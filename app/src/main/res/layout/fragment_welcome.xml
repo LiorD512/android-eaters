@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <com.bupp.wood_spoon_eaters.custom_views.ChangingPictureView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/welcomeFragSliderImages"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/woodspoon_logo"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="120dp"/>
+
+        <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:id="@+id/welcomeFragmentLogin"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:title="@string/welcome_fragment_login_btn"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueStrokeBtn
+                android:id="@+id/welcomeFragmentSignup"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:title="@string/welcome_fragment_sign_up_btn"
+                app:textColor="@color/white"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="23dp"/>
+
+    </LinearLayout>
+
+</FrameLayout>

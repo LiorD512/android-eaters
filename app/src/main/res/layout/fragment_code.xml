@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/codeFragSendNumber"
+                style="@style/Reg13Dark_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/code_fragment_sub_title"/>
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp">
+
+            <EditText
+                    android:id="@+id/codeFragInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:cursorVisible="false"/>
+
+            <LinearLayout
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                            android:id="@+id/codeFragInput1Bkg"
+                            android:layout_width="48dp"
+                            android:layout_gravity="center"
+                            android:layout_height="48dp"
+                            android:layout_margin="15dp"
+                            android:elevation="0dp">
+
+                        <TextView
+                                android:id="@+id/codeFragInput1"
+                                style="@style/Reg15Dark"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/title_input_view_input_bkg"
+                                android:gravity="center"
+                                tools:text="1"/>
+
+
+                    </androidx.cardview.widget.CardView>
+
+                </FrameLayout>
+
+                <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                            android:id="@+id/codeFragInput2Bkg"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="15dp"
+                            android:elevation="0dp">
+
+                        <TextView
+                                android:id="@+id/codeFragInput2"
+                                style="@style/Reg15Dark"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/title_input_view_input_bkg"
+                                android:gravity="center"
+                                tools:text="2"/>
+
+
+                    </androidx.cardview.widget.CardView>
+
+                </FrameLayout>
+
+
+                <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                            android:id="@+id/codeFragInput3Bkg"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="15dp"
+                            android:elevation="0dp">
+
+                        <TextView
+                                android:id="@+id/codeFragInput3"
+                                style="@style/Reg15Dark"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/title_input_view_input_bkg"
+                                android:gravity="center"
+                                tools:text="3"/>
+
+
+                    </androidx.cardview.widget.CardView>
+
+                </FrameLayout>
+
+                <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                            android:id="@+id/codeFragInput4Bkg"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="15dp"
+                            android:elevation="0dp">
+
+                        <TextView
+                                android:id="@+id/codeFragInput4"
+                                style="@style/Reg15Dark"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/title_input_view_input_bkg"
+                                android:gravity="center"
+                                tools:text="4"/>
+
+
+                    </androidx.cardview.widget.CardView>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+            <TextView
+                    style="@style/Reg13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/code_fragment_help"/>
+
+            <TextView
+                    android:id="@+id/codeFragResendCode"
+                    style="@style/SemiBold13Blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@string/code_fragment_resend_btn"/>
+
+        </LinearLayout>
+
+        <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+                android:id="@+id/codeFragNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/code_fragment_next_btn"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.NumPadView
+                android:id="@+id/codeFragNumPad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            tools:visibility="gone"
+            android:id="@+id/codeFragPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</FrameLayout>

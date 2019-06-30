@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">@color/peacock_blue</color>
+    <color name="colorPrimaryDark">@color/marine_blue</color>
+    <color name="colorAccent">@color/dark</color>
+
+    <color name="transparent">#00000000</color>
+
+    //num pad view
+    <color name="dialer_bg_pressed">#FF51A7A4</color>
+    <color name="dialer_bg_normal">@color/white</color>
+    <color name="dialer_txt_pressed">@color/white</color>
+    <color name="dialer_txt_normal">#58595B</color>
+    <color name="dailer_background">#AAAAAA</color>
+
+    <color name="peacock_blue">#0255a4</color>
+    <color name="marine_blue">#02386e</color>
+
+    <color name="pinkish">#80ff8b6a</color>
+    <color name="red">#ff0000</color>
+    <color name="switch_red">#e5455c</color>
+    <color name="black">#000000</color>
+    <color name="black_three">#111111</color>
+    <color name="black_two">#030303</color>
+    <color name="dark">#252126</color>
+    <color name="dark_43">#2b252126</color>
+    <color name="dark_50">#80252126</color>
+    <color name="purpley_grey">#929092</color>
+    <color name="silver">#dcdcdf</color>
+    <color name="switch_silver">#e5e5e5</color>
+    <color name="silver_20">#33dcdcdf</color>
+    <color name="silver_50">#80dcdcdf</color>
+    <color name="white">#ffffff</color>
+    <color name="white_80">#d9ffffff</color>
+    <color name="white_95">#f2ffffff</color>
+    <color name="teal_blue">#0097a3</color>
+    <color name="off_white_90">#f2fffaf0</color>
+    <color name="switch_green">#26b8a5</color>
+    <color name="teal_blue_50">#800097a3</color>
+    <color name="teal_blue_80">#D90097a3</color>
+    <color name="offwhite_90">#e6fffaf0</color>
+    <color name="light_periwinkle">#dcdcdf</color>
+</resources>
+

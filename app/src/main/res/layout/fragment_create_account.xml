@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             android:background="@color/white"
+             tools:context="com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountFragment">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="15.4dp"
+            android:paddingEnd="15.4dp">
+
+        <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                android:id="@+id/createAccountFragmentFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isMandatory="true"
+                app:inputType="TEXT"
+                app:hint="@string/create_account_fragment_full_name_hint"
+                app:title="@string/create_account_fragment_full_name_title"
+                android:layout_marginTop="22dp"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                android:id="@+id/createAccountFragmentEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:inputType="MAIL"
+                app:isMandatory="true"
+                app:hint="@string/create_account_fragment_email_hint"
+                app:title="@string/create_account_fragment_email"
+                android:layout_marginTop="15.4dp"/>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+            android:id="@+id/createAccountFragmentNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:title="@string/create_account_fragment_next_btn"
+            android:layout_marginTop="31dp"/>
+
+</FrameLayout>

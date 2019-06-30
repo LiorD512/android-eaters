@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:visibility="gone"
+                style="@style/SemiBold13Blue"
+                android:id="@+id/inputTitleViewSuffix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3.5dp"
+                android:layout_gravity="start"
+                android:text="*" />
+
+        <TextView
+                style="@style/SemiBold13Dark"
+                android:id="@+id/inputTitleViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                tools:text="title" />
+
+        <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"/>
+
+        <TextView
+                android:visibility="gone"
+                android:id="@+id/inputTitleViewCounter"
+                style="@style/SemiBold13Dark50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                tools:text="0/40"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+                android:background="@drawable/title_input_view_input_bkg"
+                android:layout_marginTop="4.3dp"
+                android:gravity="start"
+                android:textCursorDrawable="@drawable/edit_text_cursor"
+                android:id="@+id/inputTitleViewInput"
+                android:textColor="@color/dark"
+                android:textSize="13.4sp"
+                android:lineSpacingExtra="0.2dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:paddingLeft="15.4dp"
+                android:paddingRight="15.4dp"
+                tools:hint="hint"
+                android:textColorHint="@color/dark_50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"/>
+
+        <ImageView
+                android:visibility="gone"
+                android:id="@+id/inputTitleViewArrow"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="18.2dp"
+                android:src="@drawable/icons_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,302 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:statusBarColor" tools:targetApi="23">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="android:navigationBarColor" tools:targetApi="27">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
+    </style>
+
+    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- Set this to true if you want Full Screen without status bar -->
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <!-- This is important! Don't forget to set window background -->
+        <item name="android:windowBackground">@color/white</item>
+        <!-- Additionally if you want animations when dialog opening -->
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+    //fonts and colors
+
+    <style name="Reg32Dark">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">32.6sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold23Dark">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="SemiBold21Dark">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">21.1sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="SemiBold23Dark">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold23Blue">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
+    <style name="Bold17White">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Reg17White">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Bold15Dark">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold15White">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SemiBold15Red">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="Reg15Dark">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Reg15Dark_50">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_50</item>
+    </style>
+
+    <style name="Reg15Red">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+    <style name="Reg15Blue">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
+
+    <style name="SemiBold15BlackThree">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">15.1sp</item>
+        <item name="android:textColor">@color/black_three</item>
+    </style>
+
+    <style name="SemiBold13Blue">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
+    <style name="SemiBold15Blue">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">15.1sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
+    <style name="SemiBold15Dark">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">15.1sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="SemiBold15Dark_50">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">15.1sp</item>
+        <item name="android:textColor">@color/dark_50</item>
+    </style>
+
+    <style name="Bold13Dark">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold13White">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SemiBold13Dark">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="SemiBold13Dark50">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_50</item>
+    </style>
+
+    <style name="Reg13Dark">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Reg13Dark_50">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_50</item>
+    </style>
+
+    <style name="Reg13PurpleyGrey">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/purpley_grey</item>
+    </style>
+
+    <style name="Reg11Dark">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="SemiBold13Silver">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.2sp</item>
+        <item name="android:textColor">@color/silver</item>
+    </style>
+
+    <style name="SemiBold9Grey">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/purpley_grey</item>
+    </style>
+
+    <style name="SemiBold13Grey">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.2sp</item>
+        <item name="android:textColor">@color/purpley_grey</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SemiBold17White">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="drop_down_theme">
+        <!--<item name="android:background">@drawable/rectangle_dark</item>-->
+    </style>
+
+    <style name="spinnerStyle">
+        <!--<item name="android:background">@drawable/spinner_bkg</item>-->
+    </style>
+
+    <style name="ToolTipAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+
+    //Calendar view
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/teal_blue</item>
+        <item name="android:textColor">@color/calender_text_color_selector</item>
+        <item name="android:focusedMonthDateColor">@color/teal_blue</item>
+        <item name="android:weekSeparatorLineColor">@color/teal_blue</item>
+        <item name="android:selectedWeekBackgroundColor">@color/black</item>
+    </style>
+
+    <style name="CalendarDateText" parent="Theme.AppCompat">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">15.1sp</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:selectedWeekBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="CalendarViewHeader" parent="Theme.AppCompat">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.2sp</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:selectedWeekBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="CalendarWeekDays">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.1sp</item>
+        <item name="android:textColor">@color/silver</item>
+        <item name="android:selectedWeekBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="calendar_indicator_style">
+        <item name="android:background">@color/black</item>
+        <!--<item name="android:drawable">@drawable/icons_time</item>-->
+    </style>
+
+    <style name="MySeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressTint">@color/teal_blue</item>
+    </style>
+
+    <declare-styleable name="CircleView">
+        <attr format="dimension" name="circleRadius"/>
+        <attr format="color" name="circleColor"/>
+        <attr format="boolean" name="circleDrawOnlystroke"/>
+        <attr format="dimension" name="circleStrokeWidth"/>
+    </declare-styleable>
+    <declare-styleable name="CircularDotsLoader">
+        <attr format="dimension" name="loader_bigCircleRadius"/>
+    </declare-styleable>
+    <declare-styleable name="DotsLoaderBaseView">
+        <attr format="color" name="loader_defaultColor"/>
+        <attr format="color" name="loader_selectedColor"/>
+        <attr format="dimension" name="loader_circleRadius"/>
+        <attr format="integer" name="loader_animDur"/>
+        <attr format="boolean" name="loader_showRunningShadow"/>
+        <attr format="color" name="loader_firstShadowColor"/>
+        <attr format="color" name="loader_secondShadowColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="WoodSpoonProgressBar">
+        <attr format="boolean" name="isBlueStyle"/>
+    </declare-styleable>
+</resources>

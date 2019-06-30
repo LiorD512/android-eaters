@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+    <FrameLayout
+            android:id="@+id/selectableBtnBackground"
+            android:background="@drawable/grid_icon_background"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:gravity="center">
+
+        <ImageView
+                tools:src="@drawable/icons_15_min"
+                android:scaleType="fitXY"
+                android:id="@+id/selectableBtnItem"
+                android:layout_gravity="center"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <TextView
+            android:id="@+id/selectableBtnName"
+            tools:text="adjaslkdasj"
+            style="@style/SemiBold13Grey"
+            android:textColor="@color/grey_to_blue_selector"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

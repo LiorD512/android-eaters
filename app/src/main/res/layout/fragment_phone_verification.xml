@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+                android:elevation="8dp"
+                android:id="@+id/verificationFragmentInputLayout"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginEnd="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <EditText
+                    android:background="@drawable/title_input_view_input_bkg"
+                    android:id="@+id/verificationFragmentInput"
+                    android:inputType="phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/phone_verification_fragment_phone_hint"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:gravity="center"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <View
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="0dp"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+                app:title="@string/phone_verification_fragment_next_btn"
+                android:layout_gravity="center"
+                android:layout_marginTop="65.3dp"
+                android:id="@+id/verificationFragmentNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/verificationFragmentPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</FrameLayout>

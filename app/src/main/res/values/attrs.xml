@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="title" format="string" />
+    <attr name="isMandatory" format="boolean"/>
+    <attr name="hint" format="string"/>
+    <attr name="subTitle" format="string"/>
+
+    <declare-styleable name="HeaderViewAttrs">
+        <attr name="type" format="enum">
+            <enum name="HEADER_VIEW_TYPE_TITLE" value="0"/>
+            <enum name="HEADER_VIEW_TYPE_TITLE_BACK" value="1"/>
+            <enum name="HEADER_VIEW_TYPE_TITLE_BACK_SAVE" value="2"/>
+            <enum name="HEADER_VIEW_TYPE_TITLE_CLOSE_DONE" value="3"/>
+            <enum name="HEADER_VIEW_TYPE_TITLE_CLOSE_NEXT" value="4"/>
+            <enum name="HEADER_VIEW_TYPE_TITLE_NOTIFICATIONS" value="5"/>
+            <enum name="HEADER_VIEW_TYPE_TITLE_NOTIFICATIONS_SETTINGS" value="6"/>
+        </attr>
+        <attr name="title"/>
+        <attr name="isWithSep" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="InputTitleView">
+        <attr name="title"/>
+        <attr name="isMandatory"/>
+        <attr name="hint"/>
+        <attr name="lines" format="integer"/>
+        <attr name="maxChar" format="integer"/>
+        <attr name="inputType" format="enum">
+            <enum name="TEXT" value="0"/>
+            <enum name="NUMBER" value="1"/>
+            <enum name="MAIL" value="2"/>
+            <enum name="LONG_TEXT" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="IconsGridView">
+        <attr name="title"/>
+        <attr name="subTitle"/>
+    </declare-styleable>
+
+    <declare-styleable name="EmptyIconsGridView">
+        <attr name="title"/>
+        <attr name="subTitle"/>
+    </declare-styleable>
+
+    <declare-styleable name="ActionTitleView">
+        <attr name="title"/>
+        <attr name="isMandatory"/>
+        <attr name="hint"/>
+        <attr name="isWithArrow" format="boolean"/>
+        <attr name="action" format="enum">
+            <enum name="CALENDER" value="0"/>
+            <enum name="NEW_INGREDIENT" value="1"/>
+            <enum name="COUNTRY_CHOOSER" value="2"/>
+            <enum name="LOCATION_CHOOSER" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BlueBtnAttrs">
+        <attr name="title"/>
+        <attr name="textColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="SelectableBtn">
+        <attr name="title"/>
+        <attr name="image" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="ToolTipView">
+        <attr name="tip_type" format="enum">
+            <enum name="SERVICE_FEE" value="0" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="progress_state">
+        <attr name="state_selected" format="boolean" />
+        <attr name="state_not_selected" format="boolean" />
+        <attr name="state_done" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="food">
+        <attr name="state_fried" format="boolean" />
+        <attr name="state_baked" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="ChangeableSetting">
+        <attr name="setting_title" format="string" />
+        <attr name="setting_subtitle" format="string" />
+        <attr name="setting_icon" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="UserImageView">
+        <attr name="imageSize" format="enum" >
+            <enum name="SMALL" value="1"/>
+            <enum name="BIG" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="TagInputView">
+        <attr name="tagInput_title" format="string" />
+        <attr name="tagInput_hint" format="string" />
+        <attr name="tagInput_maxTags" format="integer"/>
+    </declare-styleable>
+</resources>

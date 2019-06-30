@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:gravity="left|center"
+            android:layout_marginRight="15.4dp"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginTop="15.4dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/actionTitleViewSuffix"
+                style="@style/SemiBold13Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginEnd="3.5dp"
+                android:text="*"/>
+
+        <TextView
+                style="@style/SemiBold13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Preperation Time"/>
+
+    </LinearLayout>
+
+
+    <TextView
+            style="@style/Reg15Dark_50"
+            android:layout_marginTop="7.9dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_marginLeft="15.4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="If your dish is pre-cooked, choose only the heating and packing time "/>
+
+    <LinearLayout
+            android:layout_marginTop="15.6dp"
+            android:layout_marginBottom="22.6dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:weightSum="2"
+                android:paddingTop="15.4dp"
+                android:paddingBottom="15.4dp"
+                android:background="@color/silver_20"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.bupp.wood_spoon_eaters.custom_views.SelectableBtn
+                    app:image="@drawable/icons_9_min"
+                    app:title="9-13 min"
+                    android:id="@+id/prepTimeView0"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.SelectableBtn
+                    app:image="@drawable/icons_15_min"
+                    app:title="15-19 min"
+                    android:id="@+id/prepTimeView1"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:weightSum="2"
+                android:paddingTop="15.4dp"
+                android:paddingBottom="15.4dp"
+                android:background="@color/silver_20"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.bupp.wood_spoon_eaters.custom_views.SelectableBtn
+                    app:image="@drawable/icons_21_min"
+                    app:title="21-28 min"
+                    android:id="@+id/prepTimeView2"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.SelectableBtn
+                    app:image="@drawable/icons_30_min"
+                    app:title="30-35 min"
+                    android:id="@+id/prepTimeView3"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

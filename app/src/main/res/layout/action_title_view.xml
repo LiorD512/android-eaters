@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:clickable="false"
+              android:focusable="false"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/actionTitleViewSuffix"
+                style="@style/SemiBold13Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginEnd="3.5dp"
+                android:text="*"
+                android:visibility="gone" />
+
+        <TextView
+                android:id="@+id/actionTitleViewTitle"
+                style="@style/SemiBold13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="4.3dp"
+                tools:text="title" />
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false">
+
+        <TextView
+                android:id="@+id/actionTitleViewInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/title_input_view_input_bkg"
+                android:gravity="start"
+                android:inputType="textMultiLine"
+                android:paddingLeft="15.4dp"
+                android:paddingTop="13dp"
+                android:paddingRight="15.4dp"
+                android:paddingBottom="13dp"
+                android:textColor="@color/dark"
+                android:textColorHint="@color/dark_50"
+                android:textSize="13.4sp"
+                tools:hint="hint" />
+
+        <ImageView
+                android:id="@+id/actionTitleViewArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="18.2dp"
+                android:clickable="false"
+                android:src="@drawable/icons_down"
+                android:visibility="gone" />
+
+    </FrameLayout>
+
+
+</LinearLayout>
