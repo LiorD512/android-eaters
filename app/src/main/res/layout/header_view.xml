@@ -75,6 +75,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+    <com.bupp.wood_spoon_eaters.custom_views.LocationDetailsView
+            android:id="@+id/headerViewLocationDetailsView"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     <ImageButton
             android:visibility="gone"
             android:src="@drawable/icons_close"

@@ -198,10 +198,4 @@
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-            tools:visibility="gone"
-            android:id="@+id/codeFragPb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
 </FrameLayout>

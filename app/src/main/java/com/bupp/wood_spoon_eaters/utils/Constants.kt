@@ -35,6 +35,8 @@ class Constants {
         const val HEADER_VIEW_TYPE_TITLE = 0
         const val HEADER_VIEW_TYPE_TITLE_SKIP = 1
         const val HEADER_VIEW_TYPE_TITLE_BACK = 2
+        const val HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH = 3
+
 
         //bottomBar types
         const val BOTTOM_VIEW_ORDERS = 0
@@ -79,6 +81,7 @@ class Constants {
         const val SUPPORT_TAG = "support_tag"
         const val ORDERS_HISTORY_TAG = "orders_history_tag"
         const val LOCATION_CHOOSER_TAG = "location_chooser_tag"
+        const val FEED_TAG = "my_dishes_tag"
 
         const val NEW_DISH_STEP_ONE_TAG = "new_dish_step_one_tag"
         const val NEW_DISH_STEP_TWO_TAG = "new_dish_step_two_tag"

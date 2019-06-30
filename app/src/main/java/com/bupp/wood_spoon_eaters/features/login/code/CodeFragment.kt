@@ -21,8 +21,7 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
     private val viewModel: CodeViewModel by viewModel<CodeViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.fragment_code, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_code, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,12 +34,13 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
     private fun initObservers() {
         viewModel.navigationEvent.observe(this, Observer { navigationEvent ->
             if (navigationEvent != null) {
-                codeFragPb.hide()
+                (activity as LoginActivity).handlePb(false)
                 if (navigationEvent.isCodeLegit) {
                     (activity as LoginActivity).onCodeSuccess()
                     Log.d("wow", "code success")
                 } else {
                     Log.d("wow", "code fail")
+                    Toast.makeText(context, "Invalid code entered", Toast.LENGTH_LONG).show()
                     codeFragNumPad.clearInput()
                 }
             }
@@ -48,7 +48,7 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
 
         viewModel.resendCodeEvent.observe(this, Observer { resendCodeEvent: CodeViewModel.ResendCodeEvent ->
             if (resendCodeEvent != null) {
-                codeFragPb.hide()
+                (activity as LoginActivity).handlePb(false)
                 if (resendCodeEvent.hasSent) {
                     Log.d("wowCode", "resend code success")
                     Toast.makeText(context, "Code sent!", Toast.LENGTH_SHORT).show()
@@ -68,7 +68,7 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
         codeFragSendNumber.text = "$subtitle $phoneNumber"
         codeFragInput.isEnabled = false
         codeFragNext.setBtnEnabled(false)
-        codeFragNext.setOnClickListener { v ->
+        codeFragNext.setOnClickListener {
             if (codeFragNext.isEnabled) {
                 sendCode(getCode())
             }
@@ -87,7 +87,7 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
                     codeFragNumPad.getInputText().setText(codeString.substring(0, 4))
                     return
                 }
-                if (codeString.length >= 1) {
+                if (codeString.isNotEmpty()) {
                     codeFragInput1.text = codeString.substring(0, 1)
                     codeFragInput1Bkg.elevation = 18f
                 } else {
@@ -127,14 +127,13 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
     }
 
     private fun resendCode() {
-        codeFragPb.show()
+        (activity as LoginActivity).handlePb(true)
         viewModel.sendPhoneNumber(phoneNumber)
     }
 
     private fun sendCode(codeString: String) {
-        codeFragPb.show()
         (activity as LoginActivity).handlePb(true)
-        viewModel.sendCode(phoneNumber, getCode())
+        viewModel.sendCode(phoneNumber, codeString)
     }
 
 

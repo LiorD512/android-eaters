@@ -19,15 +19,15 @@ class PhoneVerificationViewModel(val api: ApiService) : ViewModel() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Log.d("wowVerificationVM", "getCode success")
-                    navigationEvent.postValue(NavigationEvent(true))
                 } else {
                     Log.d("wowVerificationVM", "getCode fail")
                 }
+                navigationEvent.postValue(NavigationEvent(isSuccess = response.isSuccessful))
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Log.d("wowVerificationVM", "getCode big fail")
-                navigationEvent.postValue(NavigationEvent(false))
+                navigationEvent.postValue(NavigationEvent(isSuccess = false))
             }
         })
     }
