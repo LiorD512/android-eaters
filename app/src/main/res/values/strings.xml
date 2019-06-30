@@ -20,7 +20,7 @@
     <string name="phone_verification_fragment_title">Enter Your Mobile Number</string>
     <string name="phone_verification_fragment_phone_hint">+1 (201) 555 - 0123</string>
 
-    <string name="create_account_fragment_title">Create Your Cook Account</string>
+    <string name="create_account_fragment_title">Create Your Account</string>
     <string name="create_account_fragment_full_name_title">Full Name</string>
     <string name="create_account_fragment_full_name_hint">Your Full Name</string>
     <string name="create_account_fragment_email">Email</string>

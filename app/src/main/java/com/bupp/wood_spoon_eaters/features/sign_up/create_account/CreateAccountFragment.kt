@@ -27,6 +27,9 @@ class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createAccountFragmentNext.setOnClickListener {
+
+            (activity as SignUpActivity).showPb()
+
             viewModel.updateClientAccount(
                 createAccountFragmentFullName.getText(),
                 createAccountFragmentEmail.getText()
@@ -38,7 +41,13 @@ class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener 
 
         createAccountFragmentNext.setBtnEnabled(false)
 
-        viewModel.navigationEvent.observe(this, Observer { (activity as SignUpActivity).moveToMainActivity() })
+        viewModel.navigationEvent.observe(this, Observer { navigationEvent ->
+            if (navigationEvent != null) {
+                (activity as SignUpActivity).hidePb()
+
+                (activity as SignUpActivity).moveToMainActivity()
+            }
+        })
     }
 
     private fun checkValidation() {

@@ -86,9 +86,16 @@ class HeaderView : FrameLayout {
         hideAll()
         when (type) {
             Constants.HEADER_VIEW_TYPE_TITLE -> {
+                headerViewTitle.visibility = VISIBLE
+
             }
             Constants.HEADER_VIEW_TYPE_TITLE_SKIP -> {
                 headerViewSkipBtn.visibility = View.VISIBLE
+                headerViewTitle.visibility = VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH -> {
+                headerViewLocationDetailsView.visibility = View.VISIBLE
+                headerViewTitle.visibility = GONE
             }
         }
     }
@@ -101,5 +108,10 @@ class HeaderView : FrameLayout {
         headerViewSaveBtn.visibility = View.GONE
         headerViewSearchBtn.visibility = View.GONE
         headerViewFilterBtn.visibility = View.GONE
+    }
+
+    fun setLocationTitle(time: String?,location: String?){
+        headerViewLocationDetailsView.setTime(time!!)
+        headerViewLocationDetailsView.setLocation(location!!)
     }
 }

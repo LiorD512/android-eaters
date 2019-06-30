@@ -24,8 +24,7 @@ class PhoneVerificationFragment : Fragment() {
     private var phoneNumber: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.fragment_phone_verification, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_phone_verification, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +41,7 @@ class PhoneVerificationFragment : Fragment() {
                 (activity as LoginActivity).loadCodeFragment(phoneNumber)
             } else {
                 Log.d("wow", "phoneVerification fail")
+                Toast.makeText(context, "Invalid phone number", Toast.LENGTH_LONG).show()
                 verificationFragmentPb.hide()
             }
         })
@@ -59,7 +59,7 @@ class PhoneVerificationFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 val str: String = s.toString()
-                if (str.length > 0) {
+                if (str.isNotEmpty()) {
                     verificationFragmentNext.setBtnEnabled(true)
                 } else {
                     verificationFragmentNext.setBtnEnabled(false)
@@ -73,18 +73,18 @@ class PhoneVerificationFragment : Fragment() {
             sendCode()
         }
 
-        verificationFragmentInput.setOnFocusChangeListener(OnFocusChangeListener { view, hasFocus ->
+        verificationFragmentInput.onFocusChangeListener = OnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 verificationFragmentInputLayout.elevation = 18f
             } else {
                 verificationFragmentInputLayout.elevation = 8f
             }
-        })
+        }
 
 
     }
 
-    fun sendCode() {
+    private fun sendCode() {
         phoneNumber = verificationFragmentInput.text.toString()
         verificationFragmentPb.show()
         viewModel.sendPhoneNumber(phoneNumber)

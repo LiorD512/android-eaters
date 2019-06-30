@@ -8,39 +8,39 @@ import retrofit2.http.*
 interface ApiService {
 
     //Client
-    @GET("cooks/me")
+    @GET("eaters/me")
     fun getMe(): Observable<ServerResponse<Client>>
 
     //General
-    @GET("cooks/utils/meta")
+    @GET("eaters/utils/meta")
     fun getMetaData(): Observable<ServerResponse<MetaDataModel>>
 
-    @GET("cooks/utils/meta")
+    @GET("eaters/utils/meta")
     fun getMetaDataCall(): Call<ServerResponse<MetaDataModel>>
 
-    @POST("cooks/me")
+    @POST("eaters/me")
     fun postMe(@Body client: Client): Call<ServerResponse<Client>>
 
     @FormUrlEncoded
-    @POST("cooks/me/presigned_urls")
+    @POST("eaters/me/presigned_urls")
     fun postCookPreSignedUrl(@Field("type") type: String): Call<ServerResponse<PreSignedUrl>>
 
-    @POST("cooks/me/dishes/presigned_urls")
-    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>
+//    @POST("cooks/me/dishes/presigned_urls")
+//    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>
 
     //Login end-points
     @FormUrlEncoded
-    @POST("cooks/auth/get_code")
+    @POST("eaters/auth/get_code")
     fun getCode(@Field("phone_number") phone: String): Call<Void>
 
     @FormUrlEncoded
-    @POST("cooks/auth/validate_code")
+    @POST("eaters/auth/validate_code")
     fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): Call<ServerResponse<Client>>
 
 
-    //NewDish
-    @POST("cooks/me/dishes")
-    fun postNewDish(@Body dish: Dish): Call<ServerResponse<Dish>>
+//    //NewDish
+//    @POST("cooks/me/dishes")
+//    fun postNewDish(@Body dish: Dish): Call<ServerResponse<Dish>>
 
 
 //
