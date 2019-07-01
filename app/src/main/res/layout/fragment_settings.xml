@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+    <LinearLayout
+            android:layout_margin="15.4dp"
+            android:orientation="vertical"
+            android:paddingTop="7.6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    style="@style/Reg13Dark_50"
+                    android:text="Enable WoodSpoon to use your location while using the app"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/settingsFragLocationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12.3dp"
+                    android:thumb="@drawable/white_circle"
+                    app:track="@drawable/switch_track_selector"/>
+        </LinearLayout>
+
+        <View
+                android:background="@color/grey_divider"
+                android:layout_marginTop="15.8dp"
+                android:layout_marginBottom="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"/>
+
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/SemiBold13Dark"
+                        android:layout_marginBottom="4.1dp"
+                        android:text="Order Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        style="@style/Reg13Dark_50"
+                        android:text="Receive order status alerts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/settingsFragAlertsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12.3dp"
+                    android:thumb="@drawable/white_circle"
+                    app:track="@drawable/switch_track_selector"/>
+        </LinearLayout>
+
+        <View
+                android:background="@color/grey_divider"
+                android:layout_marginTop="15.8dp"
+                android:layout_marginBottom="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"/>
+
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/SemiBold13Dark"
+                        android:layout_marginBottom="4.1dp"
+                        android:text="Offers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        style="@style/Reg13Dark_50"
+                        android:text="Allow WoodSpoon to send you commercial emails of discounts and relevant information"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/settingsFragEmailSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12.3dp"
+                    android:thumb="@drawable/white_circle"
+                    app:track="@drawable/switch_track_selector"/>
+        </LinearLayout>
+
+        <View
+                android:background="@color/grey_divider"
+                android:layout_marginTop="15.8dp"
+                android:layout_marginBottom="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"/>
+    </LinearLayout>
+</FrameLayout>

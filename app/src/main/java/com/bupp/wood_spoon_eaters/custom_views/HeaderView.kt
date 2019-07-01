@@ -80,6 +80,7 @@ class HeaderView : FrameLayout {
         headerViewFilterBtn.setOnClickListener {
             listener?.onHeaderFilterClick()
         }
+//        headerViewLocationDetailsView.setLocationDetailsViewListener(this)
     }
 
     private fun initUi(type: Int?) {
@@ -90,12 +91,23 @@ class HeaderView : FrameLayout {
 
             }
             Constants.HEADER_VIEW_TYPE_TITLE_SKIP -> {
-                headerViewSkipBtn.visibility = View.VISIBLE
+                headerViewSkipBtn.visibility = VISIBLE
                 headerViewTitle.visibility = VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH -> {
-                headerViewLocationDetailsView.visibility = View.VISIBLE
+                headerViewLocationDetailsView.visibility = VISIBLE
+                headerViewProfileBtn.visibility = VISIBLE
+                headerViewSearchBtn.visibility = VISIBLE
                 headerViewTitle.visibility = GONE
+            }
+            Constants.HEADER_VIEW_TYPE_TITLE_BACK -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewBackBtn.visibility = VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_SAVE_TITLE_BACK -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewSaveBtn.visibility = VISIBLE
+                headerViewBackBtn.visibility = VISIBLE
             }
         }
     }
@@ -110,8 +122,12 @@ class HeaderView : FrameLayout {
         headerViewFilterBtn.visibility = View.GONE
     }
 
-    fun setLocationTitle(time: String?,location: String?){
+    fun setLocationTitle(time: String?, location: String?) {
         headerViewLocationDetailsView.setTime(time!!)
         headerViewLocationDetailsView.setLocation(location!!)
+    }
+
+    fun setLocationDetailsViewListener(listener: LocationDetailsView.LocationDetailsViewListener) {
+        headerViewLocationDetailsView.setLocationDetailsViewListener(listener)
     }
 }

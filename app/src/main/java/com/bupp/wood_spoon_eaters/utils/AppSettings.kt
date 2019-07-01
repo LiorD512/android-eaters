@@ -23,14 +23,6 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
         return true
     }
 
-//    fun setCurrentClient(client: Client?){
-//        this.currentClient = client
-//    }
-//
-//    fun getCurrentClient() : Client?{
-//        return currentClient
-//    }
-
     //shared prefs
 //    fun getToken(): String? {
 //        return sharedPreferences.getString(Constants.PREFS_KEY_TOKEN, null)
@@ -56,4 +48,27 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
         sharedPreferences.edit().putBoolean(Constants.SHOW_NOT_AVAILABLE_DIALOG, shouldShow).apply()
     }
 
+    fun setUseLocation(isUsingLocation: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.USE_LOCATION, isUsingLocation).apply()
+    }
+
+    fun setAlerts(alert: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.SEND_ALERTS, alert).apply()
+    }
+
+    fun setEmails(sendEmail: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.SEND_EMAILS, sendEmail).apply()
+    }
+
+    fun getUseLocation(): Boolean {
+        return sharedPreferences.getBoolean(Constants.USE_LOCATION, false)
+    }
+
+    fun getAlerts(): Boolean {
+        return sharedPreferences.getBoolean(Constants.SEND_ALERTS, false)
+    }
+
+    fun getEmails(): Boolean {
+        return sharedPreferences.getBoolean(Constants.SEND_EMAILS, false)
+    }
 }

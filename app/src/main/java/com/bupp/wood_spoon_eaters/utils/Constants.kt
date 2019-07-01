@@ -6,6 +6,7 @@ class Constants {
     companion object {
 
 
+        val SMS_NUMBER: String = "0504527975"
         //client pressigned url types
         const val PRESIGNED_URL_THUMBNAIL = "thumbnail"
         const val PRESIGNED_URL_VIDEO = "video"
@@ -25,6 +26,10 @@ class Constants {
         const val PREFS_KEY_TOKEN = "key_token"
         const val PREFS_KEY_IS_FIRST_TIME = "is_first_time"
         const val SHOW_NOT_AVAILABLE_DIALOG = "show_not_available_dialog"
+        const val USE_LOCATION = "use_location"
+        const val SEND_ALERTS = "send_alerts"
+        const val SEND_EMAILS = "send_emails"
+
 
         //action title view actionType:
         const val CALENDER_ACTION = 0
@@ -36,6 +41,7 @@ class Constants {
         const val HEADER_VIEW_TYPE_TITLE_SKIP = 1
         const val HEADER_VIEW_TYPE_TITLE_BACK = 2
         const val HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH = 3
+        const val HEADER_VIEW_TYPE_SAVE_TITLE_BACK = 4
 
 
         //bottomBar types
@@ -51,6 +57,7 @@ class Constants {
         const val INPUT_TYPE_MAIL = 2
         const val INPUT_TYPE_LONG_TEXT = 3
         const val INPUT_TYPE_FULL_NAME = 4
+        const val INPUT_TYPE_TEXT_NO_TITLE = 5
 
 
         //tool tip type
@@ -81,7 +88,9 @@ class Constants {
         const val SUPPORT_TAG = "support_tag"
         const val ORDERS_HISTORY_TAG = "orders_history_tag"
         const val LOCATION_CHOOSER_TAG = "location_chooser_tag"
-        const val FEED_TAG = "my_dishes_tag"
+        const val FEED_TAG = "feed_tag"
+        const val SETTINGS_TAG = "settings_tag"
+        const val ADD_ADDRESS_TAG = "add_address_tag"
 
         const val NEW_DISH_STEP_ONE_TAG = "new_dish_step_one_tag"
         const val NEW_DISH_STEP_TWO_TAG = "new_dish_step_two_tag"
@@ -91,14 +100,6 @@ class Constants {
         const val ORDER_HISTORY_TAG = "order_history_tag"
         const val YOUR_STORY_TAG = "your_story_tag"
         const val CREATE_ACCOUNT_TAG = "create_account_tag"
-
-
-        //your story permissions reuest code
-        const val YOUR_STORY_PERMISSION_REQUEST = 10
-
-        //cooking slot adapter types
-//        const val TYPE_ORDERS = 12
-//        const val TYPE_CALENDAR = 13
 
         //activity request code
         const val CHOOSER_ACT_RC = 901
@@ -138,10 +139,14 @@ class Constants {
         const val CAMERA_PERMISSION = Manifest.permission.CAMERA
         const val READ_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE
         const val WRITE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        const val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+
 
         const val CAMERA_PERMISSION_REQUEST_CODE = 444
         const val READ_PERMISSION_REQUEST_CODE = 445
         const val WRITE_PERMISSION_REQUEST_CODE = 446
+        const val LOCATION_PERMISSION_REQUEST_CODE = 420
+
     }
 }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="46.1dp">
+
+    <TextView
+        android:id="@+id/autoCompleteItemTitle"
+        style="@style/Reg15Dark"
+        android:gravity="center|left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:text="Iceland"/>
+
+    <!--<View-->
+        <!--android:id="@+id/autoCompleteItemBottomSep"-->
+        <!--android:layout_marginTop="12.7dp"-->
+        <!--android:layout_marginLeft="15.4dp"-->
+        <!--android:layout_marginRight="15.4dp"-->
+        <!--android:background="@color/dark"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"/>-->
+
+</LinearLayout>
