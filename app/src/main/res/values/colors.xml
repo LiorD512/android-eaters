@@ -41,5 +41,9 @@
     <color name="teal_blue_80">#D90097a3</color>
     <color name="offwhite_90">#e6fffaf0</color>
     <color name="light_periwinkle">#dcdcdf</color>
+    <color name="light_periwinkle_20">#33dcdcdf</color>
+    <color name="almost_transparent">#1a000000</color>
+    <color name="grey_divider">#e2e2e4</color>
+
 </resources>
 

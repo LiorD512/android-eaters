@@ -90,15 +90,23 @@ class InputTitleView : FrameLayout {
                 when (inputType) {
                     Constants.INPUT_TYPE_TEXT -> {
                         inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT
+                        inputTitleViewTitle.visibility = VISIBLE
                     }
                     Constants.INPUT_TYPE_NUMBER -> {
                         inputTitleViewInput.inputType = InputType.TYPE_CLASS_NUMBER
+                        inputTitleViewTitle.visibility = VISIBLE
                     }
                     Constants.INPUT_TYPE_MAIL -> {
                         inputTitleViewInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                        inputTitleViewTitle.visibility = VISIBLE
                     }
                     Constants.INPUT_TYPE_LONG_TEXT -> {
                         inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                        inputTitleViewTitle.visibility = VISIBLE
+                    }
+                    Constants.INPUT_TYPE_TEXT_NO_TITLE -> {
+                        inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT
+                        inputTitleViewTitle.visibility = GONE
                     }
                 }
             }
@@ -109,9 +117,7 @@ class InputTitleView : FrameLayout {
                         inputTitleViewCounter.text = (s!!.length.toString()) + "/" + maxChar
                     }
 
-                    if (s.toString().isNotEmpty()) {
-                        listener?.onInputTitleChange(s.toString())
-                    }
+                    listener?.onInputTitleChange(s.toString())
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -148,7 +154,7 @@ class InputTitleView : FrameLayout {
                 false
             }
         } else {
-            true
+            getText().isNotEmpty()
         }
     }
 

@@ -30,6 +30,7 @@
             <enum name="NUMBER" value="1"/>
             <enum name="MAIL" value="2"/>
             <enum name="LONG_TEXT" value="3"/>
+            <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
         </attr>
     </declare-styleable>
 

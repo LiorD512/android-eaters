@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.support
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +9,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.support_dialog.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class SupportDialog : DialogFragment(), HeaderView.HeaderViewListener {
+
+
+class SupportDialog : DialogFragment(), HeaderView.HeaderViewListener, InputTitleView.InputTitleViewListener {
 
     val viewModel by viewModel<SupportViewModel>()
 
@@ -31,17 +37,29 @@ class SupportDialog : DialogFragment(), HeaderView.HeaderViewListener {
     }
 
     private fun initUI() {
-        setTitleText()
-
-    }
-
-    private fun setTitleText() {
         supportDialogTitle.setHeaderViewListener(this)
-        supportDialogTitle.setType(Constants.HEADER_VIEW_TYPE_TITLE_BACK, getString(R.string.code_fragment_title))
+        supportDialogTitle.setType(Constants.HEADER_VIEW_TYPE_TITLE_BACK, getString(R.string.support_dialog_title))
+
+        supportDialogNext.setBtnEnabled(false)
+        supportDialogCommentInput.setInputTitleViewListener(this)
+
+        supportDialogCallButton.setOnClickListener {
+            (activity as MainActivity).callPhoneNumber()
+        }
+        supportDialogTextButton.setOnClickListener {
+            (activity as MainActivity).sendSmsText()
+        }
     }
 
     override fun onHeaderBackClick() {
-        super.onHeaderBackClick()
         dismiss()
+    }
+
+    override fun onInputTitleChange(str: String?) {
+        if (supportDialogCommentInput.isValid()) {
+            supportDialogNext.setBtnEnabled(true)
+        } else {
+            supportDialogNext.setBtnEnabled(false)
+        }
     }
 }

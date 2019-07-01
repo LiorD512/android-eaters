@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:layout_gravity="center"
               android:gravity="center"
               android:orientation="horizontal">
@@ -12,22 +12,23 @@
             android:layout_width="0dp"
             android:layout_height="1dp"/>
 
-    <TextView
-            style="@style/SemiBold13Dark"
+    <me.grantland.widget.AutofitTextView
+            style="@style/SemiBold15Dark"
             android:id="@+id/locationDetailsViewTime"
+            android:padding="10.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="ASAP"/>
 
     <ImageView
             android:src="@drawable/icon_arrow_right"
-            android:layout_marginStart="10.7dp"
-            android:layout_marginEnd="10.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    <TextView
+
+    <me.grantland.widget.AutofitTextView
             android:id="@+id/locationDetailsViewLocation"
             style="@style/SemiBold13Dark"
+            android:padding="10.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="160 Edgemont street"/>
