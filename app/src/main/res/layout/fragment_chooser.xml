@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_view_height"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        <ImageButton
+                android:id="@+id/chooserFragCloseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginRight="15.4dp"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/icons_back"/>
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="43.2dp"
+                android:layout_marginLeft="10.1dp"
+                android:layout_marginTop="7.7dp"
+                android:layout_marginRight="15.8dp"
+                android:layout_marginBottom="7.7dp"
+                android:background="@drawable/rectangle_dark"
+                android:orientation="horizontal">
+
+            <ImageButton
+                    android:id="@+id/chooserFragInputSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="15.4dp"
+                    android:background="@null"
+                    android:src="@drawable/icons_search"/>
+
+            <EditText
+                    android:id="@+id/chooserFragInput"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="start|center"
+                    android:inputType="textAutoComplete"
+                    android:maxLines="1"
+                    android:paddingLeft="15.4dp"
+                    android:paddingRight="15.4dp"
+                    android:textColor="@color/dark"
+                    android:textColorHint="@color/dark_50"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    android:textSize="13.4sp"
+                    tools:hint="hint"/>
+
+            <ImageButton
+                    android:id="@+id/chooserFragInputClean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="10.1dp"
+                    android:background="@null"
+                    android:src="@drawable/icons_delete"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="7.7dp"
+            android:background="@color/silver_50"/>
+
+    <TextView
+            android:id="@+id/chooserFragTitle"
+            style="@style/Reg13Dark_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="13dp"
+            tools:text="Ingredients frequently used in:"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chooserFragList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16.4dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginRight="15.8dp"/>
+
+</LinearLayout>

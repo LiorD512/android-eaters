@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="15.4dp"
+        android:paddingEnd="15.4dp"
+        android:background="@color/white">
+
+    <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
+            android:id="@+id/createAccountFragmentAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isMandatory="true"
+            app:lines="1"
+            app:hint="@string/common_string_address_hint"
+            app:title="@string/common_string_address"
+            app:action="LOCATION_CHOOSER"
+            android:layout_marginTop="26.9dp"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            android:id="@+id/createAccountFragAddress2ndLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/dark_50"
+            android:layout_marginTop="15.4dp"
+            style="@style/Reg13Dark"
+            app:hint="@string/common_string_apartment"
+            app:inputType="INPUT_TYPE_TEXT_NO_TITLE"
+            android:gravity="start"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            android:id="@+id/createAccountFragmentEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            app:inputType="INPUT_TYPE_TEXT_NO_TITLE"
+            app:isMandatory="false"
+            app:hint="Add Delivery Note"/>
+
+    <View
+            android:background="@color/grey_divider"
+            android:layout_marginTop="22.1dp"
+            android:layout_marginBottom="29.8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+    <CheckBox
+            android:id="@+id/addAddressFragDeliveryCb"
+            android:text="@string/add_address_frag_delivery_to_door"
+            android:paddingStart="7.5dp"
+            android:button="@drawable/circle_checkbox_selector"
+            style="@style/Reg13Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <CheckBox
+            android:id="@+id/addAddressFragPickUpCb"
+            android:text="@string/add_address_frag_pick_up_outside"
+            android:paddingStart="7.5dp"
+            android:layout_marginTop="28.1dp"
+            style="@style/Reg13Dark"
+            android:button="@drawable/circle_checkbox_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+</LinearLayout>

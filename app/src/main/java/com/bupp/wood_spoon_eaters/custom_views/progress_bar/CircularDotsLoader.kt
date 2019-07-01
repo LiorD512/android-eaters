@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.custom_views.progress_bar
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
@@ -65,7 +66,7 @@ class CircularDotsLoader : CircularAbstractView {
                     selectedDotPos = 1
                 }
 
-                (context as Activity).runOnUiThread { invalidate() }
+                getActivity(context).runOnUiThread { invalidate() }
             }
         }, 0, animDur.toLong())
     }
@@ -73,6 +74,14 @@ class CircularDotsLoader : CircularAbstractView {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawCircle(canvas)
+    }
+
+    private fun getActivity(context: Context): Activity {
+        return when (context) {
+            is Activity -> context
+            is ContextWrapper -> getActivity(context.baseContext)
+            else -> context as Activity
+        }
     }
 
     private fun drawCircle(canvas: Canvas) {
@@ -92,5 +101,10 @@ class CircularDotsLoader : CircularAbstractView {
             }
 
         }
+    }
+
+    fun stop(){
+        timer?.cancel()
+        timer = null
     }
 }

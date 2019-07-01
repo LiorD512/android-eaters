@@ -34,6 +34,7 @@ class WoodSpoonProgressBar : FrameLayout {
     }
 
     fun hide() {
+        progressBar.stop()
         progressBarLayout.visibility = View.GONE
     }
 

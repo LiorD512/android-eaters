@@ -34,11 +34,12 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).loadDeliveryDetailsSetup()
+        (activity as MainActivity).loadAddNewAddress()
     }
 
     override fun onChangeTimeClick() {
         //open date picker
+
     }
 
 }

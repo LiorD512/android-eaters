@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:layout_marginBottom="4.3dp"
                 tools:text="title" />
 
         <View
@@ -52,7 +53,6 @@
 
         <EditText
                 android:background="@drawable/title_input_view_input_bkg"
-                android:layout_marginTop="4.3dp"
                 android:gravity="start"
                 android:textCursorDrawable="@drawable/edit_text_cursor"
                 android:id="@+id/inputTitleViewInput"

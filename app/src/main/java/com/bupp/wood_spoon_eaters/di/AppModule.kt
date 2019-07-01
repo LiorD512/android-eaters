@@ -5,6 +5,7 @@ import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationV
 import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
+import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
@@ -37,10 +38,15 @@ val appModule = module {
     viewModel { CreateAccountViewModel(get(), get()) }
 
     //main
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
     viewModel { FeedViewModel(get()) }
+
+    //support
     viewModel { SupportViewModel(get()) }
 
+
+    //settings
+    viewModel { SettingsViewModel(get()) }
 
 }
 
