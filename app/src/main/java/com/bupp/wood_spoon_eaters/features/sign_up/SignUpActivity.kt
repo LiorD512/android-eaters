@@ -20,26 +20,20 @@ class SignUpActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
         initUi()
 
-        loadCreateAccount()
-
     }
 
     private fun initUi() {
-        headerSignUpFragment.setHeaderViewListener(this)
-    }
+        headerSignUpFragment.setType(Constants.HEADER_VIEW_TYPE_SIGNUP, getString(R.string.create_account_fragment_title))
+        headerSignUpFragment.isSkipable(true)
 
-    fun loadCreateAccount() {
-        headerSignUpFragment.setType(
-            Constants.HEADER_VIEW_TYPE_TITLE_SKIP,
-            getString(R.string.create_account_fragment_title)
-        )
+        headerSignUpFragment.setHeaderViewListener(this)
+
         loadFragment(CreateAccountFragment(), Constants.CREATE_ACCOUNT_TAG)
     }
 
-    fun moveToMainActivity() {
+    fun startToMainActivity() {
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-
         finish()
     }
 
@@ -50,7 +44,7 @@ class SignUpActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
     }
 
     override fun onHeaderSkipClick() {
-        moveToMainActivity()
+        startToMainActivity()
     }
 
     fun showPb() {

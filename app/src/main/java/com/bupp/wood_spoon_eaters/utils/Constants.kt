@@ -31,19 +31,19 @@ class Constants {
         const val NEW_INGREDIENT_ACTION = 1
         const val COUNTRY_CHOOSER_ACTION = 2
 
+        //deliveryDetails Types
+        const val DELIVERY_DETAILS_LOCATION = 0
+        const val DELIVERY_DETAILS_TIME = 1
+
         //headerView types
-        const val HEADER_VIEW_TYPE_TITLE = 0
-        const val HEADER_VIEW_TYPE_TITLE_SKIP = 1
-        const val HEADER_VIEW_TYPE_TITLE_BACK = 2
-        const val HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH = 3
+        const val HEADER_VIEW_TYPE_FEED = 0
+        const val HEADER_VIEW_TYPE_SEARCH = 1
+        const val HEADER_VIEW_TYPE_SIGNUP = 2
+        const val HEADER_VIEW_TYPE_BACK_TITLE = 3
+        const val HEADER_VIEW_TYPE_BACK_TITLE_DONE = 4
+        const val HEADER_VIEW_TYPE_BACK_TITLE_SAVE = 5
+        const val HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE = 6
 
-
-        //bottomBar types
-        const val BOTTOM_VIEW_ORDERS = 0
-        const val BOTTOM_VIEW_CALENDER = 1
-        const val BOTTOM_VIEW_DISHES = 2
-        const val BOTTOM_VIEW_EARNINGS = 3
-        const val BOTTOM_VIEW_PROFILE = 4
 
         //input title view input type
         const val INPUT_TYPE_TEXT = 0
@@ -70,27 +70,23 @@ class Constants {
         const val MEDIA_CHOOSER_TAG = "media_chooser_tag"
 
 
-        const val MY_DISHES_TAG = "my_dishes_tag"
-        const val CALENDAR_TAG = "calendar_tag"
-        const val ORDERS_TAG = "orders_tag"
-        const val EARNINGS_TAG = "earnings_tag"
-        const val PROFILE_TAG = "profile_tag"
-        const val EDIT_PROFILE_TAG = "edit_profile_tag"
-        const val NOTIFICATIONS_TAG = "notifications_tag"
-        const val SINGLE_DISH_TAG = "single_dish_tag"
-        const val SUPPORT_TAG = "support_tag"
-        const val ORDERS_HISTORY_TAG = "orders_history_tag"
-        const val LOCATION_CHOOSER_TAG = "location_chooser_tag"
-        const val FEED_TAG = "my_dishes_tag"
 
-        const val NEW_DISH_STEP_ONE_TAG = "new_dish_step_one_tag"
-        const val NEW_DISH_STEP_TWO_TAG = "new_dish_step_two_tag"
-        const val NEW_DISH_STEP_THREE_TAG = "new_dish_step_three_tag"
-        const val NEW_DISH_STEP_FOUR_TAG = "new_dish_step_four_tag"
-
-        const val ORDER_HISTORY_TAG = "order_history_tag"
-        const val YOUR_STORY_TAG = "your_story_tag"
         const val CREATE_ACCOUNT_TAG = "create_account_tag"
+
+        const val FEED_TAG = "my_dishes_tag"
+        const val DELIVERY_DETAILS_TAG = "delivery_details_tag"
+        const val ORDER_HISTORY_TAG = "order_history_tag"
+
+//        const val MY_DISHES_TAG = "my_dishes_tag"
+//        const val CALENDAR_TAG = "calendar_tag"
+//        const val ORDERS_TAG = "orders_tag"
+//        const val EARNINGS_TAG = "earnings_tag"
+//        const val PROFILE_TAG = "profile_tag"
+//        const val EDIT_PROFILE_TAG = "edit_profile_tag"
+//        const val NOTIFICATIONS_TAG = "notifications_tag"
+//        const val SINGLE_DISH_TAG = "single_dish_tag"
+//        const val SUPPORT_TAG = "support_tag"
+//        const val ORDERS_HISTORY_TAG = "orders_history_tag"
 
 
         //your story permissions reuest code

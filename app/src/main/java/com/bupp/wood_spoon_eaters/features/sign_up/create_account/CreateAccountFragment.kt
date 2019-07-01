@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.sign_up.create_account
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,24 +18,14 @@ class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener 
 
     val viewModel by viewModel<CreateAccountViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_create_account, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        createAccountFragmentNext.setOnClickListener {
 
-            (activity as SignUpActivity).showPb()
-
-            viewModel.updateClientAccount(
-                createAccountFragmentFullName.getText(),
-                createAccountFragmentEmail.getText()
-            )
-        }
+        createAccountFragmentNext.setOnClickListener {updateEater()}
 
         createAccountFragmentEmail.setInputTitleViewListener(this)
         createAccountFragmentFullName.setInputTitleViewListener(this)
@@ -44,10 +35,18 @@ class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener 
         viewModel.navigationEvent.observe(this, Observer { navigationEvent ->
             if (navigationEvent != null) {
                 (activity as SignUpActivity).hidePb()
-
-                (activity as SignUpActivity).moveToMainActivity()
+                if(navigationEvent.isSuccess){
+                    (activity as SignUpActivity).startToMainActivity()
+                }else{
+                    Log.d("wowAccount","failed api")
+                }
             }
         })
+    }
+
+    private fun updateEater() {
+        (activity as SignUpActivity).showPb()
+        viewModel.updateClientAccount(createAccountFragmentFullName.getText(), createAccountFragmentEmail.getText())
     }
 
     private fun checkValidation() {

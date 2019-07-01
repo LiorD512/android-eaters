@@ -7,8 +7,8 @@
         android:orientation="vertical">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-            android:id="@+id/loginTitle"
-            app:type="HEADER_VIEW_TYPE_TITLE"
+            android:id="@+id/loginActHeaderView"
+            app:type="HEADER_VIEW_TYPE_SIGNUP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:isWithSep="false"/>
@@ -18,12 +18,12 @@
             android:layout_height="match_parent">
 
         <FrameLayout
-                android:id="@+id/loginContainer"
+                android:id="@+id/loginActContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-                android:id="@+id/loginPb"
+                android:id="@+id/loginActPb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

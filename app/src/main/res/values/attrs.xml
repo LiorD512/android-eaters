@@ -7,16 +7,23 @@
 
     <declare-styleable name="HeaderViewAttrs">
         <attr name="type" format="enum">
-            <enum name="HEADER_VIEW_TYPE_TITLE" value="0"/>
-            <enum name="HEADER_VIEW_TYPE_TITLE_BACK" value="1"/>
-            <enum name="HEADER_VIEW_TYPE_TITLE_BACK_SAVE" value="2"/>
-            <enum name="HEADER_VIEW_TYPE_TITLE_CLOSE_DONE" value="3"/>
-            <enum name="HEADER_VIEW_TYPE_TITLE_CLOSE_NEXT" value="4"/>
-            <enum name="HEADER_VIEW_TYPE_TITLE_NOTIFICATIONS" value="5"/>
-            <enum name="HEADER_VIEW_TYPE_TITLE_NOTIFICATIONS_SETTINGS" value="6"/>
+            <enum name="HEADER_VIEW_TYPE_FEED" value="0"/>
+            <enum name="HEADER_VIEW_TYPE_SEARCH" value="1"/>
+            <enum name="HEADER_VIEW_TYPE_SIGNUP" value="2"/>
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE" value="3"/>
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE_DONE" value="4"/>
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SAVE" value="5"/>
+            <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE" value="6"/>
         </attr>
         <attr name="title"/>
         <attr name="isWithSep" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="DeliveryDetailsAttrs">
+        <attr name="detailsType" format="enum">
+            <enum name="DELIVERY_DETAILS_LOCATION" value="0"/>
+            <enum name="DELIVERY_DETAILS_TIME" value="1"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">

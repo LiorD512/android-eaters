@@ -80,8 +80,6 @@ class PhoneVerificationFragment : Fragment() {
                 verificationFragmentInputLayout.elevation = 8f
             }
         }
-
-
     }
 
     private fun sendCode() {

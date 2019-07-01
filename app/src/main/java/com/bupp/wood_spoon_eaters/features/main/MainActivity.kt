@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.support.SupportDialog
+import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
+import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        loadFeed()
+        loadDeliveryDetails()
     }
 
     private fun loadFragment(fragment: Fragment, tag: String) {
@@ -26,12 +27,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadFeed() {
         loadFragment(FeedFragment(), Constants.FEED_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH, "blablabal doesnt matter")
+        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
     }
 
-    private fun showSupportDialog() {
-        SupportDialog().show(supportFragmentManager, Constants.SUPPORT_TAG)
+    fun loadDeliveryDetails() {
+        loadFragment(DeliveryDetailsFragment.newInstance(), Constants.DELIVERY_DETAILS_TAG)
     }
 
-//    fun setHeaderViewLocationAnd
+    fun loadLocationChooser() {
+//        loadFragment()
+    }
+
+    fun loadDeliveryDetailsSetup() {
+        
+    }
+
+
 }

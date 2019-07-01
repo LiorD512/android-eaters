@@ -33,21 +33,20 @@ class SplashActivity : AppCompatActivity() {
                 if (event.isSuccess) {
                     // all data received
                     if (event.isRegistered) {
-                        if (event.finishedSignup) {
-                            redirectToMain()
-                        } else {
-                            redirectToCreateAccount()
-                        }
+                        redirectToMain()
                     } else {
-                        redirectToWelcome()
+                        redirectToCreateAccount()
                     }
                 } else {
                     redirectToWelcome()
-                    //server fail
                 }
+            } else {
+                redirectToWelcome()
+                //server fail
             }
         })
     }
+
 
     private fun redirectToCreateAccount() {
         startActivity(Intent(this, SignUpActivity::class.java))

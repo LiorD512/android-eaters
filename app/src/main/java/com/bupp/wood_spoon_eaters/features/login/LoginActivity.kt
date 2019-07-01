@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.loginContainer, fragment)
+            .replace(R.id.loginActContainer, fragment)
             .commit()
     }
 
@@ -36,13 +36,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun loadCodeFragment(phoneNumber: String) {
-        setTitleText(getString(R.string.code_fragment_title))
+        setHeaderView(getString(R.string.code_fragment_title))
         setTitleVisibility(View.VISIBLE)
         loadFragment(CodeFragment(phoneNumber))
     }
 
     fun loadPhoneVerificationFragment() {
-        setTitleText(getString(R.string.phone_verification_fragment_title))
+        setHeaderView(getString(R.string.phone_verification_fragment_title))
         setTitleVisibility(View.VISIBLE)
         loadFragment(PhoneVerificationFragment())
     }
@@ -53,11 +53,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setTitleVisibility(visibility: Int) {
-        loginTitle.visibility = visibility
+        loginActHeaderView.visibility = visibility
     }
 
-    private fun setTitleText(title: String) {
-        loginTitle.setType(Constants.HEADER_VIEW_TYPE_TITLE, title)
+    private fun setHeaderView(title: String) {
+        loginActHeaderView.setType(Constants.HEADER_VIEW_TYPE_SIGNUP, title)
+        loginActHeaderView.isSkipable(false)
     }
 
     fun loadMain() {
@@ -67,24 +68,21 @@ class LoginActivity : AppCompatActivity() {
 
     fun handlePb(shouldShow: Boolean) {
         if (shouldShow) {
-            loginPb.show()
+            loginActPb.show()
         } else {
-            loginPb.hide()
+            loginActPb.hide()
         }
     }
 
     fun onCodeSuccess() {
         handlePb(false)
         loadSignUpActivity()
-        //TODO == need to check how to display welcome fragment when we go back from signUpActivity
-        //TODO == maybe override onBackPress?    (eyal)
-        //loadWelcomeFragment()
+    }
 
-//        if(type == Constants.BUSINESS_CODE){
-//            loadPhoneVerificationFragment()
-//        }else if(type == Constants.VERIFY_CODE){
-//            loadMain()
-//        }
+    fun onRegisteredUser() {
+        //return here after code verification and current user is after login
+        handlePb(false)
+        loadMain()
     }
 
 

@@ -36,8 +36,12 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
             if (navigationEvent != null) {
                 (activity as LoginActivity).handlePb(false)
                 if (navigationEvent.isCodeLegit) {
-                    (activity as LoginActivity).onCodeSuccess()
                     Log.d("wow", "code success")
+                    if(navigationEvent.isAfterLogin){
+                        (activity as LoginActivity).onRegisteredUser()
+                    }else{
+                        (activity as LoginActivity).onCodeSuccess()
+                    }
                 } else {
                     Log.d("wow", "code fail")
                     Toast.makeText(context, "Invalid code entered", Toast.LENGTH_LONG).show()

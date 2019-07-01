@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.model.Client
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
@@ -17,30 +18,26 @@ class CodeViewModel(val api: ApiService, val appSettings: AppSettings) : ViewMod
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val resendCodeEvent: SingleLiveEvent<ResendCodeEvent> = SingleLiveEvent()
 
-    data class NavigationEvent(val isCodeLegit: Boolean = false)
+    data class NavigationEvent(val isCodeLegit: Boolean = false, val isAfterLogin: Boolean = false)
     data class ResendCodeEvent(val hasSent: Boolean = false)
 
-    private fun onApiDone(isSuccess: Boolean) {
-        navigationEvent.postValue(NavigationEvent(isSuccess))
-    }
-
     fun sendCode(phoneNumber: String, codeString: String) {
-        api.validateCode(phoneNumber, codeString).enqueue(object : Callback<ServerResponse<Client>> {
-            override fun onResponse(call: Call<ServerResponse<Client>>, response: Response<ServerResponse<Client>>) {
+        api.validateCode(phoneNumber, codeString).enqueue(object : Callback<ServerResponse<Eater>> {
+            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
                 if (response.isSuccessful) {
                     Log.d("wowCodeVM", "send code success: ");
-                    val client: Client? = response.body()!!.data
-                    appSettings.currentClient = client!!
-                    onApiDone(true)
+                    val eater: Eater? = response.body()!!.data
+                    appSettings.currentEater = eater!!
+                    navigationEvent.postValue(NavigationEvent(true, appSettings.isAfterLogin()))
                 } else {
                     Log.d("wowCodeVM", "send code fail");
-                    onApiDone(false)
+                    navigationEvent.postValue(NavigationEvent(false))
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Client>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
                 Log.d("wowCodeVM", "send code big fail");
-                onApiDone(false)
+                navigationEvent.postValue(NavigationEvent(false))
             }
 
         })

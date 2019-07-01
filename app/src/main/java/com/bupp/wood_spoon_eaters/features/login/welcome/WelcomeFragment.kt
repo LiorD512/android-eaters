@@ -24,15 +24,6 @@ class WelcomeFragment : Fragment() {
 
         welcomeFragmentLogin.setOnClickListener { onLoginClick() }
         welcomeFragmentSignup.setOnClickListener { onLoginClick() }
-
-//        viewModel.navigationEvent.observe(this, Observer{ navigationEvent ->
-//            if (navigationEvent != null) {
-//                if (navigationEvent.isLoginSuccess) {
-//                    Log.d("wow","wpw")
-//                    (activity as LoginActivity).loadMain()
-//                }
-//            }
-//        })
     }
 
     private fun onLoginClick() {

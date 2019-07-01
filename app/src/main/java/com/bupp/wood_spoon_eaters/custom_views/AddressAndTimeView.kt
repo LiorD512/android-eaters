@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
 import kotlinx.android.synthetic.main.location_details_view.view.*
 
-
-class LocationDetailsView : FrameLayout {
+class AddressAndTimeView : LinearLayout {
 
     private var inputType: Int = 0
     private var listener: LocationDetailsViewListener? = null

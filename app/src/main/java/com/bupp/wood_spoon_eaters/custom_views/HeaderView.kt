@@ -24,7 +24,7 @@ class HeaderView : FrameLayout {
                 headerViewTitle.text = title
             }
             if (a.hasValue(R.styleable.HeaderViewAttrs_type)) {
-                var type = a.getInt(R.styleable.HeaderViewAttrs_type, Constants.HEADER_VIEW_TYPE_TITLE)
+                var type = a.getInt(R.styleable.HeaderViewAttrs_type, Constants.HEADER_VIEW_TYPE_FEED)
                 initUi(type)
             }
             var isWithSep = a.getBoolean(R.styleable.HeaderViewAttrs_isWithSep, true)
@@ -44,29 +44,27 @@ class HeaderView : FrameLayout {
     }
 
     interface HeaderViewListener {
-        fun onHeaderCloseClick() {}
         fun onHeaderBackClick() {}
-        fun onHeaderProfileClick() {}
-        fun onHeaderSkipClick() {}
+        fun onHeaderDoneClick() {}
         fun onHeaderSaveClick() {}
+        fun onHeaderSkipClick() {}
+        fun onHeaderCloseClick() {}
         fun onHeaderSearchClick() {}
         fun onHeaderFilterClick() {}
+        fun onHeaderProfileClick() {}
     }
 
-    fun setType(type: Int?, title: String?) {
-        headerViewTitle.text = title
+    fun setType(type: Int?, title: String? = "") {
         initUi(type)
+        headerViewTitle.text = title
     }
 
     private fun initClicks() {
-        headerViewCloseBtn.setOnClickListener {
-            listener?.onHeaderCloseClick()
-        }
         headerViewBackBtn.setOnClickListener {
             listener?.onHeaderBackClick()
         }
-        headerViewProfileBtn.setOnClickListener {
-            listener?.onHeaderProfileClick()
+        headerViewDoneBtn.setOnClickListener {
+            listener?.onHeaderDoneClick()
         }
         headerViewSkipBtn.setOnClickListener {
             listener?.onHeaderSkipClick()
@@ -74,44 +72,80 @@ class HeaderView : FrameLayout {
         headerViewSaveBtn.setOnClickListener {
             listener?.onHeaderSaveClick()
         }
+        headerViewCloseBtn.setOnClickListener {
+            listener?.onHeaderCloseClick()
+        }
         headerViewSearchBtn.setOnClickListener {
             listener?.onHeaderSearchClick()
         }
         headerViewFilterBtn.setOnClickListener {
             listener?.onHeaderFilterClick()
         }
+        headerViewProfileBtn.setOnClickListener {
+            listener?.onHeaderProfileClick()
+        }
     }
 
     private fun initUi(type: Int?) {
         hideAll()
         when (type) {
-            Constants.HEADER_VIEW_TYPE_TITLE -> {
-                headerViewTitle.visibility = VISIBLE
-
-            }
-            Constants.HEADER_VIEW_TYPE_TITLE_SKIP -> {
-                headerViewSkipBtn.visibility = View.VISIBLE
-                headerViewTitle.visibility = VISIBLE
-            }
-            Constants.HEADER_VIEW_TYPE_IMAGE_LOCATION_SEARCH -> {
+            Constants.HEADER_VIEW_TYPE_FEED -> {
+                headerViewSearchBtn.visibility = View.VISIBLE
+                headerViewProfileBtn.visibility = View.VISIBLE
                 headerViewLocationDetailsView.visibility = View.VISIBLE
-                headerViewTitle.visibility = GONE
+            }
+            Constants.HEADER_VIEW_TYPE_SEARCH -> {
+                headerViewBackBtn.visibility = View.VISIBLE
+                headerViewFilterBtn.visibility = View.VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_SIGNUP -> {
+                headerViewTitle.visibility = View.VISIBLE
+                headerViewSkipBtn.visibility = View.VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_BACK_TITLE -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewBackBtn.visibility = View.VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_BACK_TITLE_DONE -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewBackBtn.visibility = View.VISIBLE
+                headerViewDoneBtn.visibility = View.VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewBackBtn.visibility = View.VISIBLE
+                headerViewSaveBtn.visibility = View.VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewSaveBtn.visibility = View.VISIBLE
+                headerViewCloseBtn.visibility = View.VISIBLE
             }
         }
     }
 
     private fun hideAll() {
+        headerViewTitle.visibility = GONE
         headerViewCloseBtn.visibility = View.GONE
         headerViewBackBtn.visibility = View.GONE
         headerViewProfileBtn.visibility = View.GONE
-        headerViewSkipBtn.visibility = View.GONE
+        headerViewDoneBtn.visibility = View.GONE
         headerViewSaveBtn.visibility = View.GONE
         headerViewSearchBtn.visibility = View.GONE
         headerViewFilterBtn.visibility = View.GONE
     }
 
     fun setLocationTitle(time: String?,location: String?){
+        //todo - fix this by sending objects?
         headerViewLocationDetailsView.setTime(time!!)
         headerViewLocationDetailsView.setLocation(location!!)
+    }
+
+    fun isSkipable(isSkipable: Boolean) {
+        if(isSkipable){
+            headerViewSkipBtn.visibility = View.VISIBLE
+        }else{
+            headerViewSkipBtn.visibility = View.GONE
+        }
     }
 }

@@ -1,9 +1,8 @@
-package com.bupp.wood_spoon_eaters.features.support
+package com.bupp.wood_spoon_eaters.features.main.support_center
 
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
 
 class SupportViewModel(val api: ApiService) : ViewModel() {
 
@@ -18,6 +17,10 @@ class SupportViewModel(val api: ApiService) : ViewModel() {
 
     fun sendCommentToSupport() {
 
-        navigationEvent.postValue(NavigationEvent(true))
+        navigationEvent.postValue(
+            NavigationEvent(
+                true
+            )
+        )
     }
 }

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.support
+package com.bupp.wood_spoon_eaters.features.main.support_center
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,8 +36,8 @@ class SupportDialog : DialogFragment(), HeaderView.HeaderViewListener {
     }
 
     private fun setTitleText() {
-        supportDialogTitle.setHeaderViewListener(this)
-        supportDialogTitle.setType(Constants.HEADER_VIEW_TYPE_TITLE_BACK, getString(R.string.code_fragment_title))
+//        supportDialogTitle.setHeaderViewListener(this)
+//        supportDialogTitle.setType(Constants.HEADER_VIEW_TYPE_TITLE_BACK, getString(R.string.code_fragment_title))
     }
 
     override fun onHeaderBackClick() {

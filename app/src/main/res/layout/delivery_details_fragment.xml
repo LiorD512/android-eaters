@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment">
+
+    <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+            android:layout_marginTop="30dp"
+            android:id="@+id/deliveryDetailsFragLocation"
+            app:detailsType="DELIVERY_DETAILS_LOCATION"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+            android:id="@+id/deliveryDetailsFragTime"
+            app:detailsType="DELIVERY_DETAILS_TIME"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

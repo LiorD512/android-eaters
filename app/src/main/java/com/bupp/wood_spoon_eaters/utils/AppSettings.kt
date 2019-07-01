@@ -2,33 +2,29 @@ package com.bupp.wood_spoon_eaters.utils
 
 import android.content.SharedPreferences
 import com.bupp.wood_spoon_eaters.model.Client
+import com.bupp.wood_spoon_eaters.model.Eater
 
 class AppSettings(val sharedPreferences: SharedPreferences) {
 
     val HAS_FINISH_STORY = "has_finished_story"
 
-    var currentClient: Client? = null
+    var currentEater: Eater? = null
 
     //singup params
 //    var hasAccount: Boolean
 //    get() = sharedPreferences.getBoolean(HAS_ACCOUNT, false)
 //    set(hasAccount) = sharedPreferences.edit().putBoolean(HAS_ACCOUNT, hasAccount).apply()
 
-    var hasFinishedStory: Boolean
-        get() = sharedPreferences.getBoolean(HAS_FINISH_STORY, false)
-        set(hasFinishedStory) = sharedPreferences.edit().putBoolean(HAS_FINISH_STORY, hasFinishedStory).apply()
-
-
     fun isAfterLogin(): Boolean {
-        return true
+        return !currentEater?.email.isNullOrEmpty()
     }
 
-//    fun setCurrentClient(client: Client?){
-//        this.currentClient = client
+//    fun setCurrentEater(client: Client?){
+//        this.currentEater = client
 //    }
 //
-//    fun getCurrentClient() : Client?{
-//        return currentClient
+//    fun getCurrentEater() : Client?{
+//        return currentEater
 //    }
 
     //shared prefs

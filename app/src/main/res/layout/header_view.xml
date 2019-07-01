@@ -22,6 +22,7 @@
                     android:id="@+id/headerViewSearchBtn"
                     android:src="@drawable/icons_search"
                     android:padding="5dp"
+
                     android:visibility="gone"
                     android:layout_gravity="center"
                     android:background="@null"
@@ -29,6 +30,7 @@
                     android:layout_height="wrap_content"/>
 
             <ImageView
+                    tools:visibility="visible"
                     android:id="@+id/headerViewFilterBtn"
                     android:src="@drawable/icons_filter"
                     android:padding="5dp"
@@ -39,6 +41,33 @@
                     android:layout_height="wrap_content"/>
 
         </FrameLayout>
+
+        <TextView
+                tools:visibility="visible"
+                style="@style/SemiBold13Blue"
+                android:id="@+id/headerViewDoneBtn"
+                android:text="Done"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_gravity="center|right"
+                android:paddingRight="15.7dp"
+                android:paddingLeft="15.7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+        <TextView
+                style="@style/SemiBold13Blue"
+                android:id="@+id/headerViewSaveBtn"
+                android:text="Save"
+                tools:visibility="visible"
+                android:textColor="@color/blue_alpha_selector"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_gravity="center|right"
+                android:paddingRight="15.7dp"
+                android:paddingLeft="15.7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
 
         <TextView
                 style="@style/SemiBold13Dark"
@@ -52,18 +81,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
 
-        <TextView
-                style="@style/SemiBold13Blue"
-                android:id="@+id/headerViewSaveBtn"
-                android:text="Save"
-                android:textColor="@color/blue_alpha_selector"
-                android:visibility="gone"
-                android:gravity="center"
-                android:layout_gravity="center|right"
-                android:paddingRight="15.7dp"
-                android:paddingLeft="15.7dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
 
     </FrameLayout>
 
@@ -75,9 +92,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.LocationDetailsView
+    <com.bupp.wood_spoon_eaters.custom_views.AddressAndTimeView
             android:id="@+id/headerViewLocationDetailsView"
             android:visibility="gone"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

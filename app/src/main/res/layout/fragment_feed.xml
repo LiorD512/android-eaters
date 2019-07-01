@@ -6,58 +6,65 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-    <ScrollView
+    <LinearLayout
+            android:id="@+id/feedFragEmptyLayout"
+            android:layout_marginTop="72dp"
+            android:background="@drawable/my_dishes_pic"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:background="@color/offwhite_90"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginEnd="15.4dp"
+                android:layout_marginTop="63.6dp"
+                android:layout_marginBottom="62.6dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/feedFragEmptyFeedTitle"
+                    style="@style/SemiBold15Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    tools:text="Hey Neta"/>
+
+            <View
+                    android:background="@color/black"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginTop="12.6dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <TextView
+                    style="@style/Reg13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="In order to see the dishes,\nplease enter your address "/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:id="@+id/feedFragListLayout"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-        <LinearLayout
-                android:id="@+id/feedFragEmptyFeedLayout"
-                android:layout_marginTop="72dp"
-                android:background="@drawable/my_dishes_pic"
-                android:visibility="gone"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedFragList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"/>
 
-            <LinearLayout
-                    android:background="@color/offwhite_90"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginEnd="15.4dp"
-                    android:layout_marginTop="63.6dp"
-                    android:layout_marginBottom="62.6dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                <TextView
-                        android:id="@+id/feedFragEmptyFeedTitle"
-                        style="@style/SemiBold15Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        tools:text="Hey Neta"/>
-
-                <View
-                        android:background="@color/black"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:layout_marginTop="12.6dp"
-                        android:layout_marginBottom="15.4dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
-
-                <TextView
-                        style="@style/Reg13Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="In order to see the dishes,\nplease enter your address "/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
 
 </FrameLayout>

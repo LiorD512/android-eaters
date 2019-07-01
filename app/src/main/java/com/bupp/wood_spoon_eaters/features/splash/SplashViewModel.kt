@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.Client
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.MetaDataModel
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -32,8 +33,7 @@ class SplashViewModel(
 
     data class NavigationEvent(
         val isSuccess: Boolean = false,
-        val isRegistered: Boolean = false,
-        val finishedSignup: Boolean = false
+        val isRegistered: Boolean = false
     )
 
     fun initServerCall() {
@@ -51,16 +51,16 @@ class SplashViewModel(
                         Log.d("wowSplashVM", "getMetaData success")
                         val metaDataResponse = response.body() as ServerResponse<MetaDataModel>
                         metaDataManager.setMetaDataObject(metaDataResponse.data!!)
-                        navigationEvent.postValue(NavigationEvent(true, isRegistered, false))
+                        navigationEvent.postValue(NavigationEvent(true, isRegistered))
                     } else {
                         Log.d("wowSplashVM", "getMetaData fail")
-                        navigationEvent.postValue(NavigationEvent(false, isRegistered, false))
+                        navigationEvent.postValue(NavigationEvent(false, isRegistered))
                     }
                 }
 
                 override fun onFailure(call: Call<ServerResponse<MetaDataModel>>, t: Throwable) {
                     Log.d("wowVerificationVM", "getMetaData big fail")
-                    navigationEvent.postValue(NavigationEvent(false, isRegistered, false))
+                    navigationEvent.postValue(NavigationEvent(false, isRegistered))
                 }
             })
         }
@@ -79,22 +79,22 @@ class SplashViewModel(
             Log.d("wowSplash", "Observable success")
 
             //parse client
-            val cookServerResponse = objects[0] as ServerResponse<Client>
-            val client: Client? = cookServerResponse.data
-            Log.d("wowSplash", "client parsing success: " + client?.id)
+            val eaterServerResponse = objects[0] as ServerResponse<Eater>
+            val eater: Eater? = eaterServerResponse.data
+            Log.d("wowSplash", "eater parsing success: " + eater?.id)
 
             //parse metaData
             val metaDataResponse = objects[1] as ServerResponse<MetaDataModel>
             metaDataManager.setMetaDataObject(metaDataResponse.data!!)
 
-            if (client == null) {
-                navigationEvent.postValue(NavigationEvent(true, true, false))
+            if (eater == null) {
+                navigationEvent.postValue(NavigationEvent(true, false))
             } else {
-                appSettings.currentClient = client
-                if (appSettings.hasFinishedStory) {
-                    navigationEvent.postValue(NavigationEvent(true, true, true))
+                appSettings.currentEater = eater
+                if (appSettings.isAfterLogin()) {
+                    navigationEvent.postValue(NavigationEvent(true, true))
                 } else {
-                    navigationEvent.postValue(NavigationEvent(true, true, false))
+                    navigationEvent.postValue(NavigationEvent(true, false))
                 }
             }
             Any()

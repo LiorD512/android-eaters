@@ -20,6 +20,11 @@
     <string name="phone_verification_fragment_title">Enter Your Mobile Number</string>
     <string name="phone_verification_fragment_phone_hint">+1 (201) 555 - 0123</string>
 
+    <string name="details_setup_fragment_address">Address</string>
+    <string name="details_setup_fragment_address_hint">Street address and building number</string>
+    <string name="details_setup_fragment_apt_hint">Apt./ Suite/ Floor</string>
+    <string name="details_setup_fragment_delivery_hint">Add Delivery Note</string>
+
     <string name="create_account_fragment_title">Create Your Account</string>
     <string name="create_account_fragment_full_name_title">Full Name</string>
     <string name="create_account_fragment_full_name_hint">Your Full Name</string>

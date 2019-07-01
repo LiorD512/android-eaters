@@ -6,22 +6,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-data class Eater(
-    val id: Long,
-    val firstName: String,
-    val lastName: String,
-    val thumbnail: String,
-    val phoneNumber: String,
-    val email: String,
-    val inAppToken: String,
-    val accountStatus: Int,
-    val statusUpdatedAt: Date,
-    val lastActivityAt: Date,
-    val primaryAddress: Address,
-    val ordersCount: Int,
-    val favoritesCount: Int,
-    val fullName: String = "$firstName $lastName"
-)
+
 
 data class Suggestion(
     val id: Long,
