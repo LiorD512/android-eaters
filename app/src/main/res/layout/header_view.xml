@@ -29,17 +29,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-            <ImageView
-                    tools:visibility="visible"
-                    android:id="@+id/headerViewFilterBtn"
-                    android:src="@drawable/icons_filter"
-                    android:padding="5dp"
-                    android:visibility="gone"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
         </FrameLayout>
 
         <TextView
@@ -99,11 +88,83 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+    <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/headerViewSearchLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_marginTop="2.3dp"
+                android:layout_marginBottom="2.3dp"
+                android:orientation="horizontal"
+                android:background="@drawable/rectangle_dark"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+            <ImageView
+                    android:layout_gravity="center|right"
+                    android:background="@null"
+                    android:layout_marginLeft="7.7dp"
+                    android:src="@drawable/icons_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            <EditText
+                    android:id="@+id/headerViewSearchInput"
+                    android:gravity="start|center"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    android:textColor="@color/dark"
+                    android:textSize="13.4sp"
+                    android:paddingLeft="15.4dp"
+                    android:paddingRight="15.4dp"
+                    android:maxLines="1"
+                    tools:hint="hint"
+                    android:background="@null"
+                    android:textColorHint="@color/dark_50"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:inputType="textAutoComplete"/>
+
+            <ImageButton
+                    android:id="@+id/headerViewSearchClean"
+                    android:layout_gravity="center|right"
+                    android:background="@null"
+                    android:layout_marginRight="7.7dp"
+                    android:src="@drawable/icons_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <ImageButton
+                tools:visibility="visible"
+                android:id="@+id/headerViewFilterBtn"
+                android:src="@drawable/icons_filter"
+                android:padding="5dp"
+                android:layout_marginRight="10.4dp"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+
+    </LinearLayout>
+
+
     <ImageButton
             android:visibility="gone"
             android:src="@drawable/icons_close"
             android:id="@+id/headerViewCloseBtn"
-            android:layout_marginLeft="15.4dp"
+            android:layout_marginLeft="10.4dp"
             android:padding="5dp"
             android:layout_gravity="left|center"
             android:background="@null"
@@ -114,7 +175,7 @@
             android:visibility="gone"
             android:src="@drawable/icons_back"
             android:id="@+id/headerViewBackBtn"
-            android:layout_marginLeft="15.4dp"
+            android:layout_marginLeft="10.4dp"
             android:padding="5dp"
             android:layout_gravity="left|center"
             android:background="@null"
@@ -125,7 +186,7 @@
             android:visibility="gone"
             android:src="@drawable/icons_profile"
             android:id="@+id/headerViewProfileBtn"
-            android:layout_marginLeft="15.4dp"
+            android:layout_marginLeft="10.4dp"
             android:padding="5dp"
             android:layout_gravity="left|center"
             android:background="@null"

@@ -15,11 +15,7 @@ data class Suggestion(
     val dishDescription: String
 )
 
-@Parcelize
-data class Price(
-    val formatedValue: String,
-    val value: Int
-) : Parcelable
+
 
 //data class Ingredient(
 //        val id: Long,
@@ -49,11 +45,11 @@ data class WoodUnit(
     val definition: String
 ): Parcelable
 
-data class DishCookingMethod(
-    val id: Long,
-    val dish: Dish,
-    val cookingMethod: CookingMethod
-)
+//data class DishCookingMethod(
+//    val id: Long,
+//    val dish: Dish,
+//    val cookingMethod: CookingMethod
+//)
 
 data class ReportTopic(
     val id: Long,
@@ -104,37 +100,37 @@ data class DishDiet(
     val diet: Diet
 )
 
-@Parcelize
-data class Dish(
-    var id: Long? = null,
-    var client: Client? = null,
-    var name: String = "",
-    var description: String = "",
-    var thumbnail: String = "",
-    var tempThumbnail: Uri? = null,
-    var dishType: Int = -1,
-    var minPrepTime: Int = -1,
-    var maxPrepTime: Int = -1,
-    var price: Price? = null,
-    var freeDelivery: Boolean = true,
-    var status: String = "",
-    var statusUpdatedAt: Date = Date(),
-    @SerializedName("cooking_time") var cookingTime: String = "",
-    @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Long> = arrayListOf(),
-    @SerializedName("diet_ids") var dietaryIds: ArrayList<Long> = arrayListOf(),
-    @SerializedName("dish_ingredients") var dishIngredients: ArrayList<DishIngredient>? = arrayListOf(),
-    @SerializedName("cooking_method_ids") var cookingMethodIds: ArrayList<Long> = arrayListOf(),
-    @SerializedName("prep_time_range_id") var prepTimeRangeId: Long = -1,
-//        var ancestorId: Long,
-    var calorificValue: Int = -1,
-    var unitSold: Int = -1,
-    var ordersCount: Int = -1,
-    var offersCount: Int = -1,
-    var totalRevenue: Int = -1,
-    var totalProfit: Int = -1,
-    var avgRating: Double = -1.0,
-    var ingredients: ArrayList<Ingredient> = arrayListOf()
-) : Parcelable
+//@Parcelize
+//data class Dish(
+//    var id: Long? = null,
+//    var client: Client? = null,
+//    var name: String = "",
+//    var description: String = "",
+//    var thumbnail: String = "",
+//    var tempThumbnail: Uri? = null,
+//    var dishType: Int = -1,
+//    var minPrepTime: Int = -1,
+//    var maxPrepTime: Int = -1,
+//    var price: Price? = null,
+//    var freeDelivery: Boolean = true,
+//    var status: String = "",
+//    var statusUpdatedAt: Date = Date(),
+//    @SerializedName("cooking_time") var cookingTime: String = "",
+//    @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Long> = arrayListOf(),
+//    @SerializedName("diet_ids") var dietaryIds: ArrayList<Long> = arrayListOf(),
+//    @SerializedName("dish_ingredients") var dishIngredients: ArrayList<DishIngredient>? = arrayListOf(),
+//    @SerializedName("cooking_method_ids") var cookingMethodIds: ArrayList<Long> = arrayListOf(),
+//    @SerializedName("prep_time_range_id") var prepTimeRangeId: Long = -1,
+////        var ancestorId: Long,
+//    var calorificValue: Int = -1,
+//    var unitSold: Int = -1,
+//    var ordersCount: Int = -1,
+//    var offersCount: Int = -1,
+//    var totalRevenue: Int = -1,
+//    var totalProfit: Int = -1,
+//    var avgRating: Double = -1.0,
+//    var ingredients: ArrayList<Ingredient> = arrayListOf()
+//) : Parcelable
 
 data class PromoCode(
     val id: Long,
@@ -271,17 +267,17 @@ data class MenuItem(
     val unitsSold: Int
 )
 
-data class CookingSlot(
-    val id: Long,
-    val client: Client,
-    val startsAt: Date,
-    val endsAt: Date,
-    val status: Int,
-    val menusCount: Int,
-    val totalProfit: Price,
-    val menuItems: ArrayList<MenuItem>,
-    val orders: ArrayList<Order>
-)
+//data class CookingSlot(
+//    val id: Long,
+//    val client: Client,
+//    val startsAt: Date,
+//    val endsAt: Date,
+//    val status: Int,
+//    val menusCount: Int,
+//    val totalProfit: Price,
+//    val menuItems: ArrayList<MenuItem>,
+//    val orders: ArrayList<Order>
+//)
 
 data class Favorite(
     val id: Long,
@@ -306,20 +302,20 @@ data class Cuisine(
     val dishesCount: Int?
 ) : Parcelable
 
-@Parcelize
-data class Ingredient(
-    override var id: Long,
-    override var name: String,
-    var baseUnit: String,
-    var unitPrice: Price,
-    var calorificValue: Int,
-    var adjustable: Boolean?,
-    var units: ArrayList<WoodUnit>
-) : SelectableString, Parcelable
-
-@Parcelize
-data class CookingMethod(
-    override val id: Long,
-    override val name: String
-) : SelectableString, Parcelable
+//@Parcelize
+//data class Ingredient(
+//    override var id: Long,
+//    override var name: String,
+//    var baseUnit: String,
+//    var unitPrice: Price,
+//    var calorificValue: Int,
+//    var adjustable: Boolean?,
+//    var units: ArrayList<WoodUnit>
+//) : SelectableString, Parcelable
+//
+//@Parcelize
+//data class CookingMethod(
+//    override val id: Long,
+//    override val name: String
+//) : SelectableString, Parcelable
 

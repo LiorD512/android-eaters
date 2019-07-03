@@ -45,6 +45,12 @@ interface ApiService {
     @POST("eaters/me")
     fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>
 
+    @POST("eaters/me/searches")
+    fun search(@Body searchRequest: SearchRequest): Call<ServerResponse<ArrayList<Search>>>
+
+    @GET("eaters/me/searches/{id}")
+    fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
+
 
 
 //    @POST("cooks/me/dishes/presigned_urls")

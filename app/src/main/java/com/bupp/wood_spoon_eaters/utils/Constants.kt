@@ -5,6 +5,7 @@ import android.Manifest
 class Constants {
     companion object {
 
+
         //client pressigned url types
         const val PRESIGNED_URL_THUMBNAIL = "thumbnail"
         const val PRESIGNED_URL_VIDEO = "video"
@@ -59,16 +60,22 @@ class Constants {
         const val CREATE_ACCOUNT_TAG = "create_account_tag"
 
         const val FEED_TAG = "feed_tag"
+        const val SEARCH_TAG = "search_tag"
         const val ADD_NEW_ADDRESS_TAG = "add_new_address_tag"
         const val DELIVERY_DETAILS_TAG = "delivery_details_tag"
         const val SETTINGS_TAG = "settings_tag"
         const val SUPPORT_TAG = "support_tag"
-
-
-
-
-
         const val ORDER_HISTORY_TAG = "order_history_tag"
+
+
+        //UserImageView Image Size
+        const val SMALL_IMAGE_SIZE = 1
+        const val BIG_IMAGE_SIZE = 2
+
+        //Search resource type
+        const val RESOURCE_TYPE_COOK = "Cook"
+        const val RESOURCE_TYPE_DISH = "Dish"
+
 
 
         //activity request code

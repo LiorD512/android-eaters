@@ -21,12 +21,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 
-class SplashViewModel(
-    val apiSettings: ApiSettings,
-    val appSettings: AppSettings,
-    val api: ApiService,
-    val metaDataManager: MetaDataManager
-) : ViewModel() {
+class SplashViewModel(val apiSettings: ApiSettings, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
 
     var serverCallMap = mutableMapOf<Int, Observable<*>>()
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()

@@ -12,14 +12,14 @@ data class ServerResponse<T> (
 
 data class MetaDataModel(
 //        val settings: ArrayList<Settings>,
-    @SerializedName("cancellation_reasonsval") val cancellationReasons: ArrayList<CancellationReason>? = arrayListOf(),
-    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethod>? = arrayListOf(),
-    val countries: ArrayList<Country>? = arrayListOf(),
-    val cuisines: ArrayList<CuisineIcon>? = arrayListOf(),
-    val diets: ArrayList<DietaryIcon>? = arrayListOf(),
-    val ingredients: ArrayList<Ingredient>? = arrayListOf(),
-    @SerializedName("prep_time_ranges") val prepTimeRanges: ArrayList<PrepTimeRange>? = arrayListOf(),
-    val units: ArrayList<WoodUnit>? = arrayListOf()
+    val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),
+    val diets: ArrayList<DietaryIcon>? = arrayListOf()
+//    @SerializedName("cancellation_reasonsval") val cancellationReasons: ArrayList<CancellationReason>? = arrayListOf(),
+//    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethod>? = arrayListOf(),
+//    val countries: ArrayList<Country>? = arrayListOf(),
+//    val ingredients: ArrayList<Ingredient>? = arrayListOf(),
+//    @SerializedName("prep_time_ranges") val prepTimeRanges: ArrayList<PrepTimeRange>? = arrayListOf(),
+//    val units: ArrayList<WoodUnit>? = arrayListOf()
 )
 
 data class PrepTimeRange(
@@ -41,29 +41,30 @@ data class AppSettings(
 )
 
 //icons grid data class
-interface SelectableIcon {
-    val id: Long
-    val name: String
-    val icon: String
-}
 
+data class DietaryIcon(
+    val name: String,
+    val icon: String,
+    val id: Long
+)
+
+data class CuisineLabel(
+    val name: String,
+    val icon: String,
+    val cover: String,
+    val id: Long
+)
+
+//interface SelectableIcon {
+//    val id: Long
+//    val name: String
+//    val icon: String
+//}
 interface SelectableString {
     val id: Long
     val name: String
 }
 
-data class DietaryIcon(
-    override val name: String,
-    override val icon: String,
-    override val id: Long
-) : SelectableIcon
-
-
-data class CuisineIcon(
-    override val name: String,
-    override val icon: String,
-    override val id: Long
-) : SelectableIcon
 
 
 data class PreSignedUrl(

@@ -1,12 +1,17 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.text_watcher.AutoCompleteTextWatcher
+import com.bupp.wood_spoon_eaters.utils.text_watcher.InputTextWatcher
 import kotlinx.android.synthetic.main.header_view.view.*
 
 
@@ -52,6 +57,7 @@ class HeaderView : FrameLayout {
         fun onHeaderSearchClick() {}
         fun onHeaderFilterClick() {}
         fun onHeaderProfileClick() {}
+        fun onHeaderTextChange(toString: String) {}
     }
 
     fun setType(type: Int?, title: String? = "") {
@@ -84,6 +90,19 @@ class HeaderView : FrameLayout {
         headerViewProfileBtn.setOnClickListener {
             listener?.onHeaderProfileClick()
         }
+
+        headerViewSearchClean.setOnClickListener {
+            headerViewSearchInput.text.clear()
+        }
+
+        headerViewSearchInput.addTextChangedListener(object: AutoCompleteTextWatcher() {
+            override fun handleInputString(s: String) {
+                Log.d("wowHeaderView","afterTextChanged: ${s.toString()}")
+                listener?.onHeaderTextChange(s.toString())
+            }
+
+        });
+
     }
 
     private fun initUi(type: Int?) {
@@ -95,8 +114,12 @@ class HeaderView : FrameLayout {
                 headerViewLocationDetailsView.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_SEARCH -> {
+                headerViewSep.visibility = View.GONE
                 headerViewBackBtn.visibility = View.VISIBLE
                 headerViewFilterBtn.visibility = View.VISIBLE
+                headerViewSearchLayout.visibility = View.VISIBLE
+                headerViewFilterBtn.alpha = 0.5f
+
             }
             Constants.HEADER_VIEW_TYPE_SIGNUP -> {
                 headerViewTitle.visibility = View.VISIBLE
@@ -128,11 +151,13 @@ class HeaderView : FrameLayout {
         headerViewTitle.visibility = GONE
         headerViewCloseBtn.visibility = View.GONE
         headerViewBackBtn.visibility = View.GONE
-        headerViewProfileBtn.visibility = View.GONE
         headerViewDoneBtn.visibility = View.GONE
         headerViewSaveBtn.visibility = View.GONE
         headerViewSearchBtn.visibility = View.GONE
         headerViewFilterBtn.visibility = View.GONE
+        headerViewProfileBtn.visibility = View.GONE
+        headerViewSearchLayout.visibility = View.GONE
+        headerViewLocationDetailsView.visibility = View.GONE
     }
 
     fun setLocationTitle(time: String?,location: String?){
@@ -147,5 +172,13 @@ class HeaderView : FrameLayout {
         }else{
             headerViewSkipBtn.visibility = View.GONE
         }
+    }
+
+    fun updateSearchInput(str: String) {
+        headerViewSearchInput.setText(str)
+    }
+
+    fun updateCurrentLocationAndTime() {
+
     }
 }

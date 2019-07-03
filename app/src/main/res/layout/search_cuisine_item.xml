@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:background="@color/teal_blue"
+        android:layout_width="157.4dp"
+        android:layout_height="115.2dp">
+
+    <ImageView
+            android:scaleType="centerCrop"
+            android:id="@+id/searchCuisineItemBkg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <TextView
+            tools:text="American"
+            style="@style/Reg15Dark"
+            android:gravity="center"
+            android:layout_marginTop="30.7dp"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="30.7dp"
+            android:id="@+id/searchCuisineItemName"
+            android:background="@color/off_white_90"/>
+
+</FrameLayout>

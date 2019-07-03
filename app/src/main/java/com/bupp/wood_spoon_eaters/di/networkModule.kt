@@ -2,12 +2,15 @@ package com.bupp.wood_spoon_eaters.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonSearch
+import com.bupp.wood_spoon_eaters.model.Search
 import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
 import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.bupp.wood_spoon_eaters.utils.PutActionManager
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -54,10 +57,15 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
 }
 
 fun provideRetrofit(client: OkHttpClient): Retrofit {
+
+    val gson = GsonBuilder()
+        .registerTypeAdapter(Search::class.java, DeserializerJsonSearch())
+        .create()
+
     return Retrofit.Builder()
         .baseUrl(SERVER_BASE_URL)
         .client(client)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 }

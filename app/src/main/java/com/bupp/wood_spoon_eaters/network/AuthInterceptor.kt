@@ -51,35 +51,6 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
         settings.token = newToken
     }
 
-    private fun refreshSessionToken(): Boolean {
-        try {
-
-            val refreshToken = settings.refreshToken
-            if (apiService != null && refreshToken != null) {
-                var retrofitLoginResponse: retrofit2.Response<LoginResponse>? = null
-//                retrofitLoginResponse = apiService!!.refreshToken(
-//                        String.format("Bearer %s", refreshToken),
-//                        RefreshTokenRequest(refreshToken)
-//                ).execute()
-
-                if (retrofitLoginResponse!!.code() == 200) {
-                    val loginResponse = retrofitLoginResponse.body()
-                    val updatedRefreshToken = loginResponse!!.refreshToken
-                    val updatedToken = loginResponse.token
-                    settings.refreshToken = updatedRefreshToken
-                    settings.token = updatedToken
-                }
-            }
-            storedAuthToken = null
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return false
-        }
-
-        return true
-    }
-
     private fun getStoredAuthToken(): String? {
         return settings.token
     }
@@ -93,4 +64,35 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
         }
         return request
     }
+
+//    private fun refreshSessionToken(): Boolean {
+//        try {
+//
+//            val refreshToken = settings.refreshToken
+//            if (apiService != null && refreshToken != null) {
+//                var retrofitLoginResponse: retrofit2.Response<LoginResponse>? = null
+////                retrofitLoginResponse = apiService!!.refreshToken(
+////                        String.format("Bearer %s", refreshToken),
+////                        RefreshTokenRequest(refreshToken)
+////                ).execute()
+//
+//                if (retrofitLoginResponse!!.code() == 200) {
+//                    val loginResponse = retrofitLoginResponse.body()
+//                    val updatedRefreshToken = loginResponse!!.refreshToken
+//                    val updatedToken = loginResponse.token
+//                    settings.refreshToken = updatedRefreshToken
+//                    settings.token = updatedToken
+//                }
+//            }
+//            storedAuthToken = null
+//
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//            return false
+//        }
+//
+//        return true
+//    }
+
+
 }

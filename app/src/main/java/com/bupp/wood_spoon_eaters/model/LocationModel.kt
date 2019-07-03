@@ -33,11 +33,11 @@ data class Address(
 
 @Parcelize
 data class Country(
-        @SerializedName("id") override val id: Long,
-        @SerializedName("name") override val name: String,
+        @SerializedName("id") val id: Long,
+        @SerializedName("name") val name: String,
         @SerializedName("iso") val iso: String? = null,
         @SerializedName("flag_url") val flagUrl: String? = null
-) : SelectableString, Parcelable
+) : Parcelable
 
 @Parcelize
 data class State(

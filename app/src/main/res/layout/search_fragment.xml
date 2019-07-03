@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.search.SearchFragment">
+
+    <LinearLayout
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:id="@+id/searchFragEmptyLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <FrameLayout
+                android:background="@drawable/your_dishes_pic"
+                android:layout_marginTop="76dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            
+            <LinearLayout
+                    android:layout_gravity="center"
+                    android:paddingRight="15.4dp"
+                    android:paddingLeft="15.4dp"
+                    android:layout_marginRight="15.4dp"
+                    android:layout_marginLeft="15.4dp"
+                    android:orientation="vertical"
+                    android:background="@color/off_white_90"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginTop="23.6dp"
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="We Are Sorry"/>
+
+                <TextView
+                        android:layout_marginTop="15.6dp"
+                        style="@style/Reg13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="The cooks in your neigborhood currently do not offer the dish you are looking for… "/>
+
+                <View
+                        android:layout_marginTop="25dp"
+                        android:layout_marginBottom="25dp"
+                        android:background="@color/black"
+                        android:layout_width="match_parent" android:layout_height="1dp"/>
+
+                <TextView
+                        android:layout_marginBottom="23dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13.4sp"
+                        android:textColor="@color/dark"
+                        android:letterSpacing="0.03"
+                        android:gravity="center_horizontal"
+                        android:text="Would you like us to ask our cooks to add this dish to their future menu? "/>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <View
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="0dp"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+                app:title="Sounds Good"
+                android:id="@+id/searchFragSoundsGood"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginBottom="38dp"
+                android:layout_marginTop="51dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
+            android:layout_marginTop="23dp"
+            android:id="@+id/searchFragList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/searchFragPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</FrameLayout>

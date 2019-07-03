@@ -13,13 +13,5 @@
         android:layout_height="match_parent"
         tools:text="Iceland"/>
 
-    <!--<View-->
-        <!--android:id="@+id/autoCompleteItemBottomSep"-->
-        <!--android:layout_marginTop="12.7dp"-->
-        <!--android:layout_marginLeft="15.4dp"-->
-        <!--android:layout_marginRight="15.4dp"-->
-        <!--android:background="@color/dark"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"/>-->
 
 </LinearLayout>

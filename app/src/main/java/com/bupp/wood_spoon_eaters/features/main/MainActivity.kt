@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetails
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
+import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.support.SupportDialog
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -23,8 +24,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         mainActHeaderView.setHeaderViewListener(this)
-        loadDeliveryDetails()
+
     }
 
     private fun loadFragment(fragment: Fragment, tag: String) {
@@ -32,6 +34,21 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
             .replace(R.id.mainActContainer, fragment, tag)
             .commit()
     }
+
+    fun getFragmentByTag(tag: String): Fragment? {
+        val fragmentManager = this@MainActivity.getSupportFragmentManager()
+        val fragments = fragmentManager.getFragments()
+        if (fragments != null) {
+            for (fragment in fragments) {
+                if (fragment.getTag() == tag)
+                    return fragment
+            }
+        }
+        return null
+    }
+
+
+
 
 
 
@@ -41,6 +58,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
     private fun loadFeed() {
         loadFragment(FeedFragment(), Constants.FEED_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
+    }
+
+    private fun loadSearchFragment(){
+        loadFragment(SearchFragment.newInstance(), Constants.SEARCH_TAG)
+        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_SEARCH)
     }
 
     //delivery details methods
@@ -110,6 +132,18 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
         onBackPressed()
     }
 
+    override fun onHeaderSearchClick() {
+        loadSearchFragment()
+    }
+
+    override fun onHeaderTextChange(str: String) {
+        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
+            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged(str)
+        }
+    }
+
+
+
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 1) {
@@ -117,6 +151,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
         } else {
             finish()
         }
+    }
+
+    fun updateSearchInput(str: String) {
+        mainActHeaderView.updateSearchInput(str)
     }
 
 }

@@ -31,6 +31,11 @@ object Utils {
         return sdf.format(date.time)
     }
 
+    fun parseDateToDayDateHour(date: Date): String {
+        val sdf = SimpleDateFormat("EE, W, Ha")
+        return sdf.format(date.time)
+    }
+
     fun parseDateToDayMonthYear(date: Date?): String {
         val sdf = SimpleDateFormat("EEEE, MMMM yyyy")
         return sdf.format(date?.time)
