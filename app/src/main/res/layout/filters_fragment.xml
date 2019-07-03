@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.pick_filters.FilterFragment">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginBottom="15.6dp"
+                    style="@style/SemiBold13Dark"
+                    android:text="Price Range"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.PriceRangeView
+                    android:id="@+id/pickFilterFragPriceRangeView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
+                    android:id="@+id/pickFilterFragTimeIcons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="38dp"
+                    app:subTitle=""
+                    app:title="Estimated Arrival Time"/>
+
+            <TextView
+                    android:id="@+id/pickFilterFragLaterTimeBtn"
+                    android:layout_marginTop="15.7dp"
+                    android:layout_marginStart="15.4dp"
+                    style="@style/Reg13Dark"
+                    android:text="@string/later_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginTop="39.2dp"
+                    android:layout_marginBottom="15.6dp"
+                    style="@style/SemiBold13Dark"
+                    android:text="Rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            <com.bupp.wood_spoon_eaters.custom_views.RatingStarsView
+                    android:id="@+id/pickFiltersFragRatingStarsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
+                    android:id="@+id/pickFilterFragDietaryIcons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="38.4dp"
+                    app:subTitle=""
+                    app:title="Dietary"/>
+
+            <TextView
+                    android:id="@+id/pickFilterFragClearAllBtn"
+                    android:layout_marginTop="15.7dp"
+                    android:layout_marginStart="15.4dp"
+                    android:paddingBottom="23.7dp"
+                    android:paddingRight="23.7dp"
+                    style="@style/SemiBold13Blue"
+                    android:text="Clear All"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

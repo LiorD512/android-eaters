@@ -24,7 +24,7 @@ class InputTitleView : FrameLayout {
     private var listener: InputTitleViewListener? = null
 
     interface InputTitleViewListener {
-        fun onInputTitleChange(str: String?)
+        fun onInputTitleChange(str: String?){}
     }
 
     fun setInputTitleViewListener(listener: InputTitleViewListener) {

@@ -18,11 +18,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-            <ImageView
-                    android:id="@+id/headerViewSearchBtn"
-                    android:src="@drawable/icons_search"
-                    android:padding="5dp"
 
+            <ImageView
+                    android:id="@+id/headerViewSettingsBtn"
+                    android:src="@drawable/icons_settings"
+                    android:padding="5dp"
                     android:visibility="gone"
                     android:layout_gravity="center"
                     android:background="@null"
@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"/>
 
             <ImageView
-                    tools:visibility="visible"
+                    tools:visibility="gone"
                     android:id="@+id/headerViewFilterBtn"
                     android:src="@drawable/icons_filter"
                     android:padding="5dp"
@@ -43,7 +43,7 @@
         </FrameLayout>
 
         <TextView
-                tools:visibility="visible"
+                tools:visibility="gone"
                 style="@style/SemiBold13Blue"
                 android:id="@+id/headerViewDoneBtn"
                 android:text="Done"
@@ -59,7 +59,7 @@
                 style="@style/SemiBold13Blue"
                 android:id="@+id/headerViewSaveBtn"
                 android:text="Save"
-                tools:visibility="visible"
+                tools:visibility="gone"
                 android:textColor="@color/blue_alpha_selector"
                 android:visibility="gone"
                 android:gravity="center"
@@ -92,12 +92,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.AddressAndTimeView
-            android:id="@+id/headerViewLocationDetailsView"
+    <LinearLayout
             android:visibility="gone"
-            android:gravity="center"
+            android:paddingRight="15.4dp"
+            android:id="@+id/headerViewLocationLayout"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content">
+
+        <ImageButton
+                tools:visibility="visible"
+                android:src="@drawable/icons_profile"
+                android:id="@+id/headerViewProfileBtn"
+                android:layout_marginLeft="15.4dp"
+                android:padding="5dp"
+                android:layout_gravity="left|center"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.AddressAndTimeView
+                tools:visibility="visible"
+                android:id="@+id/headerViewAddressAndTime"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+        <ImageView
+                tools:visibility="visible"
+                android:id="@+id/headerViewSearchBtn"
+                android:src="@drawable/icons_search"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
 
     <ImageButton
             android:visibility="gone"
@@ -121,16 +155,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <ImageButton
-            android:visibility="gone"
-            android:src="@drawable/icons_profile"
-            android:id="@+id/headerViewProfileBtn"
-            android:layout_marginLeft="15.4dp"
-            android:padding="5dp"
-            android:layout_gravity="left|center"
-            android:background="@null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
     <View
             android:id="@+id/headerViewSep"

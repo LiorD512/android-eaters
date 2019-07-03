@@ -14,6 +14,7 @@
             <enum name="HEADER_VIEW_TYPE_BACK_TITLE_DONE" value="4"/>
             <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SAVE" value="5"/>
             <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE" value="6"/>
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS" value="7"/>
         </attr>
         <attr name="title"/>
         <attr name="isWithSep" format="boolean"/>
@@ -23,6 +24,7 @@
         <attr name="detailsType" format="enum">
             <enum name="DELIVERY_DETAILS_LOCATION" value="0"/>
             <enum name="DELIVERY_DETAILS_TIME" value="1"/>
+            <enum name="DELIVERY_DETAILS_PAYMENT" value="2"/>
         </attr>
     </declare-styleable>
 
@@ -103,6 +105,7 @@
             <enum name="SMALL" value="1"/>
             <enum name="BIG" value="2"/>
         </attr>
+        <attr name="isEditButtonVisible" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="TagInputView">
