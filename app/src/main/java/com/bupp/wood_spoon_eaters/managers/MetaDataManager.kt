@@ -23,13 +23,13 @@ class MetaDataManager {
         return arrayListOf()
     }
 //
-//    fun getDietaryList(): ArrayList<SelectableIcon> {
-//        if (getMetaDataObject()?.diets != null) {
-//            return metaDataObject?.diets as ArrayList<SelectableIcon>
-//        }
-//        return arrayListOf()
-//    }
-//
+    fun getDietaryList(): ArrayList<SelectableIcon> {
+        if (getMetaDataObject()?.diets != null) {
+            return metaDataObject?.diets as ArrayList<SelectableIcon>
+        }
+        return arrayListOf()
+    }
+
 //    fun getCountries(): ArrayList<SelectableString> {
 //        if (getMetaDataObject()?.countries != null) {
 //            return getMetaDataObject()?.countries as ArrayList<SelectableString>

@@ -58,6 +58,7 @@ class HeaderView : FrameLayout {
         fun onHeaderFilterClick() {}
         fun onHeaderProfileClick() {}
         fun onHeaderTextChange(toString: String) {}
+        fun onHeaderAddressAndTimeClick() {}
     }
 
     fun setType(type: Int?, title: String? = "") {
@@ -103,21 +104,22 @@ class HeaderView : FrameLayout {
 
         });
 
+        headerViewAddressAndTime.setOnClickListener {
+            listener?.onHeaderAddressAndTimeClick()
+        }
     }
 
     private fun initUi(type: Int?) {
         hideAll()
         when (type) {
             Constants.HEADER_VIEW_TYPE_FEED -> {
-                headerViewSearchBtn.visibility = View.VISIBLE
-                headerViewProfileBtn.visibility = View.VISIBLE
-                headerViewLocationDetailsView.visibility = View.VISIBLE
+                headerViewLocationLayout.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_SEARCH -> {
                 headerViewSep.visibility = View.GONE
                 headerViewBackBtn.visibility = View.VISIBLE
-                headerViewFilterBtn.visibility = View.VISIBLE
                 headerViewSearchLayout.visibility = View.VISIBLE
+                headerViewFilterBtn.visibility = View.VISIBLE
                 headerViewFilterBtn.alpha = 0.5f
 
             }
@@ -144,6 +146,11 @@ class HeaderView : FrameLayout {
                 headerViewSaveBtn.visibility = View.VISIBLE
                 headerViewCloseBtn.visibility = View.VISIBLE
             }
+            Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewSettingsBtn.visibility = View.VISIBLE
+                headerViewBackBtn.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -153,23 +160,28 @@ class HeaderView : FrameLayout {
         headerViewBackBtn.visibility = View.GONE
         headerViewDoneBtn.visibility = View.GONE
         headerViewSaveBtn.visibility = View.GONE
-        headerViewSearchBtn.visibility = View.GONE
-        headerViewFilterBtn.visibility = View.GONE
-        headerViewProfileBtn.visibility = View.GONE
+        headerViewSettingsBtn.visibility = View.GONE
+        headerViewLocationLayout.visibility = View.GONE
         headerViewSearchLayout.visibility = View.GONE
-        headerViewLocationDetailsView.visibility = View.GONE
     }
 
-    fun setLocationTitle(time: String?,location: String?){
-        //todo - fix this by sending objects?
-        headerViewLocationDetailsView.setTime(time!!)
-        headerViewLocationDetailsView.setLocation(location!!)
+    fun setLocationTitle(time: String? = null, location: String? = null) {
+        if (!time.isNullOrEmpty()) {
+            headerViewAddressAndTime.setTime(time)
+//        }else{
+//            headerViewAddressAndTime.setDeliveryTime("ASAP")
+        }
+        if (!location.isNullOrEmpty()) {
+            headerViewAddressAndTime.setLocation(location)
+//        }else{
+//            headerViewAddressAndTime.setLocation("Address")
+        }
     }
 
     fun isSkipable(isSkipable: Boolean) {
-        if(isSkipable){
+        if (isSkipable) {
             headerViewSkipBtn.visibility = View.VISIBLE
-        }else{
+        } else {
             headerViewSkipBtn.visibility = View.GONE
         }
     }

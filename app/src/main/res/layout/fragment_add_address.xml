@@ -10,7 +10,7 @@
         android:background="@color/white">
 
     <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
-            android:id="@+id/createAccountFragmentAddress"
+            android:id="@+id/addAddressFragAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:isMandatory="true"
@@ -21,18 +21,20 @@
             android:layout_marginTop="26.9dp"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-            android:id="@+id/createAccountFragAddress2ndLine"
+            android:id="@+id/addAddressFragAddress2ndLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/dark_50"
             android:layout_marginTop="15.4dp"
             style="@style/Reg13Dark"
+            app:isMandatory="true"
             app:hint="@string/common_string_apartment"
-            app:inputType="INPUT_TYPE_TEXT_NO_TITLE"
+            app:title="@string/common_string_apartment"
+            app:inputType="TEXT"
             android:gravity="start"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-            android:id="@+id/createAccountFragmentEmail"
+            android:id="@+id/addAddressFragDeliveryNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15.4dp"
@@ -47,22 +49,33 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
-    <CheckBox
-            android:id="@+id/addAddressFragDeliveryCb"
-            android:text="@string/add_address_frag_delivery_to_door"
-            android:paddingStart="7.5dp"
-            android:button="@drawable/circle_checkbox_selector"
-            style="@style/Reg13Dark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <CheckBox
-            android:id="@+id/addAddressFragPickUpCb"
-            android:text="@string/add_address_frag_pick_up_outside"
-            android:paddingStart="7.5dp"
-            android:layout_marginTop="28.1dp"
-            style="@style/Reg13Dark"
-            android:button="@drawable/circle_checkbox_selector"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <RadioButton
+                android:checked="true"
+                android:id="@+id/addAddressFragDeliveryCb"
+                android:padding="7.5dp"
+                android:text="@string/add_address_frag_delivery_to_door"
+                android:button="@drawable/circle_checkbox_selector"
+                style="@style/Reg13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <RadioButton
+                android:id="@+id/addAddressFragPickUpCb"
+                android:text="@string/add_address_frag_pick_up_outside"
+                android:padding="7.5dp"
+                android:layout_marginTop="8dp"
+                style="@style/Reg13Dark"
+                android:button="@drawable/circle_checkbox_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </RadioGroup>
+
+
+
+
 </LinearLayout>

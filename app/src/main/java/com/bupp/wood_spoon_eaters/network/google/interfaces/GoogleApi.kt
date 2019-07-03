@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.network.google.interfaces
 
 
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
-import com.taliazhealth.predictix.network_google.models.google_api.AddressResponse
+import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
 
 import retrofit2.Call
 import retrofit2.http.GET

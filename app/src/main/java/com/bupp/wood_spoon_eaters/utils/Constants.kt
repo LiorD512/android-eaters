@@ -27,10 +27,12 @@ class Constants {
         const val CALENDER_ACTION = 0
         const val NEW_INGREDIENT_ACTION = 1
         const val COUNTRY_CHOOSER_ACTION = 2
+        const val LOCATION_CHOOSER_ACTION = 3
 
-        //deliveryDetails Types
+        //lastDeliveryDetails Types
         const val DELIVERY_DETAILS_LOCATION = 0
         const val DELIVERY_DETAILS_TIME = 1
+        const val DELIVERY_DETAILS_PAYMENT = 2
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0
@@ -40,6 +42,7 @@ class Constants {
         const val HEADER_VIEW_TYPE_BACK_TITLE_DONE = 4
         const val HEADER_VIEW_TYPE_BACK_TITLE_SAVE = 5
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE = 6
+        const val HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS = 7
 
 
         //input title view input type
@@ -50,6 +53,17 @@ class Constants {
         const val INPUT_TYPE_FULL_NAME = 4
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
 
+
+        //Price Range View
+        const val PRICE_NOT_SELECTED = 0
+        const val PRICE_GROUP_1 = 1
+        const val PRICE_GROUP_2 = 2
+        const val PRICE_GROUP_3 = 3
+        const val PRICE_GROUP_4 = 4
+
+        //UserImageView Image Size
+        const val SMALL_IMAGE_SIZE = 1
+        const val BIG_IMAGE_SIZE = 2
 
         //tool tip type
         const val TOOL_TIP_SERVICE_FEE = 0
@@ -65,12 +79,16 @@ class Constants {
         const val DELIVERY_DETAILS_TAG = "delivery_details_tag"
         const val SETTINGS_TAG = "settings_tag"
         const val SUPPORT_TAG = "support_tag"
+        const val LOCATION_CHOOSER_TAG = "location_chooser_tag"
+        const val PICK_FILTERS_TAG = "pick_filters_tag"
+        const val MY_PROFILE_TAG = "my_profile_tag"
+        const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
+
+
+
+
         const val ORDER_HISTORY_TAG = "order_history_tag"
 
-
-        //UserImageView Image Size
-        const val SMALL_IMAGE_SIZE = 1
-        const val BIG_IMAGE_SIZE = 2
 
         //Search resource type
         const val RESOURCE_TYPE_COOK = "Cook"

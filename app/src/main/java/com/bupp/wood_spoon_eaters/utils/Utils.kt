@@ -59,6 +59,11 @@ object Utils {
         return ""
     }
 
+    fun parseTime(date: Date?): String {
+        val sdf = SimpleDateFormat("HH:mm")
+        return sdf.format(date?.time)
+    }
+
     fun parseCountDown(date: Date): CharSequence? {
         val sdf = SimpleDateFormat("mm:ss")
         return sdf.format(date?.time)
