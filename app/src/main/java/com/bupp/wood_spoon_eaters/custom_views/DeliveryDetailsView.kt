@@ -8,15 +8,17 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.delivery_details_view.view.*
 
-class DeliveryDetailsView : LinearLayout{
+class DeliveryDetailsView : LinearLayout {
 
     var listener: DeliveryDetailsViewListener? = null
-    interface DeliveryDetailsViewListener{
-        fun onChangeLocationClick()
-        fun onChangeTimeClick()
+
+    interface DeliveryDetailsViewListener {
+        fun onChangeLocationClick() {}
+        fun onChangeTimeClick() {}
+        fun onChangePaymentClick() {}
     }
 
-    fun setDeliveryDetailsViewListener(listener: DeliveryDetailsViewListener){
+    fun setDeliveryDetailsViewListener(listener: DeliveryDetailsViewListener) {
         this.listener = listener
     }
 
@@ -40,7 +42,7 @@ class DeliveryDetailsView : LinearLayout{
     }
 
     private fun initUi(type: Int) {
-        when(type){
+        when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_location)
                 deliveryDetailsViewTitle.text = "Delivery Address"
@@ -49,29 +51,31 @@ class DeliveryDetailsView : LinearLayout{
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
                 deliveryDetailsViewTitle.text = "When"
             }
+            Constants.DELIVERY_DETAILS_PAYMENT -> {
+                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_credit_card)
+                deliveryDetailsViewTitle.text = "Payment Method"
+            }
         }
     }
 
 
     private fun onChange() {
-        when(type){
+        when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
                 listener?.onChangeLocationClick()
             }
             Constants.DELIVERY_DETAILS_TIME -> {
                 listener?.onChangeTimeClick()
             }
+            Constants.DELIVERY_DETAILS_PAYMENT -> {
+                listener?.onChangePaymentClick()
+            }
         }
     }
 
-    fun updateDeliveryDetails(address: String? = null, time: String? = null){
-        if(address != null){
-            deliveryDetailsViewInput.text = address
-        }else{
-            deliveryDetailsViewInput.text = time
-        }
+    fun updateDeliveryDetails(input: String) {
+        deliveryDetailsViewInput.text = input
     }
-
 
 
 }

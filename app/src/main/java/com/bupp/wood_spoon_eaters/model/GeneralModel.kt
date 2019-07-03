@@ -29,7 +29,7 @@ data class PrepTimeRange(
     @SerializedName("max_time") val maxTime: Int
 )
 
-data class AppSettings(
+data class AppSetting(
     val id: Long,
     val key: String,
     val value: String,

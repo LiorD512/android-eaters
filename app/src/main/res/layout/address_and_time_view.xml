@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="wrap_content"
-              android:layout_height="@dimen/header_view_height" xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_weight="1"
+              android:layout_width="0dp"
+              android:layout_height="@dimen/header_view_height"
               android:layout_gravity="center"
               android:gravity="center"
               app:layout_gravity="center"
@@ -13,6 +15,7 @@
             style="@style/SemiBold15Dark"
             android:id="@+id/locationDetailsViewTime"
             android:padding="10.7dp"
+            app:minTextSize="11sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ASAP"/>
@@ -28,7 +31,11 @@
             android:padding="10.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="160 Edgemont street"/>
+            android:lines="1"
+            app:minTextSize="11sp"
+            android:ellipsize="end"
+            android:text="Address"
+            tools:text="160 Edgemont street"/>
 
 
 </LinearLayout>

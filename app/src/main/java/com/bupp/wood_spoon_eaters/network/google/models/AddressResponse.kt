@@ -1,4 +1,4 @@
-package com.taliazhealth.predictix.network_google.models.google_api
+package com.bupp.wood_spoon_eaters.network.google.models
 
 import com.google.gson.annotations.SerializedName
 

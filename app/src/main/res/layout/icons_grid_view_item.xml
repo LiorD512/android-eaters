@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    android:layout_width="70dp"
+    android:layout_height="90dp"
+    android:id="@+id/iconsGridBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:background="@drawable/grid_icon_background"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:gravity="center">
+
+        <ImageView
+            tools:src="@drawable/icons_check"
+            android:padding="15dp"
+            android:id="@+id/iconsGridItem"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/iconsGridName"
+        tools:text="adjaslkdasj"
+        style="@style/SemiBold9Grey"
+        android:textColor="@color/grey_to_blue_selector"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

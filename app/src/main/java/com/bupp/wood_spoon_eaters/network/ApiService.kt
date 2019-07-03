@@ -45,6 +45,10 @@ interface ApiService {
     @POST("eaters/me")
     fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>
 
+//    @FormUrlEncoded
+//    @POST("eaters/me")
+//    fun addAddress(@Body addresses: ArrayList<AddressRequest>): Call<ServerResponse<Eater>>
+
 
 
 //    @POST("cooks/me/dishes/presigned_urls")

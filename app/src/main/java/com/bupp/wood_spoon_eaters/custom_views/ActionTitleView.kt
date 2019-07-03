@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.action_title_view.view.*
 class ActionTitleView : FrameLayout {
 
     interface ActionTitleViewListener {
-        fun onActionViewClick(type: Int)
+        fun onActionViewClick(type: Int){}
     }
 
     fun setActionTitleViewListener(listener: ActionTitleViewListener) {
