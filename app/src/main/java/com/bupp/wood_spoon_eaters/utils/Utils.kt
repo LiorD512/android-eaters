@@ -115,7 +115,18 @@ object Utils {
             var str = fullName.splitAtIndex(firstNameEndIndex)
 
             if (!str.first.isNullOrBlank() && !str.second.isNullOrBlank()) {
-                Pair(str.first, str.second)
+                var first : String = str.first
+                var last: String = str.second
+
+                if(first.endsWith(" ")){
+                    first = str.first.replace(" ","")
+                }
+
+                if(last.startsWith(" ")){
+                    last = str.second.replaceFirst(" ", "")
+                }
+
+                Pair(first, last)
             } else {
                 Pair(fullName, fullName)
             }

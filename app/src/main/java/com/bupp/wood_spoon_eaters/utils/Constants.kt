@@ -64,6 +64,8 @@ class Constants {
         //UserImageView Image Size
         const val SMALL_IMAGE_SIZE = 1
         const val BIG_IMAGE_SIZE = 2
+        const val USER_IMAGE_VIEW_USER_PICTURE = 420
+
 
         //tool tip type
         const val TOOL_TIP_SERVICE_FEE = 0
@@ -72,6 +74,9 @@ class Constants {
         //activity / dialog tags
         const val WELCOME_DIALOG_TAG = "welcome_dialog_tag"
         const val CREATE_ACCOUNT_TAG = "create_account_tag"
+        const val OFFER_DISH_TAG = "offer_dish_tag"
+        const val DISH_OFFERED_TAG = "dish_offered_tag"
+
 
         const val FEED_TAG = "feed_tag"
         const val SEARCH_TAG = "search_tag"
@@ -83,7 +88,13 @@ class Constants {
         const val PICK_FILTERS_TAG = "pick_filters_tag"
         const val MY_PROFILE_TAG = "my_profile_tag"
         const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
-
+        const val ADDRESS_DIALOG_TAG = "address_dialog"
+        const val DELIVERY_TO_ADDRESS_DIALOG_TAG = "delivery_to_address_dialog_tag"
+        const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog_tag"
+        const val CONTACT_US_DIALOG_TAG = "contact_us_dialog"
+        const val THANK_YOU_DIALOG_TAG = "thank_you_dialog"
+        const val START_NEW_CART_DIALOG_TAG = "start_new_cart_dialog"
+        const val DISH_SOLD_OUT_DIALOG_TAG = "dish_sold_out_dialog"
 
 
 

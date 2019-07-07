@@ -6,11 +6,15 @@ import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+const val DELIVERY_TO_DOOR_STRING = "Delivery to door"
+const val PICK_UP_OUTSIDE_STRING = "Pick up outside"
+
 
 class AddAddressViewModel(
     private val apiService: ApiService,
@@ -44,11 +48,8 @@ class AddAddressViewModel(
         orderManager.updateOrder(addressResponse = addressResponse)
         var currentEater = appSettings.currentEater!!
         var notes = deliveryNote
-        notes += if (isDelivery) {
-            ", Delivery to door"
-        } else {
-            ", Pick up outside"
-        }
+
+        notes = prepareNotes(notes, isDelivery)
 
         var addressRequest = getAddress(addressResponse, address1stLine, address2ndLine, notes)
 
@@ -56,7 +57,13 @@ class AddAddressViewModel(
 
         //todo - thumbnail
         var eaterRequest =
-            EaterRequest(currentEater.firstName, currentEater.lastName, "empty", currentEater.email, adresses)
+            EaterRequest(
+                currentEater.firstName,
+                currentEater.lastName,
+                "empty",
+                currentEater.email,
+                adresses
+            )
 
         //post EaterRequest
         postEater(eaterRequest)
@@ -84,7 +91,12 @@ class AddAddressViewModel(
         })
     }
 
-    private fun getAddress(address: AddressResponse, streetLine1: String, streetLine2: String, notes: String): AddressRequest? {
+    private fun getAddress(
+        address: AddressResponse,
+        streetLine1: String,
+        streetLine2: String,
+        notes: String
+    ): AddressRequest? {
         var userAddress: AddressRequest = AddressRequest()
 
         if (address != null) {
@@ -128,7 +140,7 @@ class AddAddressViewModel(
                 userAddress.zipCode = zipCode
                 userAddress.lat = lat
                 userAddress.lng = lng
-            }else{
+            } else {
 
             }
             userAddress.notes = notes
@@ -187,6 +199,40 @@ class AddAddressViewModel(
         return null
     }
 
+    fun prepareNotes(notes: String, isDelivery: Boolean): String {
+        if (notes.isNotEmpty()) {
+            when {
+                notes.endsWith(DELIVERY_TO_DOOR_STRING) -> {
+                    val indexOfSuffix = notes.indexOf(DELIVERY_TO_DOOR_STRING)
+                    return if (isDelivery) {
+                        notes.replaceRange(indexOfSuffix, notes.length, DELIVERY_TO_DOOR_STRING)
+                    } else {
+                        notes.replaceRange(indexOfSuffix, notes.length, PICK_UP_OUTSIDE_STRING)
+                    }
+                }
+                notes.endsWith(PICK_UP_OUTSIDE_STRING) -> {
+                    val indexOfSuffix = notes.indexOf(PICK_UP_OUTSIDE_STRING)
+                    return if (isDelivery) {
+                        notes.replaceRange(indexOfSuffix, notes.length, DELIVERY_TO_DOOR_STRING)
+                    } else {
+                        notes.replaceRange(indexOfSuffix, notes.length, PICK_UP_OUTSIDE_STRING)
+                    }
+                }
+                else -> return if (isDelivery) {
+                    ", $DELIVERY_TO_DOOR_STRING"
+                } else {
+                    ", $PICK_UP_OUTSIDE_STRING"
+                }
+            }
+
+        } else {
+            return if (isDelivery) {
+                DELIVERY_TO_DOOR_STRING
+            } else {
+                PICK_UP_OUTSIDE_STRING
+            }
+        }
+    }
 //    fun getDeliveryTime(): String? {
 //        if(orderManager.orderTime != null){
 //            return Utils.parseTime(orderManager.orderTime)

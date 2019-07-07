@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.managers.PermissionManager
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Utils
 
@@ -39,4 +40,16 @@ class MainViewModel(val settings: AppSettings, val permissionManager:PermissionM
         return orderManager.getLastOrderTimeString()
     }
 
+    fun getListOfAddresses(): ArrayList<Address>? {
+        return settings.currentEater!!.addresses
+    }
+
+    fun setOrderAddress(address: Address){
+//        orderManager.orderAddress = address
+        orderManager.updateOrder(orderAddress = address)
+    }
+
+    fun getOrderAddress(): Address?{
+        return orderManager.getLastOrderAddress()
+    }
 }

@@ -43,13 +43,14 @@
             app:hint="Add Delivery Note"/>
 
     <View
-            android:background="@color/grey_divider"
+            android:background="@color/silver"
             android:layout_marginTop="22.1dp"
             android:layout_marginBottom="29.8dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
     <RadioGroup
+            android:id="@+id/addAddressFragRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -49,7 +48,7 @@ class UserImageView : FrameLayout {
     }
 
     private fun initUi() {
-        cookImageViewLayout.setOnClickListener {
+        eaterImageViewLayout.setOnClickListener {
             listener?.onUserImageClick(type)
         }
     }
@@ -59,28 +58,28 @@ class UserImageView : FrameLayout {
             Constants.SMALL_IMAGE_SIZE -> {
                 val frame = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
                 frame.gravity = Gravity.CENTER_HORIZONTAL
-                cookImageViewLayout.layoutParams = frame
+                eaterImageViewLayout.layoutParams = frame
 
                 val imageLayout = LayoutParams(48.toPx(), 48.toPx())
-                cookImageView.layoutParams = imageLayout
+                eaterImageView.layoutParams = imageLayout
             }
             else -> {
                 val frame = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
                 frame.gravity = Gravity.CENTER_HORIZONTAL
-                cookImageViewLayout.layoutParams = frame
+                eaterImageViewLayout.layoutParams = frame
 
                 val imageLayout = LayoutParams(76.toPx(), 76.toPx())
                 imageLayout.gravity = Gravity.CENTER_HORIZONTAL
-                cookImageView.layoutParams = imageLayout
+                eaterImageView.layoutParams = imageLayout
             }
         }
     }
 
     fun setImage(imageStr: String) {
-        Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+        Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(eaterImageView)
     }
 
     fun setImage(imageUri: Uri) {
-        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(eaterImageView)
     }
 }
