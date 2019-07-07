@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.sign_up.create_account
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.model.Client
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.ServerResponse

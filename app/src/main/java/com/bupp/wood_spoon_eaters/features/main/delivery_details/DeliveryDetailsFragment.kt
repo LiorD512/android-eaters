@@ -52,7 +52,7 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).loadAddNewAddress()
+        (activity as MainActivity).loadAddressesDialog()
     }
 
     override fun onChangeTimeClick() {

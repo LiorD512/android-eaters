@@ -37,7 +37,7 @@
         </LinearLayout>
 
         <View
-                android:background="@color/grey_divider"
+                android:background="@color/silver"
                 android:layout_marginTop="15.8dp"
                 android:layout_marginBottom="15.4dp"
                 android:layout_width="match_parent"
@@ -81,7 +81,7 @@
         </LinearLayout>
 
         <View
-                android:background="@color/grey_divider"
+                android:background="@color/silver"
                 android:layout_marginTop="15.8dp"
                 android:layout_marginBottom="15.4dp"
                 android:layout_width="match_parent"
@@ -125,7 +125,7 @@
         </LinearLayout>
 
         <View
-                android:background="@color/grey_divider"
+                android:background="@color/silver"
                 android:layout_marginTop="15.8dp"
                 android:layout_marginBottom="15.4dp"
                 android:layout_width="match_parent"

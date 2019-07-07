@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
+import android.net.Uri
 import com.google.gson.annotations.SerializedName
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -23,7 +23,8 @@ data class EaterRequest(
     @SerializedName("thumbnail") var thumbnail: String = "",
     @SerializedName("email") var email: String = "",
     @SerializedName("addresses") var addresses: ArrayList<AddressRequest> = arrayListOf(),
-    @SerializedName("device") var device: Device? = null
+    @SerializedName("device") var device: Device? = null,
+    var tempThumbnail: Uri? = null
 )
 
 data class Device(

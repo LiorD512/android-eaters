@@ -27,13 +27,16 @@ interface ApiService {
     @GET("eaters/utils/meta")
     fun getMetaDataCall(): Call<ServerResponse<MetaDataModel>>
 
+    @FormUrlEncoded
+    @POST("eaters/me/presigned_urls")
+    fun postDishSuggestion(@Field("dish_name") dishName: String,@Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
 
 
 
     //Utils
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
-    fun postCookPreSignedUrl(@Field("type") type: String): Call<ServerResponse<PreSignedUrl>>
+    fun postEaterPreSignedUrl(@Field("type") type: String): Call<ServerResponse<PreSignedUrl>>
 
 
 
@@ -41,6 +44,9 @@ interface ApiService {
     //Eater
     @GET("eaters/me")
     fun getMe(): Observable<ServerResponse<Eater>>
+
+    @GET("eaters/me")
+    fun getMeCall(): Call<ServerResponse<Eater>>
 
     @POST("eaters/me")
     fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>

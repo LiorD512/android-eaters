@@ -7,6 +7,7 @@ import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressViewModel
+import com.bupp.wood_spoon_eaters.features.main.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.my_profile.MyProfileViewModel
@@ -54,6 +55,7 @@ val appModule = module {
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get()) }
+    viewModel { EditMyProfileViewModel(get(),get(),get()) }
 
 
     //support
