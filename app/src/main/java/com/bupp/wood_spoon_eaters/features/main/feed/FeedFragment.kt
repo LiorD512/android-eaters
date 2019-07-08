@@ -24,7 +24,7 @@ class FeedFragment() : Fragment() {
 
         //TODO (after setting location manager):
         //1. check previous location
-        //2. if has - display and get data; else check permission and get current location (display epty layout)
+        //2. if has - display and get data; else check permission and get current location (display empty layout)
         showEmptyLayout()
     }
 

@@ -2,14 +2,16 @@ package com.bupp.wood_spoon_eaters.features.main.search
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.dialogs.NewDishSuggestionDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
@@ -20,12 +22,13 @@ import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFra
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 
-class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
+class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener {
 
     companion object {
         fun newInstance() = SearchFragment()
     }
 
+    private var query: String? = null
     private lateinit var itemDecor: GridItemDecoration
     private val SEARCH_LIST_TYPE_CUISINE: Int = 0
     private val SEARCH_LIST_TYPE_RESULT: Int = 1
@@ -33,7 +36,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
     private lateinit var adapter: SearchAdapter
     val viewModel: SearchViewModel by viewModel<SearchViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
@@ -81,6 +84,16 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
                 }
             }
         })
+
+        viewModel.suggestionEvent.observe(this, Observer { event ->
+            if(event != null){
+                if(event.isSuccess){
+                    (activity as MainActivity).loadDishOfferedDialog()
+                }else{
+                    Toast.makeText(context,"There was a problem with our servers, please try again later",Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
         viewModel.dishDetailsEvent.observe(this, Observer { event ->
             if(event != null){
                 searchFragPb.hide()
@@ -102,6 +115,14 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
         adapter = SearchAdapter(context!!, viewModel.getCuisineLabels(), this)
         searchFragList.adapter = adapter
         showListLayout(SEARCH_LIST_TYPE_CUISINE)
+
+        searchFragSoundsGood.setOnClickListener {
+            NewDishSuggestionDialog(this,query).show(fragmentManager, Constants.OFFER_DISH_TAG)
+        }
+    }
+
+    override fun onNewDishSuggestion(dishName: String, dishDetails: String) {
+        viewModel.suggestDish(dishName,dishDetails)
     }
 
     private fun showListLayout(type: Int) {
@@ -129,6 +150,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
     fun onSearchInputChanged(str: String) {
         Log.d("wowSearch","onSearchInputChanged: " + str)
         if(str.isNullOrEmpty()){
+            this.query = str
             adapter.clearData()
             showListLayout(SEARCH_LIST_TYPE_CUISINE)
         }else{

@@ -28,9 +28,15 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
         val dish: Dish?
     )
 
+
+    data class SuggestionEvent(
+        val isSuccess: Boolean = false
+    )
+
     val searchEvent: SingleLiveEvent<SearchEvent> = SingleLiveEvent()
     val nextSearchEvent: SingleLiveEvent<NextSearchEvent> = SingleLiveEvent()
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
+    val suggestionEvent: SingleLiveEvent<SuggestionEvent> = SingleLiveEvent()
 
     var searchResult: ArrayList<Search>? = null
     var cooks: ArrayList<Cook>? = null
@@ -114,6 +120,25 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
             override fun onFailure(call: Call<ServerResponse<Dish>>, t: Throwable) {
                 Log.d("wowSearchVM","getDishDetails big fail: ${t.message}")
                 dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+            }
+        })
+    }
+
+    fun suggestDish(dishName: String, dishDetails: String) {
+        api.postDishSuggestion(dishName,dishDetails).enqueue(object: Callback<ServerResponse<Void>> {
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                if(response.isSuccessful){
+                    Log.d("wowSearchVM","suggestDish success")
+                    suggestionEvent.postValue(SuggestionEvent(true))
+                }else{
+                    Log.d("wowSearchVM","suggestDish fail")
+                    suggestionEvent.postValue(SuggestionEvent(false))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowSearchVM","suggestDish big fail")
+                suggestionEvent.postValue(SuggestionEvent(false))
             }
         })
     }

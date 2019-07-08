@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="15.4dp"
+        android:paddingRight="15.4dp"
+        android:background="@color/white"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.edit_my_profile.EditMyProfileFragment">
+
+    <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+            android:id="@+id/editMyProfileFragUserImageView"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center"
+            app:imageSize="BIG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            android:id="@+id/editMyProfileFragFullName"
+            android:layout_marginTop="23dp"
+            app:title="Full Name"
+            app:isMandatory="true"
+            app:inputType="TEXT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            android:id="@+id/editMyProfileFragEmail"
+            android:layout_marginTop="15.4dp"
+            app:title="Email"
+            app:isMandatory="true"
+            app:inputType="TEXT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
+            android:id="@+id/editMyProfileFragMobileNum"
+            android:layout_marginTop="24dp"
+            app:title="Mobile Number"
+            app:isMandatory="true"
+            app:inputType="NUMBER"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

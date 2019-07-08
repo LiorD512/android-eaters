@@ -1,8 +1,6 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +9,6 @@ import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.text_watcher.AutoCompleteTextWatcher
-import com.bupp.wood_spoon_eaters.utils.text_watcher.InputTextWatcher
 import kotlinx.android.synthetic.main.header_view.view.*
 
 
@@ -59,6 +56,7 @@ class HeaderView : FrameLayout {
         fun onHeaderProfileClick() {}
         fun onHeaderTextChange(toString: String) {}
         fun onHeaderAddressAndTimeClick() {}
+        fun onHeaderSettingsClick() {}
     }
 
     fun setType(type: Int?, title: String? = "") {
@@ -96,9 +94,13 @@ class HeaderView : FrameLayout {
             headerViewSearchInput.text.clear()
         }
 
-        headerViewSearchInput.addTextChangedListener(object: AutoCompleteTextWatcher() {
+        headerViewSettingsBtn.setOnClickListener {
+            listener?.onHeaderSettingsClick()
+        }
+
+        headerViewSearchInput.addTextChangedListener(object : AutoCompleteTextWatcher() {
             override fun handleInputString(s: String) {
-                Log.d("wowHeaderView","afterTextChanged: ${s.toString()}")
+                Log.d("wowHeaderView", "afterTextChanged: ${s.toString()}")
                 listener?.onHeaderTextChange(s.toString())
             }
 
@@ -168,13 +170,9 @@ class HeaderView : FrameLayout {
     fun setLocationTitle(time: String? = null, location: String? = null) {
         if (!time.isNullOrEmpty()) {
             headerViewAddressAndTime.setTime(time)
-//        }else{
-//            headerViewAddressAndTime.setDeliveryTime("ASAP")
         }
         if (!location.isNullOrEmpty()) {
             headerViewAddressAndTime.setLocation(location)
-//        }else{
-//            headerViewAddressAndTime.setLocation("Address")
         }
     }
 
@@ -190,7 +188,12 @@ class HeaderView : FrameLayout {
         headerViewSearchInput.setText(str)
     }
 
-    fun updateCurrentLocationAndTime() {
-
+    fun setSaveButtonClickable(isClickable: Boolean) {
+        if (isClickable) {
+            headerViewSaveBtn.alpha = 1.0f
+        } else {
+            headerViewSaveBtn.alpha = 0.5f
+        }
+        headerViewSaveBtn.isClickable = isClickable
     }
 }

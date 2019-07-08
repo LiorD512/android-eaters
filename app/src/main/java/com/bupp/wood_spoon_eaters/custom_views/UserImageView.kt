@@ -32,12 +32,11 @@ class UserImageView : FrameLayout {
     private var listener: UserImageViewListener? = null
 
     interface UserImageViewListener {
-        fun onUserImageClick(type: Int)
+        fun onUserImageClick()
     }
 
-    fun setUserImageViewListener(listener: UserImageViewListener, type: Int) {
+    fun setUserImageViewListener(listener: UserImageViewListener) {
         this.listener = listener
-        this.type = type
     }
 
     constructor(context: Context) : this(context, null)
@@ -57,7 +56,7 @@ class UserImageView : FrameLayout {
         }
 
         cookImageViewLayout.setOnClickListener {
-            listener?.onUserImageClick(type)
+            listener?.onUserImageClick()
         }
 
         initUi()
@@ -108,6 +107,11 @@ class UserImageView : FrameLayout {
     fun setImage(imageStr: String) {
         Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
     }
+
+    fun setImage(imageUri: Uri) {
+        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+    }
+
 
     fun setUser(cook: Cook) {
         setImage(cook.thumbnail)
