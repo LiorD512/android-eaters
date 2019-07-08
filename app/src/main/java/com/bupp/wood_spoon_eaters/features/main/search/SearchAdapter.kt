@@ -29,9 +29,9 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
     var dishes: ArrayList<Dish> = arrayListOf()
 
     interface SearchAdapterListener{
-        fun onDishClick(dish: Dish)
-        fun onCookClick(cook: Cook)
-        fun onCuisineClick(cuisine: CuisineLabel)
+        fun onDishClick(dish: Dish){}
+        fun onCookClick(cook: Cook){}
+        fun onCuisineClick(cuisine: CuisineLabel){}
     }
 
     private object ViewType {
@@ -53,7 +53,11 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                 (holder as CooksViewItemViewHolder).manyCooksView.initCooksView(cooks!!, this)
             }
             else -> {
-                val dish: Dish = dishes[position-1]
+                var curPosition = position
+                if(hasCooks){
+                    curPosition--
+                }
+                val dish: Dish = dishes[curPosition]
                 Glide.with(context).load(dish.thumbnail).into((holder as DishItemViewHolder).bkgImg)
                 (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
                 holder.dishCount.text = "todo"
@@ -123,13 +127,23 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
 
     fun updateCooks(cooks: ArrayList<Cook>) {
         hasCooks = true;
+        this.cooks.clear()
         this.cooks.addAll(cooks)
         notifyDataSetChanged()
     }
 
     fun updateDishes(dishes: ArrayList<Dish>) {
         hasDishes = true;
+        this.dishes.clear()
         this.dishes.addAll(dishes)
+        notifyDataSetChanged()
+    }
+
+    fun clearData(){
+        this.cooks.clear()
+        this.dishes.clear()
+        hasCooks = false
+        hasDishes = false
         notifyDataSetChanged()
     }
 

@@ -27,15 +27,6 @@ data class Suggestion(
 //        val calorificValue: Int
 //)
 
-@Parcelize
-data class DishIngredient(
-    @SerializedName("id") val id: Long? = null,
-    @SerializedName("ingredient_id") val ingredientId: Long?,
-    @SerializedName("quantity") val quantity: Int?,
-    @SerializedName("unit_id") val unitId: Long?,
-    @SerializedName("is_adjustable") val isAdjustable: Boolean?,
-    @SerializedName("_remove") val _removeId: Long? = null
-): Parcelable
 
 @Parcelize
 data class WoodUnit(

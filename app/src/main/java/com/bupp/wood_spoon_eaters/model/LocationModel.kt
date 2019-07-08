@@ -43,7 +43,7 @@ data class Country(
         @SerializedName("id") val id: Long,
         @SerializedName("name") val name: String,
         @SerializedName("iso") val iso: String? = null,
-        @SerializedName("flag_url") val flagUrl: String? = null
+        @SerializedName("flag_url") val flagUrl: String? = ""
 ) : Parcelable
 
 @Parcelize

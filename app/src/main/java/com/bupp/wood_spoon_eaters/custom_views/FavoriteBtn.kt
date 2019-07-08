@@ -13,6 +13,11 @@ import android.view.animation.ScaleAnimation
 
 class FavoriteBtn : FrameLayout {
 
+    interface FavoriteBtnListener{
+        fun onFavClick(isChecked: Boolean)
+    }
+
+    var listener: FavoriteBtnListener? = null
     var isFavSelected = false
 
     constructor(context: Context) : this(context, null)
@@ -47,6 +52,11 @@ class FavoriteBtn : FrameLayout {
     private fun onClick() {
         isFavSelected = !isFavSelected
         favBtn.isSelected = isFavSelected
+        listener?.onFavClick(isFavSelected)
+    }
+
+    fun setFavListener(listener: FavoriteBtnListener?) {
+        this.listener = listener
     }
 
 

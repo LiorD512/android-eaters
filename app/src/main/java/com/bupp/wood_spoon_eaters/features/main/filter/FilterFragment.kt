@@ -1,6 +1,5 @@
-package com.bupp.wood_spoon_eaters.features.main.pick_filters
+package com.bupp.wood_spoon_eaters.features.main.filter
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

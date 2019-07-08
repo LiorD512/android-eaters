@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetails
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.my_profile.MyProfileFragment
-import com.bupp.wood_spoon_eaters.features.main.pick_filters.FilterFragment
+import com.bupp.wood_spoon_eaters.features.main.filter.FilterFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
@@ -129,7 +129,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
     //delivery details methods - end
 
-
     private fun loadSettings() {
         loadFragment(SettingsFragment(), Constants.SETTINGS_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
@@ -238,5 +237,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun updateSearchInput(str: String) {
         mainActHeaderView.updateSearchInput(str)
     }
+
+
 
 }

@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.Calendar.*
 
 object Utils {
 
@@ -122,5 +123,21 @@ object Utils {
         } else {
             Pair(fullName, fullName)
         }
+    }
+
+    fun getDiffYears(date: Date): Int {
+        val a = getCalendar(Date())
+        val b = getCalendar(date)
+        var diff = b.get(YEAR) - a.get(YEAR)
+        if (a.get(MONTH) > b.get(MONTH) || a.get(MONTH) === b.get(MONTH) && a.get(DATE) > b.get(DATE)) {
+            diff--
+        }
+        return diff
+    }
+
+    fun getCalendar(date: Date): Calendar {
+        val cal = Calendar.getInstance(Locale.US)
+        cal.time = date
+        return cal
     }
 }

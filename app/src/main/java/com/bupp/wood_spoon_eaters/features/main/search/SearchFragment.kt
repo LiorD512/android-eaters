@@ -7,21 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.search_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import androidx.core.content.ContextCompat
-import android.graphics.drawable.Drawable
-
+import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFragmentDialog
+import com.bupp.wood_spoon_eaters.utils.Constants
 
 
 class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
@@ -85,6 +81,19 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
                 }
             }
         })
+        viewModel.dishDetailsEvent.observe(this, Observer { event ->
+            if(event != null){
+                searchFragPb.hide()
+                if(event.isSuccess){
+                    if(event.dish != null){
+                        SingleDishFragmentDialog.newInstance(event.dish).show(fragmentManager, Constants.SINGLE_DISH_DIALOG)
+                    }
+                }else{
+
+                }
+            }
+        })
+
     }
 
     private fun initUi() {
@@ -103,17 +112,11 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
                 searchFragList.layoutManager = GridLayoutManager(context,2)
                 itemDecor.setDecorType(0)
                 searchFragList.requestLayout()
-
             }
             SEARCH_LIST_TYPE_RESULT -> {
                 searchFragList.layoutManager = LinearLayoutManager(context)
                 itemDecor.setDecorType(1)
                 searchFragList.requestLayout()
-//                searchFragList.addItemDecoration(SearchItemDecoration())
-//                val dividerDrawable = ContextCompat.getDrawable(context!!, R.drawable.search_list_divider)
-//                val itemDecor = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-//                itemDecor.setDrawable(dividerDrawable!!)
-//                searchFragList.addItemDecoration(RecyclerView.ItemDecoration(context))
             }
         }
     }
@@ -125,12 +128,19 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener {
 
     fun onSearchInputChanged(str: String) {
         Log.d("wowSearch","onSearchInputChanged: " + str)
-        searchFragPb.show()
-        viewModel.search(str)
+        if(str.isNullOrEmpty()){
+            adapter.clearData()
+            showListLayout(SEARCH_LIST_TYPE_CUISINE)
+        }else{
+            searchFragPb.show()
+            viewModel.search(str)
+        }
     }
 
     override fun onDishClick(dish: Dish) {
         Log.d("wowSearch","onDishClick")
+        searchFragPb.show()
+        viewModel.getFullDishDetails(dish.id)
     }
 
     override fun onCookClick(cook: Cook) {

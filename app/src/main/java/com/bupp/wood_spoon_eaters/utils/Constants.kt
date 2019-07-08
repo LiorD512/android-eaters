@@ -62,6 +62,7 @@ class Constants {
         const val PRICE_GROUP_4 = 4
 
         //UserImageView Image Size
+        const val HEADER_IMAGE_SIZE = 0
         const val SMALL_IMAGE_SIZE = 1
         const val BIG_IMAGE_SIZE = 2
 
@@ -84,7 +85,7 @@ class Constants {
         const val MY_PROFILE_TAG = "my_profile_tag"
         const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
 
-
+        const val SINGLE_DISH_DIALOG = "single_dish_dialog"
 
 
         const val ORDER_HISTORY_TAG = "order_history_tag"
@@ -124,6 +125,7 @@ class Constants {
         const val READ_PERMISSION_REQUEST_CODE = 445
         const val WRITE_PERMISSION_REQUEST_CODE = 446
         const val LOCATION_PERMISSION_REQUEST_CODE = 420
+
 
     }
 }

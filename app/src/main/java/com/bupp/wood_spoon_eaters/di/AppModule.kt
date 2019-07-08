@@ -10,7 +10,7 @@ import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.my_profile.MyProfileViewModel
-import com.bupp.wood_spoon_eaters.features.main.pick_filters.PickFiltersViewModel
+import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel

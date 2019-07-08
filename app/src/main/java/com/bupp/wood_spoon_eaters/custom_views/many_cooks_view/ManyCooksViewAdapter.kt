@@ -17,6 +17,8 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
         val cookImageView = view.manyCooksViewItem
+        val cookFirstName = view.manyCooksViewName
+        val cookLastName = view.manyCooksViewNameLast
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,6 +33,9 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
         val curCook = cooksList.get(position)
 
         holder?.cookImageView.setImage(curCook.thumbnail)
+        holder?.cookFirstName.text = curCook.firstName
+        holder?.cookLastName.text = curCook.lastName
+
 
         holder?.cookImageView.setOnClickListener {
             listener.onCookViewClick(curCook)

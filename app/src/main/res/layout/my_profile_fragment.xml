@@ -23,7 +23,6 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="24dp"
                     app:imageSize="BIG"
-                    app:isEditButtonVisible="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

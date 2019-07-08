@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_eaters.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,17 +45,18 @@ data class AppSetting(
 //icons grid data class
 
 data class DietaryIcon(
-    val name: String,
-    val icon: String,
-    val id: Long
-)
+    override val name: String,
+    override val icon: String,
+    override val id: Long
+): SelectableIcon
 
+@Parcelize
 data class CuisineLabel(
-    val name: String,
-    val icon: String,
+    override val name: String,
+    override val icon: String,
     val cover: String,
-    val id: Long
-)
+    override val id: Long
+): SelectableIcon, Parcelable
 
 interface SelectableIcon {
     val id: Long

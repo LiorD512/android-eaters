@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.pick_filters
+package com.bupp.wood_spoon_eaters.features.main.filter
 
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager

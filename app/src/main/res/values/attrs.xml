@@ -101,11 +101,13 @@
     </declare-styleable>
 
     <declare-styleable name="UserImageView">
+        <!--<attr name="isWithBkg" format="boolean" />-->
+        <attr name="placeHolder" format="integer"/>
         <attr name="imageSize" format="enum" >
+            <enum name="HEADER" value="0"/>
             <enum name="SMALL" value="1"/>
             <enum name="BIG" value="2"/>
         </attr>
-        <attr name="isEditButtonVisible" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="TagInputView">

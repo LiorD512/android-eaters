@@ -52,6 +52,11 @@ interface ApiService {
     fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
 
 
+    //Single Dish
+    @GET("dishes/{id}")
+    fun getDishDetails(@Path(value = "id", encoded = true) searchId: Long): Call<ServerResponse<Dish>>
+
+
 
 //    @POST("cooks/me/dishes/presigned_urls")
 //    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>

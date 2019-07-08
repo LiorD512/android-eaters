@@ -2,21 +2,30 @@ package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+
 
 class UserImageView : FrameLayout {
 
     private var type: Int = -1
+    private var imageSize: Int = 0
+
+    private var isWithBkg: Boolean = false
+    private var placeHolder: Drawable? = null
+
 
     fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
@@ -33,46 +42,66 @@ class UserImageView : FrameLayout {
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+
+
+
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.user_image_view, this, true)
 
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.UserImageView)
-            if (a.hasValue(R.styleable.UserImageView_imageSize)) {
-                val imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.BIG_IMAGE_SIZE)
-                setImageSize(imageSize)
-            }
+//            isWithBkg = a.getBoolean(R.styleable.UserImageView_isWithBkg, false)
+            imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.SMALL_IMAGE_SIZE)
+            placeHolder = a.getDrawable(R.styleable.UserImageView_placeHolder)
             a.recycle()
+        }
+
+        cookImageViewLayout.setOnClickListener {
+            listener?.onUserImageClick(type)
         }
 
         initUi()
     }
 
     private fun initUi() {
-        cookImageViewLayout.setOnClickListener {
-            listener?.onUserImageClick(type)
+        if(placeHolder != null){
+            cookImageView.setImageDrawable(placeHolder)
         }
-    }
-
-    private fun setImageSize(imageSize: Int) {
         when (imageSize) {
-            Constants.SMALL_IMAGE_SIZE -> {
-                val frame = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-                frame.gravity = Gravity.CENTER_HORIZONTAL
-                cookImageViewLayout.layoutParams = frame
+            Constants.HEADER_IMAGE_SIZE -> {
+                val bkgLayout = LayoutParams(40.toPx(), 40.toPx())
+                cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = LayoutParams(48.toPx(), 48.toPx())
+                val imageLayout = RelativeLayout.LayoutParams(39.toPx(), 39.toPx())
+                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                 cookImageView.layoutParams = imageLayout
+            }
+            Constants.SMALL_IMAGE_SIZE -> {
+                val bkgLayout = LayoutParams(50.toPx(), 50.toPx())
+                cookImageViewLayout.layoutParams = bkgLayout
+
+                val imageLayout = RelativeLayout.LayoutParams(48.toPx(), 48.toPx())
+                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                cookImageView.layoutParams = imageLayout
+                if(isWithBkg)
+                    cookImageView.setPadding(10, 10, 10, 10)
             }
             else -> {
-                val frame = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-                frame.gravity = Gravity.CENTER_HORIZONTAL
-                cookImageViewLayout.layoutParams = frame
+                val bkgLayout = LayoutParams(80.toPx(), 80.toPx())
+                cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = LayoutParams(76.toPx(), 76.toPx())
-                imageLayout.gravity = Gravity.CENTER_HORIZONTAL
+                val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
+                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                 cookImageView.layoutParams = imageLayout
+                if(isWithBkg)
+                    cookImageView.setPadding(10, 10, 10, 10)
             }
+        }
+
+        if(isWithBkg){
+            cookImageViewBkg.visibility = View.VISIBLE
+        }else{
+            cookImageViewBkg.visibility = View.GONE
         }
     }
 
@@ -80,7 +109,13 @@ class UserImageView : FrameLayout {
         Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
     }
 
-    fun setImage(imageUri: Uri) {
-        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+    fun setUser(cook: Cook) {
+        setImage(cook.thumbnail)
+        if (!cook.video.isNullOrEmpty()) {
+            isWithBkg = true
+        } else {
+            isWithBkg = false
+        }
+        initUi()
     }
 }
