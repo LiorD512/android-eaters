@@ -88,8 +88,6 @@ class ToolTipView : FrameLayout {
 
         when (type) {
             Constants.TOOL_TIP_SERVICE_FEE -> {
-//                textView.maxWidth = DpUtils.getPixelsFromDP(context, 150)
-//                val topOffset = 83.toDp()
                 val marginLeft = 23.toPx()
                 popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
             }

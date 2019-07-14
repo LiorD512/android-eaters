@@ -15,7 +15,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 
 class UserImageView : FrameLayout {
@@ -43,7 +42,6 @@ class UserImageView : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
 
-
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.user_image_view, this, true)
 
@@ -55,7 +53,7 @@ class UserImageView : FrameLayout {
             a.recycle()
         }
 
-        cookImageViewLayout.setOnClickListener {
+        cookImageView.setOnClickListener {
             listener?.onUserImageClick()
         }
 
@@ -63,7 +61,7 @@ class UserImageView : FrameLayout {
     }
 
     private fun initUi() {
-        if(placeHolder != null){
+        if (placeHolder != null) {
             cookImageView.setImageDrawable(placeHolder)
         }
         when (imageSize) {
@@ -82,30 +80,42 @@ class UserImageView : FrameLayout {
                 val imageLayout = RelativeLayout.LayoutParams(48.toPx(), 48.toPx())
                 imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                 cookImageView.layoutParams = imageLayout
-                if(isWithBkg)
+                if (isWithBkg)
                     cookImageView.setPadding(10, 10, 10, 10)
             }
-            else -> {
+            Constants.BIG_IMAGE_SIZE -> {
                 val bkgLayout = LayoutParams(80.toPx(), 80.toPx())
                 cookImageViewLayout.layoutParams = bkgLayout
 
                 val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
                 imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                 cookImageView.layoutParams = imageLayout
-                if(isWithBkg)
+                if (isWithBkg)
                     cookImageView.setPadding(10, 10, 10, 10)
+            }
+            Constants.BIGGEST_IMAGE_SIZE -> {
+                val bkgLayout = LayoutParams(90.toPx(), 90.toPx())
+                cookImageViewLayout.layoutParams = bkgLayout
+
+                val imageLayout = RelativeLayout.LayoutParams(86.toPx(), 86.toPx())
+                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                cookImageView.layoutParams = imageLayout
             }
         }
 
-        if(isWithBkg){
+        if (isWithBkg) {
             cookImageViewBkg.visibility = View.VISIBLE
-        }else{
+        } else {
             cookImageViewBkg.visibility = View.GONE
         }
     }
 
     fun setImage(imageStr: String) {
-        Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+        if (!imageStr.isNullOrEmpty()) {
+            Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+        } else if (placeHolder != null) {
+            cookImageView.setImageDrawable(placeHolder)
+        }
     }
 
     fun setImage(imageUri: Uri) {

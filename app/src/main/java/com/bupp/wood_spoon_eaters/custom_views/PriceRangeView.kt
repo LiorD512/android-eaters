@@ -30,25 +30,28 @@ class PriceRangeView : LinearLayout, View.OnClickListener {
         LayoutInflater.from(context).inflate(R.layout.price_range_view, this, true)
 
         priceRangeViewGroup1Layout.setOnClickListener(this)
+        priceRangeViewGroup2Layout.setOnClickListener(this)
+        priceRangeViewGroup3Layout.setOnClickListener(this)
+        priceRangeViewGroup4Layout.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         reset()
         when(v){
             priceRangeViewGroup1Layout ->{
-                setRangeSelected(priceRangeViewGroup1Layout, true)
+                selectCurrentRange(priceRangeViewGroup1Layout, true)
                 rangeSelected = Constants.PRICE_GROUP_1
             }
             priceRangeViewGroup2Layout ->{
-                setRangeSelected(priceRangeViewGroup2Layout, true)
+                selectCurrentRange(priceRangeViewGroup2Layout, true)
                 rangeSelected = Constants.PRICE_GROUP_2
             }
             priceRangeViewGroup3Layout ->{
-                setRangeSelected(priceRangeViewGroup3Layout, true)
+                selectCurrentRange(priceRangeViewGroup3Layout, true)
                 rangeSelected = Constants.PRICE_GROUP_3
             }
             priceRangeViewGroup4Layout ->{
-                setRangeSelected(priceRangeViewGroup4Layout, true)
+                selectCurrentRange(priceRangeViewGroup4Layout, true)
                 rangeSelected = Constants.PRICE_GROUP_4
             }
 
@@ -57,13 +60,14 @@ class PriceRangeView : LinearLayout, View.OnClickListener {
     }
 
     fun reset() {
-        setRangeSelected(priceRangeViewGroup1Layout, false)
-        setRangeSelected(priceRangeViewGroup2Layout, false)
-        setRangeSelected(priceRangeViewGroup3Layout, false)
-        setRangeSelected(priceRangeViewGroup4Layout, false)
+        rangeSelected = Constants.PRICE_NOT_SELECTED
+        selectCurrentRange(priceRangeViewGroup1Layout, false)
+        selectCurrentRange(priceRangeViewGroup2Layout, false)
+        selectCurrentRange(priceRangeViewGroup3Layout, false)
+        selectCurrentRange(priceRangeViewGroup4Layout, false)
     }
 
-    private fun setRangeSelected(layout: LinearLayout, isSelected: Boolean) {
+    private fun selectCurrentRange(layout: LinearLayout, isSelected: Boolean) {
         val childCount = layout.childCount
         for (i in 0 until childCount) {
             val v = layout.getChildAt(i)
@@ -71,8 +75,43 @@ class PriceRangeView : LinearLayout, View.OnClickListener {
         }
     }
 
+    fun setSelectedRange(minSelectedValue: Double){
+        when(minSelectedValue){
+            1.0 ->{
+                onClick(priceRangeViewGroup1Layout)
+            }
+            11.0 ->{
+                onClick(priceRangeViewGroup2Layout)
+            }
+            21.0 ->{
+                onClick(priceRangeViewGroup3Layout)
+            }
+            30.0 ->{
+                onClick(priceRangeViewGroup4Layout)
+            }
+        }
+    }
+
     fun getSelectedRange(): Int {
         return rangeSelected
+    }
+
+    fun getMinMax(): Pair<Double?, Double?>?{
+        when(getSelectedRange()){
+            Constants.PRICE_GROUP_1 -> {
+                return Pair(1.0, 10.0)
+            }
+            Constants.PRICE_GROUP_2 -> {
+                return Pair(11.0, 20.0)
+            }
+            Constants.PRICE_GROUP_3 -> {
+                return Pair(21.0, 30.0)
+            }
+            Constants.PRICE_GROUP_4 -> {
+                return Pair(30.0, null)
+            }
+        }
+        return null
     }
 
 

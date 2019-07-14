@@ -63,14 +63,10 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
         (activity as MainActivity).handlePb(false)
 
         if (eater != null) {
-            if (!eater.thumbnail.isNullOrBlank()) {
-                editMyProfileFragUserImageView.setImage(eater.thumbnail)
-            }
+            editMyProfileFragUserImageView.setImage(eater.thumbnail)
 
-            if (!eater.fullName.isNullOrBlank()) {
-                editMyProfileFragFullName.setText(eater.fullName)
-            } else {
-                editMyProfileFragFullName.setText(eater.firstName + " " + eater.lastName)
+            if (!eater.getFullName().isNullOrBlank()) {
+                editMyProfileFragFullName.setText(eater.getFullName())
             }
 
             editMyProfileFragEmail.setText(eater.email)

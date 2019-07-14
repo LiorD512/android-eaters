@@ -57,7 +57,7 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
 
         addressChooserDialogRecycler.adapter = addressAdapter
 
-        if(addressAdapter != null && lastOrderAddress != null){
+        if(lastOrderAddress != null){
             addressAdapter!!.setSelected(lastOrderAddress!!)
         }
     }

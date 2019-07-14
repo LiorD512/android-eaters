@@ -13,7 +13,8 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_add_address.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -26,7 +27,7 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
     private var hasUpdated: Boolean = false
     private var isDelivery: Boolean = true
     private val viewModel: AddAddressViewModel by viewModel<AddAddressViewModel>()
-    private var selectedAddress: AddressResponse? = null
+    private var selectedGoogleAddress: GoogleAddressResponse? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_address, container, false)
@@ -46,8 +47,13 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
         addAddressFragAddress2ndLine.setInputTitleViewListener(this)
         addAddressFragDeliveryNote.setInputTitleViewListener(this)
 
+//        setCurrentDeliveryDetails()
         viewModel.navigationEvent.observe(this, Observer { event -> handleSaveResponse(event) })
-        setCurrentDeliveryDetails()
+        viewModel.myLocationEvent.observe(this, Observer { myLocation -> handleMyLocationEvent(myLocation.myLocation) })
+    }
+
+    private fun handleMyLocationEvent(myLocation: Address) {
+        addAddressFragAddress.setText(myLocation.streetLine1)
     }
 
     private fun handleSaveResponse(event: AddAddressViewModel.NavigationEvent?) {
@@ -74,7 +80,6 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
 
     override fun onClick(view: View?) {
         if (view is RadioButton) {
-
             hasUpdated = true
             this.isDelivery = view!!.id == addAddressFragDeliveryCb.id
 
@@ -93,29 +98,29 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
 
 
     private fun setCurrentDeliveryDetails() {
-        val currentDeliveryDetails = viewModel.getCurrentDeliveryDetails().currentNewAddress
-        selectedAddress = currentDeliveryDetails.addressResponse
-        addAddressFragAddress.setText(currentDeliveryDetails.address!!.streetLine1)
-        addAddressFragAddress2ndLine.setText(currentDeliveryDetails.address!!.streetLine2)
-
-        if (currentDeliveryDetails.isDelivery != null && currentDeliveryDetails.isDelivery) {
-            addAddressFragDeliveryNote.setText(viewModel.prepareNotes(currentDeliveryDetails.address!!.notes,currentDeliveryDetails.isDelivery))
-            addAddressFragRadioGroup.check(R.id.addAddressFragDeliveryCb)
-
-            addAddressFragDeliveryCb.typeface = Typeface.DEFAULT_BOLD
-            addAddressFragPickUpCb.typeface = Typeface.DEFAULT
-
-            addAddressFragDeliveryCb.isSelected = true
-
-        } else {
-            addAddressFragDeliveryNote.setText(currentDeliveryDetails.address!!.notes)
-            addAddressFragRadioGroup.check(R.id.addAddressFragPickUpCb)
-
-            addAddressFragDeliveryCb.typeface = Typeface.DEFAULT
-            addAddressFragPickUpCb.typeface = Typeface.DEFAULT_BOLD
-
-            addAddressFragPickUpCb.isSelected = true
-        }
+//        val currentDeliveryDetails = viewModel.getCurrentDeliveryDetails().currentNewAddress
+//        selectedGoogleAddress = currentDeliveryDetails.googleAddressResponse
+//        addAddressFragAddress.setText(currentDeliveryDetails.address!!.streetLine1)
+//        addAddressFragAddress2ndLine.setText(currentDeliveryDetails.address!!.streetLine2)
+//
+//        if (currentDeliveryDetails.isDelivery != null && currentDeliveryDetails.isDelivery) {
+//            addAddressFragDeliveryNote.setText(viewModel.prepareNotes(currentDeliveryDetails.address!!.notes,currentDeliveryDetails.isDelivery))
+//            addAddressFragRadioGroup.check(R.id.addAddressFragDeliveryCb)
+//
+//            addAddressFragDeliveryCb.typeface = Typeface.DEFAULT_BOLD
+//            addAddressFragPickUpCb.typeface = Typeface.DEFAULT
+//
+//            addAddressFragDeliveryCb.isSelected = true
+//
+//        } else {
+//            addAddressFragDeliveryNote.setText(currentDeliveryDetails.address!!.notes)
+//            addAddressFragRadioGroup.check(R.id.addAddressFragPickUpCb)
+//
+//            addAddressFragDeliveryCb.typeface = Typeface.DEFAULT
+//            addAddressFragPickUpCb.typeface = Typeface.DEFAULT_BOLD
+//
+//            addAddressFragPickUpCb.isSelected = true
+//        }
     }
 
     override fun onActionViewClick(type: Int) {
@@ -129,9 +134,9 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
         }
     }
 
-    fun onLocationSelected(selected: AddressResponse?) {
+    fun onLocationSelected(selected: GoogleAddressResponse?) {
         hasUpdated = true
-        this.selectedAddress = selected!!
+        this.selectedGoogleAddress = selected!!
         if (selected != null) {
             addAddressFragAddress.setText(selected.results!!.formattedAddress!!)
         } else {
@@ -141,9 +146,10 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
 
     fun saveAddressDetails() {
         if (hasUpdated) {
-            if (selectedAddress != null) {
+            if (selectedGoogleAddress != null) {
                 viewModel.postNewAddress(
-                    selectedAddress!!,
+                    selectedGoogleAddress!!,
+                    null,
                     addAddressFragAddress.getText(),
                     addAddressFragAddress2ndLine.getText(),
                     addAddressFragDeliveryNote.getText(),
@@ -155,6 +161,10 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
         } else {
             (activity as MainActivity).onNewAddressDone()
         }
+    }
+
+    override fun onMyLocationClick() {
+        viewModel.fetchMyLocation()
     }
 
 }

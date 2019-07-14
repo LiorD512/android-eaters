@@ -8,6 +8,13 @@
         android:background="@color/white"
         tools:context="com.bupp.wood_spoon_eaters.features.main.filter.FilterFragment">
 
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            app:title="Pick Filters"
+            android:id="@+id/filterFragHeader"
+            app:type="HEADER_VIEW_TYPE_BACK_TITLE_DONE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -27,13 +34,13 @@
                     android:layout_height="wrap_content"/>
 
             <com.bupp.wood_spoon_eaters.custom_views.PriceRangeView
-                    android:id="@+id/pickFilterFragPriceRangeView"
+                    android:id="@+id/filterFragPriceRangeView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
 
             <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
-                    android:id="@+id/pickFilterFragTimeIcons"
+                    android:id="@+id/filterFragTimeIcons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="38dp"
@@ -41,7 +48,7 @@
                     app:title="Estimated Arrival Time"/>
 
             <TextView
-                    android:id="@+id/pickFilterFragLaterTimeBtn"
+                    android:id="@+id/filterFragLaterTimeBtn"
                     android:layout_marginTop="15.7dp"
                     android:layout_marginStart="15.4dp"
                     style="@style/Reg13Dark"
@@ -66,7 +73,7 @@
 
 
             <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
-                    android:id="@+id/pickFilterFragDietaryIcons"
+                    android:id="@+id/filterFragDietaryIcons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="38.4dp"
@@ -74,7 +81,7 @@
                     app:title="Dietary"/>
 
             <TextView
-                    android:id="@+id/pickFilterFragClearAllBtn"
+                    android:id="@+id/filterFragClearAllBtn"
                     android:layout_marginTop="15.7dp"
                     android:layout_marginStart="15.4dp"
                     android:paddingBottom="23.7dp"

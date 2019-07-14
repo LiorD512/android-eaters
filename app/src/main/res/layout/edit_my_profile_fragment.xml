@@ -15,7 +15,8 @@
             android:id="@+id/editMyProfileFragUserImageView"
             android:layout_marginTop="24dp"
             android:layout_gravity="center"
-            app:imageSize="BIG"
+            app:imageSize="BIGGEST"
+            app:placeHolder="@drawable/profile_pic_placeholder_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

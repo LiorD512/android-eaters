@@ -53,14 +53,10 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     private fun initEaterData(eater: Eater) {
-        if (!eater.fullName.isNullOrBlank()) {
-            myProfileFragUserName.text = eater.fullName
-        } else {
-            myProfileFragUserName.text = eater.firstName + " " + eater.lastName
+        if (!eater.getFullName().isNullOrBlank()) {
+            myProfileFragUserName.text = eater.getFullName()
         }
-        if (!eater.thumbnail.isNullOrBlank()) {
-            myProfileFragUserPhoto.setImage(eater.thumbnail)
-        }
+        myProfileFragUserPhoto.setImage(eater.thumbnail)
     }
 
     private fun initClicks() {
@@ -83,5 +79,9 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     override fun onChangePaymentClick() {
 
+    }
+
+    fun onAddressChooserSelected() {
+        viewModel.fetchUserDetails()
     }
 }

@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.managers
 
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Utils
 import java.util.*
@@ -12,7 +12,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
 
     var isDelivery: Boolean? = null
 
-    var addressResponse: AddressResponse? = null
+    var googleAddressResponse: GoogleAddressResponse? = null
 
     var orderAddress: Address? = null
         get() = getLastOrderAddress()
@@ -56,13 +56,13 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
     }
 
     fun updateOrder(
-        addressResponse: AddressResponse? = null,
+        googleAddressResponse: GoogleAddressResponse? = null,
         orderAddress: Address? = null,
         isDelivery: Boolean? = null,
         orderTime: Date? = null
     ) {
-        if (addressResponse != null) {
-            this.addressResponse = addressResponse
+        if (googleAddressResponse != null) {
+            this.googleAddressResponse = googleAddressResponse
         }
         if (orderAddress != null) {
             this.orderAddress = orderAddress
@@ -75,9 +75,9 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
         }
     }
 
-    fun getLastAddressResponse(): AddressResponse? {
-        return if (addressResponse != null) {
-            addressResponse
+    fun getLastAddressResponse(): GoogleAddressResponse? {
+        return if (googleAddressResponse != null) {
+            googleAddressResponse
         } else {
             null
         }

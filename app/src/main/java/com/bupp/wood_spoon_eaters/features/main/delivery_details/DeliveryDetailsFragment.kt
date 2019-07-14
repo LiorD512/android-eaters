@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.delivery_details_fragment.*
@@ -36,6 +37,8 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
 
         deliveryDetailsFragLocation.setDeliveryDetailsViewListener(this)
         deliveryDetailsFragTime.setDeliveryDetailsViewListener(this)
+
+//        viewModel.initLocationListener()
 
         viewModel.lastDeliveryDetails.observe(this, Observer { details -> setDeliveryDetails(details) })
         viewModel.getLastDeliveryDetails()
@@ -70,5 +73,9 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
         }
         TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
 
+    }
+
+    fun onAddressChooserSelected() {
+        viewModel.getLastDeliveryDetails()
     }
 }

@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.network.google.models
 
 import com.google.gson.annotations.SerializedName
 
-class AddressResponse {
+class GoogleAddressResponse {
 
     @SerializedName("result")
     var results: ResultsItem? = null

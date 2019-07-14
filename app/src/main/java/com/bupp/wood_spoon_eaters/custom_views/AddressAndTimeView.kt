@@ -17,12 +17,12 @@ class AddressAndTimeView : LinearLayout {
     }
 
 
-    fun setLocation(text: String) {
-        locationDetailsViewLocation.text = text
+    fun setLocation(text: String?) {
+        locationDetailsViewLocation.text = text ?: "updating location..."
     }
 
-    fun setTime(text: String) {
-        locationDetailsViewTime.setText(text)
+    fun setTime(text: String?) {
+        locationDetailsViewTime.text = text ?: "ASAP"
     }
 
 }

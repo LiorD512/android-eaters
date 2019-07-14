@@ -107,6 +107,7 @@
             <enum name="HEADER" value="0"/>
             <enum name="SMALL" value="1"/>
             <enum name="BIG" value="2"/>
+            <enum name="BIGGEST" value="3"/>
         </attr>
     </declare-styleable>
 

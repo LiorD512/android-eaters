@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.changing_picture_view.view.*
 
 class ChangingPictureView : FrameLayout {
 
-    private lateinit var runnableCode: Runnable
+    private var runnableCode: Runnable
     private val mHandler: Handler = Handler()
     private var lastShowingView = 0
     private val DELAY: Long = 4000
@@ -78,7 +78,7 @@ class ChangingPictureView : FrameLayout {
             "wowChangingImages",
             "imgId: " + imgId + ", cur: " + curImageView!!.id + ", second: " + lastImageView!!.id
         )
-        curImageView!!.setImageResource(imgId)
+        curImageView.setImageResource(imgId)
 
         val fadeOut = ObjectAnimator.ofFloat(lastImageView, "alpha", 1f, 0f)
         fadeOut.duration = DURATION

@@ -43,8 +43,8 @@ class ActionTitleView : FrameLayout {
             }
 
             if (a.hasValue(R.styleable.ActionTitleView_hint)) {
-                var hint = a.getString(R.styleable.ActionTitleView_hint)
-                if (!hint.isEmpty()) {
+                val hint = a.getString(R.styleable.ActionTitleView_hint)
+                if (hint.isEmpty()) {
                     actionTitleViewInput.hint = hint
                 }
             }

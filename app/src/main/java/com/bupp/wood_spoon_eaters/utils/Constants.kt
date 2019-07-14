@@ -52,6 +52,7 @@ class Constants {
         const val INPUT_TYPE_LONG_TEXT = 3
         const val INPUT_TYPE_FULL_NAME = 4
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
+        const val INPUT_TYPE_LOCATION = 6
 
 
         //Price Range View
@@ -65,6 +66,7 @@ class Constants {
         const val HEADER_IMAGE_SIZE = 0
         const val SMALL_IMAGE_SIZE = 1
         const val BIG_IMAGE_SIZE = 2
+        const val BIGGEST_IMAGE_SIZE = 3
 
         //tool tip type
         const val TOOL_TIP_SERVICE_FEE = 0
@@ -136,6 +138,7 @@ class Constants {
         const val READ_PERMISSION_REQUEST_CODE = 445
         const val WRITE_PERMISSION_REQUEST_CODE = 446
         const val LOCATION_PERMISSION_REQUEST_CODE = 420
+        const val REQUEST_CHECK_SETTINGS = 121
 
 
     }

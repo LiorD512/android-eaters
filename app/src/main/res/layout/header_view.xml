@@ -75,8 +75,10 @@
             android:layout_height="wrap_content"/>
 
     <LinearLayout
+            tools:visibility="visible"
             android:visibility="gone"
             android:paddingRight="15.4dp"
+            android:clickable="false"
             android:id="@+id/headerViewLocationLayout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -115,7 +117,7 @@
     </LinearLayout>
 
     <LinearLayout
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:visibility="gone"
             android:id="@+id/headerViewSearchLayout"
             android:orientation="horizontal"
@@ -174,7 +176,7 @@
                 android:layout_marginLeft="5dp"
                 tools:visibility="visible"
                 android:id="@+id/headerViewFilterBtn"
-                android:src="@drawable/icons_filter"
+                android:src="@drawable/icons_filter_selector"
                 android:padding="5dp"
                 android:layout_marginRight="10.4dp"
                 android:visibility="gone"

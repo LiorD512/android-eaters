@@ -13,14 +13,17 @@ data class Eater(
     @SerializedName("last_name") val lastName: String,
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("email") val email: String,
-    @SerializedName("addresses") val addresses: ArrayList<Address>,
-    val fullName: String = "$firstName $lastName"
-)
+    @SerializedName("addresses") val addresses: ArrayList<Address>
+){
+    fun getFullName(): String{
+       return "$firstName $lastName"
+    }
+}
 
 data class EaterRequest(
     @SerializedName("first_name") var firstName: String = "",
     @SerializedName("last_name") var lastName: String = "",
-    @SerializedName("thumbnail") var thumbnail: String = "",
+    @SerializedName("thumbnail") var thumbnail: String? = null,
     @SerializedName("email") var email: String = "",
     @SerializedName("addresses") var addresses: ArrayList<AddressRequest> = arrayListOf(),
     @SerializedName("device") var device: Device? = null,

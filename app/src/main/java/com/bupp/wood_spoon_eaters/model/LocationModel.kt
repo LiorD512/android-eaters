@@ -1,12 +1,12 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 data class NewAddress(
-        val addressResponse: AddressResponse?,
+        val googleAddressResponse: GoogleAddressResponse?,
         val address: Address?,
         val isDelivery: Boolean?
 )
@@ -27,12 +27,12 @@ data class AddressRequest(
 @Parcelize
 data class Address(
         val id: Long? = null,
-        val lat: Double? = null,
-        val lng: Double? = null,
+        var lat: Double? = null,
+        var lng: Double? = null,
         var country: Country? = null,
         val state: State? = null,
         val city: City? = null,
-        @SerializedName("street_line_1") val streetLine1: String = "",
+        @SerializedName("street_line_1") var streetLine1: String = "",
         @SerializedName("street_line_2") val streetLine2: String = "",
         @SerializedName("zipcode") val zipCode: String = "",
         @SerializedName("notes") val notes: String = ""

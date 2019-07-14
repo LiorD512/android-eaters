@@ -25,6 +25,7 @@ class InputTitleView : FrameLayout {
 
     interface InputTitleViewListener {
         fun onInputTitleChange(str: String?){}
+        fun onMyLocationClick(){}
     }
 
     fun setInputTitleViewListener(listener: InputTitleViewListener) {
@@ -87,9 +88,16 @@ class InputTitleView : FrameLayout {
 
             if (a.hasValue(R.styleable.InputTitleView_inputType)) {
                 inputType = a.getInt(R.styleable.InputTitleView_inputType, Constants.INPUT_TYPE_TEXT)
+                inputTitleViewLocation.visibility = View.GONE
                 when (inputType) {
+                    Constants.INPUT_TYPE_LOCATION -> {
+                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                        inputTitleViewTitle.visibility = VISIBLE
+                        inputTitleViewLocation.visibility = VISIBLE
+                        inputTitleViewLocation.setOnClickListener { listener?.onMyLocationClick() }
+                    }
                     Constants.INPUT_TYPE_TEXT -> {
-                        inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT
+                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
                         inputTitleViewTitle.visibility = VISIBLE
                     }
                     Constants.INPUT_TYPE_NUMBER -> {

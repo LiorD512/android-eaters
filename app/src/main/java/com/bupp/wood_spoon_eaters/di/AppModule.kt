@@ -16,10 +16,7 @@ import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsVi
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
-import com.bupp.wood_spoon_eaters.managers.PermissionManager
-import com.bupp.wood_spoon_eaters.managers.SearchManager
+import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -31,6 +28,9 @@ val appModule = module {
     single { AppSettings(get()) }
     single { SearchManager(get()) }
     single { OrderManager(get(), get()) }
+    single { LocationManager(get(), get()) }
+    single { EaterAddressManager(get(), get(), get()) }
+
     factory { PermissionManager() }
 
     //VIEW MODELS
@@ -47,11 +47,11 @@ val appModule = module {
     viewModel { CreateAccountViewModel(get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get()) }
-    viewModel { FeedViewModel(get()) }
+    viewModel { MainViewModel(get(), get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
-    viewModel { AddAddressViewModel(get(), get(),get()) }
-    viewModel { PickFiltersViewModel(get()) }
+    viewModel { AddAddressViewModel(get(), get(),get(), get()) }
+    viewModel { PickFiltersViewModel(get(), get()) }
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get()) }
@@ -67,7 +67,7 @@ val appModule = module {
 
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }
-    viewModel { DeliveryDetailsViewModel(get()) }
+    viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
 
 }
 

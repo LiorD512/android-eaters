@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
-import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import retrofit2.Call
 import retrofit2.Response
 
 class LocationChooserViewModel(val googleApi: GoogleApi) : ViewModel() {
 
     val addressIdResponse: MutableLiveData<AddressIdResponse> = SingleLiveEvent()
-    val addressResponse: MutableLiveData<AddressResponse> = SingleLiveEvent()
+    val googleAddressResponse: MutableLiveData<GoogleAddressResponse> = SingleLiveEvent()
 
     val queryEvent: SingleLiveEvent<QueryEvent> = SingleLiveEvent()
 
@@ -36,15 +36,15 @@ class LocationChooserViewModel(val googleApi: GoogleApi) : ViewModel() {
     }
 
     fun fetchAddress(placeId: String?) {
-        googleApi.getAddress(placeId!!).enqueue(object : retrofit2.Callback<AddressResponse> {
+        googleApi.getAddress(placeId!!).enqueue(object : retrofit2.Callback<GoogleAddressResponse> {
 
-            override fun onResponse(call: Call<AddressResponse>, response: Response<AddressResponse>) {
+            override fun onResponse(call: Call<GoogleAddressResponse>, response: Response<GoogleAddressResponse>) {
                 if (response.isSuccessful) {
-                    addressResponse.postValue(response.body())
+                    googleAddressResponse.postValue(response.body())
                 }
             }
 
-            override fun onFailure(call: Call<AddressResponse>, t: Throwable) {
+            override fun onFailure(call: Call<GoogleAddressResponse>, t: Throwable) {
                 Log.d("wowGoogleApi", "onFailure! " + t.message)
             }
         })

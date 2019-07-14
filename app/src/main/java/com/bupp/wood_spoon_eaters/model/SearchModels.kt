@@ -11,7 +11,7 @@ data class SearchRequest(
     var timestamp: Int? = null,
     var q: String? = "",
     var cuisineIds: ArrayList<Int>? = null,
-    var dietIds: ArrayList<Int>? = null,
+    var dietIds: ArrayList<Long>? = null,
     var minPrice: Double? = null,
     var maxPrice: Double? = null
 )

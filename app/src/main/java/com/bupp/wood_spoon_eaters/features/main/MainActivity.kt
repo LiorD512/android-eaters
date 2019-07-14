@@ -5,9 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.bupp.wood_spoon.dialogs.AddressChooserDialog
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -17,13 +19,12 @@ import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add
 import com.bupp.wood_spoon_eaters.features.main.edit_my_profile.EditMyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.my_profile.MyProfileFragment
-import com.bupp.wood_spoon_eaters.features.main.filter.FilterFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
 
-    private lateinit var selectedAddress: AddressResponse
+    private lateinit var selectedGoogleAddress: GoogleAddressResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +49,27 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         mainActHeaderView.setHeaderViewListener(this)
 
-
-        loadFeed()
+        initObservers()
+        startLocationUpdates()
         updateAddressTimeView()
+        loadFeed()
+    }
+
+    private fun initObservers() {
+        viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
+            if (newAddressEvent != null) {
+                updateAddressTimeView()
+            }
+        })
+    }
+
+    fun startLocationUpdates(){
+        viewModel.startLocationUpdates(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopLocationUpdates()
     }
 
     private fun loadFragment(fragment: Fragment, tag: String) {
@@ -85,18 +104,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     private fun loadFeed() {
         loadFragment(FeedFragment(), Constants.FEED_TAG)
-        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getLastOrderAddress())
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
+//        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getLastOrderAddress())
     }
 
     private fun loadSearchFragment() {
         loadFragment(SearchFragment.newInstance(), Constants.SEARCH_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_SEARCH)
-    }
-
-    fun loadPickFilters() {
-        loadFragment(FilterFragment(), Constants.PICK_FILTERS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_DONE, "Pick Filters")
     }
 
     fun loadMyProfile() {
@@ -117,7 +131,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     //delivery details methods
     fun loadDeliveryDetails() {
         loadFragment(DeliveryDetailsFragment.newInstance(), Constants.DELIVERY_DETAILS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Delivery Details")
+        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Delivery Details")
     }
 
     fun loadAddNewAddress() {
@@ -129,33 +143,44 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         LocationChooserFragment(this, null).show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
     }
 
-    override fun onAddressChoose(address: Address) {
-        Toast.makeText(this, "Address selected is " + address.streetLine1, Toast.LENGTH_SHORT).show()
-        viewModel.setOrderAddress(address)
-        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), address.streetLine1)
-    }
 
-    override fun onAddAddress() {
-        loadAddNewAddress()
-    }
 
-    override fun onLocationSelected(selected: AddressResponse?) {
+    override fun onLocationSelected(selected: GoogleAddressResponse?) {
+        //on LocationChoosertFragment result
         if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-            this.selectedAddress = selected
+            this.selectedGoogleAddress = selected
             (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).onLocationSelected(selected)
         } else if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-            this.selectedAddress = selected
+            this.selectedGoogleAddress = selected
 //            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
             Toast.makeText(this,"What should we do here", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onChangeAddressClick() {
-        if(viewModel.getListOfAddresses() != null && viewModel.getListOfAddresses()!!.size > 1){
-            loadAddressesDialog()
-        }else{
-            loadAddNewAddress()
+        loadDeliveryDetails()
+    }
+    //address dialog interface
+    override fun onAddressChoose(address: Address) {
+        Toast.makeText(this, "Address selected is " + address.streetLine1, Toast.LENGTH_SHORT).show()
+        viewModel.setChosenAddress(address)
+        when(currentFragmentTag){
+            Constants.DELIVERY_DETAILS_TAG -> {
+                if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
+                    (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
+                }
+            }
+            Constants.MY_PROFILE_TAG -> {
+                if (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment? != null) {
+                    (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
+                }
+            }
         }
+        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), address)
+    }
+
+    override fun onAddAddress() {
+        loadAddNewAddress()
     }
 
     override fun onTipDone(tipAmount: Int) {
@@ -170,7 +195,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     //load dialogs
     fun loadAddressesDialog() {
-        AddressChooserDialog(this, viewModel.getListOfAddresses(),viewModel.getOrderAddress()).show(
+        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
             supportFragmentManager,
             Constants.ADDRESS_DIALOG_TAG
         )
@@ -218,8 +243,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun setHeaderViewLocationDetails(time: String? = null, location: String? = null) {
-        mainActHeaderView.setLocationTitle(time, location)
+    fun setHeaderViewLocationDetails(time: String? = null, location: Address? = null) {
+        mainActHeaderView.setLocationTitle(time, location?.streetLine1)
     }
 
 
@@ -227,8 +252,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
+                Log.d("wowMainVM","onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    loadLocationChooser()
+                    viewModel.startLocationUpdates(this)
                 }
             }
         }
@@ -260,6 +286,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadSettings()
     }
 
+    override fun onHeaderFilterClick() {
+        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
+            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).openFilterDialog()
+        }
+    }
+
+    override fun onHeaderDoneClick() {
+
+    }
+
 
     override fun onHeaderTextChange(str: String) {
         if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
@@ -276,9 +312,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null) {
             handlePb(true)
             (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).saveAddressDetails()
-        } else if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) != null) {
-            updateAddressTimeView()
-            loadFeed()
         } else if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
             handlePb(true)
             (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
@@ -290,7 +323,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun updateAddressTimeView() {
-        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getLastOrderAddress())
+        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getCurrentAddress())
     }
 
     override fun onHeaderAddressAndTimeClick() {
@@ -311,7 +344,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             loadMyProfile()
         } else if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
             loadMyProfile()
-        } else {
+        }else if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) != null) {
+            updateAddressTimeView()
+            loadFeed()
+        }  else {
             loadFeed()
         }
     }
@@ -320,7 +356,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun onNewAddressDone(location: String? = null) {
         handlePb(false)
         if (location != null) {
-            mainActHeaderView.setLocationTitle(location = location)
+            updateAddressTimeView()
+//            mainActHeaderView.setLocationTitle(location = location)
         }
         when (lastFragmentTag) {
             Constants.MY_PROFILE_TAG -> {
@@ -354,5 +391,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
         }
+    }
+
+
+
+    fun updateFilterUi(isFiltered: Boolean) {
+        mainActHeaderView.updateFilterUi(isFiltered)
     }
 }

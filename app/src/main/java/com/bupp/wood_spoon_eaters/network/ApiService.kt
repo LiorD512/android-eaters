@@ -64,6 +64,11 @@ interface ApiService {
 
 
 
+    //Feed
+    @GET("eaters/me/feed")
+    fun getFeed(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: Int? = null): Call<ServerResponse<ArrayList<Feed>>>
+
 //    @POST("cooks/me/dishes/presigned_urls")
 //    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>
 //    //NewDish

@@ -27,7 +27,6 @@ class DeserializerJsonSearch: JsonDeserializer<Search>{
         search.pagination = gson.fromJson(paginationJson, Pagination::class.java)
 
 
-
         val cookJsonArr = jsonObject?.getAsJsonArray("results")
         when(search.resource){
             Constants.RESOURCE_TYPE_COOK -> {
@@ -41,4 +40,5 @@ class DeserializerJsonSearch: JsonDeserializer<Search>{
         }
         return search
     }
+
 }

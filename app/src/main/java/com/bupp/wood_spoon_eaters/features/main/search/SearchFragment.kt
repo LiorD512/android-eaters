@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.NewDishSuggestionDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.main.filter.FilterFragment
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
@@ -22,13 +23,14 @@ import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFra
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 
-class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener {
+class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
+    FilterFragment.FilterFragmentListener {
 
     companion object {
         fun newInstance() = SearchFragment()
     }
 
-    private var query: String? = null
+    private var query: String = ""
     private lateinit var itemDecor: GridItemDecoration
     private val SEARCH_LIST_TYPE_CUISINE: Int = 0
     private val SEARCH_LIST_TYPE_RESULT: Int = 1
@@ -149,8 +151,8 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
 
     fun onSearchInputChanged(str: String) {
         Log.d("wowSearch","onSearchInputChanged: " + str)
+        this.query = str
         if(str.isNullOrEmpty()){
-            this.query = str
             adapter.clearData()
             showListLayout(SEARCH_LIST_TYPE_CUISINE)
         }else{
@@ -176,6 +178,16 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
 
     private fun updateInput(name: String) {
         (activity as MainActivity).updateSearchInput(name)
+    }
+
+    fun openFilterDialog() {
+        FilterFragment(this).show(childFragmentManager, Constants.PICK_FILTERS_TAG)
+    }
+
+    override fun onFilterDone(isFiltered: Boolean) {
+        searchFragPb.show()
+        (activity as MainActivity).updateFilterUi(isFiltered)
+        viewModel.search(query)
     }
 
 }

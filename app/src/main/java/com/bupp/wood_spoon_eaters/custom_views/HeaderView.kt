@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.text_watcher.AutoCompleteTextWatcher
 import kotlinx.android.synthetic.main.header_view.view.*
 
 
-class HeaderView : FrameLayout {
+class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
+
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -54,7 +56,7 @@ class HeaderView : FrameLayout {
         fun onHeaderSearchClick() {}
         fun onHeaderFilterClick() {}
         fun onHeaderProfileClick() {}
-        fun onHeaderTextChange(toString: String) {}
+        fun onHeaderTextChange(str: String) {}
         fun onHeaderAddressAndTimeClick() {}
         fun onHeaderSettingsClick() {}
     }
@@ -86,9 +88,7 @@ class HeaderView : FrameLayout {
         headerViewFilterBtn.setOnClickListener {
             listener?.onHeaderFilterClick()
         }
-        headerViewProfileBtn.setOnClickListener {
-            listener?.onHeaderProfileClick()
-        }
+        headerViewProfileBtn.setUserImageViewListener(this)
 
         headerViewSearchClean.setOnClickListener {
             headerViewSearchInput.text.clear()
@@ -99,9 +99,9 @@ class HeaderView : FrameLayout {
         }
 
         headerViewSearchInput.addTextChangedListener(object : AutoCompleteTextWatcher() {
-            override fun handleInputString(s: String) {
-                Log.d("wowHeaderView", "afterTextChanged: ${s.toString()}")
-                listener?.onHeaderTextChange(s.toString())
+            override fun handleInputString(str: String) {
+                Log.d("wowHeaderView", "afterTextChanged: $str")
+                listener?.onHeaderTextChange(str)
             }
 
         });
@@ -109,6 +109,10 @@ class HeaderView : FrameLayout {
         headerViewAddressAndTime.setOnClickListener {
             listener?.onHeaderAddressAndTimeClick()
         }
+    }
+
+    override fun onUserImageClick() {
+        listener?.onHeaderProfileClick()
     }
 
     private fun initUi(type: Int?) {
@@ -168,12 +172,8 @@ class HeaderView : FrameLayout {
     }
 
     fun setLocationTitle(time: String? = null, location: String? = null) {
-        if (!time.isNullOrEmpty()) {
             headerViewAddressAndTime.setTime(time)
-        }
-        if (!location.isNullOrEmpty()) {
             headerViewAddressAndTime.setLocation(location)
-        }
     }
 
     fun isSkipable(isSkipable: Boolean) {
@@ -195,5 +195,9 @@ class HeaderView : FrameLayout {
             headerViewSaveBtn.alpha = 0.5f
         }
         headerViewSaveBtn.isClickable = isClickable
+    }
+
+    fun updateFilterUi(isEnabled: Boolean) {
+        headerViewFilterBtn.isSelected = isEnabled
     }
 }

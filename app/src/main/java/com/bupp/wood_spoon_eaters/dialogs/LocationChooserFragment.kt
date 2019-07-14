@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
-import com.bupp.wood_spoon_eaters.network.google.models.AddressResponse
+import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import kotlinx.android.synthetic.main.fragment_chooser.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -29,7 +29,7 @@ class LocationChooserFragment(val listener: LocationChooserFragmentListener, var
     var adapter: AddressAutoCompleteAdapter? = null
 
     interface LocationChooserFragmentListener {
-        fun onLocationSelected(selected: AddressResponse?)
+        fun onLocationSelected(selected: GoogleAddressResponse?)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +84,7 @@ class LocationChooserFragment(val listener: LocationChooserFragmentListener, var
     }
 
     private fun initObservers() {
-        viewModel.addressResponse.observe(this,Observer { addressIdResponse -> handleAddressResponse(addressIdResponse) })
+        viewModel.googleAddressResponse.observe(this,Observer { addressIdResponse -> handleAddressResponse(addressIdResponse) })
         viewModel.queryEvent.observe(this, Observer { event ->
             if (event != null) {
                 handleAutoCompleteResponse(event.response, event.query)
@@ -97,9 +97,9 @@ class LocationChooserFragment(val listener: LocationChooserFragmentListener, var
         adapter?.refreshList(addressIdResponse, query)
     }
 
-    private fun handleAddressResponse(addressResponse: AddressResponse?) {
+    private fun handleAddressResponse(googleAddressResponse: GoogleAddressResponse?) {
         closeKeyboard(chooserFragInput)
-        listener.onLocationSelected(addressResponse!!)
+        listener.onLocationSelected(googleAddressResponse!!)
         dismiss()
     }
 

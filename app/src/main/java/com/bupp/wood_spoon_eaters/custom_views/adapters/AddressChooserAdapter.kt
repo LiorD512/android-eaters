@@ -38,7 +38,6 @@ class AddressChooserAdapter(
 
             addressText.isSelected = isSelected
 
-
             if(isSelected){
                 addressText.typeface = Typeface.DEFAULT_BOLD
             }else{
@@ -69,13 +68,7 @@ class AddressChooserAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            ViewType.ITEM -> ItemViewHolder(
-                LayoutInflater.from(context).inflate(
-                    R.layout.address_list_item,
-                    parent,
-                    false
-                )
-            )
+            ViewType.ITEM -> ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.address_list_item,parent,false))
             else -> FooterViewHolder(LayoutInflater.from(context).inflate(R.layout.address_list_footer, parent, false))
         }
     }
@@ -99,7 +92,7 @@ class AddressChooserAdapter(
         notifyDataSetChanged()
     }
 
-    fun setSelected(selectedAddress: Address) {
+    fun setSelected(selectedAddress: Address?) {
         this.selectedAddress = selectedAddress
         notifyDataSetChanged()
     }

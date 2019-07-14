@@ -19,7 +19,7 @@ class SearchManager(val api: ApiService) {
                         timestamp: Int? = null,
                         q: String? = "",
                         cuisineIds: ArrayList<Int>? = null,
-                        dietIds: ArrayList<Int>? = null,
+                        dietIds: ArrayList<Long>? = null,
                         minPrice: Double? = null,
                         maxPrice: Double? = null): SearchRequest{
         if(q != null){ curSearch.q = q }
@@ -34,6 +34,13 @@ class SearchManager(val api: ApiService) {
         return curSearch
     }
 
+    fun getSearchRequest(): SearchRequest {
+        return curSearch
+    }
+
+    fun clearSearch(){
+        curSearch = SearchRequest()
+    }
 
 
 }
