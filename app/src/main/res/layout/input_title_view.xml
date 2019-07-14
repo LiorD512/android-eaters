@@ -69,14 +69,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"/>
 
-        <ImageView
-                android:visibility="gone"
-                android:id="@+id/inputTitleViewLocation"
-                android:layout_gravity="right|center"
-                android:layout_marginRight="18.2dp"
-                android:src="@drawable/icons_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
     </FrameLayout>
 

@@ -12,10 +12,12 @@ import kotlinx.android.synthetic.main.stackable_text_view_item.view.*
 
 class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<DishIngredient>) : RecyclerView.Adapter<DishIngredientsAdapter.ViewHolder>() {
 
+    val ingredientsRemoved: ArrayList<Long> = arrayListOf()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title = view.dishIngredientItemTitle
         val remove = view.dishIngredientItemRemove
+        val layout = view.dishIngredientItemLayout
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,10 +34,25 @@ class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<Dis
         holder.title.text = ingredient.ingredient?.name
         if(ingredient.isAdjustable!!){
             holder.remove.visibility = View.VISIBLE
+
+            if(ingredientsRemoved.contains(ingredient.id)){
+                holder.layout.alpha = 0.5f
+            }else{
+                holder.layout.alpha = 1f
+            }
+
+            holder.remove.setOnClickListener {
+                if(ingredientsRemoved.contains(ingredient.id)){
+                    ingredientsRemoved.remove(ingredient.id)
+                }else{
+                    ingredientsRemoved.add(ingredient.id!!)
+                }
+                notifyDataSetChanged()
+            }
         }else{
             holder.remove.visibility = View.GONE
         }
-        holder.remove.setOnClickListener {} //todo
+
     }
 
 

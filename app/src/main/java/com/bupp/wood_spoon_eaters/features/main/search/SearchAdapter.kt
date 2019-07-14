@@ -60,15 +60,16 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                 val dish: Dish = dishes[curPosition]
                 Glide.with(context).load(dish.thumbnail).into((holder as DishItemViewHolder).bkgImg)
                 (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
-                holder.dishCount.text = "todo"
                 holder.name.text = dish.name
                 holder.cookName.text = "by ${dish.cook.getFullName()}"
-                holder.rating.text = "todo"
+                holder.rating.text = "${dish.rating}"
 
-                val upcomingSlot = dish.upcomingSlot
-                if(upcomingSlot != null){
-                    holder.date.text = Utils.parseDateToDayDateHour(upcomingSlot?.startsAt)
-                    holder.dishCount.text = "${upcomingSlot?.unitSold} / ${upcomingSlot?.quantity}"
+                if(dish.menuItem != null){
+                    holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
+                    val upcomingSlot = dish.menuItem.cookingSlot
+                    if(upcomingSlot != null){
+                        holder.date.text = Utils.parseDateToDayDateHour(upcomingSlot?.startsAt)
+                    }
                 }
 
                 holder.favBtn.setOnClickListener { onFavClick(dish) }

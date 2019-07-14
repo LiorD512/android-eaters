@@ -44,6 +44,7 @@ class AddAddressViewModel(
     fun fetchMyLocation() {
         val myLocation = eaterAddressManager.getCurrentAddress()
         if (myLocation != null) {
+            appSettings.setUserChooseSpecificAddress(false)
             myLocationEvent.postValue(MyLocationEvent(myLocation))
         } else {
             eaterAddressManager.setLocationListener(this)

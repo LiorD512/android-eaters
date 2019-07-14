@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.my_profile
+package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
 import android.os.Bundle
 import android.view.LayoutInflater

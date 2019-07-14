@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.action_title_view.view.*
 
 
@@ -14,6 +15,7 @@ class ActionTitleView : FrameLayout {
 
     interface ActionTitleViewListener {
         fun onActionViewClick(type: Int){}
+        fun onMyLocationClick() {}
     }
 
     fun setActionTitleViewListener(listener: ActionTitleViewListener) {
@@ -44,7 +46,7 @@ class ActionTitleView : FrameLayout {
 
             if (a.hasValue(R.styleable.ActionTitleView_hint)) {
                 val hint = a.getString(R.styleable.ActionTitleView_hint)
-                if (hint.isEmpty()) {
+                if (!hint.isEmpty()) {
                     actionTitleViewInput.hint = hint
                 }
             }
@@ -53,9 +55,10 @@ class ActionTitleView : FrameLayout {
                 type = a.getInt(R.styleable.ActionTitleView_action, -1)
             }
 
-            val isWithArrow = a.getBoolean(R.styleable.ActionTitleView_isWithArrow, false)
-            if (isWithArrow) {
-                actionTitleViewArrow.visibility = View.VISIBLE
+            val isWithLocation = a.getBoolean(R.styleable.ActionTitleView_isWithLocation, false)
+            if (isWithLocation) {
+                actionTitleViewLocation.visibility = View.VISIBLE
+                actionTitleViewLocation.setOnClickListener { getMyLocation() }
             }
             a.recycle()
         }
@@ -63,10 +66,16 @@ class ActionTitleView : FrameLayout {
         initUi()
     }
 
+    private fun getMyLocation() {
+        listener?.onMyLocationClick()
+    }
+
     private fun initUi() {
         actionTitleViewInput.setOnClickListener {
             listener?.onActionViewClick(type)
         }
+
+
     }
 
     fun setText(text: String) {

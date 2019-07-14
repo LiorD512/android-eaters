@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
 
 class CertificatesAdapter(val context: Context, val certificates: ArrayList<String>) : RecyclerView.Adapter<CertificatesAdapter.ViewHolder>() {
 
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title = view.certificateItemTitle
     }
@@ -26,10 +25,6 @@ class CertificatesAdapter(val context: Context, val certificates: ArrayList<Stri
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val certificate = certificates[position]
-
         holder.title.text = certificate
-
     }
-
-
 }

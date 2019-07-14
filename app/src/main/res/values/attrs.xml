@@ -57,7 +57,7 @@
         <attr name="title"/>
         <attr name="isMandatory"/>
         <attr name="hint"/>
-        <attr name="isWithArrow" format="boolean"/>
+        <attr name="isWithLocation" format="boolean"/>
         <attr name="action" format="enum">
             <enum name="CALENDER" value="0"/>
             <enum name="NEW_INGREDIENT" value="1"/>

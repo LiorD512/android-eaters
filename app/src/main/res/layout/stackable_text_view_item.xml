@@ -6,7 +6,7 @@
         android:id="@+id/stackableTextViewItem"
         android:layout_marginTop="7.7dp"
         android:layout_gravity="center|top"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
 </FrameLayout>

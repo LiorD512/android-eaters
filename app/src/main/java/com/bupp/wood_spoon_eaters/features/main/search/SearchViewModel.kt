@@ -23,11 +23,6 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
         val searchResponse: ArrayList<Search>?,
         val searchId: Long
     )
-    data class DishDetailsEvent(
-        val isSuccess: Boolean = false,
-        val dish: Dish?
-    )
-
 
     data class SuggestionEvent(
         val isSuccess: Boolean = false
@@ -35,7 +30,6 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
 
     val searchEvent: SingleLiveEvent<SearchEvent> = SingleLiveEvent()
     val nextSearchEvent: SingleLiveEvent<NextSearchEvent> = SingleLiveEvent()
-    val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
     val suggestionEvent: SingleLiveEvent<SuggestionEvent> = SingleLiveEvent()
 
     var searchResult: ArrayList<Search>? = null
@@ -104,25 +98,25 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
         })
     }
 
-    fun getFullDishDetails(id: Long) {
-        api.getDishDetails(id).enqueue(object: Callback<ServerResponse<Dish>> {
-            override fun onResponse(call: Call<ServerResponse<Dish>>, response: Response<ServerResponse<Dish>>) {
-                if(response.isSuccessful){
-                    Log.d("wowSearchVM","getDishDetails success")
-                    val dish = response.body()?.data
-                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish))
-                }else{
-                    Log.d("wowSearchVM","getDishDetails fail")
-                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Dish>>, t: Throwable) {
-                Log.d("wowSearchVM","getDishDetails big fail: ${t.message}")
-                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-            }
-        })
-    }
+//    fun getFullDishDetails(id: Long) {
+//        api.getMenuItemsDetails(id).enqueue(object: Callback<ServerResponse<Dish>> {
+//            override fun onResponse(call: Call<ServerResponse<Dish>>, response: Response<ServerResponse<Dish>>) {
+//                if(response.isSuccessful){
+//                    Log.d("wowSearchVM","getMenuItemsDetails success")
+//                    val dish = response.body()?.data
+//                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish))
+//                }else{
+//                    Log.d("wowSearchVM","getMenuItemsDetails fail")
+//                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Dish>>, t: Throwable) {
+//                Log.d("wowSearchVM","getMenuItemsDetails big fail: ${t.message}")
+//                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+//            }
+//        })
+//    }
 
     fun suggestDish(dishName: String, dishDetails: String) {
         api.postDishSuggestion(dishName,dishDetails).enqueue(object: Callback<ServerResponse<Void>> {

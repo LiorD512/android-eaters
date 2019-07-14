@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.edit_my_profile
+package com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile
 
 import android.net.Uri
 import android.util.Log

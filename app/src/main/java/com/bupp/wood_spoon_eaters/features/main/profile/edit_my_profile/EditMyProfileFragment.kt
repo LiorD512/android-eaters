@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.edit_my_profile
+package com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile
 
 import android.net.Uri
 import android.os.Bundle
@@ -14,7 +14,6 @@ import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.CameraUtils
-import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.edit_my_profile_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
 

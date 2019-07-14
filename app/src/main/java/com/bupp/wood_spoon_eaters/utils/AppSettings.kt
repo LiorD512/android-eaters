@@ -25,6 +25,7 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
         this.isUserChooseSpecificAddress = isSpecificAddress
     }
     fun isUserChooseSpecificAddress(): Boolean {
+        //is user didn't chose my location
         return isUserChooseSpecificAddress
     }
 

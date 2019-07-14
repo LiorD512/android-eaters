@@ -11,7 +11,12 @@ class DishCounterView: LinearLayout{
 
     val MINUS = 0
     val PLUS = 1
-    var count: Int = 0
+    var count: Int = 1
+
+    lateinit var listener: DishCounterViewListener
+    interface DishCounterViewListener{
+        fun onDishCounterChanged(count: Int)
+    }
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -26,6 +31,10 @@ class DishCounterView: LinearLayout{
         dishCounterPlus.setOnClickListener { handleCount(PLUS) }
     }
 
+    fun setDishCounterViewListener(listener: DishCounterViewListener){
+        this.listener = listener
+    }
+
     private fun handleCount(type: Int) {
         when(type){
             MINUS -> {
@@ -38,6 +47,9 @@ class DishCounterView: LinearLayout{
             }
         }
         dishCounterCount.setText(count.toString())
+        if(::listener.isInitialized){
+            listener.onDishCounterChanged(count)
+        }
     }
 
     fun getDishCount(): Int{

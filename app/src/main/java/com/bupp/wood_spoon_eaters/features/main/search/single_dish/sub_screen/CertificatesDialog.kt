@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import com.bupp.wood_spoon_eaters.features.main.search.single_dish.CertificatesAdapter
 import kotlinx.android.synthetic.main.certificates_dialog.*
 
 
-class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment() {
+class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment(), HeaderView.HeaderViewListener {
 
 
 
@@ -24,7 +25,7 @@ class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.single_dish_fragment_dialog_fragment, container, false)
+        return inflater.inflate(R.layout.certificates_dialog, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,15 +36,19 @@ class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        certificatesHeader.setHeaderViewListener(this)
+
         certificatesList.setLayoutManager(LinearLayoutManager(context))
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
-        singleDishIngredientList.addItemDecoration(divider)
+        certificatesList.addItemDecoration(divider)
         var adapter = CertificatesAdapter(context!!, certificates)
-        singleDishIngredientList.adapter = adapter
+        certificatesList.adapter = adapter
     }
 
-
+    override fun onHeaderBackClick() {
+        dismiss()
+    }
 
 
 }

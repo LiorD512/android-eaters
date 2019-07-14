@@ -52,7 +52,7 @@ class Constants {
         const val INPUT_TYPE_LONG_TEXT = 3
         const val INPUT_TYPE_FULL_NAME = 4
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
-        const val INPUT_TYPE_LOCATION = 6
+//        const val INPUT_TYPE_LOCATION = 6
 
 
         //Price Range View
@@ -92,12 +92,14 @@ class Constants {
 
         const val SINGLE_DISH_DIALOG = "single_dish_dialog"
         const val ADDRESS_DIALOG_TAG = "address_dialog"
-        const val DELIVERY_TO_ADDRESS_DIALOG_TAG = "delivery_to_address_dialog_tag"
-        const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog_tag"
+        const val DELIVERY_TO_ADDRESS_DIALOG_TAG = "delivery_to_address_dialog"
+        const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog"
         const val CONTACT_US_DIALOG_TAG = "contact_us_dialog"
         const val THANK_YOU_DIALOG_TAG = "thank_you_dialog"
         const val START_NEW_CART_DIALOG_TAG = "start_new_cart_dialog"
         const val DISH_SOLD_OUT_DIALOG_TAG = "dish_sold_out_dialog"
+        const val ORDER_DATE_CHOOSER_DIALOG_TAG = "order_date_chooser_dialog"
+        const val CERTIFICATES_DIALOG_TAG = "certificated_dialog"
 
 
 

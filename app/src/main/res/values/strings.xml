@@ -23,7 +23,7 @@
     <string name="phone_verification_fragment_phone_hint">+1 (201) 555 - 0123</string>
 
     <string name="details_setup_fragment_address">Address</string>
-    <string name="details_setup_fragment_address_hint">Street googleAddress and building number</string>
+    <string name="details_setup_fragment_address_hint">Street address and building number</string>
     <string name="details_setup_fragment_apt_hint">Apt./ Suite/ Floor</string>
     <string name="details_setup_fragment_delivery_hint">Add Delivery Note</string>
 
@@ -44,7 +44,7 @@
     <string name="support_dialog_title">Support Center</string>
     <string name="support_frag_sms_sentence">Hello im just a line you can change later</string>
     <string name="common_string_address">Address</string>
-    <string name="common_string_address_hint">Street googleAddress and building number</string>
+    <string name="common_string_address_hint">Street address and building number</string>
     <string name="common_string_apartment">Apt./ Suite/ Floor</string>
     <string name="add_address_frag_delivery_to_door">Delivery to door</string>
     <string name="add_address_frag_pick_up_outside">Pick up outside</string>

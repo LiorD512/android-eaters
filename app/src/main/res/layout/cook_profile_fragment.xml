@@ -13,15 +13,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-
-
                 <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                         app:imageSize="BIG"
                         android:id="@+id/cookProfileImageView"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-
 
             <LinearLayout
                     android:layout_gravity="center"
@@ -93,9 +90,10 @@
                 android:background="@color/silver" />
 
         <com.bupp.wood_spoon_eaters.custom_views.stackableTextView.StackableTextView
+                android:layout_weight="1"
                 android:id="@+id/cookProfileFragCuisineGrid"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="14dp" />
 
     <LinearLayout
@@ -128,11 +126,6 @@
                 android:text="+ 2 More" />
 
     </LinearLayout>
-
-
-
-
-
 
         <View
                 android:layout_width="match_parent"

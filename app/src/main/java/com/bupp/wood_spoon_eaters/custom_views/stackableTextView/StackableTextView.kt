@@ -30,6 +30,7 @@ class StackableTextView : FrameLayout {
         stackableTextViewList.layoutManager = LinearLayoutManager(context)
         adapter = StackableTextViewAdapter(context)
         stackableTextViewList.adapter = adapter
+        stackableTextViewList.isNestedScrollingEnabled = false
     }
 
     fun initStackableView(icons: ArrayList<SelectableIcon>){

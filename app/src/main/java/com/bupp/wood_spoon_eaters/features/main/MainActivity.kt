@@ -16,10 +16,11 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
-import com.bupp.wood_spoon_eaters.features.main.edit_my_profile.EditMyProfileFragment
+import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
-import com.bupp.wood_spoon_eaters.features.main.my_profile.MyProfileFragment
+import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
+import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFragmentDialog
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
@@ -397,5 +398,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     fun updateFilterUi(isFiltered: Boolean) {
         mainActHeaderView.updateFilterUi(isFiltered)
+    }
+
+    fun loadSingleDishDetails(id: Long) {
+        SingleDishFragmentDialog.newInstance(id).show(supportFragmentManager, Constants.SINGLE_DISH_DIALOG)
     }
 }

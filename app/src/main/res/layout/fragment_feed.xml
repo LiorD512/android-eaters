@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="In order to see the dishes,\nplease enter your googleAddress "/>
+                    android:text="In order to see the dishes,\nplease enter your address "/>
 
         </LinearLayout>
 

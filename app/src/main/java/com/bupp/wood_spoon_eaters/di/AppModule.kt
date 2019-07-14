@@ -7,11 +7,12 @@ import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressViewModel
-import com.bupp.wood_spoon_eaters.features.main.edit_my_profile.EditMyProfileViewModel
+import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
-import com.bupp.wood_spoon_eaters.features.main.my_profile.MyProfileViewModel
+import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
+import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishViewModel
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
@@ -26,9 +27,9 @@ val appModule = module {
 
     single { MetaDataManager() }
     single { AppSettings(get()) }
-    single { SearchManager(get()) }
     single { OrderManager(get(), get()) }
     single { LocationManager(get(), get()) }
+    single { SearchManager(get(), get(), get()) }
     single { EaterAddressManager(get(), get(), get()) }
 
     factory { PermissionManager() }
@@ -50,6 +51,7 @@ val appModule = module {
     viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
+    viewModel { SingleDishViewModel(get()) }
     viewModel { AddAddressViewModel(get(), get(),get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
 

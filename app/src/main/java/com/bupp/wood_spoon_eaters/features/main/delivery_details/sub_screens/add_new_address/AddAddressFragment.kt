@@ -134,6 +134,11 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
         }
     }
 
+    override fun onMyLocationClick(){
+        viewModel.fetchMyLocation()
+    }
+
+
     fun onLocationSelected(selected: GoogleAddressResponse?) {
         hasUpdated = true
         this.selectedGoogleAddress = selected!!
@@ -163,8 +168,5 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
         }
     }
 
-    override fun onMyLocationClick() {
-        viewModel.fetchMyLocation()
-    }
 
 }

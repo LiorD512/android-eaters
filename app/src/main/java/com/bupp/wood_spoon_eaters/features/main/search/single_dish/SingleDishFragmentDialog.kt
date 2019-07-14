@@ -14,30 +14,40 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.FavoriteBtn
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.graphics.Rect
+import androidx.lifecycle.Observer
+import com.bupp.wood_spoon.dialogs.OrderDateChooserDialog
+import com.bupp.wood_spoon_eaters.custom_views.DishCounterView
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
+import com.bupp.wood_spoon_eaters.features.main.search.single_dish.sub_screen.CertificatesDialog
+import com.bupp.wood_spoon_eaters.model.FullDish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 
-class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBtn.FavoriteBtnListener,
-    SearchAdapter.SearchAdapterListener {
+class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), FavoriteBtn.FavoriteBtnListener,
+    SearchAdapter.SearchAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
+    DishCounterView.DishCounterViewListener {
+
+
+
+    companion object {
+        fun newInstance(menuItemId: Long) = SingleDishFragmentDialog(menuItemId)
+    }
 
     val INFO = 0
     val INGREDIENT = 1
     val COOK = 2
+
     var adapter: DishIngredientsAdapter? = null
+    private lateinit var currentDish: FullDish
     private lateinit var dishAdapter: SearchAdapter
 
     private var lastSelected: Int = -1
-
-    companion object {
-        fun newInstance(dish: Dish) = SingleDishFragmentDialog(dish)
-    }
 
     val viewModel: SingleDishViewModel by viewModel<SingleDishViewModel>()
 
@@ -53,7 +63,22 @@ class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initUi()
+        singleDishPb.show()
+        viewModel.getFullDish(menuItemId)
+
+        viewModel.dishDetailsEvent.observe(this, Observer { event ->
+            if (event != null) {
+                singleDishPb.hide()
+                if (event.isSuccess) {
+                    if (event.dish != null) {
+                        this.currentDish = event.dish
+                        initUi()
+                    }
+                } else {
+
+                }
+            }
+        })
     }
 
     private fun initUi() {
@@ -61,6 +86,16 @@ class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBt
         initInfo()
         initIngredient()
         initCook()
+        initCart()
+    }
+
+    private fun initCart() {
+        singleDishAddToCartPrice.text = currentDish.price.formatedValue
+        singleDishAddToCartLayout.setOnClickListener { addToCart() }
+    }
+
+    private fun addToCart() {
+
     }
 
     private fun initHeader() {
@@ -75,8 +110,9 @@ class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBt
                 scrollX: Int,
                 scrollY: Int,
                 oldScrollX: Int,
-                oldScrollY: Int) {
-                checkScrollPosition(scrollY+250)
+                oldScrollY: Int
+            ) {
+                checkScrollPosition(scrollY + 250)
 
             }
 
@@ -100,20 +136,6 @@ class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBt
         }
     }
 
-    private fun isViewVisible(view: View): Boolean {
-        val scrollBounds = Rect()
-        singleDishScrollView.getDrawingRect(scrollBounds)
-
-        val top = view.y
-        val bottom = top + 200
-        return if (scrollBounds.contains(top.toInt(),
-                bottom.toInt())) {//.top < top && (scrollBounds.top + 200) > bottom) {
-//            Log.d("wowSingle","top: $top, bottom: $bottom, scrollBoundsTop: ${scrollBounds.top}, scrollBoundsBottom: ${scrollBounds.bottom} ")
-            true
-        } else {
-            false
-        }
-    }
 
     private fun scrollPageTo(scrollPos: Int) {
         unSelectAll()
@@ -163,60 +185,81 @@ class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBt
     }
 
     private fun initInfo() {
-        singleDishInfoCook.setUser(curDish.cook)
-        Glide.with(context).load(curDish.thumbnail).into(singleDishInfoImg)
+        singleDishInfoCook.setUser(currentDish.cook)
+        Glide.with(context).load(currentDish.thumbnail).into(singleDishInfoImg)
         singleDishInfoFavorite.setFavListener(this)
 
-        singleDishInfoName.text = curDish.name
-        singleDishInfoCookName.text = "by ${curDish.cook.getFullName()}"
-        if (curDish.cook.country != null) {
-            Glide.with(context).load(curDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
+        singleDishInfoName.text = currentDish.name
+        singleDishInfoCookName.text = "by ${currentDish.cook.getFullName()}"
+        if (currentDish.cook.country != null) {
+            Glide.with(context).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
-        singleDishInfoDescription.text = curDish.description
-        singleDishInfoPrice.text = curDish.price.formatedValue
-        val upcomingSlot = curDish.upcomingSlot
-        var date = "ASAP"
-        var timeRange = "${curDish.prepTimeRange.minTime}-${curDish.prepTimeRange.maxTime} min"
-        if (upcomingSlot != null) {
-            date = Utils.parseDateToDayDateHour(upcomingSlot?.startsAt)
-            singleDishInfoQuantity.text = "${upcomingSlot?.unitSold} / ${upcomingSlot?.quantity}"
+        singleDishInfoDescription.text = currentDish.description
+        singleDishInfoPrice.text = currentDish.price.formatedValue
+        val menuItem = currentDish.menuItem
+        if (menuItem != null) {
+            singleDishInfoQuantity.text = "${menuItem.unitsSold}/${menuItem.quantity} Left"
         }
-        singleDishInfoDate.text = "$date, $timeRange"
-        singleDishInfoRating.text = curDish.rating.toString()
+
+        singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
+        singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
+        singleDishInfoRating.text = currentDish.rating.toString()
+        singleDishInfoDishCounter.setDishCounterViewListener(this)
+    }
+
+    override fun onDishCounterChanged(count: Int) {
+        //update order manager
+        singleDishAddToCartTitle.text = "Add $count To Cart"
+        val newValue = currentDish.price.value*count
+        singleDishAddToCartPrice.text = "$$newValue"
+    }
+
+    private fun openOrderTimeDialog() {
+        val currentDateSelected = currentDish.menuItem
+        val availableMenuItems = currentDish.availableMenuItems
+        OrderDateChooserDialog(currentDateSelected, availableMenuItems, this).show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
+    }
+
+    override fun onDateChoose(menuItem: MenuItem) {
+        if (menuItem != null) {
+            //update order manager
+            currentDish.menuItem = menuItem
+            singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
+        }
     }
 
     private fun initIngredient() {
-        singleDishIngredientCalories.text = "${curDish.calorificValue} Calories"
-        singleDishIngredientProtein.text = "${curDish.proteins}g Protein"
-        singleDishIngredientCarbohydrate.text = "${curDish.proteins}g Carbohydrate"
-        singleDishIngredientSauteing.text = curDish.cookingMethods[0].name
+        singleDishIngredientCalories.text = "${currentDish.calorificValue} Calories"
+        singleDishIngredientProtein.text = "${currentDish.proteins}g Protein"
+        singleDishIngredientCarbohydrate.text = "${currentDish.proteins}g Carbohydrate"
+        singleDishIngredientSauteing.text = currentDish.cookingMethods[0].name
 
         singleDishIngredientList.setLayoutManager(LinearLayoutManager(context))
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
         singleDishIngredientList.addItemDecoration(divider)
-        adapter = DishIngredientsAdapter(context!!, curDish.dishIngredients)
+        adapter = DishIngredientsAdapter(context!!, currentDish.dishIngredients)
         singleDishIngredientList.adapter = adapter
     }
 
 
     private fun initCook() {
-        cookProfileImageView.setUser(curDish.cook)
-        cookProfileFragNameAndAge.text = "${curDish.cook.getFullName()}, ${curDish.cook.getAge()}"
+        cookProfileImageView.setUser(currentDish.cook)
+        cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}, ${currentDish.cook.getAge()}"
 
-        var profession = "${curDish.cook.profession},"
-        var country = "${curDish.cook.country?.name}"
+        var profession = "${currentDish.cook.profession},"
+        var country = "${currentDish.cook.country?.name}"
         cookProfileFragProfession.text = "$profession $country"
-        cookProfileFragRating.text = curDish.cook.rating.toString()
-        cookProfileFragCuisineGrid.initStackableView(curDish.cook.cuisines as ArrayList<SelectableIcon>)
-        cookProfileFragStoryName.text = "${curDish.cook.firstName}'s Story"
-        cookProfileFragStory.text = "${curDish.cook.about}"
-        cookProfileFragDishBy.text = "Other Available Dishes By ${curDish.cook.firstName}"
+        cookProfileFragRating.text = currentDish.cook.rating.toString()
+        cookProfileFragCuisineGrid.initStackableView(currentDish.cook.cuisines as ArrayList<SelectableIcon>)
+        cookProfileFragStoryName.text = "${currentDish.cook.firstName}'s Story"
+        cookProfileFragStory.text = "${currentDish.cook.about}"
+        cookProfileFragDishBy.text = "Other Available Dishes By ${currentDish.cook.firstName}"
 
-        val certificates = curDish.cook.certificates
+        val certificates = currentDish.cook.certificates
         cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }
         if (certificates.size > 0) {
-            cookProfileFragCertificate.text = "Certificate in ${curDish.cook.certificates[0]}"
+            cookProfileFragCertificate.text = "Certificate in ${currentDish.cook.certificates[0]}"
             if (certificates.size > 1) {
                 cookProfileFragCertificateCount.visibility = View.VISIBLE
                 cookProfileFragCertificateCount.text = "+ ${certificates.size - 1} More"
@@ -232,17 +275,17 @@ class SingleDishFragmentDialog(val curDish: Dish) : DialogFragment(), FavoriteBt
         divider.setDrawable(resources.getDrawable(R.drawable.horizontal_trans_divider, null))
         cookProfileFragDishList.addItemDecoration(divider)
         dishAdapter = SearchAdapter(context!!, arrayListOf(), this)
-        dishAdapter.updateDishes(curDish.cook.dishes)
+        dishAdapter.updateDishes(currentDish.cook.dishes)
         cookProfileFragDishList.adapter = dishAdapter
 //        cookProfileFragDishList.adapter //todo
     }
 
     override fun onDishClick(dish: Dish) {
-        SingleDishFragmentDialog.newInstance(dish).show(fragmentManager, Constants.SINGLE_DISH_DIALOG)
+        SingleDishFragmentDialog.newInstance(dish.menuItem.id).show(fragmentManager, Constants.SINGLE_DISH_DIALOG)
     }
 
     private fun openCertificatesDialog(certificates: ArrayList<String>) {
-
+        CertificatesDialog(certificates).show(childFragmentManager, Constants.CERTIFICATES_DIALOG_TAG)
     }
 
 

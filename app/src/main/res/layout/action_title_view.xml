@@ -57,14 +57,14 @@
                 tools:hint="hint" />
 
         <ImageView
-                android:id="@+id/actionTitleViewArrow"
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:id="@+id/actionTitleViewLocation"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="18.2dp"
+                android:src="@drawable/icons_my_location"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end|center"
-                android:layout_marginEnd="18.2dp"
-                android:clickable="false"
-                android:src="@drawable/icons_down"
-                android:visibility="gone" />
+                android:layout_height="wrap_content" />
 
     </FrameLayout>
 

@@ -18,6 +18,7 @@
             app:hint="@string/common_string_address_hint"
             app:title="@string/common_string_address"
             app:action="LOCATION_CHOOSER"
+            app:isWithLocation="true"
             android:layout_marginTop="26.9dp"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.InputTitleView

@@ -5,17 +5,18 @@ import com.bupp.wood_spoon_eaters.model.Search
 import com.bupp.wood_spoon_eaters.model.SearchRequest
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchManager(val api: ApiService) {
+class SearchManager(val api: ApiService, val eaterAddressManager: EaterAddressManager, val settings: AppSettings) {
 
     var curSearch: SearchRequest = SearchRequest()
 
     fun updateCurSearch(lat: Double? = null,
                         lng: Double? = null,
-                        addressId: Int? = null,
+                        addressId: Long? = null,
                         timestamp: Int? = null,
                         q: String? = "",
                         cuisineIds: ArrayList<Int>? = null,
@@ -35,12 +36,21 @@ class SearchManager(val api: ApiService) {
     }
 
     fun getSearchRequest(): SearchRequest {
+        val currentAddress = eaterAddressManager.getLastChosenAddress()
+        if(settings.isUserChooseSpecificAddress()){
+            curSearch.addressId = currentAddress?.id
+        }else{
+            curSearch.lat = currentAddress?.lat
+            curSearch.lng = currentAddress?.lng
+        }
         return curSearch
     }
 
     fun clearSearch(){
         curSearch = SearchRequest()
     }
+
+
 
 
 }

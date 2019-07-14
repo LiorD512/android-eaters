@@ -96,18 +96,18 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
                 }
             }
         })
-        viewModel.dishDetailsEvent.observe(this, Observer { event ->
-            if(event != null){
-                searchFragPb.hide()
-                if(event.isSuccess){
-                    if(event.dish != null){
-                        SingleDishFragmentDialog.newInstance(event.dish).show(fragmentManager, Constants.SINGLE_DISH_DIALOG)
-                    }
-                }else{
-
-                }
-            }
-        })
+//        viewModel.dishDetailsEvent.observe(this, Observer { event ->
+//            if(event != null){
+//                searchFragPb.hide()
+//                if(event.isSuccess){
+//                    if(event.dish != null){
+//
+//                    }
+//                }else{
+//
+//                }
+//            }
+//        })
 
     }
 
@@ -163,8 +163,9 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
 
     override fun onDishClick(dish: Dish) {
         Log.d("wowSearch","onDishClick")
-        searchFragPb.show()
-        viewModel.getFullDishDetails(dish.id)
+        (activity as MainActivity).loadSingleDishDetails(dish.menuItem.id)
+//        searchFragPb.show()
+//        viewModel.getFullDishDetails()
     }
 
     override fun onCookClick(cook: Cook) {

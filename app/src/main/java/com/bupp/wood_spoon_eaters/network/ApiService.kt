@@ -59,8 +59,8 @@ interface ApiService {
 
 
     //Single Dish
-    @GET("dishes/{id}")
-    fun getDishDetails(@Path(value = "id", encoded = true) searchId: Long): Call<ServerResponse<Dish>>
+    @GET("menu_items/{menu_item_id}/dish")
+    fun getMenuItemsDetails(@Path(value = "menu_item_id", encoded = true) searchId: Long): Call<ServerResponse<FullDish>>
 
 
 

@@ -1,9 +1,8 @@
-package com.bupp.wood_spoon_eaters.features.main.my_profile
+package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterAddressManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings

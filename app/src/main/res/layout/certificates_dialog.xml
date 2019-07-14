@@ -6,12 +6,15 @@
         android:layout_height="match_parent">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/certificatesHeader"
             app:title="Certificates"
             app:type="HEADER_VIEW_TYPE_BACK_TITLE"
             android:layout_width="match_parent"
             android:layout_height="@dimen/header_view_height"/>
 
     <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/white"
+            android:padding="15.4dp"
             android:id="@+id/certificatesList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

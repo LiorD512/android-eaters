@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 data class SearchRequest(
     var lat: Double? = null,
     var lng: Double? = null,
-    var addressId: Int? = null,
+    var addressId: Long? = null,
     var timestamp: Int? = null,
     var q: String? = "",
     var cuisineIds: ArrayList<Int>? = null,

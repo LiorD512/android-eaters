@@ -250,13 +250,7 @@ data class DishMetric(
     val avgRating: Double
 )
 
-data class MenuItem(
-    val id: Long,
-    val cookingSlot: CookingSlot,
-    val dish: Dish,
-    val quantity: Int,
-    val unitsSold: Int
-)
+
 
 //data class CookingSlot(
 //    val id: Long,
