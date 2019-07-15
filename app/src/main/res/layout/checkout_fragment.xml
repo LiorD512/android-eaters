@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.checkout.CheckoutFragment">
+
+    <androidx.core.widget.NestedScrollView
+            android:background="@color/light_periwinkle_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/checkoutFragTitle"
+                    android:layout_marginTop="23dp"
+                    style="@style/SemiBold15Dark"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:text="Your Order From Cook Oded"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+                    android:id="@+id/checkoutFragDeliveryTime"
+                    app:detailsType="DELIVERY_DETAILS_CHECKOUT_DELIVERY"
+                    app:changeable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+                    android:id="@+id/checkoutFragDeliveryAddress"
+                    android:paddingBottom="18.2dp"
+                    android:layout_marginBottom="15.4dp"
+                    app:detailsType="DELIVERY_DETAILS_LOCATION"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            <com.bupp.wood_spoon_eaters.custom_views.OrderItemsView
+                    android:id="@+id/checkoutFragOrderItemsView"
+                    android:layout_marginBottom="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginBottom="15.1dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        style="@style/Reg13Dark"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Subtotal"/>
+
+                <TextView
+                        android:id="@+id/checkoutFragSubtotalPriceText"
+                        style="@style/SemiBold13Dark50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        tools:text="$6.6"/>
+            </LinearLayout>
+            <View
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@color/light_periwinkle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="14.9dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginBottom="15.1dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        style="@style/Reg13Dark"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Tax"/>
+
+                <TextView
+                        android:id="@+id/checkoutFragTaxPriceText"
+                        style="@style/SemiBold13Dark50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        tools:text="$6.6"/>
+            </LinearLayout>
+            <View
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@color/light_periwinkle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginBottom="12dp"
+
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        style="@style/Reg13Dark"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="Service fee"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.ToolTipView
+                        app:tip_type="CHECKOUT_SERVICE_FEE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/checkoutFragServiceFeePriceText"
+                        style="@style/SemiBold13Dark50"
+                        android:layout_weight="1"
+                        android:gravity="end|center"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        tools:text="$6.6"/>
+            </LinearLayout>
+            <View
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@color/light_periwinkle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        style="@style/Reg13Dark"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Delivery fee"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.ToolTipView
+                        app:tip_type="CHECKOUT_DELIVERY_FEE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/checkoutFragDeliveryFeePriceText"
+                        style="@style/SemiBold13Dark50"
+                        android:gravity="end|center"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        tools:text="$6.6"/>
+
+
+            </LinearLayout>
+
+            <View
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@color/light_periwinkle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="14.9dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        style="@style/Bold15Blue"
+                        android:layout_marginBottom="15.6dp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="Total Before Tip"/>
+
+                <TextView
+                        android:id="@+id/checkoutFragTotalPriceText"
+                        style="@style/Bold15Blue"
+                        android:layout_marginBottom="15.6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        tools:text="$6.6"/>
+
+            </LinearLayout>
+
+            <TextView
+                    android:layout_marginTop="30.8dp"
+                    style="@style/SemiBold13Dark"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginBottom="15.6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Tip Your Courier Now"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
+                    android:id="@+id/checkoutFragTipPercntView"
+                    android:layout_marginBottom="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+
+            <TextView
+                    style="@style/SemiBold13Dark"
+                    android:layout_marginTop="15.4dp"
+                    android:paddingStart="15.4dp"
+                    android:layout_marginBottom="13.6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Payment Method"/>
+
+            <LinearLayout
+                    android:id="@+id/checkoutFragChangePaymentBtn"
+                    android:paddingTop="17dp"
+                    android:paddingBottom="16.4dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:drawableStart="@drawable/icons_credit_card"
+                        android:drawablePadding="7.7dp"
+                        android:paddingStart="16.3dp"
+                        style="@style/SemiBold13Dark50"
+                        android:text="Insert payment method"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+
+                <TextView
+                        android:layout_marginEnd="15.4dp"
+                        style="@style/SemiBold13Blue"
+                        android:alpha="0.3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Change"/>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@color/light_periwinkle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <TextView
+                    android:id="@+id/checkoutFragPromoCodeBtn"
+                    android:paddingTop="17dp"
+                    android:paddingBottom="14.6dp"
+                    android:drawableStart="@drawable/icons_add"
+                    android:drawablePadding="6.7dp"
+                    android:paddingStart="16.3dp"
+                    style="@style/SemiBold13Dark50"
+                    android:text="Add a promo code"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <View
+                    android:layout_marginBottom="23.5dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@color/light_periwinkle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>

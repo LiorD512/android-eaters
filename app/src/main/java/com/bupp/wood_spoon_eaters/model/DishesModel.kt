@@ -22,7 +22,8 @@ data class Dish(
     @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>,
     @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
     @SerializedName("carbohydrates") val carbohydrates: Double,
-    @SerializedName("avg_rating") val rating: Double
+    @SerializedName("avg_rating") val rating: Double,
+    @SerializedName("removed_ingredients") val removedIngredients: ArrayList<DishIngredient>
 )
 
 

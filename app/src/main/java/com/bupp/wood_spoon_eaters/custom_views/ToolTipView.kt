@@ -72,6 +72,18 @@ class ToolTipView : FrameLayout {
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 85.toPx().toFloat()
             }
+            Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
+                titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                bubbleLayout.arrowDirection = ArrowDirection.TOP
+                bubbleLayout.arrowPosition = 85.toPx().toFloat()
+            }
+            Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
+                titleText = resources.getString(R.string.tool_tip_delivery_fee_title)
+                bodyText = resources.getString(R.string.tool_tip_delivery_fee_body)
+                bubbleLayout.arrowDirection = ArrowDirection.TOP
+                bubbleLayout.arrowPosition = 85.toPx().toFloat()
+            }
         }
     }
 
@@ -91,6 +103,14 @@ class ToolTipView : FrameLayout {
 //                textView.maxWidth = DpUtils.getPixelsFromDP(context, 150)
 //                val topOffset = 83.toDp()
                 val marginLeft = 23.toPx()
+                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+            }
+            Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
+                val marginLeft = 2.toPx()
+                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+            }
+            Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
+                val marginLeft = 8.toPx()
                 popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
             }
 //            REGISTRATION -> {

@@ -18,7 +18,7 @@
             android:layout_marginRight="7.7dp"
             android:layout_marginBottom="7.4dp"
             android:alpha="0.95"
-            android:background="@drawable/rounded_white_dialog_bkg"
+            android:background="@drawable/rounded_95white_bkg"
             android:orientation="vertical">
 
         <FrameLayout

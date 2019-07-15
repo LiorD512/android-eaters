@@ -80,14 +80,13 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.4.0'
     implementation 'com.daasuu:BubbleLayout:1.2.0'
     implementation 'com.trading212:sticky-headers:0.1.4'
+    implementation 'com.androidadvance:topsnackbar:1.1.1'
 
     //utils
-    implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
     implementation 'me.grantland:autofittextview:0.2.1'
-
 
     //network
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'

@@ -51,6 +51,13 @@
     <string name="later_time"><u>Later Time</u></string>
     <string name="start_new_cart_dialog_your_cart_already_contains">Your cart already contains a dish from cook %1$s. Would you like to clear the cart and add this dish from cook %2$s instead?
     </string>
+    <string name="share_dialog_share_text">Share Woodspoon With Your Friends, and you all can get a 30% off your next
+        order
+    </string>
+    <string name="tool_tip_delivery_fee_title">Delivery Fee</string>
+    <string name="tool_tip_delivery_fee_body">Delivery fees are typically based on the distance between you and your
+        food.
+    </string>
 
 
 </resources>

@@ -11,9 +11,12 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import kotlinx.android.synthetic.main.contact_us_dialog.*
 
-class ContactUsDialog : DialogFragment() {
+class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() {
 
-    //todo listeners
+    interface ContactUsDialogListener{
+        fun onCallSupportClick()
+        fun onSmsSupportClick()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +37,11 @@ class ContactUsDialog : DialogFragment() {
     private fun initUi() {
         contactUsDialogCloseBtn.setOnClickListener { dismiss() }
         contactUsDialogCallBtn.setOnClickListener {
-            (activity as MainActivity).callPhoneNumber()
+            listener.onCallSupportClick()
             dismiss()
         }
         contactUsDialogSmsBtn.setOnClickListener {
-            (activity as MainActivity).sendSmsText()
+            listener.onSmsSupportClick()
             dismiss()
         }
         contactUsDialogLayout.setOnClickListener { dismiss() }

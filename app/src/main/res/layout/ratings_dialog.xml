@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/dark_43"
+              android:orientation="vertical"
+              android:id="@+id/ratingsDialogLayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/top_cornered_bkg"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <FrameLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:id="@+id/ratingsDialogCloseBtn"
+                    android:layout_gravity="start"
+                    android:src="@drawable/icons_close"
+                    android:paddingLeft="15.4dp"
+                    android:paddingTop="22.1dp"
+                    android:paddingBottom="23dp"
+                    android:paddingRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+
+        <TextView
+                style="@style/SemiBold15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Raitings &amp; Reviews"/>
+
+        <TextView
+                android:id="@+id/ratingsDialogAvgRating"
+                tools:text="4.8"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/SemiBold13Dark"
+                android:layout_marginTop="8.3dp"
+                android:drawableStart="@drawable/icons_raitings"
+                android:drawablePadding="8.7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="15.6dp"
+                android:layout_marginStart="7.7dp"
+                android:layout_marginEnd="7.7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="Accuracy"
+                    android:layout_marginBottom="8.4dp"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="7.7dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="I’ve got what I ordered"
+                        style="@style/Reg13Dark"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/ratingsDialogAccuracyRating"
+                        android:drawableStart="@drawable/icons_raitings_pink"
+                        android:drawablePadding="8.2dp"
+                        style="@style/Reg13Dark"
+                        android:gravity="center"
+                        tools:text="4.20"
+                        android:layout_marginEnd="7.3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/silver"/>
+
+            <TextView
+                    android:text="Delivery"
+                    android:layout_marginTop="14.9dp"
+                    android:layout_marginBottom="8.4dp"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="7.7dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="My delivery arrived on time"
+                        style="@style/Reg13Dark"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/ratingsDialogDeliveryRating"
+                        android:drawableStart="@drawable/icons_raitings_pink"
+                        android:drawablePadding="8.2dp"
+                        style="@style/Reg13Dark"
+                        android:gravity="center"
+                        tools:text="4.20"
+                        android:layout_marginEnd="7.3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/silver"/>
+
+            <TextView
+                    android:text="Taste"
+                    android:layout_marginTop="14.9dp"
+                    android:layout_marginBottom="8.4dp"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="7.7dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="I really enjoyed the food"
+                        style="@style/Reg13Dark"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/ratingsDialogTasteRating"
+                        android:drawableStart="@drawable/icons_raitings_pink"
+                        android:drawablePadding="8.2dp"
+                        style="@style/Reg13Dark"
+                        android:gravity="center"
+                        tools:text="4.20"
+                        android:layout_marginEnd="7.3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/silver"/>
+
+        </LinearLayout>
+
+
+        <View
+                android:layout_marginTop="22.6dp"
+                android:layout_width="match_parent"
+                android:layout_height="15.4dp"
+                android:background="@color/light_periwinkle_20"/>
+
+    </LinearLayout>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:background="@drawable/bottom_cornered_bkg"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/singleDishFragAppBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/singeDishCollapsingLayout"
+                    android:layout_width="match_parent"
+                    android:padding="7.7dp"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:contentScrim="@color/white">
+
+                <TextView
+                        style="@style/SemiBold15Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Woodspoon’s Community Comments"/>
+
+                <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/calendarFragToolBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="bottom"
+                        android:visibility="visible"
+                        app:layout_collapseMode="pin"/>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/singleDishScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:fillViewport="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/ratingsDialogDishesRecyclerView"
+                        android:fadingEdgeLength="25dp"
+                        android:overScrollMode="always"
+                        android:layout_marginTop="7.7dp"
+                        android:requiresFadingEdge="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+
+                <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+                        android:id="@+id/calendarFragPb"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:visibility="gone"/>
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</LinearLayout>

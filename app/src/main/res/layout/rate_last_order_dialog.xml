@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:background="@color/dark_43"
+             android:id="@+id/rateLastOrderDialogLayout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+            android:background="@drawable/rounded_white_bkg"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="7.7dp"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <FrameLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <ImageView
+                            android:id="@+id/rateLastOrderDialogCloseBtn"
+                            android:layout_gravity="start"
+                            android:src="@drawable/icons_close"
+                            android:paddingLeft="15.4dp"
+                            android:paddingTop="22.1dp"
+                            android:paddingBottom="21.6dp"
+                            android:paddingRight="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            style="@style/SemiBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Rate Your Last Order"/>
+
+                </FrameLayout>
+
+                <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                        android:id="@+id/rateLastOrderDialogUserImage"
+                        app:imageSize="SMALL"
+                        android:layout_marginBottom="7.7dp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:id="@+id/rateLastOrderDialogUserName"
+                        tools:text="Eyal Yaakobi"
+                        android:layout_gravity="center"
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_marginTop="15.6dp"
+                        android:layout_marginStart="7.7dp"
+                        android:layout_marginEnd="7.7dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:text="Accuracy"
+                            android:layout_marginBottom="8.4dp"
+                            style="@style/SemiBold13Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginBottom="7.7dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                                android:text="I’ve got what I ordered"
+                                style="@style/Reg13Dark"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                        <ImageView
+                                android:id="@+id/rateLastOrderDialogAccuracyNegative"
+                                android:src="@drawable/icon_dislike_selector"
+                                android:layout_marginEnd="23dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <ImageView
+                                android:id="@+id/rateLastOrderDialogAccuracyPositive"
+                                android:src="@drawable/icon_like_selector"
+                                android:layout_marginEnd="7.7dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/silver"/>
+
+                    <TextView
+                            android:text="Delivery"
+                            android:layout_marginTop="14.9dp"
+                            android:layout_marginBottom="8.4dp"
+                            style="@style/SemiBold13Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="7.7dp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                                android:text="My delivery arrived on time"
+                                style="@style/Reg13Dark"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"/>
+
+                        <ImageView
+                                android:id="@+id/rateLastOrderDialogDeliveryNegative"
+                                android:src="@drawable/icon_dislike_selector"
+                                android:layout_marginEnd="23dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <ImageView
+                                android:id="@+id/rateLastOrderDialogDeliveryPositive"
+                                android:src="@drawable/icon_like_selector"
+                                android:layout_marginEnd="7.7dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/silver"/>
+
+                    <TextView
+                            android:text="Taste"
+                            android:layout_marginTop="14.9dp"
+                            android:layout_marginBottom="8.4dp"
+                            style="@style/SemiBold13Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:text="I really enjoyed the food"
+                            style="@style/Reg13Dark"
+                            android:layout_marginBottom="8.2dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rateLastOrderDialogDishesRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/silver"/>
+
+                    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                            android:id="@+id/rateLastOrderDialogNotes"
+                            android:layout_marginTop="24.5dp"
+                            android:layout_marginBottom="15.4dp"
+                            app:inputType="LONG_TEXT"
+                            app:lines="4"
+                            app:hint="Tell others more about this dish"
+                            app:title="Additional Notes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+                            android:id="@+id/rateLastOrderDialogDoneBtn"
+                            app:title="Done"
+                            android:layout_marginBottom="7.3dp"
+                            android:alpha="0.3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</FrameLayout>

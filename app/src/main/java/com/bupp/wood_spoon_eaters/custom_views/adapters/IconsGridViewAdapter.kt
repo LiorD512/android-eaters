@@ -28,7 +28,7 @@ class IconsGridViewAdapter(val context: Context, val icons: ArrayList<Selectable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        presentedList.addAll(icons)
+//        presentedList.addAll(orders)
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.icons_grid_view_item, parent, false))
     }
 

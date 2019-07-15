@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:id="@+id/promoCodeFragmentLayout"
+        android:background="@color/white"
+        android:paddingStart="15.4dp"
+        android:paddingEnd="15.4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment">
+
+    <TextView
+            style="@style/SemiBold13Dark"
+            android:layout_marginTop="26.9dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Promo Code"/>
+
+    <EditText
+            android:maxLength="10"
+            android:id="@+id/promoCodeFragmentCodeInput"
+            style="@style/Reg15Dark"
+            android:background="@drawable/title_input_view_input_bkg"
+            android:layout_marginTop="4.1dp"
+            android:inputType="number"
+            android:letterSpacing="2"
+            tools:text="1234567890"
+            android:paddingStart="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+</LinearLayout>
