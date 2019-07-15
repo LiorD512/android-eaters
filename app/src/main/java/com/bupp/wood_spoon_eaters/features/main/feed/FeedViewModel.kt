@@ -20,8 +20,8 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterAdd
 
 
     private val TAG = "wowFeedVM"
-    val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
-    data class NavigationEvent(val isSuccess: Boolean = false, val feedArr: ArrayList<Feed>?)
+    val feedEvent: SingleLiveEvent<FeedEvent> = SingleLiveEvent()
+    data class FeedEvent(val isSuccess: Boolean = false, val feedArr: ArrayList<Feed>?)
 
     fun getEaterFirstName(): String?{
         return settings.currentEater?.firstName
@@ -36,17 +36,17 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterAdd
                 override fun onResponse(call: Call<ServerResponse<ArrayList<Feed>>>, response: Response<ServerResponse<ArrayList<Feed>>>) {
                     if(response.isSuccessful){
                         val feedArr = response.body()?.data
-                        Log.d("","getFeed success: ${feedArr.toString()}")
-                        navigationEvent.postValue(NavigationEvent(true, feedArr))
+                        Log.d("wowFeedVM","getFeed success: ${feedArr.toString()}")
+                        feedEvent.postValue(FeedEvent(true, feedArr))
                     }else{
                         Log.d("wowFeedVM","getFeed fail")
-                        navigationEvent.postValue(NavigationEvent(false,null))
+                        feedEvent.postValue(FeedEvent(false,null))
                     }
                 }
 
                 override fun onFailure(call: Call<ServerResponse<ArrayList<Feed>>>, t: Throwable) {
                     Log.d("wowFeedVM","getFeed big fail")
-                    navigationEvent.postValue(NavigationEvent(false,null))
+                    feedEvent.postValue(FeedEvent(false,null))
                 }
             })
         }else{
@@ -78,7 +78,9 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterAdd
         return feedRequest
     }
 
-
+    fun hasFavorites(): Boolean {
+        return settings.hasFavoriets()
+    }
 
 
 }

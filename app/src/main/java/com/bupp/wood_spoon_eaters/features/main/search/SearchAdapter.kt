@@ -11,13 +11,10 @@ import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Search
-import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.search_cuisine_item.view.*
 import kotlinx.android.synthetic.main.search_dish_cooks_item.view.*
 import kotlinx.android.synthetic.main.search_dish_item.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -170,6 +167,7 @@ class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rating = view.searchDishItemRating
     val date = view.searchDishItemDate
     val freeDelivery = view.searchDishItemFreeDelivery
+
 }
 
 

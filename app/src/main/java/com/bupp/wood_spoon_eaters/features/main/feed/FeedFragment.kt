@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.managers.LocationManager
+import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.ArrayList
 
 
 class FeedFragment() : Fragment() {
@@ -30,8 +33,24 @@ class FeedFragment() : Fragment() {
         //2. if has - display and get data; else check permission and get current location (display empty layout)
         FetchLocationAndFeed()
         showEmptyLayout()
+        initObservers()
     }
 
+    private fun initObservers() {
+        viewModel.feedEvent.observe(this, Observer { event ->
+            if(event != null){
+                if(event.isSuccess){
+                    initFeed(event.feedArr!!)
+                }
+            }
+        })
+    }
+
+    private fun initFeed(feedArr: ArrayList<Feed>) {
+        feedFragEmptyLayout.visibility = View.GONE
+        feedFragListLayout.visibility = View.VISIBLE
+        feedFragSectionsView.initFeed(viewModel.hasFavorites(), feedArr)
+    }
 
 
     private fun FetchLocationAndFeed() {

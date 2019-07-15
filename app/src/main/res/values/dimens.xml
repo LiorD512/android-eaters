@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="string_grid_item_padding">8dp</dimen>
     <dimen name="add_to_cart_height">57.3dp</dimen>
+    <dimen name="dish_padding">15.4dp</dimen>
 </resources>

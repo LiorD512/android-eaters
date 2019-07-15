@@ -29,6 +29,12 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
         return isUserChooseSpecificAddress
     }
 
+    fun hasFavoriets(): Boolean {
+        //todo: change after gils refactoring eater model
+//        return currentEater.favoritesCount > 0
+        return false
+    }
+
     var shouldEnabledUserLocation: Boolean
         get() = sharedPreferences.getBoolean(Constants.ENABLE_USER_LOCATION, true)
         set(isEnabled) = sharedPreferences.edit().putBoolean(Constants.ENABLE_USER_LOCATION, isEnabled).apply()

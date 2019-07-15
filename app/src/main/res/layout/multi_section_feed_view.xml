@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ScrollView
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            <LinearLayout
+                    android:id="@+id/multiSectionViewDishList"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+
+                <LinearLayout
+                        android:layout_marginRight="15.4dp"
+                        android:layout_marginLeft="15.4dp"
+                        android:visibility="visible"
+                        android:layout_marginTop="53dp"
+                        android:orientation="vertical"
+                        android:id="@+id/multiSectionViewFavEmptyLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            style="@style/SemiBold13Dark"
+                            android:layout_marginBottom="15.4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Favorites"/>
+
+                    <LinearLayout
+                            android:background="@color/offwhite"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                                android:layout_gravity="center"
+                                android:layout_marginTop="15.4dp"
+                                style="@style/SemiBold13Dark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="You do not have any favorites yet.."/>
+
+                        <View
+                                android:layout_margin="15.4dp"
+                                android:background="@color/silver"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+
+                        <TextView
+                                android:layout_marginBottom="15.4dp"
+                                style="@style/SemiBold13Dark"
+                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Tap the heart icon in a dish’s page and we will\n show all your favorites here "/>
+
+                        <ImageView
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="23dp"
+                                android:src="@drawable/icons_favorites_normal"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            <ImageView
+                    android:id="@+id/multiSectionViewShareBtn"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="35dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/refferal_banner_pic"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
+                    android:id="@+id/multiSectionViewTopCooks"
+                    android:layout_marginTop="38.4dp"
+                    android:layout_marginBottom="23.5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+
+</FrameLayout>
