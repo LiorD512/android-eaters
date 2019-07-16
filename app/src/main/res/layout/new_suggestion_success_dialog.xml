@@ -7,7 +7,7 @@
 
     <LinearLayout
             android:id="@+id/dishOfferedDialogLayout"
-            android:background="@drawable/rounded_white_dialog_bkg"
+            android:background="@drawable/rounded_white_bkg"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:layout_marginRight="50.9dp"

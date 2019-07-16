@@ -21,6 +21,7 @@ interface GoogleApi {
         //todo !!!! importent ! replace key !
         const val GEOCODING_URL_TEMPLATE = "autocomplete/json?language=en&types=geocode&key=AIzaSyCMo8XwzKZl1vuSBYe0xHvjlEnQ56O9lho"
         const val GEOCODING_URL_PLACE_ID_TEMPLATE = "details/json?language=en&key=AIzaSyCMo8XwzKZl1vuSBYe0xHvjlEnQ56O9lho"
+        const val GEOCODING_LAT_LNG_TO_PLACE_ID = "nearbysearch/json?&key=YOUR_API_KEY"
     }
 }
 

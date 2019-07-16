@@ -180,39 +180,6 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
     }
 
 
-//    fun setLastLocation(lastLocation: Location) {
-//        this.mLastLocation = lastLocation
-//    }
-//
-//    fun getAddressFromLatLng(): Address{
-//        if(isStarted && mCurrentLocation != null) {
-//            val geocoder: Geocoder
-//            val addresses: List<android.location.Address>
-//            geocoder = Geocoder(context, Locale.getDefault())
-//
-//            addresses = geocoder.getFromLocation(mCurrentLocation!!.latitude,
-//                mCurrentLocation!!.longitude,
-//                1) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-//
-//            val streetLine =
-//                addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//
-////        val city = addresses[0].locality
-////        val state = addresses[0].adminArea
-////        val country = addresses[0].countryName
-////        val postalCode = addresses[0].postalCode
-////        val knownName = addresses[0].featureName
-//            Log.d(TAG, "latlng to address success")
-//
-//            var address = Address()
-//            address.streetLine1 = streetLine
-//            address.lat = mCurrentLocation!!.latitude
-//            address.lng = mCurrentLocation!!.longitude
-//            return address
-//        }
-//        return Address(lat = 0.0, lng = 0.0)
-//    }
-
     fun getAddressFromLocation(location: Location): Address{
         val geocoder: Geocoder
         val addresses: List<android.location.Address>
@@ -243,7 +210,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         return null
     }
 
-
+    
 
     companion object {
 

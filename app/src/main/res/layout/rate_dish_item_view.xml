@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:gravity="left|center"
+            android:orientation="horizontal"
+            android:paddingBottom="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/orderItemImage"
+                android:layout_marginEnd="8.4dp"
+                android:src="@drawable/share_pic"
+                android:scaleType="centerCrop"
+                android:layout_width="37.9dp"
+                android:layout_height="37.9dp"/>
+
+        <TextView
+                android:id="@+id/orderItemName"
+                style="@style/SemiBold15Dark"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                tools:text="Tomato Soup x1"/>
+
+        <ImageView
+                android:id="@+id/rateDishItemAccuracyNegative"
+                android:src="@drawable/icon_dislike_selector"
+                android:layout_marginEnd="23dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:id="@+id/rateDishItemAccuracyPositive"
+                android:src="@drawable/icon_like_selector"
+                android:layout_marginEnd="7.7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

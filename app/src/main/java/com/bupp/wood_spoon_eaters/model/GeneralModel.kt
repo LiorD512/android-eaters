@@ -42,7 +42,7 @@ data class AppSetting(
     val updated_at: Date
 )
 
-//icons grid data class
+//orders grid data class
 
 data class DietaryIcon(
     override val name: String,

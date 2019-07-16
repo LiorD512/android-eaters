@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <ImageView
+            android:id="@+id/dishRatingItemEaterImage"
+            android:layout_marginEnd="8.4dp"
+            android:src="@drawable/share_pic"
+            android:layout_gravity="center"
+            android:layout_marginStart="7.7dp"
+            android:scaleType="centerCrop"
+            android:layout_width="37.9dp"
+            android:layout_height="37.9dp"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/dishRatingItemEaterName"
+                style="@style/SemiBold15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Shiran Golberi"/>
+
+        <TextView
+                android:id="@+id/dishRatingItemEaterReview"
+                style="@style/Reg13Dark_50"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginTop="4.1dp"
+                android:layout_marginEnd="13.6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="The dish was really good! Loved it!"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

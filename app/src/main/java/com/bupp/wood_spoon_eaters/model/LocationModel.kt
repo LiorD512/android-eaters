@@ -33,7 +33,7 @@ data class Address(
         val state: State? = null,
         val city: City? = null,
         @SerializedName("street_line_1") var streetLine1: String = "",
-        @SerializedName("street_line_2") val streetLine2: String = "",
+        @SerializedName("street_line_2") var streetLine2: String = "",
         @SerializedName("zipcode") val zipCode: String = "",
         @SerializedName("notes") val notes: String = ""
 ) : Parcelable

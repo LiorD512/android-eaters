@@ -23,8 +23,8 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
 
     lateinit var listener: MultiSectionFeedViewListener
     interface MultiSectionFeedViewListener {
-        fun onDishClick(dish: Dish){}
-        fun onCookClick(cook: Cook){}
+        fun onDishClick(dish: Dish)
+        fun onCookClick(cook: Cook)
         fun onShareClick(){}
     }
 

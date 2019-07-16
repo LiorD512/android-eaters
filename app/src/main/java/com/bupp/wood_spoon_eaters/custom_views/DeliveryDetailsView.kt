@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.custom_views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -23,6 +24,7 @@ class DeliveryDetailsView : LinearLayout {
     }
 
     private var type: Int = 0
+    private var changeable: Boolean = false
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -35,10 +37,24 @@ class DeliveryDetailsView : LinearLayout {
                 type = a.getInt(R.styleable.DeliveryDetailsAttrs_detailsType, Constants.DELIVERY_DETAILS_LOCATION)
                 initUi(type)
             }
+            if (a.hasValue(R.styleable.DeliveryDetailsAttrs_detailsType)) {
+                changeable = a.getBoolean(R.styleable.DeliveryDetailsAttrs_changeable, true)
+                setChangeable(changeable)
+            }
         }
 
         deliveryDetailsViewChangeBtn.setOnClickListener { onChange() }
 
+    }
+
+    private fun setChangeable(changeable: Boolean) {
+        if (changeable) {
+            deliveryDetailsViewChangeBtn.visibility = View.VISIBLE
+            deliveryDetailsViewChangeBtn.isClickable = true
+        } else {
+            deliveryDetailsViewChangeBtn.visibility = View.INVISIBLE
+            deliveryDetailsViewChangeBtn.isClickable = false
+        }
     }
 
     private fun initUi(type: Int) {
@@ -50,6 +66,10 @@ class DeliveryDetailsView : LinearLayout {
             Constants.DELIVERY_DETAILS_TIME -> {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
                 deliveryDetailsViewTitle.text = "When"
+            }
+            Constants.DELIVERY_DETAILS_CHECKOUT_DELIVERY -> {
+                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
+                deliveryDetailsViewTitle.text = "Delivery"
             }
             Constants.DELIVERY_DETAILS_PAYMENT -> {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_credit_card)

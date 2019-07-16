@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete
 
 import android.app.Activity
 import android.os.Bundle
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.dialogs.AddressAutoCompleteAdapter
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import kotlinx.android.synthetic.main.fragment_chooser.*

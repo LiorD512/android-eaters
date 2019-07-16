@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.managers.LocationManager
+import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_feed.*
@@ -17,7 +20,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 
 
-class FeedFragment() : Fragment() {
+class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
+
+
     private val TAG = "wowFeedFragment"
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
 
@@ -28,12 +33,14 @@ class FeedFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO (after setting location manager):
-        //1. check previous location
-        //2. if has - display and get data; else check permission and get current location (display empty layout)
+        initUi()
         FetchLocationAndFeed()
         showEmptyLayout()
         initObservers()
+    }
+
+    private fun initUi() {
+        feedFragSectionsView.setMultiSectionFeedViewListener(this)
     }
 
     private fun initObservers() {
@@ -69,6 +76,14 @@ class FeedFragment() : Fragment() {
 
 //        val lastLocation = viewModel.getLastLocation()
 //        Log.d("wowFeed","lastLocation: ${lastLocation?.latitude}")
+    }
+
+    override fun onDishClick(dish: Dish) {
+        (activity as MainActivity).loadSingleDishDetails(dish.menuItem.id)
+    }
+
+    override fun onCookClick(cook: Cook) {
+
     }
 
 }

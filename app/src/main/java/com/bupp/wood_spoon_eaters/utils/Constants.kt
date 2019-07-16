@@ -33,6 +33,7 @@ class Constants {
         const val DELIVERY_DETAILS_LOCATION = 0
         const val DELIVERY_DETAILS_TIME = 1
         const val DELIVERY_DETAILS_PAYMENT = 2
+        const val DELIVERY_DETAILS_CHECKOUT_DELIVERY = 3
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0
@@ -52,7 +53,6 @@ class Constants {
         const val INPUT_TYPE_LONG_TEXT = 3
         const val INPUT_TYPE_FULL_NAME = 4
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
-//        const val INPUT_TYPE_LOCATION = 6
 
 
         //Price Range View
@@ -70,6 +70,8 @@ class Constants {
 
         //tool tip type
         const val TOOL_TIP_SERVICE_FEE = 0
+        const val TOOL_TIP_CHECKOUT_SERVICE_FEE = 2
+        const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
 
 
         //activity / dialog tags
@@ -100,7 +102,23 @@ class Constants {
         const val DISH_SOLD_OUT_DIALOG_TAG = "dish_sold_out_dialog"
         const val ORDER_DATE_CHOOSER_DIALOG_TAG = "order_date_chooser_dialog"
         const val CERTIFICATES_DIALOG_TAG = "certificated_dialog"
+        const val CHECKOUT_TAG = "checkout_tag"
+        const val PROMO_CODE_TAG = "promo_code_tag"
+        const val SHARE_DIALOG_TAG = "shre_dialog_tag"
+        const val TRACK_ORDER_DIALOG_TAG = "track_order_dialog_tag"
+        const val RATE_LAST_ORDER_DIALOG_TAG = "rate_last_order_dialog_tag"
+        const val RATINGS_DIALOG_TAG = "ratings_dialog_tag"
+        const val REPORT_TAG = "report_tag"
+        const val ORDER_DETAILS_TAG = "order_details_tag"
 
+
+
+        //Track order Dialog Order Progress
+        const val ORDER_PROGRESS_NO_PROGRESS = -1
+        const val ORDER_PROGRESS_ORDER_RECEIVED = 0
+        const val ORDER_PROGRESS_ORDER_IN_COOK = 1
+        const val ORDER_PROGRESS_ORDER_IN_DELIVERY = 2
+        const val ORDER_PROGRESS_ORDER_HAS_DELIVERED = 3
 
 
         const val ORDER_HISTORY_TAG = "order_history_tag"
@@ -115,6 +133,13 @@ class Constants {
         //activity request code
         const val CHOOSER_ACT_RC = 901
 
+
+        //Tip courier Selection arg
+        const val TIP_NOT_SELECTED = 0
+        const val TIP_10_PERCENT_SELECTED = 10
+        const val TIP_15_PERCENT_SELECTED = 15
+        const val TIP_20_PERCENT_SELECTED = 20
+        const val TIP_CUSTOM_SELECTED = 666
 
         //img put action
         val PUT_ACTION_DISH_THUMBNAIL: Int = 1
@@ -143,6 +168,7 @@ class Constants {
         const val REQUEST_CHECK_SETTINGS = 121
 
 
+        const val MAX_PROMO_CODE_LENGTH = 10
     }
 }
 

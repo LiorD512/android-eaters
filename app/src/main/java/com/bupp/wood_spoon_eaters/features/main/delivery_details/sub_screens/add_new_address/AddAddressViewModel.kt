@@ -71,7 +71,7 @@ class AddAddressViewModel(
             addressRequest = parseMyLocation(myLocationAddress)
         }
 
-        var adresses = arrayListOf(addressRequest!!)
+        var adresses = arrayListOf(addressRequest)
 
         var eaterRequest =
             EaterRequest(
@@ -89,7 +89,10 @@ class AddAddressViewModel(
     private fun parseMyLocation(myLocationAddress: Address): AddressRequest {
         var addressRequest = AddressRequest()
 
+        addressRequest.lat = myLocationAddress.lat
+        addressRequest.lng = myLocationAddress.lng
         addressRequest.streetLine1 = myLocationAddress.streetLine1
+        addressRequest.streetLine2 = myLocationAddress.streetLine2
 
         return addressRequest
     }
@@ -103,7 +106,7 @@ class AddAddressViewModel(
                     appSettings.currentEater = eater
                     eaterAddressManager.setLastChosenAddress(eater.addresses[0])
 //                    orderManager.updateOrder(orderAddress = eater.addresses[0])
-                    navigationEvent.postValue(NavigationEvent(true, eater.addresses[0]))
+                    navigationEvent.postValue(NavigationEvent(true, eater.addresses.last()))
                 } else {
                     Log.d("wowAddNewAddressVM", "on Failure! ")
                     navigationEvent.postValue(NavigationEvent(false, null))

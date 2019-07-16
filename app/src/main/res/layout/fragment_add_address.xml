@@ -1,83 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingStart="15.4dp"
-        android:paddingEnd="15.4dp"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
-    <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
-            android:id="@+id/addAddressFragAddress"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:isMandatory="true"
-            app:lines="1"
-            app:hint="@string/common_string_address_hint"
-            app:title="@string/common_string_address"
-            app:action="LOCATION_CHOOSER"
-            app:isWithLocation="true"
-            android:layout_marginTop="26.9dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="15.4dp"
+            android:paddingEnd="15.4dp"
+            android:background="@color/white">
 
-    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-            android:id="@+id/addAddressFragAddress2ndLine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/dark_50"
-            android:layout_marginTop="15.4dp"
-            style="@style/Reg13Dark"
-            app:isMandatory="true"
-            app:hint="@string/common_string_apartment"
-            app:title="@string/common_string_apartment"
-            app:inputType="TEXT"
-            android:gravity="start"/>
-
-    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-            android:id="@+id/addAddressFragDeliveryNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15.4dp"
-            app:inputType="INPUT_TYPE_TEXT_NO_TITLE"
-            app:isMandatory="false"
-            app:hint="Add Delivery Note"/>
-
-    <View
-            android:background="@color/silver"
-            android:layout_marginTop="22.1dp"
-            android:layout_marginBottom="29.8dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-
-    <RadioGroup
-            android:id="@+id/addAddressFragRadioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <RadioButton
-                android:checked="true"
-                android:id="@+id/addAddressFragDeliveryCb"
-                android:padding="7.5dp"
-                android:text="@string/add_address_frag_delivery_to_door"
-                android:button="@drawable/circle_checkbox_selector"
-                style="@style/Reg13Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <RadioButton
-                android:id="@+id/addAddressFragPickUpCb"
-                android:text="@string/add_address_frag_pick_up_outside"
-                android:padding="7.5dp"
-                android:layout_marginTop="8dp"
-                style="@style/Reg13Dark"
-                android:button="@drawable/circle_checkbox_selector"
+        <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
+                android:id="@+id/addAddressFragAddress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:isMandatory="true"
+                app:lines="1"
+                app:hint="@string/common_string_address_hint"
+                app:title="@string/common_string_address"
+                app:action="LOCATION_CHOOSER"
+                app:isWithLocation="true"
+                android:layout_marginTop="26.9dp"/>
 
-    </RadioGroup>
+        <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                android:id="@+id/addAddressFragAddress2ndLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/dark_50"
+                android:layout_marginTop="15.4dp"
+                style="@style/Reg13Dark"
+                app:isMandatory="true"
+                app:hint="@string/common_string_apartment"
+                app:title="@string/common_string_apartment"
+                app:inputType="TEXT"
+                android:gravity="start"/>
 
+        <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                android:id="@+id/addAddressFragDeliveryNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.4dp"
+                app:inputType="INPUT_TYPE_TEXT_NO_TITLE"
+                app:isMandatory="false"
+                app:hint="Add Delivery Note"/>
 
+        <View
+                android:background="@color/silver"
+                android:layout_marginTop="22.1dp"
+                android:layout_marginBottom="29.8dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
+        <RadioGroup
+                android:id="@+id/addAddressFragRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-</LinearLayout>
+            <RadioButton
+                    android:checked="true"
+                    android:id="@+id/addAddressFragDeliveryCb"
+                    android:padding="7.5dp"
+                    android:text="@string/add_address_frag_delivery_to_door"
+                    android:button="@drawable/circle_checkbox_selector"
+                    style="@style/Reg13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <RadioButton
+                    android:id="@+id/addAddressFragPickUpCb"
+                    android:text="@string/add_address_frag_pick_up_outside"
+                    android:padding="7.5dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Reg13Dark"
+                    android:button="@drawable/circle_checkbox_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/addAddressFragPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</FrameLayout>

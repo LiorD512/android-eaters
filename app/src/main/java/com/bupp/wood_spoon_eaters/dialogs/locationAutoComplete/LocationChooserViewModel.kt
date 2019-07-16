@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +24,12 @@ class LocationChooserViewModel(val googleApi: GoogleApi) : ViewModel() {
 
             override fun onResponse(call: Call<AddressIdResponse>, response: Response<AddressIdResponse>) {
                 if (response.isSuccessful) {
-                    queryEvent.postValue(QueryEvent(response.body(), inputStr))
+                    queryEvent.postValue(
+                        QueryEvent(
+                            response.body(),
+                            inputStr
+                        )
+                    )
                 }
             }
 

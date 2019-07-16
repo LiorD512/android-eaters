@@ -25,7 +25,9 @@
             <enum name="DELIVERY_DETAILS_LOCATION" value="0"/>
             <enum name="DELIVERY_DETAILS_TIME" value="1"/>
             <enum name="DELIVERY_DETAILS_PAYMENT" value="2"/>
+            <enum name="DELIVERY_DETAILS_CHECKOUT_DELIVERY" value="3"/>
         </attr>
+        <attr name="changeable" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">
@@ -79,6 +81,8 @@
     <declare-styleable name="ToolTipView">
         <attr name="tip_type" format="enum">
             <enum name="SERVICE_FEE" value="0" />
+            <enum name="CHECKOUT_SERVICE_FEE" value="2" />
+            <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
         </attr>
     </declare-styleable>
 
