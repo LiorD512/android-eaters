@@ -58,7 +58,6 @@ class AddAddressViewModel(
 
     fun postNewAddress(googleAddressResponse: GoogleAddressResponse? = null, myLocationAddress: Address? = null, address1stLine: String,
                        address2ndLine: String, deliveryNote: String, isDelivery: Boolean) {
-        orderManager.updateOrder(googleAddressResponse = googleAddressResponse)
         var currentEater = appSettings.currentEater!!
         var notes = deliveryNote
 

@@ -70,6 +70,12 @@ object Utils {
         return sdf.format(date?.time)
     }
 
+    fun parseUnixTimestamp(date: Date?): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        return sdf.format(date?.time)
+    }
+
+
     fun setCustomFontTypeSpan(
         context: Context,
         source: String,

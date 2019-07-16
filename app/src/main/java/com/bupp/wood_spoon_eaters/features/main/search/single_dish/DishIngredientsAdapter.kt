@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.DishIngredient
 import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
-import kotlinx.android.synthetic.main.stackable_text_view_item.view.*
 
 class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<DishIngredient>) : RecyclerView.Adapter<DishIngredientsAdapter.ViewHolder>() {
 
@@ -29,23 +28,23 @@ class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<Dis
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ingredient = ingredient[position]
-
-        holder.title.text = ingredient.ingredient?.name
-        if(ingredient.isAdjustable!!){
+        val dishIngredient = ingredient[position]
+        val ingredient = dishIngredient.ingredient
+        holder.title.text = ingredient?.name
+        if(dishIngredient.isAdjustable!!){
             holder.remove.visibility = View.VISIBLE
 
-            if(ingredientsRemoved.contains(ingredient.id)){
+            if(ingredientsRemoved.contains(ingredient?.id)){
                 holder.layout.alpha = 0.5f
             }else{
                 holder.layout.alpha = 1f
             }
 
             holder.remove.setOnClickListener {
-                if(ingredientsRemoved.contains(ingredient.id)){
-                    ingredientsRemoved.remove(ingredient.id)
+                if(ingredientsRemoved.contains(ingredient?.id)){
+                    ingredientsRemoved.remove(ingredient?.id)
                 }else{
-                    ingredientsRemoved.add(ingredient.id!!)
+                    ingredientsRemoved.add(ingredient?.id!!)
                 }
                 notifyDataSetChanged()
             }

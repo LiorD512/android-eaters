@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,10 +18,10 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import android.graphics.Rect
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon.dialogs.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.custom_views.DishCounterView
+import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.features.main.search.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.model.FullDish
@@ -29,23 +30,26 @@ import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 
-class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), FavoriteBtn.FavoriteBtnListener,
-    SearchAdapter.SearchAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
-    DishCounterView.DishCounterViewListener {
+class SingleDishFragmentDialog(val menuItemId: Long, val listener: SingleDishDialogListener) : DialogFragment(), FavoriteBtn.FavoriteBtnListener,
+    OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
+    SingleFeedAdapter.SearchAdapterListener {
 
 
+    interface SingleDishDialogListener {
+        fun onCheckout()
+    }
 
     companion object {
-        fun newInstance(menuItemId: Long) = SingleDishFragmentDialog(menuItemId)
+        fun newInstance(menuItemId: Long, listener: SingleDishDialogListener) = SingleDishFragmentDialog(menuItemId, listener)
     }
 
     val INFO = 0
     val INGREDIENT = 1
     val COOK = 2
 
-    var adapter: DishIngredientsAdapter? = null
+    var ingredientsAdapter: DishIngredientsAdapter? = null
     private lateinit var currentDish: FullDish
-    private lateinit var dishAdapter: SearchAdapter
+    private lateinit var dishAdapter: SingleFeedAdapter
 
     private var lastSelected: Int = -1
 
@@ -79,6 +83,21 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
                 }
             }
         })
+
+        viewModel.postOrderEvent.observe(this, Observer { event ->
+            if (event != null) {
+                singleDishPb.hide()
+                if (event.isSuccess) {
+                    if (event.order != null) {
+                        updateBottomBarUi(true)
+                    }
+                } else {
+                    Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+
     }
 
     private fun initUi() {
@@ -86,16 +105,46 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
         initInfo()
         initIngredient()
         initCook()
-        initCart()
+        initCartBottomBar()
     }
 
-    private fun initCart() {
+    private fun initCartBottomBar() {
         singleDishAddToCartPrice.text = currentDish.price.formatedValue
         singleDishAddToCartLayout.setOnClickListener { addToCart() }
     }
 
     private fun addToCart() {
+        singleDishPb.show()
+        val cookingSlotId = currentDish.menuItem?.cookingSlot?.id
+        val quantity = singleDishInfoDishCounter.getDishCount()
+        val removedIngredients = ingredientsAdapter?.ingredientsRemoved
+        val note = singleDishIngredientInstructions.getText()
+        viewModel.addToCart(
+            cookingSlotId = cookingSlotId,
+            dishId = currentDish.id,
+            quantity = quantity,
+            removedIngredients = removedIngredients,
+            note = note)
 
+    }
+
+    private fun updateBottomBarUi(isCheckout: Boolean) {
+        if(isCheckout){
+            singleDishAddToCartPrice.visibility = View.GONE
+            singleDishAddToCartTitle.text = "checkout"
+            singleDishAddToCartLayout.setOnClickListener { checkout() }
+        }else{
+            singleDishAddToCartPrice.visibility = View.VISIBLE
+            val count = singleDishInfoDishCounter.getDishCount()
+            singleDishAddToCartTitle.text = "Add ${count} To Cart"
+            val newValue = currentDish.price.value*count
+            singleDishAddToCartPrice.text = "$$newValue"
+            singleDishAddToCartLayout.setOnClickListener { addToCart() }
+        }
+    }
+
+    private fun checkout() {
+        listener.onCheckout()
     }
 
     private fun initHeader() {
@@ -104,37 +153,38 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
         singleDishHeaderCook.setOnClickListener { scrollPageTo(COOK) }
         singleDishHeaderIngredient.setOnClickListener { scrollPageTo(INGREDIENT) }
 
-        singleDishScrollView.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
-            override fun onScrollChange(
-                v: NestedScrollView?,
-                scrollX: Int,
-                scrollY: Int,
-                oldScrollX: Int,
-                oldScrollY: Int
-            ) {
-                checkScrollPosition(scrollY + 250)
-
-            }
-
-        })
-
-        selectView(INFO)
+        singleDishHeaderInfo.performClick()
     }
+//        singleDishScrollView.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
+//            override fun onScrollChange(
+//                v: NestedScrollView?,
+//                scrollX: Int,
+//                scrollY: Int,
+//                oldScrollX: Int,
+//                oldScrollY: Int
+//            ) {
+//                checkScrollPosition(scrollY + 250)
+//
+//            }
+//
+//        })
 
-    private fun checkScrollPosition(scrollY: Int) {
-        val infoTop = singeDishCollapsingLayout.y
-        val ingredientTop = singleDishIngredientLayout.y
-        val cookTop = singleDishCookLayout.y
+//        selectView(INFO)
 
-        Log.d("wowSingle", "infoTop: $infoTop, ingredientTop: $ingredientTop, cookTop: $cookTop")
-        if (scrollY < ingredientTop) {
-            selectView(INFO)
-        } else if (scrollY > ingredientTop && scrollY < cookTop) {
-            selectView(INGREDIENT)
-        } else {
-            selectView(COOK)
-        }
-    }
+//    private fun checkScrollPosition(scrollY: Int) {
+////        val infoTop = singeDishCollapsingLayout.y
+//        val ingredientTop = singleDishIngredientLayout.y
+//        val cookTop = singleDishCookLayout.y
+//
+//        Log.d("wowSingle", "infoTop: $infoTop, ingredientTop: $ingredientTop, cookTop: $cookTop")
+//        if (scrollY < ingredientTop) {
+//            selectView(INFO)
+//        } else if (scrollY > ingredientTop && scrollY < cookTop) {
+//            selectView(INGREDIENT)
+//        } else {
+//            selectView(COOK)
+//        }
+//    }
 
 
     private fun scrollPageTo(scrollPos: Int) {
@@ -142,18 +192,21 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
         when (scrollPos) {
             INFO -> {
                 singleDishHeaderInfo.isSelected = true
-                singleDishFragAppBarLayout.setExpanded(true)
-                singleDishScrollView.smoothScrollTo(0, singleDishInfoLayout.y.toInt())
+                singleDishInfoLayout.visibility = View.VISIBLE
+//                singleDishFragAppBarLayout.setExpanded(true)
+//                singleDishScrollView.smoothScrollTo(0, singleDishInfoLayout.y.toInt())
             }
             INGREDIENT -> {
                 singleDishHeaderIngredient.isSelected = true
-                singleDishFragAppBarLayout.setExpanded(false)
-                singleDishScrollView.smoothScrollTo(0, singleDishIngredientLayout.y.toInt())
+                singleDishIngredientLayout.visibility = View.VISIBLE
+//                singleDishFragAppBarLayout.setExpanded(false)
+//                singleDishScrollView.smoothScrollTo(0, singleDishIngredientLayout.y.toInt())
             }
             COOK -> {
                 singleDishHeaderCook.isSelected = true
-                singleDishFragAppBarLayout.setExpanded(false)
-                singleDishScrollView.smoothScrollTo(0, singleDishCookLayout.y.toInt())
+                singleDishCookLayout.visibility = View.VISIBLE
+//                singleDishFragAppBarLayout.setExpanded(false)
+//                singleDishScrollView.smoothScrollTo(0, singleDishCookLayout.y.toInt())
             }
         }
     }
@@ -182,6 +235,9 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
         singleDishHeaderInfo.isSelected = false
         singleDishHeaderCook.isSelected = false
         singleDishHeaderIngredient.isSelected = false
+        singleDishInfoLayout.visibility = View.GONE
+        singleDishCookLayout.visibility = View.GONE
+        singleDishIngredientLayout.visibility = View.GONE
     }
 
     private fun initInfo() {
@@ -201,10 +257,15 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
             singleDishInfoQuantity.text = "${menuItem.unitsSold}/${menuItem.quantity} Left"
         }
 
+        initOrderDate()
         singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
         singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
         singleDishInfoRating.text = currentDish.rating.toString()
         singleDishInfoDishCounter.setDishCounterViewListener(this)
+    }
+
+    private fun initOrderDate() {
+        val userLastChosenDate = viewModel.getUserChosenDeliveryDate()
     }
 
     override fun onDishCounterChanged(count: Int) {
@@ -238,8 +299,8 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
         singleDishIngredientList.addItemDecoration(divider)
-        adapter = DishIngredientsAdapter(context!!, currentDish.dishIngredients)
-        singleDishIngredientList.adapter = adapter
+        ingredientsAdapter = DishIngredientsAdapter(context!!, currentDish.dishIngredients)
+        singleDishIngredientList.adapter = ingredientsAdapter
     }
 
 
@@ -271,17 +332,12 @@ class SingleDishFragmentDialog(val menuItemId: Long) : DialogFragment(), Favorit
         }
 
         cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-        var divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
-        divider.setDrawable(resources.getDrawable(R.drawable.horizontal_trans_divider, null))
-        cookProfileFragDishList.addItemDecoration(divider)
-        dishAdapter = SearchAdapter(context!!, arrayListOf(), this)
-        dishAdapter.updateDishes(currentDish.cook.dishes)
+        dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this)
         cookProfileFragDishList.adapter = dishAdapter
-//        cookProfileFragDishList.adapter //todo
     }
 
     override fun onDishClick(dish: Dish) {
-        SingleDishFragmentDialog.newInstance(dish.menuItem.id).show(fragmentManager, Constants.SINGLE_DISH_DIALOG)
+        SingleDishFragmentDialog.newInstance(dish.menuItem.id, listener).show(fragmentManager, Constants.SINGLE_DISH_DIALOG)
     }
 
     private fun openCertificatesDialog(certificates: ArrayList<String>) {

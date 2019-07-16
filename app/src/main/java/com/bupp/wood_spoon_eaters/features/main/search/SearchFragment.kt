@@ -79,7 +79,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
                 searchFragPb.hide()
                 if(event.isSuccess){
                     if(event.searchResponse != null){
-//                        adapter.updateSearchData(event.searchId, event.searchResponse)
+//                        ingredientsAdapter.updateSearchData(event.searchId, event.searchResponse)
                     }
                 }else{
 

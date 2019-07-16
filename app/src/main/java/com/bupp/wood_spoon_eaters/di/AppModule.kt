@@ -58,7 +58,7 @@ val appModule = module {
     viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
-    viewModel { SingleDishViewModel(get()) }
+    viewModel { SingleDishViewModel(get(), get(), get()) }
     viewModel { AddAddressViewModel(get(), get(),get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get()) }

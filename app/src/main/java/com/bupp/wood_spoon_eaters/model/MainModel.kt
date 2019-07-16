@@ -228,14 +228,7 @@ data class DeliveryMethod(
     val name: String
 )
 
-data class OrderItem(
-    val id: Long,
-    val order: Order,
-    val dish: Dish,
-    val quantity: Int,
-    val price: Price,
-    val notes: String
-)
+
 
 data class Metric(
     val id: Long,

@@ -30,6 +30,8 @@ class CheckoutViewModel(val api: ApiService,val orderManager:OrderManager) : Vie
         checkOutDetails.postValue(CheckoutDetails(order,cook))
     }
 
-    fun getLastOrderAddress(): String? {
-        return orderManager.getLastOrderAddress()?.streetLine1
-    }}
+//    fun getLastOrderAddress(): String? {
+//        return orderManager.getLastOrderAddress()?.streetLine1
+//    }
+
+}

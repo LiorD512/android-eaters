@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener, TrackOrderDialog.TrackOrderDialogListener,
-    RateLastOrderDialog.RateLastOrderDialogListener {
+    RateLastOrderDialog.RateLastOrderDialogListener, SingleDishFragmentDialog.SingleDishDialogListener {
+
 
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
@@ -477,6 +478,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadSingleDishDetails(id: Long) {
-        SingleDishFragmentDialog.newInstance(id).show(supportFragmentManager, Constants.SINGLE_DISH_DIALOG)
+        SingleDishFragmentDialog.newInstance(id, this).show(supportFragmentManager, Constants.SINGLE_DISH_DIALOG)
+    }
+
+    override fun onCheckout() {
+        loadCheckout()
     }
 }

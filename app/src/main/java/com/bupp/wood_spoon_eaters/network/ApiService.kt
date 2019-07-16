@@ -69,6 +69,10 @@ interface ApiService {
     fun getFeed(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
                 @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: Int? = null): Call<ServerResponse<ArrayList<Feed>>>
 
+
+    @POST("eaters/me/orders")
+    fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Search>>
+
 //    @POST("cooks/me/dishes/presigned_urls")
 //    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>
 //    //NewDish

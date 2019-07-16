@@ -30,7 +30,7 @@ class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManag
     }
 
     fun setDeliveryTime(time: Date) {
-        orderManager.updateOrder(orderTime = time)
+//        orderManager.updateOrder(orderTime = time)
     }
 
     fun getDeliveryTime(): String? {

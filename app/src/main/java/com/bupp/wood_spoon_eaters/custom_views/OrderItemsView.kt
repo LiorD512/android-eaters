@@ -36,7 +36,7 @@ class OrderItemsView : LinearLayout {
         adapter = OrderItemsViewAdapter(context, orderItems)
         orderItemsViewRecyclerView.adapter = adapter
 
-//        adapter?.setOrderItems()
+//        ingredientsAdapter?.setOrderItems()
     }
 
 }
