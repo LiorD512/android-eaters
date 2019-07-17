@@ -96,6 +96,7 @@
                 android:id="@+id/tipPercentCustomText"
                 style="@style/SemiBold13Dark50"
                 android:text="Custom"
+                android:gravity="center"
                 android:textColor="@color/dark50_to_white_selector"
                 android:layout_gravity="center"
                 android:paddingStart="16.7dp"

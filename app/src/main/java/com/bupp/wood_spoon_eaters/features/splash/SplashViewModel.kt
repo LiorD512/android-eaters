@@ -31,6 +31,11 @@ class SplashViewModel(val apiSettings: ApiSettings, val appSettings: AppSettings
         val isRegistered: Boolean = false
     )
 
+
+    //todo - add getFeed call. save feed object in FeedHelper (singleton)- update feed saved object on new getFeed Call.
+
+
+
     fun initServerCall() {
         val isRegistered = apiSettings.isRegistered()
         if (isRegistered) {

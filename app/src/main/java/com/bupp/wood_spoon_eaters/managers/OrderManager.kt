@@ -1,28 +1,26 @@
 package com.bupp.wood_spoon_eaters.managers
 
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.OrderItem
+import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.OrderItemRequest
 import com.bupp.wood_spoon_eaters.model.OrderRequest
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Utils
 import java.util.*
 
 class OrderManager(val api: ApiService, val appSettings: AppSettings) {
 
-
+    var curOrderResponse: Order? = null
     var currentOrderRequest: OrderRequest = OrderRequest()
 
     fun getOrderRequest():OrderRequest?{
         return currentOrderRequest
-
     }
 
     fun updateOrderRequest(cookingSlotId: Long? = null,
                            deliveryAt: String? = getLastOrderTimeParam(),
                            deliveryAddressId: Long? = null,
-                           orderItems: ArrayList<OrderItem>? = arrayListOf(),
+                           orderItemRequests: ArrayList<OrderItemRequest>? = null,
                            tipPercentage: Float? = null,
                            tip: Int? = null,
                            tipAmount: String? = null,
@@ -30,7 +28,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
         if(cookingSlotId != null) currentOrderRequest.cookingSlotId = cookingSlotId
         if(deliveryAt != null) currentOrderRequest.deliveryAt = deliveryAt
         if(deliveryAddressId != null) currentOrderRequest.deliveryAddressId = deliveryAddressId
-        if(orderItems != null) currentOrderRequest.orderItems = orderItems
+        if(orderItemRequests != null) currentOrderRequest.orderItemRequests = orderItemRequests
         if(tipPercentage != null) currentOrderRequest.tipPercentage = tipPercentage
         if(tip != null) currentOrderRequest.tip = tip
         if(tipAmount != null) currentOrderRequest.tipAmount = tipAmount
@@ -38,8 +36,11 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
     }
 
 
-    fun addOrderItem(orderItem: OrderItem){
-        currentOrderRequest.orderItems?.add(orderItem)
+    fun addOrderItem(orderItemRequest: OrderItemRequest){
+        if(currentOrderRequest.orderItemRequests == null){
+            currentOrderRequest.orderItemRequests = arrayListOf()
+        }
+        currentOrderRequest.orderItemRequests?.add(orderItemRequest)
     }
 
 
@@ -78,7 +79,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
     fun getLastOrderTimeParam(): String? {
         //returns unix timestamp
         return if (getLastOrderTime() != null) {
-            Utils.parseUnixTimestamp(getLastOrderTime())
+            Utils.parseUnixTimestamp(getLastOrderTime()!!)
         } else {
             Utils.parseUnixTimestamp(Date())
         }
@@ -92,27 +93,9 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings) {
         }
     }
 
-//    fun updateOrder(
-//        googleAddressResponse: GoogleAddressResponse? = null,
-//        orderAddress: Address? = null,
-//        isDelivery: Boolean? = null,
-//        orderTime: Date? = null) {
-//
-//        if (isDelivery != null) {
-//            this.isDelivery = isDelivery
-//        }
-//        if (orderTime != null) {
-//            this.orderTime = orderTime
-//        }
-//    }
-
-//    fun getLastAddressResponse(): GoogleAddressResponse? {
-//        return if (googleAddressResponse != null) {
-//            googleAddressResponse
-//        } else {
-//            null
-//        }
-//    }
+    fun setOrderResponse(order: Order?) {
+        this.curOrderResponse = order
+    }
 
 
 }

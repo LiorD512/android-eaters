@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.search.single_dish
+package com.bupp.wood_spoon_eaters.features.main.single_dish
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import kotlinx.android.synthetic.main.certificate_list_item.view.*
-import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
 
 class CertificatesAdapter(val context: Context, val certificates: ArrayList<String>) : RecyclerView.Adapter<CertificatesAdapter.ViewHolder>() {
 

@@ -20,18 +20,18 @@ class RateLastOrderViewModel(private val api: ApiService,private val orderManage
 
     val orderDetails: SingleLiveEvent<OrderDetails> = SingleLiveEvent()
 
-    data class OrderDetails(val orders: ArrayList<OrderItem2>)
+    data class OrderDetails(val orders: ArrayList<OrderItem>)
 
     fun getDumbOrderDetails() {
-        var cook: Cook2 = Cook2(firstName = "Eyal",lastName = "Yaakobi",thumbnail ="https://image.tmdb.org/t/p/w500_and_h282_face/87mvGYiKkV4PDNu9m0NIr0OPBrY.jpg")
-        var dish: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-        var dish2: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-        var dish3: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-
-        var order: OrderItem2 = OrderItem2(id=1,dish = dish,quantity = 5)
-        var order2: OrderItem2 = OrderItem2(id=2,dish = dish2,quantity = 2)
-        var order3: OrderItem2 = OrderItem2(id=3,dish = dish3,quantity = 1)
-
-        orderDetails.postValue(OrderDetails(arrayListOf(order,order2,order3)))
+//        var cook: Cook2 = Cook2(firstName = "Eyal",lastName = "Yaakobi",thumbnail ="https://image.tmdb.org/t/p/w500_and_h282_face/87mvGYiKkV4PDNu9m0NIr0OPBrY.jpg")
+//        var dish: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
+//        var dish2: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
+//        var dish3: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
+//
+//        var order: OrderItem2 = OrderItem2(id=1,dish = dish,quantity = 5)
+//        var order2: OrderItem2 = OrderItem2(id=2,dish = dish2,quantity = 2)
+//        var order3: OrderItem2 = OrderItem2(id=3,dish = dish3,quantity = 1)
+//
+//        orderDetails.postValue(OrderDetails(arrayListOf(order,order2,order3)))
     }
 }

@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
-import com.bupp.wood_spoon_eaters.features.main.checkout.CheckoutFragment
+import com.bupp.wood_spoon_eaters.features.main.checkout.CheckoutFragmentDialog
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -26,7 +26,7 @@ import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragme
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.main.report.ReportFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
-import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFragmentDialog
+import com.bupp.wood_spoon_eaters.features.main.single_dish.SingleDishFragmentDialog
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
@@ -43,9 +43,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener, TrackOrderDialog.TrackOrderDialogListener,
-    RateLastOrderDialog.RateLastOrderDialogListener, SingleDishFragmentDialog.SingleDishDialogListener {
+    RateLastOrderDialog.RateLastOrderDialogListener, SingleDishFragmentDialog.SingleDishDialogListener,
+    CheckoutFragmentDialog.CheckoutDialogListener {
 
 
+    private val curShowingDialogs: ArrayList<SingleDishFragmentDialog> = arrayListOf()
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -72,7 +74,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         })
     }
 
-    fun startLocationUpdates(){
+    fun startLocationUpdates() {
         viewModel.startLocationUpdates(this)
     }
 
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun loadFragment(fragment: Fragment, tag: String) {
+        // todo - check status bar status??
         lastFragmentTag = currentFragmentTag
         currentFragmentTag = tag
         supportFragmentManager.beginTransaction()
@@ -137,9 +140,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
     }
 
-    fun loadCheckout(){
-        loadFragment(CheckoutFragment(),Constants.CHECKOUT_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Checkout")
+    fun loadCheckout() {
+        CheckoutFragmentDialog(this).show(supportFragmentManager, Constants.CHECKOUT_DIALOG)
+    }
+
+    override fun onCheckoutDone() {
+        closeAllDialogs()
+        loadFeed()
+        loadTrackOrder()
     }
 
     fun loadPromoCode() {
@@ -174,7 +182,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-
     override fun onLocationSelected(selected: GoogleAddressResponse?) {
         //on LocationChoosertFragment result
         if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
@@ -183,18 +190,19 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         } else if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
             this.selectedGoogleAddress = selected
 //            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
-            Toast.makeText(this,"What should we do here", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "What should we do here", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onChangeAddressClick() {
         loadDeliveryDetails()
     }
+
     //address dialog interface
     override fun onAddressChoose(address: Address) {
         Toast.makeText(this, "Address selected is " + address.streetLine1, Toast.LENGTH_SHORT).show()
         viewModel.setChosenAddress(address)
-        when(currentFragmentTag){
+        when (currentFragmentTag) {
             Constants.DELIVERY_DETAILS_TAG -> {
                 if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
                     (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
@@ -214,11 +222,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onTipDone(tipAmount: Int) {
-        Toast.makeText(this,"onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNewCartClick() {
-        Toast.makeText(this,"onNewCartClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onNewCartClick", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCallSupportClick() {
@@ -230,28 +238,28 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onShareClick() {
-        Toast.makeText(this,"onShareClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onShareClick", Toast.LENGTH_SHORT).show()
     }
 
     //Track Order dialog Listener
     override fun onContactUsClick() {
-        Toast.makeText(this,"onContactUsClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onContactUsClick", Toast.LENGTH_SHORT).show()
     }
 
     override fun onMessageClick() {
-        Toast.makeText(this,"onMessageClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onMessageClick", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCancelOrderClick() {
-        Toast.makeText(this,"onCancelOrderClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onCancelOrderClick", Toast.LENGTH_SHORT).show()
     }
 
     override fun onShareImageClick() {
-        Toast.makeText(this,"onShareImageClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onShareImageClick", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDoneRateClick() {
-        Toast.makeText(this,"onDoneRateClick", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onDoneRateClick", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -263,52 +271,49 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         )
     }
 
-    fun loadNoDeliveryToAddressDialog(){
-        NoDeliveryToAddressDialog(this).show(supportFragmentManager,Constants.DELIVERY_TO_ADDRESS_DIALOG_TAG)
+    fun loadNoDeliveryToAddressDialog() {
+        NoDeliveryToAddressDialog(this).show(supportFragmentManager, Constants.DELIVERY_TO_ADDRESS_DIALOG_TAG)
     }
 
-    fun loadTipCourierDialog(){
-        TipCourierDialog(this).show(supportFragmentManager,Constants.TIP_COURIER_DIALOG_TAG)
+    fun loadTipCourierDialog() {
+        TipCourierDialog(this).show(supportFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
     }
 
-    fun loadContactUsDialog(){
-        ContactUsDialog(this).show(supportFragmentManager,Constants.CONTACT_US_DIALOG_TAG)
+    fun loadContactUsDialog() {
+        ContactUsDialog(this).show(supportFragmentManager, Constants.CONTACT_US_DIALOG_TAG)
     }
 
-    fun loadThankYouDialog(){
-        ThankYouDialog().show(supportFragmentManager,Constants.THANK_YOU_DIALOG_TAG)
+    fun loadThankYouDialog() {
+        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
     }
 
-    fun loadStartNewCartDialog(cookInCart: Cook, newCook:Cook){
-        StartNewCartDialog(this, cookInCart,newCook).show(supportFragmentManager,Constants.START_NEW_CART_DIALOG_TAG)
+    fun loadStartNewCartDialog(cookInCart: Cook, newCook: Cook) {
+        StartNewCartDialog(this, cookInCart, newCook).show(supportFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
     }
 
-    fun loadDishSoldOutDialog(){
-        DishSoldOutDialog().show(supportFragmentManager,Constants.DISH_SOLD_OUT_DIALOG_TAG)
+    fun loadDishSoldOutDialog() {
+        DishSoldOutDialog().show(supportFragmentManager, Constants.DISH_SOLD_OUT_DIALOG_TAG)
     }
 
     fun loadDishOfferedDialog() {
-        NewSuggestionSuccessDialog().show(supportFragmentManager,Constants.DISH_OFFERED_TAG)
+        NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
     }
 
     fun loadShareDialog() {
-        ShareDialog(this).show(supportFragmentManager,Constants.SHARE_DIALOG_TAG)
+        ShareDialog(this).show(supportFragmentManager, Constants.SHARE_DIALOG_TAG)
     }
 
-    fun loadTrackOrder(){
-        TrackOrderDialog(this).show(supportFragmentManager,Constants.TRACK_ORDER_DIALOG_TAG)
+    fun loadTrackOrder() {
+        TrackOrderDialog(this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
-    fun loadRateLastOrder(){
-        RateLastOrderDialog(this).show(supportFragmentManager,Constants.RATE_LAST_ORDER_DIALOG_TAG)
+    fun loadRateLastOrder() {
+        RateLastOrderDialog(this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
     }
 
-    fun loadRatings(){
-        RatingsDialog().show(supportFragmentManager,Constants.RATINGS_DIALOG_TAG)
+    fun loadRatings() {
+        RatingsDialog().show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
     }
-
-
-
 
 
     //delivery details methods - end
@@ -328,7 +333,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
-                Log.d("wowMainVM","onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
+                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     viewModel.startLocationUpdates(this)
                 }
@@ -337,7 +342,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun sendSmsText() {
-        val smsIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + getString(R.string.default_bupp_phone_number)))
+        val smsIntent =
+            Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + getString(R.string.default_bupp_phone_number)))
         smsIntent.putExtra("sms_body", getString(R.string.support_frag_sms_sentence))
         this.applicationContext.startActivity(smsIntent)
     }
@@ -409,24 +415,28 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onBackPressed() {
-        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null) {
-            when (lastFragmentTag) {
-                Constants.MY_PROFILE_TAG -> {
-                    loadMyProfile()
-                }
-                Constants.DELIVERY_DETAILS_TAG -> {
-                    loadDeliveryDetails()
+        when (currentFragmentTag) {
+            Constants.ADD_NEW_ADDRESS_TAG -> {
+                when (lastFragmentTag) {
+                    Constants.MY_PROFILE_TAG -> {
+                        loadMyProfile()
+                    }
+                    Constants.DELIVERY_DETAILS_TAG -> {
+                        loadDeliveryDetails()
+                    }
                 }
             }
-        } else if (getFragmentByTag(Constants.SETTINGS_TAG) != null) {
-            loadMyProfile()
-        } else if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
-            loadMyProfile()
-        }else if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) != null) {
-            updateAddressTimeView()
-            loadFeed()
-        }  else {
-            loadFeed()
+            Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG -> {
+                loadMyProfile()
+            }
+            Constants.DELIVERY_DETAILS_TAG -> {
+                updateAddressTimeView()
+                loadFeed()
+            }
+            else -> {
+                loadFeed()
+            }
+
         }
     }
 
@@ -435,7 +445,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         handlePb(false)
         if (location != null) {
             updateAddressTimeView()
-//            mainActHeaderView.setLocationTitle(location = location)
         }
         when (lastFragmentTag) {
             Constants.MY_PROFILE_TAG -> {
@@ -472,13 +481,28 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-
     fun updateFilterUi(isFiltered: Boolean) {
         mainActHeaderView.updateFilterUi(isFiltered)
     }
 
+    override fun onDishClick(itemId: Long) {
+        //when user click other dish inside singleDishFragment
+        loadSingleDishDetails(itemId)
+    }
+
     fun loadSingleDishDetails(id: Long) {
-        SingleDishFragmentDialog.newInstance(id, this).show(supportFragmentManager, Constants.SINGLE_DISH_DIALOG)
+        val singleDishDialog = SingleDishFragmentDialog.newInstance(id, this)
+        singleDishDialog.show(supportFragmentManager, Constants.SINGLE_DISH_DIALOG)
+        Log.d("wowDialogs","adding:  ${singleDishDialog.id}")
+        curShowingDialogs.add(singleDishDialog)
+    }
+
+    fun closeAllDialogs(){
+        for(item in curShowingDialogs){
+            Log.d("wowDialogs","removing:  ${item.id}")
+            item.dismiss()
+        }
+        curShowingDialogs.clear()
     }
 
     override fun onCheckout() {

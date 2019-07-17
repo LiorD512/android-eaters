@@ -42,7 +42,6 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
 
     fun initFeed(hasFavorites: Boolean, feedArr: ArrayList<Feed>) {
         val dishArr: ArrayList<Feed> = arrayListOf()
-        val favorites: Feed = Feed()
         val cooksArr: ArrayList<Cook> = arrayListOf()
 
         for(item in feedArr){
@@ -81,7 +80,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
     }
 
     private fun isADishResource(item: Feed): Boolean {
-        return item.search?.resource == Constants.RESOURCE_TYPE_DISH && item.hasItems()
+        return item.search?.resource == Constants.RESOURCE_TYPE_DISH// && item.hasItems()
     }
 
     private fun isACookResource(item: Feed): Boolean {

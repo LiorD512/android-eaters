@@ -8,12 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.DishIngredient
-import com.bupp.wood_spoon_eaters.model.DishIngredient2
 import com.bupp.wood_spoon_eaters.model.Ingredient
 import kotlinx.android.synthetic.main.order_item_view.view.*
 import kotlinx.android.synthetic.main.removed_ingredient_view.view.*
 
-class IngredientsCheckoutAdapter(val context: Context, private val ingredients: ArrayList<DishIngredient2>) :
+class IngredientsCheckoutAdapter(val context: Context, private val ingredients: ArrayList<Ingredient>) :
     RecyclerView.Adapter<IngredientsCheckoutAdapter.RemovedIngredientViewHolder>() {
 
     class RemovedIngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -29,8 +28,8 @@ class IngredientsCheckoutAdapter(val context: Context, private val ingredients: 
     }
 
     override fun onBindViewHolder(holder: RemovedIngredientViewHolder, position: Int) {
-        val ingredient: Ingredient = ingredients[position].ingredient!!
+        val ingredient: Ingredient = ingredients[position]
 
-        holder.name.text = "${ingredient.name}"
+        holder.name.text = "Without ${ingredient.name}"
     }
 }

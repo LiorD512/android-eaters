@@ -1,9 +1,8 @@
-package com.bupp.wood_spoon_eaters.features.main.search.single_dish
+package com.bupp.wood_spoon_eaters.features.main.single_dish
 
 import android.util.Log
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterAddressManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -19,7 +18,7 @@ class SingleDishViewModel(val api: ApiService, val orderManager: OrderManager, v
     data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?)
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
 
-    data class PostOrderEvent(val isSuccess: Boolean = false, val order: Search?)
+    data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
     val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
 
     fun getFullDish(menuItemId: Long) {
@@ -56,19 +55,20 @@ class SingleDishViewModel(val api: ApiService, val orderManager: OrderManager, v
             promoCodeId = promoCodeId)
 
         orderManager.addOrderItem(orderItem)
-        api.postOrder(orderManager.currentOrderRequest).enqueue(object: Callback<ServerResponse<Search>>{
-            override fun onResponse(call: Call<ServerResponse<Search>>, response: Response<ServerResponse<Search>>) {
+        api.postOrder(orderManager.currentOrderRequest).enqueue(object: Callback<ServerResponse<Order>>{
+            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
                 if(response.isSuccessful){
-                    val search = response.body()?.data
-                    Log.d("wowFeedVM","postOrder success: ${search.toString()}")
-                    postOrderEvent.postValue(PostOrderEvent(true, search))
+                    val order = response.body()?.data
+                    orderManager.setOrderResponse(order)
+                    Log.d("wowFeedVM","postOrder success: ${order.toString()}")
+                    postOrderEvent.postValue(PostOrderEvent(true, order))
                 }else{
                     Log.d("wowFeedVM","postOrder fail")
                     postOrderEvent.postValue(PostOrderEvent(false,null))
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Search>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
                 Log.d("wowFeedVM","postOrder big fail")
                 postOrderEvent.postValue(PostOrderEvent(false,null))
             }
@@ -76,8 +76,8 @@ class SingleDishViewModel(val api: ApiService, val orderManager: OrderManager, v
         Log.d("wowSingleDishVM","addToCart finish")
     }
 
-    private fun initOrderItemsList(dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null): OrderItem {
-        return OrderItem(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
+    private fun initOrderItemsList(dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null): OrderItemRequest {
+        return OrderItemRequest(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
     }
 
     fun getUserChosenDeliveryDate(): Date? {

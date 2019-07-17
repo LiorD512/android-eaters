@@ -71,7 +71,7 @@ interface ApiService {
 
 
     @POST("eaters/me/orders")
-    fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Search>>
+    fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
 
 //    @POST("cooks/me/dishes/presigned_urls")
 //    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>

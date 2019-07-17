@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
-import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishViewModel
+import com.bupp.wood_spoon_eaters.features.main.single_dish.SingleDishViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.main.report.ReportViewModel

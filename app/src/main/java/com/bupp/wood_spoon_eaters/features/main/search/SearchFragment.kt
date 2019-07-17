@@ -19,7 +19,6 @@ import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.search_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFragmentDialog
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 

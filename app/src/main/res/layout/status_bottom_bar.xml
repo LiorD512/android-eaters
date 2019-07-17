@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_gravity="center"
+        android:background="@color/teal_blue"
+        android:id="@+id/statusBottomBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bottom_bar_height">
+
+    <TextView
+            android:id="@+id/statusBottomBarTitle"
+            android:layout_gravity="center"
+            style="@style/Bold17White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add 1 To Cart"/>
+
+    <TextView
+            android:layout_marginRight="16.8dp"
+            android:layout_gravity="center|right"
+            style="@style/Bold17White"
+            android:id="@+id/statusBottomBarPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="$7"/>
+
+</FrameLayout>

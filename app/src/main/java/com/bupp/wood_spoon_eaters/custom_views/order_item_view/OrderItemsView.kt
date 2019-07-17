@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views
+package com.bupp.wood_spoon_eaters.custom_views.order_item_view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
-import com.bupp.wood_spoon_eaters.custom_views.adapters.OrderItemsViewAdapter
-import com.bupp.wood_spoon_eaters.model.OrderItem2
+import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
+import com.bupp.wood_spoon_eaters.model.OrderItem
 import kotlinx.android.synthetic.main.order_items_view.view.*
 
 
@@ -32,11 +32,11 @@ class OrderItemsView : LinearLayout {
         orderItemsViewRecyclerView.addItemDecoration(divider)
     }
 
-    fun setOrderItems(orderItems: ArrayList<OrderItem2>) {
+    fun setOrderItems(orderItems: ArrayList<OrderItem>) {
         adapter = OrderItemsViewAdapter(context, orderItems)
         orderItemsViewRecyclerView.adapter = adapter
 
-//        ingredientsAdapter?.setOrderItems()
+//        ingredientsAdapter?.setOrderItemRequests()
     }
 
 }

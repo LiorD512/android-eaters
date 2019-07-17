@@ -5,10 +5,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFragmentDialog">
+        tools:context=".features.main.single_dish.SingleDishFragmentDialog">
 
     <LinearLayout
-            android:paddingBottom="@dimen/add_to_cart_height"
+            android:paddingBottom="@dimen/status_bottom_bar_height"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -482,32 +482,11 @@ into consideration"/>
 
     </LinearLayout>
 
-
-    <FrameLayout
+    <com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
             android:layout_gravity="bottom"
-            android:background="@color/teal_blue"
-            android:id="@+id/singleDishAddToCartLayout"
+            android:id="@+id/singleDishStatusBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/add_to_cart_height">
-
-        <TextView
-                android:id="@+id/singleDishAddToCartTitle"
-                android:layout_gravity="center"
-                style="@style/SemiBold17White"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add 1 To Cart"/>
-
-        <TextView
-                android:layout_marginRight="16.8dp"
-                android:layout_gravity="center|right"
-                style="@style/SemiBold17White"
-                android:id="@+id/singleDishAddToCartPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="$7"/>
-
-    </FrameLayout>
+            android:layout_height="wrap_content"/>
 
 
 </FrameLayout>

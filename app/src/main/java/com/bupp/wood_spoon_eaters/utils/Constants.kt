@@ -73,6 +73,12 @@ class Constants {
         const val TOOL_TIP_CHECKOUT_SERVICE_FEE = 2
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
 
+        //status bottom bar types
+        const val STATUS_BAR_TYPE_CART = 0
+        const val STATUS_BAR_TYPE_CHECKOUT = 1
+        const val STATUS_BAR_TYPE_FINALIZE = 2
+
+
 
         //activity / dialog tags
         const val WELCOME_DIALOG_TAG = "welcome_dialog_tag"
@@ -93,6 +99,7 @@ class Constants {
         const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
 
         const val SINGLE_DISH_DIALOG = "single_dish_dialog"
+        const val CHECKOUT_DIALOG = "checkout_dialog"
         const val ADDRESS_DIALOG_TAG = "address_dialog"
         const val DELIVERY_TO_ADDRESS_DIALOG_TAG = "delivery_to_address_dialog"
         const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog"
@@ -102,7 +109,6 @@ class Constants {
         const val DISH_SOLD_OUT_DIALOG_TAG = "dish_sold_out_dialog"
         const val ORDER_DATE_CHOOSER_DIALOG_TAG = "order_date_chooser_dialog"
         const val CERTIFICATES_DIALOG_TAG = "certificated_dialog"
-        const val CHECKOUT_TAG = "checkout_tag"
         const val PROMO_CODE_TAG = "promo_code_tag"
         const val SHARE_DIALOG_TAG = "shre_dialog_tag"
         const val TRACK_ORDER_DIALOG_TAG = "track_order_dialog_tag"

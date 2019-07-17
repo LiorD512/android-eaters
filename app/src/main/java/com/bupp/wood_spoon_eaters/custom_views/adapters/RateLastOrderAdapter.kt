@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.OrderItem2
+import com.bupp.wood_spoon_eaters.model.OrderItem
 import kotlinx.android.synthetic.main.order_item_view.view.orderItemImage
 import kotlinx.android.synthetic.main.order_item_view.view.orderItemName
 import kotlinx.android.synthetic.main.rate_dish_item_view.view.*
 
-class RateLastOrderAdapter(val context: Context, private var dishes: ArrayList<OrderItem2>, private val listener: RateLastOrderAdapterListener) : RecyclerView.Adapter<RateLastOrderAdapter.DishViewHolder>() {
+class RateLastOrderAdapter(val context: Context, private var dishes: ArrayList<OrderItem>, private val listener: RateLastOrderAdapterListener) : RecyclerView.Adapter<RateLastOrderAdapter.DishViewHolder>() {
 
     interface RateLastOrderAdapterListener{
         fun onDishRate()
     }
-    var dishesRating: LinkedHashMap<OrderItem2, Boolean?> = linkedMapOf()
+    var dishesRating: LinkedHashMap<OrderItem, Boolean?> = linkedMapOf()
 
     class DishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.orderItemImage
@@ -38,7 +38,7 @@ class RateLastOrderAdapter(val context: Context, private var dishes: ArrayList<O
     }
 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
-        val orderItem: OrderItem2? = dishes[position]
+        val orderItem: OrderItem? = dishes[position]
 
         Glide.with(context).load(orderItem!!.dish.thumbnail).apply(RequestOptions.circleCropTransform())
             .into(holder.image)
@@ -63,7 +63,7 @@ class RateLastOrderAdapter(val context: Context, private var dishes: ArrayList<O
 
     }
 
-    fun getRatedDishes(): LinkedHashMap<OrderItem2, Boolean?> {
+    fun getRatedDishes(): LinkedHashMap<OrderItem, Boolean?> {
         return dishesRating
     }
 }

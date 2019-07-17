@@ -178,34 +178,34 @@ data class Certificate(
     val client: Client
 )
 
-data class Order(
-    val id: Long,
-    val created_at: Date,
-    val updated_at: Date,
-    val orderItems: ArrayList<OrderItem>,
-    val eater: Eater,
-    val orderNumber: String,
-    val client: Client,
-    val status: Int,
-    val statusUpdatedAt: Date,
-    val cancellationReason: ArrayList<CancellationReason>,
-    val deliverAt: Date,
-    val deliverAddress: Address,
-    val courier: Courier,
-    val deliveryStatus: Int,
-    val deliveryStatusUpdatedAt: Date,
-    val itemsCount: Int,
-    val subtotal: Int,
-    val tax: Int,
-    val serviceFee: Int,
-    val deliveryFee: Int,
-    val tip: Int,
-    val PromoCode: PromoCode,
-    val discount: Int,
-    val total: Int,
-    val transactionId: String,
-    val notes: String
-)
+//data class Order(
+//    val id: Long,
+//    val created_at: Date,
+//    val updated_at: Date,
+//    val orderItemRequests: ArrayList<OrderItemRequest>,
+//    val eater: Eater,
+//    val orderNumber: String,
+//    val client: Client,
+//    val status: Int,
+//    val statusUpdatedAt: Date,
+//    val cancellationReason: ArrayList<CancellationReason>,
+//    val deliverAt: Date,
+//    val deliverAddress: Address,
+//    val courier: Courier,
+//    val deliveryStatus: Int,
+//    val deliveryStatusUpdatedAt: Date,
+//    val itemsCount: Int,
+//    val subtotal: Int,
+//    val tax: Int,
+//    val serviceFee: Int,
+//    val deliveryFee: Int,
+//    val tip: Int,
+//    val PromoCode: PromoCode,
+//    val discount: Int,
+//    val total: Int,
+//    val transactionId: String,
+//    val notes: String
+//)
 
 data class Courier(
     val id: Long,
@@ -280,124 +280,3 @@ data class Cuisine(
     val icon: String,
     val dishesCount: Int?
 ) : Parcelable
-
-//@Parcelize
-//data class Ingredient(
-//    override var id: Long,
-//    override var name: String,
-//    var baseUnit: String,
-//    var unitPrice: Price,
-//    var calorificValue: Int,
-//    var adjustable: Boolean?,
-//    var units: ArrayList<WoodUnit>
-//) : SelectableString, Parcelable
-//
-//@Parcelize
-//data class CookingMethod(
-//    override val id: Long,
-//    override val name: String
-//) : SelectableString, Parcelable
-
-
-
-
-///TODO::::DELTEE
-@Parcelize
-data class DishIngredient2(
-    @SerializedName("id") val id: Long? = null,
-    @SerializedName("quantity") val quantity: Int?=null,
-    @SerializedName("is_adjustable") val isAdjustable: Boolean?= null,
-    @SerializedName("unit") val unit: WoodUnit?=null,
-    @SerializedName("ingredient") val ingredient: Ingredient?,
-    @SerializedName("_remove") val _removeId: Long? = null
-): Parcelable
-
-///TODO::::DELTEE
-
-
-data class Dish2(
-    @SerializedName("id") val id: Long? = null,
-    @SerializedName("cook") val cook: Cook2? = null,
-    @SerializedName("name") val name: String? = null,
-    @SerializedName("price") val price: Price? = null,
-    @SerializedName("thumbnail") val thumbnail: String? = null,
-    @SerializedName("is_favorite") val isFavorite: Boolean? = null,
-    @SerializedName("description") val description: String? = null,
-    @SerializedName("free_delivery") val freeDelivery: Boolean? = null,
-    @SerializedName("upcoming_slot") val upcomingSlot: UpcomingSlot? = null,
-    @SerializedName("calorific_value") val calorificValue: Double? = null,
-    @SerializedName("proteins") val proteins: Double? = null,
-    @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange? = null,
-    @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>? = null,
-    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>? = null,
-    @SerializedName("carbohydrates") val carbohydrates: Double? = null,
-    @SerializedName("avg_rating") val rating: Double? = null,
-    @SerializedName("removed_ingredients") val removedIngredients: ArrayList<DishIngredient2>? = null
-)
-///TODO::::DELTEE
-
-
-data class OrderItem2(
-    val id: Long,
-    val order: Order? = null,
-    val dish: Dish2,
-    val quantity: Int,
-    val price: Price? = null,
-    val notes: String? = null
-)
-///TODO::::DELTEE
-
-data class Order2(
-    var id: Long? = null,
-    var created_at: Date? = null,
-    var updated_at: Date? = null,
-    var orderItems: ArrayList<OrderItem2>? = null,
-    var eater: Eater? = null,
-    var orderNumber: String? = null,
-    var client: Client? = null,
-    var status: Int? = null,
-    var statusUpdatedAt: Date? = null,
-    var cancellationReason: ArrayList<CancellationReason>? = null,
-    var deliverAt: Date? = null,
-    var deliverAddress: Address? = null,
-    var courier: Courier? = null,
-    var deliveryStatus: Int? = null,
-    var deliveryStatusUpdatedAt: Date? = null,
-    var itemsCount: Int? = null,
-    var subtotal: Int? = null,
-    var tax: Int? = null,
-    var serviceFee: Int? = null,
-    var deliveryFee: Int? = null,
-    var tip: Int? = null,
-    var PromoCode: PromoCode? = null,
-    var discount: Int? = null,
-    var total: Int? = null,
-    var transactionId: String? = null,
-    var notes: String? = null
-)
-///TODO::::DELTEE
-data class Cook2(
-    @SerializedName("id") val id: Long?=null,
-    @SerializedName("first_name") val firstName: String?=null,
-    @SerializedName("last_name") val lastName: String?=null,
-    @SerializedName("thumbnail") val thumbnail: String?=null,
-    @SerializedName("video") val video: String?=null,
-    @SerializedName("profession") val profession: String?=null,
-    @SerializedName("about") val about: String?=null,
-    @SerializedName("birthdate") val birthdate: Date?=null,
-    @SerializedName("place_of_birth") val country: Country?=null,
-    @SerializedName("certificates") val certificates: ArrayList<String>?=null,
-    @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>?=null,
-    @SerializedName("diets") val diets: ArrayList<DietaryIcon>?=null,
-    @SerializedName("avg_rating") val rating: Double?=null,
-    @SerializedName("dishes") val dishes: ArrayList<Dish>?=null
-){
-    fun getFullName(): String{
-        return "$firstName $lastName"
-    }
-
-    fun getAge(): Int {
-        //todo: get birthday from server and set age
-        return Utils.getDiffYears(Date())
-    }
-}

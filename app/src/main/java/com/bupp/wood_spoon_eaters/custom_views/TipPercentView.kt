@@ -1,12 +1,15 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
+import android.text.Spannable
+import android.text.SpannableString
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.tip_percent_view.view.*
 
 
@@ -66,7 +69,9 @@ class TipPercentView : FrameLayout, View.OnClickListener {
     }
 
     fun setCustomTipValue(tipValue: Int){
-        tipPercentCustomText.text = "Custom\n$tipValue"
+        val string = "Custom\n$tipValue"
+        var spannableString = Utils.setCustomFontTypeSpan(context, string, 0, 6, R.font.open_sans_semi_bold)
+        tipPercentCustomText.text = spannableString
     }
 
 }

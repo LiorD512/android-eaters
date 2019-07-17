@@ -95,4 +95,8 @@ class MainViewModel(val settings: AppSettings, val permissionManager:PermissionM
         addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
     }
 
+    fun loadCurrentSingleDishDetails() {
+//        val id = orderManager.getCurrent
+    }
+
 }

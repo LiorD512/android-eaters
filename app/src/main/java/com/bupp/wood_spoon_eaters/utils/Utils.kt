@@ -8,6 +8,7 @@ import android.text.style.StyleSpan
 import androidx.core.content.res.ResourcesCompat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.Calendar.*
@@ -71,9 +72,15 @@ object Utils {
     }
 
     fun parseUnixTimestamp(date: Date?): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        return sdf.format(date?.time)
+        var yourmilliseconds: Long = Date().time
+        if(date != null){
+            yourmilliseconds = date.time
+        }
+        val droppedMillis = yourmilliseconds/ 1000
+        return droppedMillis.toString()
     }
+
+
 
 
     fun setCustomFontTypeSpan(
@@ -107,12 +114,6 @@ object Utils {
     fun parseDateForServer(date: Date): String {
         val sdf = SimpleDateFormat("dd/MM/YYYY")
         return sdf.format(date?.time)
-    }
-
-    fun parseDateFromServer(dateStr: String): String {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY", Locale.ENGLISH)
-        val date = LocalDate.parse(dateStr, formatter)
-        return date.toString()
     }
 
     fun getFirstAndLastNames(fullName: String): Pair<String, String> {

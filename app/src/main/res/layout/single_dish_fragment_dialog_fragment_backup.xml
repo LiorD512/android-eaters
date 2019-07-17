@@ -5,10 +5,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.bupp.wood_spoon_eaters.features.main.search.single_dish.SingleDishFragmentDialog">
+        tools:context=".features.main.single_dish.SingleDishFragmentDialog">
 
     <LinearLayout
-            android:paddingBottom="@dimen/add_to_cart_height"
+            android:paddingBottom="@dimen/status_bottom_bar_height"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -522,7 +522,7 @@ into consideration"/>
             android:background="@color/teal_blue"
             android:id="@+id/singleDishAddToCartLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/add_to_cart_height">
+            android:layout_height="@dimen/status_bottom_bar_height">
 
         <TextView
                 android:id="@+id/singleDishAddToCartTitle"
