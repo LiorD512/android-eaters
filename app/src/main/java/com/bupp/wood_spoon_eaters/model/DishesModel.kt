@@ -28,9 +28,9 @@ data class Dish(
 
 data class MenuItem(
     @SerializedName("id") val id: Long,
-    @SerializedName("eta") val eta: String,
     @SerializedName("quantity") val quantity: Int = 0,
     @SerializedName("units_sold") val unitsSold: Int = 0,
+    @SerializedName("order_at") val orderAt: Date? = null,
     @SerializedName("cooking_slot") val cookingSlot: CookingSlot
 )
 
@@ -51,6 +51,7 @@ data class FullDish(
     @SerializedName("avg_rating") val rating: Double,
     @SerializedName("cook") val cook: Cook,
     @SerializedName("description") val description: String,
+    @SerializedName("door_to_door_time") val doorToDoorTime: String,
     @SerializedName("calorific_value") val calorificValue: Double,
     @SerializedName("proteins") val proteins: Double,
     @SerializedName("carbohydrates") val carbohydrates: Double,
@@ -58,9 +59,8 @@ data class FullDish(
     @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
     @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
     @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>,
-    @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>)
-
-
+    @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>
+)
 
 @Parcelize
 data class DishIngredient(

@@ -55,14 +55,15 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         fun onLocationChanged(mLocation: Address)
     }
 
-    var listeners: ArrayList<LocationManagerListener?> = arrayListOf()
+    var listener: LocationManagerListener? = null
     fun setLocationManagerListener(listener: LocationManagerListener) {
         Log.d(TAG, "setLocationManagerListener")
-        this.listeners.add(listener)
+        this.listener = listener
     }
-    fun removeLocationManagerListener(listener: LocationManagerListener) {
+
+    fun removeLocationManagerListener() {
         Log.d(TAG, "removeLocationListener")
-        this.listeners.remove(listener)
+        this.listener = null
     }
 
     val lastLatLng: LatLng?
@@ -110,15 +111,15 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
             override fun onLocationResult(locationResult: LocationResult) {
                 mLastLocation = mCurrentLocation
                 mCurrentLocation = locationResult.lastLocation
-                if(listeners.size > 0){
+                if(listener != null){
                     Log.d(TAG, "onLocationResult:" + locationResult.lastLocation)
-                    for(listener in listeners){
-                        listener?.onLocationChanged(getAddressFromLocation(mCurrentLocation!!))
-                    }
+                    listener?.onLocationChanged(getAddressFromLocation(mCurrentLocation!!))
                 }
             }
         }
     }
+
+
 
     private fun buildLocationSettingsRequest() {
         val builder = LocationSettingsRequest.Builder()
@@ -187,8 +188,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
         addresses = geocoder.getFromLocation(location.latitude, location.longitude,1)
         Log.d(TAG, "my location object: ${addresses[0]}")
-        val streetLine =
-            addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        val streetLine = addresses[0].getAddressLine(0)
 //        val city = addresses[0].locality
 //        val state = addresses[0].adminArea
 //        val country = addresses[0].countryName

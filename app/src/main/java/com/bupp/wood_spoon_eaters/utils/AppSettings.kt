@@ -5,12 +5,6 @@ import com.bupp.wood_spoon_eaters.model.Eater
 
 class AppSettings(val sharedPreferences: SharedPreferences) {
 
-    var currentEater: Eater? = null
-    private var isUserChooseSpecificAddress: Boolean = false
-
-    fun isAfterLogin(): Boolean {
-        return !currentEater?.email.isNullOrEmpty()
-    }
 
 
     fun isFirstTime(): Boolean {
@@ -21,13 +15,6 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
         sharedPreferences.edit().putBoolean(Constants.PREFS_KEY_IS_FIRST_TIME, isFirstTime).apply()
     }
 
-    fun setUserChooseSpecificAddress(isSpecificAddress: Boolean) {
-        this.isUserChooseSpecificAddress = isSpecificAddress
-    }
-    fun isUserChooseSpecificAddress(): Boolean {
-        //is user didn't chose my location
-        return isUserChooseSpecificAddress
-    }
 
     fun hasFavoriets(): Boolean {
         //todo: change after gils refactoring eater model

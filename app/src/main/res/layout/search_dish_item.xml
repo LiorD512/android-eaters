@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                <com.bupp.wood_spoon_eaters.custom_views.FavoriteBtn
+                <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
                         android:id="@+id/searchDishItemFavorite"
                         android:layout_marginRight="7.7dp"
                         android:layout_marginBottom="7.7dp"

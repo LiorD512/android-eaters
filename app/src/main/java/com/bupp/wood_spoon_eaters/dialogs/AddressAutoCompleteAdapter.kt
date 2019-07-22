@@ -17,12 +17,11 @@ import kotlinx.android.synthetic.main.auto_complete_list_item.view.*
 
 class AddressAutoCompleteAdapter(
     val context: Context,
-    var originalArr: AddressIdResponse?,
     val listener: AddressAutoCompleteAdapterListener
 ) : RecyclerView.Adapter<AddressAutoCompleteAdapter.ViewHolder>() {
 
     lateinit var query: String
-    var presentedList: AddressIdResponse? = originalArr
+    var presentedList: AddressIdResponse? = null
     var lastSelectedItem: AddressIdResponse? = null
 
     interface AddressAutoCompleteAdapterListener {
@@ -57,7 +56,6 @@ class AddressAutoCompleteAdapter(
 
     fun clean() {
         presentedList = null
-        presentedList = originalArr
         notifyDataSetChanged()
     }
 

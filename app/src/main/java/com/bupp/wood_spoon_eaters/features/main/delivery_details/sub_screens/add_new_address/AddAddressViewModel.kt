@@ -3,13 +3,10 @@ package com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.ad
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterAddressManager
-import com.bupp.wood_spoon_eaters.managers.LocationManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,52 +15,42 @@ const val DELIVERY_TO_DOOR_STRING = "Delivery to door"
 const val PICK_UP_OUTSIDE_STRING = "Pick up outside"
 
 
-class AddAddressViewModel(
-    private val apiService: ApiService, private val appSettings: AppSettings,
-    private val orderManager: OrderManager, private val eaterAddressManager: EaterAddressManager
-) : ViewModel(),
-    LocationManager.LocationManagerListener {
+class AddAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager) : ViewModel(), EaterDataManager.EaterDataMangerListener {
+
 
 
     data class MyLocationEvent(val myLocation: Address)
-    data class NavigationEvent(val isSuccessful: Boolean = false, val address: Address?)
+    data class NavigationEvent(val isSuccessful: Boolean = false, val addressStreetStr: String?)
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val myLocationEvent: SingleLiveEvent<MyLocationEvent> = SingleLiveEvent()
 
-//    data class DeliveryDetailsEvent(var googleAddressResponse: GoogleAddressResponse, var address: Address, var isDelivery: Boolean)
-//    val lastDeliveryDetails: SingleLiveEvent<DeliveryDetailsEvent> = SingleLiveEvent()
-
-//    fun getCurrentDeliveryDetails(): CurrentDataEvent {
-//        val googleAddressResponse = eaterAddressManager.getLastAddressResponse()
-//        val address = orderManager.getLastOrderAddress()
-//        val isDelivery = orderManager.isDelivery
-//        return CurrentDataEvent(NewAddress(googleAddressResponse, address, isDelivery))
-//    }
-
     fun fetchMyLocation() {
-        val myLocation = eaterAddressManager.getCurrentAddress()
+        val myLocation = eaterDataManager.getCurrentAddress()
         if (myLocation != null) {
-            appSettings.setUserChooseSpecificAddress(false)
+            eaterDataManager.setUserChooseSpecificAddress(false)
             myLocationEvent.postValue(MyLocationEvent(myLocation))
         } else {
-            eaterAddressManager.setLocationListener(this)
+            eaterDataManager.setLocationListener(this)
         }
     }
 
-    override fun onLocationChanged(mLocation: Address) {
-        myLocationEvent.postValue(MyLocationEvent(mLocation))
-        eaterAddressManager.removeLocationListener(this)
+    override fun onAddressChanged(currentAddress: Address?) {
+        if(currentAddress != null){
+            myLocationEvent.postValue(MyLocationEvent(currentAddress))
+            eaterDataManager.removeLocationListener(this)
+        }
     }
 
     fun postNewAddress(googleAddressResponse: GoogleAddressResponse? = null, myLocationAddress: Address? = null, address1stLine: String,
-                       address2ndLine: String, deliveryNote: String, isDelivery: Boolean) {
-        var currentEater = appSettings.currentEater!!
+                       address2ndLine: String, deliveryNote: String, isDelivery: Boolean, currentAddressId: Long? = null) {
+        var currentEater = eaterDataManager.currentEater!!
         var notes = deliveryNote
 
-        notes = prepareNotes(notes, isDelivery)
-
         var addressRequest = AddressRequest()
+
+        addressRequest.dropoffLocation = isDelivery.getDropoffLocationStr()
+
         if (googleAddressResponse != null) {
             addressRequest = parseGoogleResponse(googleAddressResponse, address1stLine, address2ndLine, notes)
         } else if (myLocationAddress != null){
@@ -72,17 +59,49 @@ class AddAddressViewModel(
 
         var adresses = arrayListOf(addressRequest)
 
-        var eaterRequest =
-            EaterRequest(
-                currentEater.firstName,
-                currentEater.lastName,
-                null,
-                currentEater.email,
-                adresses
-            )
 
-        //post EaterRequest
-        postEater(eaterRequest)
+
+        if(currentAddressId != null){
+            //update Address
+            updateAddress(currentAddressId, addressRequest)
+        }else{
+            //post EaterRequest
+            var eaterRequest =
+                EaterRequest(
+                    currentEater.firstName,
+                    currentEater.lastName,
+                    null,
+                    currentEater.email,
+                    adresses
+                )
+            postEater(eaterRequest)
+        }
+    }
+
+    //weird example of kotlin structure. behold.
+    private fun Boolean.getDropoffLocationStr(): String? = if(this){
+        "delivery_to_door"
+    }else{
+        "pickup_outside"
+    }
+
+    private fun updateAddress(currentAddressId: Long, addressRequest: AddressRequest) {
+        apiService.updateAddress(currentAddressId, addressRequest).enqueue(object : Callback<ServerResponse<Void>> {
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                if (response.isSuccessful) {
+                    Log.d("wowAddNewAddressVM", "updateAddress success! ")
+                    navigationEvent.postValue(NavigationEvent(true, addressRequest.streetLine1))
+                } else {
+                    Log.d("wowAddNewAddressVM", "updateAddress Failure! ")
+                    navigationEvent.postValue(NavigationEvent(false, null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowAddNewAddressVM", "updateAddress big Failure! " + t.message)
+                navigationEvent.postValue(NavigationEvent(false, null))
+            }
+        })
     }
 
     private fun parseMyLocation(myLocationAddress: Address): AddressRequest {
@@ -102,10 +121,11 @@ class AddAddressViewModel(
                 if (response.isSuccessful) {
                     Log.d("wowAddNewAddressVM", "on success! ")
                     var eater = response.body()?.data!!
-                    appSettings.currentEater = eater
-                    eaterAddressManager.setLastChosenAddress(eater.addresses[0])
+                    eaterDataManager.currentEater = eater
+                    eaterDataManager.setLastChosenAddress(eater.addresses[0])
 //                    orderManager.updateOrder(orderAddress = eater.addresses[0])
-                    navigationEvent.postValue(NavigationEvent(true, eater.addresses.last()))
+                    val address = eater.addresses.last()
+                    navigationEvent.postValue(NavigationEvent(true, address.streetLine1))
                 } else {
                     Log.d("wowAddNewAddressVM", "on Failure! ")
                     navigationEvent.postValue(NavigationEvent(false, null))

@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.Favorite
 import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.multi_section_feed_view.view.*
@@ -25,6 +26,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
     interface MultiSectionFeedViewListener {
         fun onDishClick(dish: Dish)
         fun onCookClick(cook: Cook)
+        fun onFavClick(dishId: Long, isFavorite: Boolean)
         fun onShareClick(){}
     }
 
@@ -100,6 +102,12 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
             listener.onCookClick(clicked)
         }
     }
+
+    override fun onFavClick(dishId: Long, favSelected: Boolean) {
+        listener?.onFavClick(dishId, favSelected)
+    }
+
+
 
 
 

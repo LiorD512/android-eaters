@@ -6,6 +6,7 @@ class Constants {
     companion object {
 
 
+
         //client pressigned url types
         const val PRESIGNED_URL_THUMBNAIL = "thumbnail"
         const val PRESIGNED_URL_VIDEO = "video"
@@ -98,9 +99,10 @@ class Constants {
         const val MY_PROFILE_TAG = "my_profile_tag"
         const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
 
-        const val SINGLE_DISH_DIALOG = "single_dish_dialog"
-        const val CHECKOUT_DIALOG = "checkout_dialog"
+        const val SINGLE_DISH_TAG = "single_dish_dialog"
+        const val CHECKOUT_TAG = "checkout_dialog"
         const val ADDRESS_DIALOG_TAG = "address_dialog"
+        const val EDIT_ADDRESS_DIALOG = "edit_address_dialog"
         const val DELIVERY_TO_ADDRESS_DIALOG_TAG = "delivery_to_address_dialog"
         const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog"
         const val CONTACT_US_DIALOG_TAG = "contact_us_dialog"
@@ -167,14 +169,13 @@ class Constants {
         const val COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
 
 
+        const val NEW_ORDER_REQUEST_CODE = 111
         const val CAMERA_PERMISSION_REQUEST_CODE = 444
         const val READ_PERMISSION_REQUEST_CODE = 445
         const val WRITE_PERMISSION_REQUEST_CODE = 446
         const val LOCATION_PERMISSION_REQUEST_CODE = 420
-        const val REQUEST_CHECK_SETTINGS = 121
 
-
-        const val MAX_PROMO_CODE_LENGTH = 10
+        const val MINIMUM_LOCATION_DISTANCE = 100
     }
 }
 

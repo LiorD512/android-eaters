@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.PreSignedUrl
@@ -17,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EditMyProfileViewModel(val apiService: ApiService, val appSettings: AppSettings, val putActionManager:PutActionManager) : ViewModel(),
+class EditMyProfileViewModel(val apiService: ApiService, val eaterDataManager: EaterDataManager, val putActionManager:PutActionManager) : ViewModel(),
     PutActionManager.PutActionListener {
 
 
@@ -37,7 +38,7 @@ class EditMyProfileViewModel(val apiService: ApiService, val appSettings: AppSet
                 if (response.isSuccessful) {
                     Log.d(TAG, "on success! ")
                     var eater = response.body()?.data!!
-                    appSettings.currentEater = eater
+                    eaterDataManager.currentEater = eater
                     userDetails.postValue(eater)
                 } else {
                     Log.d(TAG, "on Failure! ")
@@ -77,7 +78,7 @@ class EditMyProfileViewModel(val apiService: ApiService, val appSettings: AppSet
                 if (response.isSuccessful) {
                     Log.d(TAG, "on success! ")
                     var eater = response.body()?.data!!
-                    appSettings.currentEater = eater
+                    eaterDataManager.currentEater = eater
                     navigationEvent.postValue(NavigationEvent(true))
                 } else {
                     Log.d(TAG, "on Failure! ")

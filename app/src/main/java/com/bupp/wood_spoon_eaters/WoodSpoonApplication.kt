@@ -16,7 +16,7 @@ class WoodSpoonApplication : Application() {
         startKoin {
             androidContext(this@WoodSpoonApplication)
             androidLogger()
-            modules(appModule, networkModule)
+            modules(listOf(appModule, networkModule))
         }
 
         LeakSentry.config = LeakSentry.config.copy(watchFragmentViews = true)

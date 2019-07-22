@@ -20,10 +20,9 @@ import com.bupp.wood_spoon_eaters.dialogs.AddressAutoCompleteAdapter
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import kotlinx.android.synthetic.main.fragment_chooser.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LocationChooserFragment(val listener: LocationChooserFragmentListener, var dataList: AddressIdResponse?) :
-    DialogFragment(),
+class LocationChooserFragment(val listener: LocationChooserFragmentListener, val input: String?): DialogFragment(),
     AddressAutoCompleteAdapter.AddressAutoCompleteAdapterListener {
 
     val viewModel by viewModel<LocationChooserViewModel>()
@@ -62,7 +61,7 @@ class LocationChooserFragment(val listener: LocationChooserFragmentListener, var
         chooserFragList.addItemDecoration(decoration)
 
         chooserFragList.layoutManager = LinearLayoutManager(context)
-        adapter = AddressAutoCompleteAdapter(context!!, dataList, this)
+        adapter = AddressAutoCompleteAdapter(context!!, this)
         chooserFragList.adapter = adapter
 
         chooserFragInput.addTextChangedListener(object : TextWatcher {
@@ -82,6 +81,10 @@ class LocationChooserFragment(val listener: LocationChooserFragmentListener, var
                 }
             }
         })
+
+        if(input != null){
+            chooserFragInput.setText(input)
+        }
     }
 
     private fun initObservers() {

@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".features.main.single_dish.SingleDishFragmentDialog">
+        tools:context=".features.new_order.sub_screen.single_dish.SingleDishFragment">
 
     <LinearLayout
             android:paddingBottom="@dimen/status_bottom_bar_height"
@@ -118,7 +118,7 @@
                                         android:layout_width="57.6dp"
                                         android:layout_height="57.6dp"/>
 
-                                <com.bupp.wood_spoon_eaters.custom_views.FavoriteBtn
+                                <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
                                         android:id="@+id/singleDishInfoFavorite"
                                         android:layout_marginRight="7.7dp"
                                         android:layout_marginBottom="7.7dp"
@@ -273,7 +273,7 @@
                                     <LinearLayout
                                             android:gravity="center"
                                             android:orientation="vertical"
-                                            android:layout_width="wrap_content"
+                                            android:layout_width="match_parent"
                                             android:layout_height="wrap_content">
 
                                         <TextView

@@ -16,5 +16,5 @@ data class FeedRequest(
     var lat: Double? = null,
     var lng: Double? = null,
     var addressId: Long? = null,
-    var timestamp: Int? = null
+    var timestamp: String? = null
 )

@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterAddressManager
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.LocationManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Feed
@@ -15,16 +15,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterAddressManager: EaterAddressManager): ViewModel(),
-    LocationManager.LocationManagerListener {
+class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     private val TAG = "wowFeedVM"
     val feedEvent: SingleLiveEvent<FeedEvent> = SingleLiveEvent()
     data class FeedEvent(val isSuccess: Boolean = false, val feedArr: ArrayList<Feed>?)
 
+    data class LikeEvent(val isSuccess: Boolean = false)
+    val likeEvent: SingleLiveEvent<LikeEvent> = SingleLiveEvent()
+
     fun getEaterFirstName(): String?{
-        return settings.currentEater?.firstName
+        return eaterDataManager.currentEater?.firstName
     }
 
 
@@ -51,15 +53,45 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterAdd
             })
         }else{
             Log.d("wowFeedVM","getFeed setLocationListener")
-            eaterAddressManager.setLocationListener(this)
+            eaterDataManager.setLocationListener(this)
         }
     }
 
-    override fun onLocationChanged(mLocation: Address) {
-        Log.d("wowFeedVM","getFeed onLocationChanged")
-        eaterAddressManager.setLastChosenAddress(mLocation)
-        eaterAddressManager.removeLocationListener(this)
-        getFeed()
+    fun likeDish(id: Long) {
+        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                likeEvent.postValue(LikeEvent(response.isSuccessful))
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowSingleDishVM","likeDish big fail")
+                likeEvent.postValue(LikeEvent(false))
+            }
+
+        })
+    }
+
+    fun unlikeDish(id: Long) {
+        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                likeEvent.postValue(LikeEvent(response.isSuccessful))
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowSingleDishVM","unlikeDish big fail")
+                likeEvent.postValue(LikeEvent(false))
+            }
+
+        })
+    }
+
+    override fun onAddressChanged(currentAddress: Address?) {
+        if(currentAddress != null){
+            Log.d("wowFeedVM","getFeed onLocationChanged")
+            eaterDataManager.setLastChosenAddress(currentAddress)
+            eaterDataManager.removeLocationListener(this)
+            getFeed()
+        }
     }
 
     private fun validFeedRequest(feedRequest: FeedRequest): Boolean {
@@ -68,13 +100,19 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterAdd
 
     private fun getFeedRequest(): FeedRequest {
         var feedRequest = FeedRequest()
-        val currentAddress = eaterAddressManager.getLastChosenAddress()
-        if(settings.isUserChooseSpecificAddress()){
+        //address
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        if(eaterDataManager.isUserChooseSpecificAddress()){
             feedRequest.addressId = currentAddress?.id
         }else{
             feedRequest.lat = currentAddress?.lat
             feedRequest.lng = currentAddress?.lng
         }
+
+        //time
+        feedRequest.timestamp = eaterDataManager.getLastOrderTimeParam()
+
+
         return feedRequest
     }
 

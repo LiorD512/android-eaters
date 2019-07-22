@@ -21,18 +21,5 @@ class RatingsViewModel(private val api: ApiService, private val appSettings: App
             tasteRating = 5.0))
     }
 
-    fun getDumbReviewList() {
-        var reviewsList: ArrayList<Review> = arrayListOf()
 
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-        reviewsList.add(Review(1, appSettings.currentEater!!, "Realy dont care about this food"))
-
-        reviewList.postValue(reviewsList)
-    }
 }

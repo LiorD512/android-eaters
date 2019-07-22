@@ -1,16 +1,10 @@
 package com.bupp.wood_spoon_eaters.managers
 
-import android.util.Log
-import com.bupp.wood_spoon_eaters.model.Search
 import com.bupp.wood_spoon_eaters.model.SearchRequest
-import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class SearchManager(val api: ApiService, val eaterAddressManager: EaterAddressManager, val settings: AppSettings) {
+class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager, val settings: AppSettings) {
 
     var curSearch: SearchRequest = SearchRequest()
 
@@ -36,8 +30,8 @@ class SearchManager(val api: ApiService, val eaterAddressManager: EaterAddressMa
     }
 
     fun getSearchRequest(): SearchRequest {
-        val currentAddress = eaterAddressManager.getLastChosenAddress()
-        if(settings.isUserChooseSpecificAddress()){
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        if(eaterDataManager.isUserChooseSpecificAddress()){
             curSearch.addressId = currentAddress?.id
         }else{
             curSearch.lat = currentAddress?.lat

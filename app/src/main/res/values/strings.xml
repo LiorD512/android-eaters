@@ -48,8 +48,11 @@
     <string name="common_string_apartment">Apt./ Suite/ Floor</string>
     <string name="add_address_frag_delivery_to_door">Delivery to door</string>
     <string name="add_address_frag_pick_up_outside">Pick up outside</string>
-    <string name="later_time"><u>Later Time</u></string>
-    <string name="start_new_cart_dialog_your_cart_already_contains">Your cart already contains a dish from cook %1$s. Would you like to clear the cart and add this dish from cook %2$s instead?
+    <string name="later_time">
+        <u>Later Time</u>
+    </string>
+    <string name="start_new_cart_dialog_your_cart_already_contains">Your cart already contains a dish from cook %1$s.
+        Would you like to clear the cart and add this dish from cook %2$s instead?
     </string>
     <string name="share_dialog_share_text">Share Woodspoon With Your Friends, and you all can get a 30% off your next
         order
@@ -58,6 +61,8 @@
     <string name="tool_tip_delivery_fee_body">Delivery fees are typically based on the distance between you and your
         food.
     </string>
+    <string name="title_activity_new_order">NewOrderActivity</string>
+    <string name="action_settings">Settings</string>
 
 
 </resources>

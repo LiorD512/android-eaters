@@ -5,21 +5,21 @@
              android:visibility="gone"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@color/white">
+             android:background="@color/white_80">
 
-    <com.bupp.wood_spoon_eaters.custom_views.progress_bar.CircularDotsLoader
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/transparent"
-            app:loader_animDur="100"
-            app:loader_bigCircleRadius="23dp"
-            app:loader_circleRadius="5dp"
-            app:loader_defaultColor="@color/teal_blue"
-            app:loader_firstShadowColor="@color/teal_blue"
-            app:loader_secondShadowColor="@color/teal_blue"
-            app:loader_selectedColor="@color/teal_blue"
-            app:loader_showRunningShadow="true"/>
+    <!--<com.bupp.wood_spoon_eaters.custom_views.progress_bar.CircularDotsLoader-->
+            <!--android:id="@+id/progressBar"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:background="@color/transparent"-->
+            <!--app:loader_animDur="100"-->
+            <!--app:loader_bigCircleRadius="23dp"-->
+            <!--app:loader_circleRadius="5dp"-->
+            <!--app:loader_defaultColor="@color/teal_blue"-->
+            <!--app:loader_firstShadowColor="@color/teal_blue"-->
+            <!--app:loader_secondShadowColor="@color/teal_blue"-->
+            <!--app:loader_selectedColor="@color/teal_blue"-->
+            <!--app:loader_showRunningShadow="true"/>-->
 
 </FrameLayout>

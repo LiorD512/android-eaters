@@ -26,7 +26,7 @@ class WoodSpoonProgressBar : FrameLayout {
                 isBlue = attrSet.getBoolean(R.styleable.WoodSpoonProgressBar_isBlueStyle, false)
             }
         }
-        setProgressBarStyle()
+//        setProgressBarStyle()
     }
 
     fun show() {
@@ -34,23 +34,23 @@ class WoodSpoonProgressBar : FrameLayout {
     }
 
     fun hide() {
-        progressBar.stop()
+//        progressBar.stop()
         progressBarLayout.visibility = View.GONE
     }
 
-    private fun setProgressBarStyle() {
-        if (isBlue) {
-            progressBar.defaultColor = ContextCompat.getColor(context, R.color.white)
-            progressBar.selectedColor = ContextCompat.getColor(context, R.color.white)
-            progressBar.firstShadowColor = ContextCompat.getColor(context, R.color.white)
-            progressBar.secondShadowColor = ContextCompat.getColor(context, R.color.white)
-            progressBarLayout.background = ContextCompat.getDrawable(context, R.color.teal_blue_80)
-        } else {
-            progressBar.defaultColor = ContextCompat.getColor(context, R.color.teal_blue)
-            progressBar.selectedColor = ContextCompat.getColor(context, R.color.teal_blue)
-            progressBar.firstShadowColor = ContextCompat.getColor(context, R.color.teal_blue)
-            progressBar.secondShadowColor = ContextCompat.getColor(context, R.color.teal_blue)
-            progressBarLayout.background = ContextCompat.getDrawable(context, R.color.white_80)
-        }
-    }
+//    private fun setProgressBarStyle() {
+//        if (isBlue) {
+//            progressBar.defaultColor = ContextCompat.getColor(context, R.color.white)
+//            progressBar.selectedColor = ContextCompat.getColor(context, R.color.white)
+//            progressBar.firstShadowColor = ContextCompat.getColor(context, R.color.white)
+//            progressBar.secondShadowColor = ContextCompat.getColor(context, R.color.white)
+//            progressBarLayout.background = ContextCompat.getDrawable(context, R.color.teal_blue_80)
+//        } else {
+//            progressBar.defaultColor = ContextCompat.getColor(context, R.color.teal_blue)
+//            progressBar.selectedColor = ContextCompat.getColor(context, R.color.teal_blue)
+//            progressBar.firstShadowColor = ContextCompat.getColor(context, R.color.teal_blue)
+//            progressBar.secondShadowColor = ContextCompat.getColor(context, R.color.teal_blue)
+//            progressBarLayout.background = ContextCompat.getDrawable(context, R.color.white_80)
+//        }
+//    }
 }

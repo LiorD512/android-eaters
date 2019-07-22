@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.login.code
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Client
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.ServerResponse
@@ -13,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class CodeViewModel(val api: ApiService, val appSettings: AppSettings) : ViewModel() {
+class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val resendCodeEvent: SingleLiveEvent<ResendCodeEvent> = SingleLiveEvent()
@@ -27,8 +28,8 @@ class CodeViewModel(val api: ApiService, val appSettings: AppSettings) : ViewMod
                 if (response.isSuccessful) {
                     Log.d("wowCodeVM", "send code success: ");
                     val eater: Eater? = response.body()!!.data
-                    appSettings.currentEater = eater!!
-                    navigationEvent.postValue(NavigationEvent(true, appSettings.isAfterLogin()))
+                    eaterDataManager.currentEater = eater!!
+                    navigationEvent.postValue(NavigationEvent(true, eaterDataManager.isAfterLogin()))
                 } else {
                     Log.d("wowCodeVM", "send code fail");
                     navigationEvent.postValue(NavigationEvent(false))

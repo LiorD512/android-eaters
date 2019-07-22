@@ -18,6 +18,12 @@ interface ApiService {
     fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): Call<ServerResponse<Eater>>
 
 
+    //Address
+    @DELETE("eaters/me/addresses/{address_id}")
+    fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
+
+    @POST("eaters/me/addresses/{address_id}")
+    fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Void>>
 
 
     //General
@@ -60,44 +66,37 @@ interface ApiService {
 
     //Single Dish
     @GET("menu_items/{menu_item_id}/dish")
-    fun getMenuItemsDetails(@Path(value = "menu_item_id", encoded = true) searchId: Long): Call<ServerResponse<FullDish>>
+    fun getMenuItemsDetails(@Path(value = "menu_item_id", encoded = true) menuItemId: Long, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+                            @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<FullDish>>
+
+
+
+    //New Order calls
+    @POST("eaters/me/orders")
+    fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
+
+    @POST("eaters/me/orders/{order_id}/checkout")
+    fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
+
+    @POST("eaters/me/orders/{order_id}/finalize")
+    fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
+
+
 
 
 
     //Feed
     @GET("eaters/me/feed")
     fun getFeed(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: Int? = null): Call<ServerResponse<ArrayList<Feed>>>
+                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<ArrayList<Feed>>>
 
 
-    @POST("eaters/me/orders")
-    fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
+    //dish likes
+    @POST("dishes/{dish_id}/likes")
+    fun likeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Void>>
 
-//    @POST("cooks/me/dishes/presigned_urls")
-//    fun postDishPreSignedUrl(): Call<ServerResponse<PreSignedUrl>>
-//    //NewDish
-//    @POST("cooks/me/dishes")
-//    fun postNewDish(@Body dish: Dish): Call<ServerResponse<Dish>>
-//
-//    @FormUrlEncoded
-//    @POST("getCode")
-//    fun getCode(@Field("phone") phone: String, @Field("validation_code") code: String): Call<User>
-//
-//    @GET("app_settings")
-//    fun getSettings(): Observable<List<Settings>>
-//
-//    @POST("getCode/auth")
-//    fun getCode(@Body request: LoginRequest): Call<LoginResponse>
-//
-//    @POST("UserDevice")
-//    fun registerUserDevice(@Body request: RegisterUserDeviceRequest): Call<Void>
-//
-//    @POST("UserDevice/BiometricToken/status")
-//    fun updateBiometricToken(@Body request: UpdateBiometricToken): Call<UpdateBiometricResponse>
-//
-//    @POST("getCode/biometric")
-//    fun loginBiometric(@Body request: BiometricLoginRequest): Call<LoginResponse>
-//
-//    @POST("getCode/refresh")
-//    fun refreshToken(@Header("Authorization") authorization: String, @Body request: RefreshTokenRequest): Call<LoginResponse>
+    @DELETE("dishes/{dish_id}/likes")
+    fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Void>>
+
+
 }

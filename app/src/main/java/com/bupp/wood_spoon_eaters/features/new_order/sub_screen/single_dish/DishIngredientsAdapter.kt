@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.single_dish
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -35,9 +35,11 @@ class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<Dis
             holder.remove.visibility = View.VISIBLE
 
             if(ingredientsRemoved.contains(ingredient?.id)){
-                holder.layout.alpha = 0.5f
+                holder.remove.text = "Add"
+                holder.title.alpha = 0.5f
             }else{
-                holder.layout.alpha = 1f
+                holder.remove.text = "Remove"
+                holder.title.alpha = 1f
             }
 
             holder.remove.setOnClickListener {

@@ -15,11 +15,14 @@ import kotlinx.android.synthetic.main.search_dish_item.view.*
 
 
 class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val listener: SearchAdapterListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(){//}, FavoriteBtn.FavoriteBtnListener {
 
+
+    private var lastClickedPosition: Int = 0
 
     interface SearchAdapterListener {
         fun onDishClick(dish: Dish) {}
+        fun onFavClick(dishId: Long, favSelected: Boolean){}
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -41,28 +44,32 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
             }
         }
 
-        holder.favBtn.setOnClickListener { onFavClick(dish) }
+        holder.favBtn.setIsFav(dish.isFavorite)
+        holder.favBtn.setDishId(dish.id)
+        lastClickedPosition = position
         holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
 
     }
 
-    private fun onFavClick(dish: Dish) {
-
-    }
+//    private fun onFavClick(dishId: Long, favSelected: Boolean) {
+//        listener?.onFavClick(dishId, favSelected)
+//    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        val view = LayoutInflater.from(context).inflate(R.layout.search_dish_item, parent, false)
-//        val width = recyclerView.getWidth()
-//        val params = view.getLayoutParams()
-//        params.width = (width * 0.8).toInt()
-//        view.setLayoutParams(params)
         return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.search_dish_item, parent, false))
     }
 
     override fun getItemCount(): Int {
         return dishes!!.size
     }
+
+//    override fun onFavClick(isChecked: Boolean) {
+//        if(lastClickedPosition != 0){
+//            listener?.onFavClick(dishes[lastClickedPosition].id, isChecked)
+//        }
+//    }
+
 
 }
 

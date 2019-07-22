@@ -29,6 +29,7 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
         fun onDishClick(dish: Dish){}
         fun onCookClick(cook: Cook){}
         fun onCuisineClick(cuisine: CuisineLabel){}
+        fun onFavClick(dishId: Long, favSelected: Boolean) {}
     }
 
     private object ViewType {
@@ -69,14 +70,15 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                     }
                 }
 
-                holder.favBtn.setOnClickListener { onFavClick(dish) }
+                holder.favBtn.setIsFav(dish.isFavorite)
+                holder.favBtn.setOnClickListener { onFavClick(dish.id, holder.favBtn.isFavSelected) }
                 holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
             }}
 
     }
 
-    private fun onFavClick(dish: Dish) {
-
+    private fun onFavClick(dishId: Long, favSelected: Boolean) {
+        listener?.onFavClick(dishId, favSelected)
     }
 
     override fun onCookClicked(clicked: Cook) {

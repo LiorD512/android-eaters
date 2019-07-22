@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.blue_btn.view.*
 import kotlinx.android.synthetic.main.status_bottom_bar.view.*
+import java.text.DecimalFormat
 
 
 class StatusBottomBar : FrameLayout {
@@ -39,7 +40,7 @@ class StatusBottomBar : FrameLayout {
     override fun setEnabled(isEnabled: Boolean) {
         super.setEnabled(isEnabled)
         Log.d("wowStatusBottomBar", "isEnabled: $isEnabled")
-        this.isEnabled = isEnabled
+//        this.isEnabled = isEnabled
         if (isEnabled) {
             statusBottomBarLayout.alpha = 1f
         } else {
@@ -47,17 +48,18 @@ class StatusBottomBar : FrameLayout {
         }
     }
 
-    fun updateStatusBottomBar(type: Int? = null, price: String = "", itemCount: Int = -1) {
+    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
         if(type != null){
             this.curType = type
         }
-        if(price.isNotEmpty()){
-            statusBottomBarPrice.text = "$$price"
+        if(price != null){
+            val priceStr = DecimalFormat("##.##").format(price)
+            statusBottomBarPrice.text = "$$priceStr"
         }
         when(curType){
             Constants.STATUS_BAR_TYPE_CART -> {
                 statusBottomBarPrice.visibility = View.VISIBLE
-                if(itemCount != -1){
+                if(itemCount != null){
                     statusBottomBarTitle.text = "Add $itemCount To Cart"
                 }
             }

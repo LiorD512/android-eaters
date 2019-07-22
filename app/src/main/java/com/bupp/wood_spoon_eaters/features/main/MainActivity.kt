@@ -11,12 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon.dialogs.AddressChooserDialog
+import com.bupp.wood_spoon.dialogs.EditAddressDialog
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
-import com.bupp.wood_spoon_eaters.features.main.checkout.CheckoutFragmentDialog
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -26,8 +27,9 @@ import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragme
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.main.report.ReportFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
-import com.bupp.wood_spoon_eaters.features.main.single_dish.SingleDishFragmentDialog
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Cook
@@ -35,7 +37,7 @@ import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -43,11 +45,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener, TrackOrderDialog.TrackOrderDialogListener,
-    RateLastOrderDialog.RateLastOrderDialogListener, SingleDishFragmentDialog.SingleDishDialogListener,
-    CheckoutFragmentDialog.CheckoutDialogListener {
+    RateLastOrderDialog.RateLastOrderDialogListener, EditAddressDialog.EditAddressDialogListener {
 
 
-    private val curShowingDialogs: ArrayList<SingleDishFragmentDialog> = arrayListOf()
+    private val curShowingDialogs: ArrayList<SingleDishFragment> = arrayListOf()
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -69,7 +70,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     private fun initObservers() {
         viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
             if (newAddressEvent != null) {
-                updateAddressTimeView()
+                if(newAddressEvent.currentAddress != null){
+                    updateAddressTimeView()
+                }else{
+
+                }
             }
         })
     }
@@ -141,14 +146,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadCheckout() {
-        CheckoutFragmentDialog(this).show(supportFragmentManager, Constants.CHECKOUT_DIALOG)
+//        currentFragmentTag = Constants.CHECKOUT_TAG
+//        CheckoutFragment(this).show(supportFragmentManager, Constants.CHECKOUT_TAG)
     }
 
-    override fun onCheckoutDone() {
-        closeAllDialogs()
-        loadFeed()
-        loadTrackOrder()
-    }
+//    override fun onCheckoutDone() {
+//
+//    }
 
     fun loadPromoCode() {
         loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
@@ -172,12 +176,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadAddNewAddress() {
-        loadFragment(AddAddressFragment(), Constants.ADD_NEW_ADDRESS_TAG)
+        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
     }
 
-    fun loadLocationChooser() {
-        LocationChooserFragment(this, null)
+    fun loadLocationChooser(input: String?) {
+        LocationChooserFragment(this, input)
             .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
     }
 
@@ -213,13 +217,19 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
                 }
             }
+            Constants.CHECKOUT_TAG -> {
+                if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
+                    (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
+                }
+            }
         }
         setHeaderViewLocationDetails(viewModel.getLastOrderTime(), address)
     }
 
-    override fun onAddAddress() {
-        loadAddNewAddress()
-    }
+
+
+
+
 
     override fun onTipDone(tipAmount: Int) {
         Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
@@ -265,11 +275,22 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     //load dialogs
     fun loadAddressesDialog() {
-        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
-            supportFragmentManager,
-            Constants.ADDRESS_DIALOG_TAG
-        )
+        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(supportFragmentManager, Constants.ADDRESS_DIALOG_TAG)
     }
+
+    override fun onAddressMenuClick(address: Address) {
+        EditAddressDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
+    }
+
+    override fun onEditAddress(address: Address) {
+        loadFragment(AddAddressFragment(address), Constants.ADD_NEW_ADDRESS_TAG)
+        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
+    }
+
+    override fun onAddAddress() {
+        loadAddNewAddress()
+    }
+
 
     fun loadNoDeliveryToAddressDialog() {
         NoDeliveryToAddressDialog(this).show(supportFragmentManager, Constants.DELIVERY_TO_ADDRESS_DIALOG_TAG)
@@ -474,7 +495,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                             resultUri
                         )
                     }
-
+                }
+                Constants.NEW_ORDER_REQUEST_CODE -> {
+                    closeAllDialogs()
+                    loadFeed()
+                    loadTrackOrder()
                 }
             }
         }
@@ -485,27 +510,30 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.updateFilterUi(isFiltered)
     }
 
-    override fun onDishClick(itemId: Long) {
-        //when user click other dish inside singleDishFragment
-        loadSingleDishDetails(itemId)
-    }
+//    override fun onDishClick(itemId: Long) {
+//        //when user click other dish inside singleDishFragment
+////        loadSingleDishDetails(itemId)
+//        startActivity(Intent(this, NewOrderActivity::class.java).putExtra("menuItemId",itemId))
+//
+//    }
 
     fun loadSingleDishDetails(id: Long) {
-        val singleDishDialog = SingleDishFragmentDialog.newInstance(id, this)
-        singleDishDialog.show(supportFragmentManager, Constants.SINGLE_DISH_DIALOG)
-        Log.d("wowDialogs","adding:  ${singleDishDialog.id}")
-        curShowingDialogs.add(singleDishDialog)
+        startActivityForResult(Intent(this, NewOrderActivity::class.java).putExtra("menuItemId",id), Constants.NEW_ORDER_REQUEST_CODE)
+//        val singleDishDialog = SingleDishFragment.newInstance(id, this)
+//        singleDishDialog.show(supportFragmentManager, Constants.SINGLE_DISH_TAG)
+//        Log.d("wowDialogs","adding:  ${singleDishDialog.id}")
+//        curShowingDialogs.add(singleDishDialog)
     }
 
     fun closeAllDialogs(){
         for(item in curShowingDialogs){
             Log.d("wowDialogs","removing:  ${item.id}")
-            item.dismiss()
+//            item.dismiss()
         }
         curShowingDialogs.clear()
     }
 
-    override fun onCheckout() {
-        loadCheckout()
-    }
+//    override fun onCheckout() {
+//        loadCheckout()
+//    }
 }

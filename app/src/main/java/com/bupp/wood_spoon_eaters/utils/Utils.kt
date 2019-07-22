@@ -34,7 +34,8 @@ object Utils {
     }
 
     fun parseDateToDayDateHour(date: Date): String {
-        val sdf = SimpleDateFormat("EE, W, Ha")
+        //mon, 24, 4pm
+        val sdf = SimpleDateFormat("EE, dd, H:mma")
         return sdf.format(date.time)
     }
 
@@ -51,12 +52,13 @@ object Utils {
     }
 
     fun parseTwoDates(startsAtDate: Date?, endsAtDate: Date?): String {
-        val sdf = SimpleDateFormat("HH:mm a")
+//        val sdf = SimpleDateFormat("HH:mm a")
+        val sdf = SimpleDateFormat("Ha")
         if (startsAtDate != null && endsAtDate != null) {
-            val start = sdf.format(startsAtDate?.time)
+//            val start = sdf.format(startsAtDate?.time)
             val end = sdf.format(endsAtDate?.time)
-            val monthYear = parseDateToMonthYear(startsAtDate)
-            return "$monthYear $start - $end"
+            val dayDateHour = parseDateToDayDateHour(startsAtDate)
+            return "$dayDateHour - $end"
         }
         return ""
     }

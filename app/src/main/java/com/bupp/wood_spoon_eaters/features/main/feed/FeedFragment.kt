@@ -16,11 +16,12 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_feed.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 
 
 class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
+
 
 
     private val TAG = "wowFeedFragment"
@@ -84,6 +85,14 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
 
     override fun onCookClick(cook: Cook) {
 
+    }
+
+    override fun onFavClick(dishId: Long, isFavorite: Boolean) {
+        if(isFavorite){
+            viewModel.likeDish(dishId)
+        }else{
+            viewModel.unlikeDish(dishId)
+        }
     }
 
 }

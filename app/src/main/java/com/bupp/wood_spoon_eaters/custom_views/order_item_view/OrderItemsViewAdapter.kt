@@ -16,13 +16,19 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapt
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import kotlinx.android.synthetic.main.order_item_view.view.*
+import java.text.DecimalFormat
 
-class OrderItemsViewAdapter(val context: Context, private var orders: ArrayList<OrderItem>) :
+class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val context: Context, private var orders: ArrayList<OrderItem>) :
     RecyclerView.Adapter<OrderItemsViewAdapter.DishViewHolder>() {
+
+    interface OrderItemsViewAdapterListener{
+        fun onDishCountChange()
+    }
 
     var adapter: IngredientsCheckoutAdapter? = null
 
     class DishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val layout = view.orderItemLayout
         val price: TextView = view.orderItemPrice
         val image: ImageView = view.orderItemImage
         val name: TextView = view.orderItemName
@@ -32,7 +38,7 @@ class OrderItemsViewAdapter(val context: Context, private var orders: ArrayList<
         val note: TextView = view.orderItemNote
         val ingredientsList = view.orderItemIngredientsRecyclerView!!
 
-        var counterVal = 1
+//        var counterVal = 1
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DishViewHolder {
@@ -49,14 +55,19 @@ class OrderItemsViewAdapter(val context: Context, private var orders: ArrayList<
         val orderItem: OrderItem = orders[position]
         val dish: Dish = orderItem.dish
 
-        if (orderItem.quantity > 1) {
-            holder.counterVal = orderItem.quantity
+        if(orderItem.quantity == 0){
+            holder.layout.alpha = 0.5f
+        }else{
+            holder.layout.alpha = 1f
         }
-        Glide.with(context).load(dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(holder.image)
-        holder.name.text = "${dish.name} x${holder.counterVal}"
 
-        holder.price.text = orderItem.price.formatedValue
-        holder.counterText.text = "Count: ${holder.counterVal}"
+        Glide.with(context).load(dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(holder.image)
+        holder.name.text = "${dish.name} x${orderItem.quantity}"
+
+        val price = (orderItem.price.value*orderItem.quantity)
+        val priceStr = DecimalFormat("##.##").format(price)
+        holder.price.text = "$$priceStr"
+        holder.counterText.text = "Count: ${orderItem.quantity}"
 
         if(orderItem.notes.isNullOrEmpty()){
             holder.note.visibility = View.GONE
@@ -66,14 +77,16 @@ class OrderItemsViewAdapter(val context: Context, private var orders: ArrayList<
         }
 
         holder.plusBtn.setOnClickListener {
-            holder.counterVal++
+            orderItem.quantity++
             notifyDataSetChanged()
+            listener?.onDishCountChange()
         }
 
         holder.minusBtn.setOnClickListener {
-            if (holder.counterVal > 1)
-                holder.counterVal--
+            if (orderItem.quantity > 0)
+                orderItem.quantity--
             notifyDataSetChanged()
+            listener?.onDishCountChange()
         }
 
         holder.ingredientsList.layoutManager = LinearLayoutManager(context)
@@ -84,6 +97,14 @@ class OrderItemsViewAdapter(val context: Context, private var orders: ArrayList<
     fun setOrderItems(orderItems: ArrayList<OrderItem>) {
         this.orders = orderItems
         notifyDataSetChanged()
+    }
+
+    fun getAllDishPriceValue(): Double {
+        var sum: Double = 0.0
+        for(item in orders){
+            sum += (item.price.value*item.quantity)
+        }
+        return sum
     }
 
 

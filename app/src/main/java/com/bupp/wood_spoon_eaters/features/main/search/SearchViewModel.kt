@@ -13,6 +13,9 @@ import retrofit2.Response
 
 class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager, val searchManager: SearchManager) : ViewModel() {
 
+    data class LikeEvent(val isSuccess: Boolean = false)
+    val likeEvent: SingleLiveEvent<LikeEvent> = SingleLiveEvent()
+
     data class SearchEvent(
         val isSuccess: Boolean = false,
         val cooks: ArrayList<Cook>?,
@@ -134,6 +137,34 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
                 Log.d("wowSearchVM","suggestDish big fail")
                 suggestionEvent.postValue(SuggestionEvent(false))
             }
+        })
+    }
+
+    fun likeDish(id: Long) {
+        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                likeEvent.postValue(LikeEvent(response.isSuccessful))
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowSingleDishVM","likeDish big fail")
+                likeEvent.postValue(LikeEvent(false))
+            }
+
+        })
+    }
+
+    fun unlikeDish(id: Long) {
+        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                likeEvent.postValue(LikeEvent(response.isSuccessful))
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowSingleDishVM","unlikeDish big fail")
+                likeEvent.postValue(LikeEvent(false))
+            }
+
         })
     }
 

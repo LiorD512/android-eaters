@@ -18,7 +18,7 @@ class AddressAndTimeView : LinearLayout {
 
 
     fun setLocation(text: String?) {
-        locationDetailsViewLocation.text = text ?: "updating location..."
+        locationDetailsViewLocation.text = text ?: "Address"
     }
 
     fun setTime(text: String?) {

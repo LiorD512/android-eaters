@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_phone_verification.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PhoneVerificationFragment : Fragment() {

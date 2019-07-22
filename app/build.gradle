@@ -87,6 +87,7 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
     implementation 'me.grantland:autofittextview:0.2.1'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.1'
 
 
     //location
@@ -104,10 +105,15 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     //di
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
-    androidTestImplementation "org.koin:koin-test:$koin_version"
-    testImplementation "org.koin:koin-test:$koin_version"
-    implementation "org.koin:koin-java:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+// Koin AndroidX ViewModel features
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+// Koin AndroidX Experimental features
+    implementation "org.koin:koin-androidx-ext:$koin_version"
+//    implementation "org.koin:koin-android-viewmodel:$koin_version"
+//    androidTestImplementation "org.koin:koin-test:$koin_version"
+//    testImplementation "org.koin:koin-test:$koin_version"
+//    implementation "org.koin:koin-java:$koin_version"
 
 
     // ViewModel and LiveData

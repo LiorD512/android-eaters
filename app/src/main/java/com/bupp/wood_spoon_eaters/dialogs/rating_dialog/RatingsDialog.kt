@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.main.search.RatingItemDecoration
 import com.bupp.wood_spoon_eaters.model.Review
 import kotlinx.android.synthetic.main.ratings_dialog.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RatingsDialog : DialogFragment() {
 
@@ -53,7 +53,7 @@ class RatingsDialog : DialogFragment() {
         })
 
         viewModel.getDumbRatingDetails()
-        viewModel.getDumbReviewList()
+//        viewModel.getDumbReviewList()
     }
 
     private fun handleReviewList(reviewList: ArrayList<Review>) {

@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.adapters.AddressChooserAdapter
+import com.bupp.wood_spoon_eaters.dialogs.address_chooser.AddressChooserAdapter
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.model.Address
 import kotlinx.android.synthetic.main.address_chooser_dialog.*
@@ -23,6 +23,7 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
 
     interface AddressChooserDialogListener {
         fun onAddressChoose(address: Address)
+        fun onAddressMenuClick(address: Address)
         fun onAddAddress()
     }
 
@@ -49,7 +50,8 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
 
         addressChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
 
-        addressAdapter = AddressChooserAdapter(context!!, addresses, this)
+        addressAdapter =
+            AddressChooserAdapter(context!!, addresses, this)
 
         val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
 
@@ -75,6 +77,11 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
 
     override fun onAddAddressClick() {
         listener.onAddAddress()
+        dismiss()
+    }
+
+    override fun onMenuClick(selected: Address) {
+        listener.onAddressMenuClick(selected)
         dismiss()
     }
 

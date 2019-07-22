@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="68dp">
 
 
     <TextView
@@ -17,6 +17,16 @@
             android:drawablePadding="7.7dp"
             android:gravity="center_vertical"
             tools:text="Ahu Sharmuta 420, Jamaica"
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"/>
+
+    <ImageButton
+            android:id="@+id/addressItemMenu"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:paddingRight="15.4dp"
+            android:paddingLeft="15.4dp"
+            android:src="@drawable/icons_navigation"
+            android:layout_width="wrap_content" android:layout_height="match_parent"/>
 </LinearLayout>

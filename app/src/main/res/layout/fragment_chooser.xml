@@ -26,9 +26,8 @@
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="43.2dp"
-                android:layout_marginLeft="10.1dp"
                 android:layout_marginTop="7.7dp"
-                android:layout_marginRight="15.8dp"
+                android:layout_marginRight="63.8dp"
                 android:layout_marginBottom="7.7dp"
                 android:background="@drawable/rectangle_dark"
                 android:orientation="horizontal">

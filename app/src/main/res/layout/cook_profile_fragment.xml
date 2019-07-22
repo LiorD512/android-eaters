@@ -2,23 +2,27 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:paddingRight="15.4dp"
-        android:paddingLeft="15.4dp"
+
         android:paddingTop="23dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <LinearLayout
+            android:paddingRight="15.4dp"
+            android:paddingLeft="15.4dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                        app:imageSize="BIG"
-                        android:id="@+id/cookProfileImageView"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                    app:imageSize="BIG"
+                    android:id="@+id/cookProfileImageView"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
             <LinearLayout
                     android:layout_gravity="center"
@@ -96,36 +100,36 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="14dp" />
 
-    <LinearLayout
-            android:layout_marginTop="23dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/cookProfileFragCertificateLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-                android:id="@+id/cookProfileFragCertificate"
-                style="@style/Reg13Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableStart="@drawable/icons_certificate"
-                android:drawablePadding="7.4dp"
+        <LinearLayout
+                android:layout_marginTop="23dp"
                 android:gravity="center"
-                android:text="Certificate in Culinary Arts" />
+                android:orientation="vertical"
+                android:id="@+id/cookProfileFragCertificateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-                android:id="@+id/cookProfileFragCertificateCount"
-                style="@style/SemiBold13Dark50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="9.8dp"
-                android:gravity="center"
-                android:text="+ 2 More" />
+            <TextView
+                    android:id="@+id/cookProfileFragCertificate"
+                    style="@style/Reg13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableStart="@drawable/icons_certificate"
+                    android:drawablePadding="7.4dp"
+                    android:gravity="center"
+                    android:text="Certificate in Culinary Arts" />
 
-    </LinearLayout>
+            <TextView
+                    android:id="@+id/cookProfileFragCertificateCount"
+                    style="@style/SemiBold13Dark50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="9.8dp"
+                    android:gravity="center"
+                    android:text="+ 2 More" />
+
+        </LinearLayout>
 
         <View
                 android:layout_width="match_parent"
@@ -150,23 +154,30 @@
                 android:text="I love that cooking gives me a chance to be creative and indulge in some ‘play’ time – something we adults could do
 with a lot more" />
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="15.4dp"
-            android:background="@color/silver" />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15.4dp"
+                android:background="@color/silver" />
 
-    <TextView
-            style="@style/SemiBold13Dark"
-            android:layout_marginTop="15.4dp"
-            android:id="@+id/cookProfileFragDishBy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Other Available Dishes By Oded" />
+        <TextView
+                style="@style/SemiBold13Dark"
+                android:layout_marginTop="15.4dp"
+                android:id="@+id/cookProfileFragDishBy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other Available Dishes By Oded" />
+
+    </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="23dp"
             android:layout_marginBottom="24dp"
+            android:paddingStart="7.9dp"
+            android:paddingEnd="15.4dp"
+            android:clipToPadding="false"
             android:id="@+id/cookProfileFragDishList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

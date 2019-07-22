@@ -7,7 +7,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterAddressManager
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.LocationManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.managers.PermissionManager
@@ -15,8 +15,9 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Constants
 
-class MainViewModel(val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager, val eaterAddressManager: EaterAddressManager): ViewModel(),
-    LocationManager.LocationManagerListener {
+class MainViewModel(val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager): ViewModel(),
+    EaterDataManager.EaterDataMangerListener {
+
 
     val addressUpdateEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
     data class AddressUpdateEvent(val currentAddress: Address?)
@@ -41,7 +42,7 @@ class MainViewModel(val settings: AppSettings, val permissionManager:PermissionM
     }
 
     fun getUserName(): String {
-        return settings.currentEater?.firstName!!
+        return eaterDataManager.currentEater?.firstName!!
     }
 
     fun getLastOrderAddress(): String? {
@@ -50,20 +51,20 @@ class MainViewModel(val settings: AppSettings, val permissionManager:PermissionM
     }
 
     fun getLastOrderTime(): String? {
-        return orderManager.getLastOrderTimeString()
+        return eaterDataManager.getLastOrderTimeString()
     }
 
     fun getListOfAddresses(): ArrayList<Address>? {
-        return settings.currentEater!!.addresses
+        return eaterDataManager.currentEater!!.addresses
     }
 
     fun setChosenAddress(address: Address){
-        settings.setUserChooseSpecificAddress(true)
-        eaterAddressManager.setLastChosenAddress(address)
+        eaterDataManager.setUserChooseSpecificAddress(true)
+        eaterDataManager.setLastChosenAddress(address)
     }
 
     fun getChosenAddress(): Address?{
-        return eaterAddressManager.getLastChosenAddress()
+        return eaterDataManager.getLastChosenAddress()
     }
 
     fun startLocationUpdates(activity: Activity) {
@@ -72,26 +73,27 @@ class MainViewModel(val settings: AppSettings, val permissionManager:PermissionM
             permissionManager.requestPermission(activity, arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION), Constants.LOCATION_PERMISSION_REQUEST_CODE)
         }else{
             Log.d(TAG, "location setting success")
-            eaterAddressManager.startLocationUpdates()
+            eaterDataManager.startLocationUpdates()
         }
     }
 
     fun stopLocationUpdates() {
-        eaterAddressManager.stopLocationUpdates()
+        eaterDataManager.stopLocationUpdates()
     }
 
     fun getCurrentAddress(): Address?{
-        val currentAddress = eaterAddressManager.getLastChosenAddress()
+        val currentAddress = eaterDataManager.getLastChosenAddress()
         if(currentAddress == null){
-            eaterAddressManager.setLocationListener(this)
+            eaterDataManager.setLocationListener(this)
         }else{
             //disable below line to ensure reUpdating location
-            eaterAddressManager.removeLocationListener(this)
+            eaterDataManager.removeLocationListener(this)
         }
         return currentAddress
     }
 
-    override fun onLocationChanged(updatedAddress: Address) {
+
+    override fun onAddressChanged(updatedAddress: Address?) {
         addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
     }
 

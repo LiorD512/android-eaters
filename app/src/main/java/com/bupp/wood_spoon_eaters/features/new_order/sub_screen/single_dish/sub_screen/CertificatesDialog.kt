@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.single_dish.sub_screen
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.features.main.single_dish.CertificatesAdapter
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.CertificatesAdapter
 import kotlinx.android.synthetic.main.certificates_dialog.*
 
 

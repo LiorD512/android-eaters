@@ -32,11 +32,19 @@ class OrderItemsView : LinearLayout {
         orderItemsViewRecyclerView.addItemDecoration(divider)
     }
 
-    fun setOrderItems(orderItems: ArrayList<OrderItem>) {
-        adapter = OrderItemsViewAdapter(context, orderItems)
+    fun setOrderItems(context: Context, orderItems: ArrayList<OrderItem>, listener: OrderItemsViewAdapter.OrderItemsViewAdapterListener) {
+        adapter = OrderItemsViewAdapter(listener, context, orderItems)
         orderItemsViewRecyclerView.adapter = adapter
 
 //        ingredientsAdapter?.setOrderItemRequests()
+    }
+
+    fun getAllDishPriceValue(): Double {
+        if(adapter != null){
+            return adapter!!.getAllDishPriceValue()
+        }else{
+            return 0.0
+        }
     }
 
 }

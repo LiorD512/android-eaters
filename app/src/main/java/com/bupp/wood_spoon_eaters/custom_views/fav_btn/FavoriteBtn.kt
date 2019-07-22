@@ -1,38 +1,50 @@
-package com.bupp.wood_spoon_eaters.custom_views
+package com.bupp.wood_spoon_eaters.custom_views.fav_btn
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.FrameLayout
-import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.favorite_btn.view.*
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
+import android.widget.FrameLayout
+import com.bupp.wood_spoon_eaters.R
+import com.example.matthias.mvvmcustomviewexample.custom.FavoriteBtnViewModel
+import kotlinx.android.synthetic.main.favorite_btn.view.*
 
 
-class FavoriteBtn : FrameLayout {
+class FavoriteBtn : FrameLayout, FavoriteBtnViewModel.FavVMListener {
 
-    interface FavoriteBtnListener{
-        fun onFavClick(isChecked: Boolean)
-    }
-
-    var listener: FavoriteBtnListener? = null
-    var isFavSelected = false
+    var dishId: Long? = null
+    val viewModel = FavoriteBtnViewModel()
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.favorite_btn, this, true)
 
-        initUi()
-    }
-
-    private fun initUi() {
+        viewModel.setFavListener(this)
         favBtn.setOnClickListener {
             animateView()
             onClick()
         }
+    }
+
+    fun setDishId(dishId: Long) {
+        this.dishId = dishId
+    }
+
+    override fun onFail() {
+        //reverseBtnState
+        isFavSelected = !isFavSelected
+        updateUi()
+    }
+
+    var isFavSelected = false
+
+    private fun onClick() {
+        animateView()
+        updateUi()
+        viewModel.onClick(dishId, isFavSelected)
     }
 
     private fun animateView() {
@@ -49,14 +61,13 @@ class FavoriteBtn : FrameLayout {
         favBtn.startAnimation(anim)
     }
 
-    private fun onClick() {
+    private fun updateUi() {
         isFavSelected = !isFavSelected
         favBtn.isSelected = isFavSelected
-        listener?.onFavClick(isFavSelected)
     }
 
-    fun setFavListener(listener: FavoriteBtnListener?) {
-        this.listener = listener
+    fun setIsFav(isFavorite: Boolean) {
+        favBtn.isSelected = isFavorite
     }
 
 

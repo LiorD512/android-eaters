@@ -18,7 +18,7 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.search_fragment.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 
@@ -41,8 +41,8 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
         return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initUi()
         initObservers()
@@ -188,6 +188,14 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
         searchFragPb.show()
         (activity as MainActivity).updateFilterUi(isFiltered)
         viewModel.search(query)
+    }
+
+    override fun onFavClick(dishId: Long, favSelected: Boolean) {
+        if(favSelected){
+            viewModel.likeDish(dishId)
+        }else{
+            viewModel.unlikeDish(dishId)
+        }
     }
 
 }

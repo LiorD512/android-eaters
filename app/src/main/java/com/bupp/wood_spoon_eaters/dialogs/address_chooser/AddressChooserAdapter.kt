@@ -1,10 +1,11 @@
-package com.bupp.wood_spoon_eaters.custom_views.adapters
+package com.bupp.wood_spoon_eaters.dialogs.address_chooser
 
 import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
@@ -21,6 +22,7 @@ class AddressChooserAdapter(
 
     interface AddressChooserAdapterListener {
         fun onAddressClick(selected: Address)
+        fun onMenuClick(selected: Address)
         fun onAddAddressClick()
     }
 
@@ -31,7 +33,8 @@ class AddressChooserAdapter(
 
     class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view)
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val addressText: TextView = view.addressItemText
+        val addressText: TextView = view.addressItemText
+        val addressMenu: ImageButton = view.addressItemMenu
 
         fun initAddress(address: Address, isSelected: Boolean) {
             addressText.text = address.streetLine1
@@ -53,8 +56,12 @@ class AddressChooserAdapter(
                 var address = addresses!![position]
                 (holder as ItemViewHolder).initAddress(address, address == selectedAddress)
 
-                holder?.itemView.setOnClickListener {
+                holder.addressText.setOnClickListener {
                     listener.onAddressClick(address)
+                }
+
+                holder.addressMenu.setOnClickListener {
+                    listener.onMenuClick(address)
                 }
 
             }
@@ -68,8 +75,12 @@ class AddressChooserAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            ViewType.ITEM -> ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.address_list_item,parent,false))
-            else -> FooterViewHolder(LayoutInflater.from(context).inflate(R.layout.address_list_footer, parent, false))
+            ViewType.ITEM -> ItemViewHolder(
+                LayoutInflater.from(context).inflate(R.layout.address_list_item, parent, false)
+            )
+            else -> FooterViewHolder(
+                LayoutInflater.from(context).inflate(R.layout.address_list_footer, parent, false)
+            )
         }
     }
 

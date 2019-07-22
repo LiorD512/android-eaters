@@ -17,19 +17,19 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_add_address.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
+class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView.ActionTitleViewListener,
     InputTitleView.InputTitleViewListener, View.OnClickListener {
 
 
     private var hasApt: Boolean = false
     private var hasAddress: Boolean = false
     private var isDelivery: Boolean = true
-    private val viewModel: AddAddressViewModel by viewModel<AddAddressViewModel>()
     private var myLocationAddress: Address? = null
     private var selectedGoogleAddress: GoogleAddressResponse? = null
+    private val viewModel: AddAddressViewModel by viewModel<AddAddressViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_address, container, false)
@@ -49,10 +49,26 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
         addAddressFragAddress2ndLine.setInputTitleViewListener(this)
         addAddressFragDeliveryNote.setInputTitleViewListener(this)
 
+        if(curAddress != null){
+            initEditAddress()
+        }
 
-//        setCurrentDeliveryDetails()
+
         viewModel.navigationEvent.observe(this, Observer { event -> handleSaveResponse(event) })
         viewModel.myLocationEvent.observe(this, Observer { myLocation -> handleMyLocationEvent(myLocation.myLocation) })
+    }
+
+    private fun initEditAddress() {
+        (activity as MainActivity).loadLocationChooser(curAddress!!.streetLine1)
+        addAddressFragDeliveryNote.setText(curAddress.notes)
+
+        when (curAddress.dropOfLocationStr) {
+            "delivery_to_door" -> addAddressFragDeliveryCb.performClick()
+            else -> addAddressFragPickUpCb.performClick()
+        }
+
+        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
+
     }
 
     override fun onInputTitleChange(streetLine2: String?) {
@@ -70,27 +86,15 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
 
     private fun handleSaveResponse(event: AddAddressViewModel.NavigationEvent?) {
         if (event != null) {
-//            (activity as MainActivity).handlePb(false)
             addAddressFragPb.hide()
             if (event!!.isSuccessful) {
-                (activity as MainActivity).onNewAddressDone(location = event.address?.streetLine1)
+                (activity as MainActivity).onNewAddressDone(location = event.addressStreetStr)
             } else {
                 Toast.makeText(context, "There was a problem", Toast.LENGTH_SHORT).show()
-//                addAddressFragPb.hide()
             }
         }
     }
 
-//        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-//        hasAddress = true
-//        this.isDelivery = buttonView!!.id == addAddressFragDeliveryCb.id
-//        addAddressFragDeliveryCb.typeface = Typeface.DEFAULT
-//        addAddressFragPickUpCb.typeface = Typeface.DEFAULT
-//
-//        if (isChecked) {
-//            buttonView.typeface = Typeface.DEFAULT_BOLD
-//        }
-//    }
 
     override fun onClick(view: View?) {
         if (view is RadioButton) {
@@ -113,7 +117,7 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
     override fun onActionViewClick(type: Int) {
         when (type) {
             Constants.LOCATION_CHOOSER_ACTION -> {
-                (activity as MainActivity).loadLocationChooser()
+                (activity as MainActivity).loadLocationChooser(null)
             }
             else -> {
                 Toast.makeText(context, "Not implemented onActionViewClick with Type: $type", Toast.LENGTH_LONG).show()
@@ -144,14 +148,16 @@ class AddAddressFragment : Fragment(), ActionTitleView.ActionTitleViewListener,
 
     fun saveAddressDetails() {
         addAddressFragPb.show()
-        if (selectedGoogleAddress != null || myLocationAddress != null) {
+
+        if (selectedGoogleAddress != null || myLocationAddress != null || curAddress != null) {
             viewModel.postNewAddress(
                 selectedGoogleAddress,
                 myLocationAddress,
                 addAddressFragAddress.getText(),
                 addAddressFragAddress2ndLine.getText(),
                 addAddressFragDeliveryNote.getText(),
-                isDelivery
+                isDelivery,
+                curAddress?.id
             )
         }else{
             addAddressFragPb.hide()

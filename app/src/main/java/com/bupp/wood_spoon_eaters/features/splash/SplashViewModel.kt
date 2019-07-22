@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.splash
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.Client
 import com.bupp.wood_spoon_eaters.model.Eater
@@ -21,7 +22,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 
-class SplashViewModel(val apiSettings: ApiSettings, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
+class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterDataManager, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
 
     var serverCallMap = mutableMapOf<Int, Observable<*>>()
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
@@ -90,8 +91,8 @@ class SplashViewModel(val apiSettings: ApiSettings, val appSettings: AppSettings
             if (eater == null) {
                 navigationEvent.postValue(NavigationEvent(true, false))
             } else {
-                appSettings.currentEater = eater
-                if (appSettings.isAfterLogin()) {
+                eaterDataManager.currentEater = eater
+                if (eaterDataManager.isAfterLogin()) {
                     navigationEvent.postValue(NavigationEvent(true, true))
                 } else {
                     navigationEvent.postValue(NavigationEvent(true, false))

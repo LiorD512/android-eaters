@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.sign_up.create_account
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.ServerResponse
@@ -14,7 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class CreateAccountViewModel(val appSettings: AppSettings, val api: ApiService) : ViewModel() {
+class CreateAccountViewModel(val eaterDataManager: EaterDataManager, val api: ApiService) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
 
@@ -37,7 +38,7 @@ class CreateAccountViewModel(val appSettings: AppSettings, val api: ApiService) 
             override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
                 if (response.isSuccessful) {
                     Log.d("wowCreateAccountVM", "on success! ")
-                    appSettings.currentEater = response.body()?.data!!
+                    eaterDataManager.currentEater = response.body()?.data!!
                 } else {
                     Log.d("wowCreateAccountVM", "on Failure! ")
                 }

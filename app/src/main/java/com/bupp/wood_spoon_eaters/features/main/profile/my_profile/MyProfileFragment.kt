@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Eater
 import kotlinx.android.synthetic.main.my_profile_fragment.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener {
 

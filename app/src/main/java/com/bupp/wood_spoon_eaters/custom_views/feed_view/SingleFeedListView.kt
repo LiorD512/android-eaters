@@ -17,9 +17,11 @@ import com.bupp.wood_spoon_eaters.features.main.search.SingleFeedItemDecoration
 
 class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener {
 
+
     lateinit var listener: SingleFeedListViewListener
     interface SingleFeedListViewListener {
         fun onDishClick(dish: Dish)
+        fun onFavClick(dishId: Long, isFavorite: Boolean)
     }
 
     private lateinit var adapter: SingleFeedAdapter
@@ -48,6 +50,10 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
         if(::listener.isInitialized){
             listener.onDishClick(dish)
         }
+    }
+
+    override fun onFavClick(dishId: Long, favSelected: Boolean) {
+        listener.onFavClick(dishId, favSelected)
     }
 
 
