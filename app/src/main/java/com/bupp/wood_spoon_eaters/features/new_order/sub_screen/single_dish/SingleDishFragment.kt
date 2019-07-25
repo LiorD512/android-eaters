@@ -202,14 +202,14 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
 
     private fun initInfo() {
         singleDishInfoCook.setUser(currentDish.cook)
-        Glide.with(context).load(currentDish.thumbnail).into(singleDishInfoImg)
+        Glide.with(context!!).load(currentDish.thumbnail).into(singleDishInfoImg)
         singleDishInfoFavorite.setIsFav(currentDish.isFavorite)
         singleDishInfoFavorite.setDishId(currentDish.id)
 
         singleDishInfoName.text = currentDish.name
         singleDishInfoCookName.text = "by ${currentDish.cook.getFullName()}"
         if (currentDish.cook.country != null) {
-            Glide.with(context).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
+            Glide.with(context!!).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
         singleDishInfoDescription.text = currentDish.description
         singleDishInfoPrice.text = currentDish.price.formatedValue

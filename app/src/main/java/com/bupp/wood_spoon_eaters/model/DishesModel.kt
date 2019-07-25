@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Parcelize
 data class Dish(
     @SerializedName("id") val id: Long,
     @SerializedName("name") val name: String,
@@ -24,22 +25,24 @@ data class Dish(
 //    @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>,
 //    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
 //    @SerializedName("carbohydrates") val carbohydrates: Double,
-)
+): Parcelable
 
+@Parcelize
 data class MenuItem(
     @SerializedName("id") val id: Long,
     @SerializedName("quantity") val quantity: Int = 0,
     @SerializedName("units_sold") val unitsSold: Int = 0,
     @SerializedName("order_at") val orderAt: Date? = null,
     @SerializedName("cooking_slot") val cookingSlot: CookingSlot
-)
+): Parcelable
 
+@Parcelize
 data class CookingSlot(
     @SerializedName("id") val id: Long,
     @SerializedName("ends_at") val endsAt: Date,
     @SerializedName("starts_at") val startsAt: Date,
     @SerializedName("free_delivery") val freeDelivery: Boolean
-)
+): Parcelable
 
 data class FullDish(
     @SerializedName("id") val id: Long,
@@ -84,12 +87,12 @@ data class CookingMethods(
     @SerializedName("name") val name: String
 )
 
-
+@Parcelize
 data class Price(
     @SerializedName("cents") val cents: Long,
     @SerializedName("value") val value: Double,
     @SerializedName("formatted") val formatedValue: String
-)
+): Parcelable
 
 data class UpcomingSlot(
     @SerializedName("id") val id: Long,

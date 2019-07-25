@@ -44,11 +44,12 @@ data class AppSetting(
 
 //orders grid data class
 
+@Parcelize
 data class DietaryIcon(
     override val name: String,
     override val icon: String,
     override val id: Long
-): SelectableIcon
+): SelectableIcon, Parcelable
 
 @Parcelize
 data class CuisineLabel(

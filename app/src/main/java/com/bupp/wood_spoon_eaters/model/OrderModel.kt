@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_eaters.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,15 +26,17 @@ data class OrderItemRequest(
     @SerializedName("notes") var notes: String? = null
 )
 
-
-data class Order(
+@Parcelize
+data class Order (
     @SerializedName("id") val id: Long,
     @SerializedName("order_number") val orderNumber: String,
     @SerializedName("deliver_at") val deliverAt: Date,
     @SerializedName("delivery_address") val deliveryAddress: Address,
+    @SerializedName("estimated_delivery_time") val estDeliveryTime: Date,
     @SerializedName("status") val status: String,
     @SerializedName("status_updated_at") val statusUpdatedAt: Date,
     @SerializedName("delivery_status") val deliveryStatus: String,
+    @SerializedName("preparation_status") val preparationStatus: String,
     @SerializedName("delivery_status_updated_at") val deliveryStatusUpdatedAt: Date,
     @SerializedName("tip_percentage") val tipPercentage: Int,
     @SerializedName("notes") val notes: String,
@@ -46,14 +50,14 @@ data class Order(
     @SerializedName("delivery_fee") val deliveryFee: Price,
     @SerializedName("tip") val tip: Price,
     @SerializedName("discount") val discount: Price
+): Parcelable
 
-)
-
+@Parcelize
 data class OrderItem(
     @SerializedName("id") val id: Long,
     @SerializedName("dish") val dish: Dish,
     @SerializedName("quantity") var quantity: Int,
     @SerializedName("removed_ingredients") var removedIndredients: ArrayList<Ingredient>,
     @SerializedName("price") val price: Price,
-    @SerializedName("notes") var notes: String
-)
+    @SerializedName("notes") var notes: String?
+): Parcelable

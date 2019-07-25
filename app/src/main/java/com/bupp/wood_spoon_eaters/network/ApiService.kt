@@ -82,6 +82,13 @@ interface ApiService {
     fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
 
 
+    //Active Order
+    @GET("eaters/me/orders/trackable")
+    fun getTrackableOrders(): Call<ServerResponse<ArrayList<Order>>>
+
+    @GET("eaters/me/orders/trackable")
+    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
+
 
 
 

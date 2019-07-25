@@ -1,11 +1,13 @@
 package com.bupp.wood_spoon_eaters.model
 
+import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+@Parcelize
 data class Cook(
     @SerializedName("id") val id: Long,
     @SerializedName("first_name") val firstName: String,
@@ -21,7 +23,7 @@ data class Cook(
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>,
     @SerializedName("avg_rating") val rating: Double,
     @SerializedName("dishes") val dishes: ArrayList<Dish>
-){
+): Parcelable {
     fun getFullName(): String{
         return "$firstName $lastName"
     }

@@ -22,6 +22,11 @@
             tools:ignore="GoogleAppIndexingWarning"
             tools:replace="android:allowBackup,android:supportsRtl">
         <activity
+                android:name=".features.active_orders_tracker.ActiveOrdersTrackerActivity"
+                android:label="@string/title_activity_active_orders_tracker"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
                 android:name=".features.new_order.NewOrderActivity"
                 android:label="@string/title_activity_new_order"
                 android:theme="@style/AppTheme.NoActionBar">

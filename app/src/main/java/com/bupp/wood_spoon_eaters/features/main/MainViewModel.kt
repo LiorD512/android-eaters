@@ -12,10 +12,16 @@ import com.bupp.wood_spoon_eaters.managers.LocationManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.managers.PermissionManager
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Constants
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class MainViewModel(val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager): ViewModel(),
+class MainViewModel(val api: ApiService, val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager): ViewModel(),
     EaterDataManager.EaterDataMangerListener {
 
 
@@ -99,6 +105,34 @@ class MainViewModel(val settings: AppSettings, val permissionManager:PermissionM
 
     fun loadCurrentSingleDishDetails() {
 //        val id = orderManager.getCurrent
+    }
+
+    val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
+    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?)
+
+    fun checkForActiveOrder() {
+        api.getTrackableOrders().enqueue(object : Callback<ServerResponse<ArrayList<Order>>> {
+            override fun onResponse(call: Call<ServerResponse<ArrayList<Order>>>, response: Response<ServerResponse<ArrayList<Order>>>) {
+                if (response.isSuccessful) {
+//                    Log.d("wow", "phoneNumber sent: $phoneNumber")
+                    Log.d("wowMainVM", "getTrackableOrders success")
+                    val activeOrders = response.body()!!.data
+                    if(activeOrders != null && activeOrders.size > 0){
+                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders))
+                    }else{
+                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                    }
+                } else {
+                    Log.d("wowMainVM", "getTrackableOrders fail")
+                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<ArrayList<Order>>>, t: Throwable) {
+                Log.d("wowMainVM", "getTrackableOrders big fail")
+                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+            }
+        })
     }
 
 }

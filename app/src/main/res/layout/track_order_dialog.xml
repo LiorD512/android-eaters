@@ -97,6 +97,7 @@
                         android:layout_height="wrap_content">
 
                     <CheckBox
+                            android:checked="true"
                             android:button="@drawable/circle_checkbox_selector"
                             android:id="@+id/trackOrderDialogCb1"
                             android:paddingStart="7.3dp"

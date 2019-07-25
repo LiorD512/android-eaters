@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
@@ -27,12 +28,12 @@ import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragme
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.main.report.ReportFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.theartofdev.edmodo.cropper.CropImage
@@ -44,11 +45,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     LocationChooserFragment.LocationChooserFragmentListener, AddressChooserDialog.AddressChooserDialogListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
-    ShareDialog.ShareDialogListener, TrackOrderDialog.TrackOrderDialogListener,
-    RateLastOrderDialog.RateLastOrderDialogListener, EditAddressDialog.EditAddressDialogListener {
+    ShareDialog.ShareDialogListener, RateLastOrderDialog.RateLastOrderDialogListener, EditAddressDialog.EditAddressDialogListener {
 
 
-    private val curShowingDialogs: ArrayList<SingleDishFragment> = arrayListOf()
+
+    //    private val curShowingDialogs: ArrayList<SingleDishFragment> = arrayListOf()
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -65,6 +66,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         startLocationUpdates()
         updateAddressTimeView()
         loadFeed()
+
+        checkForActiveOrder()
+    }
+
+    private fun checkForActiveOrder() {
+        viewModel.checkForActiveOrder()
     }
 
     private fun initObservers() {
@@ -77,6 +84,19 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
         })
+
+        viewModel.getActiveOrders.observe(this, Observer { ordersEvent ->
+            if (ordersEvent.isSuccess && ordersEvent.orders != null) {
+                    openActiveOrdersDialog(ordersEvent.orders)
+                }else{
+
+                }
+            }
+        )
+    }
+
+    private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
+        ActiveOrderTrackerDialog(orders).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
     fun startLocationUpdates() {
@@ -251,27 +271,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         Toast.makeText(this, "onShareClick", Toast.LENGTH_SHORT).show()
     }
 
-    //Track Order dialog Listener
-    override fun onContactUsClick() {
-        Toast.makeText(this, "onContactUsClick", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onMessageClick() {
-        Toast.makeText(this, "onMessageClick", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onCancelOrderClick() {
-        Toast.makeText(this, "onCancelOrderClick", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onShareImageClick() {
-        Toast.makeText(this, "onShareImageClick", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onDoneRateClick() {
-        Toast.makeText(this, "onDoneRateClick", Toast.LENGTH_SHORT).show()
-    }
-
 
     //load dialogs
     fun loadAddressesDialog() {
@@ -324,9 +323,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         ShareDialog(this).show(supportFragmentManager, Constants.SHARE_DIALOG_TAG)
     }
 
-    fun loadTrackOrder() {
-        TrackOrderDialog(this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
-    }
+//    fun loadTrackOrder() {
+//        TrackOrderFragment(this)
+//            .show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+//    }
 
     fun loadRateLastOrder() {
         RateLastOrderDialog(this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
@@ -336,6 +336,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         RatingsDialog().show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
     }
 
+    override fun onDoneRateClick() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     //delivery details methods - end
 
@@ -497,9 +500,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     }
                 }
                 Constants.NEW_ORDER_REQUEST_CODE -> {
-                    closeAllDialogs()
+//                    closeAllDialogs()
                     loadFeed()
-                    loadTrackOrder()
+                    checkForActiveOrder()
                 }
             }
         }
@@ -525,13 +528,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //        curShowingDialogs.add(singleDishDialog)
     }
 
-    fun closeAllDialogs(){
-        for(item in curShowingDialogs){
-            Log.d("wowDialogs","removing:  ${item.id}")
-//            item.dismiss()
-        }
-        curShowingDialogs.clear()
-    }
+//    fun closeAllDialogs(){
+//        for(item in curShowingDialogs){
+//            Log.d("wowDialogs","removing:  ${item.id}")
+////            item.dismiss()
+//        }
+//        curShowingDialogs.clear()
+//    }
 
 //    override fun onCheckout() {
 //        loadCheckout()

@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.di
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserViewModel
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsViewModel
-import com.bupp.wood_spoon_eaters.dialogs.TrackOrderViewModel
+import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.login.code.CodeViewModel
 import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationViewModel
 import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeViewModel
@@ -57,7 +57,7 @@ val appModule = module {
     viewModel { CreateAccountViewModel(get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { SingleDishViewModel(get(), get(), get(), get()) }
@@ -65,13 +65,13 @@ val appModule = module {
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(),get())}
-    viewModel { TrackOrderViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get(),get()) }
     viewModel { RatingsViewModel(get(), get()) }
     viewModel { ReportViewModel(get()) }
     viewModel { OrderDetailsViewModel(get(),get()) }
 
     viewModel { NewOrderViewModel(get(), get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get()) }
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get()) }
