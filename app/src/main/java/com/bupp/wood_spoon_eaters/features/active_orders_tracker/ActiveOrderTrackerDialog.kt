@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ActiveOrderTrackerDialog(val orders: ArrayList<Order>) : DialogFragment(),
     TrackOrderFragment.TrackOrderDialogListener {
+
 
     private lateinit var adapter: OrdersPagerAdapter
     val viewModel: ActiveOrderTrackerViewModel by viewModel<ActiveOrderTrackerViewModel>()
@@ -42,20 +44,8 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>) : DialogFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUi()
-        initSilentUpdater()
-
     }
 
-    private fun initSilentUpdater() {
-        viewModel.startSilentUpdate()
-
-//        viewModel.getActiveOrders.observe(this, Observer { result ->
-//            if(result.isSuccess && result.orders?.size!! > 0){
-//                Log.d("wowActiveOrderTracker","updating orders")
-//                adapter.updateOrders(result.orders)
-//            }
-//         })
-    }
 
     private fun initUi() {
         adapter = OrdersPagerAdapter(childFragmentManager, orders, this)
@@ -93,19 +83,17 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>) : DialogFragment(),
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onCancelOrderClick(order: Order) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override fun onOrderCanceled() {
+        (activity as MainActivity).checkForActiveOrder()
+        dismiss()
     }
 
     override fun onCloseClick() {
         dismiss()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        viewModel.endUpdates()
-        super.onDismiss(dialog)
 
-    }
 
 
 

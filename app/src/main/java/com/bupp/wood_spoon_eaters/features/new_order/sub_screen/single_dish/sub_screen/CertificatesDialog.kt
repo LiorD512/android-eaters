@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.CertificatesAdapter
 import kotlinx.android.synthetic.main.certificates_dialog.*
 
 
@@ -41,7 +40,11 @@ class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment()
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
         certificatesList.addItemDecoration(divider)
-        var adapter = CertificatesAdapter(context!!, certificates)
+        var adapter =
+            CertificatesAdapter(
+                context!!,
+                certificates
+            )
         certificatesList.adapter = adapter
     }
 

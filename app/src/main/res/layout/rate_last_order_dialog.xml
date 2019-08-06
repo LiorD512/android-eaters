@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
              android:background="@color/dark_43"
-             android:id="@+id/rateLastOrderDialogLayout"
+             android:id="@+id/rateLastOrderLayout"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
@@ -30,7 +30,7 @@
                         android:layout_height="wrap_content">
 
                     <ImageView
-                            android:id="@+id/rateLastOrderDialogCloseBtn"
+                            android:id="@+id/rateLastOrderCloseBtn"
                             android:layout_gravity="start"
                             android:src="@drawable/icons_close"
                             android:paddingLeft="15.4dp"
@@ -51,7 +51,7 @@
                 </FrameLayout>
 
                 <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                        android:id="@+id/rateLastOrderDialogUserImage"
+                        android:id="@+id/rateLastOrderUserImage"
                         app:imageSize="SMALL"
                         android:layout_marginBottom="7.7dp"
                         android:layout_gravity="center"
@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:id="@+id/rateLastOrderDialogUserName"
+                        android:id="@+id/rateLastOrderUserName"
                         tools:text="Eyal Yaakobi"
                         android:layout_gravity="center"
                         style="@style/SemiBold13Dark"
@@ -96,19 +96,26 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"/>
 
-                        <ImageView
-                                android:id="@+id/rateLastOrderDialogAccuracyNegative"
-                                android:src="@drawable/icon_dislike_selector"
-                                android:layout_marginEnd="23dp"
+                        <RadioGroup
+                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content">
 
-                        <ImageView
-                                android:id="@+id/rateLastOrderDialogAccuracyPositive"
-                                android:src="@drawable/icon_like_selector"
-                                android:layout_marginEnd="7.7dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                            <RadioButton
+                                    android:id="@+id/rateLastOrderAccuracyNegative"
+                                    android:button="@drawable/icon_dislike_selector"
+                                    android:layout_marginEnd="23dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                            <RadioButton
+                                    android:id="@+id/rateLastOrderAccuracyPositive"
+                                    android:button="@drawable/icon_like_selector"
+                                    android:layout_marginEnd="7.7dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                        </RadioGroup>
 
                     </LinearLayout>
 
@@ -139,20 +146,27 @@
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"/>
-
-                        <ImageView
-                                android:id="@+id/rateLastOrderDialogDeliveryNegative"
-                                android:src="@drawable/icon_dislike_selector"
-                                android:layout_marginEnd="23dp"
+                        <RadioGroup
+                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content">
 
-                        <ImageView
-                                android:id="@+id/rateLastOrderDialogDeliveryPositive"
-                                android:src="@drawable/icon_like_selector"
-                                android:layout_marginEnd="7.7dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                            <RadioButton
+                                    android:id="@+id/rateLastOrderDeliveryNegative"
+                                    android:button="@drawable/icon_dislike_selector"
+                                    android:layout_marginEnd="23dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                            <RadioButton
+                                    android:id="@+id/rateLastOrderDeliveryPositive"
+                                    android:button="@drawable/icon_like_selector"
+                                    android:layout_marginEnd="7.7dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                        </RadioGroup>
+                        
 
                     </LinearLayout>
 
@@ -177,7 +191,7 @@
                             android:layout_height="wrap_content"/>
 
                     <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rateLastOrderDialogDishesRecyclerView"
+                            android:id="@+id/rateLastOrderDishesRecyclerView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
@@ -187,7 +201,7 @@
                             android:background="@color/silver"/>
 
                     <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-                            android:id="@+id/rateLastOrderDialogNotes"
+                            android:id="@+id/rateLastOrderNotes"
                             android:layout_marginTop="24.5dp"
                             android:layout_marginBottom="15.4dp"
                             app:inputType="LONG_TEXT"
@@ -198,17 +212,22 @@
                             android:layout_height="wrap_content"/>
 
                     <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
-                            android:id="@+id/rateLastOrderDialogDoneBtn"
                             app:title="Done"
+                            android:id="@+id/rateLastOrderDoneBtn"
                             android:layout_marginBottom="7.3dp"
-                            android:alpha="0.3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
+
                 </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/rateLastOrderPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 </FrameLayout>

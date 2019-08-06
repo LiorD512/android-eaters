@@ -42,12 +42,15 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
             if (upcomingSlot != null) {
                 holder.date.text = Utils.parseDateToDayDateHour(upcomingSlot?.startsAt)
             }
+            holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
+        }else{
+            holder.unAvailableLayout.visibility = View.VISIBLE
         }
 
         holder.favBtn.setIsFav(dish.isFavorite)
         holder.favBtn.setDishId(dish.id)
         lastClickedPosition = position
-        holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
+
 
     }
 
@@ -76,6 +79,7 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val mainLayout = view.searchDishItemLayout
+    val unAvailableLayout = view.searchDishUnAvailable
     val bkgImg = view.searchDishItemBkg
     val cookImg = view.searchDishItemUserImg
     val favBtn = view.searchDishItemFavorite

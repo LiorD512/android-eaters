@@ -23,12 +23,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-        <com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
-                android:id="@+id/mainActBottomBar"
-                android:layout_gravity="bottom"
+        <TextView
                 android:visibility="gone"
+                android:id="@+id/activeOrderBottomBarTitle"
+                android:layout_gravity="bottom"
+                style="@style/Bold17White"
+                android:gravity="center"
+                android:background="@color/light_teal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="@dimen/status_bottom_bar_height"
+                android:text="Track Your Order"/>
 
         <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
                 android:id="@+id/mainActPb"

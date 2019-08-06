@@ -48,6 +48,8 @@ class InputTitleView : FrameLayout {
                     inputTitleViewSuffix.visibility = View.VISIBLE
                 }
                 inputTitleViewTitle.text = title
+            }else{
+                inputTitleViewTitle.visibility = View.GONE
             }
 
             //DEFINE INPUT TEXT HEIGHT AND GRAVITY

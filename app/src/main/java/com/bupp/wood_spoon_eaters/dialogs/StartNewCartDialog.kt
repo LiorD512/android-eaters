@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.model.Cook
-import kotlinx.android.synthetic.main.new_dish_suggestion_dialog.*
 import kotlinx.android.synthetic.main.start_new_cart_dialog_layout.*
 
-class StartNewCartDialog(val listener: StartNewCartDialogListener, val cookInCart: Cook, val newCook:Cook ) : DialogFragment() {
+class StartNewCartDialog(val cookInCart: Cook, val currentShowingCook:Cook, val listener: StartNewCartDialogListener) : DialogFragment() {
 
     interface StartNewCartDialogListener {
         fun onNewCartClick()
@@ -48,7 +46,7 @@ class StartNewCartDialog(val listener: StartNewCartDialogListener, val cookInCar
         }
 
 
-        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCart.getFullName(), newCook.getFullName())
+        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCart.getFullName(), currentShowingCook.getFullName())
     }
 
 }

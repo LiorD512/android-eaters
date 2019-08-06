@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -15,7 +15,9 @@ class CertificatesAdapter(val context: Context, val certificates: ArrayList<Stri
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.certificate_list_item, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.certificate_list_item, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {

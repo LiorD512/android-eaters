@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -17,8 +19,11 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.track_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogListener) : Fragment() {
+class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogListener) : Fragment(),
+    CancelOrderDialog.CancelOrderDialogListener {
 
+
+    private var curOrderStage: Int = 0
     val viewModel by viewModel<ActiveOrderTrackerViewModel>()
 
     private lateinit var progressList: ArrayList<CheckBox>
@@ -27,7 +32,7 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         fun onContactUsClick(order: Order)
         fun onMessageClick(order: Order)
         fun onShareImageClick(order: Order)
-        fun onCancelOrderClick(order: Order)
+        fun onOrderCanceled()
         fun onCloseClick()
     }
 
@@ -73,8 +78,16 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         }
 
         trackOrderDialogCancelBtn.setOnClickListener {
-            listener.onCancelOrderClick(curOrder)
-//            dismiss()
+            if(curOrderStage == 1){
+                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+            }
+            if(curOrderStage == 2){
+                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_2, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+            }
+            if(curOrderStage == 3){
+                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_3, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+            }
+
         }
 
         trackOrderDialogShareImageBtn.setOnClickListener {
@@ -87,6 +100,10 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
 
     }
 
+    override fun onOrderCanceled() {
+        listener.onOrderCanceled()
+    }
+
     private fun initUi(order: Order) {
         Log.d("wowTrackOrderFragment","initUing now")
         progressList = arrayListOf<CheckBox>(trackOrderDialogCb1, trackOrderDialogCb2, trackOrderDialogCb3, trackOrderDialogCb4)
@@ -95,22 +112,24 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         when(order.preparationStatus){
             "idle", "received", "in_progress" -> {
                 trackOrderDialogCb2.isChecked = true
+                curOrderStage = 2
             }
         }
 
         when(order.deliveryStatus){
             "idle", "awaiting" -> {
                 trackOrderDialogCb2.isChecked = true
+                curOrderStage = 2
             }
             "on_the_way" -> {
                 trackOrderDialogCb3.isChecked = true
+                curOrderStage = 3
             }
             "shipped" -> {
                 trackOrderDialogCb4.isChecked = true
+                curOrderStage = 4
             }
         }
-
-
     }
 
 //    private fun handleOrderDetails(details: ActiveOrderTrackerViewModel.OrderDetailsEvent) {
@@ -152,6 +171,11 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         cbItem.setTextColor(ContextCompat.getColor(context!!,R.color.dark))
 
         setOrderProgress(stepNum - 1)
+    }
+
+    override fun onPause() {
+        viewModel.endUpdates()
+        super.onPause()
     }
 
 

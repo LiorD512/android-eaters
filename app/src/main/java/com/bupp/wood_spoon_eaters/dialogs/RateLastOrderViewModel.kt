@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -12,26 +13,58 @@ import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResp
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
-class RateLastOrderViewModel(private val api: ApiService,private val orderManager: OrderManager) : ViewModel() {
+class RateLastOrderViewModel(private val api: ApiService,private val metaDataManager: MetaDataManager) : ViewModel() {
 
+    val getLastOrder: SingleLiveEvent<LastOrderEvent> = SingleLiveEvent()
+    data class LastOrderEvent(val isSuccess: Boolean = false, val order: Order? = null)
 
+    fun getLastOrder(orderId: Long) {
+        api.getOrderById(orderId).enqueue(object: Callback<ServerResponse<Order>> {
+            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
+                if(response.isSuccessful){
+                    val order = response.body()?.data
+                    if(order != null){
+                        getLastOrder.postValue(LastOrderEvent(true, order))
+                    }else{
+                        getLastOrder.postValue(LastOrderEvent(false,null))
+                    }
+                }else{
+                    Log.d("wowFeedVM","postOrder fail")
+                    getLastOrder.postValue(LastOrderEvent(false,null))
+                }
+            }
 
-    val orderDetails: SingleLiveEvent<OrderDetails> = SingleLiveEvent()
-
-    data class OrderDetails(val orders: ArrayList<OrderItem>)
-
-    fun getDumbOrderDetails() {
-//        var cook: Cook2 = Cook2(firstName = "Eyal",lastName = "Yaakobi",thumbnail ="https://image.tmdb.org/t/p/w500_and_h282_face/87mvGYiKkV4PDNu9m0NIr0OPBrY.jpg")
-//        var dish: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-//        var dish2: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-//        var dish3: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-//
-//        var order: OrderItem2 = OrderItem2(id=1,dish = dish,quantity = 5)
-//        var order2: OrderItem2 = OrderItem2(id=2,dish = dish2,quantity = 2)
-//        var order3: OrderItem2 = OrderItem2(id=3,dish = dish3,quantity = 1)
-//
-//        orderDetails.postValue(OrderDetails(arrayListOf(order,order2,order3)))
+            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
+                Log.d("wowFeedVM","postOrder big fail")
+                getLastOrder.postValue(LastOrderEvent(false,null))
+            }
+        })
     }
+
+
+    val postRating: SingleLiveEvent<PostRatingEvent> = SingleLiveEvent()
+    data class PostRatingEvent(val isSuccess: Boolean = false)
+    fun postRating(orderId: Long, reviewRequest: ReviewRequest) {
+        api.postReview(orderId, reviewRequest).enqueue(object: Callback<ServerResponse<Void>>{
+            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                if(response.isSuccessful){
+                    Log.d("wowRateOrderVM","postReview success")
+                    postRating.postValue(PostRatingEvent(true))
+                }else{
+                    Log.d("wowRateOrderVM","postReview fail")
+                    postRating.postValue(PostRatingEvent(false))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                Log.d("wowRateOrderVM","postReview big fail")
+                postRating.postValue(PostRatingEvent(false))
+            }
+
+        })
+    }
+
 }

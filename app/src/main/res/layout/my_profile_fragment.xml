@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent" android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/white"
         tools:context=".features.main.profile.my_profile.MyProfileFragment">
-
 
     <ScrollView
             android:layout_width="match_parent"
@@ -70,6 +68,41 @@
                     android:layout_height="wrap_content"/>
 
             <LinearLayout
+                    android:id="@+id/myProfileFragOrderHistoryBtn"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:paddingTop="17dp"
+                        android:paddingBottom="15.8dp"
+                        android:drawableStart="@drawable/icons_order_history"
+                        android:drawablePadding="6.7dp"
+                        android:paddingStart="16.3dp"
+                        style="@style/SemiBold13Dark"
+                        android:text="Order History"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+
+                <ImageView
+                        android:layout_gravity="center"
+                        android:layout_marginRight="11.5dp"
+                        android:src="@drawable/icons_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_marginStart="15.8dp"
+                    android:layout_marginEnd="15.8dp"
+                    android:background="@color/silver"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <LinearLayout
                     android:id="@+id/myProfileFragPromoCodesBtn"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -111,13 +144,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="15.4dp"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/myProfileFragLastOrdersRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/myProfileFragFavoritesRecyclerView"
+            <com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
+                    android:id="@+id/myProfileFragFavorites"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -230,4 +259,11 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            tools:visibility="gone"
+            android:id="@+id/myProfileFragPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+</FrameLayout>

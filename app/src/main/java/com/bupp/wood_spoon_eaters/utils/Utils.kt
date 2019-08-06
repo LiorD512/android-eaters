@@ -51,6 +51,14 @@ object Utils {
         return ""
     }
 
+    fun parseDateToDateAndTime(date: Date?): String {
+        //05.04.19, 6:10PM
+        val sdf = SimpleDateFormat("ww.dd.yy, HH:mma")
+        if (date != null)
+            return sdf.format(date?.time)
+        return ""
+    }
+
     fun parseTwoDates(startsAtDate: Date?, endsAtDate: Date?): String {
 //        val sdf = SimpleDateFormat("HH:mm a")
         val sdf = SimpleDateFormat("Ha")

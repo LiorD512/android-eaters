@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.di
 
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserViewModel
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
-import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsViewModel
+import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.login.code.CodeViewModel
 import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationViewModel
@@ -18,8 +18,9 @@ import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileView
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
+import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeViewModel
-import com.bupp.wood_spoon_eaters.features.main.report.ReportViewModel
+import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
@@ -66,16 +67,17 @@ val appModule = module {
     viewModel { CheckoutViewModel(get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(),get())}
     viewModel { RateLastOrderViewModel(get(),get()) }
-    viewModel { RatingsViewModel(get(), get()) }
-    viewModel { ReportViewModel(get()) }
+    viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { OrderDetailsViewModel(get(),get()) }
 
     viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { ActiveOrderTrackerViewModel(get()) }
+    viewModel { CancelOrderViewModel(get()) }
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get()) }
     viewModel { EditMyProfileViewModel(get(), get(), get()) }
+    viewModel { OrdersHistoryViewModel(get()) }
 
 
     //support
@@ -88,6 +90,7 @@ val appModule = module {
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }
     viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
+    
 
 }
 

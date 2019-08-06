@@ -69,7 +69,6 @@ class ActiveOrderTrackerViewModel(val api: ApiService) : ViewModel() {
 
 
     fun startSilentUpdate() {
-
         val disposable =
             Observable.interval(0, 20, TimeUnit.SECONDS)
                 .flatMap {
@@ -90,6 +89,7 @@ class ActiveOrderTrackerViewModel(val api: ApiService) : ViewModel() {
             item.dispose()
         }
     }
+
 
 
 

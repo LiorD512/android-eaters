@@ -13,15 +13,31 @@ data class ServerResponse<T> (
 )
 
 data class MetaDataModel(
-//        val settings: ArrayList<Settings>,
-    val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),
-    val diets: ArrayList<DietaryIcon>? = arrayListOf()
-//    @SerializedName("cancellation_reasonsval") val cancellationReasons: ArrayList<CancellationReason>? = arrayListOf(),
-//    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethod>? = arrayListOf(),
-//    val countries: ArrayList<Country>? = arrayListOf(),
-//    val ingredients: ArrayList<Ingredient>? = arrayListOf(),
-//    @SerializedName("prep_time_ranges") val prepTimeRanges: ArrayList<PrepTimeRange>? = arrayListOf(),
-//    val units: ArrayList<WoodUnit>? = arrayListOf()
+    @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),
+    @SerializedName("diets") val diets: ArrayList<DietaryIcon>? = arrayListOf(),
+    @SerializedName("metrics") val metrics: ArrayList<Metrics>? = arrayListOf(),
+    @SerializedName("report_topics") val reportTopic: ArrayList<ReportTopic>? = arrayListOf()
+)
+
+data class ReportTopic(
+    @SerializedName("id") val id: Long,
+    @SerializedName("name") val name: String,
+    @SerializedName("report_issues") val reportIssues: java.util.ArrayList<ReportIssue>
+)
+
+data class ReportIssue(
+    val id: Long,
+    val name: String
+)
+
+data class Reports(
+    @SerializedName("reports") val reviews: ArrayList<ReportRequest>
+)
+
+data class ReportRequest(
+    @SerializedName("topic_id") val topicId: Long? = null,
+    @SerializedName("issue_id") val issueId: Long? = null,
+    @SerializedName("body") val body: String? = null
 )
 
 data class PrepTimeRange(

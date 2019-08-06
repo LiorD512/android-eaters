@@ -38,10 +38,11 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
 
         initStatusBar()
-        initObserers()
+        initObservers()
     }
 
-    private fun initObserers() {
+
+    private fun initObservers() {
 
     }
 

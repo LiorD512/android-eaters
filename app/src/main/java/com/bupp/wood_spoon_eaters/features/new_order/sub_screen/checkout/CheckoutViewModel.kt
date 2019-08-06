@@ -59,6 +59,7 @@ class CheckoutViewModel(val api: ApiService, val orderManager:OrderManager, val 
         api.finalizeOrder(orderId).enqueue(object: Callback<ServerResponse<Void>>{
             override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
                 if(response.isSuccessful){
+                    orderManager.finalizeOrder()
                     finalizeOrderEvent.postValue(FinalizeEvent(true))
                 }else{
                     finalizeOrderEvent.postValue(FinalizeEvent(false))

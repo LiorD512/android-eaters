@@ -1,0 +1,76 @@
+package com.bupp.wood_spoon_eaters.dialogs.cancel_order
+
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.utils.Constants
+import kotlinx.android.synthetic.main.cancel_order_dialog_layout.*
+import kotlinx.android.synthetic.main.thank_you_dialog_layout.*
+import kotlinx.android.synthetic.main.thank_you_dialog_layout.thankYouDialogLayout
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class CancelOrderDialog(val type: Int, val orderId: Long, val listener: CancelOrderDialogListener) : DialogFragment() {
+
+    interface CancelOrderDialogListener{
+        fun onOrderCanceled()
+    }
+
+    val viewModel: CancelOrderViewModel by viewModel<CancelOrderViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater!!.inflate(R.layout.cancel_order_dialog_layout, null)
+        dialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUi()
+    }
+
+    private fun initUi() {
+        cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
+        cancelOrderDialogBtn.setOnClickListener { cancelOrder() }
+
+        when(type){
+            Constants.CANCEL_ORDER_STAGE_1 -> {
+                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
+                cancelOrderDialogReason.visibility = View.VISIBLE
+            }
+            Constants.CANCEL_ORDER_STAGE_2 -> {
+                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_2_title)
+                cancelOrderDialogReason.visibility = View.GONE
+            }
+            Constants.CANCEL_ORDER_STAGE_3 -> {
+                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
+                cancelOrderDialogReason.visibility = View.GONE
+            }
+        }
+
+        viewModel.cancelOrder.observe(this, Observer {cancelOrderEvent ->
+            if(cancelOrderEvent.isSuccess){
+                listener.onOrderCanceled()
+                dismiss()
+            }else{
+                Toast.makeText(context, "Problem canceling order", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun cancelOrder() {
+        val note = cancelOrderDialogReason.getText()
+        viewModel.cancelOrder(orderId, note)
+    }
+}

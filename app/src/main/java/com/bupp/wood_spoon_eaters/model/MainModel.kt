@@ -37,22 +37,6 @@ data class WoodUnit(
     val definition: String
 ): Parcelable
 
-//data class DishCookingMethod(
-//    val id: Long,
-//    val dish: Dish,
-//    val cookingMethod: CookingMethod
-//)
-
-data class ReportTopic(
-    val id: Long,
-    val name: String
-)
-
-data class ReportIssue(
-    val id: Long,
-    val reportTopic: ReportTopic,
-    val name: String
-)
 
 data class Report(
     val id: Long,
@@ -230,19 +214,8 @@ data class DeliveryMethod(
 
 
 
-data class Metric(
-    val id: Long,
-    val name: String,
-    val description: String,
-    val weight: Double
-)
 
-data class DishMetric(
-    val id: Long,
-    val metric: Metric,
-    val dish: Dish,
-    val avgRating: Double
-)
+
 
 
 
@@ -264,13 +237,6 @@ data class Favorite(
     val dish: Dish
 )
 
-data class Review(
-    val id: Long,
-    val eater: Eater,
-//        val reviewableId: Client,
-//        val reviewableType: Client,
-    val body: String
-)
 
 @Parcelize
 data class Cuisine(

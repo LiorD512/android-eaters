@@ -21,7 +21,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel(val api: ApiService, val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager): ViewModel(),
+class MainViewModel(val api: ApiService, val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager,
+                    val eaterDataManager: EaterDataManager): ViewModel(),
     EaterDataManager.EaterDataMangerListener {
 
 
@@ -91,9 +92,6 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         val currentAddress = eaterDataManager.getLastChosenAddress()
         if(currentAddress == null){
             eaterDataManager.setLocationListener(this)
-        }else{
-            //disable below line to ensure reUpdating location
-            eaterDataManager.removeLocationListener(this)
         }
         return currentAddress
     }
@@ -134,5 +132,7 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
             }
         })
     }
+
+
 
 }

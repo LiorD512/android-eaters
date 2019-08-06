@@ -118,7 +118,15 @@ class Constants {
         const val RATINGS_DIALOG_TAG = "ratings_dialog_tag"
         const val REPORT_TAG = "report_tag"
         const val ORDER_DETAILS_TAG = "order_details_tag"
+        const val ORDER_HISTORY_TAG = "order_history_tag"
 
+
+
+        //cancel order dialog stage
+        const val CANCEL_ORDER_DIALOG_TAG = "cancel_order_dialog_tag"
+        const val CANCEL_ORDER_STAGE_1 = 1
+        const val CANCEL_ORDER_STAGE_2 = 2
+        const val CANCEL_ORDER_STAGE_3 = 3
 
 
         //Track order Dialog Order Progress
@@ -129,7 +137,6 @@ class Constants {
         const val ORDER_PROGRESS_ORDER_HAS_DELIVERED = 3
 
 
-        const val ORDER_HISTORY_TAG = "order_history_tag"
 
 
         //Search resource type

@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.custom_views.feed_view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +22,7 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     lateinit var listener: SingleFeedListViewListener
     interface SingleFeedListViewListener {
         fun onDishClick(dish: Dish)
-        fun onFavClick(dishId: Long, isFavorite: Boolean)
+//        fun onFavClick(dishId: Long, isFavorite: Boolean)
     }
 
     private lateinit var adapter: SingleFeedAdapter
@@ -30,6 +31,14 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.single_feed_list_view, this, true)
+
+        initUi()
+    }
+
+    private fun initUi() {
+        singleFeedListView.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(singleFeedListView)
     }
 
 
@@ -37,12 +46,14 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
         this.listener = listener
         singleFeedListViewTitle.text = feedObj.title
 
-        singleFeedListView.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-
-        val snapHelper = LinearSnapHelper()
-        snapHelper.attachToRecyclerView(singleFeedListView)
-
         adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this)
+        singleFeedListView.adapter = adapter
+    }
+
+    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener){
+        this.listener = listener
+        singleFeedListViewTitle.visibility = View.GONE
+        adapter = SingleFeedAdapter(context!!, dishes, this)
         singleFeedListView.adapter = adapter
     }
 
@@ -52,9 +63,9 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
         }
     }
 
-    override fun onFavClick(dishId: Long, favSelected: Boolean) {
-        listener.onFavClick(dishId, favSelected)
-    }
+//    override fun onFavClick(dishId: Long, favSelected: Boolean) {
+//        listener.onFavClick(dishId, favSelected)
+//    }
 
 
 }

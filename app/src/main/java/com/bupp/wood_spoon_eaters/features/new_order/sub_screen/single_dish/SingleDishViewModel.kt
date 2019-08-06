@@ -22,6 +22,9 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
     val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
 
+    data class GetReviewsEvent(val isSuccess: Boolean = false, val reviews: Review? = null)
+    val getReviewsEvent: SingleLiveEvent<GetReviewsEvent> = SingleLiveEvent()
+
     fun getFullDish(menuItemId: Long) {
         val feedRequest = getFeedRequest()
         api.getMenuItemsDetails(menuItemId = menuItemId, lat = feedRequest.lat, lng = feedRequest.lng, addressId = feedRequest.addressId, timestamp = feedRequest.timestamp)
@@ -67,6 +70,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
         val orderItem = initOrderItemsList(dishId, quantity, removedIngredients, note)
 
+        orderManager.initNewOrder()
         orderManager.updateOrderRequest(
             cookingSlotId = cookingSlotId,
             deliveryAddress = deliveryAddress,
@@ -75,7 +79,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
             promoCodeId = promoCodeId)
 
         orderManager.addOrderItem(orderItem)
-        api.postOrder(orderManager.currentOrderRequest).enqueue(object: Callback<ServerResponse<Order>>{
+        api.postOrder(orderManager.getOrderRequest()).enqueue(object: Callback<ServerResponse<Order>>{
             override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
                 if(response.isSuccessful){
                     val order = response.body()?.data
@@ -113,6 +117,49 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
     fun getDropoffLocation(): String? {
         return eaterDataManager.currentEater?.addresses?.first()?.getDropoffLocationStr()
+    }
+
+    fun getDishReview(cookId: Long) {
+        api.getDishReview(cookId).enqueue(object: Callback<ServerResponse<Review>>{
+            override fun onResponse(call: Call<ServerResponse<Review>>, response: Response<ServerResponse<Review>>) {
+                if(response.isSuccessful){
+                    val reviews = response.body()?.data
+                    Log.d("wowFeedVM","getDishReview success")
+                    getReviewsEvent.postValue(GetReviewsEvent(true, reviews))
+                }else{
+                    Log.d("wowFeedVM","getDishReview fail")
+                    getReviewsEvent.postValue(GetReviewsEvent(false))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Review>>, t: Throwable) {
+                Log.d("wowFeedVM","getDishReview big fail: ${t.message}")
+                getReviewsEvent.postValue(GetReviewsEvent(false))
+            }
+        })
+    }
+
+
+    val hasOpenOrder: SingleLiveEvent<HasOpenOrder> = SingleLiveEvent()
+    data class HasOpenOrder(val hasOpenOrder: Boolean, val cookInCart: Cook? = null, val currentShowingCook: Cook? = null)
+
+    fun checkForOpenOrder(currentShowingCook: Cook) {
+        if(orderManager.haveCurrentActiveOrder()){
+            val inCartOrder = orderManager.curOrderResponse
+            val cookInCart = inCartOrder?.cook
+            if(currentShowingCook.id != cookInCart?.id){
+                //if the showing dish's (cook) is the same as the in-cart order's cook
+                hasOpenOrder.postValue(HasOpenOrder(true, cookInCart, currentShowingCook))
+            }else{
+                hasOpenOrder.postValue(HasOpenOrder(false))
+            }
+        }else{
+            hasOpenOrder.postValue(HasOpenOrder(false))
+        }
+    }
+
+    fun clearCurrentOpenOrder() {
+        orderManager.clearCurrentOrder()
     }
 
 

@@ -57,39 +57,38 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
         }
     }
 
-    fun likeDish(id: Long) {
-        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-                likeEvent.postValue(LikeEvent(response.isSuccessful))
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-                Log.d("wowSingleDishVM","likeDish big fail")
-                likeEvent.postValue(LikeEvent(false))
-            }
-
-        })
-    }
-
-    fun unlikeDish(id: Long) {
-        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-                likeEvent.postValue(LikeEvent(response.isSuccessful))
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-                Log.d("wowSingleDishVM","unlikeDish big fail")
-                likeEvent.postValue(LikeEvent(false))
-            }
-
-        })
-    }
+//    fun likeDish(id: Long) {
+//        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
+//            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+//                likeEvent.postValue(LikeEvent(response.isSuccessful))
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+//                Log.d("wowSingleDishVM","likeDish big fail")
+//                likeEvent.postValue(LikeEvent(false))
+//            }
+//
+//        })
+//    }
+//
+//    fun unlikeDish(id: Long) {
+//        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
+//            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+//                likeEvent.postValue(LikeEvent(response.isSuccessful))
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+//                Log.d("wowSingleDishVM","unlikeDish big fail")
+//                likeEvent.postValue(LikeEvent(false))
+//            }
+//
+//        })
+//    }
 
     override fun onAddressChanged(currentAddress: Address?) {
         if(currentAddress != null){
             Log.d("wowFeedVM","getFeed onLocationChanged")
             eaterDataManager.setLastChosenAddress(currentAddress)
-            eaterDataManager.removeLocationListener(this)
             getFeed()
         }
     }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:background="@color/dark_43"
+             android:id="@+id/cancelOrderDialogLayout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+            android:background="@drawable/rounded_white_bkg"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginRight="50.9dp"
+            android:layout_marginLeft="50.9dp"
+            android:paddingLeft="7.7dp"
+            android:paddingRight="7.7dp"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <FrameLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <ImageView
+                    android:id="@+id/cancelOrderDialogCloseBtn"
+                    android:layout_gravity="start"
+                    android:src="@drawable/icons_close"
+                    android:paddingLeft="7.7dp"
+                    android:paddingTop="23.5dp"
+                    android:paddingBottom="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:layout_marginTop="7.2dp"
+                    style="@style/SemiBold15Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Cancel Order"/>
+
+
+        </FrameLayout>
+
+
+
+
+
+        <TextView
+                android:id="@+id/cancelOrderDialogTitle"
+                style="@style/Reg13Dark_50"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="15.8dp"
+                android:layout_marginEnd="15.8dp"
+                android:layout_marginTop="15.5dp"
+                android:layout_marginBottom="25.8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We are sorry to see you cancel your order. Please let us know why you want to cancel"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                android:id="@+id/cancelOrderDialogReason"
+                android:inputType="number"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginEnd="15.4dp"
+                android:layout_marginBottom="14dp"
+                app:lines="4"
+                app:inputType="LONG_TEXT"
+                style="@style/Reg15Dark"
+                app:hint="Cancelation Reason"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="@color/dark_50"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <View
+                android:background="@color/silver"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+        <TextView
+                android:id="@+id/cancelOrderDialogBtn"
+                style="@style/SemiBold15Red"
+                android:gravity="center"
+                android:paddingTop="15.5dp"
+                android:paddingBottom="15.5dp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Cancel My Order"/>
+
+    </LinearLayout>
+
+</FrameLayout>

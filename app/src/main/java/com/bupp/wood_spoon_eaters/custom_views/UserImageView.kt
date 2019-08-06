@@ -110,7 +110,7 @@ class UserImageView : FrameLayout {
         }
     }
 
-    fun setImage(imageStr: String) {
+    fun setImage(imageStr: String?) {
         if (!imageStr.isNullOrEmpty()) {
             Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
         } else if (placeHolder != null) {

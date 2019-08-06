@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:paddingBottom="15.4dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingStart="15.4dp"
+        android:paddingEnd="15.4dp"
+        android:layout_marginTop="23.2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+            style="@style/SemiBold13Dark"
+            android:id="@+id/reportIssueTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report Issue With The Dish"/>
+
+    <RadioGroup
+            android:layout_marginTop="24.1dp"
+            android:layout_marginBottom="11.4dp"
+            android:id="@+id/reportIssueRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            android:id="@+id/reportIssueNotes"
+            app:lines="4"
+            app:inputType="LONG_TEXT"
+            app:title=""
+            app:hint="Somthing else…"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

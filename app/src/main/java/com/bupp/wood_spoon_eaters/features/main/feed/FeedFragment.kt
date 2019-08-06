@@ -10,14 +10,15 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.managers.LocationManager
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
-import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
+import android.text.method.Touch.onTouchEvent
+import android.widget.Toast
+import android.view.MotionEvent
 
 
 class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
@@ -38,7 +39,9 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
         FetchLocationAndFeed()
         showEmptyLayout()
         initObservers()
+
     }
+
 
     private fun initUi() {
         feedFragSectionsView.setMultiSectionFeedViewListener(this)
@@ -57,13 +60,17 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
     private fun initFeed(feedArr: ArrayList<Feed>) {
         feedFragEmptyLayout.visibility = View.GONE
         feedFragListLayout.visibility = View.VISIBLE
-        feedFragSectionsView.initFeed(viewModel.hasFavorites(), feedArr)
+        feedFragSectionsView.initFeed(feedArr)
     }
 
 
     private fun FetchLocationAndFeed() {
         Log.d(TAG, "feed fragment started")
         viewModel.getFeed()
+    }
+
+    override fun refreshList() {
+        FetchLocationAndFeed()
     }
 
     private fun showEmptyLayout() {
@@ -80,19 +87,19 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
     }
 
     override fun onDishClick(dish: Dish) {
-        (activity as MainActivity).loadSingleDishDetails(dish.menuItem.id)
+        (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
     }
 
     override fun onCookClick(cook: Cook) {
 
     }
 
-    override fun onFavClick(dishId: Long, isFavorite: Boolean) {
-        if(isFavorite){
-            viewModel.likeDish(dishId)
-        }else{
-            viewModel.unlikeDish(dishId)
-        }
-    }
+//    override fun onFavClick(dishId: Long, isFavorite: Boolean) {
+//        if(isFavorite){
+//            viewModel.likeDish(dishId)
+//        }else{
+//            viewModel.unlikeDish(dishId)
+//        }
+//    }
 
 }

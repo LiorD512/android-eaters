@@ -38,13 +38,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         listeners.add(listener)
     }
 
-    fun removeLocationListener(listener: EaterDataMangerListener) {
-        listeners.remove(listener)
-        if(listeners.size == 0){
-            locationManager.removeLocationManagerListener()
-        }
-    }
-
     override fun onLocationChanged(mLocation: Address) {
         val myAddress: Address? = getClosestAddressToLocation(mLocation)
         if(myAddress != null){
@@ -52,12 +45,16 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             for(listener in listeners){
                 listener?.onAddressChanged(myAddress)
             }
+            listeners.clear()
+            locationManager.removeLocationManagerListener()
+
         }else{
             for(listener in listeners){
                 listener?.onAddressChanged(null)
             }
         }
     }
+
 
     private fun getClosestAddressToLocation(mLocation: Address): Address? {
         val myAddresses = currentEater?.addresses

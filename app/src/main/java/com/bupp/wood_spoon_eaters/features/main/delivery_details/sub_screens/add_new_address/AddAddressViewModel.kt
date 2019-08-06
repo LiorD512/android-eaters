@@ -38,7 +38,6 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     override fun onAddressChanged(currentAddress: Address?) {
         if(currentAddress != null){
             myLocationEvent.postValue(MyLocationEvent(currentAddress))
-            eaterDataManager.removeLocationListener(this)
         }
     }
 

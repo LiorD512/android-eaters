@@ -81,6 +81,9 @@ interface ApiService {
     @POST("eaters/me/orders/{order_id}/finalize")
     fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
 
+    @DELETE("eaters/me/orders/{order_id}/")
+    fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
+
 
     //Active Order
     @GET("eaters/me/orders/trackable")
@@ -89,7 +92,21 @@ interface ApiService {
     @GET("eaters/me/orders/trackable")
     fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
 
+    @GET("eaters/me/orders")
+    fun getOrders(): Call<ServerResponse<ArrayList<Order>>>
 
+    @GET("eaters/me/orders/{order_id}")
+    fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Order>>
+
+
+    //Profile data
+    @GET("eaters/me/dishes/ordered")
+    fun getEaterOrdered(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<Search>>
+
+    @GET("eaters/me/favorites")
+    fun getEaterFavorites(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<Search>>
 
 
     //Feed
@@ -105,5 +122,16 @@ interface ApiService {
     @DELETE("dishes/{dish_id}/likes")
     fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Void>>
 
+    //Reports
+    @GET("cooks/{cook_id}/reviews")
+    fun getDishReview(@Path(value = "cook_id", encoded = true) cookId: Long): Call<ServerResponse<Review>>
+
+    //Post Report
+    @POST("eaters/me/orders/{order_id}/reports")
+    fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): Call<ServerResponse<Void>>
+
+    //Post Review
+    @POST("eaters/me/orders/{order_id}/reviews")
+    fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): Call<ServerResponse<Void>>
 
 }

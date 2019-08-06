@@ -34,6 +34,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
+                <TextView
+                        android:visibility="gone"
+                        android:id="@+id/searchDishUnAvailable"
+                        android:gravity="center"
+                        style="@style/SemiBold17White"
+                        android:text="Currently Not Available"
+                        android:background="@color/dark_50"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
                 <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                         app:imageSize="SMALL"
                         android:id="@+id/searchDishItemUserImg"

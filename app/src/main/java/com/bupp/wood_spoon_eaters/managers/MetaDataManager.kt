@@ -30,40 +30,20 @@ class MetaDataManager {
         return arrayListOf()
     }
 
-//    fun getCountries(): ArrayList<SelectableString> {
-//        if (getMetaDataObject()?.countries != null) {
-//            return getMetaDataObject()?.countries as ArrayList<SelectableString>
-//        }
-//        return arrayListOf()
-//    }
-//
-//    fun getCookingMethodsList(): java.util.ArrayList<SelectableString> {
-//        if (getMetaDataObject()?.cookingMethods != null) {
-//            return getMetaDataObject()?.cookingMethods as ArrayList<SelectableString>
-//        }
-//        return arrayListOf()
-//    }
-//
-//    fun getPrepTimeList(): ArrayList<PrepTimeRange> {
-//        if (getMetaDataObject()?.prepTimeRanges != null) {
-//            return getMetaDataObject()?.prepTimeRanges as ArrayList<PrepTimeRange>
-//        }
-//        return arrayListOf()
-//    }
-//
-//    fun getIngredientsList(): ArrayList<Ingredient> {
-//        if (getMetaDataObject()?.ingredients != null) {
-//            return getMetaDataObject()?.ingredients!!
-//        }
-//        return arrayListOf()
-//    }
-//
-//    fun getIngredientsSelectableList(): ArrayList<SelectableString> {
-//        if (getMetaDataObject()?.ingredients != null) {
-//            return getMetaDataObject()?.ingredients as ArrayList<SelectableString>
-//        }
-//        return arrayListOf()
-//    }
+    fun getMetricsList(): ArrayList<Metrics> {
+        if (getMetaDataObject()?.metrics != null) {
+            return metaDataObject.metrics as ArrayList<Metrics>
+        }
+        return arrayListOf()
+    }
+
+    fun getReportTopics(): ArrayList<ReportTopic> {
+        if (getMetaDataObject()?.reportTopic != null) {
+            return metaDataObject.reportTopic as ArrayList<ReportTopic>
+        }
+        return arrayListOf()
+    }
+
 
 
 }

@@ -8,12 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Eater
 import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener {
+class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
+    SingleFeedListView.SingleFeedListViewListener {
+
 
     companion object {
         fun newInstance() = MyProfileFragment()
@@ -31,32 +35,43 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragEditLocation.setDeliveryDetailsViewListener(this)
         myProfileFragEditPayment.setDeliveryDetailsViewListener(this)
 
-
         initClicks()
+        initProfileData()
+        initObservers()
 
-        viewModel.userDetails.observe(this, Observer { userDetails -> handleUserDetails(userDetails) })
-
-        viewModel.fetchUserDetails()
     }
 
-    private fun handleUserDetails(userDetails: MyProfileViewModel.UserDetails?) {
-        if (userDetails != null) {
-            initEaterData(userDetails.eater)
-            initDeliveryDetails(userDetails.deliveryAddress)
-        }
+    private fun initProfileData() {
+        myProfileFragPb.show()
+        viewModel.getUserDetails()
     }
 
-    private fun initDeliveryDetails(deliveryDetails: String?) {
-        if (!deliveryDetails.isNullOrBlank()) {
-            myProfileFragEditLocation.updateDeliveryDetails(deliveryDetails)
-        }
+    private fun initObservers() {
+        viewModel.getUserDetails.observe(this, Observer { getUserEvent ->
+            myProfileFragPb.hide()
+            if (getUserEvent.isSuccess) {
+                handleUserDetails(getUserEvent.eater!!)
+            }
+        })
+
     }
+
+
+    private fun handleUserDetails(eater: Eater) {
+        initEaterData(eater)
+    }
+
 
     private fun initEaterData(eater: Eater) {
-        if (!eater.getFullName().isNullOrBlank()) {
-            myProfileFragUserName.text = eater.getFullName()
-        }
+        myProfileFragUserName.text = eater.getFullName()
+        myProfileFragEditLocation.updateDeliveryDetails(viewModel.getDeliveryAddress())
         myProfileFragUserPhoto.setImage(eater.thumbnail)
+
+    }
+
+    override fun onDishClick(dish: Dish) {
+        (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
+
     }
 
     private fun initClicks() {
@@ -65,12 +80,19 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
         myProfileFragPromoCodesBtn.setOnClickListener { }
 
-        myProfileFragLocationSettingsBtn.setOnClickListener { (activity as MainActivity).loadSettings() }
+        myProfileFragLocationSettingsBtn.setOnClickListener { (activity as MainActivity).loadSettingsFragment() }
         myProfileFragPrivacyBtn.setOnClickListener { }
         myProfileFragSupportBtn.setOnClickListener { (activity as MainActivity).loadSupport() }
 
         myProfileFragJoinBtn.setOnClickListener { }
         myProfileFragShareBtnLayout.setOnClickListener { }
+
+        myProfileFragOrderHistoryBtn.setOnClickListener { openOrderHistoryDialog() }
+
+    }
+
+    private fun openOrderHistoryDialog() {
+        (activity as MainActivity).loadOrderHistoryFragment()
     }
 
     override fun onChangeLocationClick() {
@@ -82,6 +104,6 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     fun onAddressChooserSelected() {
-        viewModel.fetchUserDetails()
+        viewModel.getUserDetails()
     }
 }

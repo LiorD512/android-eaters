@@ -2,31 +2,29 @@ package com.bupp.wood_spoon_eaters.custom_views.feed_view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Favorite
 import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.multi_section_feed_view.view.*
-import kotlinx.android.synthetic.main.single_feed_list_view.view.*
 
 class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, ManyCooksView.ManyCooksViewListener,
-    SingleFeedListView.SingleFeedListViewListener {
+    SingleFeedListView.SingleFeedListViewListener, FavoritesView.FavoritesViewListener {
 
 
     lateinit var listener: MultiSectionFeedViewListener
     interface MultiSectionFeedViewListener {
         fun onDishClick(dish: Dish)
         fun onCookClick(cook: Cook)
-        fun onFavClick(dishId: Long, isFavorite: Boolean)
+        fun refreshList()
+//        fun onFavClick(dishId: Long, isFavorite: Boolean)
         fun onShareClick(){}
     }
 
@@ -36,13 +34,20 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.multi_section_feed_view, this, true)
+
+        multiSectionViewRefreshLayout.setOnRefreshListener { refresh() }
+    }
+
+    private fun refresh() {
+        Log.d("wowMultiSection","refresh !")
     }
 
     fun setMultiSectionFeedViewListener(listener: MultiSectionFeedViewListener){
         this.listener = listener
     }
 
-    fun initFeed(hasFavorites: Boolean, feedArr: ArrayList<Feed>) {
+    fun initFeed(feedArr: ArrayList<Feed>) {
+        multiSectionViewRefreshLayout.setRefreshing(false)
         val dishArr: ArrayList<Feed> = arrayListOf()
         val cooksArr: ArrayList<Cook> = arrayListOf()
 
@@ -62,11 +67,8 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
             initCooksList(cooksArr)
         }
 
-        if(!hasFavorites){
-            multiSectionViewFavEmptyLayout.visibility = View.VISIBLE
-        }else{
-            multiSectionViewFavEmptyLayout.visibility = View.GONE
-        }
+        multiSectionViewFavorites.setFavoritesViewListener(this)
+
     }
 
     private fun initDishesList(dishArr: ArrayList<Feed>) {
@@ -89,8 +91,6 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         return item.search?.resource == Constants.RESOURCE_TYPE_COOK
     }
 
-
-
     override fun onDishClick(dish: Dish) {
         if(::listener.isInitialized){
             listener.onDishClick(dish)
@@ -102,13 +102,6 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
             listener.onCookClick(clicked)
         }
     }
-
-    override fun onFavClick(dishId: Long, favSelected: Boolean) {
-        listener?.onFavClick(dishId, favSelected)
-    }
-
-
-
 
 
 }
