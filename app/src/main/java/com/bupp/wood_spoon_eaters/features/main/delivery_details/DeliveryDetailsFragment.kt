@@ -10,14 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.TimeDeliveryDetailsView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.delivery_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener {
-
+class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
+    TimeDeliveryDetailsView.TimeDeliveryDetailsViewListener {
 
     companion object {
         fun newInstance() = DeliveryDetailsFragment()
@@ -35,7 +36,7 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
         super.onActivityCreated(savedInstanceState)
 
         deliveryDetailsFragLocation.setDeliveryDetailsViewListener(this)
-        deliveryDetailsFragTime.setDeliveryDetailsViewListener(this)
+        deliveryDetailsFragTime.setTimeDeliveryDetailsViewListener(this)
 
 //        viewModel.initLocationListener()
 
@@ -48,7 +49,7 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
             deliveryDetailsFragLocation.updateDeliveryDetails(details.address.streetLine1)
         }
         if (details.time != null && details.time.toString().isNotEmpty()) {
-            val time = Utils.parseTime(details.time)
+            val time = Utils.parseDateToDayDateHour(details.time)
             deliveryDetailsFragTime.updateDeliveryDetails(time)
         }
     }
@@ -87,6 +88,10 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
 
         }
         TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
+    }
+
+    override fun onChangeTimeAsap() {
+        viewModel.setDeliveryTimeAsap()
     }
 
     fun onAddressChooserSelected() {

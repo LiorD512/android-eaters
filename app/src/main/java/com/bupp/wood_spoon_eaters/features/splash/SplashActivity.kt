@@ -13,6 +13,7 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 
+
 class SplashActivity : AppCompatActivity() {
 
     val viewModel: SplashViewModel by viewModel<SplashViewModel>()

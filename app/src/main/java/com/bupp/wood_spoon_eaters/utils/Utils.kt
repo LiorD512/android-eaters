@@ -12,6 +12,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.Calendar.*
+import android.app.Activity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
+
 
 object Utils {
 
@@ -167,5 +173,16 @@ object Utils {
         val cal = Calendar.getInstance(Locale.US)
         cal.time = date
         return cal
+    }
+
+    fun hideKeyBoard(activity: FragmentActivity) {
+        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = activity.getCurrentFocus()
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = View(activity)
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
     }
 }

@@ -15,9 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+    <com.bupp.wood_spoon_eaters.custom_views.TimeDeliveryDetailsView
             android:id="@+id/deliveryDetailsFragTime"
-            app:detailsType="DELIVERY_DETAILS_TIME"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

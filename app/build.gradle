@@ -114,4 +114,10 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$androidArchitectureVersion"
     testImplementation "android.arch.core:core-testing:$androidArchitectureVersion"
     implementation "android.arch.lifecycle:extensions:$androidArchitectureVersion"
+
+    //AppCenter
+    def appCenterSdkVersion = '2.3.0'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-distribute:${appCenterSdkVersion}"
 }

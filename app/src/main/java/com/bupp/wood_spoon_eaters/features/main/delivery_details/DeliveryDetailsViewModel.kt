@@ -31,6 +31,10 @@ class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManag
         eaterDataManager.orderTime = time
     }
 
+    fun setDeliveryTimeAsap() {
+        eaterDataManager.orderTime = null
+    }
+
     fun getDeliveryTime(): String? {
         if(eaterDataManager.orderTime != null){
             return Utils.parseTime(eaterDataManager.orderTime)

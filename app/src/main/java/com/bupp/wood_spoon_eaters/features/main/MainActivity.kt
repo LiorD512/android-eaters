@@ -37,10 +37,13 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
+import com.microsoft.appcenter.distribute.Distribute
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     LocationChooserFragment.LocationChooserFragmentListener, AddressChooserDialog.AddressChooserDialogListener,
@@ -60,6 +63,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        AppCenter.start(
+            application, "1995d4eb-7e59-44b8-8832-6550bd7752ff",
+            Analytics::class.java, Crashes::class.java, Distribute::class.java
+        )
 
         mainActHeaderView.setHeaderViewListener(this)
 
