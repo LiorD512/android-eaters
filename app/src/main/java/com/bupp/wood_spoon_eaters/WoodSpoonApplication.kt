@@ -19,6 +19,6 @@ class WoodSpoonApplication : Application() {
             modules(listOf(appModule, networkModule))
         }
 
-        LeakSentry.config = LeakSentry.config.copy(watchFragmentViews = true)
+//        LeakSentry.config = LeakSentry.config.copy(watchFragmentViews = true)
     }
 }
