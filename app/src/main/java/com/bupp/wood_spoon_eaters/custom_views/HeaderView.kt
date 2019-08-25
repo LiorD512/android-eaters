@@ -132,6 +132,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
             Constants.HEADER_VIEW_TYPE_SIGNUP -> {
                 headerViewTitle.visibility = View.VISIBLE
                 headerViewSkipBtn.visibility = View.VISIBLE
+                headerViewBackBtn.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_BACK_TITLE -> {
                 headerViewTitle.visibility = VISIBLE

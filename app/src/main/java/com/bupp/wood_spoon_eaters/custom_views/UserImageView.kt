@@ -125,10 +125,10 @@ class UserImageView : FrameLayout {
 
     fun setUser(cook: Cook) {
         setImage(cook.thumbnail)
-        if (!cook.video.isNullOrEmpty()) {
-            isWithBkg = true
-        } else {
+        if (cook.video.isNullOrEmpty()) {
             isWithBkg = false
+        } else {
+            isWithBkg = true
         }
         initUi()
     }

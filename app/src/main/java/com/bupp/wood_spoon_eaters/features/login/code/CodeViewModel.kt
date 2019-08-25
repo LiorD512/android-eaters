@@ -3,9 +3,12 @@ package com.bupp.wood_spoon_eaters.features.login.code
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.Client
 import com.bupp.wood_spoon_eaters.model.Eater
+import com.bupp.wood_spoon_eaters.model.MetaDataModel
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
@@ -14,7 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager) : ViewModel() {
+class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val resendCodeEvent: SingleLiveEvent<ResendCodeEvent> = SingleLiveEvent()
@@ -59,6 +62,30 @@ class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager)
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Log.d("wowCodeVM", "getCode big fail")
+            }
+        })
+    }
+
+    fun updateMetaData() {
+        api.getMetaDataCall().enqueue(object : Callback<ServerResponse<MetaDataModel>> {
+            override fun onResponse(
+                call: Call<ServerResponse<MetaDataModel>>,
+                response: Response<ServerResponse<MetaDataModel>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("wowSplashVM", "getMetaData success")
+                    val metaDataResponse = response.body() as ServerResponse<MetaDataModel>
+                    metaDataManager.setMetaDataObject(metaDataResponse.data!!)
+//                    navigationEvent.postValue(SplashViewModel.NavigationEvent(true, isRegistered))
+                } else {
+                    Log.d("wowSplashVM", "getMetaData fail")
+//                    navigationEvent.postValue(SplashViewModel.NavigationEvent(false, isRegistered))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<MetaDataModel>>, t: Throwable) {
+                Log.d("wowVerificationVM", "getMetaData big fail")
+//                navigationEvent.postValue(SplashViewModel.NavigationEvent(false, isRegistered))
             }
         })
     }

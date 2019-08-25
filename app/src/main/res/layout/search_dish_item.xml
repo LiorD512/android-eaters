@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
             android:elevation="8dp"
             android:layout_marginEnd="7.9dp"
-            android:layout_marginStart="7.9dp"
+            android:layout_marginStart="2.9dp"
             android:background="@color/white"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
@@ -78,7 +78,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    <TextView
+                    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+                            android:singleLine="true"
+                            app:minTextSize="11sp"
                             android:id="@+id/searchDishItemDishName"
                             style="@style/SemiBold15Dark"
                             android:layout_weight="1"

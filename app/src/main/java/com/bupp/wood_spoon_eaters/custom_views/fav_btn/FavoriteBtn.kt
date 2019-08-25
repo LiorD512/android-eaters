@@ -16,6 +16,8 @@ class FavoriteBtn : FrameLayout, FavoriteBtnViewModel.FavVMListener {
 
     var dishId: Long? = null
     val viewModel = FavoriteBtnViewModel()
+    var isFavSelected = false
+
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -39,7 +41,6 @@ class FavoriteBtn : FrameLayout, FavoriteBtnViewModel.FavVMListener {
         updateUi()
     }
 
-    var isFavSelected = false
 
     private fun onClick() {
         animateView()
@@ -67,6 +68,7 @@ class FavoriteBtn : FrameLayout, FavoriteBtnViewModel.FavVMListener {
     }
 
     fun setIsFav(isFavorite: Boolean) {
+        isFavSelected = isFavorite
         favBtn.isSelected = isFavorite
     }
 

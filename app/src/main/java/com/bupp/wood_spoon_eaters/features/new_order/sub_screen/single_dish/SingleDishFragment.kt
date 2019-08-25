@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.dialogs.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.custom_views.DishCounterView
+import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
 import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
@@ -36,7 +38,7 @@ import kotlin.collections.ArrayList
 class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogListener) : Fragment(),
     OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener, StatusBottomBar.StatusBottomBarListener,
-    StartNewCartDialog.StartNewCartDialogListener {
+    StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener {
 
     interface SingleDishDialogListener {
         fun onCheckout()
@@ -47,9 +49,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         fun newInstance(menuItemId: Long, listener: SingleDishDialogListener) = SingleDishFragment(menuItemId, listener)
     }
 
-    val INFO = 0
-    val INGREDIENT = 1
-    val COOK = 2
+
 
     var ingredientsAdapter: DishIngredientsAdapter? = null
     private lateinit var currentDish: FullDish
@@ -87,8 +87,6 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
                         initUi()
                         checkForOpenOrder(currentDish)
                     }
-                } else {
-
                 }
             }
         })
@@ -104,7 +102,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
                 singleDishPb.hide()
                 if (event.isSuccess) {
                     if (event.order != null) {
-                        scrollPageTo(COOK)
+                        singleDishHeader.updateUi(SingleDishHeader.COOK)
                         singleDishScrollView.fullScroll(View.FOCUS_DOWN)
                         updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
                     }
@@ -138,6 +136,30 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         initIngredient()
         initCook()
         initCartBottomBar()
+    }
+
+    private fun initHeader() {
+        singleDishHeader.setSingleDishHeaderListener(this)
+    }
+
+    override fun onBackClick() {
+        (activity as NewOrderActivity).finish()
+    }
+
+    override fun onPageClick(page: Int) {
+        hidePages()
+        when(page){
+            SingleDishHeader.INFO -> {singleDishInfoLayout.visibility = View.VISIBLE}
+            SingleDishHeader.COOK -> {singleDishCookLayout.visibility = View.VISIBLE}
+            SingleDishHeader.INGREDIENT -> {singleDishIngredientLayout.visibility = View.VISIBLE}
+        }
+    }
+
+
+    private fun hidePages(){
+        singleDishInfoLayout.visibility = View.GONE
+        singleDishCookLayout.visibility = View.GONE
+        singleDishIngredientLayout.visibility = View.GONE
     }
 
     private fun initCartBottomBar() {
@@ -175,42 +197,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     }
 
 
-    private fun initHeader() {
-        singleDishHeaderInfo.setOnClickListener { scrollPageTo(INFO) }
-        singleDishHeaderCook.setOnClickListener { scrollPageTo(COOK) }
-        singleDishHeaderIngredient.setOnClickListener { scrollPageTo(INGREDIENT) }
 
-        singleDishHeaderBack.setOnClickListener { (activity as NewOrderActivity).finish() }
-
-        singleDishHeaderInfo.performClick()
-    }
-
-    private fun scrollPageTo(scrollPos: Int) {
-        unSelectAll()
-        when (scrollPos) {
-            INFO -> {
-                singleDishHeaderInfo.isSelected = true
-                singleDishInfoLayout.visibility = View.VISIBLE
-            }
-            INGREDIENT -> {
-                singleDishHeaderIngredient.isSelected = true
-                singleDishIngredientLayout.visibility = View.VISIBLE
-            }
-            COOK -> {
-                singleDishHeaderCook.isSelected = true
-                singleDishCookLayout.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private fun unSelectAll() {
-        singleDishHeaderInfo.isSelected = false
-        singleDishHeaderCook.isSelected = false
-        singleDishHeaderIngredient.isSelected = false
-        singleDishInfoLayout.visibility = View.GONE
-        singleDishCookLayout.visibility = View.GONE
-        singleDishIngredientLayout.visibility = View.GONE
-    }
 
     private fun initInfo() {
         singleDishInfoCook.setUser(currentDish.cook)
@@ -219,7 +206,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         singleDishInfoFavorite.setDishId(currentDish.id)
 
         singleDishInfoName.text = currentDish.name
-        singleDishInfoCookName.text = "by ${currentDish.cook.getFullName()}"
+        singleDishInfoCookName.text = "By ${currentDish.cook.getFullName()}"
         if (currentDish.cook.country != null) {
             Glide.with(context!!).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
@@ -229,11 +216,12 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         singleDishInfoPrice.text = currentDish.price.formatedValue
         val menuItem = currentDish.menuItem
         if (menuItem != null) {
-            singleDishInfoQuantity.text = "${menuItem.unitsSold}/${menuItem.quantity} Left"
+            val quantityLeft = menuItem.quantity - menuItem.unitsSold
+            singleDishInfoQuantity.text = "$quantityLeft Left"
+            singleDishInfoDishCounter.setDishCounterViewListener(this, quantityLeft)
         }
 
         initOrderDate()
-        singleDishInfoDishCounter.setDishCounterViewListener(this)
         singleDishInfoRating.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
     }
@@ -249,7 +237,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         if(orderAtDate != null){
             singleDishInfoDate.text = "${Utils.parseDateToDayDateHour(orderAtDate)}"
         }else if(currentDish.doorToDoorTime != null){
-            singleDishInfoDate.text = "${currentDish.doorToDoorTime}"
+            singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
         }
         singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
         singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
@@ -296,8 +284,12 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         cookProfileImageView.setUser(currentDish.cook)
         cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}, ${currentDish.cook.getAge()}"
 
-        var profession = "${currentDish.cook.profession},"
-        var country = "${currentDish.cook.country?.name}"
+        var profession = currentDish.cook.profession
+        var country = ""
+        currentDish.cook.country?.let{
+            country = ", ${it.name}"
+            Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
+        }
         cookProfileFragProfession.text = "$profession $country"
         cookProfileFragRating.text = currentDish.cook.rating.toString()
         cookProfileFragCuisineGrid.initStackableView(currentDish.cook.cuisines as ArrayList<SelectableIcon>)

@@ -32,47 +32,48 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
         requestOptions = requestOptions.transforms(CenterCrop(), RoundedCornersTransformation(context, 8, 0, RoundedCornersTransformation.CornerType.TOP))
         Glide.with(context).load(dish.thumbnail).apply(requestOptions).into((holder as DishItemViewHolder).bkgImg)
         (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
-        holder.name.text = dish.name
-        holder.cookName.text = "by ${dish.cook.getFullName()}"
+        holder.name.text = "${dish.name} ${dish.price.formatedValue}"
+        holder.cookName.text = "By ${dish.cook.getFullName()}"
         holder.rating.text = "${dish.rating}"
 
         if (dish.menuItem != null) {
-            holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
-            val upcomingSlot = dish.menuItem.cookingSlot
-            if (upcomingSlot != null) {
-                holder.date.text = Utils.parseDateToDayDateHour(upcomingSlot?.startsAt)
+//            holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
+            holder.dishCount.setText("${dish.menuItem?.getQuantityLeft()}")
+//            val upcomingSlot = dish.menuItem.cookingSlot
+            if (dish.menuItem.orderAt != null) {
+                holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
+            }else if(dish.doorToDoorTime != null){
+                holder.date.text = "ASAP, ${dish.doorToDoorTime}"
             }
             holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
+
+            val upcomingSlot = dish.menuItem.cookingSlot
+            upcomingSlot?.let {
+                if(it.freeDelivery){
+                    holder.freeDelivery.visibility = View.VISIBLE
+                }else{
+                    holder.freeDelivery.visibility = View.GONE
+                }
+            }
         }else{
             holder.unAvailableLayout.visibility = View.VISIBLE
         }
 
         holder.favBtn.setIsFav(dish.isFavorite)
         holder.favBtn.setDishId(dish.id)
+
         lastClickedPosition = position
 
 
     }
-
-//    private fun onFavClick(dishId: Long, favSelected: Boolean) {
-//        listener?.onFavClick(dishId, favSelected)
-//    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.search_dish_item, parent, false))
     }
 
     override fun getItemCount(): Int {
-        return dishes!!.size
+        return dishes.size
     }
-
-//    override fun onFavClick(isChecked: Boolean) {
-//        if(lastClickedPosition != 0){
-//            listener?.onFavClick(dishes[lastClickedPosition].id, isChecked)
-//        }
-//    }
-
 
 }
 

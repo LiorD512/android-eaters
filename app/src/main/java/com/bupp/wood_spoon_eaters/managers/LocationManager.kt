@@ -24,6 +24,7 @@ import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -183,10 +184,14 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
     fun getAddressFromLocation(location: Location): Address{
         val geocoder: Geocoder
-        val addresses: List<android.location.Address>
+        var addresses: List<android.location.Address> = arrayListOf()
         geocoder = Geocoder(context, Locale.getDefault())
 
-        addresses = geocoder.getFromLocation(location.latitude, location.longitude,1)
+        try {
+            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        }catch (e: IOException){
+            Log.d(TAG, "location manager error: " + e.message)
+        }
         Log.d(TAG, "my location object: ${addresses[0]}")
         val streetLine = addresses[0].getAddressLine(0)
 //        val city = addresses[0].locality

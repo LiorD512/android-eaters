@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.dish_counter_view.view.*
 
 class DishCounterView: LinearLayout{
 
+    private var quantityLeft: Int? = 1
     val MINUS = 0
     val PLUS = 1
     var count: Int = 1
@@ -31,8 +32,10 @@ class DishCounterView: LinearLayout{
         dishCounterPlus.setOnClickListener { handleCount(PLUS) }
     }
 
-    fun setDishCounterViewListener(listener: DishCounterViewListener){
+    fun setDishCounterViewListener(listener: DishCounterViewListener, quantityLeft: Int? = 1){
         this.listener = listener
+        this.quantityLeft = quantityLeft
+        updateUi()
     }
 
     private fun handleCount(type: Int) {
@@ -41,14 +44,34 @@ class DishCounterView: LinearLayout{
                 if(count > 0){
                     count--
                 }
+
             }
             PLUS -> {
                 count++
+
             }
         }
+        updateUi()
         dishCounterCount.setText(count.toString())
         if(::listener.isInitialized){
             listener.onDishCounterChanged(count)
+        }
+    }
+
+    private fun updateUi() {
+        if(count == 1){
+            dishCounterMinus.isEnabled = false
+            dishCounterMinus.alpha = 0.5f
+        }else{
+            dishCounterMinus.isEnabled = true
+            dishCounterMinus.alpha = 1f
+        }
+        if(count == quantityLeft){
+            dishCounterPlus.isEnabled = false
+            dishCounterPlus.alpha = 0.5f
+        }else{
+            dishCounterPlus.isEnabled = true
+            dishCounterPlus.alpha = 1f
         }
     }
 

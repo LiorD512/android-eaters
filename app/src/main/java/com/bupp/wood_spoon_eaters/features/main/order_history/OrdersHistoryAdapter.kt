@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,13 +24,22 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as ItemViewHolder).initItem(context, orders[position])
+        val order = orders[position]
+        (holder as ItemViewHolder).initItem(context,order )
 
-        holder.reOrder.setOnClickListener {
-            listener?.onRateClick(orders[position].id)
+        if(order.wasRated){
+            holder.rateBtn.isEnabled = false
+            holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue_50))
+        }else{
+            holder.rateBtn.isEnabled = true
+            holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue))
+            holder.rateBtn.setOnClickListener {
+                listener?.onRateClick(order.id)
+            }
         }
+
         holder.reportIssue.setOnClickListener {
-            listener?.onReportClick(orders[position].id)
+            listener?.onReportClick(order.id)
         }
 
     }
@@ -62,7 +72,7 @@ class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val title: TextView = view.orderHistoryItemCookBy
     private val price: TextView = view.orderHistoryItemPrice
     private val date: TextView = view.orderHistoryItemDate
-    var reOrder: TextView = view.orderHistoryItemReorder
+    var rateBtn: TextView = view.orderHistoryItemReorder
     var reportIssue: TextView = view.orderHistoryItemReport
 
 }

@@ -35,7 +35,6 @@ class OrdersHistoryViewModel(val api: ApiService) : ViewModel() {
                 getOrdersEvent.postValue(OrderHistoryEvent(false))
             }
 
-
         })
     }
 

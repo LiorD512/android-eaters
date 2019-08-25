@@ -83,8 +83,9 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         }
 
         holder.minusBtn.setOnClickListener {
-            if (orderItem.quantity > 0)
+            if (orderItem.quantity > 0){
                 orderItem.quantity--
+            }
             notifyDataSetChanged()
             listener?.onDishCountChange()
         }

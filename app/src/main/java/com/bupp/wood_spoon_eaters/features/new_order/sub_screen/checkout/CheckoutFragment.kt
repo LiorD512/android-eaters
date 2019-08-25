@@ -14,8 +14,10 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
+import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.TipCourierDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -28,7 +30,7 @@ import kotlin.collections.ArrayList
 class CheckoutFragment(val listener: CheckoutDialogListener) :
     Fragment(), TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener,
-    StatusBottomBar.StatusBottomBarListener {
+    StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener {
 
     lateinit var curOrder: Order
 
@@ -137,9 +139,20 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
         if(allDishSubTotal == 0.0){
             checkoutFragStatusBar.isEnabled = false
+            Log.d("wowCheckoutFrag","no dish no more !")
+            showEmptyCartDialog()
         }else{
             checkoutFragStatusBar.isEnabled = true
         }
+    }
+
+    private fun showEmptyCartDialog() {
+        ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+    }
+
+    override fun onClearCart() {
+        viewModel.clearCart()
+        (activity as NewOrderActivity).finish()
     }
 
     override fun onStatusBarClicked(type: Int?) {

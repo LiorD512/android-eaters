@@ -12,9 +12,10 @@
             android:paddingLeft="15.4dp"
             android:orientation="vertical"
             android:layout_width="match_parent" android:layout_height="wrap_content">
+
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="134dp"
                 android:orientation="horizontal">
 
             <com.bupp.wood_spoon_eaters.custom_views.UserImageView
@@ -25,9 +26,10 @@
                     android:layout_height="wrap_content"/>
 
             <LinearLayout
+                    android:gravity="center|left"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -40,9 +42,10 @@
                         android:text="Neta Nachmias, 29" />
 
                 <LinearLayout
+                        android:layout_marginTop="8.3dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center|left"
                         android:orientation="horizontal">
 
                     <TextView
@@ -50,14 +53,14 @@
                             style="@style/Reg13Dark_50"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8.3dp"
                             android:layout_gravity="start"
                             android:text="Architect, Israel" />
 
                     <ImageView
+                            android:layout_marginLeft="7dp"
                             android:id="@+id/cookProfileFragFlag"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_width="23dp"
+                            android:layout_height="23dp" />
 
                 </LinearLayout>
 
@@ -77,7 +80,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="7.2dp"
-                    android:layout_marginEnd="16.4dp"
                     android:drawableStart="@drawable/icons_raitings"
                     android:drawablePadding="8.7dp"
                     android:gravity="center"

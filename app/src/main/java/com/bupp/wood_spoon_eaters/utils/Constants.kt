@@ -54,6 +54,7 @@ class Constants {
         const val INPUT_TYPE_LONG_TEXT = 3
         const val INPUT_TYPE_FULL_NAME = 4
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
+        const val INPUT_TYPE_DONE_BTN = 6
 
 
         //Price Range View
@@ -87,6 +88,9 @@ class Constants {
         const val OFFER_DISH_TAG = "offer_dish_tag"
         const val DISH_OFFERED_TAG = "dish_offered_tag"
 
+        const val WELCOME_TAG ="welcome_tag"
+        const val CODE_TAG ="welcome_tag"
+        const val PHONE_VERIFICATION_TAG = "phone_verification_tag"
 
         const val FEED_TAG = "feed_tag"
         const val SEARCH_TAG = "search_tag"
@@ -116,6 +120,7 @@ class Constants {
         const val TRACK_ORDER_DIALOG_TAG = "track_order_dialog_tag"
         const val RATE_LAST_ORDER_DIALOG_TAG = "rate_last_order_dialog_tag"
         const val RATINGS_DIALOG_TAG = "ratings_dialog_tag"
+        const val CLEAR_CART_DIALOG_TAG = "clear_cart_dialog"
         const val REPORT_TAG = "report_tag"
         const val ORDER_DETAILS_TAG = "order_details_tag"
         const val ORDER_HISTORY_TAG = "order_history_tag"

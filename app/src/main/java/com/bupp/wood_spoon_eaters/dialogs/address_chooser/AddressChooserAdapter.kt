@@ -94,7 +94,7 @@ class AddressChooserAdapter(
 
     override fun getItemCount(): Int {
         return if (addresses != null)
-            addresses!!.size + 1
+            addresses.size + 1
         else 1
     }
 

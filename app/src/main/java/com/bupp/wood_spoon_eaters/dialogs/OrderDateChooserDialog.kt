@@ -21,13 +21,8 @@ import kotlin.collections.ArrayList
 
 
 
-class OrderDateChooserDialog(
-    val currentMenuItem: MenuItem?,
-    val allMenuItems: ArrayList<MenuItem>,
-    val listener: OrderDateChooserDialogListener
-) : DialogFragment(),
+class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: ArrayList<MenuItem>, val listener: OrderDateChooserDialogListener) : DialogFragment(),
     OrderDateChooserAdapter.OrderDateChooserAdapterListener, TimePickerDialog.OnTimeSetListener {
-
 
     private var newSelectedMenuItem: MenuItem? = null
     private lateinit var addressAdapter: OrderDateChooserAdapter
@@ -92,7 +87,7 @@ class OrderDateChooserDialog(
         val calEnd = Calendar.getInstance()
         calEnd.time = endDate
 
-        val dpd = TimePickerDialog.newInstance(this, calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), true)
+        val dpd = TimePickerDialog.newInstance(this, calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), false)
 
         dpd.show(fragmentManager, "Datepickerdialog")
         dpd.setMinTime(calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), 0)

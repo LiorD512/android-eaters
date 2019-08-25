@@ -14,7 +14,9 @@ import kotlin.collections.ArrayList
 
 class NewOrderViewModel(val api: ApiService, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel() {
 
-
+    fun initNewOrder(){
+        orderManager.initNewOrder()
+    }
 
 
 }

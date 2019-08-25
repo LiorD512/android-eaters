@@ -64,13 +64,14 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         return feedRequest
     }
 
+
+
     fun addToCart(cookingSlotId: Long? = null, dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
                   tipAmount: String? = null, promoCodeId: Long? = null) {
 //        val cookingSlotId = cookingSlotId
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
         val orderItem = initOrderItemsList(dishId, quantity, removedIngredients, note)
 
-        orderManager.initNewOrder()
         orderManager.updateOrderRequest(
             cookingSlotId = cookingSlotId,
             deliveryAddress = deliveryAddress,
@@ -160,6 +161,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
     fun clearCurrentOpenOrder() {
         orderManager.clearCurrentOrder()
+        orderManager.initNewOrder()
     }
 
 

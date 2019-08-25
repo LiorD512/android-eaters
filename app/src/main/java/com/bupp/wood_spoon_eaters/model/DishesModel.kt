@@ -15,6 +15,7 @@ data class Dish(
     @SerializedName("is_favorite") val isFavorite: Boolean,
     @SerializedName("price") val price: Price,
     @SerializedName("cook") val cook: Cook,
+    @SerializedName("door_to_door_time") val doorToDoorTime: String?,
     @SerializedName("matching_menu") val menuItem: MenuItem,
     @SerializedName("avg_rating") val rating: Double
 //    @SerializedName("description") val description: String,
@@ -34,7 +35,12 @@ data class MenuItem(
     @SerializedName("units_sold") val unitsSold: Int = 0,
     @SerializedName("order_at") val orderAt: Date? = null,
     @SerializedName("cooking_slot") val cookingSlot: CookingSlot
-): Parcelable
+): Parcelable{
+    fun getQuantityLeft(): String{
+        val left = quantity - unitsSold
+        return "$left Left"
+    }
+}
 
 @Parcelize
 data class CookingSlot(

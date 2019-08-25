@@ -15,10 +15,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.ArrayList
-import android.text.method.Touch.onTouchEvent
-import android.widget.Toast
-import android.view.MotionEvent
+import java.util.*
 
 
 class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
@@ -49,10 +46,9 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
 
     private fun initObservers() {
         viewModel.feedEvent.observe(this, Observer { event ->
-            if(event != null){
-                if(event.isSuccess){
-                    initFeed(event.feedArr!!)
-                }
+            feedFragPb.hide()
+            if(event.isSuccess){
+                initFeed(event.feedArr!!)
             }
         })
     }
@@ -66,6 +62,7 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
 
     private fun FetchLocationAndFeed() {
         Log.d(TAG, "feed fragment started")
+        feedFragPb.show()
         viewModel.getFeed()
     }
 
@@ -82,8 +79,6 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
     private fun startDeliveryDetails() {
         (activity as MainActivity).loadDeliveryDetails()
 
-//        val lastLocation = viewModel.getLastLocation()
-//        Log.d("wowFeed","lastLocation: ${lastLocation?.latitude}")
     }
 
     override fun onDishClick(dish: Dish) {
@@ -93,13 +88,5 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
     override fun onCookClick(cook: Cook) {
 
     }
-
-//    override fun onFavClick(dishId: Long, isFavorite: Boolean) {
-//        if(isFavorite){
-//            viewModel.likeDish(dishId)
-//        }else{
-//            viewModel.unlikeDish(dishId)
-//        }
-//    }
 
 }

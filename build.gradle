@@ -1,15 +1,26 @@
 apply from: "versions.gradle"
 
+ext {
+    var = 'kofkof12'
+    var1 = 'woodSpoonEaters'
+}
+
 buildscript {
     apply from: "versions.gradle"
 
     repositories {
         google()
         jcenter()
+
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'io.fabric.tools:gradle:1.31.0'
     }
 }
 

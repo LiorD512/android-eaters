@@ -66,4 +66,8 @@ class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,
         (activity as MainActivity).loadReport(orderId)
     }
 
+    fun onRatingDone() {
+        initUi()
+    }
+
 }

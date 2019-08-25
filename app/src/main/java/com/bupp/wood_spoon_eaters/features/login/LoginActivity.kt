@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.features.login.code.CodeFragment
 import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationFragment
 import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeFragment
@@ -15,36 +16,38 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        loginActHeaderView.setHeaderViewListener(this)
         loadWelcomeFragment()
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    private fun loadFragment(fragment: Fragment, tag: String) {
         supportFragmentManager.beginTransaction()
+            .addToBackStack(tag)
             .replace(R.id.loginActContainer, fragment)
             .commit()
     }
 
     fun loadWelcomeFragment() {
         setTitleVisibility(View.GONE)
-        loadFragment(WelcomeFragment())
+        loadFragment(WelcomeFragment(), Constants.WELCOME_TAG)
     }
 
     fun loadCodeFragment(phoneNumber: String) {
         setHeaderView(getString(R.string.code_fragment_title))
         setTitleVisibility(View.VISIBLE)
-        loadFragment(CodeFragment(phoneNumber))
+        loadFragment(CodeFragment(phoneNumber), Constants.CODE_TAG)
     }
 
     fun loadPhoneVerificationFragment() {
         setHeaderView(getString(R.string.phone_verification_fragment_title))
         setTitleVisibility(View.VISIBLE)
-        loadFragment(PhoneVerificationFragment())
+        loadFragment(PhoneVerificationFragment(), Constants.PHONE_VERIFICATION_TAG)
     }
 
     private fun loadSignUpActivity() {
@@ -83,6 +86,10 @@ class LoginActivity : AppCompatActivity() {
         //return here after code verification and current user is after login
         handlePb(false)
         loadMain()
+    }
+
+    override fun onHeaderBackClick() {
+        onBackPressed()
     }
 
 

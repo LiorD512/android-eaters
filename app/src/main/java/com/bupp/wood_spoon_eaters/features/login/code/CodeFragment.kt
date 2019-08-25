@@ -37,6 +37,7 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
                 (activity as LoginActivity).handlePb(false)
                 if (navigationEvent.isCodeLegit) {
                     Log.d("wow", "code success")
+                    viewModel.updateMetaData()
                     if(navigationEvent.isAfterLogin){
                         (activity as LoginActivity).onRegisteredUser()
                     }else{
@@ -116,6 +117,7 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
                     codeFragInput4.text = codeString.substring(3, 4)
                     codeFragInput4Bkg.elevation = 18f
                     codeFragNext.setBtnEnabled(true)
+                    sendCode(getCode())
                 } else {
                     codeFragInput4.text = ""
                     codeFragNext.setBtnEnabled(false)

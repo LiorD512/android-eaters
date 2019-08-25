@@ -47,4 +47,8 @@ class ManyCooksView : FrameLayout, ManyCooksViewAdapter.ManyCooksViewListener {
         listener?.onCookClicked(selected)
     }
 
+    fun setTitle(cooksTitle: String) {
+        manyCooksViewTitle.text = cooksTitle
+    }
+
 }

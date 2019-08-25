@@ -42,7 +42,7 @@ data class Address(
 
     fun getDropoffLocationStr(): String {
         when (dropOfLocationStr) {
-            "delivery_to_door" -> return "Delivery to door"
+            "delivery_to_door" -> return "Delivered To Your Door"
             else -> return "Pick up outside"
         }
     }
@@ -56,8 +56,8 @@ enum class DropOffLocation(str: String) {
 
 @Parcelize
 data class Country(
-    @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String,
+    @SerializedName("id") val id: Long = 0,
+    @SerializedName("name") val name: String = "",
     @SerializedName("iso") val iso: String? = null,
     @SerializedName("flag_url") val flagUrl: String? = ""
 ) : Parcelable

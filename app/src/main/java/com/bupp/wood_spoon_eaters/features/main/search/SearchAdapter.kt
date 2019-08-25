@@ -59,14 +59,23 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                 Glide.with(context).load(dish.thumbnail).into((holder as DishItemViewHolder).bkgImg)
                 (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
                 holder.name.text = dish.name
-                holder.cookName.text = "by ${dish.cook.getFullName()}"
+                holder.cookName.text = "By ${dish.cook.getFullName()}"
                 holder.rating.text = "${dish.rating}"
 
                 if(dish.menuItem != null){
                     holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
                     val upcomingSlot = dish.menuItem.cookingSlot
-                    if(upcomingSlot != null){
-                        holder.date.text = Utils.parseDateToDayDateHour(upcomingSlot?.startsAt)
+                    if (dish.menuItem.orderAt != null) {
+                        holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
+                    }else if(dish.doorToDoorTime != null){
+                        holder.date.text = "ASAP, ${dish.doorToDoorTime}"
+                    }
+                    upcomingSlot?.let {
+                        if (it.freeDelivery) {
+                            holder.freeDelivery.visibility = View.VISIBLE
+                        } else {
+                            holder.freeDelivery.visibility = View.GONE
+                        }
                     }
                 }
 

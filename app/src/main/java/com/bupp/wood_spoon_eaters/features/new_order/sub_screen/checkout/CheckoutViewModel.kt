@@ -73,5 +73,9 @@ class CheckoutViewModel(val api: ApiService, val orderManager:OrderManager, val 
         })
     }
 
+    fun clearCart() {
+        orderManager.clearCurrentOrder()
+    }
+
 
 }

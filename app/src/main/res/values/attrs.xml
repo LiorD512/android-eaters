@@ -42,6 +42,7 @@
             <enum name="MAIL" value="2"/>
             <enum name="LONG_TEXT" value="3"/>
             <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
+            <enum name="INPUT_TYPE_DONE_BTN" value="6"/>
         </attr>
     </declare-styleable>
 

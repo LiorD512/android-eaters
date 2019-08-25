@@ -13,11 +13,11 @@ data class Cook(
     @SerializedName("first_name") val firstName: String,
     @SerializedName("last_name") val lastName: String,
     @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("video") val video: String,
+    @SerializedName("video") val video: String?,
     @SerializedName("profession") val profession: String,
     @SerializedName("about") val about: String,
     @SerializedName("birthdate") val birthdate: Date,
-    @SerializedName("place_of_birth") val country: Country,
+    @SerializedName("place_of_birth") val country: Country = Country(),
     @SerializedName("certificates") val certificates: ArrayList<String>,
     @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>,
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>,
@@ -30,7 +30,7 @@ data class Cook(
 
     fun getAge(): Int {
         //todo: get birthday from server and set age
-        return Utils.getDiffYears(Date())
+        return Utils.getDiffYears(birthdate)
     }
 }
 

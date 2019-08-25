@@ -13,61 +13,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <RelativeLayout
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
+        <com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
+                android:id="@+id/singleDishHeader"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
-
-            <ImageButton
-                    android:id="@+id/singleDishHeaderBack"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15.4dp"
-                    android:background="@null"
-                    android:src="@drawable/icons_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            <TextView
-                    android:layout_toLeftOf="@+id/singleDishHeaderIngredient"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/singleDishHeaderInfo"
-                    android:text="Info"
-                    android:textColor="@color/grey_to_black_selector"
-                    android:layout_marginRight="47dp"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:drawableTop="@drawable/dish_tab_info_selector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            <TextView
-                    android:layout_centerInParent="true"
-                    android:id="@+id/singleDishHeaderIngredient"
-                    android:text="Ingredient"
-                    android:textColor="@color/grey_to_black_selector"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:drawableTop="@drawable/dish_tab_ingredients_selector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            <TextView
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/singleDishHeaderIngredient"
-                    android:id="@+id/singleDishHeaderCook"
-                    android:text="Cook"
-                    android:textColor="@color/grey_to_black_selector"
-                    android:layout_marginLeft="35dp"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:drawableTop="@drawable/dish_tab_cook_selector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
+                android:layout_height="wrap_content"/>
 
         <LinearLayout
                 android:orientation="vertical"
@@ -450,6 +399,7 @@ into consideration"/>
 
                             <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
                                     android:layout_marginTop="15.4dp"
+                                    app:inputType="INPUT_TYPE_DONE_BTN"
                                     android:id="@+id/singleDishIngredientInstructions"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>

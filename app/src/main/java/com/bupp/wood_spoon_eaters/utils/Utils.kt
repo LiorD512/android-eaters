@@ -160,8 +160,8 @@ object Utils {
     }
 
     fun getDiffYears(date: Date): Int {
-        val a = getCalendar(Date())
-        val b = getCalendar(date)
+        val a = getCalendar(date)
+        val b = getCalendar(Date())
         var diff = b.get(YEAR) - a.get(YEAR)
         if (a.get(MONTH) > b.get(MONTH) || a.get(MONTH) === b.get(MONTH) && a.get(DATE) > b.get(DATE)) {
             diff--

@@ -10,6 +10,7 @@ import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
@@ -111,6 +112,11 @@ class InputTitleView : FrameLayout {
                         inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT
                         inputTitleViewTitle.visibility = GONE
                     }
+                    Constants.INPUT_TYPE_DONE_BTN -> {
+                        inputTitleViewInput.imeOptions = EditorInfo.IME_ACTION_DONE
+                        inputTitleViewInput.setSingleLine(true)
+                    }
+
                 }
             }
 

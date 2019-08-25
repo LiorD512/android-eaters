@@ -37,34 +37,8 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             loadSingleDish(menuItemId)
         }
 
-        initStatusBar()
-        initObservers()
+        viewModel.initNewOrder()
     }
-
-
-    private fun initObservers() {
-
-    }
-
-    private fun initStatusBar() {
-//        newOrderStatusBar.setStatusBottomBarListener(this)
-    }
-
-
-
-//    override fun onStatusBarClicked(type: Int?) {
-//        when(type){
-//            Constants.STATUS_BAR_TYPE_CART -> {
-//                (getFragmentByTag(currentDesplayingFragment.last()) as SingleDishFragment).addToCart()
-//            }
-//            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
-//                updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
-//                onCheckout()
-//            }
-//        }
-//    }
-
-
 
 
 
@@ -79,7 +53,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     //Checkout
-
     override fun onCheckout() {
         loadFragment(CheckoutFragment(this), Constants.CHECKOUT_TAG)
     }
@@ -106,23 +79,23 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             .commit()
     }
 
-    private fun loadSubFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.newOrderContainer, fragment, tag)
-            .addToBackStack(null)
-            .commit()
-//        subscreensOnTheStack++;
-    }
-
-    private fun getFragmentByTag(tag: String): Fragment? {
-        val fragmentManager = this@NewOrderActivity.supportFragmentManager
-        val fragments = fragmentManager.fragments
-        for (fragment in fragments) {
-            if (fragment.tag == tag)
-                return fragment
-        }
-        return null
-    }
+//    private fun loadSubFragment(fragment: Fragment, tag: String) {
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.newOrderContainer, fragment, tag)
+//            .addToBackStack(null)
+//            .commit()
+////        subscreensOnTheStack++;
+//    }
+//
+//    private fun getFragmentByTag(tag: String): Fragment? {
+//        val fragmentManager = this@NewOrderActivity.supportFragmentManager
+//        val fragments = fragmentManager.fragments
+//        for (fragment in fragments) {
+//            if (fragment.tag == tag)
+//                return fragment
+//        }
+//        return null
+//    }
 
     override fun onBackPressed() {
 

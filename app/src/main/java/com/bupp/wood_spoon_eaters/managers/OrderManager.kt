@@ -69,6 +69,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
 
     fun clearCurrentOrder() {
         currentOrderRequest = null
+        curOrderResponse = null
     }
 
 

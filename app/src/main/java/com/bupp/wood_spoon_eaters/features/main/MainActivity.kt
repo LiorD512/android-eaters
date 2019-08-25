@@ -215,6 +215,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onRatingDone() {
         ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
+        if (getFragmentByTag(Constants.ORDER_HISTORY_TAG) != null) {
+            (getFragmentByTag(Constants.ORDER_HISTORY_TAG) as OrdersHistoryFragment).onRatingDone()
+        }
     }
 
     fun loadOrderDetails() {

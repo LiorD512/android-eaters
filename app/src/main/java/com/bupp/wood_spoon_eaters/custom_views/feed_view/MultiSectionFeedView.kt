@@ -40,22 +40,27 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
 
     private fun refresh() {
         Log.d("wowMultiSection","refresh !")
+        listener.refreshList()
     }
+
 
     fun setMultiSectionFeedViewListener(listener: MultiSectionFeedViewListener){
         this.listener = listener
     }
 
     fun initFeed(feedArr: ArrayList<Feed>) {
+        clearFeed()
         multiSectionViewRefreshLayout.setRefreshing(false)
         val dishArr: ArrayList<Feed> = arrayListOf()
         val cooksArr: ArrayList<Cook> = arrayListOf()
+        var cooksTitle: String = ""
 
         for(item in feedArr){
             if(isADishResource(item)){
                 dishArr.add(item)
             }
             else if(isACookResource(item)){
+                cooksTitle = item.title
                 cooksArr.addAll(item.search?.results as ArrayList<Cook>)
             }
         }
@@ -64,11 +69,15 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
             initDishesList(dishArr)
         }
         if(cooksArr.size > 0){
-            initCooksList(cooksArr)
+            initCooksList(cooksArr, cooksTitle)
         }
 
         multiSectionViewFavorites.setFavoritesViewListener(this)
 
+    }
+
+    private fun clearFeed() {
+        multiSectionViewDishList.removeAllViews()
     }
 
     private fun initDishesList(dishArr: ArrayList<Feed>) {
@@ -79,7 +88,8 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         }
     }
 
-    private fun initCooksList(cooksArr: ArrayList<Cook>) {
+    private fun initCooksList(cooksArr: ArrayList<Cook>, cooksTitle: String) {
+        multiSectionViewTopCooks.setTitle(cooksTitle)
         multiSectionViewTopCooks.initCooksView(cooksArr, this)
     }
 
