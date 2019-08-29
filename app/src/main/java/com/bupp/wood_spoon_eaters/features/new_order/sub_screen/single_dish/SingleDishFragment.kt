@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,14 +20,15 @@ import com.bupp.wood_spoon_eaters.dialogs.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.custom_views.DishCounterView
 import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
 import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
+import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
+import com.bupp.wood_spoon_eaters.dialogs.DishUnAvailableDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.model.FullDish
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import java.util.*
@@ -38,7 +38,8 @@ import kotlin.collections.ArrayList
 class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogListener) : Fragment(),
     OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener, StatusBottomBar.StatusBottomBarListener,
-    StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener {
+    StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
+    UserImageView.UserImageViewListener {
 
     interface SingleDishDialogListener {
         fun onCheckout()
@@ -76,7 +77,6 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         viewModel.checkForOpenOrder(currentDish.cook)
     }
 
-
     private fun initObservers() {
        viewModel.dishDetailsEvent.observe(this, Observer { event ->
             if (event != null) {
@@ -86,6 +86,10 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
                         this.currentDish = event.dish
                         initUi()
                         checkForOpenOrder(currentDish)
+                        if(!event.isAvailable){
+                            handleUnAvailableCookingSlot()
+
+                        }
                     }
                 }
             }
@@ -125,6 +129,19 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
             }
         })
     }
+
+    override fun onUserImageClick(cook: Cook?) {
+        if(cook != null && !cook.video.isNullOrEmpty()){
+            VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+        }
+    }
+
+    private fun handleUnAvailableCookingSlot() {
+        DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
+        val cookingSlotStartingTime = currentDish.menuItem?.cookingSlot?.startsAt
+        viewModel.updateChosenDeliveryDate(cookingSlotStartingTime!!)
+    }
+
 
     override fun onNewCartClick() {
         viewModel.clearCurrentOpenOrder()
@@ -201,6 +218,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
 
     private fun initInfo() {
         singleDishInfoCook.setUser(currentDish.cook)
+        singleDishInfoCook.setUserImageViewListener(this)
         Glide.with(context!!).load(currentDish.thumbnail).into(singleDishInfoImg)
         singleDishInfoFavorite.setIsFav(currentDish.isFavorite)
         singleDishInfoFavorite.setDishId(currentDish.id)
@@ -216,13 +234,14 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         singleDishInfoPrice.text = currentDish.price.formatedValue
         val menuItem = currentDish.menuItem
         if (menuItem != null) {
+            singleDishQuantityView.initQuantityView(menuItem)
             val quantityLeft = menuItem.quantity - menuItem.unitsSold
-            singleDishInfoQuantity.text = "$quantityLeft Left"
             singleDishInfoDishCounter.setDishCounterViewListener(this, quantityLeft)
+//            singleDishInfoQuantity.text = "$quantityLeft Left"
         }
 
         initOrderDate()
-        singleDishInfoRating.text = currentDish.rating.toString()
+        singleDishInfoRatingVal.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
     }
 
@@ -269,7 +288,11 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         singleDishIngredientCalories.text = "${currentDish.calorificValue} Calories"
         singleDishIngredientProtein.text = "${currentDish.proteins}g Protein"
         singleDishIngredientCarbohydrate.text = "${currentDish.proteins}g Carbohydrate"
-        singleDishIngredientSauteing.text = currentDish.cookingMethods[0].name
+
+        if(currentDish.cookingMethods.size > 0){
+            singleDishIngredientSauteing.text = currentDish.cookingMethods[0].name
+        }
+
 
         singleDishIngredientList.setLayoutManager(LinearLayoutManager(context))
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -282,6 +305,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
 
     private fun initCook() {
         cookProfileImageView.setUser(currentDish.cook)
+        cookProfileImageView.setUserImageViewListener(this)
         cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}, ${currentDish.cook.getAge()}"
 
         var profession = currentDish.cook.profession

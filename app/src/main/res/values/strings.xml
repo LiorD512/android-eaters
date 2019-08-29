@@ -13,7 +13,7 @@
     <string name="view_dialer_8_under_txt">TUV</string>
     <string name="view_dialer_9_under_txt">WXYZ</string>
 
-    <string name="default_bupp_phone_number">0547729888</string>
+    <string name="default_bupp_phone_number">+16179096185</string>
 
     <string name="welcome_fragment_login_btn">Get Started</string>
     <string name="welcome_fragment_sign_up_btn">I Already Have An Account</string>

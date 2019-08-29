@@ -62,7 +62,7 @@
                 android:id="@+id/actionTitleViewLocation"
                 android:layout_gravity="right|center"
                 android:layout_marginRight="18.2dp"
-                android:src="@drawable/icons_my_location"
+                android:src="@drawable/my_location_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

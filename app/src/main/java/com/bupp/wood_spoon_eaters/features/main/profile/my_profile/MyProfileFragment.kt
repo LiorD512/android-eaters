@@ -9,14 +9,17 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
+import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
+import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Eater
+import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
-    SingleFeedListView.SingleFeedListViewListener {
+    SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener {
 
 
     companion object {
@@ -81,7 +84,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragPromoCodesBtn.setOnClickListener { }
 
         myProfileFragLocationSettingsBtn.setOnClickListener { (activity as MainActivity).loadSettingsFragment() }
-        myProfileFragPrivacyBtn.setOnClickListener { }
+        myProfileFragPrivacyBtn.setOnClickListener { WebDocsDialog(Constants.WEB_DOCS_PRIVACY).show(childFragmentManager, Constants.WEB_DOCS_DIALOG_TAG) }
         myProfileFragSupportBtn.setOnClickListener { (activity as MainActivity).loadSupport() }
 
         myProfileFragJoinBtn.setOnClickListener { }
@@ -89,6 +92,13 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
         myProfileFragOrderHistoryBtn.setOnClickListener { openOrderHistoryDialog() }
 
+        profileFragLogout.setOnClickListener {
+            LogoutDialog(this).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
+        }
+    }
+
+    override fun logout() {
+        viewModel.logout(context!!)
     }
 
     private fun openOrderHistoryDialog() {

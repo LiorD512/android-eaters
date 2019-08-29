@@ -3,6 +3,8 @@ package com.bupp.wood_spoon_eaters.di
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserViewModel
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
+import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsViewModel
+import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.login.code.CodeViewModel
 import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationViewModel
@@ -62,13 +64,15 @@ val appModule = module {
     viewModel { FeedViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { SingleDishViewModel(get(), get(), get(), get()) }
-    viewModel { AddAddressViewModel(get(), get()) }
+    viewModel { AddAddressViewModel(get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(),get())}
     viewModel { RateLastOrderViewModel(get(),get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
-    viewModel { OrderDetailsViewModel(get(),get()) }
+    viewModel { OrderDetailsViewModel(get()) }
+
+    viewModel { PaymentMethodsViewModel(get()) }
 
     viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { ActiveOrderTrackerViewModel(get()) }
@@ -78,6 +82,7 @@ val appModule = module {
     viewModel { MyProfileViewModel(get(), get(), get()) }
     viewModel { EditMyProfileViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get()) }
+    viewModel { WebDocsViewModel(get())}
 
 
     //support

@@ -26,8 +26,10 @@
             <enum name="DELIVERY_DETAILS_TIME" value="1"/>
             <enum name="DELIVERY_DETAILS_PAYMENT" value="2"/>
             <enum name="DELIVERY_DETAILS_CHECKOUT_DELIVERY" value="3"/>
+            <enum name="DELIVERY_DETAILS_LOCATION_PROFILE" value="4"/>
         </attr>
         <attr name="changeable" format="boolean" />
+        <attr name="isSelectionGray" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">
@@ -66,6 +68,13 @@
             <enum name="NEW_INGREDIENT" value="1"/>
             <enum name="COUNTRY_CHOOSER" value="2"/>
             <enum name="LOCATION_CHOOSER" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="QuantityView">
+        <attr name="views_gravity" format="enum">
+            <enum name="CENTER" value="0"/>
+            <enum name="RIGHT" value="1"/>
         </attr>
     </declare-styleable>
 
@@ -114,6 +123,7 @@
             <enum name="BIG" value="2"/>
             <enum name="BIGGEST" value="3"/>
         </attr>
+        <attr name="isWithStroke" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="TagInputView">

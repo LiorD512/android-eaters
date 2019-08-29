@@ -109,18 +109,24 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         progressList = arrayListOf<CheckBox>(trackOrderDialogCb1, trackOrderDialogCb2, trackOrderDialogCb3, trackOrderDialogCb4)
 
         trackOrderDialogArrivalTime.text = Utils.parseDateToTime(order.estDeliveryTime)
+
+//        "idle", "received", "in_progress"
         when(order.preparationStatus){
-            "idle", "received", "in_progress" -> {
+            "in_progress" -> {
+                trackOrderDialogCb2.isChecked = true
+                curOrderStage = 2
+            }
+            "completed" -> {
                 trackOrderDialogCb2.isChecked = true
                 curOrderStage = 2
             }
         }
 
         when(order.deliveryStatus){
-            "idle", "awaiting" -> {
-                trackOrderDialogCb2.isChecked = true
-                curOrderStage = 2
-            }
+//            "idle", "awaiting" -> {
+//                trackOrderDialogCb2.isChecked = true
+//                curOrderStage = 2
+//            }
             "on_the_way" -> {
                 trackOrderDialogCb3.isChecked = true
                 curOrderStage = 3
@@ -173,9 +179,9 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         setOrderProgress(stepNum - 1)
     }
 
-    override fun onPause() {
+    override fun onDestroy() {
         viewModel.endUpdates()
-        super.onPause()
+        super.onDestroy()
     }
 
 

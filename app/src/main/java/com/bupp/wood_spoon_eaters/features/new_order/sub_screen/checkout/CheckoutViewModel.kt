@@ -27,9 +27,9 @@ class CheckoutViewModel(val api: ApiService, val orderManager:OrderManager, val 
         getOrderDetailsEvent.postValue(OrderDetailsEvent(orderManager.curOrderResponse))
     }
 
-    fun updateOrderAddress() {
-        orderManager.updateOrderRequest(deliveryAddress = eaterDataManager.getLastChosenAddress())
-    }
+//    fun updateOrderAddress() {
+//        orderManager.updateOrderRequest(deliveryAddress = eaterDataManager.getLastChosenAddress())
+//    }
 
     fun getDeliveryDetails() {
         val address = eaterDataManager.getLastChosenAddress()

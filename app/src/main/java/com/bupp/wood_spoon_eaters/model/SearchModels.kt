@@ -8,7 +8,7 @@ data class SearchRequest(
     var lat: Double? = null,
     var lng: Double? = null,
     var addressId: Long? = null,
-    var timestamp: Int? = null,
+    var timestamp: String? = null,
     var q: String? = "",
     var cuisineIds: ArrayList<Int>? = null,
     var dietIds: ArrayList<Long>? = null,

@@ -1,20 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker
 
 
-import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -23,9 +19,12 @@ import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ActiveOrderTrackerDialog(val orders: ArrayList<Order>) : DialogFragment(),
+class ActiveOrderTrackerDialog(val orders: ArrayList<Order>, val listener: ActiveOrderTrackerDialogListener) : DialogFragment(),
     TrackOrderFragment.TrackOrderDialogListener {
 
+    interface ActiveOrderTrackerDialogListener{
+        fun onContactUsClick()
+    }
 
     private lateinit var adapter: OrdersPagerAdapter
     val viewModel: ActiveOrderTrackerViewModel by viewModel<ActiveOrderTrackerViewModel>()
@@ -72,8 +71,9 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>) : DialogFragment(),
 
     //single order interfaces
     override fun onContactUsClick(order: Order) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        listener.onContactUsClick()
     }
+
 
     override fun onMessageClick(order: Order) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

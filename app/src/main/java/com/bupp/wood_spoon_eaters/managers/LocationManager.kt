@@ -187,13 +187,14 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         var addresses: List<android.location.Address> = arrayListOf()
         geocoder = Geocoder(context, Locale.getDefault())
 
+        var streetLine = ""
         try {
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            Log.d(TAG, "my location object: ${addresses[0]}")
+            streetLine = addresses[0].getAddressLine(0)
         }catch (e: IOException){
             Log.d(TAG, "location manager error: " + e.message)
         }
-        Log.d(TAG, "my location object: ${addresses[0]}")
-        val streetLine = addresses[0].getAddressLine(0)
 //        val city = addresses[0].locality
 //        val state = addresses[0].adminArea
 //        val country = addresses[0].countryName

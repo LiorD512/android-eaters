@@ -11,7 +11,7 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
     fun updateCurSearch(lat: Double? = null,
                         lng: Double? = null,
                         addressId: Long? = null,
-                        timestamp: Int? = null,
+                        timestamp: String? = null,
                         q: String? = "",
                         cuisineIds: ArrayList<Int>? = null,
                         dietIds: ArrayList<Long>? = null,
@@ -29,7 +29,7 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         return curSearch
     }
 
-    fun getSearchRequest(): SearchRequest {
+    fun getSearchRequest(str: String): SearchRequest {
         val currentAddress = eaterDataManager.getLastChosenAddress()
         if(eaterDataManager.isUserChooseSpecificAddress()){
             curSearch.addressId = currentAddress?.id
@@ -37,6 +37,13 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
             curSearch.lat = currentAddress?.lat
             curSearch.lng = currentAddress?.lng
         }
+        if(!str.isNullOrEmpty()){
+            curSearch.q = str
+        }
+
+        //time
+        curSearch.timestamp = eaterDataManager.getLastOrderTimeParam()
+
         return curSearch
     }
 

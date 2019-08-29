@@ -1,34 +1,46 @@
 package com.bupp.wood_spoon_eaters.features.main.order_details
 
+import android.util.Log
 import androidx.lifecycle.ViewModel;
+import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.OrderManager
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.model.Price
+import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class OrderDetailsViewModel(val apiService: ApiService, val orderManager: OrderManager) : ViewModel() {
+class OrderDetailsViewModel(val api: ApiService) : ViewModel() {
 
 
+    val orderDetails: SingleLiveEvent<OrderDetailsEvent> = SingleLiveEvent()
+    data class OrderDetailsEvent(val isSuccess: Boolean, val order: Order?)
 
-    val orderItems: SingleLiveEvent<OrderDetails> = SingleLiveEvent()
+    fun getOrderDetails(orderId: Long) {
+        api.getOrderById(orderId).enqueue(object: Callback<ServerResponse<Order>> {
+            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
+                if(response.isSuccessful){
+                    val order = response.body()?.data
+                    if(order != null){
+                        orderDetails.postValue(OrderDetailsEvent(true, order))
+                    }else{
+                        orderDetails.postValue(OrderDetailsEvent(false, null))
+                    }
+                }else{
+                    Log.d("wowFeedVM","postOrder fail")
+                    orderDetails.postValue(OrderDetailsEvent(false, null))
+                }
+            }
 
-    data class OrderDetails(val orders: ArrayList<OrderItem>)
-
-    fun getDumbOrderItems() {
-
-//        var price: Price = Price(1,1.0,"$1")
-//
-//        var cook: Cook2 = Cook2(firstName = "Eyal",lastName = "Yaakobi",thumbnail ="https://image.tmdb.org/t/p/w500_and_h282_face/87mvGYiKkV4PDNu9m0NIr0OPBrY.jpg")
-//        var dish: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-//        var dish2: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-//        var dish3: Dish2 = Dish2(name = " Tomato Soup",thumbnail = "https://www.cleaneatingkitchen.com/wp-content/uploads/2015/11/Healthy-Cream-of-Tomato-Soup.jpg",cook = cook)
-//
-//        var order: OrderItem2 = OrderItem2(id=1,dish = dish,quantity = 5,price= price)
-//        var order2: OrderItem2 = OrderItem2(id=2,dish = dish2,quantity = 2,price= price)
-//        var order3: OrderItem2 = OrderItem2(id=3,dish = dish3,quantity = 1,price= price)
-//
-//        orderItems.postValue(OrderDetails(arrayListOf(order,order2,order3)))
+            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
+                Log.d("wowFeedVM","postOrder big fail")
+                orderDetails.postValue(OrderDetailsEvent(false, null))
+            }
+        })
     }
 
 }

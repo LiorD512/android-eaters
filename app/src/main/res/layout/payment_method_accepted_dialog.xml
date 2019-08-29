@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/paymentSuccessDialogBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/back"
+        android:background="@color/dark_43"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:background="@drawable/rounded_white_bkg"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginRight="50.9dp"
+        android:layout_marginLeft="50.9dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:padding="5dp"
+            android:id="@+id/paymentSuccessDialogCloseBtn"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginTop="15.4dp"
+            android:src="@drawable/icons_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Reg15Dark"
+            android:gravity="center"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginRight="25.4dp"
+            android:layout_marginLeft="25.4dp"
+            android:layout_marginBottom="25.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Method Accepted"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="7.7dp"
+            android:layout_marginRight="7.7dp"
+            android:background="@color/dark_43" />
+
+        <TextView
+            android:id="@+id/shareCookingSlotDialogShare"
+            style="@style/SemiBold15Dark"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:gravity="center"
+            android:text="Cool" />
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -19,6 +19,7 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OrdersHistoryAdapterListener{
+        fun onOrderClick(orderId: Long)
         fun onRateClick(reportId: Long)
         fun onReportClick(reportId: Long)
     }
@@ -42,6 +43,10 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
             listener?.onReportClick(order.id)
         }
 
+        holder.mainLayout.setOnClickListener {
+            listener?.onOrderClick(order.id)
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -61,10 +66,9 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
 class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun initItem(context: Context, order: Order) {
         Glide.with(context).load(order.cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(img)
-        title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook.firstName}, "
-        price.text = order.total.formatedValue
-
-        date.text = Utils.parseDateToDateAndTime(order.deliverAt)
+        title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook.firstName}"
+        date.text = Utils.parseDateToDateAndTime(order.estDeliveryTime)
+        price.text = "Total: ${order.total.formatedValue}"
 
     }
 
@@ -74,5 +78,6 @@ class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val date: TextView = view.orderHistoryItemDate
     var rateBtn: TextView = view.orderHistoryItemReorder
     var reportIssue: TextView = view.orderHistoryItemReport
+    val mainLayout = view.orderHistoryMainLayout
 
 }

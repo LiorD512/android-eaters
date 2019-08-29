@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
 
 class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel() {
 
-    data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?)
+    data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
 
     data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
@@ -33,7 +33,8 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                 if(response.isSuccessful){
                     Log.d("wowSearchVM","getMenuItemsDetails success")
                     val dish = response.body()?.data
-                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish))
+                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
+                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
                 }else{
                     Log.d("wowSearchVM","getMenuItemsDetails fail")
                     dishDetailsEvent.postValue(DishDetailsEvent(false, null))
@@ -45,6 +46,20 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                 dishDetailsEvent.postValue(DishDetailsEvent(false, null))
             }
         })
+    }
+
+    private fun checkCookingSlotAvailability(dish: FullDish?): Boolean {
+        val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
+        val end: Date? = dish?.menuItem?.cookingSlot?.endsAt
+        var userSelection: Date? = eaterDataManager.getLastOrderTime()
+
+        if(start == null || end == null){
+            return false
+        }
+        if(userSelection == null){
+            userSelection = Date()
+        }
+        return userSelection.after(start) && userSelection.before(end)
     }
 
     private fun getFeedRequest(): FeedRequest {

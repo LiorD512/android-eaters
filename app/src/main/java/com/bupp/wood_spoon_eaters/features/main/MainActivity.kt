@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,6 +10,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon.dialogs.AddressChooserDialog
@@ -33,7 +36,6 @@ import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFr
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -50,8 +52,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener, EditAddressDialog.EditAddressDialogListener,
-    RateLastOrderDialog.RateDialogListener {
-
+    RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener {
 
     //    private val curShowingDialogs: ArrayList<SingleDishFragment> = arrayListOf()
     private var lastFragmentTag: String? = null
@@ -77,10 +78,15 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadFeed()
 
         checkForActiveOrder()
+        checkForTriggers()
     }
 
     fun checkForActiveOrder() {
         viewModel.checkForActiveOrder()
+    }
+
+    fun checkForTriggers() {
+        viewModel.checkForTriggers()
     }
 
     private fun initObservers() {
@@ -102,12 +108,19 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             } else {
                 handleActiveOrderBottomBar(false)
             }
-        }
-        )
+        })
+
+        viewModel.getTriggers.observe(this, Observer { triggerEvent ->
+            if (triggerEvent.isSuccess) {
+                Log.d("wowMain","found should rate id !: ${triggerEvent.trigger?.shouldRateId}")
+                RateLastOrderDialog(triggerEvent.trigger?.shouldRateId!!, this)
+            }
+        })
     }
 
     private fun handleActiveOrderBottomBar(shouldShow: Boolean) {
         if (shouldShow) {
+            Log.d("wowMain", "show bottom bar")
             mainActContainer.setPadding(0,0,0, resources.getDimension(R.dimen.header_view_height).toInt())
             activeOrderBottomBarTitle.visibility = View.VISIBLE
             activeOrderBottomBarTitle.setOnClickListener {
@@ -115,13 +128,34 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 viewModel.checkForActiveOrder()
             }
         } else {
+            Log.d("wowMain", "hide bottom bar")
             mainActContainer.setPadding(0,0,0,0)
             activeOrderBottomBarTitle.visibility = View.GONE
         }
     }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
-        ActiveOrderTrackerDialog(orders).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+        ActiveOrderTrackerDialog(orders, this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+    }
+
+    override fun onContactUsClick() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), Constants.PHONE_CALL_PERMISSION_REQUEST_CODE)
+            }
+        } else {
+            callPhone()
+        }
+    }
+
+
+    fun callPhone(){
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.default_bupp_phone_number)))
+        startActivity(intent)
     }
 
     fun startLocationUpdates() {
@@ -177,7 +211,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     fun loadMyProfile() {
         loadFragment(MyProfileFragment.newInstance(), Constants.MY_PROFILE_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS, "Hey ${viewModel.getUserName()}!")
+        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS, "My Account")
     }
 
     fun loadEditMyProfile() {
@@ -220,8 +254,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    fun loadOrderDetails() {
-        loadFragment(OrderDetailsFragment(), Constants.ORDER_DETAILS_TAG)
+    fun loadOrderDetails(orderId: Long) {
+        loadFragment(OrderDetailsFragment(orderId), Constants.ORDER_DETAILS_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order Details")
     }
 
@@ -379,6 +413,17 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     viewModel.startLocationUpdates(this)
                 }
             }
+            Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {
+                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission was granted, yay!
+                    callPhone()
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality
+                }
+                return
+            }
         }
     }
 
@@ -390,6 +435,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun callPhoneNumber() {
+        val phone = "+16179096185"
         val dialIntent = Intent(Intent.ACTION_DIAL)
         dialIntent.data = Uri.parse("tel:" + getString(R.string.default_bupp_phone_number))
         this.applicationContext.startActivity(dialIntent)
@@ -474,6 +520,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 updateAddressTimeView()
                 loadFeed()
             }
+
             else -> {
                 loadFeed()
             }
@@ -537,6 +584,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Constants.NEW_ORDER_REQUEST_CODE
         )
     }
+
 
     fun onReportIssueDone() {
         loadFeed()

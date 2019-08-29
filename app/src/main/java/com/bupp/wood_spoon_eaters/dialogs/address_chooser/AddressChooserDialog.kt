@@ -50,8 +50,7 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
 
         addressChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
 
-        addressAdapter =
-            AddressChooserAdapter(context!!, addresses, this)
+        addressAdapter = AddressChooserAdapter(context!!, addresses, this)
 
         val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
 

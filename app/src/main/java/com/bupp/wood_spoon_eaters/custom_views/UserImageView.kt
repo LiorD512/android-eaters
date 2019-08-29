@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
@@ -19,9 +20,11 @@ import kotlinx.android.synthetic.main.user_image_view.view.*
 
 class UserImageView : FrameLayout {
 
+    private lateinit var curCook: Cook
     private var type: Int = -1
     private var imageSize: Int = 0
 
+    private var isWithStroke: Boolean = false
     private var isWithBkg: Boolean = false
     private var placeHolder: Drawable? = null
 
@@ -31,7 +34,7 @@ class UserImageView : FrameLayout {
     private var listener: UserImageViewListener? = null
 
     interface UserImageViewListener {
-        fun onUserImageClick()
+        fun onUserImageClick(cook: Cook?)
     }
 
     fun setUserImageViewListener(listener: UserImageViewListener) {
@@ -50,11 +53,12 @@ class UserImageView : FrameLayout {
 //            isWithBkg = a.getBoolean(R.styleable.UserImageView_isWithBkg, false)
             imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.SMALL_IMAGE_SIZE)
             placeHolder = a.getDrawable(R.styleable.UserImageView_placeHolder)
+            isWithStroke = a.getBoolean(R.styleable.UserImageView_isWithStroke, false)
             a.recycle()
         }
 
         cookImageView.setOnClickListener {
-            listener?.onUserImageClick()
+            listener?.onUserImageClick(curCook)
         }
 
         initUi()
@@ -103,6 +107,12 @@ class UserImageView : FrameLayout {
             }
         }
 
+        if(isWithStroke){
+            cookImageView.background = ContextCompat.getDrawable(context, R.drawable.blue_circle)
+        }else{
+            cookImageView.background = null
+        }
+
         if (isWithBkg) {
             cookImageViewBkg.visibility = View.VISIBLE
         } else {
@@ -124,6 +134,7 @@ class UserImageView : FrameLayout {
 
 
     fun setUser(cook: Cook) {
+        this.curCook = cook
         setImage(cook.thumbnail)
         if (cook.video.isNullOrEmpty()) {
             isWithBkg = false

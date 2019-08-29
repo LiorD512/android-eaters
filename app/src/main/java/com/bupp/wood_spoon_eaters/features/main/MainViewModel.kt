@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.managers.PermissionManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.model.Trigger
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -22,14 +23,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel(val api: ApiService, val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager,
-                    val eaterDataManager: EaterDataManager): ViewModel(),
-    EaterDataManager.EaterDataMangerListener {
+                    val eaterDataManager: EaterDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     val addressUpdateEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
     data class AddressUpdateEvent(val currentAddress: Address?)
-
-
 
     private val TAG = "wowMainVM"
     fun isFirstTime(): Boolean{
@@ -133,6 +131,31 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         })
     }
 
+    val getTriggers: SingleLiveEvent<GetTriggers> = SingleLiveEvent()
+    data class GetTriggers(val isSuccess: Boolean, val trigger: Trigger?)
+    fun checkForTriggers() {
+        api.getTriggers().enqueue(object : Callback<ServerResponse<Trigger>> {
+            override fun onResponse(call: Call<ServerResponse<Trigger>>, response: Response<ServerResponse<Trigger>>) {
+                if (response.isSuccessful) {
+                    Log.d("wowMainVM", "getTriggers success")
+                    val trigger = response.body()!!.data
+                    if(trigger != null && trigger.shouldRateId != null){
+                        getTriggers.postValue(GetTriggers(true, trigger))
+                    }else{
+                        getTriggers.postValue(GetTriggers(false, null))
+                    }
+                } else {
+                    Log.d("wowMainVM", "getTriggers fail")
+                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Trigger>>, t: Throwable) {
+                Log.d("wowMainVM", "getTriggers big fail")
+                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+            }
+        })
+    }
 
 
 }

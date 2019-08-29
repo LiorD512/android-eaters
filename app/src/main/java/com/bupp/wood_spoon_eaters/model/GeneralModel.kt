@@ -16,7 +16,8 @@ data class MetaDataModel(
     @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>? = arrayListOf(),
     @SerializedName("metrics") val metrics: ArrayList<Metrics>? = arrayListOf(),
-    @SerializedName("report_topics") val reportTopic: ArrayList<ReportTopic>? = arrayListOf()
+    @SerializedName("report_topics") val reportTopic: ArrayList<ReportTopic>? = arrayListOf(),
+    @SerializedName("settings") val settings: ArrayList<AppSetting>? = arrayListOf()
 )
 
 data class ReportTopic(
@@ -50,12 +51,11 @@ data class PrepTimeRange(
 data class AppSetting(
     val id: Long,
     val key: String,
-    val value: String,
-    val data_type: Int,
-    val description: String,
-    val is_client_accessible: Boolean,
-
-    val updated_at: Date
+    val value: String
+//    val data_type: Int,
+//    val description: String,
+//    val is_client_accessible: Boolean,
+//    val updated_at: Date
 )
 
 //orders grid data class

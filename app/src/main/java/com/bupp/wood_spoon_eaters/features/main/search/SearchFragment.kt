@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.search
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -95,23 +96,13 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
                 }
             }
         })
-//        viewModel.dishDetailsEvent.observe(this, Observer { event ->
-//            if(event != null){
-//                searchFragPb.hide()
-//                if(event.isSuccess){
-//                    if(event.dish != null){
-//
-//                    }
-//                }else{
-//
-//                }
-//            }
-//        })
-
     }
 
+    fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+
     private fun initUi() {
-        itemDecor = GridItemDecoration(2, 2)
+        itemDecor = GridItemDecoration(15.dpToPx(), 2)
         searchFragList.addItemDecoration(itemDecor)
         adapter = SearchAdapter(context!!, viewModel.getCuisineLabels(), this)
         searchFragList.adapter = adapter
@@ -156,7 +147,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
             showListLayout(SEARCH_LIST_TYPE_CUISINE)
         }else{
             searchFragPb.show()
-            viewModel.search(str)
+            viewModel.search(query)
         }
     }
 

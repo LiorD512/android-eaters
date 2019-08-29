@@ -7,6 +7,7 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
+import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +16,7 @@ const val DELIVERY_TO_DOOR_STRING = "Delivery to door"
 const val PICK_UP_OUTSIDE_STRING = "Pick up outside"
 
 
-class AddAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager) : ViewModel(), EaterDataManager.EaterDataMangerListener {
+class AddAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings) : ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
 
@@ -274,6 +275,10 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
                 PICK_UP_OUTSIDE_STRING
             }
         }
+    }
+
+    fun isLocationEnabled(): Boolean {
+        return appSettings.shouldEnabledUserLocation
     }
 
 

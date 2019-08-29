@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.delivery_details_view.view.*
@@ -25,6 +26,7 @@ class DeliveryDetailsView : LinearLayout {
 
     private var type: Int = 0
     private var changeable: Boolean = false
+    private var isGrey: Boolean = false
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -40,6 +42,12 @@ class DeliveryDetailsView : LinearLayout {
             if (a.hasValue(R.styleable.DeliveryDetailsAttrs_detailsType)) {
                 changeable = a.getBoolean(R.styleable.DeliveryDetailsAttrs_changeable, true)
                 setChangeable(changeable)
+            }
+            if (a.hasValue(R.styleable.DeliveryDetailsAttrs_isSelectionGray)) {
+                isGrey = a.getBoolean(R.styleable.DeliveryDetailsAttrs_isSelectionGray, false)
+                if(isGrey){
+                    deliveryDetailsViewInput.setTextColor(ContextCompat.getColor(context, R.color.dark_50))
+                }
             }
         }
 
@@ -62,6 +70,10 @@ class DeliveryDetailsView : LinearLayout {
             Constants.DELIVERY_DETAILS_LOCATION -> {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_location)
                 deliveryDetailsViewTitle.text = "Delivery Address"
+            }
+            Constants.DELIVERY_DETAILS_LOCATION_PROFILE -> {
+                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_location)
+                deliveryDetailsViewTitle.text = "Manage Addresses"
             }
 //            Constants.DELIVERY_DETAILS_TIME -> {
 //                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)

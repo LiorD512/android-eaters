@@ -9,17 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
+import com.bupp.wood_spoon_eaters.dialogs.NoDishesAvailableDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
+import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
 class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
-
+    override fun onEmptyhDishList() {
+        NoDishesAvailableDialog().show(childFragmentManager, Constants.NO_DISHES_AVAILABLE_DIALOG)
+    }
 
 
     private val TAG = "wowFeedFragment"

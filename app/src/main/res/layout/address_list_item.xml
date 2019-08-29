@@ -9,7 +9,7 @@
 
     <TextView
             android:id="@+id/addressItemText"
-            android:drawableStart="@drawable/circle_checkbox_selector"
+            android:drawableStart="@drawable/circle_icon_selector"
             style="@style/Reg13Dark"
             android:paddingStart="15.4dp"
             android:paddingTop="22.6dp"

@@ -34,10 +34,7 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
         if(validFeedRequest(feedRequest)) {
             api.getEaterFavorites(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
                 .enqueue(object : Callback<ServerResponse<Search>> {
-                    override fun onResponse(
-                        call: Call<ServerResponse<Search>>,
-                        response: Response<ServerResponse<Search>>
-                    ) {
+                    override fun onResponse(call: Call<ServerResponse<Search>>, response: Response<ServerResponse<Search>>) {
                         if (response.isSuccessful) {
                             Log.d(TAG, "getEaterFavorites success")
                             val searchObj = response.body()?.data

@@ -57,13 +57,15 @@
             <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
                     android:layout_marginTop="34.2dp"
                     android:id="@+id/myProfileFragEditLocation"
-                    app:detailsType="DELIVERY_DETAILS_LOCATION"
+                    app:detailsType="DELIVERY_DETAILS_LOCATION_PROFILE"
+                    app:isSelectionGray="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
             <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
                     android:id="@+id/myProfileFragEditPayment"
                     app:detailsType="DELIVERY_DETAILS_PAYMENT"
+                    app:isSelectionGray="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -176,7 +178,7 @@
                     android:id="@+id/myProfileFragLocationSettingsBtn"
                     android:orientation="vertical"
                     android:layout_marginTop="9.2dp"
-                    android:layout_marginLeft="15.4dp"
+                    android:layout_marginLeft="17.4dp"
                     android:layout_marginRight="15.4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -246,6 +248,16 @@
                         android:background="@color/silver"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
+
+                <TextView
+                        style="@style/SemiBold15Red"
+                        android:id="@+id/profileFragLogout"
+                        android:paddingTop="15.4dp"
+                        android:paddingBottom="15.4dp"
+                        android:text="Sign Out"
+                        android:textColor="@color/red"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
             </LinearLayout>
 

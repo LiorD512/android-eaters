@@ -44,7 +44,7 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
     }
 
     fun search(str: String) {
-        val curSearchObj = searchManager.getSearchRequest()
+        val curSearchObj = searchManager.getSearchRequest(str)
         doSearch(curSearchObj)
     }
 

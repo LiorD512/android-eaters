@@ -8,7 +8,7 @@
         tools:context="com.bupp.wood_spoon_eaters.features.main.search.SearchFragment">
 
     <LinearLayout
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:visibility="gone"
             android:id="@+id/searchFragEmptyLayout"
             android:orientation="vertical"
@@ -88,6 +88,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+            tools:visibility="visible"
             android:visibility="gone"
             android:layout_marginTop="23dp"
             android:id="@+id/searchFragList"

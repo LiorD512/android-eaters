@@ -1,6 +1,11 @@
 package com.bupp.wood_spoon_eaters.utils
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.Eater
 
 class AppSettings(val sharedPreferences: SharedPreferences) {
@@ -34,7 +39,15 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
         get() = sharedPreferences.getBoolean(Constants.ENABLE_COMMERCIAL_EMAILS, true)
         set(isEnabled) = sharedPreferences.edit().putBoolean(Constants.ENABLE_COMMERCIAL_EMAILS, isEnabled).apply()
 
-
+    fun logout(context: Context){
+        sharedPreferences.edit().clear().commit()
+        val intent = Intent(context, SplashActivity::class.java)
+        val mPendingIntentId = 123
+        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+        System.exit(0)
+    }
 
 
 }

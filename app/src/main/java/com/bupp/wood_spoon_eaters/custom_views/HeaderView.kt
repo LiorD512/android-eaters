@@ -8,9 +8,11 @@ import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.text_watcher.AutoCompleteTextWatcher
 import kotlinx.android.synthetic.main.header_view.view.*
+import kotlinx.android.synthetic.main.input_title_view.view.*
 
 
 class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
@@ -41,6 +43,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         initClicks()
     }
 
+    private var type: Int? = -1
     var listener: HeaderViewListener? = null
 
     fun setHeaderViewListener(listenerInstance: HeaderViewListener) {
@@ -62,13 +65,19 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
     }
 
     fun setType(type: Int?, title: String? = "") {
+        this.type = type
         initUi(type)
         headerViewTitle.text = title
     }
 
     private fun initClicks() {
         headerViewBackBtn.setOnClickListener {
-            listener?.onHeaderBackClick()
+            when(type){
+                Constants.HEADER_VIEW_TYPE_SEARCH -> {
+                    checkInputState()
+                }
+                else -> listener?.onHeaderBackClick()
+            }
         }
         headerViewDoneBtn.setOnClickListener {
             listener?.onHeaderDoneClick()
@@ -111,7 +120,15 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         }
     }
 
-    override fun onUserImageClick() {
+    private fun checkInputState() {
+        if(headerViewSearchInput.text.isEmpty()){
+            listener?.onHeaderBackClick()
+        }else{
+            headerViewSearchInput.text.clear()
+        }
+    }
+
+    override fun onUserImageClick(cook: Cook?) {
         listener?.onHeaderProfileClick()
     }
 
@@ -201,5 +218,9 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
 
     fun updateFilterUi(isEnabled: Boolean) {
         headerViewFilterBtn.isSelected = isEnabled
+    }
+
+    fun setTitle(title: String) {
+        headerViewTitle.text = title
     }
 }

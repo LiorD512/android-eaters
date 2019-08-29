@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.checkout_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
@@ -48,8 +49,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         initUi()
         initObservers()
     }
@@ -89,26 +88,35 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         checkoutFragChangePaymentBtn.setOnClickListener {
             Toast.makeText(context, "on change payment clicked", Toast.LENGTH_SHORT).show()
         }
-        viewModel.getDeliveryDetails()
-        viewModel.getDeliveryDetailsEvent.observe(this, Observer { deliveryDetails -> handleDeliveryDetails(deliveryDetails.address, deliveryDetails.time) })
+//        viewModel.getDeliveryDetails()
+//        viewModel.getDeliveryDetailsEvent.observe(this, Observer { deliveryDetails -> handleDeliveryDetails(deliveryDetails.address, deliveryDetails.time) })
         viewModel.getOrderDetails()
         viewModel.getOrderDetailsEvent.observe(this, Observer { orderDetails -> handleOrderDetails(orderDetails.order) })
 
     }
 
-    private fun handleDeliveryDetails(address: Address?, time: String?) {
-        if (address != null) {
-            checkoutFragDeliveryAddress.updateDeliveryDetails(address.streetLine1)
-        }
-        if(time != null){
-            checkoutFragDeliveryTime.updateDeliveryDetails(time)
-        }
-    }
+//    private fun handleDeliveryDetails(address: Address?, time: String?) {
+//        if (address != null) {
+//            checkoutFragDeliveryAddress.updateDeliveryDetails(address.streetLine1)
+//        }
+//        if(time != null){
+//            checkoutFragDeliveryTime.updateDeliveryDetails(time)
+//        }
+//    }
 
     private fun handleOrderDetails(order: Order?) {
         if (order != null) {
             this.curOrder = order
             var cook = order.cook
+
+            val address = order.deliveryAddress.streetLine1
+            val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
+            if (address != null) {
+                checkoutFragDeliveryAddress.updateDeliveryDetails(address)
+            }
+            if(time != null){
+                checkoutFragDeliveryTime.updateDeliveryDetails(time)
+            }
 
             checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"
             checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)

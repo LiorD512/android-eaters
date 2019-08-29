@@ -46,6 +46,7 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
         addAddressFragPickUpCb.setOnClickListener(this)
 
         addAddressFragAddress.setActionTitleViewListener(this)
+        addAddressFragAddress.updateLocationIcon(viewModel.isLocationEnabled())
         addAddressFragAddress2ndLine.setInputTitleViewListener(this)
         addAddressFragDeliveryNote.setInputTitleViewListener(this)
 

@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
+import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.order_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OrderDetailsFragment : Fragment() {
+class OrderDetailsFragment(val orderId: Long) : Fragment() {
 
     private lateinit var adapter: OrderDetailsAdapter
     val viewModel by viewModel<OrderDetailsViewModel>()
@@ -31,19 +33,21 @@ class OrderDetailsFragment : Fragment() {
 
     private fun initUi() {
 
-        viewModel.orderItems.observe(this, Observer { orderItems ->
-            if (orderItems != null) {
-                handleOrderItems(orderItems)
+        viewModel.orderDetails.observe(this, Observer { orderDetails ->
+            orderHistoryPb.hide()
+            if (orderDetails.isSuccess) {
+                handleOrderItems(orderDetails.order!!)
             }
         })
 
-        viewModel.getDumbOrderItems()
+        orderHistoryPb.show()
+        viewModel.getOrderDetails(orderId)
 
     }
 
-    private fun handleOrderItems(orderItems: OrderDetailsViewModel.OrderDetails) {
+    private fun handleOrderItems(curOrder: Order) {
         orderDetailsFragDishesRecycler.layoutManager = LinearLayoutManager(context)
-        adapter = OrderDetailsAdapter(context!!, orderItems.orders)
+        adapter = OrderDetailsAdapter(context!!, curOrder.orderItems)
 
 
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -51,5 +55,29 @@ class OrderDetailsFragment : Fragment() {
         orderDetailsFragDishesRecycler.addItemDecoration(divider)
 
         orderDetailsFragDishesRecycler.adapter = adapter
+
+        val firstOrderItem = curOrder.orderItems.first()
+        Glide.with(context!!).load(firstOrderItem.dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(orderDetailsFragDishImage)
+
+        val tax: Double = curOrder.tax.value
+        val serviceFee = curOrder.serviceFee.value
+        val deliveryFee = curOrder.deliveryFee.value
+        val discount = curOrder.discount.value
+
+        orderDetailsFragTax.text = "$$tax"
+        orderDetailsFragServiceFee.text = "$$serviceFee"
+        orderDetailsFragDeliveryFee.text = "$$deliveryFee"
+
+        orderDetailsFragPromoDiscount.text = "$$discount" //todo - add this when server ready
+        orderDetailsFragOrderId.text = "${curOrder.orderNumber}"
+
+        orderDetailsFragCookName.text = "By cook ${curOrder.cook.getFullName()}"
+        val date = Utils.parseDDateToUsDate(curOrder.estDeliveryTime)
+        val time = Utils.parseDDateToUsTime(curOrder.estDeliveryTime)
+        orderDetailsFragOrderDate.text = "$date at $time"
+
+        orderDetailsFragTotalPrice.text = curOrder.total.formatedValue
+
+
     }
 }

@@ -37,3 +37,7 @@ data class Device(
     val osVersion: String = "",
     val appVersion: String = ""
 )
+
+data class Trigger(
+    @SerializedName("should_rate") var shouldRateId: Long?
+)

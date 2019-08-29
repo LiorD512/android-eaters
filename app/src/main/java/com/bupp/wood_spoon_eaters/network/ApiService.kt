@@ -37,6 +37,10 @@ interface ApiService {
     @POST("eaters/me/presigned_urls")
     fun postDishSuggestion(@Field("dish_name") dishName: String,@Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
 
+    @GET("eaters/me/triggers")
+    fun getTriggers(): Call<ServerResponse<Trigger>>
+
+
 
 
     //Utils

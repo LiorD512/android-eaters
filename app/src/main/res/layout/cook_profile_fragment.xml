@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="7.2dp"
-                    android:drawableStart="@drawable/icons_raitings"
+                    android:drawableStart="@drawable/icons_raitings_selected"
                     android:drawablePadding="8.7dp"
                     android:gravity="center"
                     android:text="4.8" />

@@ -24,6 +24,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         fun onDishClick(dish: Dish)
         fun onCookClick(cook: Cook)
         fun refreshList()
+        fun onEmptyhDishList()
 //        fun onFavClick(dishId: Long, isFavorite: Boolean)
         fun onShareClick(){}
     }
@@ -67,6 +68,8 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
 
         if(dishArr.size > 0){
             initDishesList(dishArr)
+        }else{
+            listener.onEmptyhDishList()
         }
         if(cooksArr.size > 0){
             initCooksList(cooksArr, cooksTitle)

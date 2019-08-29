@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import kotlinx.android.synthetic.main.edit_my_profile_fragment.*
@@ -88,7 +89,7 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
         }
     }
 
-    override fun onUserImageClick() {
+    override fun onUserImageClick(cook: Cook?) {
         CameraUtils.openCamera(activity as MainActivity)
     }
 

@@ -65,6 +65,10 @@ class ActionTitleView : FrameLayout {
 
         initUi()
     }
+    
+    fun updateLocationIcon(isEnabled: Boolean){
+        actionTitleViewLocation.isEnabled = isEnabled
+    }
 
     private fun getMyLocation() {
         listener?.onMyLocationClick()

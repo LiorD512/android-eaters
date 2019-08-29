@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.search_dish_item.view.*
+import kotlinx.android.synthetic.main.feed_dish_item.view.*
 
 
 class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val listener: SearchAdapterListener) :
@@ -38,7 +38,7 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
 
         if (dish.menuItem != null) {
 //            holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
-            holder.dishCount.setText("${dish.menuItem?.getQuantityLeft()}")
+            holder.dishCount.initQuantityView(dish.menuItem)
 //            val upcomingSlot = dish.menuItem.cookingSlot
             if (dish.menuItem.orderAt != null) {
                 holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
@@ -68,7 +68,7 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.search_dish_item, parent, false))
+        return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.feed_dish_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -79,17 +79,17 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
 
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val mainLayout = view.searchDishItemLayout
-    val unAvailableLayout = view.searchDishUnAvailable
-    val bkgImg = view.searchDishItemBkg
-    val cookImg = view.searchDishItemUserImg
-    val favBtn = view.searchDishItemFavorite
-    val name = view.searchDishItemDishName
-    val dishCount = view.searchDishItemDishCount
-    val cookName = view.searchDishItemCookName
-    val rating = view.searchDishItemRating
-    val date = view.searchDishItemDate
-    val freeDelivery = view.searchDishItemFreeDelivery
+    val mainLayout = view.feedDishItemLayout
+    val unAvailableLayout = view.feedDishUnAvailable
+    val bkgImg = view.feedDishItemBkg
+    val cookImg = view.feedDishItemUserImg
+    val favBtn = view.feedDishItemFavorite
+    val name = view.feedDishItemDishName
+    val dishCount = view.feedDishQuantityView
+    val cookName = view.feedDishItemCookName
+    val rating = view.feedDishItemRating
+    val date = view.feedDishItemDate
+    val freeDelivery = view.feedDishItemFreeDelivery
 }
 
 

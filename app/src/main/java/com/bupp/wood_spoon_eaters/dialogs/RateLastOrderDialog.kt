@@ -94,7 +94,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
 
         rateLastOrderUserImage.setImage(order.cook!!.thumbnail!!)
-        rateLastOrderUserName.text = order.cook!!.getFullName()
+        rateLastOrderUserName.text = "Made by ${order.cook!!.getFullName()}"
 
         rateLastOrderNotes.setInputTitleViewListener(this)
 

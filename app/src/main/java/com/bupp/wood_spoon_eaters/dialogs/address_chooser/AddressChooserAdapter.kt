@@ -28,10 +28,10 @@ class AddressChooserAdapter(
 
     private object ViewType {
         const val ITEM = 1
-        const val FOOTER = 2
+//        const val FOOTER = 2
     }
 
-    class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view)
+//    class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view)
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val addressText: TextView = view.addressItemText
         val addressMenu: ImageButton = view.addressItemMenu
@@ -51,51 +51,52 @@ class AddressChooserAdapter(
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (getItemViewType(position)) {
-            ViewType.ITEM -> {
-                var address = addresses!![position]
-                (holder as ItemViewHolder).initAddress(address, address == selectedAddress)
+        var address = addresses!![position]
+        (holder as ItemViewHolder).initAddress(address, address == selectedAddress)
 
-                holder.addressText.setOnClickListener {
-                    listener.onAddressClick(address)
-                }
-
-                holder.addressMenu.setOnClickListener {
-                    listener.onMenuClick(address)
-                }
-
-            }
-            ViewType.FOOTER -> {
-                holder?.itemView.setOnClickListener {
-                    listener.onAddAddressClick()
-                }
-            }
+        holder.addressText.setOnClickListener {
+            listener.onAddressClick(address)
         }
+
+        holder.addressMenu.setOnClickListener {
+            listener.onMenuClick(address)
+        }
+//        when (getItemViewType(position)) {
+//            ViewType.ITEM -> {
+//
+//
+//            }
+//            ViewType.FOOTER -> {
+//                holder?.itemView.setOnClickListener {
+//                    listener.onAddAddressClick()
+//                }
+//            }
+//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            ViewType.ITEM -> ItemViewHolder(
-                LayoutInflater.from(context).inflate(R.layout.address_list_item, parent, false)
-            )
-            else -> FooterViewHolder(
-                LayoutInflater.from(context).inflate(R.layout.address_list_footer, parent, false)
-            )
-        }
+        return ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.address_list_item, parent, false))
+//        return when (viewType) {
+//            ViewType.ITEM -> ItemViewHolder(
+//            )
+//            else -> FooterViewHolder(
+//                LayoutInflater.from(context).inflate(R.layout.address_list_footer, parent, false)
+//            )
+//        }
     }
 
 
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            itemCount - 1 -> ViewType.FOOTER
-            else -> ViewType.ITEM
-        }
-    }
+//    override fun getItemViewType(position: Int): Int {
+//        return when (position) {
+//            itemCount - 1 -> ViewType.FOOTER
+//            else -> ViewType.ITEM
+//        }
+//    }
 
     override fun getItemCount(): Int {
         return if (addresses != null)
-            addresses.size + 1
-        else 1
+            addresses.size
+        else 0
     }
 
     fun addAddress(newAddress: Address) {

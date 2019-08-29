@@ -44,6 +44,30 @@ class MetaDataManager {
         return arrayListOf()
     }
 
+    fun getSettings(): ArrayList<AppSetting> {
+        if (getMetaDataObject()?.settings != null) {
+            return metaDataObject.settings as ArrayList<AppSetting>
+        }
+        return arrayListOf()
+    }
+
+
+    fun getTermsOfServiceUrl(): String {
+        for (settings in getSettings()){
+            if(settings.key == "terms_url")
+                return settings.value
+        }
+        return ""
+    }
+
+    fun getPrivacyPolicyUrl(): String {
+        for (settings in getSettings()){
+            if(settings.key == "privacy_policy_url")
+                return settings.value
+        }
+
+        return ""
+    }
 
 
 }

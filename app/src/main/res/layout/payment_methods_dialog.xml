@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:stripe="http://schemas.android.com/apk/res-auto"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/paymentMethodsHeaderView"
+            app:title="Add Payment Method"
+            app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+            app:isWithSep="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+    <com.stripe.android.view.CardMultilineWidget
+            android:layout_marginTop="15.4dp"
+            stripe:cardTint="@color/teal_blue_50"
+            stripe:cardTextErrorColor="@color/red"
+            android:id="@+id/paymentMethodsCardWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+            android:layout_gravity="bottom"
+            app:title="Save"
+            android:id="@+id/paymentMethodsSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

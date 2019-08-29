@@ -35,6 +35,7 @@ class Constants {
         const val DELIVERY_DETAILS_TIME = 1
         const val DELIVERY_DETAILS_PAYMENT = 2
         const val DELIVERY_DETAILS_CHECKOUT_DELIVERY = 3
+        const val DELIVERY_DETAILS_LOCATION_PROFILE = 4
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0
@@ -124,6 +125,13 @@ class Constants {
         const val REPORT_TAG = "report_tag"
         const val ORDER_DETAILS_TAG = "order_details_tag"
         const val ORDER_HISTORY_TAG = "order_history_tag"
+        const val LOGOUT_DIALOG_TAG = "logout_dialog_tag"
+        const val WEB_DOCS_DIALOG_TAG = "web_docs_dialog_tga"
+        const val UNAVAILABLE_DISH_DIALOG_TAG = "unavailable_dish_dialog_tag"
+        const val NO_DISHES_AVAILABLE_DIALOG = "no_dishes_available_dialog_tag"
+        const val VIDEO_VIEW_DIALOG = "video_view_dialog_tag"
+        const val PAYMENT_METHOD_DIALOG = "payment_method_dialog_tag"
+        const val PAYMENT_METHOD_SUCCESS_DIALOG = "payment_method_success_dialog_tag"
 
 
 
@@ -172,6 +180,10 @@ class Constants {
         const val MEDIA_TYPE_GALLERY = 112
         const val MEDIA_TYPE_VIDEO = 169
 
+        //WEBDOCS TYPE
+        const val WEB_DOCS_PRIVACY = 0
+        const val WEB_DOCS_TERMS = 1
+
 
         //permission const
         const val CAMERA_PERMISSION = Manifest.permission.CAMERA
@@ -186,6 +198,7 @@ class Constants {
         const val READ_PERMISSION_REQUEST_CODE = 445
         const val WRITE_PERMISSION_REQUEST_CODE = 446
         const val LOCATION_PERMISSION_REQUEST_CODE = 420
+        const val PHONE_CALL_PERMISSION_REQUEST_CODE = 430
 
         const val MINIMUM_LOCATION_DISTANCE = 100
     }

@@ -154,29 +154,36 @@
 
                                     </LinearLayout>
 
-                                    <LinearLayout
-                                            android:gravity="center"
+                                    <com.bupp.wood_spoon_eaters.custom_views.QuantityView
+                                            android:id="@+id/singleDishQuantityView"
                                             android:layout_weight="1"
+                                            app:views_gravity="CENTER"
                                             android:layout_width="0dp"
-                                            android:layout_height="wrap_content">
+                                            android:layout_height="wrap_content"/>
+                                    <!--<LinearLayout-->
+                                            <!--android:gravity="center"-->
+                                            <!--android:layout_weight="1"-->
+                                            <!--android:layout_width="0dp"-->
+                                            <!--android:layout_height="wrap_content">-->
 
-                                        <ImageView
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:src="@drawable/icons_dishes"/>
+                                        <!--<ImageView-->
+                                                <!--android:layout_width="wrap_content"-->
+                                                <!--android:layout_height="wrap_content"-->
+                                                <!--android:src="@drawable/icons_dishes"/>-->
 
-                                        <TextView
-                                                android:id="@+id/singleDishInfoQuantity"
-                                                style="@style/Reg13Dark"
-                                                android:paddingLeft="7.8dp"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:gravity="center"
-                                                tools:text="5/20 Left"/>
+                                        <!--<TextView-->
+                                                <!--android:id="@+id/singleDishInfoQuantity"-->
+                                                <!--style="@style/Reg13Dark"-->
+                                                <!--android:paddingLeft="7.8dp"-->
+                                                <!--android:layout_width="wrap_content"-->
+                                                <!--android:layout_height="wrap_content"-->
+                                                <!--android:gravity="center"-->
+                                                <!--tools:text="5/20 Left"/>-->
 
-                                    </LinearLayout>
+                                    <!--</LinearLayout>-->
 
                                     <LinearLayout
+                                            android:id="@+id/singleDishInfoRating"
                                             android:gravity="center"
                                             android:layout_weight="1"
                                             android:layout_width="0dp"
@@ -188,7 +195,7 @@
                                                 android:src="@drawable/icons_raitings"/>
 
                                         <TextView
-                                                android:id="@+id/singleDishInfoRating"
+                                                android:id="@+id/singleDishInfoRatingVal"
                                                 style="@style/Reg13Dark"
                                                 android:paddingLeft="7.8dp"
                                                 android:layout_width="wrap_content"
@@ -354,7 +361,7 @@
                                     <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:src="@drawable/icons_cooking_method"/>
+                                            android:src="@drawable/icons_carbohydrates"/>
 
                                     <TextView
                                             style="@style/SemiBold13Dark"

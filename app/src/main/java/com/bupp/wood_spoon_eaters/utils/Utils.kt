@@ -23,7 +23,7 @@ object Utils {
 
     fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 
-    fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+    fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     fun String.splitAtIndex(index: Int) = require(index in 0..length).let {
         take(index) to substring(index)
@@ -41,7 +41,7 @@ object Utils {
 
     fun parseDateToDayDateHour(date: Date): String {
         //mon, 24, 4pm
-        val sdf = SimpleDateFormat("EE, dd, H:mma")
+        val sdf = SimpleDateFormat("EE, dd, h:mma")
         return sdf.format(date.time)
     }
 
@@ -51,15 +51,28 @@ object Utils {
     }
 
     fun parseDateToTime(date: Date?): String {
-        val sdf = SimpleDateFormat("HH:mm a")
+        val sdf = SimpleDateFormat("h:mm a")
         if (date != null)
             return sdf.format(date?.time)
         return ""
     }
 
+    fun parseDDateToUsDate(date: Date): String{
+        //August 2, 2019
+        val sdf = SimpleDateFormat("MMMM dd, yyyy")
+        return sdf.format(date.time)
+    }
+
+    fun parseDDateToUsTime(date: Date): String{
+        //4:30 PM
+        val sdf = SimpleDateFormat("h:mma")
+        return sdf.format(date.time)
+    }
+
+
     fun parseDateToDateAndTime(date: Date?): String {
         //05.04.19, 6:10PM
-        val sdf = SimpleDateFormat("ww.dd.yy, HH:mma")
+        val sdf = SimpleDateFormat("dd.MM.yy, h:mma")
         if (date != null)
             return sdf.format(date?.time)
         return ""
@@ -67,7 +80,7 @@ object Utils {
 
     fun parseTwoDates(startsAtDate: Date?, endsAtDate: Date?): String {
 //        val sdf = SimpleDateFormat("HH:mm a")
-        val sdf = SimpleDateFormat("Ha")
+        val sdf = SimpleDateFormat("ha")
         if (startsAtDate != null && endsAtDate != null) {
 //            val start = sdf.format(startsAtDate?.time)
             val end = sdf.format(endsAtDate?.time)
@@ -78,7 +91,7 @@ object Utils {
     }
 
     fun parseTime(date: Date?): String {
-        val sdf = SimpleDateFormat("HH:mm")
+        val sdf = SimpleDateFormat("H:mm")
         return sdf.format(date?.time)
     }
 

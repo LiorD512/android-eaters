@@ -63,7 +63,7 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                 holder.rating.text = "${dish.rating}"
 
                 if(dish.menuItem != null){
-                    holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
+                    holder.dishCount.initQuantityView(dish.menuItem)
                     val upcomingSlot = dish.menuItem.cookingSlot
                     if (dish.menuItem.orderAt != null) {
                         holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
@@ -77,11 +77,13 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                             holder.freeDelivery.visibility = View.GONE
                         }
                     }
+                    holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
+                }else{
+                    holder.unAvailableLayout.visibility = View.VISIBLE
                 }
 
                 holder.favBtn.setIsFav(dish.isFavorite)
                 holder.favBtn.setOnClickListener { onFavClick(dish.id, holder.favBtn.isFavSelected) }
-                holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
             }}
 
     }
@@ -178,6 +180,7 @@ class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rating = view.searchDishItemRating
     val date = view.searchDishItemDate
     val freeDelivery = view.searchDishItemFreeDelivery
+    val unAvailableLayout = view.searchDishUnAvailable
 
 }
 

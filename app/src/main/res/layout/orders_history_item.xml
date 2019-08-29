@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/orderHistoryMainLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -36,23 +37,22 @@
                        android:layout_height="wrap_content"
                        tools:text="Your Order by cook Oded"/>
 
-               <TextView
-                       style="@style/SemiBold13Blue"
-                       android:id="@+id/orderHistoryItemPrice"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       tools:text=", $6.3"/>
-
            </LinearLayout>
 
            <TextView
                    style="@style/SemiBold13Dark50"
                    android:layout_gravity="left"
-                   android:layout_marginTop="7.9dp"
                    android:id="@+id/orderHistoryItemDate"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    tools:text="05.04.19, 6:10PM"/>
+
+           <TextView
+                   style="@style/SemiBold13Blue"
+                   android:id="@+id/orderHistoryItemPrice"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   tools:text="$6.3"/>
 
        </LinearLayout>
 

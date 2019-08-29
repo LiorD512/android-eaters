@@ -211,6 +211,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
+                    <View
+                            android:layout_weight="1"
+                            android:layout_width="1dp" android:layout_height="0dp"/>
+
                     <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
                             app:title="Done"
                             android:id="@+id/rateLastOrderDoneBtn"
@@ -226,6 +230,7 @@
     </LinearLayout>
 
     <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            tools:visibility="gone"
             android:id="@+id/rateLastOrderPb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
