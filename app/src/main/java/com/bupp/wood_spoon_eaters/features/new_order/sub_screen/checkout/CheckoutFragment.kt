@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.TipCourierDialog
+import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.model.Address
@@ -23,10 +25,14 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
 import kotlinx.android.synthetic.main.checkout_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import kotlin.collections.ArrayList
+
+
 
 class CheckoutFragment(val listener: CheckoutDialogListener) :
     Fragment(), TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
@@ -56,7 +62,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     private fun initObservers() {
         viewModel.checkoutOrderEvent.observe(this, Observer { checkoutEvent ->
             if(checkoutEvent != null && checkoutEvent.isSuccess){
-                finalizeOrder(curOrder)
+                checkoutFragPb.hide()
+                listener.onCheckoutDone()
             }else{
                 checkoutFragPb.hide()
                 Toast.makeText(context, "checkoutEvent failed", Toast.LENGTH_SHORT).show()
@@ -71,6 +78,16 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
                 Toast.makeText(context, "finalizeEvent failed", Toast.LENGTH_SHORT).show()
             }
          })
+
+        viewModel.getOrderDetailsEvent.observe(this, Observer { orderDetails -> handleOrderDetails(orderDetails.order) })
+
+        viewModel.getStripeCustomerCards.observe(this, Observer { cardsEvent ->
+            if(cardsEvent.isSuccess){
+                handleCustomerCards(cardsEvent.paymentMethods)
+            }else {
+                setEmptyPaymentMethod()
+            }
+        })
     }
 
 
@@ -85,24 +102,49 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             (activity as MainActivity).loadPromoCode()
         }
 
-        checkoutFragChangePaymentBtn.setOnClickListener {
-            Toast.makeText(context, "on change payment clicked", Toast.LENGTH_SHORT).show()
+        checkoutFragChangePaymentChangeBtn.setOnClickListener {
+//            PaymentMethodsDialog().show(childFragmentManager, Constants.PAYMENT_METHOD_SUCCESS_DIALOG)
+            (activity as NewOrderActivity).startPaymentMethodActivity()
+//            Toast.makeText(context, "on change payment clicked", Toast.LENGTH_SHORT).show()
+//            checkoutFragPb.show()
         }
-//        viewModel.getDeliveryDetails()
-//        viewModel.getDeliveryDetailsEvent.observe(this, Observer { deliveryDetails -> handleDeliveryDetails(deliveryDetails.address, deliveryDetails.time) })
+
         viewModel.getOrderDetails()
-        viewModel.getOrderDetailsEvent.observe(this, Observer { orderDetails -> handleOrderDetails(orderDetails.order) })
+
+        viewModel.getStripeCustomerCards()
+        viewModel.getCurrentCustomer()
 
     }
 
-//    private fun handleDeliveryDetails(address: Address?, time: String?) {
-//        if (address != null) {
-//            checkoutFragDeliveryAddress.updateDeliveryDetails(address.streetLine1)
-//        }
-//        if(time != null){
-//            checkoutFragDeliveryTime.updateDeliveryDetails(time)
-//        }
-//    }
+
+
+    private fun setEmptyPaymentMethod() {
+        checkoutFragChangePaymentTitle.text = "Insert payment method"
+        checkoutFragChangePaymentChangeBtn.alpha = 1f
+        checkoutFragStatusBar.setEnabled(false)
+
+    }
+
+    private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
+        if(paymentMethods?.size!! > 0){
+            val defaultPayment = paymentMethods[0]
+            updateCustomerPaymentMethod(defaultPayment)
+//            viewModel.attachCardToCustomer(defaultPayment.id!!)
+        }else{
+            setEmptyPaymentMethod()
+        }
+    }
+
+    fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
+        val card = paymentMethod.card
+        if(card != null){
+            Log.d("wowCheckoutFrag","updateCustomerPaymentMethod: ${paymentMethod.id}")
+            checkoutFragStatusBar.setEnabled(true)
+            checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
+            checkoutFragChangePaymentChangeBtn.alpha = 0.3f
+            viewModel.updateUserCustomerCard(paymentMethod)
+        }
+    }
 
     private fun handleOrderDetails(order: Order?) {
         if (order != null) {
@@ -141,7 +183,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
         val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee))
         checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
-        checkoutFragTotalPriceText.text = "$$total"
+        checkoutFragTotalPriceText.text = "$${DecimalFormat("##.##").format(total)}"
 
         checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, price = total)
 
@@ -168,13 +210,12 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         viewModel.checkoutOrder(curOrder.id)
     }
 
-    private fun finalizeOrder(curOrder: Order) {
-        viewModel.finalizeOrder(curOrder.id)
-    }
+//    private fun finalizeOrder(curOrder: Order) {
+//        viewModel.finalizeOrder(curOrder.id)
+//    }
 
     private fun onOrderFinalized() {
-        checkoutFragPb.hide()
-        listener?.onCheckoutDone()
+
     }
 
     override fun onTipIconClick(tipSelection: Int) {
@@ -204,6 +245,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         Log.d("wow","onAddressChooserSelected")
         viewModel.getDeliveryDetails()
     }
+
+
 
 
 }

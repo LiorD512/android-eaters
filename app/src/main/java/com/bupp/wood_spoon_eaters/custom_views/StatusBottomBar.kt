@@ -41,6 +41,7 @@ class StatusBottomBar : FrameLayout {
         super.setEnabled(isEnabled)
         Log.d("wowStatusBottomBar", "isEnabled: $isEnabled")
 //        this.isEnabled = isEnabled
+        statusBottomBarLayout.isEnabled = isEnabled
         if (isEnabled) {
             statusBottomBarLayout.alpha = 1f
         } else {
@@ -72,4 +73,5 @@ class StatusBottomBar : FrameLayout {
             }
         }
     }
+
 }

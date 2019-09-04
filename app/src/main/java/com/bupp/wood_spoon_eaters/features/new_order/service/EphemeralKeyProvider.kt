@@ -1,0 +1,36 @@
+package com.bupp.wood_spoon_eaters.features.new_order.service
+
+import androidx.annotation.Size
+import com.bupp.wood_spoon_eaters.network.ApiService
+import com.stripe.android.EphemeralKeyProvider
+import com.stripe.android.EphemeralKeyUpdateListener
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import org.json.JSONObject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import java.io.IOException
+
+class EphemeralKeyProvider : EphemeralKeyProvider, KoinComponent {
+
+    val api: ApiService by inject()
+
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+    override fun createEphemeralKey(@Size(min = 4) apiVersion: String, keyUpdateListener: EphemeralKeyUpdateListener) {
+        compositeDisposable.add(
+            api.getEphemeralKey()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { responseBody ->
+                    try {
+                        val jsObject = JSONObject(responseBody.string())
+                        val ephemeralKeyJson = jsObject.get("data").toString()
+                        keyUpdateListener.onKeyUpdate(ephemeralKeyJson)
+                    } catch (e: IOException) {
+                        keyUpdateListener.onKeyUpdateFailure(0, e.message ?: "")
+                    }
+                })
+    }
+}

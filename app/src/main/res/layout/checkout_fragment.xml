@@ -61,6 +61,7 @@
             </LinearLayout>
 
             <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+                    tools:visibility="gone"
                     android:id="@+id/checkoutFragOrderItemsView"
                     android:paddingRight="15.4dp"
                     android:paddingLeft="15.4dp"
@@ -273,24 +274,27 @@
                         android:text="Payment Method"/>
 
                 <LinearLayout
-                        android:id="@+id/checkoutFragChangePaymentBtn"
                         android:paddingTop="17dp"
                         android:paddingBottom="16.4dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                     <TextView
+                            android:id="@+id/checkoutFragChangePaymentTitle"
                             android:drawableStart="@drawable/icons_credit_card"
                             android:drawablePadding="7.7dp"
                             android:paddingStart="16.3dp"
                             style="@style/SemiBold13Dark50"
-                            android:text="Insert payment method"
+                            android:text="No payment method selected"
                             android:gravity="center_vertical"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"/>
 
                     <TextView
+                            android:padding="5dp"
+                            android:id="@+id/checkoutFragChangePaymentChangeBtn"
                             android:layout_marginEnd="15.4dp"
                             style="@style/SemiBold13Blue"
                             android:alpha="0.3"
@@ -342,6 +346,7 @@
             android:layout_height="wrap_content"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            tools:visibility="gone"
             android:id="@+id/checkoutFragPb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

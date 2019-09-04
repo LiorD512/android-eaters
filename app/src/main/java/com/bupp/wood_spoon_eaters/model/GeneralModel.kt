@@ -49,13 +49,10 @@ data class PrepTimeRange(
 )
 
 data class AppSetting(
-    val id: Long,
-    val key: String,
-    val value: String
-//    val data_type: Int,
-//    val description: String,
-//    val is_client_accessible: Boolean,
-//    val updated_at: Date
+    var id: Long?,
+    var key: String?,
+    var dataType: String?,
+    var value: Any?
 )
 
 //orders grid data class

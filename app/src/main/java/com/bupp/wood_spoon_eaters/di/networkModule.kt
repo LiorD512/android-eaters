@@ -2,7 +2,9 @@ package com.bupp.wood_spoon_eaters.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonAppSetting
 import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonSearch
+import com.bupp.wood_spoon_eaters.model.AppSetting
 import com.bupp.wood_spoon_eaters.model.Search
 import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
 import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
@@ -60,6 +62,7 @@ fun provideRetrofit(client: OkHttpClient): Retrofit {
 
     val gson = GsonBuilder()
         .registerTypeAdapter(Search::class.java, DeserializerJsonSearch())
+        .registerTypeAdapter(AppSetting::class.java, DeserializerJsonAppSetting())
         .create()
 
     return Retrofit.Builder()

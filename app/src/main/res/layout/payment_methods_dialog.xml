@@ -17,9 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
 
-    <com.stripe.android.view.CardMultilineWidget
+    <com.stripe.android.view.CardInputWidget
             android:layout_marginTop="15.4dp"
-            stripe:cardTint="@color/teal_blue_50"
+            android:paddingLeft="15.4dp"
+            android:paddingRight="15.4dp"
+            stripe:cardTint="@color/red"
+            android:theme="@style/CardWidgetStyle"
+            android:background="@color/silver_50"
             stripe:cardTextErrorColor="@color/red"
             android:id="@+id/paymentMethodsCardWidget"
             android:layout_width="match_parent"

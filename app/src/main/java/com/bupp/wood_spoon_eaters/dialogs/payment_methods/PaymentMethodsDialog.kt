@@ -13,8 +13,17 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.PaymentMethodAcceptedDialog
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.stripe.android.Stripe
 import kotlinx.android.synthetic.main.payment_methods_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.stripe.android.CustomerSession
+import android.R.string
+import androidx.annotation.NonNull
+import androidx.annotation.Size
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import com.stripe.android.EphemeralKeyUpdateListener
+
 
 class PaymentMethodsDialog(val ephemeralKey: String) : DialogFragment(), HeaderView.HeaderViewListener {
 
@@ -27,20 +36,54 @@ class PaymentMethodsDialog(val ephemeralKey: String) : DialogFragment(), HeaderV
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.payment_methods_dialog, null)
-        getDialog().getWindow().setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)));
+//        getDialog().getWindow().setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)));
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initUi()
 }
 
     private fun initUi() {
-
         paymentMethodsHeaderView.setHeaderViewListener(this)
         paymentMethodsSave.setOnClickListener { onSave() }
+
+//        CustomerSession.initCustomerSession(context!!, EphemeralKeyProvider(
+//                object : EphemeralKeyProvider.ProgressListener() {
+//                    fun onStringResponse(string: String) {
+//                        if (string.startsWith("Error: ")) {
+//                            // Show the error to the user.
+//                        }
+//                    }
+//                })
+//        )
     }
+//    fun createEphemeralKey(
+//        @NonNull @Size(min = 4) apiVersion: String,
+//        @NonNull keyUpdateListener: EphemeralKeyUpdateListener
+//    ) {
+//        val apiParamMap = HashMap()
+//        apiParamMap.put("api_version", apiVersion)
+//
+//        mCompositeDisposable.add(
+//            mStripeService.createEphemeralKey(apiParamMap)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                    { response ->
+//                        try {
+//                            val rawKey = response.string()
+//                            keyUpdateListener.onKeyUpdate(rawKey)
+//                            mProgressListener.onStringResponse(rawKey)
+//                        } catch (ignored: IOException) {
+//                        }
+//                    },
+//                    { throwable -> mProgressListener.onStringResponse(throwable.getMessage()) })
+//        )
+//    }
+
 
     private fun onSave() {
         val cardToSave = paymentMethodsCardWidget.card

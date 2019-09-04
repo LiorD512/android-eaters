@@ -130,7 +130,6 @@ class Constants {
         const val UNAVAILABLE_DISH_DIALOG_TAG = "unavailable_dish_dialog_tag"
         const val NO_DISHES_AVAILABLE_DIALOG = "no_dishes_available_dialog_tag"
         const val VIDEO_VIEW_DIALOG = "video_view_dialog_tag"
-        const val PAYMENT_METHOD_DIALOG = "payment_method_dialog_tag"
         const val PAYMENT_METHOD_SUCCESS_DIALOG = "payment_method_success_dialog_tag"
 
 
@@ -199,6 +198,8 @@ class Constants {
         const val WRITE_PERMISSION_REQUEST_CODE = 446
         const val LOCATION_PERMISSION_REQUEST_CODE = 420
         const val PHONE_CALL_PERMISSION_REQUEST_CODE = 430
+        const val PAYMENT_METHOD_DIALOG_REQUEST_CODE = 440
+
 
         const val MINIMUM_LOCATION_DISTANCE = 100
     }

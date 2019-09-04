@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.network
 
 import com.bupp.wood_spoon_eaters.model.*
 import io.reactivex.Observable
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -39,6 +40,12 @@ interface ApiService {
 
     @GET("eaters/me/triggers")
     fun getTriggers(): Call<ServerResponse<Trigger>>
+
+    @GET("eaters/me/stripe/ephemeral_key")
+    fun getEphemeralKey(): Observable<ResponseBody>
+
+    @GET("eaters/me/stripe/ephemeral_key")
+    fun getEphemeralKey2(): Call<ServerResponse<Any>>
 
 
 
@@ -80,7 +87,7 @@ interface ApiService {
     fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
 
     @POST("eaters/me/orders/{order_id}/checkout")
-    fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
+    fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>
 
     @POST("eaters/me/orders/{order_id}/finalize")
     fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>

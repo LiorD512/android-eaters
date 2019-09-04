@@ -43,6 +43,8 @@ import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -590,6 +592,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadFeed()
         ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
     }
+
 
 
 }

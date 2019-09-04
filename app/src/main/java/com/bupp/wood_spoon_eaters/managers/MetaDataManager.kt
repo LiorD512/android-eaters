@@ -55,7 +55,7 @@ class MetaDataManager {
     fun getTermsOfServiceUrl(): String {
         for (settings in getSettings()){
             if(settings.key == "terms_url")
-                return settings.value
+                return settings.value!! as String
         }
         return ""
     }
@@ -63,10 +63,18 @@ class MetaDataManager {
     fun getPrivacyPolicyUrl(): String {
         for (settings in getSettings()){
             if(settings.key == "privacy_policy_url")
-                return settings.value
+                return settings.value!! as String
         }
-
         return ""
+    }
+
+    fun getStripePublishableKey(): String{
+        for (settings in getSettings()){
+            if(settings.key == "stripe_publishable_key")
+                return settings.value!! as String
+        }
+        return ""
+
     }
 
 

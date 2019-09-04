@@ -54,10 +54,10 @@ class QuantityView : LinearLayout{
     fun initQuantityView(menuItem: MenuItem){
         if (menuItem != null) {
             val quantityLeft = menuItem.quantity - menuItem.unitsSold
-            if(quantityLeft < 0){
-                quantityViewQuantity.text = "$quantityLeft Left"
-            }else{
+            if(quantityLeft <= 0){
                 quantityViewQuantity.text = "Sold Out!"
+            }else{
+                quantityViewQuantity.text = "$quantityLeft Left"
             }
         }
 

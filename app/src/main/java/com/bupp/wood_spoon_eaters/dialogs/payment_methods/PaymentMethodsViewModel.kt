@@ -1,24 +1,12 @@
 package com.bupp.wood_spoon_eaters.dialogs.payment_methods
 
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bupp.wood_spoon_eaters.dialogs.PaymentMethodAcceptedDialog
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
-import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
-import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Constants
-import com.stripe.android.ApiResultCallback
+import com.stripe.android.SourceCallback
 import com.stripe.android.Stripe
 import com.stripe.android.model.Card
-import com.stripe.android.model.Token
-import retrofit2.Call
-import retrofit2.Response
+import com.stripe.android.model.SourceParams
 import java.lang.Exception
 
 class PaymentMethodsViewModel(val context: Context) : ViewModel() {
@@ -27,18 +15,31 @@ class PaymentMethodsViewModel(val context: Context) : ViewModel() {
     data class AddCardEvent(val isSuccess: Boolean = false)
 
     fun tokenizeCard(ephemeralKey:String, card: Card) {
-        val stripe = Stripe(context, ephemeralKey)
-        stripe.createToken(card, object : ApiResultCallback<Token> {
-            override fun onSuccess(token: Token) {
-                addCard.postValue(AddCardEvent(true))
-            }
-
-            override fun onError(e: Exception) {
-                Log.d("wowPaymentMethodVm","wrror on save card !")
-                addCard.postValue(AddCardEvent(false))
-            }
-        }
-        )
+        val stripe = Stripe(context, "pk_test_eCDAnCOC8dcX1AU09JbgVKU700Q5GSVt0F")
+//        val cardSourceParams = SourceParams.createCardParams(card)
+//        stripe.createSource(
+//            cardSourceParams,
+//            object : SourceCallback {
+//                override fun onSuccess(source: Source) {
+//                    // Store the source somewhere, use it, etc
+//                }
+//
+//                override fun onError(error: Exception) {
+//                    // Tell the user that something went wrong
+//                }
+//            })
+//        stripe.createToken(card, object : ApiResultCallback<Token> {
+//            override fun onSuccess(token: Token) {
+//                Log.d("wowPaymentMethodVm","save card success!")
+//                addCard.postValue(AddCardEvent(true))
+//            }
+//
+//            override fun onError(e: Exception) {
+//                Log.d("wowPaymentMethodVm","error on save card !: ${e.message}")
+//                addCard.postValue(AddCardEvent(false))
+//            }
+//        }
+//        )
     }
 
 

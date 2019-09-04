@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@color/white"
         android:orientation="vertical"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-            android:background="@color/white"
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/videoViewHeaderView"
+            app:title="Video"
+            app:isWithSep="false"
+            app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <FrameLayout
+            android:background="@color/black"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-                android:id="@+id/videoViewHeaderView"
-                app:title="Video"
-                app:isWithSep="false"
-                app:type="HEADER_VIEW_TYPE_BACK_TITLE"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        <VideoView
+        <com.google.android.exoplayer2.ui.PlayerView
                 android:id="@+id/videoView"
-                android:layout_width="match_parent" android:layout_height="match_parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-    </LinearLayout>
+        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+                android:id="@+id/videoViewPb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-            android:id="@+id/videoViewPb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+    </FrameLayout>
 
-</FrameLayout>
+
+</LinearLayout>

@@ -41,3 +41,9 @@ data class Device(
 data class Trigger(
     @SerializedName("should_rate") var shouldRateId: Long?
 )
+
+data class EphemeralKey(
+    @SerializedName("id") var id: String = "",
+    @SerializedName("object") var keyObject: String = "",
+    @SerializedName("secret") var secret: String = ""
+)

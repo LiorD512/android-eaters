@@ -1,18 +1,19 @@
 package com.bupp.wood_spoon_eaters.features.new_order
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
 import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.activity_new_order.*
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
+import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 
@@ -38,6 +39,29 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
 
         viewModel.initNewOrder()
+        viewModel.initStripe(this)
+    }
+
+    fun startPaymentMethodActivity() {
+        PaymentMethodsActivityStarter(this).startForResult()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
+
+                    if (paymentMethod != null && paymentMethod.card != null) {
+                        Log.d("wowNewOrder","payment method success")
+                        if(getFragmentByTag(Constants.CHECKOUT_TAG) != null){
+                            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).updateCustomerPaymentMethod(paymentMethod)
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -79,23 +103,15 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             .commit()
     }
 
-//    private fun loadSubFragment(fragment: Fragment, tag: String) {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.newOrderContainer, fragment, tag)
-//            .addToBackStack(null)
-//            .commit()
-////        subscreensOnTheStack++;
-//    }
-//
-//    private fun getFragmentByTag(tag: String): Fragment? {
-//        val fragmentManager = this@NewOrderActivity.supportFragmentManager
-//        val fragments = fragmentManager.fragments
-//        for (fragment in fragments) {
-//            if (fragment.tag == tag)
-//                return fragment
-//        }
-//        return null
-//    }
+    private fun getFragmentByTag(tag: String): Fragment? {
+        val fragmentManager = this@NewOrderActivity.supportFragmentManager
+        val fragments = fragmentManager.fragments
+        for (fragment in fragments) {
+            if (fragment.tag == tag)
+                return fragment
+        }
+        return null
+    }
 
     override fun onBackPressed() {
 
@@ -117,6 +133,9 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             supportFragmentManager.popBackStackImmediate()
         }
     }
+
+
+
 
 
 }
