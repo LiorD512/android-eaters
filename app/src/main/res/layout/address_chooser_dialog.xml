@@ -14,15 +14,13 @@
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/status_bottom_bar_height">
 
             <TextView
                     style="@style/SemiBold15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:paddingTop="24dp"
-                    android:paddingBottom="22.7dp"
                     android:text="My Address"/>
 
             <ImageView
@@ -36,14 +34,14 @@
 
             <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_gravity="bottom"
-                    android:background="@color/dark"/>
+                    android:background="@color/silver"/>
 
         </FrameLayout>
 
         <TextView
-                android:id="@+id/addressItemText"
+                android:id="@+id/addressChooserDialogAddBtn"
                 android:drawableStart="@drawable/icons_add"
                 style="@style/Reg13Dark"
                 android:paddingStart="15.4dp"

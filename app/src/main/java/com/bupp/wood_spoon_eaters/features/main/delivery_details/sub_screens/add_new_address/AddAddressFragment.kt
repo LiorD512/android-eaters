@@ -54,6 +54,10 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
             initEditAddress()
         }
 
+        when (curAddress?.dropOfLocationStr) {
+            "delivery_to_door" -> addAddressFragDeliveryCb.performClick()
+            else -> addAddressFragPickUpCb.performClick()
+        }
 
         viewModel.navigationEvent.observe(this, Observer { event -> handleSaveResponse(event) })
         viewModel.myLocationEvent.observe(this, Observer { myLocation -> handleMyLocationEvent(myLocation.myLocation) })
@@ -62,11 +66,6 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
     private fun initEditAddress() {
         (activity as MainActivity).loadLocationChooser(curAddress!!.streetLine1)
         addAddressFragDeliveryNote.setText(curAddress.notes)
-
-        when (curAddress.dropOfLocationStr) {
-            "delivery_to_door" -> addAddressFragDeliveryCb.performClick()
-            else -> addAddressFragPickUpCb.performClick()
-        }
 
         (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
 

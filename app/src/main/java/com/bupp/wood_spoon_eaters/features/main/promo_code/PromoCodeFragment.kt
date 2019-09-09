@@ -43,7 +43,7 @@ class PromoCodeFragment : Fragment() {
 //
 //        promoCodeFragmentCodeInput.setRawInputType(Configuration.KEYBOARD_12KEY)
 
-        promoCodeFragmentCodeInput.addTextChangedListener(object : TextWatcher {
+        promoCodeFragCodeInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -65,7 +65,7 @@ class PromoCodeFragment : Fragment() {
                 showWrongPromoCodeNotification()
             }
         })
-        openKeyboard(promoCodeFragmentCodeInput)
+        openKeyboard(promoCodeFragCodeInput)
     }
 
     private fun showWrongPromoCodeNotification() {
@@ -88,6 +88,6 @@ class PromoCodeFragment : Fragment() {
     }
 
     fun savePromoCode() {
-        viewModel.savePromoCode(promoCodeFragmentCodeInput.text.toString())
+        viewModel.savePromoCode(promoCodeFragCodeInput.text.toString())
     }
 }

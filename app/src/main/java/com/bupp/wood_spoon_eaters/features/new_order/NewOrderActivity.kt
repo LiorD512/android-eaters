@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
@@ -40,6 +42,12 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 
         viewModel.initNewOrder()
         viewModel.initStripe(this)
+
+        viewModel.ephemeralKeyProvider.observe(this, Observer { event ->
+            if(!event.isSuccess){
+                Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     fun startPaymentMethodActivity() {
@@ -134,8 +142,9 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
     }
 
-
-
+    fun loadPromoCode() {
+        Log.d("wow","load Promo code")
+    }
 
 
 }

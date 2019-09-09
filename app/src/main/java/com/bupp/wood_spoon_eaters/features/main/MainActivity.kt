@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Analytics::class.java, Crashes::class.java, Distribute::class.java
         )
 
-        mainActHeaderView.setHeaderViewListener(this)
+        mainActHeaderView.setHeaderViewListener(this, viewModel.getCurrentEater())
+
 
         initObservers()
         startLocationUpdates()
@@ -235,7 +236,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //
 //    }
 
-    fun loadPromoCode() {
+    fun loadPromoCodeDialog() {
         loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Add Promo Code")
     }
@@ -394,6 +395,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     fun loadDishOfferedDialog() {
         NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
+        if(getFragmentByTag(Constants.SEARCH_TAG) != null){
+            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged("")
+        }
     }
 
     fun loadShareDialog() {

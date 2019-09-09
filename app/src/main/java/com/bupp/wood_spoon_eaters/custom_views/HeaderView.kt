@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.text_watcher.AutoCompleteTextWatcher
 import kotlinx.android.synthetic.main.header_view.view.*
@@ -46,7 +47,10 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
     private var type: Int? = -1
     var listener: HeaderViewListener? = null
 
-    fun setHeaderViewListener(listenerInstance: HeaderViewListener) {
+    fun setHeaderViewListener(listenerInstance: HeaderViewListener, eater: Eater? = null) {
+        if(eater != null){
+            headerViewProfileBtn.setUser(eater)
+        }
         listener = listenerInstance
     }
 
@@ -144,7 +148,6 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
                 headerViewSearchLayout.visibility = View.VISIBLE
                 headerViewFilterBtn.visibility = View.VISIBLE
                 headerViewFilterBtn.alpha = 0.5f
-
             }
             Constants.HEADER_VIEW_TYPE_SIGNUP -> {
                 headerViewTitle.visibility = View.VISIBLE

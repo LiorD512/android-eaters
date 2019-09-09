@@ -42,7 +42,7 @@ class IconsGridViewAdapter(val context: Context, val icons: ArrayList<Selectable
         Glide.with(context).load(icon!!.icon).into(holder.iconView)
         holder.name.text = icon.name
 
-        holder?.background.setOnClickListener {
+        holder.background.setOnClickListener {
             if (selectedList.contains(icon)) {
                 selectedList.remove(icon)
             } else if (selectedList.size < choiceCount) {
@@ -50,7 +50,7 @@ class IconsGridViewAdapter(val context: Context, val icons: ArrayList<Selectable
 
             }
             notifyItemChanged(position)
-            listener?.onItemClick(icon)
+            listener.onItemClick(icon)
         }
 
         if (selectedList.contains(icon)) {

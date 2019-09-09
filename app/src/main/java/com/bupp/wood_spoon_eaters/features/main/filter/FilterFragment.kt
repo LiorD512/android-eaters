@@ -49,7 +49,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
         filterFragDietaryIcons.setIconsGridViewListener(this)
 
         filterFragTimeIcons.initIconsGrid(viewModel.getArrivalTimes(), Constants.SINGLE_SELECTION)
-        filterFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.MULTI_SELECTION)
+        filterFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.ENDLESS_SELECTION)
 
         filterFragHeader.setHeaderViewListener(this)
         filterFragClearAllBtn.setOnClickListener { clearAllFilters() }

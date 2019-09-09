@@ -154,8 +154,6 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     override fun onDishClick(dish: Dish) {
         Log.d("wowSearch","onDishClick")
         (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
-//        searchFragPb.show()
-//        viewModel.getFullDishDetails()
     }
 
     override fun onCookClick(cook: Cook) {

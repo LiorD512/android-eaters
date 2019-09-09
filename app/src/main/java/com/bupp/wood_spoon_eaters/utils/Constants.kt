@@ -14,6 +14,7 @@ class Constants {
         //settings stuff
         const val SINGLE_SELECTION = 1
         const val MULTI_SELECTION = 5
+        const val ENDLESS_SELECTION = 500
 
         //prefs
         const val PREFS_KEY_TOKEN = "key_token"
@@ -50,6 +51,7 @@ class Constants {
 
         //input title view input type
         const val INPUT_TYPE_TEXT = 0
+        const val INPUT_TYPE_TEXT_WITH_NUMBER = 7
         const val INPUT_TYPE_NUMBER = 1
         const val INPUT_TYPE_MAIL = 2
         const val INPUT_TYPE_LONG_TEXT = 3
@@ -70,6 +72,7 @@ class Constants {
         const val SMALL_IMAGE_SIZE = 1
         const val BIG_IMAGE_SIZE = 2
         const val BIGGEST_IMAGE_SIZE = 3
+        const val MANY_COOKS_VIEW = 4
 
         //tool tip type
         const val TOOL_TIP_SERVICE_FEE = 0

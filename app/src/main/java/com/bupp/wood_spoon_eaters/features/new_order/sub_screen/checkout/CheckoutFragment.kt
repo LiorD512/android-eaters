@@ -99,7 +99,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         checkoutFragHeaderView.setHeaderViewListener(this)
 
         checkoutFragPromoCodeBtn.setOnClickListener {
-            (activity as MainActivity).loadPromoCode()
+            (activity as NewOrderActivity).loadPromoCode()
         }
 
         checkoutFragChangePaymentChangeBtn.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -260,6 +261,8 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         }
         singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
         singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
+
+        singleDishInfoDate.setPaintFlags(singleDishInfoDate.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG);
     }
 
     override fun onDishCounterChanged(count: Int) {

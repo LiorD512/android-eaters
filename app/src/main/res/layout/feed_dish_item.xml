@@ -8,11 +8,11 @@
         android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-            android:elevation="8dp"
-            android:layout_marginEnd="7.9dp"
-            android:layout_marginStart="2.9dp"
+            app:cardElevation="@dimen/shadow_elevation"
+            android:layout_marginEnd="8.9dp"
+            android:layout_marginStart="8.9dp"
             android:background="@color/white"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="13dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -128,7 +128,7 @@
                             android:id="@+id/feedDishItemRating"
                             android:drawableLeft="@drawable/icons_raitings"
                             android:drawablePadding="7.7dp"
-                            style="@style/SemiBold15Dark"
+                            style="@style/SemiBold13Dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="5"/>

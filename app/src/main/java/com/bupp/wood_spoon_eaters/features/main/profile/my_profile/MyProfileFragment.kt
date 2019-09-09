@@ -12,9 +12,11 @@ import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -95,6 +97,10 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         profileFragLogout.setOnClickListener {
             LogoutDialog(this).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
         }
+    }
+
+    fun loadPromoCodeDialog() {
+        PromoCodeFragment()
     }
 
     override fun logout() {

@@ -20,7 +20,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.collections.ArrayList
 
-class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel() {
+class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),
+    EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     fun initNewOrder(){
         orderManager.initNewOrder()
@@ -28,7 +29,14 @@ class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: 
 
     fun initStripe(activity: Activity) {
         PaymentConfiguration.init(metaDataManager.getStripePublishableKey())
-        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(), false)
+        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
+    }
+
+
+    val ephemeralKeyProvider: SingleLiveEvent<EphemeralKeyProviderEvent> = SingleLiveEvent()
+    data class EphemeralKeyProviderEvent(val isSuccess: Boolean = false)
+    override fun onEphemeralKeyProviderError() {
+        ephemeralKeyProvider.postValue(EphemeralKeyProviderEvent(false))
     }
 
 

@@ -1,7 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.new_order.service
 
+import android.util.Log
 import androidx.annotation.Size
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.google.firebase.events.Subscriber
 import com.stripe.android.EphemeralKeyProvider
 import com.stripe.android.EphemeralKeyUpdateListener
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,9 +14,13 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.io.IOException
 
-class EphemeralKeyProvider : EphemeralKeyProvider, KoinComponent {
+class EphemeralKeyProvider(val listener: EphemeralKeyProviderListener) : EphemeralKeyProvider, KoinComponent {
 
     val api: ApiService by inject()
+
+    interface EphemeralKeyProviderListener{
+        fun onEphemeralKeyProviderError(){}
+    }
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -23,14 +29,23 @@ class EphemeralKeyProvider : EphemeralKeyProvider, KoinComponent {
             api.getEphemeralKey()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { responseBody ->
+                .subscribe(
+                    {responseBody ->
                     try {
                         val jsObject = JSONObject(responseBody.string())
                         val ephemeralKeyJson = jsObject.get("data").toString()
                         keyUpdateListener.onKeyUpdate(ephemeralKeyJson)
                     } catch (e: IOException) {
                         keyUpdateListener.onKeyUpdateFailure(0, e.message ?: "")
-                    }
-                })
+                    }}, {e -> showError(e)}
+                )
+        )
+    }
+
+    private fun showError(e: Throwable?) {
+        Log.d("EphemeralKeyProvider","error ${e?.message}")
+        listener.onEphemeralKeyProviderError()
     }
 }
+
+

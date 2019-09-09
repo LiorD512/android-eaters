@@ -14,13 +14,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
 
 
 class UserImageView : FrameLayout {
 
-    private lateinit var curCook: Cook
+    private var curEater: Eater? = null
+    private var curCook: Cook? = null
     private var type: Int = -1
     private var imageSize: Int = 0
 
@@ -105,6 +107,15 @@ class UserImageView : FrameLayout {
                 imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                 cookImageView.layoutParams = imageLayout
             }
+            Constants.MANY_COOKS_VIEW -> {
+                val bkgLayout = LayoutParams(76.toPx(), 76.toPx())
+                cookImageViewLayout.layoutParams = bkgLayout
+
+                val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
+                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                cookImageView.layoutParams = imageLayout
+                cookImageView.setPadding(0, 0, 0, 0)
+            }
         }
 
         if(isWithStroke){
@@ -132,6 +143,11 @@ class UserImageView : FrameLayout {
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
     }
 
+    fun setUser(eater: Eater) {
+        this.curEater = eater
+        setImage(eater.thumbnail)
+        initUi()
+    }
 
     fun setUser(cook: Cook) {
         this.curCook = cook

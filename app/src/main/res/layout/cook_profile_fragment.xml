@@ -69,7 +69,7 @@
 
             <View
                     android:layout_gravity="center"
-                    android:layout_width="1.5dp"
+                    android:layout_width="1dp"
                     android:layout_height="46dp"
                     android:background="@color/dark" />
 
@@ -97,8 +97,9 @@
 
         <com.bupp.wood_spoon_eaters.custom_views.stackableTextView.StackableTextView
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:id="@+id/cookProfileFragCuisineGrid"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="14dp" />
 

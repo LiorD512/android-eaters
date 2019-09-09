@@ -71,6 +71,9 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
         val dpd = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             openTimePicker(year, monthOfYear, dayOfMonth)
         }, year, month, day)
+
+        dpd.datePicker.minDate = Date().time
+
         dpd.show()
     }
 

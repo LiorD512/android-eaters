@@ -45,6 +45,8 @@
             <enum name="LONG_TEXT" value="3"/>
             <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
             <enum name="INPUT_TYPE_DONE_BTN" value="6"/>
+            <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7"/>
+"
         </attr>
     </declare-styleable>
 
@@ -122,6 +124,7 @@
             <enum name="SMALL" value="1"/>
             <enum name="BIG" value="2"/>
             <enum name="BIGGEST" value="3"/>
+            <enum name="MANY_COOKS_VIEW" value="4"/>
         </attr>
         <attr name="isWithStroke" format="boolean"/>
     </declare-styleable>

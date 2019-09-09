@@ -11,10 +11,7 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.LocationManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.managers.PermissionManager
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.model.ServerResponse
-import com.bupp.wood_spoon_eaters.model.Trigger
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -155,6 +152,10 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
                 getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
             }
         })
+    }
+
+    fun getCurrentEater(): Eater? {
+        return eaterDataManager.currentEater
     }
 
 

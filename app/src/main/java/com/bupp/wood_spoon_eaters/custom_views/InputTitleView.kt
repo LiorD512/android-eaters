@@ -93,7 +93,11 @@ class InputTitleView : FrameLayout {
                 inputType = a.getInt(R.styleable.InputTitleView_inputType, Constants.INPUT_TYPE_TEXT)
                 when (inputType) {
                     Constants.INPUT_TYPE_TEXT -> {
-                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                        inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT
+                        inputTitleViewTitle.visibility = VISIBLE
+                    }
+                    Constants.INPUT_TYPE_TEXT_WITH_NUMBER -> {
+                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                         inputTitleViewTitle.visibility = VISIBLE
                     }
                     Constants.INPUT_TYPE_NUMBER -> {

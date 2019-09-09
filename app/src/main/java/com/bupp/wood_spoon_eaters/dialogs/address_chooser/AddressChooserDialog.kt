@@ -48,6 +48,10 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
             dismiss()
         }
 
+        addressChooserDialogAddBtn.setOnClickListener {
+            onAddAddressClick()
+        }
+
         addressChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
 
         addressAdapter = AddressChooserAdapter(context!!, addresses, this)
@@ -84,7 +88,4 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
         dismiss()
     }
 
-//    fun addAddress(selected: Address) {
-//        addressAdapter.addAddress(selected)
-//    }
 }

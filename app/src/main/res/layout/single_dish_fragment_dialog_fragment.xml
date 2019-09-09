@@ -407,6 +407,8 @@ into consideration"/>
                             <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
                                     android:layout_marginTop="15.4dp"
                                     app:inputType="INPUT_TYPE_DONE_BTN"
+                                    app:hint="Add your request here..."
+                                    app:lines="3"
                                     android:id="@+id/singleDishIngredientInstructions"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>
