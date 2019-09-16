@@ -17,13 +17,20 @@ data class MetaDataModel(
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>? = arrayListOf(),
     @SerializedName("metrics") val metrics: ArrayList<Metrics>? = arrayListOf(),
     @SerializedName("report_topics") val reportTopic: ArrayList<ReportTopic>? = arrayListOf(),
-    @SerializedName("settings") val settings: ArrayList<AppSetting>? = arrayListOf()
+    @SerializedName("settings") val settings: ArrayList<AppSetting>? = arrayListOf(),
+    @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>? = arrayListOf()
 )
 
 data class ReportTopic(
     @SerializedName("id") val id: Long,
     @SerializedName("name") val name: String,
     @SerializedName("report_issues") val reportIssues: java.util.ArrayList<ReportIssue>
+)
+
+data class NotificationGroup(
+    @SerializedName("id") val id: Long,
+    @SerializedName("name") val name: String,
+    @SerializedName("description") val description: String
 )
 
 data class ReportIssue(

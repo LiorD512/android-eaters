@@ -10,8 +10,6 @@ import com.bupp.wood_spoon_eaters.model.Eater
 
 class AppSettings(val sharedPreferences: SharedPreferences) {
 
-
-
     fun isFirstTime(): Boolean {
         return sharedPreferences.getBoolean(Constants.PREFS_KEY_IS_FIRST_TIME, true)
     }

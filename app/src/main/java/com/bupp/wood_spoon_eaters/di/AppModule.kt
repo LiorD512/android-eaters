@@ -23,7 +23,7 @@ import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewMo
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
-import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsViewModel
+import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
@@ -90,7 +90,7 @@ val appModule = module {
 
 
     //settings
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get()) }
 
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }

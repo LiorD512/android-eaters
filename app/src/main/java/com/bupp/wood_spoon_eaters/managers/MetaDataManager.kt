@@ -44,6 +44,13 @@ class MetaDataManager {
         return arrayListOf()
     }
 
+    fun getNotificationsGroup(): ArrayList<NotificationGroup> {
+        if (getMetaDataObject()?.notificationsGroup != null) {
+            return metaDataObject.notificationsGroup as ArrayList<NotificationGroup>
+        }
+        return arrayListOf()
+    }
+
     fun getSettings(): ArrayList<AppSetting> {
         if (getMetaDataObject()?.settings != null) {
             return metaDataObject.settings as ArrayList<AppSetting>

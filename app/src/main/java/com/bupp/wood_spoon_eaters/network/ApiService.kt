@@ -68,6 +68,9 @@ interface ApiService {
     @POST("eaters/me")
     fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>
 
+    @POST("eaters/me")
+    fun postEaterNotificationGroup(@Query("notification_group_ids") notificationGroupIds: ArrayList<Long>? = null): Call<ServerResponse<Eater>>
+
     @POST("eaters/me/searches")
     fun search(@Body searchRequest: SearchRequest): Call<ServerResponse<ArrayList<Search>>>
 

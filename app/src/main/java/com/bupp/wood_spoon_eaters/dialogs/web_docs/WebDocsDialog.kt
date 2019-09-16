@@ -38,7 +38,18 @@ class WebDocsDialog(val type: Int) : DialogFragment(), HeaderView.HeaderViewList
 
 //        webDocsPb.show()
         initUi()
-        webDocsPrivacy.performClick()
+        if(type != null){
+            when(type){
+                Constants.WEB_DOCS_PRIVACY -> {
+                    webDocsPrivacy.performClick()
+                }
+                Constants.WEB_DOCS_TERMS -> {
+                    webDocsTerms.performClick()
+                }
+            }
+        }else{
+            webDocsPrivacy.performClick()
+        }
     }
 
     private fun initUi() {

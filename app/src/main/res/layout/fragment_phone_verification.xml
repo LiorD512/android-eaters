@@ -38,10 +38,38 @@
                 android:layout_width="1dp"
                 android:layout_height="0dp"/>
 
+        <LinearLayout
+                android:gravity="center"
+                android:layout_marginRight="7.7dp"
+                android:layout_marginTop="65.3dp"
+                android:layout_marginBottom="23dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <CheckBox
+                    android:layout_marginRight="7.7dp"
+                    android:id="@+id/verificationFragPrivacyPolicyCb"
+                    style="@style/Reg13Dark"
+                    android:text=""
+                    android:paddingLeft="7.2dp"
+                    android:layout_marginLeft="8.6dp"
+                    android:button="@drawable/checkbox_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    style="@style/Reg13Dark"
+                    android:gravity="left"
+                    android:id="@+id/verificationFragCbText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
         <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
                 app:title="@string/phone_verification_fragment_next_btn"
                 android:layout_gravity="center"
-                android:layout_marginTop="65.3dp"
                 android:id="@+id/verificationFragmentNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

@@ -13,10 +13,19 @@ data class Eater(
     @SerializedName("last_name") val lastName: String,
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("email") val email: String,
-    @SerializedName("addresses") val addresses: ArrayList<Address>
+    @SerializedName("addresses") val addresses: ArrayList<Address>,
+    @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>
 ){
     fun getFullName(): String{
        return "$firstName $lastName"
+    }
+
+    fun getNotificationGroupIds(): ArrayList<Long>{
+        val array: ArrayList<Long> = arrayListOf()
+        for(item in notificationsGroup){
+            array.add(item.id)
+        }
+        return array
     }
 }
 

@@ -32,7 +32,7 @@ import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragm
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
-import com.bupp.wood_spoon_eaters.features.main.sub_features.settings.SettingsFragment
+import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
@@ -43,8 +43,6 @@ import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivity
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

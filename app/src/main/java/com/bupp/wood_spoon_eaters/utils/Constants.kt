@@ -134,6 +134,7 @@ class Constants {
         const val NO_DISHES_AVAILABLE_DIALOG = "no_dishes_available_dialog_tag"
         const val VIDEO_VIEW_DIALOG = "video_view_dialog_tag"
         const val PAYMENT_METHOD_SUCCESS_DIALOG = "payment_method_success_dialog_tag"
+        const val WEB_DOCS_DIALOG = "web_docs_dialog_tag"
 
 
 
