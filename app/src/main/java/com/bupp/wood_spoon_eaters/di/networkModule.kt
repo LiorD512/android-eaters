@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.bupp.wood_spoon_eaters.FlavorConfig
 import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonAppSetting
 import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonSearch
 import com.bupp.wood_spoon_eaters.model.AppSetting
@@ -42,7 +43,7 @@ fun provideGoogleApi(): GoogleApi {
 }
 
 const val DEFAULT_NAMESPACE = "default"
-const val SERVER_BASE_URL = "https://woodspoon-staging.herokuapp.com/api/v1/"
+//const val SERVER_BASE_URL = FlavorConfig.BASE_URL
 
 fun provideSharedPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences("User", android.content.Context.MODE_PRIVATE)
@@ -66,7 +67,7 @@ fun provideRetrofit(client: OkHttpClient): Retrofit {
         .create()
 
     return Retrofit.Builder()
-        .baseUrl(SERVER_BASE_URL)
+        .baseUrl(FlavorConfig.CONSTANTS.BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
