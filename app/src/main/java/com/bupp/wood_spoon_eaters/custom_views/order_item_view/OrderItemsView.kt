@@ -47,4 +47,12 @@ class OrderItemsView : LinearLayout {
         }
     }
 
+    fun getOrderItemsQuantity(): Int {
+        if (adapter != null) {
+            return adapter!!.getOrderItemsQuantity()
+        } else {
+            return 0
+        }
+    }
+
 }

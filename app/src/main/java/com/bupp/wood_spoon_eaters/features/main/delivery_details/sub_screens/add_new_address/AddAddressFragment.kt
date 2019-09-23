@@ -129,7 +129,6 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
         viewModel.fetchMyLocation()
     }
 
-
     fun onLocationSelected(selected: GoogleAddressResponse?) {
         hasAddress = true
         this.selectedGoogleAddress = selected!!

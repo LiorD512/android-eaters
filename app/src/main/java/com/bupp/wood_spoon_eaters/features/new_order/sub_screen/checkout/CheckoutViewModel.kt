@@ -63,25 +63,25 @@ class CheckoutViewModel(val api: ApiService, val orderManager: OrderManager, val
         })
     }
 
-    data class FinalizeEvent(val isSuccess: Boolean)
-    val finalizeOrderEvent: SingleLiveEvent<FinalizeEvent> = SingleLiveEvent()
-    fun finalizeOrder(orderId: Long) {
-        api.finalizeOrder(orderId).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-                if(response.isSuccessful){
-                    orderManager.finalizeOrder()
-                    finalizeOrderEvent.postValue(FinalizeEvent(true))
-                }else{
-                    finalizeOrderEvent.postValue(FinalizeEvent(false))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-                finalizeOrderEvent.postValue(FinalizeEvent(false))
-            }
-
-        })
-    }
+//    data class FinalizeEvent(val isSuccess: Boolean)
+//    val finalizeOrderEvent: SingleLiveEvent<FinalizeEvent> = SingleLiveEvent()
+//    fun finalizeOrder(orderId: Long) {
+//        api.finalizeOrder(orderId).enqueue(object: Callback<ServerResponse<Void>>{
+//            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+//                if(response.isSuccessful){
+//                    orderManager.finalizeOrder()
+//                    finalizeOrderEvent.postValue(FinalizeEvent(true))
+//                }else{
+//                    finalizeOrderEvent.postValue(FinalizeEvent(false))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+//                finalizeOrderEvent.postValue(FinalizeEvent(false))
+//            }
+//
+//        })
+//    }
 
     fun clearCart() {
         orderManager.clearCurrentOrder()

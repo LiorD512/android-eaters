@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,16 +16,12 @@ import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.TipCourierDialog
-import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsDialog
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivity
 import kotlinx.android.synthetic.main.checkout_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
@@ -70,14 +65,14 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             }
          })
 
-        viewModel.finalizeOrderEvent.observe(this, Observer { finalizeEvent ->
-            if(finalizeEvent != null && finalizeEvent.isSuccess){
-                onOrderFinalized()
-            }else{
-                checkoutFragPb.hide()
-                Toast.makeText(context, "finalizeEvent failed", Toast.LENGTH_SHORT).show()
-            }
-         })
+//        viewModel.finalizeOrderEvent.observe(this, Observer { finalizeEvent ->
+//            if(finalizeEvent != null && finalizeEvent.isSuccess){
+//                onOrderFinalized()
+//            }else{
+//                checkoutFragPb.hide()
+//                Toast.makeText(context, "finalizeEvent failed", Toast.LENGTH_SHORT).show()
+//            }
+//         })
 
         viewModel.getOrderDetailsEvent.observe(this, Observer { orderDetails -> handleOrderDetails(orderDetails.order) })
 
@@ -110,7 +105,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         }
 
         viewModel.getOrderDetails()
-
         viewModel.getStripeCustomerCards()
         viewModel.getCurrentCustomer()
 
@@ -151,7 +145,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             this.curOrder = order
             var cook = order.cook
 
-            val address = order.deliveryAddress.streetLine1
+            var address: String? = null
+            if(order.deliveryAddress != null ){
+                address = order.deliveryAddress.streetLine1
+            }
             val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
             if (address != null) {
                 checkoutFragDeliveryAddress.updateDeliveryDetails(address)
@@ -162,15 +159,23 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
             checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"
             checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
-            calcPrice()
+            updatePriceUi()
         }
     }
 
     override fun onDishCountChange() {
-        calcPrice()
+        if(checkoutFragOrderItemsView.getOrderItemsQuantity() <= 0){
+            checkoutFragStatusBar.isEnabled = false
+            showEmptyCartDialog()
+        }else{
+            checkoutFragStatusBar.isEnabled = true
+
+        }
+        updatePriceUi()
+
     }
 
-    private fun calcPrice() {
+    private fun updatePriceUi() {
         val tax: Double = curOrder.tax.value
         val serviceFee = curOrder.serviceFee.value
         val deliveryFee = curOrder.deliveryFee.value
@@ -187,13 +192,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
         checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, price = total)
 
-        if(allDishSubTotal == 0.0){
-            checkoutFragStatusBar.isEnabled = false
-            Log.d("wowCheckoutFrag","no dish no more !")
-            showEmptyCartDialog()
-        }else{
-            checkoutFragStatusBar.isEnabled = true
-        }
     }
 
     private fun showEmptyCartDialog() {
@@ -234,7 +232,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).loadAddressesDialog()
+        (activity as NewOrderActivity).loadAddressesDialog()
     }
 
     override fun onHeaderBackClick() {

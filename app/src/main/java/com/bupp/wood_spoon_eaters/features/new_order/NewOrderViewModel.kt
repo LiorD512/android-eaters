@@ -39,6 +39,22 @@ class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: 
         ephemeralKeyProvider.postValue(EphemeralKeyProviderEvent(false))
     }
 
+    fun getListOfAddresses(): ArrayList<Address>? {
+        if(eaterDataManager.currentEater != null){
+            return eaterDataManager.currentEater!!.addresses
+        }
+        return arrayListOf()
+    }
+
+    fun getChosenAddress(): Address?{
+        return eaterDataManager.getLastChosenAddress()
+    }
+
+    fun setChosenAddress(address: Address){
+        eaterDataManager.setUserChooseSpecificAddress(true)
+        eaterDataManager.setLastChosenAddress(address)
+    }
+
 
 
 

@@ -53,6 +53,7 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
     private fun handleSaveResponse(event: EditMyProfileViewModel.NavigationEvent?) {
         (activity as MainActivity).handlePb(false)
         if (event!!.isSuccess) {
+            (activity as MainActivity).refreshUserUi()
             (activity as MainActivity).loadMyProfile()
         } else {
             Toast.makeText(context, "There was a problem accessing the server", Toast.LENGTH_SHORT).show()

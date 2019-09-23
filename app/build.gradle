@@ -37,9 +37,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signing_config
         }
-        debug {
-            applicationIdSuffix ".staging"
-        }
+//        debug {
+//            applicationIdSuffix ".staging"
+//        }
     }
 
     compileOptions {
@@ -56,7 +56,7 @@ android {
         }
         stagingFlavor {
             dimension "flavor"
-            applicationId "com.bupp.wood_spoon_eaters_staging"
+            applicationId "com.bupp.wood_spoon_eaters.staging"
         }
     }
 }

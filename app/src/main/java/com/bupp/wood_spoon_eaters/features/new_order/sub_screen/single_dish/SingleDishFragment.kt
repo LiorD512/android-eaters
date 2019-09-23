@@ -140,7 +140,9 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     private fun handleUnAvailableCookingSlot() {
         DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
         val cookingSlotStartingTime = currentDish.menuItem?.cookingSlot?.startsAt
-        viewModel.updateChosenDeliveryDate(cookingSlotStartingTime!!)
+        if(cookingSlotStartingTime != null){
+            viewModel.updateChosenDeliveryDate(cookingSlotStartingTime)
+        }
     }
 
 

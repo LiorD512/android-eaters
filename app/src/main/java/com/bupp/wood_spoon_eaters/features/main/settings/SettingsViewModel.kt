@@ -15,6 +15,8 @@ import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SettingsViewModel(private val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager, val eaterDataManager: EaterDataManager) : ViewModel() {
 
@@ -57,17 +59,24 @@ class SettingsViewModel(private val appSettings: AppSettings, val api: ApiServic
         val eater = eaterDataManager.currentEater
         if(eater != null){
             val idsList = eater.getNotificationGroupIds()
+            Log.d("wowSettings","current ids: $idsList")
             if(idsList.contains(notificationGroupId)){
                 idsList.remove(notificationGroupId)
             }else{
                 idsList.add(notificationGroupId)
             }
-            api.postEaterNotificationGroup(idsList).enqueue(object : Callback<ServerResponse<Eater>> {
+//            val array = arrayOfNulls<Long>(idsList.size)
+//            val array = arrayOf("a", "b")
+            val array = arrayOf<Long>()
+            val list = idsList.toArray(array)
+            Log.d("wowSettings","sending ids: ${list.asList()}")
+            api.postEaterNotificationGroup(list).enqueue(object : Callback<ServerResponse<Eater>> {
                 override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
                     if (response.isSuccessful) {
                         Log.d("wowSettingsVM", "postEaterNotificationGroup on success! ")
                         val eater = response.body()?.data!!
                         eaterDataManager.currentEater = eater
+                        Log.d("wowSettings","current ids: ${eater.notificationsGroup}")
                         postNotificationGroup.postValue(PostNotificationGroupEvent(true))
                     } else {
                         Log.d("wowSettingsVM", "postEaterNotificationGroupon Failure! ")

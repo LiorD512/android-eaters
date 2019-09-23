@@ -57,7 +57,10 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
     }
 
     fun getListOfAddresses(): ArrayList<Address>? {
-        return eaterDataManager.currentEater!!.addresses
+        if(eaterDataManager.currentEater != null){
+            return eaterDataManager.currentEater!!.addresses
+        }
+        return arrayListOf()
     }
 
     fun setChosenAddress(address: Address){

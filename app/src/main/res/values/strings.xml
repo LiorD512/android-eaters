@@ -42,7 +42,7 @@
     <string name="support_dialog_popular_qa_button"><![CDATA[Popular Q&A]]></string>
     <string name="support_dialog_contuct_us_button">Contact Us</string>
     <string name="support_dialog_title">Support Center</string>
-    <string name="support_frag_sms_sentence">Hello im just a line you can change later</string>
+    <string name="support_frag_sms_sentence"></string>
     <string name="common_string_address">Address</string>
     <string name="common_string_address_hint">Street address and building number</string>
     <string name="common_string_apartment">Apt./ Suite/ Floor</string>

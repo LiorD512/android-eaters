@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,13 @@ import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.checkout_fragment.*
 import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,7 +52,10 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     private fun initProfileData() {
         myProfileFragPb.show()
+        viewModel.initStripe((activity as MainActivity))
         viewModel.getUserDetails()
+        viewModel.getStripeCustomerCards()
+        myProfileFragFavorites.initFavorites()
     }
 
     private fun initObservers() {
@@ -56,6 +63,14 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
             myProfileFragPb.hide()
             if (getUserEvent.isSuccess) {
                 handleUserDetails(getUserEvent.eater!!)
+            }
+        })
+
+        viewModel.getStripeCustomerCards.observe(this, Observer { cardsEvent ->
+            if(cardsEvent.isSuccess){
+                handleCustomerCards(cardsEvent.paymentMethods)
+            }else {
+                setEmptyPaymentMethod()
             }
         })
 
@@ -76,7 +91,6 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     override fun onDishClick(dish: Dish) {
         (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
-
     }
 
     private fun initClicks() {
@@ -116,7 +130,32 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     override fun onChangePaymentClick() {
+        (activity as MainActivity).startPaymentMethodActivity()
+    }
 
+    private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
+        if(paymentMethods?.size!! > 0){
+            val defaultPayment = paymentMethods[0]
+            updateCustomerPaymentMethod(defaultPayment)
+//            viewModel.attachCardToCustomer(defaultPayment.id!!)
+        }else{
+            setEmptyPaymentMethod()
+        }
+    }
+
+    fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
+        val card = paymentMethod.card
+        if(card != null){
+            Log.d("wowMyProfile","updateCustomerPaymentMethod: ${paymentMethod.id}")
+            myProfileFragEditPayment.updateDeliveryDetails("Selected Card: (${card.brand} ${card.last4})")
+            myProfileFragEditPayment.setChangeable(true)
+            viewModel.updateUserCustomerCard(paymentMethod)
+        }
+    }
+
+    private fun setEmptyPaymentMethod() {
+        myProfileFragEditPayment.updateDeliveryDetails("Insert payment method")
+        myProfileFragEditPayment.setChangeable(true)
     }
 
     fun onAddressChooserSelected() {

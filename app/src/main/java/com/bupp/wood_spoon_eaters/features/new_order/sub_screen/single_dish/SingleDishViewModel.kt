@@ -132,7 +132,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     }
 
     fun getDropoffLocation(): String? {
-        return eaterDataManager.currentEater?.addresses?.first()?.getDropoffLocationStr()
+        return eaterDataManager.getDropoffLocation()
     }
 
     fun getDishReview(cookId: Long) {

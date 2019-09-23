@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.settings
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +39,13 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
 
         holder.switch.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+                Log.d("wowSettings","onCheckedChanged ${notificationGroup.id}")
+                if(eaterPrefs.contains(notificationGroup.id)){
+                    eaterPrefs.remove(notificationGroup.id)
+                }else{
+                    eaterPrefs.add(notificationGroup.id)
+                }
+                Log.d("wowSettings","list ${eaterPrefs}")
                 listener.onNotificationChange(notificationGroup.id)
             }
         })
@@ -61,6 +69,9 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
         notifyDataSetChanged()
     }
 
+    fun getSelectedIds(): ArrayList<Long>{
+        return eaterPrefs
+    }
 }
 
 class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {

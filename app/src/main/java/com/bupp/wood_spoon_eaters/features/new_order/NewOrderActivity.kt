@@ -9,9 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import com.bupp.wood_spoon.dialogs.AddressChooserDialog
+import com.bupp.wood_spoon.dialogs.EditAddressDialog
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.stripe.android.model.PaymentMethod
 import com.stripe.android.view.PaymentMethodsActivity
@@ -21,7 +25,9 @@ import java.util.ArrayList
 
 
 class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialogListener,
-    CheckoutFragment.CheckoutDialogListener{//}, StatusBottomBar.StatusBottomBarListener {
+    CheckoutFragment.CheckoutDialogListener, AddressChooserDialog.AddressChooserDialogListener,
+    EditAddressDialog.EditAddressDialogListener {
+
 
     private val currentDesplayingFragment: ArrayList<String> = arrayListOf()
     val viewModel by viewModel<NewOrderViewModel>()
@@ -144,6 +150,38 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 
     fun loadPromoCode() {
         Log.d("wow","load Promo code")
+    }
+
+    fun loadAddressesDialog() {
+        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
+            supportFragmentManager,
+            Constants.ADDRESS_DIALOG_TAG
+        )
+    }
+
+    override fun onAddressMenuClick(address: Address) {
+        EditAddressDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
+    }
+
+    override fun onAddressChoose(address: Address) {
+        viewModel.setChosenAddress(address)
+    }
+
+    override fun onEditAddress(address: Address) {
+        loadFragment(AddAddressFragment(address), Constants.ADD_NEW_ADDRESS_TAG)
+        if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
+            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
+        }
+//        .setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
+    }
+
+    override fun onAddAddress() {
+        loadAddNewAddress()
+    }
+
+    fun loadAddNewAddress() {
+        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
+//        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
     }
 
 

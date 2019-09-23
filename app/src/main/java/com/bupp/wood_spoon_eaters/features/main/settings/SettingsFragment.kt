@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.settings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +51,8 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
 
         val notificationGroupList = viewModel.getNotificationsGroup()
         val userSettings = viewModel.getEaterNotificationsGroup()
+        Log.d("wowSettings","userSettings ids: $userSettings")
+
         adapter = NotificationsGroupAdapter(context!!, notificationGroupList, userSettings!!, this)
         settingsFragNotificationGroupList.adapter = adapter
     }

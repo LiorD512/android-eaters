@@ -36,7 +36,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
-    fun postDishSuggestion(@Field("dish_name") dishName: String,@Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
+    fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
 
     @GET("eaters/me/triggers")
     fun getTriggers(): Call<ServerResponse<Trigger>>
@@ -68,8 +68,9 @@ interface ApiService {
     @POST("eaters/me")
     fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>
 
+    @FormUrlEncoded
     @POST("eaters/me")
-    fun postEaterNotificationGroup(@Query("notification_group_ids") notificationGroupIds: ArrayList<Long>? = null): Call<ServerResponse<Eater>>
+    fun postEaterNotificationGroup(@Field("notification_group_ids") notificationGroupIds: Array<Long>): Call<ServerResponse<Eater>>
 
     @POST("eaters/me/searches")
     fun search(@Body searchRequest: SearchRequest): Call<ServerResponse<ArrayList<Search>>>

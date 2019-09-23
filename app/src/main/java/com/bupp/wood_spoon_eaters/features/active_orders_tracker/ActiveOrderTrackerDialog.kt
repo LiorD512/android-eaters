@@ -76,11 +76,11 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>, val listener: Activ
 
 
     override fun onMessageClick(order: Order) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onShareImageClick(order: Order) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
 

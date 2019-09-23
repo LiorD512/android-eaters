@@ -55,7 +55,7 @@ class DeliveryDetailsView : LinearLayout {
 
     }
 
-    private fun setChangeable(changeable: Boolean) {
+    fun setChangeable(changeable: Boolean) {
         if (changeable) {
             deliveryDetailsViewChangeBtn.visibility = View.VISIBLE
             deliveryDetailsViewChangeBtn.isClickable = true
@@ -108,6 +108,7 @@ class DeliveryDetailsView : LinearLayout {
     fun updateDeliveryDetails(input: String) {
         deliveryDetailsViewInput.text = input
     }
+
 
 
 }

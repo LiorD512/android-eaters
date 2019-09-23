@@ -43,6 +43,9 @@ import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
+import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -318,11 +321,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
                 }
             }
-            Constants.CHECKOUT_TAG -> {
-                if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
-                    (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
-                }
-            }
+//            Constants.CHECKOUT_TAG -> {
+//                if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
+//                    (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
+//                }
+//            }
         }
         setHeaderViewLocationDetails(viewModel.getLastOrderTime(), address)
     }
@@ -369,6 +372,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onAddAddress() {
         loadAddNewAddress()
     }
+
+
 
 
     fun loadNoDeliveryToAddressDialog() {
@@ -435,14 +440,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         val smsIntent =
             Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + getString(R.string.default_bupp_phone_number)))
         smsIntent.putExtra("sms_body", getString(R.string.support_frag_sms_sentence))
-        this.applicationContext.startActivity(smsIntent)
+        startActivity(smsIntent)
     }
 
     fun callPhoneNumber() {
         val phone = "+16179096185"
         val dialIntent = Intent(Intent.ACTION_DIAL)
         dialIntent.data = Uri.parse("tel:" + getString(R.string.default_bupp_phone_number))
-        this.applicationContext.startActivity(dialIntent)
+        startActivity(dialIntent)
     }
 
 
@@ -524,6 +529,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 updateAddressTimeView()
                 loadFeed()
             }
+            Constants.ORDER_HISTORY_TAG -> {
+                loadMyProfile()
+            }
 
             else -> {
                 loadFeed()
@@ -552,6 +560,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.updateSearchInput(str)
     }
 
+    fun startPaymentMethodActivity() {
+        PaymentMethodsActivityStarter(this).startForResult()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -571,6 +582,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //                    closeAllDialogs()
                     loadFeed()
                     checkForActiveOrder()
+                }
+                PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
+
+                    if (paymentMethod != null && paymentMethod.card != null) {
+                        Log.d("wowNewOrder","payment method success")
+                        if(getFragmentByTag(Constants.MY_PROFILE_TAG) != null){
+                            (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(paymentMethod)
+                        }
+                    }
                 }
             }
         }
@@ -595,6 +616,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
     }
 
+    fun refreshUserUi() {
+        mainActHeaderView.refreshUserUi(viewModel.getCurrentEater())
+    }
 
 
 }

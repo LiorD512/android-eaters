@@ -60,11 +60,15 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
     private fun getClosestAddressToLocation(mLocation: Address): Address? {
         val myAddresses = currentEater?.addresses
-        if(myAddresses != null){
+        if(myAddresses != null && myAddresses.size > 0){
             for(address in myAddresses){
-                if(isLocationsNear(mLocation.lat!!, mLocation.lng!!, address.lat!!, address.lng!!))
+                if(isLocationsNear(mLocation.lat!!, mLocation.lng!!, address.lat!!, address.lng!!)){
                     return address
+                }
             }
+            return mLocation
+        }else{
+            return mLocation
         }
         return null
     }
@@ -165,6 +169,14 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     fun isUserChooseSpecificAddress(): Boolean {
         //is user didn't chose my location
         return isUserChooseSpecificAddress
+    }
+
+    fun getDropoffLocation(): String? {
+        if(currentEater?.addresses != null && currentEater?.addresses!!.size > 0){
+            return currentEater?.addresses?.first()?.getDropoffLocationStr()
+        }else{
+            return getLastChosenAddress()?.getDropoffLocationStr()
+        }
     }
 
 

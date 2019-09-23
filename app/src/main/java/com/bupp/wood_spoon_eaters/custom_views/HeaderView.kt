@@ -54,6 +54,12 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         listener = listenerInstance
     }
 
+    fun refreshUserUi(eater: Eater? = null){
+        if(eater != null){
+            headerViewProfileBtn.setUser(eater)
+        }
+    }
+
     interface HeaderViewListener {
         fun onHeaderBackClick() {}
         fun onHeaderDoneClick() {}

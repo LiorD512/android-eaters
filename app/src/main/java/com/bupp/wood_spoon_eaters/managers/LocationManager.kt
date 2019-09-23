@@ -7,6 +7,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.NonNull
 import com.bupp.wood_spoon_eaters.model.Address
 
@@ -72,6 +73,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
     fun start() {
         if (!isStarted) {
+//            Toast.makeText(context, "starting location manager", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "startLocationUpdates")
             isStarted = true
 //            this.activity = activity
@@ -94,6 +96,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                 startLocationUpdates()
             }
         } else {
+//            Toast.makeText(context, "Re-starting location manager", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "re starting LocationUpdates")
             startLocationUpdates()
         }
@@ -113,6 +116,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                 mLastLocation = mCurrentLocation
                 mCurrentLocation = locationResult.lastLocation
                 if(listener != null){
+//                    Toast.makeText(context, "onLocationResult:" + locationResult.lastLocation, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "onLocationResult:" + locationResult.lastLocation)
                     listener?.onLocationChanged(getAddressFromLocation(mCurrentLocation!!))
                 }
@@ -145,14 +149,17 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         task.addOnFailureListener { exception ->
             if (exception is ResolvableApiException){
                 Log.d(TAG, "location setting failed")
+//                Toast.makeText(context, "location setting failed", Toast.LENGTH_SHORT).show()
                 val statusCode = (exception as ApiException).getStatusCode()
                 when (statusCode) {
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
+//                        Toast.makeText(context, "location setting failed - RESOLUTION_REQUIRED", Toast.LENGTH_SHORT).show()
                         Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings")
                         val rae = exception as ResolvableApiException
 //                        rae.startResolutionForResult(context, Constants.REQUEST_CHECK_SETTINGS);
                     }
                     LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+//                        Toast.makeText(context, "location setting failed - SETTINGS_CHANGE_UNAVAILABLE", Toast.LENGTH_SHORT).show()
                         val errorMessage = "Location settings are inadequate, and cannot be " + "fixed here. Fix in Settings."
                         Log.e(TAG, errorMessage)
                         mRequestingLocationUpdates = false
@@ -168,11 +175,13 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         if (isStarted) {
             isStarted = false
             if ((!mRequestingLocationUpdates)) {
+//                Toast.makeText(context, "stopLocationUpdates: updates never requested", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.")
                 return
             }
             mFusedLocationClient!!.removeLocationUpdates(mLocationCallback).addOnCompleteListener(object : OnCompleteListener<Void> {
                 override fun onComplete(@NonNull task: Task<Void>) {
+                    Toast.makeText(context, "stopLocationUpdates", Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "stopLocationUpdates")
                     mRequestingLocationUpdates = false
                 }
@@ -191,9 +200,11 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         try {
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             Log.d(TAG, "my location object: ${addresses[0]}")
+//            Toast.makeText(context, "my location object: ${addresses[0]}", Toast.LENGTH_SHORT).show()
             streetLine = addresses[0].getAddressLine(0)
         }catch (e: IOException){
             Log.d(TAG, "location manager error: " + e.message)
+//            Toast.makeText(context, "location manager error: " + e.message, Toast.LENGTH_SHORT).show()
         }
 //        val city = addresses[0].locality
 //        val state = addresses[0].adminArea

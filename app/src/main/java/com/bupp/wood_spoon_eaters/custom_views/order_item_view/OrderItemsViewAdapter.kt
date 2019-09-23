@@ -108,5 +108,13 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         return sum
     }
 
+    fun getOrderItemsQuantity(): Int {
+        var sum: Int = 0
+        for(item in orders){
+            sum += item.quantity
+        }
+        return sum
+    }
+
 
 }

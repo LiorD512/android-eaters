@@ -68,6 +68,7 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
         Log.d(TAG, "feed fragment started")
         feedFragPb.show()
         viewModel.getFeed()
+
     }
 
     override fun refreshList() {

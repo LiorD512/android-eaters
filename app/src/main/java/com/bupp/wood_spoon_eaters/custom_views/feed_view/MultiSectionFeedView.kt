@@ -76,7 +76,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         }
 
         multiSectionViewFavorites.setFavoritesViewListener(this)
-
+        multiSectionViewFavorites.initFavorites()
     }
 
     private fun clearFeed() {

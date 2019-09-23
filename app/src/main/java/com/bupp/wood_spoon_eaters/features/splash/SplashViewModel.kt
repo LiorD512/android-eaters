@@ -52,7 +52,7 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
                         Log.d("wowSplashVM", "getMetaData success")
                         val metaDataResponse = response.body() as ServerResponse<MetaDataModel>
                         metaDataManager.setMetaDataObject(metaDataResponse.data!!)
-                        navigationEvent.postValue(NavigationEvent(true, isRegistered))
+                        navigationEvent.postValue(NavigationEvent(false, isRegistered))
                     } else {
                         Log.d("wowSplashVM", "getMetaData fail")
                         navigationEvent.postValue(NavigationEvent(false, isRegistered))
@@ -89,7 +89,7 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
             metaDataManager.setMetaDataObject(metaDataResponse.data!!)
 
             if (eater == null) {
-                navigationEvent.postValue(NavigationEvent(true, false))
+                navigationEvent.postValue(NavigationEvent(false, false))
             } else {
                 eaterDataManager.currentEater = eater
                 if (eaterDataManager.isAfterLogin()) {

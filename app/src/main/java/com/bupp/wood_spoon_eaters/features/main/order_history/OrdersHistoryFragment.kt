@@ -53,8 +53,14 @@ class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,
     }
 
     private fun initList(orderHistory: ArrayList<Order>) {
-        var adapter = OrdersHistoryAdapter(context!!, orderHistory, this)
-        ordersHistoryFragRecyclerView.adapter = adapter
+        if(orderHistory.size > 0){
+            val adapter = OrdersHistoryAdapter(context!!, orderHistory, this)
+            ordersHistoryFragRecyclerView.adapter = adapter
+        }else{
+            ordersHistoryFragEmpty.visibility = View.VISIBLE
+            ordersHistoryFragRecyclerView.visibility = View.GONE
+        }
+
     }
 
 
