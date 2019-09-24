@@ -66,12 +66,23 @@
     <string name="title_activity_active_orders_tracker">ActiveOrdersTrackerActivity</string>
     <string name="common_string_order_number">Order no.</string>
 
-    <string name="order_history_item_reorder"><u>Rate Order</u></string>
-    <string name="order_history_item_report"><u>Report issue</u></string>
+    <string name="order_history_item_reorder">
+        <u>Rate Order</u>
+    </string>
+    <string name="order_history_item_report">
+        <u>Report issue</u>
+    </string>
     <string name="order_history_item_by_cook">Your Order by cook</string>
-    <string name="cancel_dialog_stage_1_title">We are sorry to see you cancel your order. Please let us know why you want to cancel</string>
-    <string name="cancel_dialog_stage_2_title">Our cook already started to prepare your order. Please notice that you will be charged for 50% of the order cost</string>
-    <string name="cancel_dialog_stage_3_title">Your order is already on its way. You will be charged for 100% of the order cost if canceling</string>
+    <string name="cancel_dialog_stage_1_title">We are sorry to see you cancel your order. Please let us know why you
+        want to cancel
+    </string>
+    <string name="cancel_dialog_stage_2_title">Our cook already started to prepare your order. Please notice that you
+        will be charged for 50% of the order cost
+    </string>
+    <string name="cancel_dialog_stage_3_title">Your order is already on its way. You will be charged for 100% of the
+        order cost if canceling
+    </string>
+    <string name="title_activity_address_chooser">AddressChooserActivity</string>
 
 
 </resources>

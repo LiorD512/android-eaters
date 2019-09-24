@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -59,15 +59,15 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
             else -> addAddressFragPickUpCb.performClick()
         }
 
-        viewModel.navigationEvent.observe(this, Observer { event -> handleSaveResponse(event) })
+        viewModel.updateAddressEvent.observe(this, Observer { event -> handleSaveResponse(event) })
         viewModel.myLocationEvent.observe(this, Observer { myLocation -> handleMyLocationEvent(myLocation.myLocation) })
     }
 
     private fun initEditAddress() {
-        (activity as MainActivity).loadLocationChooser(curAddress!!.streetLine1)
+        (activity as AddressChooserActivity).loadLocationChooser(curAddress!!.streetLine1)
         addAddressFragDeliveryNote.setText(curAddress.notes)
 
-        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
+        (activity as AddressChooserActivity).setHeaderViewSaveBtnClickable(true)
 
     }
 
@@ -88,7 +88,7 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
         if (event != null) {
             addAddressFragPb.hide()
             if (event!!.isSuccessful) {
-                (activity as MainActivity).onNewAddressDone(location = event.addressStreetStr)
+                (activity as AddressChooserActivity).onNewAddressDone(location = event.addressStreetStr)
             } else {
                 Toast.makeText(context, "There was a problem", Toast.LENGTH_SHORT).show()
             }
@@ -117,7 +117,7 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
     override fun onActionViewClick(type: Int) {
         when (type) {
             Constants.LOCATION_CHOOSER_ACTION -> {
-                (activity as MainActivity).loadLocationChooser(null)
+                (activity as AddressChooserActivity).loadLocationChooser(null)
             }
             else -> {
                 Toast.makeText(context, "Not implemented onActionViewClick with Type: $type", Toast.LENGTH_LONG).show()
@@ -141,7 +141,7 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
 
     fun validateFields(){
         if(hasAddress && hasApt){
-            (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
+            (activity as AddressChooserActivity).setHeaderViewSaveBtnClickable(true)
         }
     }
 

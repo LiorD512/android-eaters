@@ -76,16 +76,16 @@ class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager,
                     Log.d("wowSplashVM", "getMetaData success")
                     val metaDataResponse = response.body() as ServerResponse<MetaDataModel>
                     metaDataManager.setMetaDataObject(metaDataResponse.data!!)
-//                    navigationEvent.postValue(SplashViewModel.NavigationEvent(true, isRegistered))
+//                    updateAddressEvent.postValue(SplashViewModel.NavigationEvent(true, isRegistered))
                 } else {
                     Log.d("wowSplashVM", "getMetaData fail")
-//                    navigationEvent.postValue(SplashViewModel.NavigationEvent(false, isRegistered))
+//                    updateAddressEvent.postValue(SplashViewModel.NavigationEvent(false, isRegistered))
                 }
             }
 
             override fun onFailure(call: Call<ServerResponse<MetaDataModel>>, t: Throwable) {
                 Log.d("wowVerificationVM", "getMetaData big fail")
-//                navigationEvent.postValue(SplashViewModel.NavigationEvent(false, isRegistered))
+//                updateAddressEvent.postValue(SplashViewModel.NavigationEvent(false, isRegistered))
             }
         })
     }

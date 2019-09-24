@@ -84,5 +84,21 @@ class MetaDataManager {
 
     }
 
+    fun getReportsEmailAddress(): String? {
+        for (settings in getSettings()){
+            if(settings.key == "reports_email")
+                return settings.value!! as String
+        }
+        return ""
+    }
+
+    fun getDeliveryFeeStr(): String {
+        for (settings in getSettings()){
+            if(settings.key == "delivery_fee")
+                return (settings.value!! as Price).formatedValue as String
+        }
+        return ""
+    }
+
 
 }

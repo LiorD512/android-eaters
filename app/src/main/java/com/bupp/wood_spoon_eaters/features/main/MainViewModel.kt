@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
@@ -23,6 +24,8 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
                     val eaterDataManager: EaterDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
+    private var hasPendingOrder: Boolean = false
+    private var hasActiveOrder: Boolean = false
     val addressUpdateEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
     data class AddressUpdateEvent(val currentAddress: Address?)
 
@@ -114,11 +117,14 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
                     Log.d("wowMainVM", "getTrackableOrders success")
                     val activeOrders = response.body()!!.data
                     if(activeOrders != null && activeOrders.size > 0){
+                        hasActiveOrder = true
                         getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders))
                     }else{
+                        hasActiveOrder = false
                         getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
                     }
                 } else {
+                    hasActiveOrder = false
                     Log.d("wowMainVM", "getTrackableOrders fail")
                     getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
                 }
@@ -157,8 +163,29 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         })
     }
 
+    val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
+    data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
+    fun checkCartStatus() {
+        hasPendingOrder = orderManager.haveCurrentActiveOrder()
+        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
+    }
+
+
+
     fun getCurrentEater(): Eater? {
         return eaterDataManager.currentEater
+    }
+
+    fun getContainerPaddingBottom(): Int{
+        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+        var padding = 0
+        if(hasActiveOrder){
+            padding += 55.DptoPx()
+        }
+        if(hasPendingOrder){
+            padding += 55.DptoPx()
+        }
+        return padding
     }
 
 

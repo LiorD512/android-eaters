@@ -308,15 +308,15 @@
     </style>
 
     <!--<style name="CardWidgetStyle" parent="@android:style/Theme.DeviceDefault">-->
-        <!--<item name="android:background">@color/white</item>-->
-        <!--<item name="editTextStyle">@style/EditTextOverride</item>-->
-        <!--<item name="android:editTextStyle">@style/EditTextOverride</item>-->
+    <!--<item name="android:background">@color/white</item>-->
+    <!--<item name="editTextStyle">@style/EditTextOverride</item>-->
+    <!--<item name="android:editTextStyle">@style/EditTextOverride</item>-->
     <!--</style>-->
 
     <!--<style name="EditTextOverride" parent="@android:style/Widget.EditText">-->
-        <!--<item name="android:textColor">@color/dark</item>-->
-        <!--<item name="android:textColorHint">@color/dark_50</item>-->
-        <!--<item name="android:textSize">12sp</item>-->
+    <!--<item name="android:textColor">@color/dark</item>-->
+    <!--<item name="android:textColorHint">@color/dark_50</item>-->
+    <!--<item name="android:textSize">12sp</item>-->
     <!--</style>-->
 
     <declare-styleable name="CircleView">

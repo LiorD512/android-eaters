@@ -30,7 +30,9 @@ class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<Dis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dishIngredient = ingredient[position]
         val ingredient = dishIngredient.ingredient
-        holder.title.text = ingredient?.name
+        val name = ingredient?.name
+        val quantity = "${dishIngredient.quantity} ${dishIngredient.unit?.name}"
+        holder.title.text = "$name ($quantity)"
         if(dishIngredient.isAdjustable!!){
             holder.remove.visibility = View.VISIBLE
 

@@ -23,7 +23,18 @@ import kotlin.collections.ArrayList
 class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
+    val orderStatusEvent: SingleLiveEvent<OrderStatusEvent> = SingleLiveEvent()
+    data class OrderStatusEvent(val hasActiveOrder: Boolean = false)
+    fun checkOrderStatus(){
+        if(orderManager.haveCurrentActiveOrder()){
+            orderStatusEvent.postValue(OrderStatusEvent(true))
+        }else{
+            orderStatusEvent.postValue(OrderStatusEvent(false))
+        }
+    }
+
     fun initNewOrder(){
+        orderManager.clearCurrentOrder()
         orderManager.initNewOrder()
     }
 
@@ -53,6 +64,10 @@ class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: 
     fun setChosenAddress(address: Address){
         eaterDataManager.setUserChooseSpecificAddress(true)
         eaterDataManager.setLastChosenAddress(address)
+    }
+
+    fun clearCart() {
+        orderManager.clearCurrentOrder()
     }
 
 

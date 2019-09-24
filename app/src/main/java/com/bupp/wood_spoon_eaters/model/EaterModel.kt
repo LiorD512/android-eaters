@@ -13,6 +13,7 @@ data class Eater(
     @SerializedName("first_name") val firstName: String,
     @SerializedName("last_name") val lastName: String,
     @SerializedName("thumbnail") val thumbnail: String,
+    @SerializedName("invite_url") val inviteUrl: String? = "",
     @SerializedName("email") val email: String,
     @SerializedName("addresses") val addresses: ArrayList<Address>,
     @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>

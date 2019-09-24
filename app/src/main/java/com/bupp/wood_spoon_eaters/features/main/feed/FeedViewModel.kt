@@ -5,17 +5,15 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.LocationManager
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.Feed
-import com.bupp.wood_spoon_eaters.model.FeedRequest
-import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
+class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     private val TAG = "wowFeedVM"
@@ -57,33 +55,6 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
         }
     }
 
-//    fun likeDish(id: Long) {
-//        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
-//            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-//                likeEvent.postValue(LikeEvent(response.isSuccessful))
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-//                Log.d("wowSingleDishVM","likeDish big fail")
-//                likeEvent.postValue(LikeEvent(false))
-//            }
-//
-//        })
-//    }
-//
-//    fun unlikeDish(id: Long) {
-//        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
-//            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-//                likeEvent.postValue(LikeEvent(response.isSuccessful))
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-//                Log.d("wowSingleDishVM","unlikeDish big fail")
-//                likeEvent.postValue(LikeEvent(false))
-//            }
-//
-//        })
-//    }
 
     override fun onAddressChanged(currentAddress: Address?) {
         if(currentAddress != null){
@@ -117,6 +88,38 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
 
     fun hasFavorites(): Boolean {
         return settings.hasFavoriets()
+    }
+
+    val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
+    data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
+    fun getCurrentCook(id: Long) {
+        api.getCook(id).enqueue(object: Callback<ServerResponse<Cook>>{
+            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
+                if(response.isSuccessful){
+                    val cook = response.body()?.data
+                    Log.d("wowFeedVM","getCurrentCook success: ")
+                    getCookEvent.postValue(CookEvent(true, cook))
+                }else{
+                    Log.d("wowFeedVM","getCurrentCook fail")
+                    getCookEvent.postValue(CookEvent(false,null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
+                Log.d("wowFeedVM","getCurrentCook big fail")
+                getCookEvent.postValue(CookEvent(false,null))
+            }
+        })
+    }
+
+    fun getDeliveryFeeString(): String {
+        return metaDataManager.getDeliveryFeeStr()
+    }
+
+    fun getShareText(): String {
+        val inviteUrl = eaterDataManager.currentEater?.inviteUrl
+        val text = "Hey there, I just thought of you and realized you would love this new app. WoodSpoon is the first on-demand homemade food delivery app. You should definitely try it! Download WoodSpoon now and get 30% off your next dish \n"
+        return "$text \n $inviteUrl"
     }
 
 

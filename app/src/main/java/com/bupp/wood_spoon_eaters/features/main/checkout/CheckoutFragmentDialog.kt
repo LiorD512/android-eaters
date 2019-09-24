@@ -147,7 +147,7 @@
 //    }
 //
 //    override fun onChangeLocationClick() {
-//        (activity as MainActivity).loadAddressesDialog()
+//        (activity as MainActivity).openAddressChooser()
 //    }
 //
 //    override fun onHeaderBackClick() {

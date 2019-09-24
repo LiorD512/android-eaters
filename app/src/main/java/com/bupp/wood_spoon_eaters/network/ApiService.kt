@@ -24,7 +24,7 @@ interface ApiService {
     fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
 
     @POST("eaters/me/addresses/{address_id}")
-    fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Void>>
+    fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Address>>
 
 
     //General
@@ -78,6 +78,8 @@ interface ApiService {
     @GET("eaters/me/searches/{id}")
     fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
 
+    @GET("cooks/{cook_id}")
+    fun getCook(@Path(value = "cook_id", encoded = true) cookId: Long): Call<ServerResponse<Cook>>
 
     //Single Dish
     @GET("menu_items/{menu_item_id}/dish")
@@ -89,6 +91,9 @@ interface ApiService {
     //New Order calls
     @POST("eaters/me/orders")
     fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
+
+    @POST("eaters/me/orders/{order_id}")
+    fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
 
     @POST("eaters/me/orders/{order_id}/checkout")
     fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>

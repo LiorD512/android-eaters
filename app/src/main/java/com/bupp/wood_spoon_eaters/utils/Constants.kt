@@ -92,6 +92,7 @@ class Constants {
         const val OFFER_DISH_TAG = "offer_dish_tag"
         const val DISH_OFFERED_TAG = "dish_offered_tag"
 
+
         const val WELCOME_TAG ="welcome_tag"
         const val CODE_TAG ="welcome_tag"
         const val PHONE_VERIFICATION_TAG = "phone_verification_tag"
@@ -135,6 +136,7 @@ class Constants {
         const val VIDEO_VIEW_DIALOG = "video_view_dialog_tag"
         const val PAYMENT_METHOD_SUCCESS_DIALOG = "payment_method_success_dialog_tag"
         const val WEB_DOCS_DIALOG = "web_docs_dialog_tag"
+        const val COOK_PROFILE_DIALOG_TAG = "cook_profile_dialog_tag"
 
 
 
@@ -203,6 +205,8 @@ class Constants {
         const val LOCATION_PERMISSION_REQUEST_CODE = 420
         const val PHONE_CALL_PERMISSION_REQUEST_CODE = 430
         const val PAYMENT_METHOD_DIALOG_REQUEST_CODE = 440
+        const val ADDRESS_CHOOSER_REQUEST_CODE = 450
+
 
 
         const val MINIMUM_LOCATION_DISTANCE = 100

@@ -99,6 +99,37 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         this.lastChosenAddress = address
     }
 
+    fun removeAddressById(deletedAddressId: Long) {
+        if(currentEater != null){
+            val addresess = currentEater!!.addresses
+            val newAddresess: ArrayList<Address> = arrayListOf()
+            for(item in addresess){
+                if(item.id != deletedAddressId){
+                   newAddresess.add(item)
+                }
+            }
+            currentEater!!.addresses.clear()
+            currentEater!!.addresses.addAll(newAddresess)
+        }
+    }
+
+    fun updateAddressById(currentAddressId: Long, newAddress: Address?) {
+        if(currentEater != null){
+            val addresess = currentEater!!.addresses
+            val newAddresess: ArrayList<Address> = arrayListOf()
+            for(item in addresess){
+                if(item.id != currentAddressId){
+                    newAddresess.add(item)
+                }
+            }
+            currentEater!!.addresses.clear()
+            currentEater!!.addresses.add(newAddress!!)
+            currentEater!!.addresses.addAll(newAddresess)
+        }
+    }
+
+
+
 
     //Stripe customer card
     fun updateCustomerCard(paymentMethod: PaymentMethod){
@@ -178,6 +209,8 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return getLastChosenAddress()?.getDropoffLocationStr()
         }
     }
+
+
 
 
 }

@@ -11,10 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.clear_cart_dialog.*
-import kotlinx.android.synthetic.main.start_new_cart_dialog_layout.*
 import kotlinx.android.synthetic.main.web_docs_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

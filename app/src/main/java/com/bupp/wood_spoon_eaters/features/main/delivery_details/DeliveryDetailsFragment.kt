@@ -55,7 +55,7 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).loadAddressesDialog()
+        (activity as MainActivity).openAddressChooser()
     }
 
     override fun onChangeTimeClick() {

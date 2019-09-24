@@ -14,7 +14,12 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.feed_dish_item.view.*
 
 
-class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val listener: SearchAdapterListener) :
+class SingleFeedAdapter(
+    val context: Context,
+    val dishes: ArrayList<Dish>,
+    val listener: SearchAdapterListener,
+    val deliveryFee: String
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){//}, FavoriteBtn.FavoriteBtnListener {
 
 
@@ -50,9 +55,9 @@ class SingleFeedAdapter(val context: Context, val dishes: ArrayList<Dish>, val l
             val upcomingSlot = dish.menuItem.cookingSlot
             upcomingSlot?.let {
                 if(it.freeDelivery){
-                    holder.freeDelivery.visibility = View.VISIBLE
+                    holder.freeDelivery.text = "Free Delivery"
                 }else{
-                    holder.freeDelivery.visibility = View.GONE
+                    holder.freeDelivery.text = "$deliveryFee"
                 }
             }
         }else{

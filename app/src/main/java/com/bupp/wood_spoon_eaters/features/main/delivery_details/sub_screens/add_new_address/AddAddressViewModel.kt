@@ -23,7 +23,7 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     data class MyLocationEvent(val myLocation: Address)
     data class NavigationEvent(val isSuccessful: Boolean = false, val addressStreetStr: String?)
 
-    val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
+    val updateAddressEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val myLocationEvent: SingleLiveEvent<MyLocationEvent> = SingleLiveEvent()
 
     fun fetchMyLocation() {
@@ -86,20 +86,23 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     }
 
     private fun updateAddress(currentAddressId: Long, addressRequest: AddressRequest) {
-        apiService.updateAddress(currentAddressId, addressRequest).enqueue(object : Callback<ServerResponse<Void>> {
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        apiService.updateAddress(currentAddressId, addressRequest).enqueue(object : Callback<ServerResponse<Address>> {
+            override fun onResponse(call: Call<ServerResponse<Address>>, response: Response<ServerResponse<Address>>) {
                 if (response.isSuccessful) {
                     Log.d("wowAddNewAddressVM", "updateAddress success! ")
-                    navigationEvent.postValue(NavigationEvent(true, addressRequest.streetLine1))
+                    val newAddress = response.body()?.data
+                    eaterDataManager.updateAddressById(currentAddressId, newAddress)
+                    eaterDataManager.setLastChosenAddress(newAddress)
+                    updateAddressEvent.postValue(NavigationEvent(true, newAddress?.streetLine1))
                 } else {
                     Log.d("wowAddNewAddressVM", "updateAddress Failure! ")
-                    navigationEvent.postValue(NavigationEvent(false, null))
+                    updateAddressEvent.postValue(NavigationEvent(false, null))
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Address>>, t: Throwable) {
                 Log.d("wowAddNewAddressVM", "updateAddress big Failure! " + t.message)
-                navigationEvent.postValue(NavigationEvent(false, null))
+                updateAddressEvent.postValue(NavigationEvent(false, null))
             }
         })
     }
@@ -122,19 +125,19 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
                     Log.d("wowAddNewAddressVM", "on success! ")
                     var eater = response.body()?.data!!
                     eaterDataManager.currentEater = eater
-                    eaterDataManager.setLastChosenAddress(eater.addresses[0])
+                    eaterDataManager.setLastChosenAddress(eater.addresses.last())
 //                    orderManager.updateOrder(orderAddress = eater.addresses[0])
                     val address = eater.addresses.last()
-                    navigationEvent.postValue(NavigationEvent(true, address.streetLine1))
+                    updateAddressEvent.postValue(NavigationEvent(true, address.streetLine1))
                 } else {
                     Log.d("wowAddNewAddressVM", "on Failure! ")
-                    navigationEvent.postValue(NavigationEvent(false, null))
+                    updateAddressEvent.postValue(NavigationEvent(false, null))
                 }
             }
 
             override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
                 Log.d("wowAddNewAddressVM", "on big Failure! " + t.message)
-                navigationEvent.postValue(NavigationEvent(false, null))
+                updateAddressEvent.postValue(NavigationEvent(false, null))
             }
         })
     }
@@ -169,6 +172,7 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
             var stateNames = getStateName(addressComponents, countryName, countryIso)
             var stateIso = stateNames.second
 
+//            var streetLine1 = streetLine1
             var streetLine1 = getStreet(addressComponents, streetLine1)
             var cityName = getCityName(addressComponents)
             var zipCode = getZipCode(addressComponents)
@@ -221,16 +225,23 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
         return Pair(null, null)
     }
 
-    private fun getStreet(
-        addrComponents: List<GoogleAddressResponse.AddressComponentsItem>?,
-        streetName: String
-    ): String {
+    private fun getStreet(addrComponents: List<GoogleAddressResponse.AddressComponentsItem>?, streetName: String): String {
+        var streetNumber = ""
+        var route = ""
+        var locality = ""
+        var country = ""
         for (i in 0 until addrComponents!!.size) {
-            if (addrComponents[i].types!![0] == "route") {
-                return addrComponents[i].longName!!
+            val component = addrComponents[i]
+            if(component != null){
+                when(component.types!![0]){
+                    "street_number" -> {streetNumber = component.longName!!}
+                    "route" -> {route = component.longName!!}
+                    "locality" -> {locality = component.longName!!}
+                    "country" -> {country = component.longName!!}
+                }
             }
         }
-        return streetName
+        return "$streetNumber $route, $locality, $country"
     }
 
     private fun getZipCode(addrComponents: List<GoogleAddressResponse.AddressComponentsItem>?): String? {

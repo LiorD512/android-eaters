@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -14,7 +15,7 @@ import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel() {
+class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
 
     data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
@@ -82,7 +83,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
 
     fun addToCart(cookingSlotId: Long? = null, dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
-                  tipAmount: String? = null, promoCodeId: Long? = null) {
+                  tipAmount: String? = null, promoCode: String? = null) {
 //        val cookingSlotId = cookingSlotId
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
         val orderItem = initOrderItemsList(dishId, quantity, removedIngredients, note)
@@ -92,7 +93,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
             deliveryAddress = deliveryAddress,
             tipPercentage = tipPercentage,
             tipAmount = tipAmount,
-            promoCodeId = promoCodeId)
+            promoCode = promoCode)
 
         orderManager.addOrderItem(orderItem)
         api.postOrder(orderManager.getOrderRequest()).enqueue(object: Callback<ServerResponse<Order>>{
@@ -177,6 +178,10 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     fun clearCurrentOpenOrder() {
         orderManager.clearCurrentOrder()
         orderManager.initNewOrder()
+    }
+
+    fun getDeliveryFeeString(): String {
+        return metaDataManager.getDeliveryFeeStr()
     }
 
 

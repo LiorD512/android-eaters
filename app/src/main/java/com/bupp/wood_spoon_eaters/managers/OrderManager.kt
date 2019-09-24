@@ -21,7 +21,6 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         currentOrderRequest = OrderRequest()
     }
 
-
     fun updateOrderRequest(cookingSlotId: Long? = null,
                            deliveryAt: String? = eaterDataManager.getLastOrderTimeParam(),
                            deliveryAddress: Address? = getLastOrderAddressParam(),
@@ -29,7 +28,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
                            tipPercentage: Float? = null,
                            tip: Int? = null,
                            tipAmount: String? = null,
-                           promoCodeId: Long? = null){
+                           promoCode: String? = null){
         if(currentOrderRequest != null){
             if(cookingSlotId != null) currentOrderRequest!!.cookingSlotId = cookingSlotId
             if(deliveryAt != null) currentOrderRequest!!.deliveryAt = deliveryAt
@@ -38,7 +37,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
             if(tipPercentage != null) currentOrderRequest!!.tipPercentage = tipPercentage
             if(tip != null) currentOrderRequest!!.tip = tip
             if(tipAmount != null) currentOrderRequest!!.tipAmount = tipAmount
-            if(promoCodeId != null) currentOrderRequest!!.promoCodeId = promoCodeId
+            if(promoCode != null) currentOrderRequest!!.promoCode = promoCode
         }
     }
 
@@ -53,6 +52,11 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
             }
             currentOrderRequest!!.orderItemRequests?.add(orderItemRequest)
         }
+    }
+
+    fun updateOrderItems(orderItemRequests: ArrayList<OrderItemRequest>){
+        currentOrderRequest!!.orderItemRequests?.clear()
+        currentOrderRequest!!.orderItemRequests?.addAll(orderItemRequests)
     }
 
     fun setOrderResponse(order: Order?) {
@@ -71,6 +75,11 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         currentOrderRequest = null
         curOrderResponse = null
     }
+
+    var tempTipPercentage: Int = 0
+    var tempTipInDollars: Int = 0
+
+
 
 
 }

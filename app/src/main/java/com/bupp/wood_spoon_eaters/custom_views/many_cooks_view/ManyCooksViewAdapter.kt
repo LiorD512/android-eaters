@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.model.Cook
 import kotlinx.android.synthetic.main.many_cooks_view_item.view.*
 
-class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>, val listener: ManyCooksViewListener): RecyclerView.Adapter<ManyCooksViewAdapter.ViewHolder>() {
+class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>, val listener: ManyCooksViewListener): RecyclerView.Adapter<ManyCooksViewAdapter.ViewHolder>(),
+    UserImageView.UserImageViewListener {
+
 
     interface ManyCooksViewListener{
         fun onCookViewClick(selected: Cook)
@@ -32,15 +35,17 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val curCook = cooksList.get(position)
 
-        holder?.cookImageView.setImage(curCook.thumbnail)
-        holder?.cookFirstName.text = curCook.firstName
-        holder?.cookLastName.text = curCook.lastName
+        holder.cookImageView.setCookFromCooksView(curCook)
+        holder.cookFirstName.text = curCook.firstName
+        holder.cookLastName.text = curCook.lastName
 
 
-        holder?.cookImageView.setOnClickListener {
-            listener.onCookViewClick(curCook)
-        }
+        holder.cookImageView.setUserImageViewListener(this)
 
+    }
+
+    override fun onUserImageClick(cook: Cook?) {
+        listener?.onCookViewClick(cook!!)
     }
 
     fun addCook(newCook: Cook) {

@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -80,7 +81,8 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>, val listener: Activ
     }
 
     override fun onShareImageClick(order: Order) {
-
+        val text = viewModel.getShareText()
+        Utils.shareText(activity!!, text)
     }
 
 

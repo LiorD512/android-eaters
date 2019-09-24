@@ -93,7 +93,7 @@ class DeliveryDetailsView : LinearLayout {
 
     private fun onChange() {
         when (type) {
-            Constants.DELIVERY_DETAILS_LOCATION -> {
+            Constants.DELIVERY_DETAILS_LOCATION, Constants.DELIVERY_DETAILS_LOCATION_PROFILE -> {
                 listener?.onChangeLocationClick()
             }
 //            Constants.DELIVERY_DETAILS_TIME -> {

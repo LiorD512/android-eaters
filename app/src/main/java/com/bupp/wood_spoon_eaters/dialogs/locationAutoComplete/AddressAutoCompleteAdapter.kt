@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete
 
 import android.content.Context
 import android.text.Spannable
@@ -15,10 +15,7 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
 import kotlinx.android.synthetic.main.auto_complete_list_item.view.*
 
-class AddressAutoCompleteAdapter(
-    val context: Context,
-    val listener: AddressAutoCompleteAdapterListener
-) : RecyclerView.Adapter<AddressAutoCompleteAdapter.ViewHolder>() {
+class AddressAutoCompleteAdapter(val context: Context, val listener: AddressAutoCompleteAdapterListener) : RecyclerView.Adapter<AddressAutoCompleteAdapter.ViewHolder>() {
 
     lateinit var query: String
     var presentedList: AddressIdResponse? = null
@@ -33,7 +30,9 @@ class AddressAutoCompleteAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.auto_complete_list_item, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.auto_complete_list_item, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -71,7 +70,7 @@ class AddressAutoCompleteAdapter(
         var ssbuilder = SpannableStringBuilder(addressStr)
         var ss = SpannableString("test")
         val splitString = query.split(" ")
-        Log.d("wowKusEmek", "splitted strings are $splitString in size of ${splitString.size}")
+        Log.d("wowAutoCompltAdapter", "splitted strings are $splitString in size of ${splitString.size}")
 
 
 
@@ -85,7 +84,7 @@ class AddressAutoCompleteAdapter(
                 ssbuilder.setSpan(spannableString, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                 Log.d(
-                    "wowKusEmek",
+                    "wowAutoCompltAdapter",
                     "spanned string $ssbuilder from $startIndex -> $endIndex (which is ${ssbuilder.subSequence(
                         startIndex,
                         endIndex
@@ -95,7 +94,7 @@ class AddressAutoCompleteAdapter(
         }
         if (ssbuilder.isNotEmpty()) {
             Log.d(
-                "wowKusEmek",
+                "wowAutoCompltAdapter",
                 "ssbuilder at the end is with ${ssbuilder.getSpans(0, ssbuilder.length, ss.javaClass).size} spans"
             )
 

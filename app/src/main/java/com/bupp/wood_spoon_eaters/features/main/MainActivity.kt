@@ -14,14 +14,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.bupp.wood_spoon.dialogs.AddressChooserDialog
-import com.bupp.wood_spoon.dialogs.EditAddressDialog
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
+import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -29,7 +27,7 @@ import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
-import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
@@ -51,13 +49,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
-    LocationChooserFragment.LocationChooserFragmentListener, AddressChooserDialog.AddressChooserDialogListener,
+    LocationChooserFragment.LocationChooserFragmentListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
-    ShareDialog.ShareDialogListener, EditAddressDialog.EditAddressDialogListener,
+    ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener {
 
-    //    private val curShowingDialogs: ArrayList<SingleDishFragment> = arrayListOf()
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -92,6 +89,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun checkForTriggers() {
         viewModel.checkForTriggers()
     }
+    fun checkCartStatus(){
+        viewModel.checkCartStatus()
+    }
 
     private fun initObservers() {
         viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
@@ -120,12 +120,30 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 RateLastOrderDialog(triggerEvent.trigger?.shouldRateId!!, this)
             }
         })
+
+        viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
+            if (pendingOrderEvent.hasPendingOrder) {
+                showCheckOutBottomBar(true)
+            }else{
+                showCheckOutBottomBar(false)
+            }
+        })
+    }
+
+    private fun showCheckOutBottomBar(shouldShow: Boolean) {
+        if(shouldShow){
+            CheckOutBottomBarTitle.visibility = View.VISIBLE
+            CheckOutBottomBarTitle.setOnClickListener { loadNewOrderActivityCheckOut() }
+        }else{
+            CheckOutBottomBarTitle.visibility = View.GONE
+        }
+        handleContainerPadding()
     }
 
     private fun handleActiveOrderBottomBar(shouldShow: Boolean) {
         if (shouldShow) {
             Log.d("wowMain", "show bottom bar")
-            mainActContainer.setPadding(0,0,0, resources.getDimension(R.dimen.header_view_height).toInt())
+            handleContainerPadding()
             activeOrderBottomBarTitle.visibility = View.VISIBLE
             activeOrderBottomBarTitle.setOnClickListener {
                 mainActPb.show()
@@ -133,9 +151,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             }
         } else {
             Log.d("wowMain", "hide bottom bar")
-            mainActContainer.setPadding(0,0,0,0)
+            handleContainerPadding()
             activeOrderBottomBarTitle.visibility = View.GONE
         }
+    }
+
+    private fun handleContainerPadding() {
+        val padding = viewModel.getContainerPaddingBottom()
+        mainActContainer.setPadding(0,0,0, padding.toInt())
     }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
@@ -237,10 +260,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //
 //    }
 
-    fun loadPromoCodeDialog() {
-        loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Add Promo Code")
-    }
+
 
     fun loadReport(orderId: Long) {
         loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
@@ -274,10 +294,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
     }
 
-    fun loadLocationChooser(input: String?) {
-        LocationChooserFragment(this, input)
-            .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
-    }
+//    fun loadLocationChooser(input: String?) {
+//        LocationChooserFragment(this, input)
+//            .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
+//    }
 
     fun loadSettingsFragment() {
         loadFragment(SettingsFragment(), Constants.SETTINGS_TAG)
@@ -306,30 +326,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadDeliveryDetails()
     }
 
-    //address dialog interface
-    override fun onAddressChoose(address: Address) {
-        Toast.makeText(this, "Address selected is " + address.streetLine1, Toast.LENGTH_SHORT).show()
-        viewModel.setChosenAddress(address)
-        when (currentFragmentTag) {
-            Constants.DELIVERY_DETAILS_TAG -> {
-                if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
-                    (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
-                }
-            }
-            Constants.MY_PROFILE_TAG -> {
-                if (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment? != null) {
-                    (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
-                }
-            }
-//            Constants.CHECKOUT_TAG -> {
-//                if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
-//                    (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
-//                }
-//            }
-        }
-        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), address)
-    }
-
 
     override fun onTipDone(tipAmount: Int) {
         Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
@@ -353,58 +349,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
 
     //load dialogs
-    fun loadAddressesDialog() {
-        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
-            supportFragmentManager,
-            Constants.ADDRESS_DIALOG_TAG
-        )
+    fun openAddressChooser() {
+        startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
     }
 
-    override fun onAddressMenuClick(address: Address) {
-        EditAddressDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
-    }
-
-    override fun onEditAddress(address: Address) {
-        loadFragment(AddAddressFragment(address), Constants.ADD_NEW_ADDRESS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
-    }
-
-    override fun onAddAddress() {
-        loadAddNewAddress()
-    }
-
-
-
-
-    fun loadNoDeliveryToAddressDialog() {
-        NoDeliveryToAddressDialog(this).show(supportFragmentManager, Constants.DELIVERY_TO_ADDRESS_DIALOG_TAG)
-    }
-
-    fun loadTipCourierDialog() {
-        TipCourierDialog(this).show(supportFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
-    }
-
-    fun loadContactUsDialog() {
-        ContactUsDialog(this).show(supportFragmentManager, Constants.CONTACT_US_DIALOG_TAG)
-    }
-
-    fun loadThankYouDialog() {
-        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
-    }
-
-    fun loadDishSoldOutDialog() {
-        DishSoldOutDialog().show(supportFragmentManager, Constants.DISH_SOLD_OUT_DIALOG_TAG)
-    }
 
     fun loadDishOfferedDialog() {
         NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
         if(getFragmentByTag(Constants.SEARCH_TAG) != null){
             (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged("")
         }
-    }
-
-    fun loadShareDialog() {
-        ShareDialog(this).show(supportFragmentManager, Constants.SHARE_DIALOG_TAG)
     }
 
 
@@ -487,14 +441,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
 
     override fun onHeaderSaveClick() {
-        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null) {
-            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).saveAddressDetails()
-        } else if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
+//        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null) {
+//            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).saveAddressDetails()
+//        } else
+            if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
             handlePb(true)
             (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
-        } else if (getFragmentByTag(Constants.PROMO_CODE_TAG) != null) {
-            handlePb(true)
-            (getFragmentByTag(Constants.PROMO_CODE_TAG) as PromoCodeFragment).savePromoCode()
         }
     }
 
@@ -522,7 +474,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     }
                 }
             }
-            Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG -> {
+            Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG, Constants.SUPPORT_TAG -> {
                 loadMyProfile()
             }
             Constants.DELIVERY_DETAILS_TAG -> {
@@ -541,21 +493,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun onNewAddressDone(location: String? = null) {
-        handlePb(false)
-        if (location != null) {
-            updateAddressTimeView()
-        }
-        when (lastFragmentTag) {
-            Constants.MY_PROFILE_TAG -> {
-                loadMyProfile()
-            }
-            Constants.DELIVERY_DETAILS_TAG -> {
-                loadDeliveryDetails()
-            }
-        }
-    }
-
     fun updateSearchInput(str: String) {
         mainActHeaderView.updateSearchInput(str)
     }
@@ -566,6 +503,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        updateAddressTimeView()
+        if(requestCode == Constants.NEW_ORDER_REQUEST_CODE){
+            loadFeed()
+            checkForActiveOrder()
+            checkCartStatus()
+        }
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
@@ -578,11 +521,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                         )
                     }
                 }
-                Constants.NEW_ORDER_REQUEST_CODE -> {
-//                    closeAllDialogs()
-                    loadFeed()
-                    checkForActiveOrder()
-                }
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
                     val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
 
@@ -590,6 +528,24 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                         Log.d("wowNewOrder","payment method success")
                         if(getFragmentByTag(Constants.MY_PROFILE_TAG) != null){
                             (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(paymentMethod)
+                        }
+                    }
+                }
+                Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
+                    Log.d("wowMianActivity","result ADDRESS_CHOOSER_REQUEST_CODE success")
+                    handlePb(false)
+                    updateAddressTimeView()
+
+                    when (currentFragmentTag) {
+                        Constants.DELIVERY_DETAILS_TAG -> {
+                            if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
+                                (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
+                            }
+                        }
+                        Constants.MY_PROFILE_TAG -> {
+                            if (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment? != null) {
+                                (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
+                            }
                         }
                     }
                 }
@@ -606,6 +562,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun loadNewOrderActivity(id: Long) {
         startActivityForResult(
             Intent(this, NewOrderActivity::class.java).putExtra("menuItemId", id),
+            Constants.NEW_ORDER_REQUEST_CODE
+        )
+    }
+
+    fun loadNewOrderActivityCheckOut() {
+        startActivityForResult(
+            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true),
             Constants.NEW_ORDER_REQUEST_CODE
         )
     }

@@ -35,6 +35,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener {
 
     lateinit var curOrder: Order
+//    var tipPercent: Int = 0
+//    var tipInDollars: Int = 0
 
     interface CheckoutDialogListener{
         fun onCheckoutDone()
@@ -65,15 +67,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             }
          })
 
-//        viewModel.finalizeOrderEvent.observe(this, Observer { finalizeEvent ->
-//            if(finalizeEvent != null && finalizeEvent.isSuccess){
-//                onOrderFinalized()
-//            }else{
-//                checkoutFragPb.hide()
-//                Toast.makeText(context, "finalizeEvent failed", Toast.LENGTH_SHORT).show()
-//            }
-//         })
-
         viewModel.getOrderDetailsEvent.observe(this, Observer { orderDetails -> handleOrderDetails(orderDetails.order) })
 
         viewModel.getStripeCustomerCards.observe(this, Observer { cardsEvent ->
@@ -89,28 +82,22 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     private fun initUi() {
         checkoutFragStatusBar.setStatusBottomBarListener(this)
         checkoutFragTipPercntView.setTipPercentViewListener(this)
-        checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
         checkoutFragHeaderView.setHeaderViewListener(this)
+        checkoutFragDeliveryAddress.setChangeable(false)
 
-        checkoutFragPromoCodeBtn.setOnClickListener {
+        checkoutFragAddPromoCodeBtn.setOnClickListener {
             (activity as NewOrderActivity).loadPromoCode()
         }
 
         checkoutFragChangePaymentChangeBtn.setOnClickListener {
-//            PaymentMethodsDialog().show(childFragmentManager, Constants.PAYMENT_METHOD_SUCCESS_DIALOG)
             (activity as NewOrderActivity).startPaymentMethodActivity()
-//            Toast.makeText(context, "on change payment clicked", Toast.LENGTH_SHORT).show()
-//            checkoutFragPb.show()
         }
 
         viewModel.getOrderDetails()
         viewModel.getStripeCustomerCards()
         viewModel.getCurrentCustomer()
-
     }
-
-
 
     private fun setEmptyPaymentMethod() {
         checkoutFragChangePaymentTitle.text = "Insert payment method"
@@ -123,7 +110,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         if(paymentMethods?.size!! > 0){
             val defaultPayment = paymentMethods[0]
             updateCustomerPaymentMethod(defaultPayment)
-//            viewModel.attachCardToCustomer(defaultPayment.id!!)
         }else{
             setEmptyPaymentMethod()
         }
@@ -141,6 +127,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     }
 
     private fun handleOrderDetails(order: Order?) {
+        checkoutFragPb.hide()
         if (order != null) {
             this.curOrder = order
             var cook = order.cook
@@ -159,19 +146,21 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
             checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"
             checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
+
+            checkoutFragTipPercntView.updateCurrentTip(viewModel.getTempTipPercent(), viewModel.getTempTipInDollars())
             updatePriceUi()
         }
     }
 
-    override fun onDishCountChange() {
-        if(checkoutFragOrderItemsView.getOrderItemsQuantity() <= 0){
-            checkoutFragStatusBar.isEnabled = false
+    override fun onDishCountChange(orderItemsCount: Int, updatedOrderItem: OrderItem) {
+        if(orderItemsCount <= 0){
+//            checkoutFragStatusBar.isEnabled = false
             showEmptyCartDialog()
         }else{
+            checkoutFragPb.show()
             checkoutFragStatusBar.isEnabled = true
-
+            viewModel.updateOrder(updatedOrderItem)
         }
-        updatePriceUi()
 
     }
 
@@ -179,6 +168,20 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         val tax: Double = curOrder.tax.value
         val serviceFee = curOrder.serviceFee.value
         val deliveryFee = curOrder.deliveryFee.value
+        val discount = curOrder.discount.value
+
+        val tipPercent = viewModel.getTempTipPercent()
+        val tipInDollars = viewModel.getTempTipInDollars()
+        Log.d("wowCheckout","tipinDollars $tipInDollars")
+
+        if(discount < 0){
+            checkoutFragPromoCodeBtn.visibility = View.VISIBLE
+            checkoutFragAddPromoCodeBtn.visibility = View.GONE
+            checkoutFragPromoCodeBtn.text = "Promo Code - ${curOrder.discount.formatedValue} Discount"
+        }else{
+            checkoutFragPromoCodeBtn.visibility = View.GONE
+            checkoutFragAddPromoCodeBtn.visibility = View.VISIBLE
+        }
 
         checkoutFragTaxPriceText.text = "$$tax"
         checkoutFragServiceFeePriceText.text = "$$serviceFee"
@@ -186,11 +189,23 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
         val allDishSubTotal = checkoutFragOrderItemsView.getAllDishPriceValue()
         val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
-        val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee))
+
+        var tipValue = 0.0
+        if(tipPercent != 0){
+            tipValue = allDishSubTotal.times(tipPercent).div(100)
+        }
+        if(tipInDollars > 0.0){
+            tipValue = tipInDollars.toDouble()
+        }
+
+        val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee).plus(discount))
+        val totalWithTip: Double = total.plus(tipValue)
+
+
         checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
         checkoutFragTotalPriceText.text = "$${DecimalFormat("##.##").format(total)}"
 
-        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, price = total)
+        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, price = totalWithTip)
 
     }
 
@@ -208,27 +223,25 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         viewModel.checkoutOrder(curOrder.id)
     }
 
-//    private fun finalizeOrder(curOrder: Order) {
-//        viewModel.finalizeOrder(curOrder.id)
-//    }
-
-    private fun onOrderFinalized() {
-
-    }
 
     override fun onTipIconClick(tipSelection: Int) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(fragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
+            viewModel.updateTipInDollars(0)
+            viewModel.updateTipPercentage(tipSelection)
+            viewModel.getOrderDetails()
+            updatePriceUi()
             Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
-            //update order
-            //handle tip
-        }
-
+            }
     }
 
     override fun onTipDone(tipAmount: Int) {
         checkoutFragTipPercntView.setCustomTipValue(tipAmount)
+        viewModel.updateTipPercentage(0)
+        viewModel.updateTipInDollars(tipAmount)
+        viewModel.getOrderDetails()
+//        updatePriceUi()
     }
 
     override fun onChangeLocationClick() {

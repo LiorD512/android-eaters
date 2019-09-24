@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|bottom"
+            android:alpha="0.95"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+        <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+                android:id="@+id/mainAddressChooserActHeaderView"
+                app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+                app:title="My Address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+       <LinearLayout
+               android:id="@+id/mainAddressChooserLayout"
+               android:orientation="vertical"
+               android:layout_width="match_parent" android:layout_height="wrap_content">
+
+           <TextView
+                   android:id="@+id/addressChooserDialogAddBtn"
+                   android:drawableStart="@drawable/icons_add"
+                   style="@style/Reg13Dark"
+                   android:paddingStart="15.4dp"
+                   android:paddingTop="22.6dp"
+                   android:paddingBottom="22.6dp"
+                   android:drawablePadding="7.7dp"
+                   android:gravity="center_vertical"
+                   android:text="Add new address"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"/>
+
+           <View
+                   android:layout_marginStart="15.4dp"
+                   android:layout_marginEnd="15.4dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="2dp"
+                   android:layout_gravity="bottom"
+                   android:background="@color/silver"/>
+
+           <androidx.recyclerview.widget.RecyclerView
+                   android:id="@+id/addressChooserDialogRecycler"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"/>
+
+       </LinearLayout>
+
+        <FrameLayout
+                android:id="@+id/mainAddressChooserActContainer"
+                android:layout_width="match_parent" android:layout_height="match_parent"/>
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

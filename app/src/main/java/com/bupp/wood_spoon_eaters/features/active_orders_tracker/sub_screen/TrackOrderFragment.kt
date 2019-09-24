@@ -77,6 +77,7 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
             listener.onContactUsClick(curOrder)
         }
 
+
         trackOrderDialogCancelBtn.setOnClickListener {
             if(curOrderStage <= 1){
                 CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)

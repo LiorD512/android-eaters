@@ -3,9 +3,11 @@ package com.bupp.wood_spoon_eaters.features.active_orders_tracker
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.utils.AppSettings
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,7 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ActiveOrderTrackerViewModel(val api: ApiService) : ViewModel() {
+class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager) : ViewModel() {
 
 
     private val compositeDisposable: ArrayList<Disposable> = arrayListOf()
@@ -25,19 +27,10 @@ class ActiveOrderTrackerViewModel(val api: ApiService) : ViewModel() {
 
     data class OrderDetailsEvent(/*val order: Order,*/val orderProgress: Int, val arrivalTime:String, val isNewMsgs:Boolean)
 
-    fun getDumbOrderDetails() {
-//        val subscription = Observable.interval(
-//            1000, 5000,
-//            TimeUnit.MILLISECONDS
-//        )
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(object : Action1<Long>() {
-//                fun call(aLong: Long?) {
-//                    // here is the task that should repeat
-//                }
-//            })
-
-
+    fun getShareText(): String {
+        val inviteUrl = eaterDataManager.currentEater?.inviteUrl
+        val text = "Hey there, I just thought of you and realized you would love this new app. WoodSpoon is the first on-demand homemade food delivery app. You should definitely try it! Download WoodSpoon now and get 30% off your next dish \n"
+        return "$text \n $inviteUrl"
     }
 
     private fun fetchFromServer(emitter: ObservableEmitter<String>) {

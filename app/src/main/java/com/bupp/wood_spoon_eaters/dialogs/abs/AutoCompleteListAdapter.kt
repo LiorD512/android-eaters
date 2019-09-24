@@ -44,7 +44,6 @@ class AutoCompleteListAdapter(
             listener.onItemClick(curObj)
         }
 
-
         holder?.title.isSelected = curObj == lastSelectedItem
     }
 

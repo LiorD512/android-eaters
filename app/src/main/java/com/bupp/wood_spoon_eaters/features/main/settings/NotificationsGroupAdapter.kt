@@ -31,10 +31,14 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
         (holder as ItemViewHolder).name.text = notificationGroup.name
         holder.description.text = notificationGroup.description
 
-        if(eaterPrefs.contains(notificationGroup.id)){
-            holder.switch.isChecked = true
+        if(eaterPrefs.isEmpty()){
+
         }else{
-            holder.switch.isChecked = false
+            if(eaterPrefs.contains(notificationGroup.id)){
+                holder.switch.isChecked = true
+            }else{
+                holder.switch.isChecked = false
+            }
         }
 
         holder.switch.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {

@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
 import android.graphics.Paint
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -290,9 +289,9 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     }
 
     private fun initIngredient() {
-        singleDishIngredientCalories.text = "${currentDish.calorificValue} Calories"
-        singleDishIngredientProtein.text = "${currentDish.proteins}g Protein"
-        singleDishIngredientCarbohydrate.text = "${currentDish.proteins}g Carbohydrate"
+        singleDishIngredientCalories.text = "${currentDish.calorificValue.toInt()} Calories"
+        singleDishIngredientProtein.text = "${currentDish.proteins.toInt()}g Protein"
+        singleDishIngredientCarbohydrate.text = "${currentDish.carbohydrates.toInt()}g Carbohydrate"
 
         if(currentDish.cookingMethods.size > 0){
             singleDishIngredientSauteing.text = currentDish.cookingMethods[0].name
@@ -311,7 +310,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     private fun initCook() {
         cookProfileImageView.setUser(currentDish.cook)
         cookProfileImageView.setUserImageViewListener(this)
-        cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}, ${currentDish.cook.getAge()}"
+        cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}"//, ${currentDish.cook.getAge()}"
 
         var profession = currentDish.cook.profession
         var country = ""
@@ -319,7 +318,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
             country = ", ${it.name}"
             Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }
-        cookProfileFragProfession.text = "$profession $country"
+        cookProfileFragProfession.text = "$profession"// $country"
         cookProfileFragRating.text = currentDish.cook.rating.toString()
         cookProfileFragCuisineGrid.initStackableView(currentDish.cook.cuisines as ArrayList<SelectableIcon>)
         cookProfileFragStoryName.text = "${currentDish.cook.firstName}'s Story"
@@ -341,7 +340,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         }
 
         cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-        dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this)
+        dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this, viewModel.getDeliveryFeeString())
         cookProfileFragDishList.adapter = dishAdapter
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }

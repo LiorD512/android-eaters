@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon.dialogs.AddressChooserDialog
-import com.bupp.wood_spoon.dialogs.EditAddressDialog
+import com.bupp.wood_spoon.dialogs.AddressMenuDialog
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -26,7 +28,7 @@ import java.util.ArrayList
 
 class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialogListener,
     CheckoutFragment.CheckoutDialogListener, AddressChooserDialog.AddressChooserDialogListener,
-    EditAddressDialog.EditAddressDialogListener {
+    AddressMenuDialog.EditAddressDialogListener, ClearCartDialog.ClearCartDialogListener {
 
 
     private val currentDesplayingFragment: ArrayList<String> = arrayListOf()
@@ -39,14 +41,8 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_order)
 
-        val menuItemId = intent.getLongExtra("menuItemId", -1)
-        if(menuItemId < 0){
-            finish()
-        }else{
-            loadSingleDish(menuItemId)
-        }
+        checkActivityIntent()
 
-        viewModel.initNewOrder()
         viewModel.initStripe(this)
 
         viewModel.ephemeralKeyProvider.observe(this, Observer { event ->
@@ -54,7 +50,52 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
                 Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
             }
         })
+
+        viewModel.orderStatusEvent.observe(this, Observer { event ->
+            if(event.hasActiveOrder){
+                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+            }else{
+                viewModel.initNewOrder()
+            }
+        })
     }
+
+    override fun onClearCart() {
+        viewModel.initNewOrder()
+    }
+
+    private fun checkActivityIntent() {
+        val menuItemId = intent.getLongExtra("menuItemId", -1)
+        val isCheckout = intent.getBooleanExtra("isCheckout", false)
+        if(menuItemId > 0){
+            viewModel.checkOrderStatus()
+            loadSingleDish(menuItemId)
+//            if(viewModel.isCartEmpty()){
+//            }else{
+//                showEmptyCartDialog()
+//            }
+        }
+        if(isCheckout){
+            onCheckout()
+        }
+        else if(menuItemId < 0 && !isCheckout){
+            finish()
+        }
+    }
+
+//    private fun showEmptyCartDialog() {
+//        ClearCartDialog(object: ClearCartDialog.ClearCartDialogListener{
+//            override fun onClearCart() {
+//                viewModel.initNewOrder()
+//            }
+//        }).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+//    }
+
+//    override fun onClearCart() {
+//        viewModel.clearCart()
+//        val menuItemId = intent.getLongExtra("menuItemId", -1)
+//        loadSingleDish(menuItemId)
+//    }
 
     fun startPaymentMethodActivity() {
         PaymentMethodsActivityStarter(this).startForResult()
@@ -66,7 +107,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
                     val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
-
                     if (paymentMethod != null && paymentMethod.card != null) {
                         Log.d("wowNewOrder","payment method success")
                         if(getFragmentByTag(Constants.CHECKOUT_TAG) != null){
@@ -78,8 +118,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
     }
 
-
-
     //Single Dish
 
     fun loadSingleDish(menuItemId: Long){
@@ -89,6 +127,11 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     override fun onDishClick(itemId: Long) {
         loadFragment(SingleDishFragment(itemId, this), itemId.toString())
     }
+
+    fun loadPromoCode(){
+        loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
+    }
+
 
     //Checkout
     override fun onCheckout() {
@@ -136,6 +179,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             currentDesplayingFragment.removeAt(count-1)
             Log.d("wowNewOrder", "onBackPress num of frag: $count")
         }else{
+            setResult(Activity.RESULT_CANCELED)
             finish()
         }
 //        popOffSubscreens()
@@ -148,10 +192,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
     }
 
-    fun loadPromoCode() {
-        Log.d("wow","load Promo code")
-    }
-
     fun loadAddressesDialog() {
         AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
             supportFragmentManager,
@@ -160,7 +200,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     override fun onAddressMenuClick(address: Address) {
-        EditAddressDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
+        AddressMenuDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
     }
 
     override fun onAddressChoose(address: Address) {
@@ -183,6 +223,11 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
 //        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
     }
+
+    override fun onAddressDeleted() {
+
+    }
+
 
 
 }

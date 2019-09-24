@@ -23,6 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), IconsGridView.IconsGridViewListener, PriceRangeView.PriceRangeViewListener,RatingStarsView.RatingStarsViewListener,
     HeaderView.HeaderViewListener {
+    var estimatedTimeArrivalId: Int? = null
 
     interface FilterFragmentListener{
         fun onFilterDone(isFiltered: Boolean)
@@ -44,18 +45,44 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
         super.onViewCreated(view, savedInstanceState)
 
         filterFragPriceRangeView.setPriceRangeViewListener(this)
-        filterFragTimeIcons.setIconsGridViewListener(this)
         pickFiltersFragRatingStarsView.setRatingStarsViewListener(this)
         filterFragDietaryIcons.setIconsGridViewListener(this)
 
-        filterFragTimeIcons.initIconsGrid(viewModel.getArrivalTimes(), Constants.SINGLE_SELECTION)
         filterFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.ENDLESS_SELECTION)
 
         filterFragHeader.setHeaderViewListener(this)
         filterFragClearAllBtn.setOnClickListener { clearAllFilters() }
         disableClearBtn()
 
+        initTimeArrivalUi()
+
         getCurrentFilterParam()
+    }
+
+    private fun initTimeArrivalUi() {
+        filterFragArraival20Min.setOnClickListener {
+            estimatedTimeArrivalId = 1
+            setArrivalTimeSelected(it)
+        }
+        filterFragArraival60Min.setOnClickListener {
+            estimatedTimeArrivalId = 2
+            setArrivalTimeSelected(it)
+        }
+        filterFragArraival120Min.setOnClickListener {
+            estimatedTimeArrivalId = 3
+            setArrivalTimeSelected(it)
+        }
+    }
+
+    private fun setArrivalTimeSelected(it: View?) {
+        unSelectAll()
+        it?.isSelected = true
+    }
+
+    private fun unSelectAll() {
+        filterFragArraival20Min.isSelected = false
+        filterFragArraival60Min.isSelected = false
+        filterFragArraival120Min.isSelected = false
     }
 
     private fun getCurrentFilterParam() {
@@ -86,8 +113,8 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
 
 
     private fun clearAllFilters() {
+        unSelectAll()
         filterFragPriceRangeView.reset()
-        filterFragTimeIcons.setSelectedItems(arrayListOf())
         pickFiltersFragRatingStarsView.setRating(0)
         filterFragDietaryIcons.setSelectedItems(arrayListOf())
         disableClearBtn()
@@ -108,7 +135,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
 
     private fun validateFields() {
         if (filterFragPriceRangeView.getSelectedRange() != Constants.PRICE_NOT_SELECTED
-            || filterFragTimeIcons.getSelectedItems().isNotEmpty()
+            || estimatedTimeArrivalId != null
             || pickFiltersFragRatingStarsView.getRating() > 0
             || filterFragDietaryIcons.getSelectedItems().isNotEmpty()
         ) {
@@ -137,7 +164,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
             dietsIds = filterFragDietaryIcons.getSelectedItemsIds()
             isFiltered = true
         }
-        viewModel.updateSearchParams(price, dietsIds)
+        viewModel.updateSearchParams(price, dietsIds)//, estimatedTimeArrivalId)
         listener.onFilterDone(isFiltered)
         dismiss()
     }

@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.Calendar.*
 import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
@@ -197,5 +198,13 @@ object Utils {
             view = View(activity)
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+    }
+
+    fun shareText(activity: FragmentActivity, text: String) {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
+        activity.startActivity(Intent.createChooser(shareIntent, "Share"))
     }
 }

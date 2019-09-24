@@ -97,6 +97,12 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
         eaterDataManager.updateCustomerCard(paymentMethod)
     }
 
+    fun getShareText(): String {
+        val inviteUrl = eaterDataManager.currentEater?.inviteUrl
+        val text = "Hey there, I just thought of you and realized you would love this new app. WoodSpoon is the first on-demand homemade food delivery app. You should definitely try it! Download WoodSpoon now and get 30% off your next dish \n"
+        return "$text \n $inviteUrl"
+    }
+
 
 
 }

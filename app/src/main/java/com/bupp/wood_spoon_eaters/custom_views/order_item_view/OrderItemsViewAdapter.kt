@@ -16,13 +16,14 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapt
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import kotlinx.android.synthetic.main.order_item_view.view.*
+import java.text.BreakIterator
 import java.text.DecimalFormat
 
 class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val context: Context, private var orders: ArrayList<OrderItem>) :
     RecyclerView.Adapter<OrderItemsViewAdapter.DishViewHolder>() {
 
     interface OrderItemsViewAdapterListener{
-        fun onDishCountChange()
+        fun onDishCountChange(orderItemsCount: Int, orderItem1: OrderItem)
     }
 
     var adapter: IngredientsCheckoutAdapter? = null
@@ -79,15 +80,24 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         holder.plusBtn.setOnClickListener {
             orderItem.quantity++
             notifyDataSetChanged()
-            listener?.onDishCountChange()
+            listener?.onDishCountChange(getOrderItemsQuantity(), orderItem)
         }
 
         holder.minusBtn.setOnClickListener {
-            if (orderItem.quantity > 0){
+            if (orderItem.quantity > 1){
                 orderItem.quantity--
+                listener?.onDishCountChange(getOrderItemsQuantity(), orderItem)
+            }else{
+                if(getOrderItemsQuantity() > 1){
+//                    orders.remove(orderItem)
+                    orderItem.quantity--
+                    listener?.onDishCountChange(getOrderItemsQuantity(), orderItem)
+                }else{
+                    listener?.onDishCountChange(0, orderItem)
+
+                }
             }
             notifyDataSetChanged()
-            listener?.onDishCountChange()
         }
 
         holder.ingredientsList.layoutManager = LinearLayoutManager(context)
@@ -107,6 +117,7 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         }
         return sum
     }
+
 
     fun getOrderItemsQuantity(): Int {
         var sum: Int = 0

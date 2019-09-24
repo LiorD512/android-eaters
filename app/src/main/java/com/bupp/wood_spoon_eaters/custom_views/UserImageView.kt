@@ -143,6 +143,11 @@ class UserImageView : FrameLayout {
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
     }
 
+    fun setCookFromCooksView(cook: Cook) {
+        this.curCook = cook
+        Glide.with(context).load(cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+    }
+
     fun setUser(eater: Eater) {
         this.curEater = eater
         setImage(eater.thumbnail)

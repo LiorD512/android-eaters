@@ -26,7 +26,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         fun refreshList()
         fun onEmptyhDishList()
 //        fun onFavClick(dishId: Long, isFavorite: Boolean)
-        fun onShareClick(){}
+        fun onShareClick()
     }
 
     private lateinit var adapter: SearchAdapter
@@ -37,6 +37,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         LayoutInflater.from(context).inflate(R.layout.multi_section_feed_view, this, true)
 
         multiSectionViewRefreshLayout.setOnRefreshListener { refresh() }
+        multiSectionViewShareBtn.setOnClickListener { listener.onShareClick() }
     }
 
     private fun refresh() {
@@ -49,7 +50,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         this.listener = listener
     }
 
-    fun initFeed(feedArr: ArrayList<Feed>) {
+    fun initFeed(feedArr: ArrayList<Feed>, deliveryFee: String) {
         clearFeed()
         multiSectionViewRefreshLayout.setRefreshing(false)
         val dishArr: ArrayList<Feed> = arrayListOf()
@@ -67,7 +68,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         }
 
         if(dishArr.size > 0){
-            initDishesList(dishArr)
+            initDishesList(dishArr, deliveryFee)
         }else{
             listener.onEmptyhDishList()
         }
@@ -83,10 +84,10 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         multiSectionViewDishList.removeAllViews()
     }
 
-    private fun initDishesList(dishArr: ArrayList<Feed>) {
+    private fun initDishesList(dishArr: ArrayList<Feed>, deliveryFee: String) {
         for(item in dishArr){
             val singleFeedListView = SingleFeedListView(context)
-            singleFeedListView.initSingleFeed(item, this)
+            singleFeedListView.initSingleFeed(item, this, deliveryFee)
             multiSectionViewDishList.addView(singleFeedListView)
         }
     }

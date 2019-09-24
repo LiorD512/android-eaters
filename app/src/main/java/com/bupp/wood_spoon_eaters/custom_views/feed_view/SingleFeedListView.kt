@@ -5,20 +5,18 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
 import kotlinx.android.synthetic.main.single_feed_list_view.view.*
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.bupp.wood_spoon_eaters.features.main.search.SingleFeedItemDecoration
 
 
 class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener {
 
 
+    private var deliveryFee: String = ""
     lateinit var listener: SingleFeedListViewListener
     interface SingleFeedListViewListener {
         fun onDishClick(dish: Dish)
@@ -42,18 +40,19 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     }
 
 
-    fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener) {
+    fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener, deliveryFee: String) {
+        this.deliveryFee = deliveryFee
         this.listener = listener
         singleFeedListViewTitle.text = feedObj.title
 
-        adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this)
+        adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this, deliveryFee)
         singleFeedListView.adapter = adapter
     }
 
     fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener){
         this.listener = listener
         singleFeedListViewTitle.visibility = View.GONE
-        adapter = SingleFeedAdapter(context!!, dishes, this)
+        adapter = SingleFeedAdapter(context!!, dishes, this, deliveryFee)
         singleFeedListView.adapter = adapter
     }
 

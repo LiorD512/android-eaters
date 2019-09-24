@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.support
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +37,20 @@ class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {
         }
         supportDialogTextButton.setOnClickListener {
             (activity as MainActivity).sendSmsText()
+        }
+
+        supportDialogNext.setOnClickListener { sendMail() }
+    }
+
+    private fun sendMail() {
+        val text = supportDialogCommentInput.getText()
+        val address = viewModel.getAdminMailAddress()
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:$address")
+        intent.putExtra(Intent.EXTRA_EMAIL, address)
+        intent.putExtra(Intent.EXTRA_SUBJECT, text)
+        if (intent.resolveActivity(activity?.packageManager) != null) {
+            startActivity(intent)
         }
     }
 

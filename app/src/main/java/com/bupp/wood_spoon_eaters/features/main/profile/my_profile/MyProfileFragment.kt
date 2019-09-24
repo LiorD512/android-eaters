@@ -13,14 +13,12 @@ import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.main.promo_code.PromoCodeFragment
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.checkout_fragment.*
 import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,7 +39,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        myProfileFragEditLocation.setDeliveryDetailsViewListener(this)
+//        myProfileFragEditLocation.setDeliveryDetailsViewListener(this)
         myProfileFragEditPayment.setDeliveryDetailsViewListener(this)
 
         initClicks()
@@ -84,8 +82,9 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     private fun initEaterData(eater: Eater) {
         myProfileFragUserName.text = eater.getFullName()
-        myProfileFragEditLocation.updateDeliveryDetails(viewModel.getDeliveryAddress())
+        myProfileFragEditLocation.setOnClickListener { (activity as MainActivity).openAddressChooser() }
         myProfileFragUserPhoto.setImage(eater.thumbnail)
+//        myProfileFragEditLocation.updateDeliveryDetails(viewModel.getDeliveryAddress())
 
     }
 
@@ -97,14 +96,14 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragUserPhoto.setOnClickListener { }
         myProfileFragEditProfileBtn.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }
 
-        myProfileFragPromoCodesBtn.setOnClickListener { }
+//        myProfileFragPromoCodesBtn.setOnClickListener { }
 
         myProfileFragLocationSettingsBtn.setOnClickListener { (activity as MainActivity).loadSettingsFragment() }
         myProfileFragPrivacyBtn.setOnClickListener { WebDocsDialog(Constants.WEB_DOCS_PRIVACY).show(childFragmentManager, Constants.WEB_DOCS_DIALOG_TAG) }
         myProfileFragSupportBtn.setOnClickListener { (activity as MainActivity).loadSupport() }
 
         myProfileFragJoinBtn.setOnClickListener { }
-        myProfileFragShareBtnLayout.setOnClickListener { }
+        myProfileFragShareBtnLayout.setOnClickListener { share() }
 
         myProfileFragOrderHistoryBtn.setOnClickListener { openOrderHistoryDialog() }
 
@@ -113,9 +112,14 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         }
     }
 
-    fun loadPromoCodeDialog() {
-        PromoCodeFragment()
+    private fun share() {
+        val text = viewModel.getShareText()
+        Utils.shareText(activity!!, text)
     }
+
+//    fun loadPromoCodeDialog() {
+//        PromoCodeFragment()
+//    }
 
     override fun logout() {
         viewModel.logout(context!!)
@@ -126,7 +130,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).loadAddressesDialog()
+        (activity as MainActivity).openAddressChooser()
     }
 
     override fun onChangePaymentClick() {

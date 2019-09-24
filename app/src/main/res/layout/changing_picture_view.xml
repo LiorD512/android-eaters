@@ -13,7 +13,6 @@
             android:layout_height="match_parent"/>
 
     <ImageView
-            android:background="@color/teal_blue_80"
             android:visibility="visible"
             android:alpha="0"
             android:scaleType="fitXY"

@@ -312,7 +312,21 @@
                         android:layout_height="1dp"/>
 
                 <TextView
+                        android:visibility="gone"
                         android:id="@+id/checkoutFragPromoCodeBtn"
+                        android:paddingTop="17dp"
+                        android:paddingBottom="14.6dp"
+                        android:drawableStart="@drawable/icons_check"
+                        android:drawablePadding="6.7dp"
+                        android:paddingStart="16.3dp"
+                        style="@style/SemiBold13Blue"
+                        android:text="Promo Code - "
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                <TextView
+                        android:id="@+id/checkoutFragAddPromoCodeBtn"
                         android:paddingTop="17dp"
                         android:paddingBottom="14.6dp"
                         android:drawableStart="@drawable/icons_add"

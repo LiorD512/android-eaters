@@ -15,13 +15,13 @@ data class OrderRequest(
     @SerializedName("tip_percentage") var tipPercentage: Float? = null,
     @SerializedName("tip") var tip: Int? = null,
     @SerializedName("tip_amount") var tipAmount: String? = null,
-    @SerializedName("promo_code_id") var promoCodeId: Long? = null
+    @SerializedName("promo_code") var promoCode: String? = null
 )
 
 data class OrderItemRequest(
-    @SerializedName("id") val id: Long? = null,
+    @SerializedName("id") var id: Long? = null,
     @SerializedName("dish_id") val dishId: Long? = null,
-    @SerializedName("quantity") val quantity: Int? = null,
+    @SerializedName("quantity") var quantity: Int? = null,
     @SerializedName("removed_ingredient_ids") var removedIndredientsIds: ArrayList<Long>? = null,
     @SerializedName("notes") var notes: String? = null
 )

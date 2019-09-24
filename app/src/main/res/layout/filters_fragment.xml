@@ -39,13 +39,48 @@
                     android:layout_height="wrap_content"/>
 
 
-            <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
-                    android:id="@+id/filterFragTimeIcons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+            <TextView
+                    android:layout_marginStart="15.4dp"
                     android:layout_marginTop="38dp"
-                    app:subTitle=""
-                    app:title="Estimated Arrival Time"/>
+                    style="@style/SemiBold13Dark"
+                    android:text="Estimated Arrival Time"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+           <LinearLayout
+                   android:weightSum="3"
+                   android:layout_marginStart="15.4dp"
+                   android:layout_marginEnd="15.4dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent" android:layout_height="wrap_content">
+
+               <ImageButton
+                       android:padding="5dp"
+                       android:background="@null"
+                       android:src="@drawable/arrival_20_min_selector"
+                       android:layout_weight="1"
+                       android:id="@+id/filterFragArraival20Min"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"/>
+
+               <ImageButton
+                       android:padding="5dp"
+                       android:background="@null"
+                       android:src="@drawable/arrival_60_min_selector"
+                       android:layout_weight="1"
+                       android:id="@+id/filterFragArraival60Min"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"/>
+
+               <ImageButton
+                       android:padding="5dp"
+                       android:background="@null"
+                       android:src="@drawable/arrival_120_min_selector"
+                       android:layout_weight="1"
+                       android:id="@+id/filterFragArraival120Min"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"/>
+
+           </LinearLayout>
 
             <TextView
                     android:id="@+id/filterFragLaterTimeBtn"

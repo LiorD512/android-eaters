@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import kotlinx.android.synthetic.main.clear_cart_dialog.*
-import kotlinx.android.synthetic.main.start_new_cart_dialog_layout.*
 
 class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() {
 
     interface ClearCartDialogListener {
         fun onClearCart()
+        fun close(){}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
