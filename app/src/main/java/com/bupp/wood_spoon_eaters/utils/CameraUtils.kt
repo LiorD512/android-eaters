@@ -15,5 +15,13 @@ class CameraUtils {
                     .setGuidelines(CropImageView.Guidelines.OFF)
                     .start(activity)
         }
+
+        fun openProfileCamera(activity: Activity){
+            CropImage.activity()
+                .setFixAspectRatio(true)
+                .setAspectRatio(1,1)
+                .setGuidelines(CropImageView.Guidelines.OFF)
+                .start(activity)
+        }
     }
 }

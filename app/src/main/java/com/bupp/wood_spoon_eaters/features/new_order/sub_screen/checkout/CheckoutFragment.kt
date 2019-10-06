@@ -134,12 +134,12 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
             var address: String? = null
             if(order.deliveryAddress != null ){
-                address = order.deliveryAddress.streetLine1
+                checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
+//                address = order.deliveryAddress.streetLine1
             }
+//            if (address != null) {
+//            }
             val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
-            if (address != null) {
-                checkoutFragDeliveryAddress.updateDeliveryDetails(address)
-            }
             if(time != null){
                 checkoutFragDeliveryTime.updateDeliveryDetails(time)
             }
@@ -175,11 +175,15 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         Log.d("wowCheckout","tipinDollars $tipInDollars")
 
         if(discount < 0){
-            checkoutFragPromoCodeBtn.visibility = View.VISIBLE
+            checkoutFragPromoCodeLayout.visibility = View.VISIBLE
+            checkoutFragPromoCodeText.text = "(${curOrder.discount.formatedValue})"
+            checkoutFragPromoCodeStr.visibility = View.VISIBLE
+            checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
             checkoutFragAddPromoCodeBtn.visibility = View.GONE
-            checkoutFragPromoCodeBtn.text = "Promo Code - ${curOrder.discount.formatedValue} Discount"
         }else{
-            checkoutFragPromoCodeBtn.visibility = View.GONE
+            checkoutFragPromoCodeStr.visibility = View.GONE
+            checkoutFragPromoCodeSep.visibility = View.GONE
+            checkoutFragPromoCodeLayout.visibility = View.GONE
             checkoutFragAddPromoCodeBtn.visibility = View.VISIBLE
         }
 
@@ -222,7 +226,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         checkoutFragPb.show()
         viewModel.checkoutOrder(curOrder.id)
     }
-
 
     override fun onTipIconClick(tipSelection: Int) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {

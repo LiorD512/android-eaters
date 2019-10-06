@@ -18,13 +18,13 @@ interface ApiService {
     @POST("eaters/auth/validate_code")
     fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): Call<ServerResponse<Eater>>
 
-
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
     fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
 
     @POST("eaters/me/addresses/{address_id}")
     fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Address>>
+
 
 
     //General
@@ -68,6 +68,9 @@ interface ApiService {
     @POST("eaters/me")
     fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>
 
+    @POST("eaters/me")
+    fun postDeviceDetails(@Body device: DeviceDetails): Call<ServerResponse<Void>>
+
     @FormUrlEncoded
     @POST("eaters/me")
     fun postEaterNotificationGroup(@Field("notification_group_ids") notificationGroupIds: Array<Long>): Call<ServerResponse<Eater>>
@@ -103,6 +106,7 @@ interface ApiService {
 
     @DELETE("eaters/me/orders/{order_id}/")
     fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
+
 
 
     //Active Order

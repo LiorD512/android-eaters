@@ -91,7 +91,7 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
     }
 
     override fun onUserImageClick(cook: Cook?) {
-        CameraUtils.openCamera(activity as MainActivity)
+        CameraUtils.openProfileCamera(activity as MainActivity)
     }
 
     fun onMediaCaptureResult(resultUri: Uri?) {

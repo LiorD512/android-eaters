@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.delivery_details_view.view.*
 
@@ -107,6 +108,14 @@ class DeliveryDetailsView : LinearLayout {
 
     fun updateDeliveryDetails(input: String) {
         deliveryDetailsViewInput.text = input
+    }
+
+    fun updateDeliveryFullDetails(address: Address) {
+        deliveryDetailsViewInput.text = address.streetLine1
+        deliveryDetailsViewAptNumber.text = "Apt number:  ${address.streetLine2}"
+        deliveryDetailsViewDelivery.text = address.getDropoffLocationStr()
+        deliveryDetailsViewAptNumber.visibility = View.VISIBLE
+        deliveryDetailsViewDelivery.visibility = View.VISIBLE
     }
 
 

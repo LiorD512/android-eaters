@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.NewDishSuggestionDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.filter.FilterFragment
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
@@ -21,6 +22,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.search_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.utils.Constants
+import kotlinx.android.synthetic.main.fragment_feed.*
 
 
 class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
@@ -96,6 +98,13 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
                 }
             }
         })
+
+        viewModel.getCookEvent.observe(this, Observer { event ->
+            searchFragPb.hide()
+            if(event.isSuccess){
+                CookProfileDialog(event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+            }
+        })
     }
 
     fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
@@ -157,7 +166,8 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     }
 
     override fun onCookClick(cook: Cook) {
-        Log.d("wowSearch","onCookClick")
+        searchFragPb.show()
+        viewModel.getCurrentCook(cook.id)
     }
 
     override fun onCuisineClick(cuisine: CuisineLabel) {

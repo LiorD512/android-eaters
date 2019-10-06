@@ -73,8 +73,8 @@
                         android:paddingTop="17dp"
                         android:paddingBottom="15.8dp"
                         android:drawableStart="@drawable/icons_location"
-                        android:drawablePadding="6.7dp"
-                        android:paddingStart="16.3dp"
+                        android:drawablePadding="12.7dp"
+                        android:paddingStart="20.3dp"
                         style="@style/SemiBold13Dark"
                         android:text="Manage Addresess"
                         android:gravity="center_vertical"
@@ -116,7 +116,7 @@
                         android:paddingBottom="15.8dp"
                         android:drawableStart="@drawable/icons_order_history"
                         android:drawablePadding="6.7dp"
-                        android:paddingStart="16.3dp"
+                        android:paddingStart="20.3dp"
                         style="@style/SemiBold13Dark"
                         android:text="Order History"
                         android:gravity="center_vertical"
@@ -134,6 +134,7 @@
             </LinearLayout>
 
             <View
+                    android:layout_marginBottom="7.7dp"
                     android:layout_marginStart="15.8dp"
                     android:layout_marginEnd="15.8dp"
                     android:background="@color/silver"
@@ -223,7 +224,7 @@
 
                 <TextView
                         android:drawableLeft="@drawable/icons_location"
-                        android:drawablePadding="18.2dp"
+                        android:drawablePadding="22.2dp"
                         android:text="Location and Communication settings"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12.5dp"

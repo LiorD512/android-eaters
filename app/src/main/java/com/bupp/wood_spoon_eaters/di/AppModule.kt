@@ -44,6 +44,7 @@ val appModule = module {
     single { LocationManager(get(), get()) }
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
+    single { FcmManager(get()) }
 
     factory { PermissionManager() }
 
@@ -55,14 +56,14 @@ val appModule = module {
 
     //login
     viewModel { WelcomeViewModel(get()) }
-    viewModel { CodeViewModel(get(), get(), get()) }
+    viewModel { CodeViewModel(get(), get(), get(), get()) }
     viewModel { PhoneVerificationViewModel(get()) }
 
     //sign up
     viewModel { CreateAccountViewModel(get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { SingleDishViewModel(get(), get(), get(), get(), get()) }

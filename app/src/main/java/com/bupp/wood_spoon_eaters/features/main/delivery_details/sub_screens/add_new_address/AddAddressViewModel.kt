@@ -241,7 +241,7 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
                 }
             }
         }
-        return "$streetNumber $route, $locality, $country"
+        return "$streetNumber $route"//, $locality, $country"
     }
 
     private fun getZipCode(addrComponents: List<GoogleAddressResponse.AddressComponentsItem>?): String? {

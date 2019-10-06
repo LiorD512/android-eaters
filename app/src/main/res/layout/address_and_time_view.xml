@@ -25,17 +25,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <me.grantland.widget.AutofitTextView
+    <TextView
             android:id="@+id/locationDetailsViewLocation"
             style="@style/SemiBold13Dark"
             android:padding="10.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
-            app:minTextSize="11sp"
             android:ellipsize="end"
             android:text="Address"
             tools:text="160 Edgemont street"/>
+            <!--app:minTextSize="11sp"-->
 
 
 </LinearLayout>

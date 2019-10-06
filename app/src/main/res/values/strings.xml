@@ -4,6 +4,10 @@
     <string name="tool_tip_service_fee_body">
         <![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
 
+    <string name="default_notification_channel_id">notifications_channel</string>
+
+    <string name="crop_image_menu_crop">Save</string>
+
     <string name="view_dialer_2_under_txt">ABC</string>
     <string name="view_dialer_3_under_txt">DEF</string>
     <string name="view_dialer_4_under_txt">GHI</string>
@@ -83,6 +87,7 @@
         order cost if canceling
     </string>
     <string name="title_activity_address_chooser">AddressChooserActivity</string>
+    <string name="fcm_message_title">WoodSpoon Eaters</string>
 
 
 </resources>

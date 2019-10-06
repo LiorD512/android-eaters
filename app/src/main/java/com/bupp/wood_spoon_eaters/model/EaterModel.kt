@@ -42,16 +42,20 @@ data class EaterRequest(
     var tempThumbnail: Uri? = null
 )
 
+data class DeviceDetails(
+    @SerializedName("device") val device: Device? = null
+)
+
 data class Device(
-    val deviceToken: String = "",
-    val osType: Int = 1,
-    val deviceType: String = "",
-    val osVersion: String = "",
-    val appVersion: String = ""
+    @SerializedName("device_token") val deviceToken: String = "",
+    @SerializedName("os_type") val osType: Int = 1,
+    @SerializedName("device_type") val deviceType: String = "",
+    @SerializedName("os_version") val osVersion: String = "",
+    @SerializedName("app_version") val appVersion: String = ""
 )
 
 data class Trigger(
-    @SerializedName("should_rate") var shouldRateId: Long?
+    @SerializedName("should_rate") var shouldRateOrder: Order?
 )
 
 data class EphemeralKey(

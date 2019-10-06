@@ -101,25 +101,27 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
         })
     }
 
-//    fun getFullDishDetails(id: Long) {
-//        api.getMenuItemsDetails(id).enqueue(object: Callback<ServerResponse<Dish>> {
-//            override fun onResponse(call: Call<ServerResponse<Dish>>, response: Response<ServerResponse<Dish>>) {
-//                if(response.isSuccessful){
-//                    Log.d("wowSearchVM","getMenuItemsDetails success")
-//                    val dish = response.body()?.data
-//                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish))
-//                }else{
-//                    Log.d("wowSearchVM","getMenuItemsDetails fail")
-//                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Dish>>, t: Throwable) {
-//                Log.d("wowSearchVM","getMenuItemsDetails big fail: ${t.message}")
-//                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-//            }
-//        })
-//    }
+    val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
+    data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
+    fun getCurrentCook(id: Long) {
+        api.getCook(id).enqueue(object: Callback<ServerResponse<Cook>>{
+            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
+                if(response.isSuccessful){
+                    val cook = response.body()?.data
+                    Log.d("wowFeedVM","getCurrentCook success: ")
+                    getCookEvent.postValue(CookEvent(true, cook))
+                }else{
+                    Log.d("wowFeedVM","getCurrentCook fail")
+                    getCookEvent.postValue(CookEvent(false,null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
+                Log.d("wowFeedVM","getCurrentCook big fail")
+                getCookEvent.postValue(CookEvent(false,null))
+            }
+        })
+    }
 
     fun suggestDish(dishName: String, dishDetails: String) {
         api.postDishSuggestion(dishName,dishDetails).enqueue(object: Callback<ServerResponse<Void>> {

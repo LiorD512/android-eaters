@@ -3,21 +3,18 @@ package com.bupp.wood_spoon_eaters.features.login.code
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
+import com.bupp.wood_spoon_eaters.managers.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.model.Client
-import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.model.MetaDataModel
-import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
+class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager
+                    , val deviceDetailsManager: FcmManager) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val resendCodeEvent: SingleLiveEvent<ResendCodeEvent> = SingleLiveEvent()
@@ -32,6 +29,9 @@ class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager,
                     Log.d("wowCodeVM", "send code success: ");
                     val eater: Eater? = response.body()!!.data
                     eaterDataManager.currentEater = eater!!
+
+                    deviceDetailsManager.refreshPushNotificationToken()
+
                     navigationEvent.postValue(NavigationEvent(true, eaterDataManager.isAfterLogin()))
                 } else {
                     Log.d("wowCodeVM", "send code fail");
@@ -43,10 +43,11 @@ class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager,
                 Log.d("wowCodeVM", "send code big fail");
                 navigationEvent.postValue(NavigationEvent(false))
             }
-
         })
-        //appSettings.setToken("123")
     }
+
+
+
 
     fun sendPhoneNumber(phoneNumber: String) {
         api.getCode(phoneNumber).enqueue(object : Callback<Void> {

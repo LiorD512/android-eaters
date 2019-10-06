@@ -49,6 +49,8 @@ class CookProfileDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderVie
         initCook()
         initObservers()
 
+        cookProfileHeader.setHeaderViewListener(this)
+
     }
 
     private fun initObservers() {
@@ -118,6 +120,10 @@ class CookProfileDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderVie
         if(cook != null && !cook.video.isNullOrEmpty()){
             VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
         }
+    }
+
+    override fun onHeaderBackClick() {
+        dismiss()
     }
 
 

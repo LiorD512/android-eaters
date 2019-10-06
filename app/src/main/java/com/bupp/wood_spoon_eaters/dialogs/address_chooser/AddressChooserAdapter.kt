@@ -61,17 +61,6 @@ class AddressChooserAdapter(
         holder.addressMenu.setOnClickListener {
             listener.onMenuClick(address)
         }
-//        when (getItemViewType(position)) {
-//            ViewType.ITEM -> {
-//
-//
-//            }
-//            ViewType.FOOTER -> {
-//                holder?.itemView.setOnClickListener {
-//                    listener.onAddAddressClick()
-//                }
-//            }
-//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

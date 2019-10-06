@@ -80,6 +80,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         checkForActiveOrder()
         checkForTriggers()
+
+        initFcm()
+    }
+
+    fun initFcm(){
+        viewModel.initFcmListener()
     }
 
     fun checkForActiveOrder() {
@@ -116,8 +122,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         viewModel.getTriggers.observe(this, Observer { triggerEvent ->
             if (triggerEvent.isSuccess) {
-                Log.d("wowMain","found should rate id !: ${triggerEvent.trigger?.shouldRateId}")
-                RateLastOrderDialog(triggerEvent.trigger?.shouldRateId!!, this)
+                Log.d("wowMain","found should rate id !: ${triggerEvent.trigger?.shouldRateOrder}")
+                RateLastOrderDialog(triggerEvent.trigger?.shouldRateOrder!!.id, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
             }
         })
 
@@ -272,7 +278,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onRatingDone() {
-        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
+//        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
         if (getFragmentByTag(Constants.ORDER_HISTORY_TAG) != null) {
             (getFragmentByTag(Constants.ORDER_HISTORY_TAG) as OrdersHistoryFragment).onRatingDone()
         }
@@ -474,7 +480,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     }
                 }
             }
-            Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG, Constants.SUPPORT_TAG -> {
+            Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG,
+            Constants.SUPPORT_TAG, Constants.ORDER_DETAILS_TAG -> {
                 loadMyProfile()
             }
             Constants.DELIVERY_DETAILS_TAG -> {

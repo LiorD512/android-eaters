@@ -30,7 +30,7 @@
             app:lines="4"
             app:inputType="LONG_TEXT"
             app:title=""
-            app:hint="Somthing else…"
+            app:hint="Something else…"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

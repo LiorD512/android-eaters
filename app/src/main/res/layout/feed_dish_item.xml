@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="13.4sp"
                             android:gravity="right"
-                            android:text="Free Delivery"/>
+                            tools:text="Free Delivery"/>
 
                 </LinearLayout>
 

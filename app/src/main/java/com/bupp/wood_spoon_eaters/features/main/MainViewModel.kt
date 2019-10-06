@@ -8,10 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.LocationManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
-import com.bupp.wood_spoon_eaters.managers.PermissionManager
+import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
@@ -21,7 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel(val api: ApiService, val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager,
-                    val eaterDataManager: EaterDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
+                    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     private var hasPendingOrder: Boolean = false
@@ -32,6 +29,10 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
     private val TAG = "wowMainVM"
     fun isFirstTime(): Boolean{
         return settings.isFirstTime()
+    }
+
+    fun initFcmListener(){
+        fcmManager.initFcmListener()
     }
 
     fun checkPermission(context: Context, permissions: Array<String>): Boolean {
@@ -145,7 +146,7 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
                 if (response.isSuccessful) {
                     Log.d("wowMainVM", "getTriggers success")
                     val trigger = response.body()!!.data
-                    if(trigger != null && trigger.shouldRateId != null){
+                    if(trigger != null && trigger.shouldRateOrder != null){
                         getTriggers.postValue(GetTriggers(true, trigger))
                     }else{
                         getTriggers.postValue(GetTriggers(false, null))

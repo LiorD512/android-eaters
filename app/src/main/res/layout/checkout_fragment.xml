@@ -109,6 +109,39 @@
                         android:layout_height="1dp"/>
 
                 <LinearLayout
+                        android:id="@+id/checkoutFragPromoCodeLayout"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="14.9dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_marginBottom="15.1dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            style="@style/Reg13Dark"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Promo Code"/>
+
+                    <TextView
+                            android:id="@+id/checkoutFragPromoCodeText"
+                            style="@style/SemiBold13Dark50"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            tools:text="($2.0)"/>
+                </LinearLayout>
+
+                <View
+                        android:id="@+id/checkoutFragPromoCodeSep"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:background="@color/light_periwinkle"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
+                <LinearLayout
                         android:orientation="horizontal"
                         android:layout_marginTop="14.9dp"
                         android:layout_marginStart="15.4dp"
@@ -313,7 +346,7 @@
 
                 <TextView
                         android:visibility="gone"
-                        android:id="@+id/checkoutFragPromoCodeBtn"
+                        android:id="@+id/checkoutFragPromoCodeStr"
                         android:paddingTop="17dp"
                         android:paddingBottom="14.6dp"
                         android:drawableStart="@drawable/icons_check"

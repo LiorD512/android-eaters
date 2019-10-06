@@ -66,6 +66,28 @@
 
     </LinearLayout>
 
+    <TextView
+            android:visibility="gone"
+            style="@style/Reg13Dark"
+            android:id="@+id/deliveryDetailsViewAptNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:text="Apt number"/>
+
+    <TextView
+            android:visibility="gone"
+            style="@style/Reg13Dark"
+            android:id="@+id/deliveryDetailsViewDelivery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:text=""/>
+
     <View
             android:background="@color/light_periwinkle"
             android:layout_marginTop="14.6dp"

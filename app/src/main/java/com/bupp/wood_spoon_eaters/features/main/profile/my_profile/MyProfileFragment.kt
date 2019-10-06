@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
@@ -23,7 +24,8 @@ import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
-    SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener {
+    SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
+    FavoritesView.FavoritesViewListener {
 
 
     companion object {
@@ -96,6 +98,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragUserPhoto.setOnClickListener { }
         myProfileFragEditProfileBtn.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }
 
+        myProfileFragFavorites.setFavoritesViewListener(this)
 //        myProfileFragPromoCodesBtn.setOnClickListener { }
 
         myProfileFragLocationSettingsBtn.setOnClickListener { (activity as MainActivity).loadSettingsFragment() }
