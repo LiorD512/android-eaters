@@ -9,10 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.main.search.RatingItemDecoration
 import com.bupp.wood_spoon_eaters.model.Review
 import kotlinx.android.synthetic.main.ratings_dialog.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RatingsDialog(val ratings: Review) : DialogFragment() {
 

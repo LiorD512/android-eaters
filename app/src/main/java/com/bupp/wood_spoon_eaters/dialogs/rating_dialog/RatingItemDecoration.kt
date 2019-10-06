@@ -1,7 +1,6 @@
-package com.bupp.wood_spoon_eaters.features.main.search
+package com.bupp.wood_spoon_eaters.dialogs.rating_dialog
 
 import android.content.res.Resources
-import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

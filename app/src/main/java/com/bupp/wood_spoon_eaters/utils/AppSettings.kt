@@ -40,11 +40,8 @@ class AppSettings(val sharedPreferences: SharedPreferences) {
     fun logout(context: Context){
         sharedPreferences.edit().clear().commit()
         val intent = Intent(context, SplashActivity::class.java)
-        val mPendingIntentId = 123
-        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-        val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-        System.exit(0)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        context.startActivity(intent)
     }
 
 
