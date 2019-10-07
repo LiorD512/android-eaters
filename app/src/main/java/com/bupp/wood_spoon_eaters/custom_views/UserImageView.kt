@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
 class UserImageView : FrameLayout {
@@ -143,9 +144,14 @@ class UserImageView : FrameLayout {
         Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
     }
 
+    private val circleOptions = RequestOptions()
+        .centerCrop()
+        .circleCrop()      // responsible for circle crop
+        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+
     fun setCookFromCooksView(cook: Cook) {
         this.curCook = cook
-        Glide.with(context).load(cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+        Glide.with(context).load(cook.thumbnail).apply(circleOptions).into(cookImageView)
     }
 
     fun setUser(eater: Eater) {
