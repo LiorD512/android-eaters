@@ -20,3 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.stripe.android.** { *; }
+-dontwarn com.stripe.android.**
+-dontwarn com.nimbusds.jose.**
