@@ -118,7 +118,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
         showListLayout(SEARCH_LIST_TYPE_CUISINE)
 
         searchFragSoundsGood.setOnClickListener {
-            NewDishSuggestionDialog(this,query).show(fragmentManager, Constants.OFFER_DISH_TAG)
+            NewDishSuggestionDialog(this,query).show(childFragmentManager, Constants.OFFER_DISH_TAG)
         }
     }
 

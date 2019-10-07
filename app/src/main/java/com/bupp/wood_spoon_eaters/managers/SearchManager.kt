@@ -33,7 +33,10 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         val currentAddress = eaterDataManager.getLastChosenAddress()
         if(eaterDataManager.isUserChooseSpecificAddress()){
             curSearch.addressId = currentAddress?.id
+            curSearch.lat = null
+            curSearch.lng = null
         }else{
+            curSearch.addressId = null
             curSearch.lat = currentAddress?.lat
             curSearch.lng = currentAddress?.lng
         }

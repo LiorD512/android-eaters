@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.address_chooser.sub_screen
 
 import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
@@ -35,7 +35,7 @@ class AddressMenuDialog(val curAddress: Address, val listener: EditAddressDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.address_menu_dialog, null)
-        dialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog!!.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
         return view
     }
 
@@ -72,7 +72,7 @@ class AddressMenuDialog(val curAddress: Address, val listener: EditAddressDialog
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         Log.d("wow", "AddressMenuDialog dismiss")
     }

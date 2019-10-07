@@ -229,7 +229,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
     override fun onTipIconClick(tipSelection: Int) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-            TipCourierDialog(this).show(fragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
+            TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
             viewModel.updateTipInDollars(0)
             viewModel.updateTipPercentage(tipSelection)
@@ -252,7 +252,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     }
 
     override fun onHeaderBackClick() {
-        listener?.onCheckoutCanceled()
+        listener.onCheckoutCanceled()
     }
 
     fun onAddressChooserSelected() {

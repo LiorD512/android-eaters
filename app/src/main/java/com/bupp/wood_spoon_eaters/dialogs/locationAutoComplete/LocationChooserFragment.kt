@@ -123,7 +123,7 @@ class LocationChooserFragment(val listener: LocationChooserFragmentListener, val
     }
 
     private fun openKeyboard() {
-        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        dialog!!.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     private fun closeChooser() {

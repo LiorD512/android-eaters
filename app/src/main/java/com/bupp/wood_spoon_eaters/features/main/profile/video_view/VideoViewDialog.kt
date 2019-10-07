@@ -81,7 +81,7 @@ class VideoViewDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderViewL
         dismiss()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         player?.release()
         player?.clearVideoSurface()
