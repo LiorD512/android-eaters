@@ -47,6 +47,8 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
     private fun setDeliveryDetails(details: DeliveryDetailsViewModel.LastDataEvent) {
         if (details.address != null && details.address.id != null) {
             deliveryDetailsFragLocation.updateDeliveryDetails(details.address.streetLine1)
+        }else{
+            deliveryDetailsFragLocation.updateDeliveryDetails("")
         }
         if (details.time != null && details.time.toString().isNotEmpty()) {
             val time = Utils.parseDateToDayDateHour(details.time)

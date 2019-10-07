@@ -12,8 +12,6 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.cancel_order_dialog_layout.*
-import kotlinx.android.synthetic.main.thank_you_dialog_layout.*
-import kotlinx.android.synthetic.main.thank_you_dialog_layout.thankYouDialogLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CancelOrderDialog(val type: Int, val orderId: Long, val listener: CancelOrderDialogListener) : DialogFragment() {
@@ -42,24 +40,29 @@ class CancelOrderDialog(val type: Int, val orderId: Long, val listener: CancelOr
 
     private fun initUi() {
         cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
-        cancelOrderDialogBtn.setOnClickListener { cancelOrder() }
+        cancelOrderDialogKeepBtn.setOnClickListener { dismiss() }
+        cancelOrderDialogCancelBtn.setOnClickListener { cancelOrder() }
 
         when(type){
             Constants.CANCEL_ORDER_STAGE_1 -> {
                 cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
-                cancelOrderDialogReason.visibility = View.VISIBLE
+                cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_1_body)
+//                cancelOrderDialogReason.visibility = View.VISIBLE
             }
             Constants.CANCEL_ORDER_STAGE_2 -> {
                 cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_2_title)
-                cancelOrderDialogReason.visibility = View.GONE
+                cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_2_body)
+//                cancelOrderDialogReason.visibility = View.GONE
             }
             Constants.CANCEL_ORDER_STAGE_3 -> {
-                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
-                cancelOrderDialogReason.visibility = View.GONE
+                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
+                cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_3_body)
+//                cancelOrderDialogReason.visibility = View.GONE
             }
         }
 
         viewModel.cancelOrder.observe(this, Observer {cancelOrderEvent ->
+            cancelOrderPb.hide()
             if(cancelOrderEvent.isSuccess){
                 listener.onOrderCanceled()
                 dismiss()
@@ -70,7 +73,8 @@ class CancelOrderDialog(val type: Int, val orderId: Long, val listener: CancelOr
     }
 
     private fun cancelOrder() {
-        val note = cancelOrderDialogReason.getText()
+        cancelOrderPb.show()
+        val note = ""//cancelOrderDialogReason.getText()
         viewModel.cancelOrder(orderId, note)
     }
 }

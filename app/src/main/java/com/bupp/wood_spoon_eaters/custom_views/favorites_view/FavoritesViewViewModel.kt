@@ -3,6 +3,7 @@ package com.example.matthias.mvvmcustomviewexample.custom
 import android.util.Log
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import org.koin.core.KoinComponent
@@ -18,6 +19,7 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
 
     val api: ApiService by inject()
     val eaterDataManager: EaterDataManager by inject()
+    val metaDataManager: MetaDataManager by inject()
     private var listener: FavoritesViewListener? = null
 
     interface FavoritesViewListener{
@@ -26,6 +28,10 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
 
     fun setFavoritesViewListener(listener: FavoritesViewListener){
         this.listener = listener
+    }
+
+    fun getDeliveryFeeString(): String {
+        return metaDataManager.getDeliveryFeeStr()
     }
 
     fun fetchFavorites() {

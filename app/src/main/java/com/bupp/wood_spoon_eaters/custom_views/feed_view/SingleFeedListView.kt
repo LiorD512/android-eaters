@@ -49,7 +49,7 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
         singleFeedListView.adapter = adapter
     }
 
-    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener){
+    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener, deliveryFee: String){
         this.listener = listener
         singleFeedListViewTitle.visibility = View.GONE
         adapter = SingleFeedAdapter(context!!, dishes, this, deliveryFee)

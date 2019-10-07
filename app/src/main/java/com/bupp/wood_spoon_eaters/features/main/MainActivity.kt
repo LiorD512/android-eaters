@@ -481,7 +481,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
             Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG,
-            Constants.SUPPORT_TAG, Constants.ORDER_DETAILS_TAG -> {
+            Constants.SUPPORT_TAG, Constants.REPORT_TAG -> {
                 loadMyProfile()
             }
             Constants.DELIVERY_DETAILS_TAG -> {
@@ -490,6 +490,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             }
             Constants.ORDER_HISTORY_TAG -> {
                 loadMyProfile()
+            }
+            Constants.ORDER_DETAILS_TAG -> {
+                loadOrderHistoryFragment()
             }
 
             else -> {

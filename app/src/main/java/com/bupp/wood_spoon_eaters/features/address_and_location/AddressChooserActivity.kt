@@ -94,6 +94,7 @@ class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.Addres
     }
 
     override fun onAddressDeleted() {
+        viewModel.setNoAddress()
         initUi()
     }
 
@@ -132,6 +133,7 @@ class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.Addres
     }
 
     override fun onHeaderBackClick() {
+        setResult(Activity.RESULT_OK)
         finish()
     }
 

@@ -34,6 +34,11 @@ class AddressChooserViewModel(val api: ApiService, val settings: AppSettings, va
         eaterDataManager.setLastChosenAddress(address)
     }
 
+    fun setNoAddress(){
+        eaterDataManager.setUserChooseSpecificAddress(false)
+        eaterDataManager.setLastChosenAddress(null)
+    }
+
     fun getChosenAddress(): Address?{
         return eaterDataManager.getLastChosenAddress()
     }
