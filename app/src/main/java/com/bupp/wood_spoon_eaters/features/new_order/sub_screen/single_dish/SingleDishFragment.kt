@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.dialogs.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.custom_views.DishCounterView

@@ -22,7 +22,7 @@ import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyPr
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.promo_code_fragment.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {

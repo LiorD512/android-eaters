@@ -19,7 +19,8 @@ import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 
 import kotlinx.android.synthetic.main.activity_address_chooser.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.AddressChooserAdapterListener,
     AddressMenuDialog.EditAddressDialogListener, HeaderView.HeaderViewListener,

@@ -45,14 +45,14 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         if(myAddress != null){
             setLastChosenAddress(mLocation)
             for(listener in listeners){
-                listener?.onAddressChanged(myAddress)
+                listener.onAddressChanged(myAddress)
             }
             listeners.clear()
             locationManager.removeLocationManagerListener()
 
         }else{
             for(listener in listeners){
-                listener?.onAddressChanged(null)
+                listener.onAddressChanged(null)
             }
         }
     }
@@ -70,7 +70,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }else{
             return mLocation
         }
-        return null
     }
 
     fun isLocationsNear(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Boolean{

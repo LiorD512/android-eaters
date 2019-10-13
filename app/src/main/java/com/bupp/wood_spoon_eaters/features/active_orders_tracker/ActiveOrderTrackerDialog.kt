@@ -17,7 +17,7 @@ import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ActiveOrderTrackerDialog(val orders: ArrayList<Order>, val listener: ActiveOrderTrackerDialogListener) : DialogFragment(),

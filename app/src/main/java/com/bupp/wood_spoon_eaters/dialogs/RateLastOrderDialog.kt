@@ -20,7 +20,8 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.rate_last_order_dialog.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) : DialogFragment(),
     InputTitleView.InputTitleViewListener, RateLastOrderAdapter.RateOrderAdapterListener,

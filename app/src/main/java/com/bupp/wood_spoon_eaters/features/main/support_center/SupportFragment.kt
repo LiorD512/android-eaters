@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import kotlinx.android.synthetic.main.fragment_support.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {

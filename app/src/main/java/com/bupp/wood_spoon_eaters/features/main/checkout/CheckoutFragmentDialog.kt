@@ -22,7 +22,7 @@
 //import com.bupp.wood_spoon_eaters.utils.Constants
 //import com.bupp.wood_spoon_eaters.utils.Utils
 //import kotlinx.android.synthetic.main.checkout_fragment.*
-//import org.koin.androidx.viewmodel.ext.android.viewModel
+//import org.koin.android.viewmodel.ext.android.viewModel
 //import java.text.DecimalFormat
 //import java.util.*
 //import kotlin.collections.ArrayList

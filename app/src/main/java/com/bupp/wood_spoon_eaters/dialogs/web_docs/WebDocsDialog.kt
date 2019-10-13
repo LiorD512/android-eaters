@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.web_docs_dialog.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class WebDocsDialog(val type: Int) : DialogFragment(), HeaderView.HeaderViewListener {
 

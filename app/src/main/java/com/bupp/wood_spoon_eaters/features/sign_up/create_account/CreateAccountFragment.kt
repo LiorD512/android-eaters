@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import kotlinx.android.synthetic.main.fragment_create_account.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener {

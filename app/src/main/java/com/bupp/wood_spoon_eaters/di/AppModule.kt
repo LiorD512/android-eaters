@@ -32,16 +32,17 @@ import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountV
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.utils.AppSettings
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.android.viewmodel.dsl.viewModel
+
 import org.koin.dsl.module
 
 
 val appModule = module {
 
-    single { MetaDataManager() }
     single { AppSettings(get()) }
     single { OrderManager(get(), get(), get()) }
     single { LocationManager(get(), get()) }
+    single { MetaDataManager() }
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }

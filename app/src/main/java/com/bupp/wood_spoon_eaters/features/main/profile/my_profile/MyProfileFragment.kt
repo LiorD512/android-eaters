@@ -21,7 +21,7 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.my_profile_fragment.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,

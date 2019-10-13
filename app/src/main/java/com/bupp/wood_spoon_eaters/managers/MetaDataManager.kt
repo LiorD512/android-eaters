@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import android.util.Log
 import com.bupp.wood_spoon_eaters.model.*
 
 //import com.google.gson.JsonObject
@@ -9,6 +10,7 @@ class MetaDataManager {
     private var metaDataObject: MetaDataModel = MetaDataModel(null, null)
 
     fun setMetaDataObject(metaDataObject: MetaDataModel) {
+        Log.d("wowMetaData","setMetaDataObject $metaDataObject")
         this.metaDataObject = metaDataObject
     }
 

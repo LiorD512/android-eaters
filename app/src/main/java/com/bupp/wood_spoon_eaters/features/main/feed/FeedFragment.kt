@@ -18,7 +18,7 @@ import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_feed.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
 

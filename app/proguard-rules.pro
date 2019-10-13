@@ -19,6 +19,21 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
 -keep class com.stripe.android.** { *; }
 -dontwarn com.stripe.android.**
+#-keep class com.nimbusds.jose.** { *; }
 -dontwarn com.nimbusds.jose.**
+#-keep class net.minidev.asm.** { *; }
+-dontwarn net.minidev.asm.**
+#-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**
+
+
+-keep class * {
+    public private *;
+}
+
+#-keep class com.bupp.wood_spoon_eaters.features.splash.SplashViewModel { *; }
+#-keep class com.bupp.wood_spoon_eaters.managers.MetaDataManager { *; }
