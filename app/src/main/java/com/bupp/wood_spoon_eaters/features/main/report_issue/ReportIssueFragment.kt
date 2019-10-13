@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.Reports
 import kotlinx.android.synthetic.main.report_issue_fragment.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ReportIssueFragment(val orderId: Long) : Fragment(), InputTitleView.InputTitleViewListener,

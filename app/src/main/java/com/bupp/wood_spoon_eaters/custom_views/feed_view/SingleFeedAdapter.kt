@@ -37,7 +37,13 @@ class SingleFeedAdapter(
         requestOptions = requestOptions.transforms(CenterCrop(), RoundedCornersTransformation(context, 8, 0, RoundedCornersTransformation.CornerType.TOP))
         Glide.with(context).load(dish.thumbnail).apply(requestOptions).into((holder as DishItemViewHolder).bkgImg)
         (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
-        holder.name.text = "${dish.name} ${dish.price.formatedValue}"
+
+        val name = dish.name
+        var price = ""
+        if(dish.price != null){
+            price = dish.price.formatedValue
+        }
+        holder.name.text = "$name $price"
         holder.cookName.text = "By ${dish.cook.getFullName()}"
         holder.rating.text = "${dish.rating}"
 

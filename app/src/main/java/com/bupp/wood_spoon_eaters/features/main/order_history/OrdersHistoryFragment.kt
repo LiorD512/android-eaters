@@ -15,7 +15,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import kotlinx.android.synthetic.main.fragment_orders_history.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,

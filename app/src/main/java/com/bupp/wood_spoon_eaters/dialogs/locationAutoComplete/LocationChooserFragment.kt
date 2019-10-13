@@ -19,7 +19,8 @@ import com.bupp.wood_spoon_eaters.R
 import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import kotlinx.android.synthetic.main.fragment_chooser.*
-import org.koin.android.viewmodel.ext.android.viewModel
+//import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationChooserFragment(val listener: LocationChooserFragmentListener, val input: String?): DialogFragment(),
     AddressAutoCompleteAdapter.AddressAutoCompleteAdapterListener {

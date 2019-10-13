@@ -24,7 +24,7 @@ import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.cook_profile_dialog.*
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CookProfileDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderViewListener,
     SingleFeedAdapter.SearchAdapterListener, UserImageView.UserImageViewListener {

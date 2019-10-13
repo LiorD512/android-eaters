@@ -14,7 +14,7 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
@@ -30,10 +30,4 @@
 #-keep class org.bouncycastle.** { *; }
 -dontwarn org.bouncycastle.**
 
-
--keep class * {
-    public private *;
-}
-
-#-keep class com.bupp.wood_spoon_eaters.features.splash.SplashViewModel { *; }
-#-keep class com.bupp.wood_spoon_eaters.managers.MetaDataManager { *; }
+-keep public class com.bupp.wood_spoon_eaters.model.** {*;}

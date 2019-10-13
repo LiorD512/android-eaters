@@ -22,7 +22,7 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import com.stripe.android.model.PaymentMethod
 import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 
 
