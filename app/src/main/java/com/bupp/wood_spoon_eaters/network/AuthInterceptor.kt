@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.network
 
 import android.util.Log
-import com.bupp.wood_spoon_eaters.model.LoginResponse
+//import com.bupp.wood_spoon_eaters.model.LoginResponse
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

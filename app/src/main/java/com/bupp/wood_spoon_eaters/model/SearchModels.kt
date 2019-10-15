@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 
 data class SearchRequest(
-    var lat: Double? = null,
-    var lng: Double? = null,
+    @SerializedName("lat") var lat: Double? = null,
+    @SerializedName("lng") var lng: Double? = null,
     @SerializedName("address_id") var addressId: Long? = null,
-    var timestamp: String? = null,
-    var q: String? = "",
+    @SerializedName("timestamp") var timestamp: String? = null,
+    @SerializedName("q") var q: String? = "",
     @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Int>? = null,
     @SerializedName("diet_ids") var dietIds: ArrayList<Long>? = null,
     @SerializedName("min_price") var minPrice: Double? = null,
@@ -18,10 +18,10 @@ data class SearchRequest(
 
 
 data class Search(
-    var id: Long?,
-    var resource: String?,
-    var results: ArrayList<*>? = null,
-    var pagination: Pagination?
+    @SerializedName("id") var id: Long?,
+    @SerializedName("resource") var resource: String?,
+    @SerializedName("results") var results: ArrayList<*>? = null,
+    @SerializedName("pagination") var pagination: Pagination?
 ) {
     fun cooksCount(): Int {
         when (resource) {

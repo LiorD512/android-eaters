@@ -1,8 +1,10 @@
 package com.bupp.wood_spoon_eaters.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Feed(
-    val title: String = "",
-    var search: Search? = null
+    @SerializedName("title") val title: String = "",
+    @SerializedName("search") var search: Search? = null
 ){
     fun hasItems(): Boolean{
         if(search != null && search!!.results != null){
@@ -13,8 +15,8 @@ data class Feed(
 }
 
 data class FeedRequest(
-    var lat: Double? = null,
-    var lng: Double? = null,
-    var addressId: Long? = null,
-    var timestamp: String? = null
+    @SerializedName("lat") var lat: Double? = null,
+    @SerializedName("lng") var lng: Double? = null,
+    @SerializedName("addressId") var addressId: Long? = null,
+    @SerializedName("timestamp") var timestamp: String? = null
 )

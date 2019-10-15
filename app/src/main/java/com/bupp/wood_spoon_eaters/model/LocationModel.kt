@@ -27,12 +27,12 @@ data class AddressRequest(
 
 @Parcelize
 data class Address(
-    val id: Long? = null,
-    var lat: Double? = null,
-    var lng: Double? = null,
-    var country: Country? = null,
-    val state: State? = null,
-    val city: City? = null,
+    @SerializedName("id") val id: Long? = null,
+    @SerializedName("lat") var lat: Double? = null,
+    @SerializedName("lng") var lng: Double? = null,
+    @SerializedName("country") var country: Country? = null,
+    @SerializedName("state") val state: State? = null,
+    @SerializedName("city") val city: City? = null,
     @SerializedName("dropoff_location") var dropOfLocationStr: String = "",
     @SerializedName("street_line_1") var streetLine1: String = "",
     @SerializedName("street_line_2") var streetLine2: String = "",

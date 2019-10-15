@@ -7,9 +7,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 data class ServerResponse<T> (
-    var code: Int = 0,
-    var message: String? = null,
-    var data: T? = null
+    @SerializedName("code") var code: Int = 0,
+    @SerializedName("message") var message: String? = null,
+    @SerializedName("data") var data: T? = null
 )
 
 data class MetaDataModel(
@@ -34,8 +34,8 @@ data class NotificationGroup(
 )
 
 data class ReportIssue(
-    val id: Long,
-    val name: String
+    @SerializedName("id") val id: Long,
+    @SerializedName("name") val name: String
 )
 
 data class Reports(
@@ -49,34 +49,34 @@ data class ReportRequest(
 )
 
 data class PrepTimeRange(
-    val id: Long,
-    val icon: String,
+    @SerializedName("id") val id: Long,
+    @SerializedName("icon") val icon: String,
     @SerializedName("min_time") val minTime: Int,
     @SerializedName("max_time") val maxTime: Int
 )
 
 data class AppSetting(
-    var id: Long?,
-    var key: String?,
-    var dataType: String?,
-    var value: Any?
+    @SerializedName("id") var id: Long?,
+    @SerializedName("key") var key: String?,
+    @SerializedName("dataType") var dataType: String?,
+    @SerializedName("value") var value: Any?
 )
 
 //orders grid data class
 
 @Parcelize
 data class DietaryIcon(
-    override val name: String,
-    override val icon: String,
-    override val id: Long
+    @SerializedName("name") override val name: String,
+    @SerializedName("icon") override val icon: String,
+    @SerializedName("id") override val id: Long
 ): SelectableIcon, Parcelable
 
 @Parcelize
 data class CuisineLabel(
-    override val name: String,
-    override val icon: String,
-    val cover: String,
-    override val id: Long
+    @SerializedName("name") override val name: String,
+    @SerializedName("icon") override val icon: String,
+    @SerializedName("cover") val cover: String,
+    @SerializedName("id") override val id: Long
 ): SelectableIcon, Parcelable
 
 interface SelectableIcon {
@@ -93,6 +93,6 @@ interface SelectableString {
 
 
 data class PreSignedUrl(
-    val key: String,
-    val url: String
+    @SerializedName("key") val key: String,
+    @SerializedName("url") val url: String
 )

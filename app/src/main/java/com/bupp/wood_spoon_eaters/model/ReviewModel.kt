@@ -12,16 +12,16 @@ data class Review(
 )
 
 data class Metrics(
-    val id: Long,
-    val name: String,
-    val description: String,
-    val rating: Double
+    @SerializedName("id") val id: Long,
+    @SerializedName("name") val name: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("rating") val rating: Double
 )
 
 data class Comment(
-    val id: Long,
-    val body: String,
-    val eater: Eater
+    @SerializedName("id") val id: Long,
+    @SerializedName("body") val body: String,
+    @SerializedName("eater") val eater: Eater
 )
 
 

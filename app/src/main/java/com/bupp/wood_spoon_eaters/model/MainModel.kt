@@ -9,12 +9,12 @@ import java.util.*
 
 
 
-data class Suggestion(
-    val id: Long,
-    val eater: Eater,
-    val dishName: String,
-    val dishDescription: String
-)
+//data class Suggestion(
+//    val id: Long,
+//    val eater: Eater,
+//    val dishName: String,
+//    val dishDescription: String
+//)
 
 
 
@@ -31,50 +31,50 @@ data class Suggestion(
 
 @Parcelize
 data class WoodUnit(
-    val id: Long,
-    val name: String,
-    val displayName: String,
-    val definition: String
+    @SerializedName("id") val id: Long,
+    @SerializedName("name") val name: String,
+    @SerializedName("displayName") val displayName: String,
+    @SerializedName("definition") val definition: String
 ): Parcelable
 
 
-data class Report(
-    val id: Long,
-    val order: Order,
-    val reportTopic: ReportTopic,
-    val reportIssue: ReportIssue,
-    val body: String
-)
-
-data class CookCuisine(
-    val id: Long,
-    val client: Client,
-    val cuisine: Cuisine
-)
-
-data class DishCuisine(
-    val id: Long,
-    val dish: Dish,
-    val cuisine: Cuisine
-)
+//data class Report(
+//    val id: Long,
+//    val order: Order,
+//    val reportTopic: ReportTopic,
+//    val reportIssue: ReportIssue,
+//    val body: String
+//)
+//
+//data class CookCuisine(
+//    val id: Long,
+//    val client: Client,
+//    val cuisine: Cuisine
+//)
+//
+//data class DishCuisine(
+//    val id: Long,
+//    val dish: Dish,
+//    val cuisine: Cuisine
+//)
 
 @Parcelize
 data class Diet(
-    val id: Long?,
-    val name: String
+    @SerializedName("id") val id: Long?,
+    @SerializedName("name") val name: String
 ) : Parcelable
 
-data class CookDiet(
-    val id: Long,
-    val client: Client,
-    val diet: Diet
-)
-
-data class DishDiet(
-    val id: Long,
-    val dish: Dish,
-    val diet: Diet
-)
+//data class CookDiet(
+//    val id: Long,
+//    val client: Client,
+//    val diet: Diet
+//)
+//
+//data class DishDiet(
+//    val id: Long,
+//    val dish: Dish,
+//    val diet: Diet
+//)
 
 //@Parcelize
 //data class Dish(
@@ -108,38 +108,38 @@ data class DishDiet(
 //    var ingredients: ArrayList<Ingredient> = arrayListOf()
 //) : Parcelable
 
-data class PromoCode(
-    val id: Long,
-    val expiresAt: Date,
-    val code: String,
-    val value: Int,
-    val status: Int
-)
-
-data class CancellationReason(
-    val id: Long,
-    val name: String
-)
+//data class PromoCode(
+//    val id: Long,
+//    val expiresAt: Date,
+//    val code: String,
+//    val value: Int,
+//    val status: Int
+//)
+//
+//data class CancellationReason(
+//    val id: Long,
+//    val name: String
+//)
 
 @Parcelize
 data class Client(
-    val id: Long? = null,
+    @SerializedName("id") val id: Long? = null,
     @SerializedName("first_name") val firstName: String = "",
     @SerializedName("last_name") val lastName: String = "",
-    var thumbnail: String? = "",
-    var tempThumbnail: Uri? = null,
-    var tempVideoUri: Uri? = null,
-    var video: String? = "",
+    @SerializedName("thumbnail") var thumbnail: String? = "",
+    @SerializedName("temp_thumbnail") var tempThumbnail: Uri? = null,
+    @SerializedName("temp_video_uri") var tempVideoUri: Uri? = null,
+    @SerializedName("video") var video: String? = "",
     @SerializedName("phone_number") val phoneNumber: String? = "",
-    val email: String = "",
+    @SerializedName("email") val email: String = "",
 //        val inAppToken: String,
     @SerializedName("account_status") val accountStatus: String? = "",
     @SerializedName("status_updated_at") val statusUpdatedAt: Date? = null,
     @SerializedName("last_activity_at") val lastActivityAt: Date? = null,
-    val profession: String? = "",
-    val birthdate: String? = "",
+    @SerializedName("profession") val profession: String? = "",
+    @SerializedName("birthdate") val birthdate: String? = "",
     @SerializedName("place_of_birth") val placeOfBirth: Country? = null,
-    val about: String? = "",
+    @SerializedName("about") val about: String? = "",
     @SerializedName("weekly_orders_count") val weeklyOrdersCount: Int? = null,
     @SerializedName("total_orders_count") val totalOrdersCount: Int? = null,
     @SerializedName("total_dishes_count") val totalDishesCount: Int? = null,
@@ -150,17 +150,17 @@ data class Client(
     @SerializedName("total_profit") val totalProfit: Int? = null,
     @SerializedName("avg_profit_per_dish") val avgProfitPerDish: Int? = null,
     @SerializedName("pickup_address") var pickupAddress: Address? = null,
-    val certificates: ArrayList<String>? = arrayListOf(),
+    @SerializedName("certificates") val certificates: ArrayList<String>? = arrayListOf(),
     @SerializedName("cuisine_ids") val cuisineIds: ArrayList<Int>? = arrayListOf(),
     @SerializedName("diet_ids") var dietIds: ArrayList<Int>? = null,
     @SerializedName("country_id") var countryId: Int? = null
 ) : Parcelable
 
-data class Certificate(
-    val id: Long,
-    val name: String,
-    val client: Client
-)
+//data class Certificate(
+//    val id: Long,
+//    val name: String,
+//    val client: Client
+//)
 
 //data class Order(
 //    val id: Long,
@@ -191,26 +191,26 @@ data class Certificate(
 //    val notes: String
 //)
 
-data class Courier(
-    val id: Long,
-    val firstName: String,
-    val lastName: String,
-    val thumbnail: String,
-    val phoneNumber: String,
-    val email: String,
-    val inAppToken: String,
-    val accountStatus: Int,
-    val statusUpdatedAt: Date,
-    val lastActivityAt: Date,
-    val primaryAddress: Address,
-    val deliveryMethod: DeliveryMethod,
-    val totalOrdersCount: Int
-)
+//data class Courier(
+//    val id: Long,
+//    val firstName: String,
+//    val lastName: String,
+//    val thumbnail: String,
+//    val phoneNumber: String,
+//    val email: String,
+//    val inAppToken: String,
+//    val accountStatus: Int,
+//    val statusUpdatedAt: Date,
+//    val lastActivityAt: Date,
+//    val primaryAddress: Address,
+//    val deliveryMethod: DeliveryMethod,
+//    val totalOrdersCount: Int
+//)
 
-data class DeliveryMethod(
-    val id: Long,
-    val name: String
-)
+//data class DeliveryMethod(
+//    @SerializedName("id") val id: Long,
+//    @SerializedName("name") val name: String
+//)
 
 
 
@@ -231,18 +231,18 @@ data class DeliveryMethod(
 //    val orders: ArrayList<Order>
 //)
 
-data class Favorite(
-    val id: Long,
-    val eater: Eater,
-    val dish: Dish
-)
-
-
-@Parcelize
-data class Cuisine(
-    val id: Long?,
-    val name: String,
-    val body: String?,
-    val icon: String,
-    val dishesCount: Int?
-) : Parcelable
+//data class Favorite(
+//    val id: Long,
+//    val eater: Eater,
+//    val dish: Dish
+//)
+//
+//
+//@Parcelize
+//data class Cuisine(
+//    val id: Long?,
+//    val name: String,
+//    val body: String?,
+//    val icon: String,
+//    val dishesCount: Int?
+//) : Parcelable
