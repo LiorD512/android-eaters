@@ -17,9 +17,11 @@ import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.cook_profile_dialog.*
@@ -109,6 +111,10 @@ class CookProfileDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderVie
 
     private fun openCertificatesDialog(certificates: ArrayList<String>) {
         CertificatesDialog(certificates).show(childFragmentManager, Constants.CERTIFICATES_DIALOG_TAG)
+    }
+
+    override fun onDishClick(dish: Dish) {
+        (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
     }
 
     private fun onRatingClick() {

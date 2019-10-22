@@ -55,8 +55,8 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
         }
 
         when (curAddress?.dropOfLocationStr) {
-            "delivery_to_door" -> addAddressFragDeliveryCb.performClick()
-            else -> addAddressFragPickUpCb.performClick()
+            "pickup_outside" -> addAddressFragPickUpCb.performClick()
+            else -> addAddressFragDeliveryCb.performClick()
         }
 
         viewModel.updateAddressEvent.observe(this, Observer { event -> handleSaveResponse(event) })
