@@ -7,14 +7,14 @@
         android:layout_height="wrap_content" xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
+            android:id="@+id/manyCooksViewBkg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardUseCompatPadding="false"
             android:padding="10dp"
             android:layout_margin="10dp"
             app:cardBackgroundColor="@color/white_to_blue_selector"
             app:cardElevation="@dimen/shadow_elevation"
-            app:cardCornerRadius="59dp">
+            app:cardCornerRadius="40dp">
 
         <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                 android:layout_gravity="center"

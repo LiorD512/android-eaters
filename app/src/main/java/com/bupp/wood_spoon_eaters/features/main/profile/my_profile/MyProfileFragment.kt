@@ -22,6 +22,9 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.content.Intent
+import android.net.Uri
+
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
@@ -105,7 +108,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragPrivacyBtn.setOnClickListener { WebDocsDialog(Constants.WEB_DOCS_PRIVACY).show(childFragmentManager, Constants.WEB_DOCS_DIALOG_TAG) }
         myProfileFragSupportBtn.setOnClickListener { (activity as MainActivity).loadSupport() }
 
-        myProfileFragJoinBtn.setOnClickListener { }
+        myProfileFragJoinBtn.setOnClickListener { OpenWoodSpoonGooglePlay() }
         myProfileFragShareBtnLayout.setOnClickListener { share() }
 
         myProfileFragOrderHistoryBtn.setOnClickListener { openOrderHistoryDialog() }
@@ -113,6 +116,13 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         profileFragLogout.setOnClickListener {
             LogoutDialog(this).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
         }
+    }
+
+    private fun OpenWoodSpoonGooglePlay() {
+        val url = "https://play.google.com/store/apps/details?id=com.bupp.wood_spoon_chef"
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
     }
 
     private fun share() {

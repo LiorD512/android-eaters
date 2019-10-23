@@ -4,11 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.model.Cook
 import kotlinx.android.synthetic.main.many_cooks_view_item.view.*
+import kotlinx.android.synthetic.main.user_image_view.view.*
 
 class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>, val listener: ManyCooksViewListener): RecyclerView.Adapter<ManyCooksViewAdapter.ViewHolder>(),
     UserImageView.UserImageViewListener {
@@ -19,6 +23,7 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
     }
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+        val CooksViewBkg = view.manyCooksViewBkg
         val cookImageView = view.manyCooksViewItem
         val cookFirstName = view.manyCooksViewName
         val cookLastName = view.manyCooksViewNameLast
@@ -35,10 +40,11 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val curCook = cooksList.get(position)
 
-        holder.cookImageView.setCookFromCooksView(curCook)
         holder.cookFirstName.text = curCook.firstName
         holder.cookLastName.text = curCook.lastName
+        holder.cookImageView.setCookFromCooksView(curCook)
 
+//        Glide.with(context).load(ContextCompat.getDrawable(context, R.drawable.white_circle)).apply(RequestOptions.circleCropTransform()).into(holder.CooksViewBkg)
 
         holder.cookImageView.setUserImageViewListener(this)
 

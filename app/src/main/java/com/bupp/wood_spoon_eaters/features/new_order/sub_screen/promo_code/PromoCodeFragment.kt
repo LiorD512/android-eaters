@@ -91,4 +91,8 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
         promoCodeFragPb.show()
         viewModel.savePromoCode(promoCodeFragCodeInput.text.toString())
     }
+
+    override fun onHeaderBackClick() {
+        (activity as NewOrderActivity).onCheckout()
+    }
 }

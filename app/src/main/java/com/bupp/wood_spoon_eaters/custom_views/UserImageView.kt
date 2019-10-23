@@ -112,10 +112,10 @@ class UserImageView : FrameLayout {
                 val bkgLayout = LayoutParams(76.toPx(), 76.toPx())
                 cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
+                val imageLayout = RelativeLayout.LayoutParams(74.toPx(), 74.toPx())
                 imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                 cookImageView.layoutParams = imageLayout
-                cookImageView.setPadding(0, 0, 0, 0)
+//                cookImageView.setPadding(0, 0, 0, 0)
             }
         }
 
@@ -151,7 +151,8 @@ class UserImageView : FrameLayout {
 
     fun setCookFromCooksView(cook: Cook) {
         this.curCook = cook
-        Glide.with(context).load(cook.thumbnail).apply(circleOptions).into(cookImageView)
+        Glide.with(context).load(cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+//        Glide.with(context).load(cook.thumbnail).apply(circleOptions).into(cookImageView)
     }
 
     fun setUser(eater: Eater) {

@@ -34,6 +34,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener,
     StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener {
 
+    private var hasPaymentMethod: Boolean = false
     lateinit var curOrder: Order
 //    var tipPercent: Int = 0
 //    var tipInDollars: Int = 0
@@ -100,9 +101,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     }
 
     private fun setEmptyPaymentMethod() {
+        hasPaymentMethod = false
         checkoutFragChangePaymentTitle.text = "Insert payment method"
         checkoutFragChangePaymentChangeBtn.alpha = 1f
-        checkoutFragStatusBar.setEnabled(false)
+//        checkoutFragStatusBar.setEnabled(false)
 
     }
 
@@ -118,6 +120,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
         val card = paymentMethod.card
         if(card != null){
+            hasPaymentMethod = true
             Log.d("wowCheckoutFrag","updateCustomerPaymentMethod: ${paymentMethod.id}")
             checkoutFragStatusBar.setEnabled(true)
             checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
@@ -223,8 +226,12 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     }
 
     override fun onStatusBarClicked(type: Int?) {
-        checkoutFragPb.show()
-        viewModel.checkoutOrder(curOrder.id)
+        if(hasPaymentMethod){
+            checkoutFragPb.show()
+            viewModel.checkoutOrder(curOrder.id)
+        }else{
+            (activity as NewOrderActivity).startPaymentMethodActivity()
+        }
     }
 
     override fun onTipIconClick(tipSelection: Int) {

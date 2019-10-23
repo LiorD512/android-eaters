@@ -17,6 +17,13 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         return currentOrderRequest!!
     }
 
+    fun getPromoCodeOrderRequest(): OrderRequest {
+        val promoCodeOrderRequest = OrderRequest()
+        promoCodeOrderRequest.promoCode = getOrderRequest().promoCode
+//        promoCodeOrderRequest.promoCode = getOrderRequest().id
+        return promoCodeOrderRequest
+    }
+
     fun initNewOrder() {
         currentOrderRequest = OrderRequest()
     }
@@ -75,6 +82,8 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         currentOrderRequest = null
         curOrderResponse = null
     }
+
+
 
     var tempTipPercentage: Int = 0
     var tempTipInDollars: Int = 0

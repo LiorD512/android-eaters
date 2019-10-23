@@ -51,6 +51,7 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
             })
         }else{
             Log.d("wowFeedVM","getFeed setLocationListener")
+            feedEvent.postValue(FeedEvent(false,null))
             eaterDataManager.setLocationListener(this)
         }
     }

@@ -18,7 +18,7 @@ class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : V
 
     fun savePromoCode(code: String) {
         orderManager.updateOrderRequest(promoCode = code)
-        api.updateOrder(orderManager.curOrderResponse!!.id, orderManager.getOrderRequest()).enqueue(object: Callback<ServerResponse<Order>>{
+        api.updateOrder(orderManager.curOrderResponse!!.id, orderManager.getPromoCodeOrderRequest()).enqueue(object: Callback<ServerResponse<Order>>{
             override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
                 if(response.isSuccessful){
                     val order = response.body()?.data
