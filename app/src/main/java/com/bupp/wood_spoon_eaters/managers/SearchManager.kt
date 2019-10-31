@@ -13,10 +13,11 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
                         addressId: Long? = null,
                         timestamp: String? = null,
                         q: String? = "",
-                        cuisineIds: ArrayList<Int>? = null,
+                        cuisineIds: ArrayList<Long>? = null,
                         dietIds: ArrayList<Long>? = null,
                         minPrice: Double? = null,
-                        maxPrice: Double? = null): SearchRequest{
+                        maxPrice: Double? = null,
+                        isAsap: Boolean? = null): SearchRequest{
         if(q != null){ curSearch.q = q }
         if(lat != null){ curSearch.lat = lat }
         if(lng != null){ curSearch.lng = lat }
@@ -26,10 +27,11 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         if(addressId != null){ curSearch.addressId = addressId }
         if(timestamp != null){ curSearch.timestamp = timestamp }
         if(cuisineIds != null){ curSearch.cuisineIds = cuisineIds }
+        if(isAsap != null){ curSearch.isAsap = isAsap }
         return curSearch
     }
 
-    fun getSearchRequest(str: String): SearchRequest {
+    fun getSearchRequest(str: String, cuisineIds: ArrayList<Long>?): SearchRequest {
         val currentAddress = eaterDataManager.getLastChosenAddress()
         if(eaterDataManager.isUserChooseSpecificAddress()){
             curSearch.addressId = currentAddress?.id
@@ -42,6 +44,15 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         }
         if(!str.isNullOrEmpty()){
             curSearch.q = str
+        }else{
+            curSearch.q = ""
+        }
+
+        if(cuisineIds != null && cuisineIds.size!! > 0){
+            curSearch.cuisineIds = arrayListOf()
+            curSearch.cuisineIds?.addAll(cuisineIds)
+        }else{
+            curSearch.cuisineIds?.clear()
         }
 
         //time

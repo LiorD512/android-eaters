@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.input_title_view.view.*
 
 class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
 
+    protected var watcher: AutoCompleteTextWatcher? = getAutoCompleteTextWatecher()
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -117,16 +118,23 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
             listener?.onHeaderSettingsClick()
         }
 
-        headerViewSearchInput.addTextChangedListener(object : AutoCompleteTextWatcher() {
+        headerViewAddressAndTime.setOnClickListener {
+            listener?.onHeaderAddressAndTimeClick()
+        }
+
+        setTitleInputListener()
+    }
+
+    private fun setTitleInputListener(){
+        headerViewSearchInput.addTextChangedListener(watcher)
+    }
+
+    private fun getAutoCompleteTextWatecher(): AutoCompleteTextWatcher{
+        return object : AutoCompleteTextWatcher() {
             override fun handleInputString(str: String) {
                 Log.d("wowHeaderView", "afterTextChanged: $str")
                 listener?.onHeaderTextChange(str)
             }
-
-        });
-
-        headerViewAddressAndTime.setOnClickListener {
-            listener?.onHeaderAddressAndTimeClick()
         }
     }
 
@@ -135,6 +143,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
             listener?.onHeaderBackClick()
         }else{
             headerViewSearchInput.text.clear()
+            listener?.onHeaderTextChange("")
         }
     }
 
@@ -157,7 +166,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
             }
             Constants.HEADER_VIEW_TYPE_SIGNUP -> {
                 headerViewTitle.visibility = View.VISIBLE
-                headerViewSkipBtn.visibility = View.VISIBLE
+//                headerViewSkipBtn.visibility = View.VISIBLE
                 headerViewBackBtn.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_BACK_TITLE -> {
@@ -212,8 +221,10 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         }
     }
 
-    fun updateSearchInput(str: String) {
+    fun updateSearchTitle(str: String) {
+        headerViewSearchInput.removeTextChangedListener(watcher)
         headerViewSearchInput.setText(str)
+        setTitleInputListener()
     }
 
     fun setSaveButtonClickable(isClickable: Boolean) {

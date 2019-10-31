@@ -110,6 +110,11 @@ object Utils {
         return droppedMillis.toString()
     }
 
+    fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean{
+        val sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+        return sameDay
+    }
 
 
 

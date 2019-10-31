@@ -36,16 +36,26 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
     val suggestionEvent: SingleLiveEvent<SuggestionEvent> = SingleLiveEvent()
 
     var searchResult: ArrayList<Search>? = null
-    var cooks: ArrayList<Cook>? = null
-    var dishes: ArrayList<Dish>? = null
+
 
     fun getCuisineLabels(): ArrayList<CuisineLabel> {
         return metaDataManager.getCuisineList()
     }
 
     fun search(str: String) {
-        val curSearchObj = searchManager.getSearchRequest(str)
+        val curSearchObj = searchManager.getSearchRequest(str, null)
         doSearch(curSearchObj)
+    }
+
+    fun getDishesByCisineId(id: Long) {
+        val cuisineId: ArrayList<Long> = arrayListOf<Long>()
+        cuisineId.add(id)
+        val curSearchObj = searchManager.getSearchRequest("", cuisineIds = cuisineId)
+        doSearch(curSearchObj)
+    }
+
+    fun clearSearchQuery(){
+        searchManager.updateCurSearch(q = null, cuisineIds = null)
     }
 
     private fun doSearch(curOrderObj: SearchRequest) {
@@ -70,6 +80,8 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
 
     private fun arrangeData(searchResult: ArrayList<Search>?) {
         this.searchResult = searchResult
+        var cooks: ArrayList<Cook>? = null
+        var dishes: ArrayList<Dish>? = null
         for(item in searchResult!!){
             if(item.hasCooks()){
                 cooks = item.results as ArrayList<Cook>
@@ -169,5 +181,7 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
 
         })
     }
+
+
 
 }

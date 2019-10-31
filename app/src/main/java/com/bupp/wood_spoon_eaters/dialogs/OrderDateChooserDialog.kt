@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.dialogs
 
+import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.dialogs.abs.OrderDateChooserAdapter
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.order_date_chooser_dialog.*
 import java.util.*
@@ -70,14 +72,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
 
     override fun onOrderDateClick(selected: MenuItem) {
         this.newSelectedMenuItem = selected
-        openTimePicker(selected)
-        dismiss()
-    }
 
-
-
-    fun openTimePicker(selected: MenuItem) {
-        newSelectedMenuItem = selected
         val startDate: Date = selected.cookingSlot.startsAt
         val endDate: Date = selected.cookingSlot.endsAt
 
@@ -87,6 +82,42 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         val calEnd = Calendar.getInstance()
         calEnd.time = endDate
 
+        if(Utils.isSameDay(calStart, calEnd)){
+            openTimePicker(calStart, calEnd)
+            dismiss()
+        }else{
+            openDatePicker(calStart, calEnd)
+        }
+
+    }
+
+    fun openDatePicker(calStart: Calendar, calEnd: Calendar){
+        val c = Calendar.getInstance()
+        val year = calStart.get(Calendar.YEAR)
+        val month = calStart.get(Calendar.MONTH)
+        val day = calStart.get(Calendar.DAY_OF_MONTH)
+
+        val dpd = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            val selectedDate = Calendar.getInstance()
+            selectedDate.set(year, monthOfYear, dayOfMonth)
+            if(Utils.isSameDay(selectedDate, calStart)){
+                selectedDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59)
+                openTimePicker(calStart, selectedDate)
+            }else{
+                selectedDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
+                openTimePicker(selectedDate, calEnd)
+            }
+
+
+        }, year, month, day)
+
+        dpd.datePicker.minDate = calStart.timeInMillis
+        dpd.datePicker.maxDate = calEnd.timeInMillis
+
+        dpd.show()
+    }
+
+    fun openTimePicker(calStart: Calendar, calEnd: Calendar) {
         val dpd = TimePickerDialog.newInstance(this, calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), false)
 
         dpd.show(childFragmentManager, "Datepickerdialog")
@@ -103,6 +134,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         var newChosenDate: Date = Date(newCal.timeInMillis)
 
         listener.onDateChoose(newSelectedMenuItem!!, newChosenDate)
+        dismiss()
     }
 
 

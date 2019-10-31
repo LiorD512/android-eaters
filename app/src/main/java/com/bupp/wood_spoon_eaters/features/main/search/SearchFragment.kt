@@ -22,7 +22,6 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.search_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.fragment_feed.*
 
 
 class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
@@ -154,6 +153,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
         if(str.isNullOrEmpty()){
             adapter.clearData()
             showListLayout(SEARCH_LIST_TYPE_CUISINE)
+            viewModel.clearSearchQuery()
         }else{
             searchFragPb.show()
             viewModel.search(query)
@@ -173,10 +173,11 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     override fun onCuisineClick(cuisine: CuisineLabel) {
         Log.d("wowSearch","onCuisineClick")
         updateInput(cuisine.name)
+        viewModel.getDishesByCisineId(cuisine.id)
     }
 
     private fun updateInput(name: String) {
-        (activity as MainActivity).updateSearchInput(name)
+        (activity as MainActivity).updateSearchBarTitle(name)
     }
 
     fun openFilterDialog() {

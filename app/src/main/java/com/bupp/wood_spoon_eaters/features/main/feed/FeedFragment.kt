@@ -61,7 +61,6 @@ class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewList
             feedFragPb.hide()
             if(event.isSuccess){
                 CookProfileDialog(event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
-
             }
         })
     }

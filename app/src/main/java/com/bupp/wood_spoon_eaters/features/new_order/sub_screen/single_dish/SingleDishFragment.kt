@@ -88,7 +88,6 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
                         checkForOpenOrder(currentDish)
                         if(!event.isAvailable){
                             handleUnAvailableCookingSlot()
-
                         }
                     }
                 }
@@ -162,7 +161,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     }
 
     override fun onBackClick() {
-        (activity as NewOrderActivity).finish()
+        (activity as NewOrderActivity).finishWithCookId(currentDish.cook.id)
     }
 
     override fun onPageClick(page: Int) {

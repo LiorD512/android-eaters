@@ -228,6 +228,12 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 
     }
 
+    fun finishWithCookId(curCookId: Long) {
+        val intent: Intent = getIntent()
+        intent.putExtra("curCookId", curCookId)
+        setResult(Activity.RESULT_CANCELED, intent)
+        finish()
+    }
 
 
 }

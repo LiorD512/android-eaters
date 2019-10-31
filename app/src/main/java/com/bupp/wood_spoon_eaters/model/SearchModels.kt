@@ -10,10 +10,11 @@ data class SearchRequest(
     @SerializedName("address_id") var addressId: Long? = null,
     @SerializedName("timestamp") var timestamp: String? = null,
     @SerializedName("q") var q: String? = "",
-    @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Int>? = null,
+    @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Long>? = null,
     @SerializedName("diet_ids") var dietIds: ArrayList<Long>? = null,
     @SerializedName("min_price") var minPrice: Double? = null,
-    @SerializedName("max_price") var maxPrice: Double? = null
+    @SerializedName("max_price") var maxPrice: Double? = null,
+    @SerializedName("asap_only") var isAsap: Boolean? = null
 )
 
 

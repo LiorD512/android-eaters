@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -27,7 +28,6 @@ import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
@@ -46,6 +46,7 @@ import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -134,6 +135,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 showCheckOutBottomBar(false)
             }
         })
+
+//        viewModel.getCookEvent.observe(this, Observer { event ->
+//            feedFragPb.hide()
+//            if(event.isSuccess){
+//                currentFragmentTag = Constants.COOK_PROFILE_DIALOG_TAG
+//                CookProfileDialog(event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//            }
+//        })
     }
 
     private fun showCheckOutBottomBar(shouldShow: Boolean) {
@@ -484,6 +493,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Constants.SUPPORT_TAG, Constants.REPORT_TAG -> {
                 loadMyProfile()
             }
+
             Constants.DELIVERY_DETAILS_TAG -> {
                 updateAddressTimeView()
                 loadFeed()
@@ -503,8 +513,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun updateSearchInput(str: String) {
-        mainActHeaderView.updateSearchInput(str)
+    fun updateSearchBarTitle(str: String) {
+        mainActHeaderView.updateSearchTitle(str)
     }
 
     fun startPaymentMethodActivity() {
@@ -515,9 +525,17 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         super.onActivityResult(requestCode, resultCode, data)
         updateAddressTimeView()
         if(requestCode == Constants.NEW_ORDER_REQUEST_CODE){
-            loadFeed()
-            checkForActiveOrder()
-            checkCartStatus()
+//            if(lastFragmentTag == Constants.COOK_PROFILE_DIALOG_TAG){
+//                val curCookId = data?.getIntExtra("curCookId", -1)
+//                if(curCookId != -1){
+//                    mainActPb.show()
+//                    viewModel.getCurrentCook(curCookId!!.toLong())
+//                }
+//            }else{
+                loadFeed()
+                checkForActiveOrder()
+                checkCartStatus()
+//            }
         }
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {

@@ -63,7 +63,7 @@ class SingleFeedAdapter(
                 if(it.freeDelivery){
                     holder.freeDelivery.text = "Free Delivery"
                 }else{
-                    holder.freeDelivery.text = "$deliveryFee"
+                    holder.freeDelivery.text = "$deliveryFee Delivery"
                 }
             }
         }else{

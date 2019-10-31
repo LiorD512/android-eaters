@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.SearchManager
-import com.bupp.wood_spoon_eaters.model.SearchRequest
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
 class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManager: SearchManager) : ViewModel(){
@@ -12,7 +11,8 @@ class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManag
     data class RestoreDetailsEvent(val hasParmas: Boolean,
                                    val currentDiets: ArrayList<SelectableIcon>,
                                    val minPrice: Double?,
-                                   val maxPrice: Double?)
+                                   val maxPrice: Double?,
+                                   val isAsap: Boolean?)
     val restoreDetailsEvent: SingleLiveEvent<RestoreDetailsEvent> = SingleLiveEvent()
 
     fun getArrivalTimes(): ArrayList<SelectableIcon> {
@@ -24,7 +24,10 @@ class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManag
         return metaDataManager.getDietaryList()
     }
 
-    fun updateSearchParams(price: Pair<Double?, Double?>?, dietsIds: ArrayList<Long>?) {
+    fun updateSearchParams(
+        price: Pair<Double?, Double?>?,
+        dietsIds: ArrayList<Long>?,
+        isAsap: Boolean?) {
         if(price != null){
             searchManager.updateCurSearch(minPrice = price.first, maxPrice = price.second)
         }else{
@@ -36,12 +39,16 @@ class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManag
         }else{
             searchManager.curSearch.dietIds = null
         }
+
+        searchManager.curSearch.isAsap = isAsap
+
     }
 
     fun getCurrentFilterParam() {
         val currentSearchParam = searchManager.curSearch
         var hasParams = false;
         val currentDiets = arrayListOf<SelectableIcon>()
+        var isAsap = false
         if(currentSearchParam.dietIds != null && currentSearchParam.dietIds!!.size > 0){
             for(item in getDietaryList()){
                 for(item2 in currentSearchParam.dietIds!!){
@@ -55,7 +62,13 @@ class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManag
         if(currentSearchParam.maxPrice != null || currentSearchParam.minPrice != null){
             hasParams = true
         }
-        restoreDetailsEvent.postValue(RestoreDetailsEvent(hasParams, currentDiets, currentSearchParam.minPrice, currentSearchParam.maxPrice ))
+
+        if(currentSearchParam.isAsap != null){
+            hasParams = true
+            isAsap = currentSearchParam.isAsap!!
+        }
+
+        restoreDetailsEvent.postValue(RestoreDetailsEvent(hasParams, currentDiets, currentSearchParam.minPrice, currentSearchParam.maxPrice, isAsap))
     }
 
     fun clearSearchParams(){

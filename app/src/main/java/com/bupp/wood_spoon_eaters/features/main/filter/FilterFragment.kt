@@ -1,21 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.main.filter
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
 import com.bupp.wood_spoon_eaters.custom_views.PriceRangeView
 import com.bupp.wood_spoon_eaters.custom_views.RatingStarsView
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.filters_fragment.*
@@ -23,6 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), IconsGridView.IconsGridViewListener, PriceRangeView.PriceRangeViewListener,RatingStarsView.RatingStarsViewListener,
     HeaderView.HeaderViewListener {
+    private var isAsap: Boolean? = null
     var estimatedTimeArrivalId: Int? = null
 
     interface FilterFragmentListener{
@@ -60,29 +56,31 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
     }
 
     private fun initTimeArrivalUi() {
-        filterFragArraival20Min.setOnClickListener {
-            estimatedTimeArrivalId = 1
-            setArrivalTimeSelected(it)
+        filterFragArraivalAsap.setOnClickListener {
+            isAsap = true
+            unSelectAll()
+            filterFragArraivalAsap.isSelected = true
+            it?.isSelected = true
+            validateFields()
         }
-        filterFragArraival60Min.setOnClickListener {
-            estimatedTimeArrivalId = 2
-            setArrivalTimeSelected(it)
+        filterFragArraivalLater.setOnClickListener {
+            isAsap = false
+            unSelectAll()
+            filterFragArraivalLater.isSelected = true
+            validateFields()
+
         }
-        filterFragArraival120Min.setOnClickListener {
-            estimatedTimeArrivalId = 3
-            setArrivalTimeSelected(it)
-        }
+
     }
 
-    private fun setArrivalTimeSelected(it: View?) {
-        unSelectAll()
-        it?.isSelected = true
-    }
+//    private fun setArrivalTimeSelected(it: View?) {
+//        it?.isSelected = true
+//    }
 
     private fun unSelectAll() {
-        filterFragArraival20Min.isSelected = false
-        filterFragArraival60Min.isSelected = false
-        filterFragArraival120Min.isSelected = false
+        filterFragArraivalAsap.isSelected = false
+        filterFragArraivalLater.isSelected = false
+
     }
 
     private fun getCurrentFilterParam() {
@@ -95,6 +93,14 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
                     }
                     if(event.minPrice != null){
                         filterFragPriceRangeView.setSelectedRange(event.minPrice!!)
+                    }
+                    if(event.isAsap != null){
+                        isAsap = event.isAsap
+                        when(isAsap){
+                            true -> filterFragArraivalAsap.performClick()
+                            false -> filterFragArraivalLater.performClick()
+
+                        }
                     }
                 }else{
                     clearAllFilters()
@@ -117,6 +123,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
         filterFragPriceRangeView.reset()
         pickFiltersFragRatingStarsView.setRating(0)
         filterFragDietaryIcons.setSelectedItems(arrayListOf())
+        isAsap = null
         disableClearBtn()
         viewModel.clearSearchParams()
     }
@@ -138,6 +145,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
             || estimatedTimeArrivalId != null
             || pickFiltersFragRatingStarsView.getRating() > 0
             || filterFragDietaryIcons.getSelectedItems().isNotEmpty()
+            || isAsap != null
         ) {
             filterFragClearAllBtn.alpha = 1f
             filterFragClearAllBtn.isClickable = true
@@ -164,7 +172,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
             dietsIds = filterFragDietaryIcons.getSelectedItemsIds()
             isFiltered = true
         }
-        viewModel.updateSearchParams(price, dietsIds)//, estimatedTimeArrivalId)
+        viewModel.updateSearchParams(price, dietsIds, isAsap)//, estimatedTimeArrivalId)
         listener.onFilterDone(isFiltered)
         dismiss()
     }
