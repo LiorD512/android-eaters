@@ -34,7 +34,7 @@ data class Order (
     @SerializedName("delivery_address") val deliveryAddress: Address,
     @SerializedName("estimated_delivery_time") val estDeliveryTime: Date,
     @SerializedName("status") val status: String,
-    @SerializedName("promo_code") val promoCode: String,
+    @SerializedName("promo_code") val promoCode: String = "",
     @SerializedName("status_updated_at") val statusUpdatedAt: Date,
     @SerializedName("delivery_status") val deliveryStatus: String,
     @SerializedName("preparation_status") val preparationStatus: String,

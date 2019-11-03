@@ -12,6 +12,11 @@ android {
             keyPassword 'kofkof12'
             keyAlias = 'woodSpoonEaters'
         }
+        debug {
+            storePassword 'kofkof12'
+            keyAlias = 'woodSpoonEaters'
+            keyPassword 'kofkof12'
+        }
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -36,6 +41,9 @@ android {
             minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signing_config
+        }
+        debug {
             signingConfig signingConfigs.signing_config
         }
     }
@@ -98,6 +106,11 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 
+    //3rd party events
+    implementation 'com.appsee:appsee-android:+'
+    implementation 'com.appsflyer:af-android-sdk:4.10.2'
+    implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
+    implementation 'com.android.installreferrer:installreferrer:1.0'
 
     //location
     implementation 'com.google.android.gms:play-services-location:17.0.0'

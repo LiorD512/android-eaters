@@ -91,6 +91,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             (activity as NewOrderActivity).loadPromoCode()
         }
 
+        checkoutFragPromoCodeStr.setOnClickListener {
+            (activity as NewOrderActivity).loadPromoCode()
+        }
+
         checkoutFragChangePaymentChangeBtn.setOnClickListener {
             (activity as NewOrderActivity).startPaymentMethodActivity()
         }
@@ -151,6 +155,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
 
             checkoutFragTipPercntView.updateCurrentTip(viewModel.getTempTipPercent(), viewModel.getTempTipInDollars())
+
             updatePriceUi()
         }
     }
@@ -177,7 +182,9 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         val tipInDollars = viewModel.getTempTipInDollars()
         Log.d("wowCheckout","tipinDollars $tipInDollars")
 
-        if(discount < 0){
+        val promo = curOrder.promoCode
+
+        if(promo != null && promo.isNotEmpty()){
             checkoutFragPromoCodeLayout.visibility = View.VISIBLE
             checkoutFragPromoCodeText.text = "(${curOrder.discount.formatedValue})"
             checkoutFragPromoCodeStr.visibility = View.VISIBLE
