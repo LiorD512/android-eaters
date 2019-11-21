@@ -230,6 +230,14 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
             Glide.with(context!!).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
 
+        if(currentDish.cook.diets.size > 0){
+            singleDishInfoDietryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+            val dietaryAdapter = CooksDietaryAdapter(context!!, currentDish.cook.diets)
+            singleDishInfoDietryList.adapter = dietaryAdapter
+        }else{
+            singleDishInfoDietryList.visibility = View.GONE
+        }
+
 
         singleDishInfoDescription.text = currentDish.description
         singleDishInfoPrice.text = currentDish.price.formatedValue

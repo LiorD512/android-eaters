@@ -102,13 +102,19 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
     }
 
     override fun onInputTitleChange(str: String?){
-        if(str != null){
-            onRate()
-        }
+//        if(str != null){
+//            onRate()
+//        }
     }
 
     override fun onRate() {
-        rateLastOrderDoneBtn.setBtnEnabled(true)
+        if(allFieldsRated()){
+            rateLastOrderDoneBtn.setBtnEnabled(true)
+        }
+    }
+
+    private fun allFieldsRated(): Boolean {
+        return accuracyRating != null && deliveryRating != null && adapter.isAllRated()
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {

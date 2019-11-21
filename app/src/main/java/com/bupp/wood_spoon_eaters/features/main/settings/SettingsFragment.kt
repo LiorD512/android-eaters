@@ -48,7 +48,9 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
 
     private fun initNotificationGroup() {
         settingsFragNotificationGroupList.layoutManager = LinearLayoutManager(context)
-
+//        var divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
+//        divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
+//        settingsFragNotificationGroupList.addItemDecoration(divider)
         val notificationGroupList = viewModel.getNotificationsGroup()
         val userSettings = viewModel.getEaterNotificationsGroup()
         Log.d("wowSettings","userSettings ids: $userSettings")

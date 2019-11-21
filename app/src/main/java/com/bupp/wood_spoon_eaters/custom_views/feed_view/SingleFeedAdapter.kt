@@ -51,11 +51,28 @@ class SingleFeedAdapter(
 //            holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
             holder.dishCount.initQuantityView(dish.menuItem)
 //            val upcomingSlot = dish.menuItem.cookingSlot
-            if (dish.menuItem.orderAt != null) {
-                holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
-            }else if(dish.doorToDoorTime != null){
-                holder.date.text = "ASAP, ${dish.doorToDoorTime}"
+
+            if(dish.menuItem.orderAt == null){
+                //Dish is offered today.
+                if(dish.doorToDoorTime != null){
+                    holder.date.text = "ASAP, ${dish.doorToDoorTime}"
+                }
+            }else{
+                if(Utils.isTodayOrTomorrow(dish.menuItem.orderAt)){
+                    //Dish is offered today or tomorrow.
+                    holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
+                }else{
+                    //Dish is offered later this week and beyond
+                    holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.orderAt)
+                }
             }
+
+
+//            if (dish.menuItem.orderAt != null) {
+//                holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
+//            }else if(dish.doorToDoorTime != null){
+//                holder.date.text = "ASAP, ${dish.doorToDoorTime}"
+//            }
             holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
 
             val upcomingSlot = dish.menuItem.cookingSlot

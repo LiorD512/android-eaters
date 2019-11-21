@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@color/white"
+            android:layout_marginRight="7.7dp"
+             android:orientation="vertical">
+
+    <ImageView
+            android:id="@+id/dietaryItem"
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+
+</FrameLayout>

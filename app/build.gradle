@@ -12,11 +12,6 @@ android {
             keyPassword 'kofkof12'
             keyAlias = 'woodSpoonEaters'
         }
-        debug {
-            storePassword 'kofkof12'
-            keyAlias = 'woodSpoonEaters'
-            keyPassword 'kofkof12'
-        }
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -24,7 +19,7 @@ android {
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 6
+        versionCode 7
         versionName "1.0"
 //        multiDexEnabled true
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -44,7 +39,7 @@ android {
             signingConfig signingConfigs.signing_config
         }
         debug {
-            signingConfig signingConfigs.signing_config
+//            signingConfig signingConfigs.signing_config
         }
     }
 
@@ -65,6 +60,7 @@ android {
             applicationId "com.bupp.wood_spoon_eaters.staging"
         }
     }
+
 }
 
 dependencies {
@@ -107,9 +103,9 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 
     //3rd party events
-    implementation 'com.appsee:appsee-android:+'
+    implementation 'com.appsee:appsee-android:2.6.0'
     implementation 'com.appsflyer:af-android-sdk:4.10.2'
-    implementation 'com.facebook.android:facebook-android-sdk:5.9.0'
+    implementation 'com.facebook.android:facebook-android-sdk:5.8.0'
     implementation 'com.android.installreferrer:installreferrer:1.0'
 
     //location
@@ -162,3 +158,4 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.appsee.appsee-plugin'

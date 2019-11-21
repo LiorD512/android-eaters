@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.appsee.Appsee
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -24,6 +25,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         initObservers()
+        Appsee.start()
         Timer("SettingUp", false).schedule(1000) {
             init()
         }

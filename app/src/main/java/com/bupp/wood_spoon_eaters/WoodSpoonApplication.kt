@@ -27,7 +27,7 @@ class WoodSpoonApplication : Application() {
             modules(listOf(appModule, networkModule))
         }
 
-        Appsee.start()
+
 
         val conversionDataListener  = object : AppsFlyerConversionListener{
             override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {

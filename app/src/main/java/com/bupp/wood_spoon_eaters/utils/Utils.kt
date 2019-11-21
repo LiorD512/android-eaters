@@ -46,9 +46,21 @@ object Utils {
         return sdf.format(date.time)
     }
 
-    fun parseDateToDayMonthYear(date: Date?): String {
-        val sdf = SimpleDateFormat("EEEE, MMMM yyyy")
-        return sdf.format(date?.time)
+    fun parseDateToStartToEnd(startDate: Date, endDate: Date): String {
+        //10:30 AM - 4:00 PM
+        val sdf = SimpleDateFormat("h:mma")
+        val start = sdf.format(startDate.time)
+        val end = sdf.format(endDate.time)
+        return "$start - $end"
+    }
+
+    fun parseDateToFromStartingDate(orderDate: Date?): String {
+        //Aug 2, From 10:30 AM
+        val dateFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("h:mma", Locale.getDefault())
+        val date = dateFormat.format(orderDate)
+        val time = timeFormat.format(orderDate)
+        return "$date, From $time"
     }
 
     fun parseDateToTime(date: Date?): String {
@@ -58,13 +70,13 @@ object Utils {
         return ""
     }
 
-    fun parseDDateToUsDate(date: Date): String{
+    fun parseDDateToUsDate(date: Date): String {
         //August 2, 2019
         val sdf = SimpleDateFormat("MMMM dd, yyyy")
         return sdf.format(date.time)
     }
 
-    fun parseDDateToUsTime(date: Date): String{
+    fun parseDDateToUsTime(date: Date): String {
         //4:30 PM
         val sdf = SimpleDateFormat("h:mma")
         return sdf.format(date.time)
@@ -103,19 +115,27 @@ object Utils {
 
     fun parseUnixTimestamp(date: Date?): String {
         var yourmilliseconds: Long = Date().time
-        if(date != null){
+        if (date != null) {
             yourmilliseconds = date.time
         }
-        val droppedMillis = yourmilliseconds/ 1000
+        val droppedMillis = yourmilliseconds / 1000
         return droppedMillis.toString()
     }
 
-    fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean{
+    fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
         val sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
         return sameDay
     }
 
+    fun isTodayOrTomorrow(orderTime: Date): Boolean {
+        val orderDate = Calendar.getInstance()
+        orderDate.time = orderTime
+        val today = Calendar.getInstance()
+        val tomorrow = GregorianCalendar()
+        tomorrow.add(Calendar.DATE, 1)
+        return isSameDay(orderDate, today) || isSameDay(orderDate, tomorrow)
+    }
 
 
     fun setCustomFontTypeSpan(
@@ -158,14 +178,14 @@ object Utils {
             var str = fullName.splitAtIndex(firstNameEndIndex)
 
             if (!str.first.isNullOrBlank() && !str.second.isNullOrBlank()) {
-                var first : String = str.first
+                var first: String = str.first
                 var last: String = str.second
 
-                if(first.endsWith(" ")){
-                    first = str.first.replace(" ","")
+                if (first.endsWith(" ")) {
+                    first = str.first.replace(" ", "")
                 }
 
-                if(last.startsWith(" ")){
+                if (last.startsWith(" ")) {
                     last = str.second.replaceFirst(" ", "")
                 }
 
@@ -212,4 +232,6 @@ object Utils {
         shareIntent.putExtra(Intent.EXTRA_TEXT, text)
         activity.startActivity(Intent.createChooser(shareIntent, "Share"))
     }
+
+
 }

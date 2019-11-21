@@ -68,4 +68,8 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: ArrayLi
     fun getRatedDishes(): ArrayList<DishMetricsRequest> {
         return ArrayList(metricsRequestsMap.values)
     }
+
+    fun isAllRated(): Boolean{
+        return metricsRequestsMap.values.size == getItemCount()
+    }
 }

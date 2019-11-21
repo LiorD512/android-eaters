@@ -18,14 +18,6 @@ data class Dish(
     @SerializedName("door_to_door_time") val doorToDoorTime: String?,
     @SerializedName("matching_menu") val menuItem: MenuItem,
     @SerializedName("avg_rating") val rating: Double
-//    @SerializedName("description") val description: String,
-//    @SerializedName("upcoming_slot") val upcomingSlot: UpcomingSlot,
-//    @SerializedName("calorific_value") val calorificValue: Double,
-//    @SerializedName("proteins") val proteins: Double,
-//    @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
-//    @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>,
-//    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
-//    @SerializedName("carbohydrates") val carbohydrates: Double,
 ): Parcelable
 
 @Parcelize
