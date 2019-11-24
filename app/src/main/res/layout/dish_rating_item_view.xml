@@ -6,11 +6,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
     <ImageView
             android:id="@+id/dishRatingItemImage"
             android:layout_marginEnd="8.4dp"
-            android:src="@drawable/share_pic"
+            android:src="@drawable/icons_profile"
             android:layout_gravity="top|center"
             android:layout_marginStart="7.7dp"
             android:scaleType="centerCrop"

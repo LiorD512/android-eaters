@@ -44,38 +44,42 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
 
     fun postNewAddress(googleAddressResponse: GoogleAddressResponse? = null, myLocationAddress: Address? = null, address1stLine: String,
                        address2ndLine: String, deliveryNote: String, isDelivery: Boolean, currentAddressId: Long? = null) {
-        var currentEater = eaterDataManager.currentEater!!
-        var notes = deliveryNote
+        val currentEater = eaterDataManager.currentEater
 
-        var addressRequest = AddressRequest()
+        currentEater?.let {
+            val notes = deliveryNote
 
-        addressRequest.dropoffLocation = isDelivery.getDropoffLocationStr()
+            var addressRequest = AddressRequest()
 
-        if (googleAddressResponse != null) {
-            addressRequest = parseGoogleResponse(googleAddressResponse, address1stLine, address2ndLine, notes)
-        } else if (myLocationAddress != null){
-            addressRequest = parseMyLocation(myLocationAddress)
+            addressRequest.dropoffLocation = isDelivery.getDropoffLocationStr()
+
+            if (googleAddressResponse != null) {
+                addressRequest = parseGoogleResponse(googleAddressResponse, address1stLine, address2ndLine, notes)
+            } else if (myLocationAddress != null){
+                addressRequest = parseMyLocation(myLocationAddress)
+            }
+
+            val adresses = arrayListOf(addressRequest)
+
+
+
+            if(currentAddressId != null){
+                //update Address
+                updateAddress(currentAddressId, addressRequest)
+            }else{
+                //post EaterRequest
+                var eaterRequest =
+                    EaterRequest(
+                        it.firstName,
+                        it.lastName,
+                        null,
+                        it.email,
+                        adresses
+                    )
+                postEater(eaterRequest)
+            }
         }
 
-        var adresses = arrayListOf(addressRequest)
-
-
-
-        if(currentAddressId != null){
-            //update Address
-            updateAddress(currentAddressId, addressRequest)
-        }else{
-            //post EaterRequest
-            var eaterRequest =
-                EaterRequest(
-                    currentEater.firstName,
-                    currentEater.lastName,
-                    null,
-                    currentEater.email,
-                    adresses
-                )
-            postEater(eaterRequest)
-        }
     }
 
     //weird example of kotlin structure. behold.

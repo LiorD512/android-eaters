@@ -33,7 +33,10 @@ class RatingsAdapter(val context: Context, private var comments: ArrayList<Comme
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
         val review: Comment = comments[position]
 
-        Glide.with(context).load(review.eater.thumbnail).apply(RequestOptions.circleCropTransform()).into(holder.image)
+        review.eater.thumbnail?.let {
+            Glide.with(context).load(review.eater.thumbnail).apply(RequestOptions.circleCropTransform()).into(holder.image)
+        }
+
         holder.name.text = review.eater.getFullName()
         holder.review.text = review.body
     }
