@@ -28,11 +28,13 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
         val order = orders[position]
         (holder as ItemViewHolder).initItem(context,order )
 
-        if(order.wasRated){
+        if(order.wasRated || order.status.equals("cancelled")){
             holder.rateBtn.isEnabled = false
+            holder.rateBtn.setOnClickListener(null)
             holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue_50))
         }else{
             holder.rateBtn.isEnabled = true
+            holder.rateBtn.isClickable = true
             holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue))
             holder.rateBtn.setOnClickListener {
                 listener?.onRateClick(order.id)

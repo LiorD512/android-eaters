@@ -19,7 +19,13 @@ data class Eater(
     @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>
 ){
     fun getFullName(): String{
-       return "$firstName $lastName"
+        var first = "Anonymous"
+        var last = ""
+        if(firstName.isNotEmpty())
+            first = firstName
+        if(lastName.isNotEmpty())
+            last = lastName
+       return "$first $last"
     }
 
     fun getNotificationGroupIds(): ArrayList<Long>{
