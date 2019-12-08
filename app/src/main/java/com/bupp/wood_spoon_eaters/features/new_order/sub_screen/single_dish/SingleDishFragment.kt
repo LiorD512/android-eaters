@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
 import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
+import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.DishUnAvailableDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
@@ -39,7 +40,8 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener, StatusBottomBar.StatusBottomBarListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
-    UserImageView.UserImageViewListener {
+    UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener {
+
 
     interface SingleDishDialogListener {
         fun onCheckout()
@@ -192,12 +194,24 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     override fun onStatusBarClicked(type: Int?) {
         when(type){
             Constants.STATUS_BAR_TYPE_CART -> {
-                addToCart()
+                if(viewModel.hasValidDeliveryAddress()){
+                    addToCart()
+                }else{
+                    openAddressMissingDialog()
+                }
             }
             Constants.STATUS_BAR_TYPE_CHECKOUT -> {
                 (activity as NewOrderActivity).onCheckout()
             }
         }
+    }
+
+    private fun openAddressMissingDialog() {
+        AddressMissingDialog(this).show(childFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
+    }
+
+    override fun pnUpdateAddress() {
+        (activity as NewOrderActivity).openAddressChooser()
     }
 
     fun addToCart() {

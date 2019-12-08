@@ -184,5 +184,9 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         return metaDataManager.getDeliveryFeeStr()
     }
 
+    fun hasValidDeliveryAddress(): Boolean {
+        return eaterDataManager.getLastChosenAddress()?.id != null
+    }
+
 
 }

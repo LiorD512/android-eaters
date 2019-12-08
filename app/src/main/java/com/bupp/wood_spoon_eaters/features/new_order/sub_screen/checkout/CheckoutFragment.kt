@@ -262,7 +262,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
     }
 
     override fun onChangeLocationClick() {
-        (activity as NewOrderActivity).loadAddressesDialog()
+//        (activity as NewOrderActivity).loadAddressesDialog()
     }
 
     override fun onHeaderBackClick() {

@@ -13,6 +13,7 @@ import com.bupp.wood_spoon.dialogs.AddressChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.address_chooser.sub_screen.AddressMenuDialog
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
+import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
@@ -192,12 +193,16 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
     }
 
-    fun loadAddressesDialog() {
-        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
-            supportFragmentManager,
-            Constants.ADDRESS_DIALOG_TAG
-        )
+    fun openAddressChooser() {
+        startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
     }
+
+//    fun loadAddressesDialog() {
+//        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
+//            supportFragmentManager,
+//            Constants.ADDRESS_DIALOG_TAG
+//        )
+//    }
 
     override fun onAddressMenuClick(address: Address) {
         AddressMenuDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
@@ -234,6 +239,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         setResult(Activity.RESULT_CANCELED, intent)
         finish()
     }
+
 
 
 }
