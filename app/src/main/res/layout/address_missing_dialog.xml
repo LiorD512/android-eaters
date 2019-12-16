@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Your Address is Missing Achi"/>
+                android:text="Please confirm your address"/>
 
 
         <TextView
@@ -47,7 +47,7 @@
                 android:gravity="center_horizontal"
                 android:layout_marginStart="15.4dp"
                 android:layout_marginEnd="15.4dp"
-                android:text="Please Update your address before you continue"/>
+                android:text="It seems like your address is not saved, the good news is that you will only have to do it once :) Please go ahead and add your full address (including apartment number)"/>
 
 
         <View
@@ -66,7 +66,7 @@
                 android:padding="15.4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alright"/>
+                android:text="OK"/>
 
 
 
