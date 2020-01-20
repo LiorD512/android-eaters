@@ -23,6 +23,9 @@ class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,
 
     val viewModel by viewModel<OrdersHistoryViewModel>()
 
+    companion object{
+        fun newInstance() = OrdersHistoryFragment()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_orders_history, null)

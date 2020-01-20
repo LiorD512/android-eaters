@@ -27,6 +27,9 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
     private lateinit var selectedTime: Date
     val viewModel by viewModel<DeliveryDetailsViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.delivery_details_fragment, container, false)

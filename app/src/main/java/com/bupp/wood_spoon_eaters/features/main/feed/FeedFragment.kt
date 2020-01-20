@@ -22,11 +22,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class FeedFragment() : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
+class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
 
 
     override fun onEmptyhDishList() {
         NoDishesAvailableDialog().show(childFragmentManager, Constants.NO_DISHES_AVAILABLE_DIALOG)
+    }
+
+
+    companion object {
+        fun newInstance() = FeedFragment()
     }
 
 

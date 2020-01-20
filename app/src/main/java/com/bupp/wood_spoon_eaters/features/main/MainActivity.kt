@@ -241,7 +241,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     //fragment and sub features
 
     private fun loadFeed() {
-        loadFragment(FeedFragment(), Constants.FEED_TAG)
+        loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
 //        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getLastOrderAddress())
     }
@@ -262,7 +262,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadSupport() {
-        loadFragment(SupportFragment(), Constants.SUPPORT_TAG)
+        loadFragment(SupportFragment.newInstance(), Constants.SUPPORT_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
     }
 
@@ -294,7 +294,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadOrderDetails(orderId: Long) {
-        loadFragment(OrderDetailsFragment(orderId), Constants.ORDER_DETAILS_TAG)
+        loadFragment(OrderDetailsFragment.newInstance(orderId), Constants.ORDER_DETAILS_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order Details")
     }
 
@@ -304,10 +304,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Delivery Details")
     }
 
-    fun loadAddNewAddress() {
-        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
-    }
+//    fun loadAddNewAddress() {
+//        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
+//        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
+//    }
 
 //    fun loadLocationChooser(input: String?) {
 //        LocationChooserFragment(this, input)
@@ -315,12 +315,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //    }
 
     fun loadSettingsFragment() {
-        loadFragment(SettingsFragment(), Constants.SETTINGS_TAG)
+        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
     }
 
     fun loadOrderHistoryFragment() {
-        loadFragment(OrdersHistoryFragment(), Constants.ORDER_HISTORY_TAG)
+        loadFragment(OrdersHistoryFragment.newInstance(), Constants.ORDER_HISTORY_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order History")
     }
 

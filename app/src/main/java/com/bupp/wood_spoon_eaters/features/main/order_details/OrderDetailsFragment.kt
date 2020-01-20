@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.order_details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +17,26 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.order_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OrderDetailsFragment(val orderId: Long) : Fragment() {
+class OrderDetailsFragment() : Fragment() {
 
     private lateinit var adapter: OrderDetailsAdapter
     val viewModel by viewModel<OrderDetailsViewModel>()
+    private var orderId: Long = -1
+
+    companion object {
+        fun newInstance(orderId: Long) = OrderDetailsFragment().apply {
+            arguments = Bundle().apply {
+                putLong("OrderId",orderId)
+            }
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        arguments?.getLong("orderId",-1)?.let{
+            orderId = it
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.order_details_fragment, container, false)

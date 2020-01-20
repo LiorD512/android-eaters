@@ -21,6 +21,9 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
     var lastClickedSwitchId: Long = -1
 
+    companion object{
+        fun newInstance() = SettingsFragment()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
