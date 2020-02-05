@@ -47,6 +47,8 @@ class Constants {
         const val HEADER_VIEW_TYPE_BACK_TITLE_SAVE = 5
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE = 6
         const val HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS = 7
+        const val HEADER_VIEW_TYPE_CLOSE_TITLE_DONE = 8
+        const val HEADER_VIEW_TYPE_EVENT = 9
 
 
         //input title view input type
@@ -84,6 +86,10 @@ class Constants {
         const val STATUS_BAR_TYPE_CHECKOUT = 1
         const val STATUS_BAR_TYPE_FINALIZE = 2
 
+        //Mlti Section View stsub View
+        const val FEED_VIEW_STUB_SHARE = 0
+        const val FEED_VIEW_STUB_PROMO = 1
+
 
 
         //activity / dialog tags
@@ -107,6 +113,9 @@ class Constants {
         const val PICK_FILTERS_TAG = "pick_filters_tag"
         const val MY_PROFILE_TAG = "my_profile_tag"
         const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
+
+        const val GET_EVENT_TAG = "get_event_tag"
+        const val EVENT_FEED_TAG = "event_feed_tag"
 
         const val SINGLE_DISH_TAG = "single_dish_dialog"
         const val CHECKOUT_TAG = "checkout_dialog"

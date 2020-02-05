@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
@@ -15,6 +16,8 @@ import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.multi_section_feed_view.view.*
 
+
+
 class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, ManyCooksView.ManyCooksViewListener,
     SingleFeedListView.SingleFeedListViewListener, FavoritesView.FavoritesViewListener {
 
@@ -23,8 +26,8 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
     interface MultiSectionFeedViewListener {
         fun onDishClick(dish: Dish)
         fun onCookClick(cook: Cook)
-        fun refreshList()
-        fun onEmptyhDishList()
+        fun refreshList(){}
+        fun onEmptyhDishList(){}
 //        fun onFavClick(dishId: Long, isFavorite: Boolean)
         fun onShareClick()
     }
@@ -37,7 +40,6 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         LayoutInflater.from(context).inflate(R.layout.multi_section_feed_view, this, true)
 
         multiSectionViewRefreshLayout.setOnRefreshListener { refresh() }
-        multiSectionViewShareBtn.setOnClickListener { listener.onShareClick() }
     }
 
     private fun refresh() {
@@ -50,7 +52,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         this.listener = listener
     }
 
-    fun initFeed(feedArr: ArrayList<Feed>, deliveryFee: String) {
+    fun initFeed(feedArr: ArrayList<Feed>, deliveryFee: String, isWithFavorites: Boolean = true, stubView: Int, isPullToRefreshEnabled: Boolean = true) {
         clearFeed()
         multiSectionViewRefreshLayout.setRefreshing(false)
         val dishArr: ArrayList<Feed> = arrayListOf()
@@ -76,8 +78,31 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
             initCooksList(cooksArr, cooksTitle)
         }
 
-        multiSectionViewFavorites.setFavoritesViewListener(this)
-        multiSectionViewFavorites.initFavorites()
+        when(isWithFavorites){
+            true -> {
+                multiSectionViewFavorites.setFavoritesViewListener(this)
+                multiSectionViewFavorites.initFavorites()
+            }
+            false -> {
+                multiSectionViewFavorites.visibility = View.GONE
+            }
+        }
+
+        when(stubView){
+            Constants.FEED_VIEW_STUB_SHARE -> {
+                multiSectionViewShareView.visibility = View.VISIBLE
+                multiSectionViewLogo.visibility = View.GONE
+                multiSectionViewShareView.setOnClickListener { listener.onShareClick() }
+            }
+            Constants.FEED_VIEW_STUB_PROMO -> {
+                multiSectionViewShareView.visibility = View.GONE
+                multiSectionViewLogo.visibility = View.VISIBLE
+            }
+        }
+
+        if(!isPullToRefreshEnabled){
+            multiSectionViewRefreshLayout.isEnabled = false
+        }
     }
 
     private fun clearFeed() {

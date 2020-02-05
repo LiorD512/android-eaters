@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserViewModel
+import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
 import com.bupp.wood_spoon_eaters.features.login.code.CodeViewModel
 import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationViewModel
 import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeViewModel
@@ -101,6 +102,10 @@ val appModule = module {
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }
     viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
+
+    viewModel { EventActivityViewModel(get(), get(), get()) }
+//    viewModel { GetEventByIdViewModel(get()) }
+//    viewModel { EventFeedViewModel(get(), get(), get()) }
     
 
 }

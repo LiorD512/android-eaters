@@ -298,6 +298,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
+                <View
+                        android:background="@color/silver"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
+
+
             </LinearLayout>
 
             <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
@@ -306,6 +313,13 @@
                     app:title="Join WoodSpoon's Cooks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.BlueStrokeBtn
+                    android:id="@+id/myProfileFragEventsBtn"
+                    android:layout_marginBottom="22.6dp"
+                    app:title="Join Event"
+                    android:layout_width="match_parent"
+                                                                   android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </ScrollView>

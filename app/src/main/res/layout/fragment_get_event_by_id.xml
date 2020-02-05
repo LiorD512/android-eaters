@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingRight="15.4dp"
+              android:paddingLeft="15.4dp"
+              android:background="@color/white">
+
+    <TextView
+            style="@style/Reg13Dark"
+            android:layout_marginTop="15.4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Please enter the event code provided to you by the Woodspoon team"/>
+
+    <TextView
+            android:layout_marginTop="23.5dp"
+            style="@style/SemiBold13Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Event Code"/>
+
+    <EditText
+            android:inputType="text"
+            android:lines="1"
+            android:imeOptions="actionDone"
+            android:paddingLeft="15.4dp"
+            android:id="@+id/eventValidationFragInput"
+            style="@style/Reg15Dark"
+            android:background="@drawable/title_input_view_input_bkg"
+            android:layout_marginTop="4.1dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+    <TextView
+            style="@style/Reg11Red"
+            android:drawablePadding="7dp"
+            android:drawableLeft="@drawable/ic_code_error"
+            android:id="@+id/eventValidationFragError"
+            android:visibility="gone"
+            android:layout_marginTop="7.7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your event code seems to be invalide. Please check again"/>
+
+
+</LinearLayout>

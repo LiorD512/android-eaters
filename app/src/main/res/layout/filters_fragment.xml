@@ -61,15 +61,26 @@
                         android:layout_weight="1"
                         android:layout_width="0dp" android:layout_height="match_parent">
 
-                    <ImageView
+                    <androidx.cardview.widget.CardView
                             android:padding="5dp"
-                            android:background="@null"
-                            android:src="@drawable/arrival_asap_selector"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="80dp"
+                            app:cardElevation="8dp"
+                            android:layout_gravity="center"
+                            android:layout_width="87dp" android:layout_height="87dp">
+
+                        <ImageView
+                                android:layout_gravity="center"
+                                android:background="@null"
+                                android:src="@drawable/arrival_asap_selector"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                    </androidx.cardview.widget.CardView>
+
 
                     <TextView
+                            android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="ASAP"
                             android:textColor="@color/grey_to_blue_selector"
@@ -87,15 +98,25 @@
                         android:layout_weight="1"
                         android:layout_width="0dp" android:layout_height="match_parent">
 
-                    <ImageView
-                            android:padding="5dp"
-                            android:background="@null"
-                            android:src="@drawable/arrival_later_min_selector"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                    <androidx.cardview.widget.CardView
+                            app:cardCornerRadius="50dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardElevation="8dp"
+                            android:layout_gravity="center"
+                            android:layout_width="87dp" android:layout_height="87dp">
+
+                        <ImageView
+                                android:background="@null"
+                                android:layout_gravity="center"
+                                android:src="@drawable/arrival_later_min_selector"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                    </androidx.cardview.widget.CardView>
+
 
                     <TextView
+                            android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="Later Time"
                             android:textColor="@color/grey_to_blue_selector"

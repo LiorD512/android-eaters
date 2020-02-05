@@ -48,9 +48,7 @@ class SingleFeedAdapter(
         holder.rating.text = "${dish.rating}"
 
         if (dish.menuItem != null) {
-//            holder.dishCount.setText("${dish.menuItem?.unitsSold}/${dish.menuItem?.quantity}")
             holder.dishCount.initQuantityView(dish.menuItem)
-//            val upcomingSlot = dish.menuItem.cookingSlot
 
             if(dish.menuItem.orderAt == null){
                 //Dish is offered today.
@@ -66,13 +64,6 @@ class SingleFeedAdapter(
                     holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.orderAt)
                 }
             }
-
-
-//            if (dish.menuItem.orderAt != null) {
-//                holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
-//            }else if(dish.doorToDoorTime != null){
-//                holder.date.text = "ASAP, ${dish.doorToDoorTime}"
-//            }
             holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
 
             val upcomingSlot = dish.menuItem.cookingSlot

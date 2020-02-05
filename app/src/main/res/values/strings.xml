@@ -5,8 +5,6 @@
     <string name="appsee_api_key">ab7af46b578c4e219e42646c0e9f4db6</string>
 
 
-
-
     <string name="tool_tip_service_fee_title">Service Fee</string>
     <string name="tool_tip_service_fee_body">
         <![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
@@ -85,18 +83,26 @@
     </string>
     <string name="order_history_item_by_cook">Your Order by cook</string>
     <string name="cancel_dialog_stage_1_title">No Cancelation Fee</string>
-    <string name="cancel_dialog_stage_1_body">We are sorry to see you cancel your order. Because our cook still didn\'t start preparing your dish,
-        per our cancelation policy, there is no cancelation fee. \n We hope you consider ordering again with us soon</string>
+    <string name="cancel_dialog_stage_1_body">We are sorry to see you cancel your order. Because our cook still didn\'t
+        start preparing your dish,
+        per our cancelation policy, there is no cancelation fee. \n We hope you consider ordering again with us soon
+    </string>
     <string name="cancel_dialog_stage_2_title">50% Cancelation Fee</string>
-    <string name="cancel_dialog_stage_2_body">We are sorry to see you cancel your order. Per our cancelation policy, because our cook already started to prepare your order, you will be charged for 50% of the order cost.
+    <string name="cancel_dialog_stage_2_body">We are sorry to see you cancel your order. Per our cancelation policy,
+        because our cook already started to prepare your order, you will be charged for 50% of the order cost.
         \n We hope you consider ordering again with us soon
     </string>
     <string name="cancel_dialog_stage_3_title">100% Cancelation Fee</string>
-    <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancelation policy, because the order is already on its way, you will be charged for 100% of the order cost.
+    <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancelation policy,
+        because the order is already on its way, you will be charged for 100% of the order cost.
         \n We hope you can understand and wishing to see you ordering again soon
     </string>
     <string name="title_activity_address_chooser">AddressChooserActivity</string>
     <string name="fcm_message_title">WoodSpoon Eaters</string>
+    <string name="title_activity_event">EventActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -1,7 +1,12 @@
 package com.bupp.wood_spoon_eaters.model
 
+import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 data class SearchRequest(
@@ -17,29 +22,35 @@ data class SearchRequest(
     @SerializedName("asap_only") var isAsap: Boolean? = null
 )
 
-
+@Parcelize
 data class Search(
-    @SerializedName("id") var id: Long?,
-    @SerializedName("resource") var resource: String?,
-    @SerializedName("results") var results: ArrayList<*>? = null,
-    @SerializedName("pagination") var pagination: Pagination?
-) {
+    @SerializedName("id") var id: Long? = 0,
+    @SerializedName("resource") var resource: String? = "",
+    @SerializedName("results") var results: ArrayList<Parcelable>? = arrayListOf<Parcelable>(),
+    @SerializedName("pagination") var pagination: Pagination = Pagination()
+):Parcelable {
     fun cooksCount(): Int {
-        when (resource) {
-            Constants.RESOURCE_TYPE_COOK -> {
-                return results!!.size
-            }
-            else -> return 0
-        }
+//        results?.let{
+//            when (resource) {
+//                Constants.RESOURCE_TYPE_COOK -> {
+//                    return results!!.size
+//                }
+//                else -> return 0
+//            }
+//        }
+        return 0
     }
 
     fun dishCount(): Int {
-        when (resource) {
-            Constants.RESOURCE_TYPE_DISH -> {
-                return results!!.size
-            }
-            else -> return 0
-        }
+//        results?.let{
+//            when (resource) {
+//                Constants.RESOURCE_TYPE_DISH -> {
+//                    return results!!.size
+//                }
+//                else -> return 0
+//            }
+//        }
+        return 0
     }
 
     fun hasCooks(): Boolean {
@@ -51,10 +62,11 @@ data class Search(
     }
 }
 
+@Parcelize
 data class Pagination(
-    @SerializedName("total") val total: Int?,
-    @SerializedName("per_page") val perPage: Int?,
-    @SerializedName("next_page") val nextPage: String?,
-    @SerializedName("total_pages") val totalPages: Int?,
-    @SerializedName("current_page") val currentPage: String?
-)
+    @SerializedName("total") val total: Int = -1,
+    @SerializedName("per_page") val perPage: Int = -1,
+    @SerializedName("next_page") val nextPage: String = "",
+    @SerializedName("total_pages") val totalPages: Int = -1,
+    @SerializedName("current_page") val currentPage: String = ""
+):Parcelable

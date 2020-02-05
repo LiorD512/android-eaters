@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.FlavorConfig
 import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonAppSetting
 import com.bupp.wood_spoon_eaters.di.abs.DeserializerJsonSearch
 import com.bupp.wood_spoon_eaters.model.AppSetting
+import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.model.Search
 import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
 import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi

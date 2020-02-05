@@ -17,6 +17,8 @@ import kotlin.collections.ArrayList
 
 class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
 
+    var menuItemId: Long = -1
+
     data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
 
@@ -26,24 +28,24 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     data class GetReviewsEvent(val isSuccess: Boolean = false, val reviews: Review? = null)
     val getReviewsEvent: SingleLiveEvent<GetReviewsEvent> = SingleLiveEvent()
 
-    fun getFullDish(menuItemId: Long) {
+    fun getFullDish() {
         val feedRequest = getFeedRequest()
         api.getMenuItemsDetails(menuItemId = menuItemId, lat = feedRequest.lat, lng = feedRequest.lng, addressId = feedRequest.addressId, timestamp = feedRequest.timestamp)
             .enqueue(object: Callback<ServerResponse<FullDish>> {
             override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
                 if(response.isSuccessful){
-                    Log.d("wowSearchVM","getMenuItemsDetails success")
+                    Log.d("wowSingleDishVM","getMenuItemsDetails success")
                     val dish = response.body()?.data
                     val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
                     dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
                 }else{
-                    Log.d("wowSearchVM","getMenuItemsDetails fail")
+                    Log.d("wowSingleDishVM","getMenuItemsDetails fail")
                     dishDetailsEvent.postValue(DishDetailsEvent(false, null))
                 }
             }
 
             override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
-                Log.d("wowSearchVM","getMenuItemsDetails big fail: ${t.message}")
+                Log.d("wowSingleDishVM","getMenuItemsDetails big fail: ${t.message}")
                 dishDetailsEvent.postValue(DishDetailsEvent(false, null))
             }
         })

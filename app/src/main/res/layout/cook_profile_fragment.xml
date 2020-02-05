@@ -18,12 +18,23 @@
                 android:layout_height="134dp"
                 android:orientation="horizontal">
 
-            <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                    app:imageSize="BIG"
-                    android:id="@+id/cookProfileImageView"
-                    android:layout_gravity="center"
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/manyCooksViewBkg"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@color/white_to_blue_selector"
+                    app:cardElevation="@dimen/shadow_elevation"
+                    app:cardCornerRadius="40dp">
+
+                <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                        app:imageSize="BIG"
+                        android:id="@+id/cookProfileImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </androidx.cardview.widget.CardView>
+
 
             <LinearLayout
                     android:gravity="center|left"

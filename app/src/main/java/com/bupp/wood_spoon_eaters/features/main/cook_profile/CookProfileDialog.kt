@@ -28,9 +28,12 @@ import kotlinx.android.synthetic.main.cook_profile_dialog.*
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CookProfileDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderViewListener,
+class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook) : DialogFragment(), HeaderView.HeaderViewListener,
     SingleFeedAdapter.SearchAdapterListener, UserImageView.UserImageViewListener {
 
+    interface CookProfileDialogListener{
+        fun onDishClick(menuItemId: Long)
+    }
 
     private var dishAdapter: SingleFeedAdapter? = null
     val viewModel by viewModel<CookProfileViewModel>()
@@ -113,8 +116,9 @@ class CookProfileDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderVie
         CertificatesDialog(certificates).show(childFragmentManager, Constants.CERTIFICATES_DIALOG_TAG)
     }
 
-    override fun onDishClick(dish: Dish) {
-        (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
+    override fun onDishClick(dish: Dish){
+        listener.onDishClick(dish.menuItem.id)
+//        (activity as MainActivity).loadNewOrderActivity()
     }
 
     private fun onRatingClick() {

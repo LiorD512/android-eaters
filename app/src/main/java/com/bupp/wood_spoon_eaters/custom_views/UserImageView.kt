@@ -94,11 +94,17 @@ class UserImageView : FrameLayout {
                 val bkgLayout = LayoutParams(80.toPx(), 80.toPx())
                 cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
-                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                cookImageView.layoutParams = imageLayout
-                if (isWithBkg)
+                if (isWithBkg){
                     cookImageView.setPadding(10, 10, 10, 10)
+                    val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
+                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    cookImageView.layoutParams = imageLayout
+                }else{
+                    cookImageView.setPadding(0,0,0,0)
+                    val imageLayout = RelativeLayout.LayoutParams(80.toPx(), 80.toPx())
+                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    cookImageView.layoutParams = imageLayout
+                }
             }
             Constants.BIGGEST_IMAGE_SIZE -> {
                 val bkgLayout = LayoutParams(90.toPx(), 90.toPx())
@@ -112,10 +118,12 @@ class UserImageView : FrameLayout {
                 val bkgLayout = LayoutParams(76.toPx(), 76.toPx())
                 cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = RelativeLayout.LayoutParams(74.toPx(), 74.toPx())
+                val imageLayout = RelativeLayout.LayoutParams(76.toPx(), 76.toPx())
                 imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                cookImageView.setPadding(0,0,0,0)
                 cookImageView.layoutParams = imageLayout
-//                cookImageView.setPadding(0, 0, 0, 0)
+
+                isWithBkg = false
             }
         }
 
@@ -166,8 +174,10 @@ class UserImageView : FrameLayout {
         setImage(cook.thumbnail)
         if (cook.video.isNullOrEmpty()) {
             isWithBkg = false
+            isWithStroke = false
         } else {
             isWithBkg = true
+            isWithStroke = true
         }
         initUi()
     }

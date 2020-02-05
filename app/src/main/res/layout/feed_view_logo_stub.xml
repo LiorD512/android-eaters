@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+             android:background="@drawable/event_logo_bkg"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <ImageView
+            android:layout_marginTop="13dp"
+            android:layout_gravity="center"
+            android:src="@drawable/woodspoon_logo"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="17.3dp"
+            android:layout_marginEnd="17.3dp"
+            android:layout_marginBottom="21dp"
+            android:background="@color/off_white_90"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_marginTop="23.5dp"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginBottom="16dp"
+                style="@style/Reg13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Get the most delicious dishes with Woodspoon and enjoy healthy Homemade food cooked by our amazing and trusted cooks."/>
+
+        <View
+                android:layout_marginRight="15.4dp"
+                android:layout_marginLeft="15.4dp"
+                android:background="@color/dark"
+                android:layout_width="match_parent" android:layout_height="1dp"/>
+
+        <TextView
+
+                style="@style/SemiBold13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginBottom="16dp"
+                android:text="It&apos;s easier than you thought to order your favorite dish"/>
+
+    </LinearLayout>
+
+</LinearLayout>

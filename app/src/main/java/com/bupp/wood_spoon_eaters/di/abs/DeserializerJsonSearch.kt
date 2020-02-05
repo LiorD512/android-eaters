@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.di.abs
 
+import android.os.Parcelable
+import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Pagination
@@ -18,7 +20,7 @@ class DeserializerJsonSearch: JsonDeserializer<Search>{
         val gson = Gson()
         val jsonObject = json?.asJsonObject
 
-        val search = Search(null, null, null, null)
+        val search = Search()
         search.id = jsonObject?.get("id")?.asLong
         search.resource = jsonObject?.get("resource")?.asString
 
@@ -32,6 +34,7 @@ class DeserializerJsonSearch: JsonDeserializer<Search>{
             Constants.RESOURCE_TYPE_COOK -> {
                 val type = object : TypeToken<ArrayList<Cook>>(){}.type
                 search.results = gson.fromJson(cookJsonArr, type)
+
             }
             Constants.RESOURCE_TYPE_DISH -> {
                 val type = object : TypeToken<ArrayList<Dish>>(){}.type
@@ -42,3 +45,35 @@ class DeserializerJsonSearch: JsonDeserializer<Search>{
     }
 
 }
+
+//when(search.resource){
+//    Constants.RESOURCE_TYPE_COOK -> {
+//        cookJsonArr?.let {
+//            val list = it.mapNotNull { jsonObj ->
+//                Log.d("wowDeserializerSearch", "jsonObj: $jsonObj")
+//                gson.fromJson(jsonObj, Cook::class.java)
+//            }
+//            Log.d("wowDeserializerSearch", "list: $list")
+//            val list2 = list as ArrayList<Cook>
+//            Log.d("wowDeserializerSearch", "list2: $list2")
+//            search.results = list2 as ArrayList<Parcelable>
+//        }
+//        //val type = object : TypeToken<ArrayList<Cook>>(){}.type
+//        //search.results = gson.fromJson<ArrayList<Parcelable>>(cookJsonArr, type)
+//
+//    }
+//    Constants.RESOURCE_TYPE_DISH -> {
+//        cookJsonArr?.let {
+//            val list = it.mapNotNull { jsonObj ->
+//                Log.d("wowDeserializerSearch", "jsonObj: $jsonObj")
+//                gson.fromJson(jsonObj, Dish::class.java)
+//            }
+//            Log.d("wowDeserializerSearch", "list: $list")
+//            val list2 = list as ArrayList<Dish>
+//            Log.d("wowDeserializerSearch", "list2: $list2")
+//            search.results = list2 as ArrayList<Parcelable>
+//        }
+////                val type = object : TypeToken<ArrayList<Dish>>(){}.type
+////                search.results = gson.fromJson(cookJsonArr, type)
+//    }
+//}

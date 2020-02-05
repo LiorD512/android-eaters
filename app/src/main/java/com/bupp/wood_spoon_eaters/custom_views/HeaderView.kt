@@ -194,10 +194,24 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
                 headerViewSettingsBtn.visibility = View.VISIBLE
                 headerViewBackBtn.visibility = View.VISIBLE
             }
+            Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_DONE -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewDoneBtn.visibility = View.VISIBLE
+                headerViewCloseBtn.visibility = View.VISIBLE
+            }
+            Constants.HEADER_VIEW_TYPE_EVENT -> {
+                headerViewLocationLayout.visibility = View.VISIBLE
+                headerViewSearchBtn.visibility = View.INVISIBLE
+                headerViewProfileBtn.visibility = View.INVISIBLE
+                headerViewCloseBtn.visibility = View.VISIBLE
+                headerViewAddressAndTime.setEnabled(false)
+                headerViewAddressAndTime.alpha = 0.5f
+            }
         }
     }
 
     private fun hideAll() {
+        headerViewAddressAndTime.alpha = 1.0f
         headerViewTitle.visibility = GONE
         headerViewCloseBtn.visibility = View.GONE
         headerViewBackBtn.visibility = View.GONE
@@ -228,12 +242,11 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
     }
 
     fun setSaveButtonClickable(isClickable: Boolean) {
-//        if (isClickable) {
-//            headerViewSaveBtn.alpha = 1.0f
-//        } else {
-//            headerViewSaveBtn.alpha = 0.5f
-//        }
         headerViewSaveBtn.isEnabled = isClickable
+    }
+
+    fun setDoneButtonClickable(isEnabled: Boolean) {
+        headerViewDoneBtn.isEnabled = isEnabled
     }
 
     fun updateFilterUi(isEnabled: Boolean) {

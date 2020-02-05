@@ -31,9 +31,6 @@ class ManyCooksView : FrameLayout, ManyCooksViewAdapter.ManyCooksViewListener {
 
     private fun initUi() {
         manyCooksViewList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-//        var divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
-//        divider.setDrawable(resources.getDrawable(R.drawable.horizontal_trans_divider, null))
-//        manyCooksViewList.addItemDecoration(divider)
     }
 
     fun initCooksView(cooks: ArrayList<Cook>, listener: ManyCooksViewListener) {

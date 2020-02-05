@@ -25,7 +25,7 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 
 
 class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
-    FilterFragment.FilterFragmentListener {
+    FilterFragment.FilterFragmentListener, CookProfileDialog.CookProfileDialogListener {
 
     companion object {
         fun newInstance() = SearchFragment()
@@ -101,9 +101,14 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
         viewModel.getCookEvent.observe(this, Observer { event ->
             searchFragPb.hide()
             if(event.isSuccess){
-                CookProfileDialog(event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+                CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
+    }
+
+    //CookProfileDialog interface
+    override fun onDishClick(menuItemId: Long) {
+        (activity as MainActivity).loadNewOrderActivity(menuItemId)
     }
 
     fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/eventFeedAppBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/eventFeedCollapsingLayout"
+                android:layout_width="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@color/white">
+
+            <LinearLayout
+                    android:id="@+id/eventFeedCalLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="50dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <ImageView
+                            android:id="@+id/eventFeedImage"
+                            android:layout_width="87dp" android:layout_height="87dp"/>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                        android:id="@+id/eventFeedTitle"
+                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center"
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        tools:text="Monkeytech New Year Event"/>
+
+                <TextView
+                        android:id="@+id/eventFeedDescription"
+                        android:paddingStart="15.4dp"
+                        android:paddingEnd="15.4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center"
+                        style="@style/SemiBold13Dark50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        tools:text="First 75 dishes in a promotion $5 price, hurry up, first come first serve"/>
+
+                <View
+                        android:layout_marginTop="23dp"
+                        android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/silver"/>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/eventFeedToolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone"
+                    app:layout_collapseMode="pin">
+
+                <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+
+                </FrameLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+                android:id="@+id/eventFeedContentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7.7dp"
+                android:orientation="vertical">
+
+            <!--<com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView-->
+            <!--android:id="@+id/eventFeedManyCooksView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"/>-->
+
+            <com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
+                    android:id="@+id/eventFeedFeedView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/eventFeedPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+

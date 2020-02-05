@@ -25,4 +25,5 @@ class AddressAndTimeView : LinearLayout {
         locationDetailsViewTime.text = text ?: "ASAP"
     }
 
+
 }

@@ -1,18 +1,14 @@
 package com.bupp.wood_spoon_eaters.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Feed(
-    @SerializedName("title") val title: String = "",
-    @SerializedName("search") var search: Search? = null
-){
-    fun hasItems(): Boolean{
-        if(search != null && search!!.results != null){
-            return search!!.results!!.size > 0
-        }
-        return false
-    }
-}
+    @SerializedName("title") var title: String = "",
+    @SerializedName("search") var search: Search? = Search()
+): Parcelable
 
 data class FeedRequest(
     @SerializedName("lat") var lat: Double? = null,

@@ -22,7 +22,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener {
+class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener,
+    CookProfileDialog.CookProfileDialogListener {
 
 
     override fun onEmptyhDishList() {
@@ -65,15 +66,21 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.getCookEvent.observe(this, Observer { event ->
             feedFragPb.hide()
             if(event.isSuccess){
-                CookProfileDialog(event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+                CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
     }
 
+    //CookProfileDialog interface
+    override fun onDishClick(menuItemId: Long) {
+        (activity as MainActivity).loadNewOrderActivity(menuItemId)
+    }
+
+
     private fun initFeed(feedArr: ArrayList<Feed>) {
         feedFragEmptyLayout.visibility = View.GONE
         feedFragListLayout.visibility = View.VISIBLE
-        feedFragSectionsView.initFeed(feedArr, viewModel.getDeliveryFeeString())
+        feedFragSectionsView.initFeed(feedArr, viewModel.getDeliveryFeeString(), stubView = Constants.FEED_VIEW_STUB_SHARE)
     }
 
     private fun FetchLocationAndFeed() {

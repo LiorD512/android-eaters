@@ -30,7 +30,6 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
     FavoritesView.FavoritesViewListener {
 
-
     companion object {
         fun newInstance() = MyProfileFragment()
     }
@@ -109,6 +108,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragSupportBtn.setOnClickListener { (activity as MainActivity).loadSupport() }
 
         myProfileFragJoinBtn.setOnClickListener { OpenWoodSpoonGooglePlay() }
+        myProfileFragEventsBtn.setOnClickListener { joinEvent() }
         myProfileFragShareBtnLayout.setOnClickListener { share() }
 
         myProfileFragOrderHistoryBtn.setOnClickListener { openOrderHistoryDialog() }
@@ -116,6 +116,10 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         profileFragLogout.setOnClickListener {
             LogoutDialog(this).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
         }
+    }
+
+    private fun joinEvent() {
+        (activity as MainActivity).startEventActivity()
     }
 
     private fun OpenWoodSpoonGooglePlay() {

@@ -32,12 +32,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                <ImageView
-                        android:id="@+id/multiSectionViewShareBtn"
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="35dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/refferal_banner_pic"/>
+                <include
+                        android:visibility="gone"
+                        android:id="@+id/multiSectionViewShareView"
+                        layout="@layout/feed_view_sharing_stub"/>
+
+                <include
+                        android:visibility="gone"
+                        android:id="@+id/multiSectionViewLogo"
+                        layout="@layout/feed_view_logo_stub"/>
+
 
                 <com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
                         android:id="@+id/multiSectionViewTopCooks"
@@ -47,7 +51,6 @@
                         android:layout_height="wrap_content"/>
 
             </LinearLayout>
-
 
         </androidx.core.widget.NestedScrollView>
 

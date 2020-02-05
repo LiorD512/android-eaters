@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,23 +37,45 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogListener) : Fragment(),
+class SingleDishFragment() : Fragment(),
     OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener, StatusBottomBar.StatusBottomBarListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
     UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener {
 
+    var listener: SingleDishDialogListener? = null
+
+    fun setSingleDishDialogListener(listener: SingleDishDialogListener){
+        this.listener = listener
+    }
 
     interface SingleDishDialogListener {
         fun onCheckout()
         fun onDishClick(itemId: Long)
     }
 
-    companion object {
-        fun newInstance(menuItemId: Long, listener: SingleDishDialogListener) = SingleDishFragment(menuItemId, listener)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (arguments != null) {
+            viewModel.menuItemId = arguments!!.getLong(ARG_PARAM)
+        }
     }
 
+    companion object {
+        private val ARG_PARAM = "menuItemId"
 
+        fun newInstance(menuItemId: Long): SingleDishFragment {
+            val fragment = SingleDishFragment()
+            try{
+                val args = Bundle()
+                args.putLong(ARG_PARAM, menuItemId)
+                fragment.arguments = args
+            }catch (e: Exception){
+                Log.d("wowSingle","newInstance exception")
+            }
+            return fragment
+        }
+    }
 
     var ingredientsAdapter: DishIngredientsAdapter? = null
     private lateinit var currentDish: FullDish
@@ -70,7 +93,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         super.onViewCreated(view, savedInstanceState)
 
         singleDishPb.show()
-        viewModel.getFullDish(menuItemId)
+        viewModel.getFullDish()
         initObservers()
 
     }
@@ -169,9 +192,15 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     override fun onPageClick(page: Int) {
         hidePages()
         when(page){
-            SingleDishHeader.INFO -> {singleDishInfoLayout.visibility = View.VISIBLE}
-            SingleDishHeader.COOK -> {singleDishCookLayout.visibility = View.VISIBLE}
-            SingleDishHeader.INGREDIENT -> {singleDishIngredientLayout.visibility = View.VISIBLE}
+            SingleDishHeader.INFO -> {
+                singleDishScrollView.smoothScrollTo(0, singleDishInfoLayout.top)
+                singleDishInfoLayout.visibility = View.VISIBLE}
+            SingleDishHeader.COOK -> {
+                singleDishScrollView.smoothScrollTo(0, singleDishCookLayout.top)
+                singleDishCookLayout.visibility = View.VISIBLE}
+            SingleDishHeader.INGREDIENT -> {
+                singleDishScrollView.smoothScrollTo(0, singleDishIngredientLayout.top)
+                singleDishIngredientLayout.visibility = View.VISIBLE}
         }
     }
 
@@ -210,7 +239,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
         AddressMissingDialog(this).show(childFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
     }
 
-    override fun pnUpdateAddress() {
+    override fun openUpdateAddress() {
         (activity as NewOrderActivity).openAddressChooser()
     }
 
@@ -368,7 +397,7 @@ class SingleDishFragment(val menuItemId: Long, val listener: SingleDishDialogLis
     }
 
     override fun onDishClick(dish: Dish) {
-        listener.onDishClick(dish.menuItem.id)
+        listener?.onDishClick(dish.menuItem.id)
 //        SingleDishFragment.newInstance(dish.menuItem.id, listener).show(fragmentManager, Constants.SINGLE_DISH_TAG)
     }
 

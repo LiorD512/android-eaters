@@ -8,15 +8,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import kotlinx.android.synthetic.main.address_missing_dialog.*
-import kotlinx.android.synthetic.main.clear_cart_dialog.*
-import kotlinx.android.synthetic.main.clear_cart_dialog.clearCartDialogCloseBtn
 
 class AddressMissingDialog(val listener: AddressMissingDialogListener) : DialogFragment() {
 
     interface AddressMissingDialogListener {
-        fun pnUpdateAddress()
+        fun openUpdateAddress()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +34,7 @@ class AddressMissingDialog(val listener: AddressMissingDialogListener) : DialogF
 
     private fun initUi() {
         addressmissingUpdateBtn.setOnClickListener {
-            listener.pnUpdateAddress()
+            listener.openUpdateAddress()
             dismiss()
         }
         caddressmissingCloseBtn.setOnClickListener { dismiss()}

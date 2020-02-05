@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,18 +28,4 @@ data class Cook(
     fun getFullName(): String{
         return "$firstName $lastName"
     }
-
-    fun getAge(): Int {
-        //todo: get birthday from server and set age
-        return Utils.getDiffYears(birthdate)
-    }
 }
-
-//data class EaterRequest(
-//    @SerializedName("first_name") var firstName: String = "",
-//    @SerializedName("last_name") var lastName: String = "",
-//    @SerializedName("thumbnail") var thumbnail: String = "",
-//    @SerializedName("email") var email: String = "",
-//    @SerializedName("addresses") var addresses: ArrayList<AddressRequest> = arrayListOf(),
-//    @SerializedName("device") var device: Device? = null
-//)

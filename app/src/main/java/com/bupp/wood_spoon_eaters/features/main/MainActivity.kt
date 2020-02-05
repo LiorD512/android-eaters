@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
+import com.bupp.wood_spoon_eaters.features.events.EventActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
@@ -609,6 +610,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     fun refreshUserUi() {
         mainActHeaderView.refreshUserUi(viewModel.getCurrentEater())
+    }
+
+    fun startEventActivity() {
+        startActivity(Intent(this, EventActivity::class.java))
     }
 
 

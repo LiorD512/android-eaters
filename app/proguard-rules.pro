@@ -11,7 +11,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
+-dontnote **
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 -keepattributes SourceFile,LineNumberTable
@@ -39,3 +39,8 @@
 -keep class androidx.** { *; }
 -keep interface androidx.** { *; }
 -keepattributes SourceFile,LineNumberTable
+
+-keepclassmembernames class com.bupp.wood_spoon_eaters.model.** { *; }
+
+
+

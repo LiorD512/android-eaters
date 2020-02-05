@@ -71,10 +71,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         if(menuItemId > 0){
             viewModel.checkOrderStatus()
             loadSingleDish(menuItemId)
-//            if(viewModel.isCartEmpty()){
-//            }else{
-//                showEmptyCartDialog()
-//            }
         }
         if(isCheckout){
             onCheckout()
@@ -122,16 +118,18 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     //Single Dish
 
     fun loadSingleDish(menuItemId: Long){
-        loadFragment(SingleDishFragment(menuItemId, this), menuItemId.toString())
+        loadFragment(SingleDishFragment.newInstance(menuItemId), Constants.SINGLE_DISH_TAG)
     }
 
     override fun onDishClick(itemId: Long) {
-        loadFragment(SingleDishFragment(itemId, this), itemId.toString())
+        loadFragment(SingleDishFragment.newInstance(itemId), Constants.SINGLE_DISH_TAG)
     }
 
     fun loadPromoCode(){
         loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
     }
+
+
 
 
     //Checkout
@@ -160,6 +158,12 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             .addToBackStack(tag)
             .commit()
     }
+
+//    override fun onAttachFragment(fragment: Fragment) {
+//        if (fragment is SingleDishFragment) {
+//            fragment.setSingleDishDialogListener(this)
+//        }
+//    }
 
     private fun getFragmentByTag(tag: String): Fragment? {
         val fragmentManager = this@NewOrderActivity.supportFragmentManager
