@@ -124,11 +124,11 @@
 
                     <TextView
                             android:gravity="center|left"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:id="@+id/feedDishItemRating"
                             android:drawableLeft="@drawable/icons_raitings"
                             android:drawablePadding="7.7dp"
-                            style="@style/SemiBold13Dark"
+                            style="@style/Bold13Dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="5"/>
@@ -137,12 +137,12 @@
 
                     <TextView
                             android:gravity="center|left"
-                            android:layout_weight="1"
+                            android:layout_weight="1.7"
                             android:padding="2dp"
                             android:id="@+id/feedDishItemDate"
                             android:drawableLeft="@drawable/icons_time"
                             android:drawablePadding="7.7dp"
-                            style="@style/SemiBold13Dark"
+                            style="@style/Bold13Dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="Mon, 24, 4PM"/>
@@ -150,8 +150,8 @@
                     <!--<View android:layout_weight="1" android:layout_width="0dp" android:layout_height="1dp"/>-->
 
                     <TextView
-                            android:layout_weight="1"
-                            style="@style/SemiBold13Dark"
+                            android:layout_weight="0.8"
+                            style="@style/Bold13Dark"
                             android:id="@+id/feedDishItemFreeDelivery"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

@@ -35,7 +35,7 @@
                 android:layout_marginTop="15.4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This Dish Cannot Be Deliverd To The Address You Selected"/>
+                android:text="This Dish Cannot Be Delivered To The Address You Selected"/>
 
         <View
                 android:layout_marginTop="30.2dp"

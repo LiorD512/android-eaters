@@ -45,35 +45,3 @@ class DeserializerJsonSearch: JsonDeserializer<Search>{
     }
 
 }
-
-//when(search.resource){
-//    Constants.RESOURCE_TYPE_COOK -> {
-//        cookJsonArr?.let {
-//            val list = it.mapNotNull { jsonObj ->
-//                Log.d("wowDeserializerSearch", "jsonObj: $jsonObj")
-//                gson.fromJson(jsonObj, Cook::class.java)
-//            }
-//            Log.d("wowDeserializerSearch", "list: $list")
-//            val list2 = list as ArrayList<Cook>
-//            Log.d("wowDeserializerSearch", "list2: $list2")
-//            search.results = list2 as ArrayList<Parcelable>
-//        }
-//        //val type = object : TypeToken<ArrayList<Cook>>(){}.type
-//        //search.results = gson.fromJson<ArrayList<Parcelable>>(cookJsonArr, type)
-//
-//    }
-//    Constants.RESOURCE_TYPE_DISH -> {
-//        cookJsonArr?.let {
-//            val list = it.mapNotNull { jsonObj ->
-//                Log.d("wowDeserializerSearch", "jsonObj: $jsonObj")
-//                gson.fromJson(jsonObj, Dish::class.java)
-//            }
-//            Log.d("wowDeserializerSearch", "list: $list")
-//            val list2 = list as ArrayList<Dish>
-//            Log.d("wowDeserializerSearch", "list2: $list2")
-//            search.results = list2 as ArrayList<Parcelable>
-//        }
-////                val type = object : TypeToken<ArrayList<Dish>>(){}.type
-////                search.results = gson.fromJson(cookJsonArr, type)
-//    }
-//}

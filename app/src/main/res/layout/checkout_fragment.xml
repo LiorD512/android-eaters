@@ -201,6 +201,16 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             tools:text="$6.6"/>
+
+                    <TextView
+                            android:visibility="gone"
+                            android:id="@+id/checkoutFragServiceFeePriceFree"
+                            style="@style/SemiBold13Blue"
+                            android:layout_weight="1"
+                            android:gravity="end|center"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="FREE"/>
                 </LinearLayout>
                 <View
                         android:layout_marginStart="15.4dp"
@@ -238,6 +248,15 @@
                             android:layout_height="match_parent"
                             tools:text="$6.6"/>
 
+                    <TextView
+                            android:visibility="gone"
+                            android:id="@+id/checkoutFragDeliveryFeePriceFree"
+                            style="@style/SemiBold13Blue"
+                            android:layout_weight="1"
+                            android:gravity="end|center"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="FREE"/>
 
                 </LinearLayout>
 

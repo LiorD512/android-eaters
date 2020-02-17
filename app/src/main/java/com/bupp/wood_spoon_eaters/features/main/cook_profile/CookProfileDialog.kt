@@ -89,7 +89,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
         cookProfileFragStoryName.text = "${cook.firstName}'s Story"
         cookProfileFragStory.text = "${cook.about}"
-        cookProfileFragDishBy.text = "Other Available Dishes By ${cook.firstName}"
+        cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
 
         val certificates = cook.certificates
         cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }

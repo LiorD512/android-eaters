@@ -38,7 +38,7 @@
                 android:layout_marginTop="7.7dp"
                 android:layout_marginBottom="23.8dp"
                 android:gravity="center"
-                android:text="This dish has a different delivery time"/>
+                android:text="This dish is available outside of the delivery window you selected"/>
 
         <TextView
                 style="@style/Reg13Dark_50"

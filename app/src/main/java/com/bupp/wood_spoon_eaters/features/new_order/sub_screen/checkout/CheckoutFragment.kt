@@ -139,7 +139,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
             this.curOrder = order
             var cook = order.cook
 
-            var address: String? = null
+//            var address: String? = null
             if(order.deliveryAddress != null ){
                 checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
 //                address = order.deliveryAddress.streetLine1
@@ -186,7 +186,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
 
         if(promo != null && promo.isNotEmpty()){
             checkoutFragPromoCodeLayout.visibility = View.VISIBLE
-            checkoutFragPromoCodeText.text = "(${curOrder.discount.formatedValue})"
+            checkoutFragPromoCodeText.text = "(${curOrder.discount.formatedValue.replace("-","")})"
             checkoutFragPromoCodeStr.visibility = View.VISIBLE
             checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
             checkoutFragAddPromoCodeBtn.visibility = View.GONE
@@ -198,8 +198,22 @@ class CheckoutFragment(val listener: CheckoutDialogListener) :
         }
 
         checkoutFragTaxPriceText.text = "$$tax"
-        checkoutFragServiceFeePriceText.text = "$$serviceFee"
-        checkoutFragDeliveryFeePriceText.text = "$$deliveryFee"
+        if(serviceFee > 0.0){
+            checkoutFragServiceFeePriceText.text = "$$serviceFee"
+            checkoutFragServiceFeePriceText.visibility = View.VISIBLE
+            checkoutFragServiceFeePriceFree.visibility = View.GONE
+        }else{
+            checkoutFragServiceFeePriceText.visibility = View.GONE
+            checkoutFragServiceFeePriceFree.visibility = View.VISIBLE
+        }
+        if(deliveryFee > 0.0){
+            checkoutFragDeliveryFeePriceText.text = "$$deliveryFee"
+            checkoutFragDeliveryFeePriceText.visibility = View.VISIBLE
+            checkoutFragDeliveryFeePriceFree.visibility = View.GONE
+        }else{
+            checkoutFragDeliveryFeePriceText.visibility = View.GONE
+            checkoutFragDeliveryFeePriceFree.visibility = View.VISIBLE
+        }
 
         val allDishSubTotal = checkoutFragOrderItemsView.getAllDishPriceValue()
         val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)

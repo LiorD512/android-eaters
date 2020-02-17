@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
 
         android:paddingTop="23dp"
@@ -157,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15.4dp"
-                android:text="Neta’s Story" />
+                tools:text="Neta’s Story" />
 
         <TextView
                 android:id="@+id/cookProfileFragStory"
@@ -165,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7.7dp"
-                android:text="I love that cooking gives me a chance to be creative and indulge in some ‘play’ time – something we adults could do
+                tools:text="I love that cooking gives me a chance to be creative and indulge in some ‘play’ time – something we adults could do
 with a lot more" />
 
         <View
@@ -180,7 +181,7 @@ with a lot more" />
                 android:id="@+id/cookProfileFragDishBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Other Available Dishes By Oded" />
+                android:text="Dishes By Oded" />
 
     </LinearLayout>
 

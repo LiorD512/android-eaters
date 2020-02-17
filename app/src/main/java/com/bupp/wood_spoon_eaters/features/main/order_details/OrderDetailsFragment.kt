@@ -26,7 +26,7 @@ class OrderDetailsFragment() : Fragment() {
     companion object {
         fun newInstance(orderId: Long) = OrderDetailsFragment().apply {
             arguments = Bundle().apply {
-                putLong("OrderId",orderId)
+                putLong("orderId",orderId)
             }
         }
     }

@@ -491,10 +491,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
             Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG,
-            Constants.SUPPORT_TAG, Constants.REPORT_TAG -> {
+            Constants.SUPPORT_TAG -> {
                 loadMyProfile()
             }
-
+            Constants.REPORT_TAG -> {
+                loadOrderHistoryFragment()
+            }
             Constants.DELIVERY_DETAILS_TAG -> {
                 updateAddressTimeView()
                 loadFeed()

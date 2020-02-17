@@ -236,7 +236,7 @@
                                                 android:textSize="13.4sp"
                                                 android:textColor="@color/dark"
                                                 android:letterSpacing="0.04"
-                                                tools:text="Deliverd To Your Door"/>
+                                                tools:text="Delivered To Your Door"/>
 
                                     </LinearLayout>
 
