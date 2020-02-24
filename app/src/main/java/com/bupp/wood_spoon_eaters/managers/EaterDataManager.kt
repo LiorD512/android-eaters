@@ -5,6 +5,7 @@ import android.location.Location
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Eater
+import com.bupp.wood_spoon_eaters.model.Event
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -16,7 +17,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     LocationManager.LocationManagerListener {
 
     private val TAG = "wowEaterAddressManager"
-    private var lastChosenAddress: Address? = null
     private var currentPaymentMethod: PaymentMethod? = null
 
     interface EaterDataMangerListener{
@@ -90,12 +90,24 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         return locationManager.getCurrentAddress()
     }
 
+    private var lastChosenAddress: Address? = null
+    private var eventChosenAddress: Address? = null
+
+
     fun getLastChosenAddress(): Address? {
-        return lastChosenAddress ?: getCurrentAddress()
+        when(isInEvent){
+            true -> return eventChosenAddress ?: null
+            false -> return lastChosenAddress ?: getCurrentAddress()
+        }
+
     }
 
     fun setLastChosenAddress(address: Address?) {
-        this.lastChosenAddress = address
+        when(isInEvent){
+            true -> this.eventChosenAddress = address
+            false -> this.lastChosenAddress = address
+        }
+
     }
 
     fun removeAddressById(deletedAddressId: Long) {
@@ -148,16 +160,28 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
 
 
-
+    var isInEvent: Boolean = false
 
     //order date and time !!
     var orderTime: Date? = null
+    var eventOrderTime: Date? = null
 
     fun getLastOrderTime(): Date? {
-        return if (orderTime != null) {
-            orderTime
-        } else {
-            null
+        return when(isInEvent){
+            true -> {
+                if (eventOrderTime != null) {
+                    eventOrderTime
+                }else{
+                    null
+                }
+            }
+            false -> {
+                if (orderTime != null) {
+                    orderTime
+                }else{
+                    null
+                }
+            }
         }
     }
 
@@ -198,7 +222,11 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     }
     fun isUserChooseSpecificAddress(): Boolean {
         //is user didn't chose my location
-        return isUserChooseSpecificAddress
+        return when(isInEvent){
+            true -> false
+            false -> isUserChooseSpecificAddress
+        }
+
     }
 
     fun getDropoffLocation(): String? {
@@ -209,7 +237,19 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
     }
 
+    fun setEventTimeAndPlace(event: Event?) {
+        event?.let{
+            isInEvent = true
+            setLastChosenAddress(event.location)
+            eventOrderTime = event.startsAt
+        }
+    }
 
+    fun disableEventDate() {
+        isInEvent = false
+        eventChosenAddress = null
+        eventOrderTime = null
+    }
 
 
 }

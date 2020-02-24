@@ -17,7 +17,6 @@ import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.model.Cook
@@ -117,7 +116,9 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
     }
 
     override fun onDishClick(dish: Dish){
-        listener.onDishClick(dish.menuItem.id)
+        dish.menuItem?.let{
+            listener.onDishClick(it.id)
+        }
 //        (activity as MainActivity).loadNewOrderActivity()
     }
 

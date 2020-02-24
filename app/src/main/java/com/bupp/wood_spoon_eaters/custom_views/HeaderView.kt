@@ -65,6 +65,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         fun onHeaderBackClick() {}
         fun onHeaderDoneClick() {}
         fun onHeaderSaveClick() {}
+        fun onHeaderNextClick() {}
         fun onHeaderSkipClick() {}
         fun onHeaderCloseClick() {}
         fun onHeaderSearchClick() {}
@@ -107,6 +108,9 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         }
         headerViewFilterBtn.setOnClickListener {
             listener?.onHeaderFilterClick()
+        }
+        headerViewNextBtn.setOnClickListener {
+            listener?.onHeaderNextClick()
         }
         headerViewProfileBtn.setUserImageViewListener(this)
 
@@ -207,6 +211,11 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
                 headerViewAddressAndTime.setEnabled(false)
                 headerViewAddressAndTime.alpha = 0.5f
             }
+            Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewNextBtn.visibility = View.VISIBLE
+                headerViewCloseBtn.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -217,6 +226,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         headerViewBackBtn.visibility = View.GONE
         headerViewDoneBtn.visibility = View.GONE
         headerViewSaveBtn.visibility = View.GONE
+        headerViewNextBtn.visibility = View.GONE
         headerViewSettingsBtn.visibility = View.GONE
         headerViewLocationLayout.visibility = View.GONE
         headerViewSearchLayout.visibility = View.GONE

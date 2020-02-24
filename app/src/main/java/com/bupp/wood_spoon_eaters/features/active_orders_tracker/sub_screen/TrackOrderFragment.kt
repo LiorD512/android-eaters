@@ -17,14 +17,17 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.track_order_dialog.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogListener) : Fragment(),
     CancelOrderDialog.CancelOrderDialogListener {
 
 
     private var curOrderStage: Int = 0
-    val viewModel by viewModel<ActiveOrderTrackerViewModel>()
+    val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
     private lateinit var progressList: ArrayList<CheckBox>
 
@@ -109,7 +112,17 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
         Log.d("wowTrackOrderFragment","initUing now")
         progressList = arrayListOf<CheckBox>(trackOrderDialogCb1, trackOrderDialogCb2, trackOrderDialogCb3, trackOrderDialogCb4)
 
-        trackOrderDialogArrivalTime.text = Utils.parseDateToTime(order.estDeliveryTime)
+        val today = Calendar.getInstance()
+        today.time = Date()
+
+        val deliveryTime = Calendar.getInstance()
+        deliveryTime.time = order.estDeliveryTime
+
+        if(Utils.isSameDay(today, deliveryTime)){
+            trackOrderDialogArrivalTime.text = Utils.parseDateToTime(order.estDeliveryTime)
+        }else{
+            trackOrderDialogArrivalTime.text = Utils.parseDateToFullDate(order.estDeliveryTime)
+        }
 
 //        "idle", "received", "in_progress"
         when(order.preparationStatus){

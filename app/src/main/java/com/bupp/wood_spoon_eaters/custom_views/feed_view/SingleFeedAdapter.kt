@@ -18,7 +18,8 @@ class SingleFeedAdapter(
     val context: Context,
     val dishes: ArrayList<Dish>,
     val listener: SearchAdapterListener,
-    val deliveryFee: String
+    val deliveryFee: String,
+    val isEvent: Boolean = false
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){//}, FavoriteBtn.FavoriteBtnListener {
 
@@ -39,10 +40,7 @@ class SingleFeedAdapter(
         (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
 
         val name = dish.name
-        var price = ""
-        if(dish.price != null){
-            price = dish.price.formatedValue
-        }
+        val price = dish.getPriceObj().formatedValue
         holder.name.text = "$name $price"
         holder.cookName.text = "By ${dish.cook.getFullName()}"
         holder.rating.text = "${dish.rating}"
@@ -56,12 +54,16 @@ class SingleFeedAdapter(
                     holder.date.text = "ASAP, ${dish.doorToDoorTime}"
                 }
             }else{
-                if(Utils.isTodayOrTomorrow(dish.menuItem.orderAt)){
-                    //Dish is offered today or tomorrow.
-                    holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
+                if(isEvent){
+                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
                 }else{
-                    //Dish is offered later this week and beyond
-                    holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.orderAt)
+                    if(Utils.isTodayOrTomorrow(dish.menuItem.orderAt)){
+                        //Dish is offered today or tomorrow.
+                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
+                    }else{
+                        //Dish is offered later this week and beyond
+                        holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.orderAt)
+                    }
                 }
             }
             holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }

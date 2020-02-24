@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.*
@@ -27,53 +28,17 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
     data class AddressUpdateEvent(val currentAddress: Address?)
 
     private val TAG = "wowMainVM"
-    fun isFirstTime(): Boolean{
-        return settings.isFirstTime()
-    }
 
     fun initFcmListener(){
         fcmManager.initFcmListener()
-    }
-
-    fun checkPermission(context: Context, permissions: Array<String>): Boolean {
-        for (item in permissions) {
-            if (!permissionManager.hasPermission(context, item))
-                return false
-        }
-        return true
-    }
-
-    fun requestPermission(activity: FragmentActivity, types: Array<String>, requestName: Int) {
-        ActivityCompat.requestPermissions(activity, types, requestName)
     }
 
     fun getUserName(): String {
         return eaterDataManager.currentEater?.firstName!!
     }
 
-    fun getLastOrderAddress(): String? {
-        return ""
-//        return orderManager.getLastOrderAddress()?.streetLine1
-    }
-
     fun getLastOrderTime(): String? {
         return eaterDataManager.getLastOrderTimeString()
-    }
-
-    fun getListOfAddresses(): ArrayList<Address>? {
-        if(eaterDataManager.currentEater != null){
-            return eaterDataManager.currentEater!!.addresses
-        }
-        return arrayListOf()
-    }
-
-    fun setChosenAddress(address: Address){
-        eaterDataManager.setUserChooseSpecificAddress(true)
-        eaterDataManager.setLastChosenAddress(address)
-    }
-
-    fun getChosenAddress(): Address?{
-        return eaterDataManager.getLastChosenAddress()
     }
 
     fun startLocationUpdates(activity: Activity) {
@@ -103,9 +68,42 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
     }
 
-    fun loadCurrentSingleDishDetails() {
-//        val id = orderManager.getCurrent
+//    val heightHandling: MutableLiveData<HeightHandling> = SingleLiveEvent()
+//    enum class HeightHandlingType {ACTIVE_ORDER, CHECKOUT, NONE}
+//    data class HeightHandling(val type: HeightHandlingType, val padding: Int)
+
+//    fun getContainerPaddingBottom(): Int{
+//        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+//        if(hasActiveOrder || hasPendingOrder){
+//            return 55.DptoPx()
+//        }
+//        return 0
+//    }
+
+//    fun getContainerPaddingBottom(): Int{
+//        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+//        var padding = 0
+//        if(hasActiveOrder){
+//            padding += 55.DptoPx()
+//        }
+//        if(hasPendingOrder){
+//            padding += 55.DptoPx()
+//        }
+//        return padding
+//    }
+
+    val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
+    data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
+    fun checkCartStatus() {
+        hasPendingOrder = orderManager.haveCurrentActiveOrder()
+        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
     }
+//    fun checkCartStatus() {
+//        if(orderManager.haveCurrentActiveOrder()){
+//          heightHandling.postValue(HeightHandling(HeightHandlingType.CHECKOUT, ))
+//        }
+//        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
+//    }
 
     val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
     data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?)
@@ -164,50 +162,12 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         })
     }
 
-    val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
-    data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
-    fun checkCartStatus() {
-        hasPendingOrder = orderManager.haveCurrentActiveOrder()
-        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
-    }
-
-//    val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
-//    data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
-//    fun getCurrentCook(id: Long) {
-//        api.getCook(id).enqueue(object: Callback<ServerResponse<Cook>>{
-//            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
-//                if(response.isSuccessful){
-//                    val cook = response.body()?.data
-//                    Log.d("wowFeedVM","getCurrentCook success: ")
-//                    getCookEvent.postValue(CookEvent(true, cook))
-//                }else{
-//                    Log.d("wowFeedVM","getCurrentCook fail")
-//                    getCookEvent.postValue(CookEvent(false,null))
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
-//                Log.d("wowFeedVM","getCurrentCook big fail")
-//                getCookEvent.postValue(CookEvent(false,null))
-//            }
-//        })
-//    }
 
     fun getCurrentEater(): Eater? {
         return eaterDataManager.currentEater
     }
 
-    fun getContainerPaddingBottom(): Int{
-        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
-        var padding = 0
-        if(hasActiveOrder){
-            padding += 55.DptoPx()
-        }
-        if(hasPendingOrder){
-            padding += 55.DptoPx()
-        }
-        return padding
-    }
+
 
 
 }

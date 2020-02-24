@@ -12,47 +12,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    <RelativeLayout
-
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <FrameLayout
                 android:id="@+id/mainActContainer"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="0dp"/>
 
-        <TextView
-                android:layout_alignParentBottom="true"
-                android:layout_above="@+id/activeOrderBottomBarTitle"
-                android:visibility="gone"
-                android:id="@+id/CheckOutBottomBarTitle"
-                android:layout_gravity="bottom"
-                style="@style/Bold17White"
-                android:gravity="center"
-                android:background="@color/teal_blue"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/status_bottom_bar_height"
-                android:text="Checkout"/>
+        <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-        <TextView
-                android:layout_alignParentBottom="true"
-                android:visibility="gone"
-                android:layout_marginTop="15.4dp"
-                android:id="@+id/activeOrderBottomBarTitle"
-                android:layout_gravity="bottom"
-                style="@style/Bold17White"
-                android:gravity="center"
-                android:background="@color/teal_blue"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/status_bottom_bar_height"
-                android:text="Track Your Order"/>
+            <!--<TextView-->
+                    <!--android:visibility="gone"-->
+                    <!--android:id="@+id/checkOutBottomBarTitle"-->
+                    <!--android:layout_gravity="bottom"-->
+                    <!--style="@style/Bold17White"-->
+                    <!--android:gravity="center"-->
+                    <!--android:background="@color/teal_blue"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/status_bottom_bar_height"-->
+                    <!--android:text="Checkout"/>-->
 
-        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-                android:id="@+id/mainActPb"
+            <!--<TextView-->
+                    <!--android:visibility="gone"-->
+                    <!--android:layout_marginTop="15.4dp"-->
+                    <!--android:id="@+id/activeOrderBottomBarTitle"-->
+                    <!--android:layout_gravity="bottom"-->
+                    <!--style="@style/Bold17White"-->
+                    <!--android:gravity="center"-->
+                    <!--android:background="@color/teal_blue"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/status_bottom_bar_height"-->
+                    <!--android:text="Track Your Order"/>-->
+
+        <!--</LinearLayout>-->
+
+        <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+                android:id="@+id/mainActOrdersBB"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:isBlueStyle="false"/>
-    </RelativeLayout>
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/mainActPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:isBlueStyle="false"/>
 
 </LinearLayout>

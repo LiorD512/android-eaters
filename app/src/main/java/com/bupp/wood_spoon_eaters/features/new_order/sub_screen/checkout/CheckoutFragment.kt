@@ -29,8 +29,8 @@ import kotlin.collections.ArrayList
 
 
 
-class CheckoutFragment(val listener: CheckoutDialogListener) :
-    Fragment(), TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
+class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
+    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener,
     StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener {
 

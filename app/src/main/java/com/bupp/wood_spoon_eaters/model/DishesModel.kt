@@ -16,13 +16,22 @@ data class Dish(
     @SerializedName("price") val price: Price,
     @SerializedName("cook") val cook: Cook,
     @SerializedName("door_to_door_time") val doorToDoorTime: String?,
-    @SerializedName("matching_menu") val menuItem: MenuItem,
+    @SerializedName("matching_menu") val menuItem: MenuItem?,
     @SerializedName("avg_rating") val rating: Double
-): Parcelable
+): Parcelable {
+    fun getPriceObj(): Price {
+        return if(menuItem?.price != null){
+            menuItem.price
+        }else{
+            price
+        }
+    }
+}
 
 @Parcelize
 data class MenuItem(
     @SerializedName("id") val id: Long,
+    @SerializedName("price") val price: Price? = null,
     @SerializedName("quantity") val quantity: Int = 0,
     @SerializedName("units_sold") val unitsSold: Int = 0,
     @SerializedName("order_at") val orderAt: Date? = null,
@@ -61,7 +70,15 @@ data class FullDish(
     @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
     @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>,
     @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>
-)
+){
+    fun getPriceObj(): Price {
+        if(availableMenuItems[0].price != null){
+            return availableMenuItems[0].price!!
+        }else{
+            return price
+        }
+    }
+}
 
 @Parcelize
 data class DishIngredient(

@@ -103,7 +103,7 @@ val appModule = module {
     viewModel { LocationChooserViewModel(get()) }
     viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
 
-    viewModel { EventActivityViewModel(get(), get(), get()) }
+    viewModel { EventActivityViewModel(get(), get(), get(), get()) }
 //    viewModel { GetEventByIdViewModel(get()) }
 //    viewModel { EventFeedViewModel(get(), get(), get()) }
     

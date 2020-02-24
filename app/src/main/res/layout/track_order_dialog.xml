@@ -41,6 +41,7 @@
                     android:text="Track Your Order"/>
 
             <ImageView
+                    android:visibility="gone"
                     android:id="@+id/trackOrderDialogMessageBtn"
                     android:layout_gravity="center"
                     android:src="@drawable/messages_image_selector"
@@ -152,7 +153,7 @@
                             android:paddingStart="7.3dp"
                             android:paddingBottom="5dp"
                             android:layout_marginBottom="30.2dp"
-                            android:text="Deliverd"
+                            android:text="Delivered"
                             style="@style/Reg13Dark_50"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>

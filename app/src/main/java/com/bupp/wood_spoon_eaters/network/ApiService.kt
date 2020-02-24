@@ -82,7 +82,7 @@ interface ApiService {
     fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
 
     @GET("cooks/{cook_id}")
-    fun getCook(@Path(value = "cook_id", encoded = true) cookId: Long): Call<ServerResponse<Cook>>
+    fun getCook(@Path(value = "cook_id", encoded = true) cookId: Long, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<Cook>>
 
     //Single Dish
     @GET("menu_items/{menu_item_id}/dish")

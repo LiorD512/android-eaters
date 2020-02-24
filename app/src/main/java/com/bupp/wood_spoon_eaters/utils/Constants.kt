@@ -48,7 +48,8 @@ class Constants {
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE = 6
         const val HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS = 7
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_DONE = 8
-        const val HEADER_VIEW_TYPE_EVENT = 9
+        const val HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT = 9
+        const val HEADER_VIEW_TYPE_EVENT = 10
 
 
         //input title view input type

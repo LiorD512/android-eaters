@@ -93,7 +93,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:gravity="center_horizontal"
-                                        android:text="Tomato Soup"/>
+                                        tools:text="Tomato Soup"/>
 
                                 <LinearLayout
                                         android:gravity="center|left"
@@ -107,7 +107,7 @@
                                             android:id="@+id/singleDishInfoCookName"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="By Oded Shoshan"/>
+                                            tools:text="By Oded Shoshan"/>
 
                                     <ImageView
                                             android:layout_marginLeft="7.7dp"
@@ -123,7 +123,7 @@
                                         android:layout_marginTop="4dp"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers"/>
+                                        tools:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers"/>
 
                                 <LinearLayout
                                         android:gravity="center"

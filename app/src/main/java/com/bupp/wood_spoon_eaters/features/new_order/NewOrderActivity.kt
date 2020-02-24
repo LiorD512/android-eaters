@@ -32,6 +32,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     AddressMenuDialog.EditAddressDialogListener, ClearCartDialog.ClearCartDialogListener {
 
 
+    //    private var isEvent: Boolean = false
     private val currentDesplayingFragment: ArrayList<String> = arrayListOf()
     val viewModel by viewModel<NewOrderViewModel>()
 
@@ -47,18 +48,32 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         viewModel.initStripe(this)
 
         viewModel.ephemeralKeyProvider.observe(this, Observer { event ->
-            if(!event.isSuccess){
+            if (!event.isSuccess) {
                 Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
             }
         })
 
         viewModel.orderStatusEvent.observe(this, Observer { event ->
-            if(event.hasActiveOrder){
+            if (event.hasActiveOrder) {
                 ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-            }else{
+            } else {
                 viewModel.initNewOrder()
             }
         })
+        viewModel.navigationEvent.observe(this, Observer { event ->
+            event?.let {
+                if(event.menuItemId != -1.toLong()) {
+                    viewModel.checkOrderStatus()
+                    loadSingleDish(event.menuItemId)
+                }
+                if (event.isCheckout) {
+                    onCheckout()
+                } else if (event.menuItemId == -1.toLong() && !event.isCheckout) {
+                    finish()
+                }
+            }
+        })
+
     }
 
     override fun onClearCart() {
@@ -68,16 +83,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     private fun checkActivityIntent() {
         val menuItemId = intent.getLongExtra("menuItemId", -1)
         val isCheckout = intent.getBooleanExtra("isCheckout", false)
-        if(menuItemId > 0){
-            viewModel.checkOrderStatus()
-            loadSingleDish(menuItemId)
-        }
-        if(isCheckout){
-            onCheckout()
-        }
-        else if(menuItemId < 0 && !isCheckout){
-            finish()
-        }
+        viewModel.setIntentParams(menuItemId, isCheckout)
     }
 
 //    private fun showEmptyCartDialog() {
@@ -103,11 +109,14 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
+                    val paymentMethod: PaymentMethod =
+                        (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
                     if (paymentMethod != null && paymentMethod.card != null) {
-                        Log.d("wowNewOrder","payment method success")
-                        if(getFragmentByTag(Constants.CHECKOUT_TAG) != null){
-                            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).updateCustomerPaymentMethod(paymentMethod)
+                        Log.d("wowNewOrder", "payment method success")
+                        if (getFragmentByTag(Constants.CHECKOUT_TAG) != null) {
+                            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).updateCustomerPaymentMethod(
+                                paymentMethod
+                            )
                         }
                     }
                 }
@@ -115,9 +124,9 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         }
     }
 
-    //Single Dish
+//Single Dish
 
-    fun loadSingleDish(menuItemId: Long){
+    fun loadSingleDish(menuItemId: Long) {
         loadFragment(SingleDishFragment.newInstance(menuItemId), Constants.SINGLE_DISH_TAG)
     }
 
@@ -125,11 +134,9 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         loadFragment(SingleDishFragment.newInstance(itemId), Constants.SINGLE_DISH_TAG)
     }
 
-    fun loadPromoCode(){
+    fun loadPromoCode() {
         loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
     }
-
-
 
 
     //Checkout
@@ -143,8 +150,10 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     override fun onCheckoutCanceled() {
-        setResult(Activity.RESULT_CANCELED)
-        finish()
+        viewModel.loadPreviousDish()
+//        loadSingleDish()
+//        setResult(Activity.RESULT_CANCELED)
+//        finish()
     }
 
 
@@ -153,7 +162,12 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         fragManger.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         currentDesplayingFragment.add(tag)
         fragManger.beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
+            .setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_right,
+                R.anim.enter_from_right,
+                R.anim.exit_to_right
+            )
             .replace(R.id.newOrderContainer, fragment, tag)
             .addToBackStack(tag)
             .commit()
@@ -176,14 +190,13 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     override fun onBackPressed() {
-
         val count = currentDesplayingFragment.size
         Log.d("wowNewOrder", "onBackPress num of frag: $count")
-        if(count > 1){
+        if (count > 1) {
             super.onBackPressed()
-            currentDesplayingFragment.removeAt(count-1)
+            currentDesplayingFragment.removeAt(count - 1)
             Log.d("wowNewOrder", "onBackPress num of frag: $count")
-        }else{
+        } else {
             setResult(Activity.RESULT_CANCELED)
             finish()
         }
@@ -243,7 +256,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         setResult(Activity.RESULT_CANCELED, intent)
         finish()
     }
-
 
 
 }

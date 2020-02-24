@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,7 +29,7 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>, val listener: Activ
     }
 
     private lateinit var adapter: OrdersPagerAdapter
-    val viewModel: ActiveOrderTrackerViewModel by viewModel<ActiveOrderTrackerViewModel>()
+    val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,13 @@ class ActiveOrderTrackerDialog(val orders: ArrayList<Order>, val listener: Activ
     private fun initUi() {
         adapter = OrdersPagerAdapter(childFragmentManager, orders, this)
         ordersTrackerPager.adapter = adapter
+
+        if(orders.size > 1){
+            ordersTrackerIndicator.visibility = View.VISIBLE
+            ordersTrackerIndicator.setViewPager(ordersTrackerPager)
+        }else{
+            ordersTrackerIndicator.visibility = View.GONE
+        }
     }
 
     class OrdersPagerAdapter(fragmentManager: FragmentManager, private val orders: ArrayList<Order>,

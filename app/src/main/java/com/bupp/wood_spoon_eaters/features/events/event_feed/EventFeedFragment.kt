@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.features.events.event_feed
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +13,12 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.features.events.EventActivity
 import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_event_feed.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener,
     CookProfileDialog.CookProfileDialogListener {
@@ -46,6 +41,13 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
         super.onViewCreated(view, savedInstanceState)
         initUi()
         initObservers()
+
+        checkForActiveOrder()
+
+    }
+
+    fun checkForActiveOrder() {
+        viewModel.checkForActiveOrder()
     }
 
     private fun initUi() {
@@ -60,7 +62,7 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
             eventFeedPb.hide()
             event.event.let {
                 initEventUi(event.event)
-                initFeed(event.event.feed)
+                initFeed(event.event.feed, event.event.deliveryFee)
             }
         })
 //
@@ -83,9 +85,12 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
         eventFeedDescription.text = event.description
     }
 
-    private fun initFeed(feedArr: ArrayList<Feed>?) {
+    private fun initFeed(
+        feedArr: ArrayList<Feed>?,
+        deliveryFee: Price
+    ) {
         feedArr?.let{
-            eventFeedFeedView.initFeed(feedArr, viewModel.getDeliveryFeeString(), false, Constants.FEED_VIEW_STUB_PROMO, false)
+            eventFeedFeedView.initFeed(feedArr, deliveryFee.formatedValue, false, Constants.FEED_VIEW_STUB_PROMO, false, true)
         }
     }
 
@@ -96,7 +101,9 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
 //    }
 
     override fun onDishClick(dish: Dish) {
-        (activity as EventActivity).loadNewOrderActivity(dish.menuItem.id)
+        dish.menuItem?.let{
+            (activity as EventActivity).loadNewOrderActivity(it.id)
+        }
     }
 
     override fun onCookClick(cook: Cook) {

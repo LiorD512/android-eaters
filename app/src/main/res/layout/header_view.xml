@@ -25,6 +25,18 @@
 
         <TextView
                 style="@style/SemiBold13Blue"
+                android:id="@+id/headerViewNextBtn"
+                android:text="Next"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_gravity="center|right"
+                android:paddingRight="15.7dp"
+                android:paddingLeft="15.7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+        <TextView
+                style="@style/SemiBold13Blue"
                 android:id="@+id/headerViewDoneBtn"
                 android:text="Done"
                 android:visibility="gone"

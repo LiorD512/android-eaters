@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.utils
 
+import android.Manifest
 import android.content.Context
 import android.content.res.Resources
 import android.text.Spannable
@@ -14,10 +15,15 @@ import java.util.*
 import java.util.Calendar.*
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
+import com.bupp.wood_spoon_eaters.R
 
 
 object Utils {
@@ -28,6 +34,26 @@ object Utils {
 
     fun String.splitAtIndex(index: Int) = require(index in 0..length).let {
         take(index) to substring(index)
+    }
+
+    fun onContactUsClick(context: Context) {
+
+    }
+
+
+    fun callPhone(activity: FragmentActivity){
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CALL_PHONE), Constants.PHONE_CALL_PERMISSION_REQUEST_CODE)
+            }
+        } else {
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + activity.getString(R.string.default_bupp_phone_number)))
+            activity.startActivity(intent)
+        }
     }
 
     fun parseDate(date: Date?): String {
@@ -61,6 +87,15 @@ object Utils {
         val date = dateFormat.format(orderDate)
         val time = timeFormat.format(orderDate)
         return "$date, From $time"
+    }
+
+    fun parseDateToFullDate(orderDate: Date?): String {
+        //Aug 2, 10:30 AM
+        val dateFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("h:mma", Locale.getDefault())
+        val date = dateFormat.format(orderDate)
+        val time = timeFormat.format(orderDate)
+        return "$date, $time"
     }
 
     fun parseDateToTime(date: Date?): String {

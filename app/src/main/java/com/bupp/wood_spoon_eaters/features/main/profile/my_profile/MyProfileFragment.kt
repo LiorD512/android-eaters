@@ -93,7 +93,9 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     override fun onDishClick(dish: Dish) {
-        (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
+        dish.menuItem?.let{
+            (activity as MainActivity).loadNewOrderActivity(it.id)
+        }
     }
 
     private fun initClicks() {

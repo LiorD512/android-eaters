@@ -106,7 +106,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     override fun onDishClick(dish: Dish) {
-        (activity as MainActivity).loadNewOrderActivity(dish.menuItem.id)
+        dish.menuItem?.let{
+            (activity as MainActivity).loadNewOrderActivity(it.id)
+        }
     }
 
     override fun onCookClick(cook: Cook) {

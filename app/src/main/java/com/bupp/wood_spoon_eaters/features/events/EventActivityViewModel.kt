@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.events
 
+import android.content.res.Resources
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,16 +8,19 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.model.Event
-import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.managers.OrderManager
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.ArrayList
 
-class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiService: ApiService, val metaDataManager: MetaDataManager): ViewModel() {
+class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiService: ApiService, val metaDataManager: MetaDataManager, val orderManager: OrderManager): ViewModel() {
+
+    private var hasActiveOrder: Boolean = false
+    private var hasPendingOrder: Boolean = false
 
     val navigationEvent = SingleLiveEvent<NavigationEvent>()
     enum class NavigationEvent{
@@ -42,6 +46,7 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
                     Log.d("wowEventValidationVM", "validateEventCode success")
                     val event = response.body()?.data
                     liveEventObj.postValue(event)
+                    updateEventTimeAndPlace(event)
                     if (event != null) {
                         navigationEvent.postValue(NavigationEvent.GET_EVENT_BY_ID_SUCCESS)
                     } else {
@@ -73,7 +78,8 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
     data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
     fun getCurrentCook(id: Long) {
-        apiService.getCook(id).enqueue(object: Callback<ServerResponse<Cook>> {
+        val timestamp = eaterDataManager.getLastOrderTimeParam()
+        apiService.getCook(id, timestamp).enqueue(object: Callback<ServerResponse<Cook>> {
             override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
                 if(response.isSuccessful){
                     val cook = response.body()?.data
@@ -92,6 +98,62 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
         })
     }
 
+    fun getContainerPaddingBottom(): Int{
+        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+        var padding = 0
+        if(hasActiveOrder){
+            padding += 55.DptoPx()
+        }
+        if(hasPendingOrder){
+            padding += 55.DptoPx()
+        }
+        return padding
+    }
+
+    val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
+    data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
+    fun checkCartStatus() {
+        hasPendingOrder = orderManager.haveCurrentActiveOrder()
+        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
+    }
+//    fun checkCartStatus() {
+//        if(orderManager.haveCurrentActiveOrder()){
+//          heightHandling.postValue(HeightHandling(HeightHandlingType.CHECKOUT, ))
+//        }
+//        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
+//    }
+
+    val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
+    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?)
+
+    fun checkForActiveOrder() {
+        apiService.getTrackableOrders().enqueue(object : Callback<ServerResponse<ArrayList<Order>>> {
+            override fun onResponse(call: Call<ServerResponse<ArrayList<Order>>>, response: Response<ServerResponse<ArrayList<Order>>>) {
+                if (response.isSuccessful) {
+//                    Log.d("wow", "phoneNumber sent: $phoneNumber")
+                    Log.d("wowMainVM", "getTrackableOrders success")
+                    val activeOrders = response.body()!!.data
+                    if(activeOrders != null && activeOrders.size > 0){
+//                        hasActiveOrder = true
+                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders))
+                    }else{
+//                        hasActiveOrder = false
+                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                    }
+                } else {
+//                    hasActiveOrder = false
+                    Log.d("wowMainVM", "getTrackableOrders fail")
+                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<ArrayList<Order>>>, t: Throwable) {
+                Log.d("wowMainVM", "getTrackableOrders big fail")
+                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+            }
+        })
+    }
+
     fun getDeliveryFeeString(): String {
         return metaDataManager.getDeliveryFeeStr()
     }
@@ -103,15 +165,34 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
     }
 
 
-    fun getLastOrderTime(): String? {
-        return eaterDataManager.getLastOrderTimeString()
+//    fun getLastOrderTime(): String? {
+//        return eaterDataManager.getLastOrderTimeString()
+//    }
+//
+//    fun getCurrentAddress(): Address?{
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        return currentAddress
+//    }
+
+    private fun updateEventTimeAndPlace(event: Event?) {
+        eaterDataManager.setEventTimeAndPlace(event)
     }
 
-    fun getCurrentAddress(): Address?{
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        return currentAddress
+    fun getEventOrderTime(): String? {
+        return liveEventObj.value?.let {
+            return Utils.parseDateToDayDateHour(it.startsAt)
+        }
     }
 
+    fun getEventCurrentAddress(): Address?{
+        return liveEventObj.value?.let {
+            return it.location
+        }
+    }
+
+    fun removeEventData() {
+        eaterDataManager.disableEventDate()
+    }
 
 
 }

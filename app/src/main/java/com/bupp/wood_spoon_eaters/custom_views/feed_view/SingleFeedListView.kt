@@ -40,12 +40,12 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     }
 
 
-    fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener, deliveryFee: String) {
+    fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener, deliveryFee: String, isEvent: Boolean = false) {
         this.deliveryFee = deliveryFee
         this.listener = listener
         singleFeedListViewTitle.text = feedObj.title
 
-        adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this, deliveryFee)
+        adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this, deliveryFee, isEvent)
         singleFeedListView.adapter = adapter
     }
 

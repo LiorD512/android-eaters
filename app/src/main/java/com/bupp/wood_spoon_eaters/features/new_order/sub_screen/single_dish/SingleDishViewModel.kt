@@ -62,7 +62,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         if(userSelection == null){
             userSelection = Date()
         }
-        return userSelection.after(start) && userSelection.before(end)
+        return (userSelection.equals(start) || userSelection.equals(end)) || (userSelection.after(start) && userSelection.before(end))
     }
 
     private fun getFeedRequest(): FeedRequest {

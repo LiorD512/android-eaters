@@ -213,7 +213,7 @@ class SingleDishFragment() : Fragment(),
 
     private fun initCartBottomBar() {
         singleDishStatusBar.setStatusBottomBarListener(this)
-        updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CART, price = currentDish.price.value, itemCount = 1)
+        updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CART, price = currentDish.getPriceObj().value, itemCount = 1)
     }
 
     fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
@@ -283,7 +283,8 @@ class SingleDishFragment() : Fragment(),
 
 
         singleDishInfoDescription.text = currentDish.description
-        singleDishInfoPrice.text = currentDish.price.formatedValue
+        singleDishInfoPrice.text = currentDish.getPriceObj().formatedValue
+
         val menuItem = currentDish.menuItem
         if (menuItem != null) {
             singleDishQuantityView.initQuantityView(menuItem)
@@ -296,7 +297,6 @@ class SingleDishFragment() : Fragment(),
         singleDishInfoRatingVal.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
     }
-
 
 
     private fun onRatingClick() {
@@ -397,7 +397,9 @@ class SingleDishFragment() : Fragment(),
     }
 
     override fun onDishClick(dish: Dish) {
-        listener?.onDishClick(dish.menuItem.id)
+        dish.menuItem?.let{
+            listener?.onDishClick(it.id)
+        }
 //        SingleDishFragment.newInstance(dish.menuItem.id, listener).show(fragmentManager, Constants.SINGLE_DISH_TAG)
     }
 

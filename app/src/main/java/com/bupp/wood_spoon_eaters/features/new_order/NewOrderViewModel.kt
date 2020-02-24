@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.new_order
 
 import android.app.Activity
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
@@ -22,6 +23,17 @@ import kotlin.collections.ArrayList
 
 class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
+
+    var menuItemId: Long = -1
+    var isCheckout: Boolean = false
+
+    data class NavigationEvent(val menuItemId: Long = -1, val isCheckout: Boolean = false)
+    val navigationEvent = MutableLiveData<NavigationEvent>()
+    fun setIntentParams(menuItemId: Long = -1, isCheckout: Boolean = false) {
+        this.menuItemId = menuItemId
+        this.isCheckout = isCheckout
+        navigationEvent.postValue(NavigationEvent(menuItemId, isCheckout))
+    }
 
     val orderStatusEvent: SingleLiveEvent<OrderStatusEvent> = SingleLiveEvent()
     data class OrderStatusEvent(val hasActiveOrder: Boolean = false)
@@ -70,7 +82,9 @@ class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: 
         orderManager.clearCurrentOrder()
     }
 
-
+    fun loadPreviousDish() {
+        navigationEvent.postValue(NavigationEvent(menuItemId = menuItemId))
+    }
 
 
 }

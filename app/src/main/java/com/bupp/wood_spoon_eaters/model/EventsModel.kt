@@ -15,5 +15,6 @@ data class Event(
     @SerializedName("starts_at") val startsAt: Date,
     @SerializedName("ends_at") val endsAt: Date,
     @SerializedName("feed") val feed: ArrayList<Feed>,
-    @SerializedName("pickup_at") val pickupAt: Date
+    @SerializedName("pickup_at") val pickupAt: Date,
+    @SerializedName("delivery_fee") val deliveryFee: Price
 ):Parcelable

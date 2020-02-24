@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.main
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,18 +9,16 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.events.EventActivity
-import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -38,6 +35,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
@@ -47,7 +45,6 @@ import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -55,7 +52,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
-    RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener {
+    RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
+    OrdersBottomBar.OrderBottomBatListener {
+
 
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         )
 
         mainActHeaderView.setHeaderViewListener(this, viewModel.getCurrentEater())
-
+        mainActOrdersBB.setOrdersBottomBarListener(this)
 
         initObservers()
         startLocationUpdates()
@@ -115,10 +114,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.getActiveOrders.observe(this, Observer { ordersEvent ->
             mainActPb.hide()
             if (ordersEvent.isSuccess) {
-                handleActiveOrderBottomBar(true)
+                mainActOrdersBB.handleBottomBar(showActiveOrders = true)
+//                handleActiveOrderBottomBar(true)
                 openActiveOrdersDialog(ordersEvent.orders!!)
             } else {
-                handleActiveOrderBottomBar(false)
+                mainActOrdersBB.handleBottomBar(showActiveOrders = false)
+//                handleActiveOrderBottomBar(false)
             }
         })
 
@@ -131,74 +132,72 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
-                showCheckOutBottomBar(true)
+                mainActOrdersBB.handleBottomBar(showCheckout = true)
+//                showCheckOutBottomBar(true)
             }else{
-                showCheckOutBottomBar(false)
+                mainActOrdersBB.handleBottomBar(showCheckout = false)
+//                showCheckOutBottomBar(false)
             }
         })
 
-//        viewModel.getCookEvent.observe(this, Observer { event ->
-//            feedFragPb.hide()
-//            if(event.isSuccess){
-//                currentFragmentTag = Constants.COOK_PROFILE_DIALOG_TAG
-//                CookProfileDialog(event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//        viewModel.heightHandling.observe(this, Observer { heightHandlingEvent ->
+//            if (heightHandlingEvent.changeContainerHeight) {
+//                showCheckOutBottomBar(true)
+//            }else{
+//                showCheckOutBottomBar(false)
 //            }
 //        })
+
     }
 
-    private fun showCheckOutBottomBar(shouldShow: Boolean) {
-        if(shouldShow){
-            CheckOutBottomBarTitle.visibility = View.VISIBLE
-            CheckOutBottomBarTitle.setOnClickListener { loadNewOrderActivityCheckOut() }
-        }else{
-            CheckOutBottomBarTitle.visibility = View.GONE
-        }
-        handleContainerPadding()
+    override fun onBottomBarOrdersClick() {
+        viewModel.checkForActiveOrder()
     }
 
-    private fun handleActiveOrderBottomBar(shouldShow: Boolean) {
-        if (shouldShow) {
-            Log.d("wowMain", "show bottom bar")
-            handleContainerPadding()
-            activeOrderBottomBarTitle.visibility = View.VISIBLE
-            activeOrderBottomBarTitle.setOnClickListener {
-                mainActPb.show()
-                viewModel.checkForActiveOrder()
-            }
-        } else {
-            Log.d("wowMain", "hide bottom bar")
-            handleContainerPadding()
-            activeOrderBottomBarTitle.visibility = View.GONE
-        }
+    override fun onBottomBarCheckoutClick() {
+        startActivityForResult(
+            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true),
+            Constants.NEW_ORDER_REQUEST_CODE
+        )
     }
 
-    private fun handleContainerPadding() {
-        val padding = viewModel.getContainerPaddingBottom()
-        mainActContainer.setPadding(0,0,0, padding.toInt())
-    }
+//    private fun showCheckOutBottomBar(shouldShow: Boolean) {
+//        if(shouldShow){
+//            checkOutBottomBarTitle.visibility = View.VISIBLE
+//            checkOutBottomBarTitle.setOnClickListener { loadNewOrderActivityCheckOut() }
+//        }else{
+//            checkOutBottomBarTitle.visibility = View.GONE
+//        }
+////        handleContainerPadding()
+//    }
+//
+//    private fun handleActiveOrderBottomBar(shouldShow: Boolean) {
+//        if (shouldShow) {
+//            Log.d("wowMain", "show bottom bar")
+////            handleContainerPadding()
+//            activeOrderBottomBarTitle.visibility = View.VISIBLE
+//            activeOrderBottomBarTitle.setOnClickListener {
+//                mainActPb.show()
+//                viewModel.checkForActiveOrder()
+//            }
+//        } else {
+//            Log.d("wowMain", "hide bottom bar")
+////            handleContainerPadding()
+//            activeOrderBottomBarTitle.visibility = View.GONE
+//        }
+//    }
+
+//    private fun handleContainerPadding() {
+//        val padding = viewModel.getContainerPaddingBottom()
+//        mainActContainer.setPadding(0,0,0, padding.toInt())
+//    }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
         ActiveOrderTrackerDialog(orders, this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
     override fun onContactUsClick() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), Constants.PHONE_CALL_PERMISSION_REQUEST_CODE)
-            }
-        } else {
-            callPhone()
-        }
-    }
-
-
-    fun callPhone(){
-        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.default_bupp_phone_number)))
-        startActivity(intent)
+        Utils.callPhone(this)
     }
 
     fun startLocationUpdates() {
@@ -396,7 +395,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     // permission was granted, yay!
-                    callPhone()
+                    Utils.callPhone(this)
                 } else {
                     // permission denied, boo! Disable the
                     // functionality
