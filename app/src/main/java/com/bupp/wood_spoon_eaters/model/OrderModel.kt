@@ -7,6 +7,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 data class OrderRequest(
+    var cookId: Long? = null,
     @SerializedName("cooking_slot_id") var cookingSlotId: Long? = null,
     @SerializedName("deliver_at") var deliveryAt: String? = null,
     @SerializedName("delivery_address") var deliveryAddress: Address? = null,

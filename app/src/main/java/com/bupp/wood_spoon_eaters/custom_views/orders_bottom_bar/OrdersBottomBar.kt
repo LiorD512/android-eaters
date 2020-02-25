@@ -40,25 +40,27 @@ class OrdersBottomBar : FrameLayout{
     }
 
     fun handleBottomBar(showActiveOrders: Boolean? = null, showCheckout: Boolean? = null){
+        var ordersVisible = false
+        var checkoutVisible = false
        showActiveOrders?.let{
            if(it){
                bottomBarActiveOrders.visibility = View.VISIBLE
-               showSep++
+               ordersVisible = true
            }else{
                bottomBarActiveOrders.visibility = View.GONE
-               showSep--
+               ordersVisible = false
            }
        }
        showCheckout?.let{
            if(it){
                bottomBarCheckout.visibility = View.VISIBLE
-               showSep++
+               checkoutVisible = true
            }else{
                bottomBarCheckout.visibility = View.GONE
-               showSep--
+               checkoutVisible = false
            }
        }
-       if(showSep > 1){
+       if(ordersVisible && checkoutVisible){
            bottomBarSeparator.visibility = View.VISIBLE
        }else{
            bottomBarSeparator.visibility = View.GONE

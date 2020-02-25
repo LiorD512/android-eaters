@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         updateAddressTimeView()
         loadFeed()
 
-        checkForActiveOrder()
+//        checkForActiveOrder()
         checkForTriggers()
 
         initFcm()
@@ -115,11 +115,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             mainActPb.hide()
             if (ordersEvent.isSuccess) {
                 mainActOrdersBB.handleBottomBar(showActiveOrders = true)
-//                handleActiveOrderBottomBar(true)
-                openActiveOrdersDialog(ordersEvent.orders!!)
+                if(ordersEvent.showDialog){
+                    openActiveOrdersDialog(ordersEvent.orders!!)
+                }
             } else {
                 mainActOrdersBB.handleBottomBar(showActiveOrders = false)
-//                handleActiveOrderBottomBar(false)
             }
         })
 
@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onBottomBarOrdersClick() {
-        viewModel.checkForActiveOrder()
+        viewModel.checkForActiveOrder(true)
     }
 
     override fun onBottomBarCheckoutClick() {
@@ -525,19 +525,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        updateAddressTimeView()
         if(requestCode == Constants.NEW_ORDER_REQUEST_CODE){
-//            if(lastFragmentTag == Constants.COOK_PROFILE_DIALOG_TAG){
-//                val curCookId = data?.getIntExtra("curCookId", -1)
-//                if(curCookId != -1){
-//                    mainActPb.show()
-//                    viewModel.getCurrentCook(curCookId!!.toLong())
-//                }
-//            }else{
                 loadFeed()
                 checkForActiveOrder()
                 checkCartStatus()
-//            }
+        }
+        if(requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE){
+//            viewModel.disableEventData()
+            checkForActiveOrder()
         }
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
@@ -581,6 +576,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
         }
+        updateAddressTimeView()
     }
 
 
@@ -614,7 +610,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun startEventActivity() {
+//        startActivityForResult(Intent(this, EventActivity::class.java), Constants.EVENT_ACTIVITY_REQUEST_CODE)
         startActivity(Intent(this, EventActivity::class.java))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkForActiveOrder()
     }
 
 

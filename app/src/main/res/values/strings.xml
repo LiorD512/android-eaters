@@ -82,18 +82,18 @@
         <u>Report issue</u>
     </string>
     <string name="order_history_item_by_cook">Your Order by cook</string>
-    <string name="cancel_dialog_stage_1_title">No Cancelation Fee</string>
+    <string name="cancel_dialog_stage_1_title">No Cancellation Fee</string>
     <string name="cancel_dialog_stage_1_body">We are sorry to see you cancel your order. Because our cook still didn\'t
         start preparing your dish,
-        per our cancelation policy, there is no cancelation fee. \n We hope you consider ordering again with us soon
+        per our cancellation policy, there is no cancellation fee. \n We hope you consider ordering again with us soon
     </string>
-    <string name="cancel_dialog_stage_2_title">50% Cancelation Fee</string>
-    <string name="cancel_dialog_stage_2_body">We are sorry to see you cancel your order. Per our cancelation policy,
+    <string name="cancel_dialog_stage_2_title">50% Cancellation Fee</string>
+    <string name="cancel_dialog_stage_2_body">We are sorry to see you cancel your order. Per our cancellation policy,
         because our cook already started to prepare your order, you will be charged for 50% of the order cost.
         \n We hope you consider ordering again with us soon
     </string>
-    <string name="cancel_dialog_stage_3_title">100% Cancelation Fee</string>
-    <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancelation policy,
+    <string name="cancel_dialog_stage_3_title">100% Cancellation Fee</string>
+    <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancellation policy,
         because the order is already on its way, you will be charged for 100% of the order cost.
         \n We hope you can understand and wishing to see you ordering again soon
     </string>

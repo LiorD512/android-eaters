@@ -52,8 +52,10 @@ class EventActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             eventActPb.hide()
             if (ordersEvent.isSuccess) {
                 eventActOrdersBB.handleBottomBar(showActiveOrders = true)
+                if(ordersEvent.showDialog){
+                    openActiveOrdersDialog(ordersEvent.orders!!)
+                }
 //                handleActiveOrderBottomBar(true)
-                openActiveOrdersDialog(ordersEvent.orders!!)
             } else {
                 eventActOrdersBB.handleBottomBar(showActiveOrders = false)
 //                handleActiveOrderBottomBar(false)
@@ -156,12 +158,12 @@ class EventActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onBottomBarOrdersClick() {
-        viewModel.checkForActiveOrder()
+        viewModel.checkForActiveOrder(true)
     }
 
     override fun onBottomBarCheckoutClick() {
         startActivityForResult(
-            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true),
+            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true).putExtra("isEvent", true),
             Constants.NEW_ORDER_REQUEST_CODE
         )
     }
@@ -176,9 +178,9 @@ class EventActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 ////        handleContainerPadding()
 //    }
 
-    fun loadNewOrderActivityCheckOut() {
-
-    }
+//    fun loadNewOrderActivityCheckOut() {
+//
+//    }
 
 //    private fun handleActiveOrderBottomBar(shouldShow: Boolean) {
 //        if (shouldShow) {

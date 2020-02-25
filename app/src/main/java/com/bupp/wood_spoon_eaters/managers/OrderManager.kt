@@ -28,7 +28,8 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         currentOrderRequest = OrderRequest()
     }
 
-    fun updateOrderRequest(cookingSlotId: Long? = null,
+    fun updateOrderRequest(cookId: Long? = null,
+                           cookingSlotId: Long? = null,
                            deliveryAt: String? = eaterDataManager.getLastOrderTimeParam(),
                            deliveryAddress: Address? = getLastOrderAddressParam(),
                            orderItemRequests: ArrayList<OrderItemRequest>? = null,
@@ -37,6 +38,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
                            tipAmount: String? = null,
                            promoCode: String? = null){
         if(currentOrderRequest != null){
+            if(cookId != null) currentOrderRequest!!.cookId = cookId
             if(cookingSlotId != null) currentOrderRequest!!.cookingSlotId = cookingSlotId
             if(deliveryAt != null) currentOrderRequest!!.deliveryAt = deliveryAt
             if(deliveryAddress != null) currentOrderRequest!!.deliveryAddressId = deliveryAddress.id
@@ -73,6 +75,9 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
     fun haveCurrentActiveOrder(): Boolean{
         return curOrderResponse != null
     }
+//    fun haveCurrentActiveOrder(): Boolean{
+//        return currentOrderRequest != null
+//    }
 
     fun finalizeOrder(){
         currentOrderRequest = null

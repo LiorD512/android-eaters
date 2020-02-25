@@ -181,7 +181,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
             }
             mFusedLocationClient!!.removeLocationUpdates(mLocationCallback).addOnCompleteListener(object : OnCompleteListener<Void> {
                 override fun onComplete(@NonNull task: Task<Void>) {
-                    Toast.makeText(context, "stopLocationUpdates", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "stopLocationUpdates", Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "stopLocationUpdates")
                     mRequestingLocationUpdates = false
                 }

@@ -58,17 +58,20 @@ class SingleDishFragment() : Fragment(),
         super.onCreate(savedInstanceState)
         if (arguments != null) {
             viewModel.menuItemId = arguments!!.getLong(ARG_PARAM)
+            viewModel.isEvent = arguments!!.getBoolean(EVENT_PARAM)
         }
     }
 
     companion object {
         private val ARG_PARAM = "menuItemId"
+        private val EVENT_PARAM = "isEvent"
 
-        fun newInstance(menuItemId: Long): SingleDishFragment {
+        fun newInstance(menuItemId: Long, isEvent: Boolean = false): SingleDishFragment {
             val fragment = SingleDishFragment()
             try{
                 val args = Bundle()
                 args.putLong(ARG_PARAM, menuItemId)
+                args.putBoolean(EVENT_PARAM, isEvent)
                 fragment.arguments = args
             }catch (e: Exception){
                 Log.d("wowSingle","newInstance exception")
@@ -245,11 +248,13 @@ class SingleDishFragment() : Fragment(),
 
     fun addToCart() {
         singleDishPb.show()
+        val cookId = currentDish.cook.id
         val cookingSlotId = currentDish.menuItem?.cookingSlot?.id
         val quantity = singleDishInfoDishCounter.getDishCount()
         val removedIngredients = ingredientsAdapter?.ingredientsRemoved
         val note = singleDishIngredientInstructions.getText()
         viewModel.addToCart(
+            cookId = cookId,
             cookingSlotId = cookingSlotId,
             dishId = currentDish.id,
             quantity = quantity,
@@ -310,7 +315,12 @@ class SingleDishFragment() : Fragment(),
         }else if(currentDish.doorToDoorTime != null){
             singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
         }
-        singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
+        if(viewModel.isEvent){
+            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }else{
+            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icons_edit, 0, 0, 0);
+            singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
+        }
         singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
 
         singleDishInfoDate.setPaintFlags(singleDishInfoDate.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG);
@@ -373,7 +383,7 @@ class SingleDishFragment() : Fragment(),
         cookProfileFragCuisineGrid.initStackableView(currentDish.cook.cuisines as ArrayList<SelectableIcon>)
         cookProfileFragStoryName.text = "${currentDish.cook.firstName}'s Story"
         cookProfileFragStory.text = "${currentDish.cook.about}"
-        cookProfileFragDishBy.text = "Other Available Dishes By ${currentDish.cook.firstName}"
+        cookProfileFragDishBy.text = "Dishes By ${currentDish.cook.firstName}"
 
         val certificates = currentDish.cook.certificates
         cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }

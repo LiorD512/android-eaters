@@ -246,6 +246,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     }
 
     fun disableEventDate() {
+        Log.d(TAG,"disableEventDate")
         isInEvent = false
         eventChosenAddress = null
         eventOrderTime = null

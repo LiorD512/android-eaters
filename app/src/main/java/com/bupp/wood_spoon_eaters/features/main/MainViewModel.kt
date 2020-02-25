@@ -106,9 +106,9 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
 //    }
 
     val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
-    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?)
+    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?, val showDialog: Boolean = false)
 
-    fun checkForActiveOrder() {
+    fun checkForActiveOrder(showDialog: Boolean = false) {
         api.getTrackableOrders().enqueue(object : Callback<ServerResponse<ArrayList<Order>>> {
             override fun onResponse(call: Call<ServerResponse<ArrayList<Order>>>, response: Response<ServerResponse<ArrayList<Order>>>) {
                 if (response.isSuccessful) {
@@ -117,10 +117,10 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
                     val activeOrders = response.body()!!.data
                     if(activeOrders != null && activeOrders.size > 0){
                         hasActiveOrder = true
-                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders))
+                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, showDialog))
                     }else{
                         hasActiveOrder = false
-                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null, showDialog))
                     }
                 } else {
                     hasActiveOrder = false
@@ -167,7 +167,9 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         return eaterDataManager.currentEater
     }
 
-
+//    fun disableEventData() {
+//        eaterDataManager.disableEventDate()
+//    }
 
 
 }

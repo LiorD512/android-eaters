@@ -55,7 +55,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 
         viewModel.orderStatusEvent.observe(this, Observer { event ->
             if (event.hasActiveOrder) {
-                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+//                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
             } else {
                 viewModel.initNewOrder()
             }
@@ -77,13 +77,14 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     override fun onClearCart() {
-        viewModel.initNewOrder()
+//        viewModel.initNewOrder()
     }
 
     private fun checkActivityIntent() {
         val menuItemId = intent.getLongExtra("menuItemId", -1)
         val isCheckout = intent.getBooleanExtra("isCheckout", false)
-        viewModel.setIntentParams(menuItemId, isCheckout)
+        val isEvent = intent.getBooleanExtra("isEvent", false)
+        viewModel.setIntentParams(menuItemId, isCheckout, isEvent)
     }
 
 //    private fun showEmptyCartDialog() {
@@ -127,11 +128,11 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 //Single Dish
 
     fun loadSingleDish(menuItemId: Long) {
-        loadFragment(SingleDishFragment.newInstance(menuItemId), Constants.SINGLE_DISH_TAG)
+        loadFragment(SingleDishFragment.newInstance(menuItemId, viewModel.isEvent), Constants.SINGLE_DISH_TAG)
     }
 
     override fun onDishClick(itemId: Long) {
-        loadFragment(SingleDishFragment.newInstance(itemId), Constants.SINGLE_DISH_TAG)
+        loadFragment(SingleDishFragment.newInstance(itemId, viewModel.isEvent), Constants.SINGLE_DISH_TAG)
     }
 
     fun loadPromoCode() {
@@ -173,11 +174,11 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
             .commit()
     }
 
-//    override fun onAttachFragment(fragment: Fragment) {
-//        if (fragment is SingleDishFragment) {
-//            fragment.setSingleDishDialogListener(this)
-//        }
-//    }
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is SingleDishFragment) {
+            fragment.setSingleDishDialogListener(this)
+        }
+    }
 
     private fun getFragmentByTag(tag: String): Fragment? {
         val fragmentManager = this@NewOrderActivity.supportFragmentManager

@@ -79,7 +79,8 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
     data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
     fun getCurrentCook(id: Long) {
         val timestamp = eaterDataManager.getLastOrderTimeParam()
-        apiService.getCook(id, timestamp).enqueue(object: Callback<ServerResponse<Cook>> {
+        val eventId = liveEventObj.value?.id
+        apiService.getCook(id, timestamp, eventId).enqueue(object: Callback<ServerResponse<Cook>> {
             override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
                 if(response.isSuccessful){
                     val cook = response.body()?.data
@@ -124,9 +125,9 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
 //    }
 
     val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
-    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?)
+    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?, val showDialog: Boolean = false)
 
-    fun checkForActiveOrder() {
+    fun checkForActiveOrder(showDialog: Boolean = false) {
         apiService.getTrackableOrders().enqueue(object : Callback<ServerResponse<ArrayList<Order>>> {
             override fun onResponse(call: Call<ServerResponse<ArrayList<Order>>>, response: Response<ServerResponse<ArrayList<Order>>>) {
                 if (response.isSuccessful) {
@@ -134,11 +135,10 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
                     Log.d("wowMainVM", "getTrackableOrders success")
                     val activeOrders = response.body()!!.data
                     if(activeOrders != null && activeOrders.size > 0){
-//                        hasActiveOrder = true
-                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders))
+                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, showDialog))
                     }else{
 //                        hasActiveOrder = false
-                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null, showDialog))
                     }
                 } else {
 //                    hasActiveOrder = false

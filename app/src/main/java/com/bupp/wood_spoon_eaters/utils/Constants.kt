@@ -217,6 +217,7 @@ class Constants {
         const val PHONE_CALL_PERMISSION_REQUEST_CODE = 430
         const val PAYMENT_METHOD_DIALOG_REQUEST_CODE = 440
         const val ADDRESS_CHOOSER_REQUEST_CODE = 450
+        const val EVENT_ACTIVITY_REQUEST_CODE = 112
 
 
 

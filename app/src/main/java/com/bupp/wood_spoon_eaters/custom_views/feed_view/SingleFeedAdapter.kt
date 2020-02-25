@@ -28,7 +28,7 @@ class SingleFeedAdapter(
 
     interface SearchAdapterListener {
         fun onDishClick(dish: Dish) {}
-        fun onFavClick(dishId: Long, favSelected: Boolean){}
+//        fun onFavClick(dishId: Long, favSelected: Boolean){}
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

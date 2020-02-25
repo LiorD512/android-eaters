@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="You do not have any favorites yet.."/>
+                    android:text="Add your favorite dishes here"/>
 
             <View
                     android:layout_margin="15.4dp"
@@ -58,11 +58,13 @@
             <TextView
                     android:layout_marginBottom="15.4dp"
                     style="@style/SemiBold13Dark"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Tap the heart icon in a dish’s page and we will\n show all your favorites here "/>
+                    android:text="Save dishes you loved using the heart icon and access them here to reorder"/>
 
             <ImageView
                     android:layout_gravity="center"

@@ -18,6 +18,7 @@ import kotlin.collections.ArrayList
 class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
 
     var menuItemId: Long = -1
+    var isEvent: Boolean = false
 
     data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
@@ -38,6 +39,8 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                     val dish = response.body()?.data
                     val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
                     dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
+//                    val shouldClearCart = checkForDifferentCook(dish)
+
                 }else{
                     Log.d("wowSingleDishVM","getMenuItemsDetails fail")
                     dishDetailsEvent.postValue(DishDetailsEvent(false, null))
@@ -50,6 +53,15 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
             }
         })
     }
+
+//    private fun checkForDifferentCook(dish: FullDish?): Boolean {
+//        if(dish != null){
+//            if(orderManager.getOrderRequest().cookId != null){
+//                return orderManager.getOrderRequest().cookId == dish.cook.id
+//            }
+//        }
+//        return false
+//    }
 
     private fun checkCookingSlotAvailability(dish: FullDish?): Boolean {
         val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
@@ -84,13 +96,14 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
 
 
-    fun addToCart(cookingSlotId: Long? = null, dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
+    fun addToCart(cookId: Long? = null, cookingSlotId: Long? = null, dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
                   tipAmount: String? = null, promoCode: String? = null) {
 //        val cookingSlotId = cookingSlotId
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
         val orderItem = initOrderItemsList(dishId, quantity, removedIngredients, note)
 
         orderManager.updateOrderRequest(
+            cookId = cookId,
             cookingSlotId = cookingSlotId,
             deliveryAddress = deliveryAddress,
             tipPercentage = tipPercentage,

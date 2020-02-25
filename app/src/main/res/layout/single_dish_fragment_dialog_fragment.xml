@@ -187,6 +187,7 @@
                                 </LinearLayout>
 
                                 <androidx.recyclerview.widget.RecyclerView
+                                        tools:visibility="gone"
                                         android:layout_marginTop="15.4dp"
                                         android:id="@+id/singleDishInfoDietryList"
                                         android:layout_gravity="center"
