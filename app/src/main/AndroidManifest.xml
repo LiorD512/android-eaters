@@ -78,8 +78,12 @@
                 android:name=".features.splash.SplashActivity"
                 android:screenOrientation="portrait">
             <intent-filter>
+                <data
+                        android:host="open"
+                        android:scheme="woodspoon://" />
                 <action android:name="android.intent.action.MAIN"/>
-
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

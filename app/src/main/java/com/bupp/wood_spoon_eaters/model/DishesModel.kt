@@ -9,15 +9,16 @@ import kotlin.collections.ArrayList
 @Parcelize
 data class Dish(
     @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String,
-    @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("matching_slot") val matchingSlot: String,
-    @SerializedName("is_favorite") val isFavorite: Boolean,
-    @SerializedName("price") val price: Price,
     @SerializedName("cook") val cook: Cook,
-    @SerializedName("door_to_door_time") val doorToDoorTime: String?,
+    @SerializedName("name") val name: String,
+    @SerializedName("price") val price: Price,
+    @SerializedName("avg_rating") val rating: Double,
+    @SerializedName("thumbnail") val thumbnail: String,
+    @SerializedName("is_favorite") val isFavorite: Boolean,
+    @SerializedName("is_recurring") val isRecurring: Boolean,
     @SerializedName("matching_menu") val menuItem: MenuItem?,
-    @SerializedName("avg_rating") val rating: Double
+    @SerializedName("matching_slot") val matchingSlot: String,
+    @SerializedName("door_to_door_time") val doorToDoorTime: String?
 ): Parcelable {
     fun getPriceObj(): Price {
         return if(menuItem?.price != null){
@@ -53,23 +54,25 @@ data class CookingSlot(
 
 data class FullDish(
     @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String,
-    @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("price") val price: Price,
-    @SerializedName("matching_menu") var menuItem: MenuItem?,
-    @SerializedName("is_favorite") val isFavorite: Boolean,
-    @SerializedName("avg_rating") val rating: Double,
     @SerializedName("cook") val cook: Cook,
-    @SerializedName("description") val description: String,
-    @SerializedName("door_to_door_time") val doorToDoorTime: String,
-    @SerializedName("calorific_value") val calorificValue: Double,
+    @SerializedName("name") val name: String,
+    @SerializedName("price") val price: Price,
+    @SerializedName("video") val video: String? = null,
+    @SerializedName("avg_rating") val rating: Double,
     @SerializedName("proteins") val proteins: Double,
-    @SerializedName("carbohydrates") val carbohydrates: Double,
+    @SerializedName("thumbnail") val thumbnail: String,
+    @SerializedName("is_favorite") val isFavorite: Boolean,
+    @SerializedName("description") val description: String,
+    @SerializedName("matching_menu") var menuItem: MenuItem?,
     @SerializedName("matching_slot") val matchingSlot: String,
-    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
+    @SerializedName("carbohydrates") val carbohydrates: Double,
+    @SerializedName("calorific_value") val calorificValue: Double,
+    @SerializedName("door_to_door_time") val doorToDoorTime: String,
     @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
-    @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>,
-    @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>
+    @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>,
+    @SerializedName("image_gallery") val imageGallery: ArrayList<String>? = null,
+    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
+    @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>
 ){
     fun getPriceObj(): Price {
         if(availableMenuItems[0].price != null){
@@ -78,7 +81,23 @@ data class FullDish(
             return price
         }
     }
+
+    fun getMediaList(): List<MediaList> {
+        val mediaList = arrayListOf<MediaList>()
+        imageGallery?.forEach {
+            mediaList.add(MediaList(it, true))
+        }
+        video?.let{
+            mediaList.add(MediaList(it, false))
+        }
+        return mediaList
+    }
 }
+
+data class MediaList(
+    val media: String,
+    val isImage: Boolean
+)
 
 @Parcelize
 data class DishIngredient(

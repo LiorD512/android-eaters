@@ -6,21 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import kotlinx.android.synthetic.main.order_item_view.view.*
-import java.text.BreakIterator
 import java.text.DecimalFormat
 
 class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val context: Context, private var orders: ArrayList<OrderItem>) :
-    RecyclerView.Adapter<OrderItemsViewAdapter.DishViewHolder>() {
+    RecyclerView.Adapter<OrderItemsViewAdapter.DishViewHolder>(){
+
 
     interface OrderItemsViewAdapterListener{
         fun onDishCountChange(orderItemsCount: Int, orderItem1: OrderItem)
@@ -33,9 +33,10 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         val price: TextView = view.orderItemPrice
         val image: ImageView = view.orderItemImage
         val name: TextView = view.orderItemName
-        val plusBtn: CardView = view.orderItemCountPlus
-        val minusBtn: CardView = view.orderItemCountMinus
-        val counterText: TextView = view.orderItemCounter
+//        val plusBtn: CardView = view.orderItemCountPlus
+//        val minusBtn: CardView = view.orderItemCountMinus
+//        val counterText: TextView = view.orderItemCounter
+        val plusMinusView: PlusMinusView = view.orderItemPlusMinus
         val note: TextView = view.orderItemNote
         val ingredientsList = view.orderItemIngredientsRecyclerView!!
 
@@ -68,7 +69,13 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         val price = (orderItem.price.value*orderItem.quantity)
         val priceStr = DecimalFormat("##.##").format(price)
         holder.price.text = "$$priceStr"
-        holder.counterText.text = "Count: ${orderItem.quantity}"
+//        holder.counterText.text = "Count: ${orderItem.quantity}"
+        holder.plusMinusView.setPlusMinusListener(object: PlusMinusView.PlusMinusInterface{
+            override fun onPlusMinusChange(counter: Int, position: Int) {
+                orderItem.quantity = counter
+                listener.onDishCountChange(counter, orderItem)
+            }
+        }, position, orderItem.quantity)
 
         if(orderItem.notes.isNullOrEmpty()){
             holder.note.visibility = View.GONE
@@ -77,28 +84,6 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
             holder.note.text = orderItem.notes
         }
 
-        holder.plusBtn.setOnClickListener {
-            orderItem.quantity++
-            notifyDataSetChanged()
-            listener?.onDishCountChange(getOrderItemsQuantity(), orderItem)
-        }
-
-        holder.minusBtn.setOnClickListener {
-            if (orderItem.quantity > 1){
-                orderItem.quantity--
-                listener?.onDishCountChange(getOrderItemsQuantity(), orderItem)
-            }else{
-                if(getOrderItemsQuantity() > 1){
-//                    orders.remove(orderItem)
-                    orderItem.quantity--
-                    listener?.onDishCountChange(getOrderItemsQuantity(), orderItem)
-                }else{
-                    listener?.onDishCountChange(0, orderItem)
-
-                }
-            }
-            notifyDataSetChanged()
-        }
 
         holder.ingredientsList.layoutManager = LinearLayoutManager(context)
         adapter = IngredientsCheckoutAdapter(context, orderItem.removedIndredients)

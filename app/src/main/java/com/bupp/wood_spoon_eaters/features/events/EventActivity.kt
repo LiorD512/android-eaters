@@ -157,7 +157,7 @@ class EventActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.checkCartStatus()
     }
 
-    override fun onBottomBarOrdersClick() {
+    override fun onBottomBarOrdersClick(type: Int) {
         viewModel.checkForActiveOrder(true)
     }
 

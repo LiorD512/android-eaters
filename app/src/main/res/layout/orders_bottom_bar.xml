@@ -3,7 +3,7 @@
         android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
             android:visibility="gone"
@@ -14,21 +14,49 @@
             android:background="@color/teal_blue"
             android:layout_width="match_parent"
             android:layout_height="@dimen/status_bottom_bar_height"
-            android:text="Checkout"/>
+            android:text="Proceed To Checkout"/>
 
     <View
+            android:visibility="gone"
             android:id="@+id/bottomBarSeparator"
             android:layout_width="match_parent" android:layout_height="15.4dp"/>
 
-    <TextView
+    <!--<TextView-->
+            <!--android:visibility="gone"-->
+            <!--android:id="@+id/bottomBarActiveOrders"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--style="@style/Bold17White"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@color/teal_blue"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/status_bottom_bar_height"-->
+            <!--android:text="Track Your Order"/>-->
+
+    <FrameLayout
             android:visibility="gone"
             android:id="@+id/bottomBarActiveOrders"
-            android:layout_gravity="bottom"
-            style="@style/Bold17White"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:background="@color/teal_blue"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/status_bottom_bar_height"
-            android:text="Track Your Order"/>
+            android:layout_height="@dimen/status_bottom_bar_height">
+
+        <TextView
+                android:id="@+id/statusBottomBarTitle"
+                android:layout_gravity="center"
+                style="@style/Bold17White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track Your Order"/>
+
+        <TextView
+                android:layout_marginRight="16.8dp"
+                android:layout_gravity="center|right"
+                style="@style/Bold17White"
+                android:id="@+id/statusBottomBarPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="$7"/>
+
+    </FrameLayout>
 
 </LinearLayout>

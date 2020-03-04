@@ -1,7 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
@@ -19,59 +21,72 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
     var menuItemId: Long = -1
     var isEvent: Boolean = false
+    val progressData = ProgressData()
 
-    data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
-    val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
 
-    data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
-    val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
-
-    data class GetReviewsEvent(val isSuccess: Boolean = false, val reviews: Review? = null)
-    val getReviewsEvent: SingleLiveEvent<GetReviewsEvent> = SingleLiveEvent()
-
-    fun getFullDish() {
-        val feedRequest = getFeedRequest()
-        api.getMenuItemsDetails(menuItemId = menuItemId, lat = feedRequest.lat, lng = feedRequest.lng, addressId = feedRequest.addressId, timestamp = feedRequest.timestamp)
-            .enqueue(object: Callback<ServerResponse<FullDish>> {
-            override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
-                if(response.isSuccessful){
-                    Log.d("wowSingleDishVM","getMenuItemsDetails success")
-                    val dish = response.body()?.data
-                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
-                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
-//                    val shouldClearCart = checkForDifferentCook(dish)
-
-                }else{
-                    Log.d("wowSingleDishVM","getMenuItemsDetails fail")
-                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
-                Log.d("wowSingleDishVM","getMenuItemsDetails big fail: ${t.message}")
-                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-            }
-        })
+    fun getCurrentDish(): FullDish? {
+        fullDish.value?.let {
+            return it
+        }
+        return null
     }
 
-//    private fun checkForDifferentCook(dish: FullDish?): Boolean {
-//        if(dish != null){
-//            if(orderManager.getOrderRequest().cookId != null){
-//                return orderManager.getOrderRequest().cookId == dish.cook.id
-//            }
-//        }
-//        return false
-//    }
+    data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
+
+    val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
+    val fullDish = MutableLiveData<FullDish>()
+
+    data class DishAvailability(val isAvailable: Boolean, val startingTime: Date?)
+
+    val availability = MutableLiveData<DishAvailability>()
+
+    fun getFullDish() {
+        progressData.startProgress()
+        val feedRequest = getFeedRequest()
+        api.getMenuItemsDetails(
+            menuItemId = menuItemId,
+            lat = feedRequest.lat,
+            lng = feedRequest.lng,
+            addressId = feedRequest.addressId,
+            timestamp = feedRequest.timestamp
+        ).enqueue(object : Callback<ServerResponse<FullDish>> {
+                override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
+                    progressData.endProgress()
+                    if (response.isSuccessful) {
+                        Log.d("wowSingleDishVM", "getMenuItemsDetails success")
+                        val dish = response.body()?.data
+                        dish?.let {
+                            fullDish.postValue(dish)
+                            availability.postValue(DishAvailability(checkCookingSlotAvailability(dish),dish.menuItem?.cookingSlot?.startsAt))
+                        }
+//                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
+//                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
+//                    val shouldClearCart = checkForDifferentCook(dish)
+
+                    } else {
+                        Log.d("wowSingleDishVM", "getMenuItemsDetails fail")
+                        dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+                    }
+                }
+
+                override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
+                    progressData.endProgress()
+                    Log.d("wowSingleDishVM", "getMenuItemsDetails big fail: ${t.message}")
+                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+                }
+            })
+    }
+
 
     private fun checkCookingSlotAvailability(dish: FullDish?): Boolean {
         val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
         val end: Date? = dish?.menuItem?.cookingSlot?.endsAt
         var userSelection: Date? = eaterDataManager.getLastOrderTime()
 
-        if(start == null || end == null){
+        if (start == null || end == null) {
             return false
         }
-        if(userSelection == null){
+        if (userSelection == null) {
             userSelection = Date()
         }
         return (userSelection.equals(start) || userSelection.equals(end)) || (userSelection.after(start) && userSelection.before(end))
@@ -81,9 +96,9 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         var feedRequest = FeedRequest()
         //address
         val currentAddress = eaterDataManager.getLastChosenAddress()
-        if(eaterDataManager.isUserChooseSpecificAddress()){
+        if (eaterDataManager.isUserChooseSpecificAddress()) {
             feedRequest.addressId = currentAddress?.id
-        }else{
+        } else {
             feedRequest.lat = currentAddress?.lat
             feedRequest.lng = currentAddress?.lng
         }
@@ -95,53 +110,18 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     }
 
 
-
-    fun addToCart(cookId: Long? = null, cookingSlotId: Long? = null, dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
-                  tipAmount: String? = null, promoCode: String? = null) {
-//        val cookingSlotId = cookingSlotId
-        val deliveryAddress = eaterDataManager.getLastChosenAddress()
-        val orderItem = initOrderItemsList(dishId, quantity, removedIngredients, note)
-
-        orderManager.updateOrderRequest(
-            cookId = cookId,
-            cookingSlotId = cookingSlotId,
-            deliveryAddress = deliveryAddress,
-            tipPercentage = tipPercentage,
-            tipAmount = tipAmount,
-            promoCode = promoCode)
-
-        orderManager.addOrderItem(orderItem)
-        api.postOrder(orderManager.getOrderRequest()).enqueue(object: Callback<ServerResponse<Order>>{
-            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
-                if(response.isSuccessful){
-                    val order = response.body()?.data
-                    orderManager.setOrderResponse(order)
-                    Log.d("wowFeedVM","postOrder success: ${order.toString()}")
-                    postOrderEvent.postValue(PostOrderEvent(true, order))
-                }else{
-                    Log.d("wowFeedVM","postOrder fail")
-                    postOrderEvent.postValue(PostOrderEvent(false,null))
-                }
+    fun updateChosenDeliveryDate(selectedMenuItem: MenuItem? = null, newChosenDate: Date) {
+        getCurrentDish()?.let {
+            eaterDataManager.orderTime = newChosenDate
+            selectedMenuItem?.let {
+                getCurrentDish()!!.menuItem = it
             }
-
-            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                Log.d("wowFeedVM","postOrder big fail")
-                postOrderEvent.postValue(PostOrderEvent(false,null))
-            }
-        })
-        Log.d("wowSingleDishVM","addToCart finish")
+        }
     }
 
-    private fun initOrderItemsList(dishId: Long? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null): OrderItemRequest {
-        return OrderItemRequest(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
-    }
-
-    fun updateChosenDeliveryDate(newChosenDate: Date) {
-        eaterDataManager.orderTime = newChosenDate
-    }
 
     fun getUserChosenDeliveryDate(): Date? {
-        if(eaterDataManager.getLastOrderTime() != null){
+        if (eaterDataManager.getLastOrderTime() != null) {
             return eaterDataManager.getLastOrderTime()
         }
         return Date()
@@ -151,49 +131,40 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         return eaterDataManager.getDropoffLocation()
     }
 
-    fun getDishReview(cookId: Long) {
-        api.getDishReview(cookId).enqueue(object: Callback<ServerResponse<Review>>{
-            override fun onResponse(call: Call<ServerResponse<Review>>, response: Response<ServerResponse<Review>>) {
-                if(response.isSuccessful){
-                    val reviews = response.body()?.data
-                    Log.d("wowFeedVM","getDishReview success")
-                    getReviewsEvent.postValue(GetReviewsEvent(true, reviews))
-                }else{
-                    Log.d("wowFeedVM","getDishReview fail")
+
+    data class GetReviewsEvent(val isSuccess: Boolean = false, val reviews: Review? = null)
+
+    val getReviewsEvent: SingleLiveEvent<GetReviewsEvent> = SingleLiveEvent()
+
+    fun getDishReview() {
+        progressData.startProgress()
+        fullDish.value?.let {
+            api.getDishReview(it.cook.id).enqueue(object : Callback<ServerResponse<Review>> {
+                override fun onResponse(
+                    call: Call<ServerResponse<Review>>,
+                    response: Response<ServerResponse<Review>>
+                ) {
+                    progressData.endProgress()
+                    if (response.isSuccessful) {
+                        val reviews = response.body()?.data
+                        Log.d("wowFeedVM", "getDishReview success")
+                        getReviewsEvent.postValue(GetReviewsEvent(true, reviews))
+                    } else {
+                        Log.d("wowFeedVM", "getDishReview fail")
+                        getReviewsEvent.postValue(GetReviewsEvent(false))
+                    }
+                }
+
+                override fun onFailure(call: Call<ServerResponse<Review>>, t: Throwable) {
+                    Log.d("wowFeedVM", "getDishReview big fail: ${t.message}")
+                    progressData.endProgress()
                     getReviewsEvent.postValue(GetReviewsEvent(false))
                 }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Review>>, t: Throwable) {
-                Log.d("wowFeedVM","getDishReview big fail: ${t.message}")
-                getReviewsEvent.postValue(GetReviewsEvent(false))
-            }
-        })
-    }
-
-
-    val hasOpenOrder: SingleLiveEvent<HasOpenOrder> = SingleLiveEvent()
-    data class HasOpenOrder(val hasOpenOrder: Boolean, val cookInCart: Cook? = null, val currentShowingCook: Cook? = null)
-
-    fun checkForOpenOrder(currentShowingCook: Cook) {
-        if(orderManager.haveCurrentActiveOrder()){
-            val inCartOrder = orderManager.curOrderResponse
-            val cookInCart = inCartOrder?.cook
-            if(currentShowingCook.id != cookInCart?.id){
-                //if the showing dish's (cook) is the same as the in-cart order's cook
-                hasOpenOrder.postValue(HasOpenOrder(true, cookInCart, currentShowingCook))
-            }else{
-                hasOpenOrder.postValue(HasOpenOrder(false))
-            }
-        }else{
-            hasOpenOrder.postValue(HasOpenOrder(false))
+            })
         }
     }
 
-    fun clearCurrentOpenOrder() {
-        orderManager.clearCurrentOrder()
-        orderManager.initNewOrder()
-    }
+
 
     fun getDeliveryFeeString(): String {
         return metaDataManager.getDeliveryFeeStr()
@@ -202,6 +173,10 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     fun hasValidDeliveryAddress(): Boolean {
         return eaterDataManager.getLastChosenAddress()?.id != null
     }
+
+    data class AdditionalDishesEvent(val orderItems: List<OrderItem>?, val moreDishes: List<Dish>?)
+
+
 
 
 }

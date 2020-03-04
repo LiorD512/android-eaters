@@ -66,13 +66,13 @@ class TipPercentView : FrameLayout, View.OnClickListener {
         tipPercentCustom.isSelected = false
     }
 
-    fun setCustomTipValue(tipValue: Int){
+    fun setCustomTipValue(tipValue: Int? = 0){
         val string = "Custom\n$$tipValue"
         var spannableString = Utils.setCustomFontTypeSpan(context, string, 0, 6, R.font.open_sans_semi_bold)
         tipPercentCustomText.text = spannableString
     }
 
-    fun updateCurrentTip(tipPercentage: Int = 0, tip: Int = 0) {
+    fun updateCurrentTip(tipPercentage: Int? = 0, tip: Int? = null) {
         if(tipPercentage != 0){
             when (tipPercentage) {
                 10 -> {
@@ -87,9 +87,11 @@ class TipPercentView : FrameLayout, View.OnClickListener {
 
             }
         }
-        if(tip != 0){
-            tipPercentCustom.isSelected = true
-            tipPercentCustomText.text = "Custom\n $$tip"
+        tip?.let{
+            if(tip != 0){
+                tipPercentCustom.isSelected = true
+                tipPercentCustomText.text = "Custom\n $$tip"
+            }
         }
 //        tipPercent10.setOnClickListener(null)
 //        tipPercent15.setOnClickListener(null)

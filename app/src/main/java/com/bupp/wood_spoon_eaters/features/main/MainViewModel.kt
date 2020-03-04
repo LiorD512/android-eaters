@@ -68,42 +68,12 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
     }
 
-//    val heightHandling: MutableLiveData<HeightHandling> = SingleLiveEvent()
-//    enum class HeightHandlingType {ACTIVE_ORDER, CHECKOUT, NONE}
-//    data class HeightHandling(val type: HeightHandlingType, val padding: Int)
-
-//    fun getContainerPaddingBottom(): Int{
-//        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
-//        if(hasActiveOrder || hasPendingOrder){
-//            return 55.DptoPx()
-//        }
-//        return 0
-//    }
-
-//    fun getContainerPaddingBottom(): Int{
-//        fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
-//        var padding = 0
-//        if(hasActiveOrder){
-//            padding += 55.DptoPx()
-//        }
-//        if(hasPendingOrder){
-//            padding += 55.DptoPx()
-//        }
-//        return padding
-//    }
-
     val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
     data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
     fun checkCartStatus() {
         hasPendingOrder = orderManager.haveCurrentActiveOrder()
         checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
     }
-//    fun checkCartStatus() {
-//        if(orderManager.haveCurrentActiveOrder()){
-//          heightHandling.postValue(HeightHandling(HeightHandlingType.CHECKOUT, ))
-//        }
-//        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
-//    }
 
     val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
     data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?, val showDialog: Boolean = false)

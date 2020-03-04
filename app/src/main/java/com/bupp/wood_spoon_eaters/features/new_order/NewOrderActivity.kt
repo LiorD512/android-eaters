@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import com.stripe.android.model.PaymentMethod
 import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 
@@ -34,7 +35,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 
     //    private var isEvent: Boolean = false
     private val currentDesplayingFragment: ArrayList<String> = arrayListOf()
-    val viewModel by viewModel<NewOrderViewModel>()
+    val viewModel by viewModel<NewOrderSharedViewModel>()
 
     private val BACK_STACK_ROOT_TAG = "first_frag_tag"
     private var subscreensOnTheStack: Int = 0
@@ -215,12 +216,12 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
     }
 
-//    fun loadAddressesDialog() {
-//        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
-//            supportFragmentManager,
-//            Constants.ADDRESS_DIALOG_TAG
-//        )
-//    }
+    fun loadAddressesDialog() {
+        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
+            supportFragmentManager,
+            Constants.ADDRESS_DIALOG_TAG
+        )
+    }
 
     override fun onAddressMenuClick(address: Address) {
         AddressMenuDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
@@ -228,6 +229,9 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
 
     override fun onAddressChoose(address: Address) {
         viewModel.setChosenAddress(address)
+        if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
+            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
+        }
     }
 
     override fun onEditAddress(address: Address) {

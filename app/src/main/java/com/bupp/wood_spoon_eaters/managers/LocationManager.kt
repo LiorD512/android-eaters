@@ -166,7 +166,6 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                     }
                     else -> Log.d(TAG, "location setting failed big")
                 }
-
             }
         }
     }

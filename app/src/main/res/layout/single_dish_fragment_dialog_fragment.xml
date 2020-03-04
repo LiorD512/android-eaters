@@ -8,7 +8,6 @@
         tools:context=".features.new_order.sub_screen.single_dish.SingleDishFragment">
 
     <LinearLayout
-            android:paddingBottom="@dimen/status_bottom_bar_height"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,9 +18,10 @@
                 android:layout_height="wrap_content"/>
 
         <LinearLayout
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="0dp">
 
             <FrameLayout
                     android:layout_width="match_parent"
@@ -54,11 +54,35 @@
                                     android:layout_height="268dp"
                                     android:background="@color/white">
 
-                                <ImageView
-                                        android:scaleType="centerCrop"
-                                        android:id="@+id/singleDishInfoImg"
+                                <FrameLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"/>
+                                        android:layout_height="match_parent">
+
+                                    <androidx.viewpager2.widget.ViewPager2
+                                            android:background="@color/white"
+                                            android:id="@+id/singleDishInfoImagePager"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent" />
+
+                                    <me.relex.circleindicator.CircleIndicator3
+                                            android:layout_gravity="bottom"
+                                            android:layout_marginBottom="22dp"
+                                            app:ci_height="10dp"
+                                            app:ci_width="10dp"
+                                            app:ci_animator="@anim/circle_indicator_anim"
+                                            app:ci_drawable="@drawable/vp_indicator_selected"
+                                            app:ci_drawable_unselected="@drawable/vp_indicator_unselected"
+                                            app:ci_gravity="center"
+                                            android:id="@+id/singleDishInfoCircleIndicator"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="11dp"/>
+
+                                </FrameLayout>
+                                <!--<ImageView-->
+                                        <!--android:scaleType="centerCrop"-->
+                                        <!--android:id="@+id/singleDishInfoImg"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="match_parent"/>-->
 
                                 <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                                         android:id="@+id/singleDishInfoCook"
@@ -426,15 +450,18 @@ into consideration"/>
 
             </FrameLayout>
 
+
+
         </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+                android:id="@+id/singleDishStatusBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
-            android:layout_gravity="bottom"
-            android:id="@+id/singleDishStatusBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
 
 
 </FrameLayout>

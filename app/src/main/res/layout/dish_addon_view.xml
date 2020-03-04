@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:paddingBottom="16.9dp"
+        android:animateLayoutChanges="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:paddingLeft="7.7dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+                app:cardElevation="8dp"
+                android:padding="3dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp">
+
+            <ImageView
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center"
+                    tools:src="@drawable/ic_utensiles"
+                    android:id="@+id/dishAddonImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+                android:layout_marginStart="7.7dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp" android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:id="@+id/dishAddonName"
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Tomato Soup"/>
+
+                <TextView
+                        android:layout_marginStart="4dp"
+                        android:id="@+id/dishAddonPrice"
+                        style="@style/Reg13Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="($7)"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Count:"/>
+
+                <TextView
+                        android:layout_marginStart="4dp"
+                        android:id="@+id/dishAddonCount"
+                        style="@style/SemiBold13Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/dishAddonAddBtn"
+                android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:background="@drawable/blue_cornered_bkg"
+                style="@style/SemiBold13White"
+                android:layout_width="99dp"
+                android:layout_height="48dp"
+                android:text="Add"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+                android:id="@+id/dishAddonPlusMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_marginStart="9.4dp"
+            android:id="@+id/dishAddonChooserLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <CheckBox
+                android:id="@+id/dishAddonSingleDishCb"
+                style="@style/Reg13Dark"
+                android:lines="1"
+                android:paddingStart="4dp"
+                android:text="Single Dish"
+                android:button="@drawable/checkbox_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <LinearLayout
+                android:layout_marginTop="15.4dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <CheckBox
+                    android:id="@+id/dishAddonWholeBatchCb"
+                    style="@style/Reg13Dark_50"
+                    android:lines="1"
+                    android:paddingStart="4dp"
+                    android:text="The Whole Batch (10 dishes)"
+                    android:button="@drawable/checkbox_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                    android:layout_marginLeft="28dp"
+                    style="@style/Reg13Dark_50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy the whole batch for a 20% disscount"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

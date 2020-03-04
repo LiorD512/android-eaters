@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,22 +18,23 @@ import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.Observer
-import com.bupp.wood_spoon_eaters.dialogs.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.custom_views.DishCounterView
 import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
 import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
-import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
-import com.bupp.wood_spoon_eaters.dialogs.DishUnAvailableDialog
-import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
+import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.AdditionalDishesDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -41,11 +43,14 @@ class SingleDishFragment() : Fragment(),
     OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener, StatusBottomBar.StatusBottomBarListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
-    UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener {
+    UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener,
+    DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener {
+
+
 
     var listener: SingleDishDialogListener? = null
 
-    fun setSingleDishDialogListener(listener: SingleDishDialogListener){
+    fun setSingleDishDialogListener(listener: SingleDishDialogListener) {
         this.listener = listener
     }
 
@@ -68,25 +73,26 @@ class SingleDishFragment() : Fragment(),
 
         fun newInstance(menuItemId: Long, isEvent: Boolean = false): SingleDishFragment {
             val fragment = SingleDishFragment()
-            try{
+            try {
                 val args = Bundle()
                 args.putLong(ARG_PARAM, menuItemId)
                 args.putBoolean(EVENT_PARAM, isEvent)
                 fragment.arguments = args
-            }catch (e: Exception){
-                Log.d("wowSingle","newInstance exception")
+            } catch (e: Exception) {
+                Log.d("wowSingle", "newInstance exception")
             }
             return fragment
         }
     }
 
     var ingredientsAdapter: DishIngredientsAdapter? = null
-    private lateinit var currentDish: FullDish
+    //    private lateinit var currentDish: FullDish
     private lateinit var dishAdapter: SingleFeedAdapter
 
     private var lastSelected: Int = -1
 
-    val viewModel: SingleDishViewModel by viewModel<SingleDishViewModel>()
+    val viewModel by viewModel<SingleDishViewModel>()
+    val ordersViewModel by sharedViewModel<NewOrderSharedViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.single_dish_fragment_dialog_fragment, container, false)
@@ -95,57 +101,96 @@ class SingleDishFragment() : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        singleDishPb.show()
         viewModel.getFullDish()
-        initObservers()
 
+        ordersViewModel.checkCartStatus()
+        initObservers()
     }
 
     private fun checkForOpenOrder(currentDish: FullDish) {
-        viewModel.checkForOpenOrder(currentDish.cook)
+        ordersViewModel.checkForOpenOrder(currentDish.cook)
     }
 
     private fun initObservers() {
-       viewModel.dishDetailsEvent.observe(this, Observer { event ->
-            if (event != null) {
-                singleDishPb.hide()
-                if (event.isSuccess) {
-                    if (event.dish != null) {
-                        this.currentDish = event.dish
-                        initUi()
-                        checkForOpenOrder(currentDish)
-                        if(!event.isAvailable){
-                            handleUnAvailableCookingSlot()
-                        }
-                    }
-                }
+        ordersViewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
+            if (pendingOrderEvent.hasPendingOrder) {
+                singleDishStatusBar.handleBottomBar(showCheckout = true)
+            }else{
+                singleDishStatusBar.handleBottomBar(showCheckout = false)
             }
         })
 
-        viewModel.hasOpenOrder.observe(this, Observer { event ->
+        viewModel.fullDish.observe(this, Observer { fullDish ->
+            if (fullDish != null) {
+                initUi(fullDish)
+                checkForOpenOrder(fullDish)
+            }
+        })
+
+        viewModel.availability.observe(this, Observer { availabilityEvent ->
+            availabilityEvent.startingTime?.let {
+                if (!availabilityEvent.isAvailable) {
+                    handleUnAvailableCookingSlot(it)
+                }
+            }
+
+        })
+
+        ordersViewModel.orderData.observe(this, Observer { orderDataEvent ->
+            handleOrderData(orderDataEvent)
+        })
+
+        ordersViewModel.orderRequestData.observe(this, Observer { orderRequestData ->
+            handlerRequestOrderData(orderRequestData)
+        })
+
+        ordersViewModel.progressData.observe(this, Observer { shouldShow ->
+            if(shouldShow){
+                singleDishPb.show()
+            }else{
+                singleDishPb.hide()
+            }
+        })
+        viewModel.progressData.observe(this, Observer { shouldShow ->
+            if(shouldShow){
+                singleDishPb.show()
+            }else{
+                singleDishPb.hide()
+            }
+        })
+
+
+        ordersViewModel.hasOpenOrder.observe(this, Observer { event ->
             if (event.hasOpenOrder) {
                 StartNewCartDialog(event.cookInCart!!, event.currentShowingCook!!, this).show(childFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
             }
         })
 
-        viewModel.postOrderEvent.observe(this, Observer { event ->
-            if (event != null) {
-                singleDishPb.hide()
-                if (event.isSuccess) {
-                    if (event.order != null) {
-                        singleDishHeader.updateUi(SingleDishHeader.COOK)
-                        singleDishScrollView.fullScroll(View.FOCUS_DOWN)
-                        updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
-                    }
-                } else {
-                    Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
-                }
+//        ordersViewModel.postOrderEvent.observe(this, Observer { event ->
+//            if (event != null) {
+//                singleDishPb.hide()
+//                if (event.isSuccess) {
+//                    if (event.order != null) {
+//                        updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
+//                        singleDishHeader.updateUi(SingleDishHeader.COOK)
+//                        singleDishScrollView.fullScroll(View.FOCUS_DOWN)
+//                    }
+//                } else {
+//                    Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        })
+
+        ordersViewModel.showDialogEvent.observe(this, Observer { showDialog ->
+            if (showDialog) {
+                AdditionalDishesDialog(this).show(childFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
             }
+
         })
 
         viewModel.getReviewsEvent.observe(this, Observer { event ->
             if (event != null) {
-                singleDishPb.hide()
+//                singleDishPb.hide()
                 if (event.isSuccess) {
                     if (event.reviews != null) {
                         RatingsDialog(event.reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
@@ -157,31 +202,51 @@ class SingleDishFragment() : Fragment(),
         })
     }
 
+    override fun onProceedToCheckout() {
+        (activity as NewOrderActivity).onCheckout()
+    }
+
+    private fun handlerRequestOrderData(orderRequestData: OrderRequest?) {
+
+    }
+
+    private fun handleOrderData(orderDataEvent: Order?) {
+        if (orderDataEvent != null) {
+            updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
+            singleDishHeader.updateUi(SingleDishHeader.COOK)
+            singleDishScrollView.fullScroll(View.FOCUS_DOWN)
+        } else {
+            Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
     override fun onUserImageClick(cook: Cook?) {
-        if(cook != null && !cook.video.isNullOrEmpty()){
+        if (cook != null && !cook.video.isNullOrEmpty()) {
             VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
         }
     }
 
-    private fun handleUnAvailableCookingSlot() {
+
+    private fun handleUnAvailableCookingSlot(startsAt: Date) {
         DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
-        val cookingSlotStartingTime = currentDish.menuItem?.cookingSlot?.startsAt
-        if(cookingSlotStartingTime != null){
-            viewModel.updateChosenDeliveryDate(cookingSlotStartingTime)
+        val cookingSlotStartingTime = startsAt
+        if (cookingSlotStartingTime != null) {
+            viewModel.updateChosenDeliveryDate(newChosenDate = startsAt)
         }
     }
 
 
     override fun onNewCartClick() {
-        viewModel.clearCurrentOpenOrder()
+        ordersViewModel.initNewOrder()
     }
 
-    private fun initUi() {
+    private fun initUi(fullDish: FullDish) {
         initHeader()
-        initInfo()
-        initIngredient()
-        initCook()
-        initCartBottomBar()
+        initInfo(fullDish)
+        initIngredient(fullDish)
+        initCook(fullDish)
+        initCartBottomBar(fullDish)
     }
 
     private fun initHeader() {
@@ -189,34 +254,58 @@ class SingleDishFragment() : Fragment(),
     }
 
     override fun onBackClick() {
-        (activity as NewOrderActivity).finishWithCookId(currentDish.cook.id)
+        viewModel.getCurrentDish()?.let {
+            (activity as NewOrderActivity).finishWithCookId(it.cook.id)
+        }
     }
 
     override fun onPageClick(page: Int) {
         hidePages()
-        when(page){
+        when (page) {
             SingleDishHeader.INFO -> {
                 singleDishScrollView.smoothScrollTo(0, singleDishInfoLayout.top)
-                singleDishInfoLayout.visibility = View.VISIBLE}
+                singleDishInfoLayout.visibility = View.VISIBLE
+            }
             SingleDishHeader.COOK -> {
                 singleDishScrollView.smoothScrollTo(0, singleDishCookLayout.top)
-                singleDishCookLayout.visibility = View.VISIBLE}
+                singleDishCookLayout.visibility = View.VISIBLE
+            }
             SingleDishHeader.INGREDIENT -> {
                 singleDishScrollView.smoothScrollTo(0, singleDishIngredientLayout.top)
-                singleDishIngredientLayout.visibility = View.VISIBLE}
+                singleDishIngredientLayout.visibility = View.VISIBLE
+            }
         }
     }
 
-
-    private fun hidePages(){
+    private fun hidePages() {
         singleDishInfoLayout.visibility = View.GONE
         singleDishCookLayout.visibility = View.GONE
         singleDishIngredientLayout.visibility = View.GONE
     }
 
-    private fun initCartBottomBar() {
-        singleDishStatusBar.setStatusBottomBarListener(this)
+    private fun initCartBottomBar(currentDish: FullDish) {
+//        singleDishStatusBar.setStatusBottomBarListener(this)
+        singleDishStatusBar.setOrdersBottomBarListener(this)
         updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CART, price = currentDish.getPriceObj().value, itemCount = 1)
+    }
+
+    override fun onBottomBarOrdersClick(type: Int) {
+        when (type) {
+            Constants.STATUS_BAR_TYPE_CART -> {
+                if (viewModel.hasValidDeliveryAddress()) {
+                    addToCart()
+                } else {
+                    openAddressMissingDialog()
+                }
+            }
+            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
+                (activity as NewOrderActivity).onCheckout()
+            }
+        }
+    }
+
+    override fun onBottomBarCheckoutClick() {
+        (activity as NewOrderActivity).onCheckout()
     }
 
     fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
@@ -224,11 +313,11 @@ class SingleDishFragment() : Fragment(),
     }
 
     override fun onStatusBarClicked(type: Int?) {
-        when(type){
+        when (type) {
             Constants.STATUS_BAR_TYPE_CART -> {
-                if(viewModel.hasValidDeliveryAddress()){
+                if (viewModel.hasValidDeliveryAddress()) {
                     addToCart()
-                }else{
+                } else {
                     openAddressMissingDialog()
                 }
             }
@@ -247,30 +336,32 @@ class SingleDishFragment() : Fragment(),
     }
 
     fun addToCart() {
-        singleDishPb.show()
-        val cookId = currentDish.cook.id
-        val cookingSlotId = currentDish.menuItem?.cookingSlot?.id
+//        singleDishPb.show()
         val quantity = singleDishInfoDishCounter.getDishCount()
         val removedIngredients = ingredientsAdapter?.ingredientsRemoved
         val note = singleDishIngredientInstructions.getText()
-        viewModel.addToCart(
-            cookId = cookId,
-            cookingSlotId = cookingSlotId,
-            dishId = currentDish.id,
+        ordersViewModel.addToCart(
+            fullDish = viewModel.fullDish.value,
             quantity = quantity,
             removedIngredients = removedIngredients,
-            note = note)
+            note = note
+        )
     }
 
 
-
-
-    private fun initInfo() {
+    private fun initInfo(currentDish: FullDish) {
         singleDishInfoCook.setUser(currentDish.cook)
         singleDishInfoCook.setUserImageViewListener(this)
-        Glide.with(context!!).load(currentDish.thumbnail).into(singleDishInfoImg)
+//        Glide.with(context!!).load(currentDish.thumbnail).into(singleDishInfoImg)
         singleDishInfoFavorite.setIsFav(currentDish.isFavorite)
         singleDishInfoFavorite.setDishId(currentDish.id)
+
+        val pagerAdapter = DishMediaAdapter(this)
+        singleDishInfoImagePager.adapter = pagerAdapter
+
+        pagerAdapter.setItem(currentDish.getMediaList())
+
+        singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
 
         singleDishInfoName.text = currentDish.name
         singleDishInfoCookName.text = "By ${currentDish.cook.getFullName()}"
@@ -278,11 +369,11 @@ class SingleDishFragment() : Fragment(),
             Glide.with(context!!).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
 
-        if(currentDish.cook.diets.size > 0){
-            singleDishInfoDietryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+        if (currentDish.cook.diets.size > 0) {
+            singleDishInfoDietryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             val dietaryAdapter = CooksDietaryAdapter(context!!, currentDish.cook.diets)
             singleDishInfoDietryList.adapter = dietaryAdapter
-        }else{
+        } else {
             singleDishInfoDietryList.visibility = View.GONE
         }
 
@@ -298,26 +389,30 @@ class SingleDishFragment() : Fragment(),
 //            singleDishInfoQuantity.text = "$quantityLeft Left"
         }
 
-        initOrderDate()
+        initOrderDate(currentDish)
         singleDishInfoRatingVal.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
     }
 
-
-    private fun onRatingClick() {
-        viewModel.getDishReview(currentDish.cook.id)
+    override fun onPlayClick(url: String) {
+        val uri = Uri.parse(url)
+        VideoPlayerDialog(uri).show(childFragmentManager, Constants.VIDEO_PLAYER_DIALOG)
     }
 
-    private fun initOrderDate() {
+    private fun onRatingClick() {
+        viewModel.getDishReview()
+    }
+
+    private fun initOrderDate(currentDish: FullDish) {
         val orderAtDate = currentDish.menuItem?.orderAt
-        if(orderAtDate != null){
+        if (orderAtDate != null) {
             singleDishInfoDate.text = "${Utils.parseDateToDayDateHour(orderAtDate)}"
-        }else if(currentDish.doorToDoorTime != null){
+        } else if (currentDish.doorToDoorTime != null) {
             singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
         }
-        if(viewModel.isEvent){
+        if (viewModel.isEvent) {
             singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        }else{
+        } else {
             singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icons_edit, 0, 0, 0);
             singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
         }
@@ -328,32 +423,37 @@ class SingleDishFragment() : Fragment(),
 
     override fun onDishCounterChanged(count: Int) {
         //update order manager
-        val newValue = currentDish.price.value*count
-        updateStatusBottomBar(price = newValue, itemCount = count)
+        //todo - refactor this
+        viewModel.getCurrentDish()?.let {
+            val newValue = it.price.value * count
+            updateStatusBottomBar(price = newValue, itemCount = count)
+        }
     }
 
     private fun openOrderTimeDialog() {
-        val currentDateSelected = currentDish.menuItem
-        val availableMenuItems = currentDish.availableMenuItems
-        OrderDateChooserDialog(currentDateSelected, availableMenuItems, this).show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
+        viewModel.getCurrentDish()?.let {
+            val currentDateSelected = it.menuItem
+            val availableMenuItems = it.availableMenuItems
+            OrderDateChooserDialog(currentDateSelected, availableMenuItems, this).show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
+        }
     }
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
         if (selectedMenuItem != null) {
             //update order manager
-            currentDish.menuItem = selectedMenuItem // update menuItem to update ui in the next visit in openOrderTimeDialog()
-            viewModel.updateChosenDeliveryDate(newChosenDate)
+//            currentDish.menuItem = selectedMenuItem // update menuItem to update ui in the next visit in openOrderTimeDialog()
+            viewModel.updateChosenDeliveryDate(selectedMenuItem, newChosenDate)
             singleDishInfoDate.text = "${Utils.parseDateToDayDateHour(newChosenDate)}"
 //            singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
         }
     }
 
-    private fun initIngredient() {
+    private fun initIngredient(currentDish: FullDish) {
         singleDishIngredientCalories.text = "${currentDish.calorificValue.toInt()} Calories"
         singleDishIngredientProtein.text = "${currentDish.proteins.toInt()}g Protein"
         singleDishIngredientCarbohydrate.text = "${currentDish.carbohydrates.toInt()}g Carbohydrate"
 
-        if(currentDish.cookingMethods.size > 0){
+        if (currentDish.cookingMethods.size > 0) {
             singleDishIngredientSauteing.text = currentDish.cookingMethods[0].name
         }
 
@@ -367,14 +467,14 @@ class SingleDishFragment() : Fragment(),
     }
 
 
-    private fun initCook() {
+    private fun initCook(currentDish: FullDish) {
         cookProfileImageView.setUser(currentDish.cook)
         cookProfileImageView.setUserImageViewListener(this)
         cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}"//, ${currentDish.cook.getAge()}"
 
         var profession = currentDish.cook.profession
         var country = ""
-        currentDish.cook.country?.let{
+        currentDish.cook.country?.let {
             country = ", ${it.name}"
             Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }
@@ -399,6 +499,7 @@ class SingleDishFragment() : Fragment(),
             cookProfileFragCertificateLayout.visibility = View.GONE
         }
 
+        ordersViewModel.setAdditionalDishes(currentDish.cook.dishes)
         cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
         dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this, viewModel.getDeliveryFeeString())
         cookProfileFragDishList.adapter = dishAdapter
@@ -407,7 +508,7 @@ class SingleDishFragment() : Fragment(),
     }
 
     override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let{
+        dish.menuItem?.let {
             listener?.onDishClick(it.id)
         }
 //        SingleDishFragment.newInstance(dish.menuItem.id, listener).show(fragmentManager, Constants.SINGLE_DISH_TAG)
@@ -416,17 +517,6 @@ class SingleDishFragment() : Fragment(),
     private fun openCertificatesDialog(certificates: ArrayList<String>) {
         CertificatesDialog(certificates).show(childFragmentManager, Constants.CERTIFICATES_DIALOG_TAG)
     }
-
-
-//interfaces -
-
-//    override fun onFavClick(isChecked: Boolean) {
-//        if(isChecked){
-//            viewModel.likeDish(currentDish.id)
-//        }else{
-//            viewModel.unlikeDish(currentDish.id)
-//        }
-//    }
 
 
 }

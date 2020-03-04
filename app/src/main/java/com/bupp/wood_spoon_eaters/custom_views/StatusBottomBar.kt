@@ -66,10 +66,10 @@ class StatusBottomBar : FrameLayout {
             }
             Constants.STATUS_BAR_TYPE_CHECKOUT -> {
                 statusBottomBarPrice.visibility = View.VISIBLE
-                statusBottomBarTitle.text = "CHECKOUT"
+                statusBottomBarTitle.text = "Proceed To Checkout"
             }
             Constants.STATUS_BAR_TYPE_FINALIZE -> {
-
+                statusBottomBarTitle.text = "PLACE AN ORDER"
             }
         }
     }

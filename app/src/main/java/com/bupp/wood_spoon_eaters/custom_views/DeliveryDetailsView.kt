@@ -17,7 +17,7 @@ class DeliveryDetailsView : LinearLayout {
 
     interface DeliveryDetailsViewListener {
         fun onChangeLocationClick() {}
-//        fun onChangeTimeClick() {}
+        fun onChangeTimeClick() {}
         fun onChangePaymentClick() {}
     }
 
@@ -76,10 +76,10 @@ class DeliveryDetailsView : LinearLayout {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_location)
                 deliveryDetailsViewTitle.text = "Manage Addresses"
             }
-//            Constants.DELIVERY_DETAILS_TIME -> {
-//                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
-//                deliveryDetailsViewTitle.text = "When"
-//            }
+            Constants.DELIVERY_DETAILS_TIME -> {
+                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
+                deliveryDetailsViewTitle.text = "Delivery Time"
+            }
             Constants.DELIVERY_DETAILS_CHECKOUT_DELIVERY -> {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
                 deliveryDetailsViewTitle.text = "Delivery"
@@ -97,9 +97,9 @@ class DeliveryDetailsView : LinearLayout {
             Constants.DELIVERY_DETAILS_LOCATION, Constants.DELIVERY_DETAILS_LOCATION_PROFILE -> {
                 listener?.onChangeLocationClick()
             }
-//            Constants.DELIVERY_DETAILS_TIME -> {
-//                listener?.onChangeTimeClick()
-//            }
+            Constants.DELIVERY_DETAILS_TIME -> {
+                listener?.onChangeTimeClick()
+            }
             Constants.DELIVERY_DETAILS_PAYMENT -> {
                 listener?.onChangePaymentClick()
             }

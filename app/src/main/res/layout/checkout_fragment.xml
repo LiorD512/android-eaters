@@ -45,14 +45,15 @@
 
                 <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
                         android:id="@+id/checkoutFragDeliveryTime"
-                        app:detailsType="DELIVERY_DETAILS_CHECKOUT_DELIVERY"
-                        app:changeable="false"
+                        app:changeable="true"
+                        app:detailsType="DELIVERY_DETAILS_TIME"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
                 <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
                         android:id="@+id/checkoutFragDeliveryAddress"
                         android:paddingBottom="18.2dp"
+                        app:changeable="true"
                         android:layout_marginBottom="15.4dp"
                         app:detailsType="DELIVERY_DETAILS_LOCATION"
                         android:layout_width="match_parent"
@@ -69,6 +70,99 @@
                     android:layout_marginTop="15.4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                    android:background="@color/white"
+                    android:layout_marginTop="15.4dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:paddingTop="21dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_marginStart="15.4dp"
+                            style="@style/SemiBold13Dark"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Recurring Order"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                            android:layout_marginEnd="15.4dp"
+                            android:id="@+id/checkoutFragRecurringSwitch"
+                            android:layout_width="wrap_content"
+                            android:checked="false"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12.3dp"
+                            android:thumb="@drawable/stroked_white_circle"
+                            app:track="@drawable/red_green_switch_track_selector"/>
+
+                </LinearLayout>
+
+                <TextView
+                        style="@style/Reg13Dark_50"
+                        android:layout_marginTop="7.7dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginBottom="15.4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This order will repeat every week ,unless you cancel it"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:background="@color/white"
+                    android:layout_marginTop="15.4dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:gravity="center"
+                        android:paddingTop="21dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:gravity="center|start"
+                            android:drawableLeft="@drawable/ic_utensiles"
+                            android:drawablePadding="8dp"
+                            android:layout_marginStart="15.4dp"
+                            style="@style/SemiBold13Dark"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Utensils,Straws, etc."/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                            android:layout_marginEnd="15.4dp"
+                            android:id="@+id/checkoutFragUtensilsSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:layout_marginStart="12.3dp"
+                            android:thumb="@drawable/stroked_white_circle"
+                            app:track="@drawable/red_green_switch_track_selector"/>
+
+                </LinearLayout>
+
+                <TextView
+                        android:id="@+id/checkoutFragUtensilsText"
+                        style="@style/Reg13Dark_50"
+                        android:layout_marginTop="7.7dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginBottom="15.4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="These items will be added to your order"/>
+
+            </LinearLayout>
 
 
             <LinearLayout
@@ -141,35 +235,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
 
-                <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_marginTop="14.9dp"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:layout_marginBottom="15.1dp"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                    <TextView
-                            style="@style/Reg13Dark"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:text="Tax"/>
 
-                    <TextView
-                            android:id="@+id/checkoutFragTaxPriceText"
-                            style="@style/SemiBold13Dark50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            tools:text="$6.6"/>
-                </LinearLayout>
-                <View
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:background="@color/light_periwinkle"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
 
                 <LinearLayout
                         android:orientation="horizontal"
@@ -260,6 +326,36 @@
 
                 </LinearLayout>
 
+                <View
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:background="@color/light_periwinkle"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_marginTop="14.9dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_marginBottom="15.1dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            style="@style/Reg13Dark"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Tax"/>
+
+                    <TextView
+                            android:id="@+id/checkoutFragTaxPriceText"
+                            style="@style/SemiBold13Dark50"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            tools:text="$6.6"/>
+                </LinearLayout>
                 <View
                         android:layout_marginStart="15.4dp"
                         android:layout_marginEnd="15.4dp"

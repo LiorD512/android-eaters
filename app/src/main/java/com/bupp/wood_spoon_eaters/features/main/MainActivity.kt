@@ -133,10 +133,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
                 mainActOrdersBB.handleBottomBar(showCheckout = true)
-//                showCheckOutBottomBar(true)
             }else{
                 mainActOrdersBB.handleBottomBar(showCheckout = false)
-//                showCheckOutBottomBar(false)
             }
         })
 
@@ -150,7 +148,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     }
 
-    override fun onBottomBarOrdersClick() {
+    override fun onBottomBarOrdersClick(type: Int) {
         viewModel.checkForActiveOrder(true)
     }
 

@@ -15,6 +15,8 @@ data class OrderRequest(
     @SerializedName("order_items") var orderItemRequests: ArrayList<OrderItemRequest>? = null,
     @SerializedName("tip_percentage") var tipPercentage: Float? = null,
     @SerializedName("tip") var tip: Int? = null,
+    @SerializedName("disposable_tableware") var addUtensils: Boolean? = null,
+//    @SerializedName("recurring_order") var recurringOrder: Boolean? = null,
     @SerializedName("tip_amount") var tipAmount: String? = null,
     @SerializedName("promo_code") var promoCode: String? = null
 )
@@ -24,7 +26,8 @@ data class OrderItemRequest(
     @SerializedName("dish_id") val dishId: Long? = null,
     @SerializedName("quantity") var quantity: Int? = null,
     @SerializedName("removed_ingredient_ids") var removedIndredientsIds: ArrayList<Long>? = null,
-    @SerializedName("notes") var notes: String? = null
+    @SerializedName("notes") var notes: String? = null,
+    @SerializedName("_destroy") var _destroy: Boolean? = false
 )
 
 @Parcelize

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/additionalDishDialogBkg"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <FrameLayout
+            android:id="@+id/back"
+            android:background="@color/dark_50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:background="@drawable/rounded_white_bkg"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="22dp"
+                android:layout_marginRight="7.7dp"
+                android:layout_marginLeft="7.7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ImageView
+                        android:padding="15dp"
+                        android:id="@+id/additionalDishDialogClose"
+                        android:layout_gravity="center|left"
+                        android:src="@drawable/icons_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:layout_gravity="center"
+                        android:paddingTop="30dp"
+                        android:paddingBottom="15.4dp"
+                        style="@style/SemiBold15Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Your Order"/>
+
+            </FrameLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/silver_20"
+                    android:layout_marginBottom="15.4dp"
+                    android:id="@+id/additionalDishDialogList"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"/>
+
+            <FrameLayout
+                    android:id="@+id/dishAddonProceedBtn"
+                    android:background="@drawable/blue_bottom_cornered_bkg"
+                    android:layout_width="match_parent"
+                    android:layout_height="57.6dp">
+
+                <TextView
+                        style="@style/Bold17White"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Proceed To Checkout"/>
+
+                <TextView
+                        android:id="@+id/dishAddonPrice"
+                        style="@style/Bold17White"
+                        android:layout_marginRight="18dp"
+                        android:layout_gravity="center|right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="$7"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+                android:id="@+id/dishAddonPb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </FrameLayout>
+</FrameLayout>

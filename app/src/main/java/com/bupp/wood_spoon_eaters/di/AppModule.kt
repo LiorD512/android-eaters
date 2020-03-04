@@ -28,6 +28,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.Promo
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
@@ -67,6 +68,8 @@ val appModule = module {
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { NewOrderSharedViewModel(get(), get(), get(), get()) }
+
     viewModel { FeedViewModel(get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { SingleDishViewModel(get(), get(), get(), get(), get()) }
