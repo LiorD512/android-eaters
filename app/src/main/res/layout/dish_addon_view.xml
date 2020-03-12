@@ -23,7 +23,7 @@
                 android:layout_height="48dp">
 
             <ImageView
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center"
                     tools:src="@drawable/ic_utensiles"
                     android:id="@+id/dishAddonImg"
@@ -43,7 +43,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                <TextView
+                <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+                        app:minTextSize="10sp"
                         android:lines="1"
                         android:ellipsize="end"
                         android:id="@+id/dishAddonName"

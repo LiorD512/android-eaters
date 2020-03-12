@@ -41,11 +41,11 @@ import kotlin.collections.ArrayList
 
 class SingleDishFragment() : Fragment(),
     OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
-    SingleFeedAdapter.SearchAdapterListener, StatusBottomBar.StatusBottomBarListener,
+    SingleFeedAdapter.SearchAdapterListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
     UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener,
     DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener {
-
+//    StatusBottomBar.StatusBottomBarListener,
 
 
     var listener: SingleDishDialogListener? = null
@@ -166,21 +166,6 @@ class SingleDishFragment() : Fragment(),
             }
         })
 
-//        ordersViewModel.postOrderEvent.observe(this, Observer { event ->
-//            if (event != null) {
-//                singleDishPb.hide()
-//                if (event.isSuccess) {
-//                    if (event.order != null) {
-//                        updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
-//                        singleDishHeader.updateUi(SingleDishHeader.COOK)
-//                        singleDishScrollView.fullScroll(View.FOCUS_DOWN)
-//                    }
-//                } else {
-//                    Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        })
-
         ordersViewModel.showDialogEvent.observe(this, Observer { showDialog ->
             if (showDialog) {
                 AdditionalDishesDialog(this).show(childFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
@@ -190,7 +175,6 @@ class SingleDishFragment() : Fragment(),
 
         viewModel.getReviewsEvent.observe(this, Observer { event ->
             if (event != null) {
-//                singleDishPb.hide()
                 if (event.isSuccess) {
                     if (event.reviews != null) {
                         RatingsDialog(event.reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
@@ -200,6 +184,10 @@ class SingleDishFragment() : Fragment(),
                 }
             }
         })
+    }
+
+    override fun onAdditionalDialogDismiss() {
+
     }
 
     override fun onProceedToCheckout() {
@@ -212,7 +200,7 @@ class SingleDishFragment() : Fragment(),
 
     private fun handleOrderData(orderDataEvent: Order?) {
         if (orderDataEvent != null) {
-            updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT)
+            updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = ordersViewModel.calcTotalDishesPrice())
             singleDishHeader.updateUi(SingleDishHeader.COOK)
             singleDishScrollView.fullScroll(View.FOCUS_DOWN)
         } else {
@@ -308,24 +296,25 @@ class SingleDishFragment() : Fragment(),
         (activity as NewOrderActivity).onCheckout()
     }
 
-    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
-        singleDishStatusBar.updateStatusBottomBar(type = type, price = price, itemCount = itemCount)
+    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, checkoutPrice: Double? = null, itemCount: Int? = null) {
+        Log.d("wowSingleDish","updateStatusBottomBar type: $type")
+        singleDishStatusBar.updateStatusBottomBar(type = type, price = price, checkoutPrice = checkoutPrice, itemCount = itemCount)
     }
 
-    override fun onStatusBarClicked(type: Int?) {
-        when (type) {
-            Constants.STATUS_BAR_TYPE_CART -> {
-                if (viewModel.hasValidDeliveryAddress()) {
-                    addToCart()
-                } else {
-                    openAddressMissingDialog()
-                }
-            }
-            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
-                (activity as NewOrderActivity).onCheckout()
-            }
-        }
-    }
+//    override fun onStatusBarClicked(type: Int?) {
+//        when (type) {
+//            Constants.STATUS_BAR_TYPE_CART -> {
+//                if (viewModel.hasValidDeliveryAddress()) {
+//                    addToCart()
+//                } else {
+//                    openAddressMissingDialog()
+//                }
+//            }
+//            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
+//                (activity as NewOrderActivity).onCheckout()
+//            }
+//        }
+//    }
 
     private fun openAddressMissingDialog() {
         AddressMissingDialog(this).show(childFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
@@ -361,7 +350,9 @@ class SingleDishFragment() : Fragment(),
 
         pagerAdapter.setItem(currentDish.getMediaList())
 
-        singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
+        if(currentDish.getMediaList().size > 1){
+            singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
+        }
 
         singleDishInfoName.text = currentDish.name
         singleDishInfoCookName.text = "By ${currentDish.cook.getFullName()}"

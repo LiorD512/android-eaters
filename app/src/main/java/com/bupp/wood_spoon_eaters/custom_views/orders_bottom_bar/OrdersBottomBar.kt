@@ -8,9 +8,6 @@ import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.orders_bottom_bar.view.*
-import kotlinx.android.synthetic.main.orders_bottom_bar.view.statusBottomBarPrice
-import kotlinx.android.synthetic.main.orders_bottom_bar.view.statusBottomBarTitle
-import kotlinx.android.synthetic.main.status_bottom_bar.view.*
 import java.text.DecimalFormat
 
 
@@ -43,26 +40,26 @@ class OrdersBottomBar : FrameLayout{
     }
 
     private fun initUi() {
-        bottomBarActiveOrders.setOnClickListener { listener?.onBottomBarOrdersClick(curType) }
-        bottomBarCheckout.setOnClickListener { listener?.onBottomBarCheckoutClick() }
+        ordersBottomBarOrder.setOnClickListener { listener?.onBottomBarOrdersClick(curType) }
+        ordersBottomBarCheckout.setOnClickListener { listener?.onBottomBarCheckoutClick() }
     }
 
     fun handleBottomBar(showActiveOrders: Boolean? = null, showCheckout: Boolean? = null){
        showActiveOrders?.let{
            if(it){
-               bottomBarActiveOrders.visibility = View.VISIBLE
+               ordersBottomBarOrder.visibility = View.VISIBLE
                ordersVisible = true
            }else{
-               bottomBarActiveOrders.visibility = View.GONE
+               ordersBottomBarOrder.visibility = View.GONE
                ordersVisible = false
            }
        }
        showCheckout?.let{
            if(it){
-               bottomBarCheckout.visibility = View.VISIBLE
+               ordersBottomBarCheckout.visibility = View.VISIBLE
                checkoutVisible = true
            }else{
-               bottomBarCheckout.visibility = View.GONE
+               ordersBottomBarCheckout.visibility = View.GONE
                checkoutVisible = false
            }
        }
@@ -77,32 +74,45 @@ class OrdersBottomBar : FrameLayout{
         }
     }
 
-    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
-        bottomBarActiveOrders.visibility = View.VISIBLE
-        ordersVisible = true
+    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, checkoutPrice : Double? = null, itemCount: Int? = null) {
+//        ordersBottomBarOrder.visibility = View.VISIBLE
+//        ordersVisible = true
         if(type != null){
             this.curType = type
         }
-        if(price != null){
-            val priceStr = DecimalFormat("##.##").format(price)
-            statusBottomBarPrice.text = "$$priceStr"
-        }
+
+
+
         when(curType){
             Constants.STATUS_BAR_TYPE_CART -> {
-                statusBottomBarPrice.visibility = View.VISIBLE
-                if(itemCount != null){
-                    statusBottomBarTitle.text = "Add $itemCount To Cart"
+                ordersBottomBarOrder.visibility = View.VISIBLE
+                ordersVisible = true
+                ordersBottomBarOrderPrice.visibility = View.VISIBLE
+                itemCount?.let{
+                    ordersBottomBarOrderTitle.text = "Add $itemCount To Cart"
+                }
+                price?.let{
+                    val priceStr = DecimalFormat("##.##").format(price)
+                    ordersBottomBarOrderPrice.text = "$$priceStr"
                 }
             }
             Constants.STATUS_BAR_TYPE_CHECKOUT -> {
-                statusBottomBarPrice.visibility = View.VISIBLE
-                statusBottomBarTitle.text = "Proceed To Checkout"
+                checkoutVisible = true
+                ordersBottomBarCheckout.visibility = View.VISIBLE
+//                ordersBottomBarOrderTitle.text = "Proceed To Cart"
 
-                bottomBarCheckout.visibility = View.GONE
-                checkoutVisible = false
+//                ordersBottomBarCheckout.visibility = View.GONE
+//                checkoutVisible = false
+                checkoutPrice?.let{
+                    val checkoutPriceStr = DecimalFormat("##.##").format(checkoutPrice)
+                    ordersBottomBarCheckoutPrice.text = "$$checkoutPriceStr"
+                    ordersBottomBarCheckoutPrice.visibility = View.VISIBLE
+                }
             }
             Constants.STATUS_BAR_TYPE_FINALIZE -> {
-                statusBottomBarTitle.text = "PLACE AN ORDER"
+                ordersBottomBarOrderTitle.text = "PLACE AN ORDER"
+                ordersBottomBarCheckout.visibility = View.GONE
+                checkoutVisible = false
             }
         }
         checkSepEnable()

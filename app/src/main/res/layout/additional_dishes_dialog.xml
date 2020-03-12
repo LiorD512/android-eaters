@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
 
         <LinearLayout
                 android:background="@drawable/rounded_white_bkg"
@@ -23,7 +23,7 @@
                 android:layout_marginRight="7.7dp"
                 android:layout_marginLeft="7.7dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
             <FrameLayout
                     android:layout_width="match_parent"
@@ -50,12 +50,12 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:background="@color/silver_20"
-                    android:layout_marginBottom="15.4dp"
+                    android:background="@color/white"
+                    android:layout_marginBottom="5.4dp"
                     android:id="@+id/additionalDishDialogList"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"/>
+                    android:layout_height="wrap_content"/>
 
             <FrameLayout
                     android:id="@+id/dishAddonProceedBtn"
@@ -68,7 +68,7 @@
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Proceed To Checkout"/>
+                        android:text="Proceed To Cart"/>
 
                 <TextView
                         android:id="@+id/dishAddonPrice"
@@ -84,6 +84,7 @@
         </LinearLayout>
 
         <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+                tools:visibility="gone"
                 android:id="@+id/dishAddonPb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

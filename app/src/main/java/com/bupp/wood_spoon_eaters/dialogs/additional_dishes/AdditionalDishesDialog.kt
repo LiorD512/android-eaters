@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.dialogs.additional_dishes
 
+import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     interface AdditionalDishesDialogListener{
         fun onProceedToCheckout()
         fun onDishClick(dish: Dish)
+        fun onAdditionalDialogDismiss()
     }
 
     //    private val dishSharedViewModel by sharedViewModel<SingleDishViewModel>()
@@ -55,12 +57,12 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     private fun initObservers() {
-        sharedViewModel.additionalDishes.observe(this, Observer { additionalDishes ->
-            handleAdditionalDishes(additionalDishes)
-        })
-
         sharedViewModel.orderData.observe(this, Observer { orderItems ->
             handleOrderItems(orderItems)
+            additionalDishDialogList.scrollToPosition(0)
+        })
+        sharedViewModel.additionalDishes.observe(this, Observer { additionalDishes ->
+            handleAdditionalDishes(additionalDishes)
         })
         sharedViewModel.progressData.observe(this, Observer { progress ->
             when (progress) {
@@ -79,7 +81,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
                 }
             }
 
-            dishAddonPrice.text = order.total.formatedValue
+            dishAddonPrice.text = "$${sharedViewModel.calcTotalDishesPrice().toString()}"
         }
     }
 
@@ -103,7 +105,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
         additionalDishDialogClose.setOnClickListener { dismiss() }
         dishAddonProceedBtn.setOnClickListener {
             dismiss()
-            listener?.onProceedToCheckout() }
+            listener.onProceedToCheckout() }
     }
 
     override fun onAddBtnClick(dish: Dish) {
@@ -116,6 +118,11 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
 
     override fun onDishCountChange(orderItemsCount: Int, curOrderItem: OrderItem) {
         sharedViewModel.updateOrder(curOrderItem)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+//        listener.onAdditionalDialogDismiss()
     }
 }
 

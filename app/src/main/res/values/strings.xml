@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WoodSpoonEater</string>
+    <string name="app_name">Staging-WoodSpoonEater</string>
     <string name="facebook_app_id">795355207569753</string>
     <string name="fb_login_protocol_scheme">fb795355207569753</string>
     <string name="appsee_api_key">ab7af46b578c4e219e42646c0e9f4db6</string>

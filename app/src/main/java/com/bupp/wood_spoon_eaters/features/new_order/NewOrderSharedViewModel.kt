@@ -287,6 +287,16 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
             })
     }
 
+    fun calcTotalDishesPrice(): Double {
+        var total = 0.0
+        orderData.value?.orderItems?.let{
+            it.forEach {
+                total += (it.price?.value * it.quantity)
+            }
+        }
+        return total
+    }
+
     val hasOpenOrder: SingleLiveEvent<HasOpenOrder> = SingleLiveEvent()
     data class HasOpenOrder(val hasOpenOrder: Boolean, val cookInCart: Cook? = null, val currentShowingCook: Cook? = null)
     //check order status - is there any open order?
@@ -382,10 +392,12 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
         val availableArr = arrayListOf<Dish>()
+        //get only available dishes
         dishes.forEach { dish ->
             dish.menuItem?.let{
                 availableArr.add(dish)
             }
+
         }
         additionalDishes.postValue(availableArr)
     }
@@ -397,4 +409,6 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
         val availableCookingSlotEndsAt = orderData.value?.cookingSlot?.endsAt
         editDeliveryTime.postValue(EditDeliveryTime(availableCookingSlotStartsAt, availableCookingSlotEndsAt))
     }
+
+
 }
