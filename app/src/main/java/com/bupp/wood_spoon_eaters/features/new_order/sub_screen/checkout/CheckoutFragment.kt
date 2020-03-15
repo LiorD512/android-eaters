@@ -116,7 +116,11 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 }
             }
         })
-
+        ordersViewModel.emptyCartEvent.observe(this, Observer { emptyCartEvent ->
+            if(emptyCartEvent.shouldShow) {
+                ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+            }
+        })
 
     }
 
@@ -195,36 +199,28 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         checkoutFragPb.hide()
         if (order != null) {
             this.curOrder = order
-            var cook = order.cook
 
-//            var address: String? = null
-            if(order.deliveryAddress != null ){
-                checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
-//                address = order.deliveryAddress.streetLine1
-            }
-//            if (address != null) {
-//            }
-            val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
-            if(time != null){
-                checkoutFragDeliveryTime.updateDeliveryDetails(time)
-            }
+            if(order.orderItems.size > 0){
+                checkoutFragStatusBar.isEnabled = true
+                var cook = order.cook
 
-            checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"
-            checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
+                if(order.deliveryAddress != null ){
+                    checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
+                }
+                val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
+                if(time != null){
+                    checkoutFragDeliveryTime.updateDeliveryDetails(time)
+                }
+
+                checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"
+                checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
+            }
 
         }
     }
 
     override fun onDishCountChange(orderItemsCount: Int, updatedOrderItem: OrderItem) {
-        if(orderItemsCount <= 0){
-//            checkoutFragStatusBar.isEnabled = false
-            showEmptyCartDialog()
-        }else{
-            checkoutFragPb.show()
-            checkoutFragStatusBar.isEnabled = true
             ordersViewModel.updateOrder(updatedOrderItem)
-        }
-
     }
 
     private fun updatePriceUi(tipPercent: Int?, tipInDollars: Int?) {
@@ -296,9 +292,9 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     }
 
-    private fun showEmptyCartDialog() {
-        ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-    }
+//    private fun showEmptyCartDialog() {
+//        ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+//    }
 
     override fun onClearCart() {
         ordersViewModel.clearCart()

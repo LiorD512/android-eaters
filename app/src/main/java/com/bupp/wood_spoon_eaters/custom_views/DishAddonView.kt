@@ -46,6 +46,7 @@ class DishAddonView : FrameLayout, PlusMinusView.PlusMinusInterface {
                 dishAddonCount.text = "${dish.quantity}"
                 dishAddonAddBtn.visibility = View.GONE
                 dishAddonPlusMinus.visibility = View.VISIBLE
+//                val quantityLeft = dish.quantity
                 dishAddonPlusMinus.setPlusMinusListener(this, position, dish.quantity)
             }
             else -> {

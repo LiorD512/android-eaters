@@ -15,7 +15,7 @@ class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() 
 
     interface ClearCartDialogListener {
         fun onClearCart()
-        fun close(){}
+        fun onCancelClearCart(){}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +39,11 @@ class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() 
             listener.onClearCart()
             dismiss()
         }
-        clearCartDialogCloseBtn.setOnClickListener { dismiss()}
+        clearCartDialogCloseBtn.setOnClickListener {
+            listener.onCancelClearCart()
+            dismiss()}
         clearCartDialogNoBtn.setOnClickListener {
+            listener.onCancelClearCart()
             dismiss()
         }
 

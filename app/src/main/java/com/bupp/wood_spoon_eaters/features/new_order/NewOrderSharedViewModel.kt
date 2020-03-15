@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
@@ -21,9 +20,15 @@ import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: MetaDataManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),
+class NewOrderSharedViewModel(
+    val apiService: ApiService,
+    val metaDataManager: MetaDataManager,
+    val orderManager: OrderManager,
+    val eaterDataManager: EaterDataManager
+) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
+    private var curCookingSlotId: Long? = null
     var menuItemId: Long = -1
     var isCheckout: Boolean = false
     var isEvent: Boolean = false
@@ -35,26 +40,35 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
         return eaterDataManager.currentEater!!.addresses
     }
 
-    fun getChosenAddress(): Address?{
+    fun getChosenAddress(): Address? {
         return eaterDataManager.getLastChosenAddress()
     }
 
     fun updateDeliveryTime(time: Date) {
-        progressData.startProgress()
+//        progressData.startProgress()
         eaterDataManager.orderTime = time
-        val orderRequest = orderManager.getOrderRequest()
+
+//        orderManager.updateOrderRequest(deliveryAt = eaterDataManager.getLastOrderTimeParam())
+        orderData.postValue(orderData.value)
+        val orderRequest = OrderRequest()
         orderRequest.deliveryAt = eaterDataManager.getLastOrderTimeParam()
         postUpdateOrder(orderRequest)
     }
 
-    fun updateAddress(){
+    fun updateAddress() {
+//        orderManager.updateOrderRequest(deliveryAddress = deliveryAddress)
+//        orderData.postValue(orderData.value)
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
-        orderManager.updateOrderRequest(deliveryAddress = deliveryAddress)
-        val orderRequest = orderManager.getOrderRequest()
+        val orderRequest = OrderRequest()
+        orderRequest.deliveryAddress = deliveryAddress
         postUpdateOrder(orderRequest)
     }
 
+    data class EmptyCartEvent(val shouldShow: Boolean = false)
+    val emptyCartEvent = SingleLiveEvent<EmptyCartEvent>()
+
     data class NavigationEvent(val menuItemId: Long = -1, val isCheckout: Boolean = false)
+
     val navigationEvent = MutableLiveData<NavigationEvent>()
     fun setIntentParams(menuItemId: Long = -1, isCheckout: Boolean = false, isEvent: Boolean) {
         this.menuItemId = menuItemId
@@ -64,11 +78,13 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
     }
 
     val orderStatusEvent: SingleLiveEvent<OrderStatusEvent> = SingleLiveEvent()
+
     data class OrderStatusEvent(val hasActiveOrder: Boolean = false)
-    fun checkOrderStatus(){
-        if(orderManager.haveCurrentActiveOrder()){
+
+    fun checkOrderStatus() {
+        if (orderManager.haveCurrentActiveOrder()) {
             orderStatusEvent.postValue(OrderStatusEvent(true))
-        }else{
+        } else {
             orderStatusEvent.postValue(OrderStatusEvent(false))
         }
     }
@@ -80,13 +96,15 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
 
 
     val ephemeralKeyProvider: SingleLiveEvent<EphemeralKeyProviderEvent> = SingleLiveEvent()
+
     data class EphemeralKeyProviderEvent(val isSuccess: Boolean = false)
+
     override fun onEphemeralKeyProviderError() {
         ephemeralKeyProvider.postValue(EphemeralKeyProviderEvent(false))
     }
 
 
-    fun setChosenAddress(address: Address){
+    fun setChosenAddress(address: Address) {
         eaterDataManager.setUserChooseSpecificAddress(true)
         eaterDataManager.setLastChosenAddress(address)
     }
@@ -100,8 +118,6 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
     }
 
 
-
-
     //ORDER DATA
 
     val orderData = MutableLiveData<Order>() //current order result
@@ -109,13 +125,13 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
     val additionalDishes = MutableLiveData<ArrayList<Dish>>() // current order other available dishes
 
     fun getLastOrderDetails() {
-        orderManager.curOrderResponse?.let{
+        orderManager.curOrderResponse?.let {
             orderData.postValue(orderManager.curOrderResponse)
         }
     }
 
     //create new order
-    fun initNewOrder(){
+    fun initNewOrder() {
         orderManager.clearCurrentOrder()
         orderRequestData.postValue(orderManager.initNewOrder())
     }
@@ -129,31 +145,28 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
 
     var isFirst: Boolean = true
     val showDialogEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
+
     data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
+
     val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
     //post current order - order details and order items - this method is used to add single dish to cart.
-    fun addToCart(fullDish: FullDish? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
-                  tipAmount: String? = null,
-                  promoCode: String? = null) {
+    fun addToCart(
+        fullDish: FullDish? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
+        tipAmount: String? = null,
+        promoCode: String? = null
+    ) {
 
 
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
-        if(hasPendingOrder){
-            fullDish?.let{
+        if (hasPendingOrder) {
+            fullDish?.let {
                 addNewDishToCart(it.id, quantity)
             }
-        }else{
+        } else {
             var cookId: Long = -1
             var dishId: Long = -1
             var cookingSlotId: Long = -1
 
-//            dish?.let {
-//                cookId = it.cook.id
-//                dishId = it.id
-//                it.menuItem?.let {
-//                    cookingSlotId = it.cookingSlot?.id
-//                }
-//            }
             fullDish?.let {
                 cookId = it.cook.id
                 dishId = it.id
@@ -181,9 +194,14 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
                     progressData.endProgress()
                     if (response.isSuccessful) {
                         val order = response.body()?.data
+                        curCookingSlotId = order?.cookingSlot?.id
                         orderManager.setOrderResponse(order)
                         orderData.postValue(order)
                         Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
+                        //update additional dishes
+                        fullDish?.let {
+                            setAdditionalDishes(it.cook.dishes)
+                        }
                         postOrderEvent.postValue(PostOrderEvent(true, order))
                         showDialogEvent.postValue(isFirst)
                         isFirst = false
@@ -242,26 +260,33 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
         val orderRequest = orderManager.getOrderRequest()
         val orderItems = orderRequest.orderItemRequests
 
-        val tempOrderItems: ArrayList<OrderItemRequest> = arrayListOf()
+        //check emptyCart State - one item in cart and current updated item quantity is 0
+        if (orderResponse?.orderItems?.size == 1 && updatedOrderItem.quantity == 0) {
+            //show empty cart dialog
+            emptyCartEvent.postValue(EmptyCartEvent(shouldShow = true))
+        } else {
+            val tempOrderItems: ArrayList<OrderItemRequest> = arrayListOf()
             for (item in orderResponse?.orderItems!!) {
                 if (item.id == updatedOrderItem.id) {
                     item.quantity = updatedOrderItem.quantity
                 }
                 val removedIngredientIds: ArrayList<Long> = arrayListOf()
-                for (ingItem in item.removedIndredients){
+                for (ingItem in item.removedIndredients) {
                     ingItem.id?.let { removedIngredientIds.add(it) }
                 }
                 val updatedOrderItemRequest = OrderItemRequest(item.id, item.dish.id, item.quantity, removedIngredientIds, item.notes)
-                if(item.quantity <= 0){ //this line make sure dishes with 0 quantitny will be left outside of the order
+                if (item.quantity <= 0) { //this line make sure dishes with 0 quantitny will be left outside of the order
                     updatedOrderItemRequest._destroy = true
                 }
                 tempOrderItems.add(updatedOrderItemRequest)
+            }
+
+            orderItems!!.clear()
+            orderItems.addAll(tempOrderItems)
+
+            postUpdateOrder(orderRequest)
         }
 
-        orderItems!!.clear()
-        orderItems.addAll(tempOrderItems)
-
-        postUpdateOrder(orderRequest)
     }
 
     private fun postUpdateOrder(orderRequest: OrderRequest) {
@@ -289,7 +314,7 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
 
     fun calcTotalDishesPrice(): Double {
         var total = 0.0
-        orderData.value?.orderItems?.let{
+        orderData.value?.orderItems?.let {
             it.forEach {
                 total += (it.price?.value * it.quantity)
             }
@@ -298,17 +323,22 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
     }
 
     val hasOpenOrder: SingleLiveEvent<HasOpenOrder> = SingleLiveEvent()
-    data class HasOpenOrder(val hasOpenOrder: Boolean, val cookInCart: Cook? = null, val currentShowingCook: Cook? = null)
+
+    data class HasOpenOrder(val hasOpenOrder: Boolean, val cookInCartName: String? = null, val currentShowingCookName: String? = null)
+
     //check order status - is there any open order?
-    fun checkForOpenOrder(currentShowingCook: Cook) {
+    fun checkForOpenOrder(currentCookingSlotid: Long?, currentShowingCookName: String) {
         if (orderManager.haveCurrentActiveOrder()) {
             val inCartOrder = orderManager.curOrderResponse
-            val cookInCart = inCartOrder?.cook
-            if (currentShowingCook.id != cookInCart?.id) {
-                //if the showing dish's (cook) is the same as the in-cart order's cook
-                hasOpenOrder.postValue(HasOpenOrder(true, cookInCart, currentShowingCook))
-            } else {
-                hasOpenOrder.postValue(HasOpenOrder(false))
+                val inCartCookingSlot = inCartOrder?.cookingSlot
+            inCartCookingSlot?.let{
+                if (it.id != currentCookingSlotid) {
+                    val cookInCartName = inCartOrder?.cook.getFullName()
+                    //if the showing dish's (cook) is the same as the in-cart order's cook
+                    hasOpenOrder.postValue(HasOpenOrder(true, cookInCartName, currentShowingCookName))
+                } else {
+                    hasOpenOrder.postValue(HasOpenOrder(false))
+                }
             }
         } else {
             hasOpenOrder.postValue(HasOpenOrder(false))
@@ -316,8 +346,9 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
     }
 
 
-    val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
+    val checkCartStatus: MutableLiveData<CheckCartStatusEvent> = SingleLiveEvent()
     data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
+
     fun checkCartStatus() {
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
         checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
@@ -325,6 +356,7 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
 
 
     data class CheckoutEvent(val isSuccess: Boolean)
+
     val checkoutOrderEvent: SingleLiveEvent<CheckoutEvent> = SingleLiveEvent()
     //checkout order
     fun checkoutOrder(orderId: Long) {
@@ -355,17 +387,16 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
     }
 
 
-
     //Additional single params
 
-    fun resetTip(){
+    fun resetTip() {
         tipInDollars.postValue(0)
         tipPercentage.postValue(0)
     }
 
     val tipInDollars = MutableLiveData<Int>()
     val tipPercentage = MutableLiveData<Int>()
-//    val orderData = MutableLiveData<Order>()
+    //    val orderData = MutableLiveData<Order>()
     fun updateTipPercentage(tipPercentage: Int) {
         this.tipPercentage.postValue(tipPercentage)
     }
@@ -382,27 +413,38 @@ class NewOrderSharedViewModel(val apiService: ApiService, val metaDataManager: M
 //        return orderManager.tempTipInDollars
 //    }
 
-    fun updateAddUtensils(shouldAdd: Boolean){
+    fun updateAddUtensils(shouldAdd: Boolean) {
         orderManager.updateOrderRequest(addUtensils = shouldAdd)
     }
 
-    fun updateRecurringOrder(isRecurring: Boolean){
+    fun updateRecurringOrder(isRecurring: Boolean) {
         orderManager.updateOrderRequest(recurringOrder = isRecurring)
     }
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
         val availableArr = arrayListOf<Dish>()
         //get only available dishes
-        dishes.forEach { dish ->
-            dish.menuItem?.let{
-                availableArr.add(dish)
+        if (curCookingSlotId != null) {
+            dishes.forEach { dish ->
+                dish.menuItem?.let {
+                    if (it.cookingSlot.id == curCookingSlotId) {
+                        availableArr.add(dish)
+                    }
+                }
             }
-
+        } else {
+            //todo - first case when entering screen and there is not clooing slot yet for order.
+            dishes.forEach { dish ->
+                dish.menuItem?.let {
+                    availableArr.add(dish)
+                }
+            }
         }
         additionalDishes.postValue(availableArr)
     }
 
     data class EditDeliveryTime(val startAt: Date?, val endsAt: Date?)
+
     val editDeliveryTime: SingleLiveEvent<EditDeliveryTime> = SingleLiveEvent()
     fun editDeliveryTime() {
         val availableCookingSlotStartsAt = orderData.value?.cookingSlot?.startsAt

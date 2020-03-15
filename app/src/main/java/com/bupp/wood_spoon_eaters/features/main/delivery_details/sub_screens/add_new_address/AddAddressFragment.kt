@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -117,7 +118,11 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
     override fun onActionViewClick(type: Int) {
         when (type) {
             Constants.LOCATION_CHOOSER_ACTION -> {
-                (activity as AddressChooserActivity).loadLocationChooser(null)
+                if(activity is AddressChooserActivity){
+                    (activity as AddressChooserActivity).loadLocationChooser(null)
+                }else if(activity is NewOrderActivity){
+                    (activity as NewOrderActivity).loadLocationChooser(null)
+                }
             }
             else -> {
                 Toast.makeText(context, "Not implemented onActionViewClick with Type: $type", Toast.LENGTH_LONG).show()
@@ -141,7 +146,11 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
 
     fun validateFields(){
         if(hasAddress && hasApt){
-            (activity as AddressChooserActivity).setHeaderViewSaveBtnClickable(true)
+            if(activity is AddressChooserActivity) {
+                (activity as AddressChooserActivity).setHeaderViewSaveBtnClickable(true)
+            }else if(activity is NewOrderActivity){
+//                (activity as NewOrderActivity).setHeaderViewSaveBtnClickable(true)
+            }
         }
     }
 

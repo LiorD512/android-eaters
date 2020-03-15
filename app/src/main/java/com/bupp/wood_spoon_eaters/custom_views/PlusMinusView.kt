@@ -14,11 +14,18 @@ class PlusMinusView : FrameLayout {
 
     private var listener: PlusMinusInterface? = null
     private var position: Int = -1
+    private var quantityLeft: Int = -1
 
-    fun setPlusMinusListener(listener: PlusMinusInterface, position: Int, initalCounter: Int) {
+    fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initalCounter: Int = 0, quantityLeft: Int = 1) {
         this.listener = listener
         this.position = position
         this.counter = initalCounter
+        this.quantityLeft = quantityLeft
+        plusMinusCounter.text = "$counter"
+    }
+
+    fun updateCounterUiOnly(count: Int) {
+        counter = count
         plusMinusCounter.text = "$counter"
     }
 
@@ -38,12 +45,29 @@ class PlusMinusView : FrameLayout {
                 counter--
                 plusMinusCounter.text = "$counter"
                 listener?.onPlusMinusChange(counter, position)
+
+                if(counter == quantityLeft){
+                    plusMinusPlus.isEnabled = false
+                    plusMinusPlus.alpha = 0.5f
+                }else{
+                    plusMinusPlus.isEnabled = true
+                    plusMinusPlus.alpha = 1f
+                }
             }
         }
         plusMinusPlus.setOnClickListener {
             counter++
             plusMinusCounter.text = "$counter"
             listener?.onPlusMinusChange(counter, position)
+
+            if(counter == quantityLeft){
+                plusMinusPlus.isEnabled = false
+                plusMinusPlus.alpha = 0.5f
+            }else{
+                plusMinusPlus.isEnabled = true
+                plusMinusPlus.alpha = 1f
+            }
         }
     }
+
 }

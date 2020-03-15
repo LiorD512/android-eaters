@@ -75,13 +75,9 @@ class OrdersBottomBar : FrameLayout{
     }
 
     fun updateStatusBottomBar(type: Int? = null, price: Double? = null, checkoutPrice : Double? = null, itemCount: Int? = null) {
-//        ordersBottomBarOrder.visibility = View.VISIBLE
-//        ordersVisible = true
         if(type != null){
             this.curType = type
         }
-
-
 
         when(curType){
             Constants.STATUS_BAR_TYPE_CART -> {
@@ -99,10 +95,6 @@ class OrdersBottomBar : FrameLayout{
             Constants.STATUS_BAR_TYPE_CHECKOUT -> {
                 checkoutVisible = true
                 ordersBottomBarCheckout.visibility = View.VISIBLE
-//                ordersBottomBarOrderTitle.text = "Proceed To Cart"
-
-//                ordersBottomBarCheckout.visibility = View.GONE
-//                checkoutVisible = false
                 checkoutPrice?.let{
                     val checkoutPriceStr = DecimalFormat("##.##").format(checkoutPrice)
                     ordersBottomBarCheckoutPrice.text = "$$checkoutPriceStr"
@@ -117,6 +109,13 @@ class OrdersBottomBar : FrameLayout{
         }
         checkSepEnable()
     }
+
+//    fun handleOrderBar(shouldShow: Boolean){
+//        when(shouldShow){
+//            true -> ordersBottomBarOrder.visibility = View.VISIBLE
+//            false -> ordersBottomBarOrder.visibility = View.GONE
+//        }
+//    }
 
 
 }

@@ -71,6 +71,7 @@ data class FullDish(
     @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
     @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>,
     @SerializedName("image_gallery") val imageGallery: ArrayList<String>? = null,
+    @SerializedName("cook_instructions") val cooksInstructions: String? = null, //todo - update this after server added
     @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
     @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>
 ){

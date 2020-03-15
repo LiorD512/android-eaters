@@ -220,6 +220,11 @@
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="Reg11PurpleyGrey">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/purpely_grey</item>
+    </style>
 
     <style name="SemiBold13Silver">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
@@ -359,4 +364,5 @@
     <declare-styleable name="WoodSpoonProgressBar">
         <attr format="boolean" name="isBlueStyle"/>
     </declare-styleable>
+    <color name="purpely_grey">#929092</color>
 </resources>

@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Cook
 import kotlinx.android.synthetic.main.start_new_cart_dialog_layout.*
 
-class StartNewCartDialog(val cookInCart: Cook, val currentShowingCook:Cook, val listener: StartNewCartDialogListener) : DialogFragment() {
+class StartNewCartDialog(val cookInCartName: String = "", val currentShowingCookName: String = "", val listener: StartNewCartDialogListener) : DialogFragment() {
 
     interface StartNewCartDialogListener {
         fun onNewCartClick()
@@ -46,7 +46,7 @@ class StartNewCartDialog(val cookInCart: Cook, val currentShowingCook:Cook, val 
         }
 
 
-        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCart.getFullName(), currentShowingCook.getFullName())
+        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCartName, currentShowingCookName)
     }
 
 }

@@ -18,10 +18,7 @@ import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.Observer
-import com.bupp.wood_spoon_eaters.custom_views.DishCounterView
-import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
-import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
-import com.bupp.wood_spoon_eaters.custom_views.UserImageView
+import com.bupp.wood_spoon_eaters.custom_views.*
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
@@ -40,11 +37,13 @@ import kotlin.collections.ArrayList
 
 
 class SingleDishFragment() : Fragment(),
-    OrderDateChooserDialog.OrderDateChooserDialogListener, DishCounterView.DishCounterViewListener,
+    OrderDateChooserDialog.OrderDateChooserDialogListener, //DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
     UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener,
-    DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener {
+    DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener,
+    PlusMinusView.PlusMinusInterface {
+
 //    StatusBottomBar.StatusBottomBarListener,
 
 
@@ -102,13 +101,13 @@ class SingleDishFragment() : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getFullDish()
-
         ordersViewModel.checkCartStatus()
         initObservers()
     }
 
+
     private fun checkForOpenOrder(currentDish: FullDish) {
-        ordersViewModel.checkForOpenOrder(currentDish.cook)
+        ordersViewModel.checkForOpenOrder(currentDish.availableMenuItems[0].cookingSlot.id, currentDish.cook.getFullName())
     }
 
     private fun initObservers() {
@@ -162,7 +161,7 @@ class SingleDishFragment() : Fragment(),
 
         ordersViewModel.hasOpenOrder.observe(this, Observer { event ->
             if (event.hasOpenOrder) {
-                StartNewCartDialog(event.cookInCart!!, event.currentShowingCook!!, this).show(childFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
+                StartNewCartDialog(event.cookInCartName!!, event.currentShowingCookName!!, this).show(childFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
             }
         })
 
@@ -170,7 +169,6 @@ class SingleDishFragment() : Fragment(),
             if (showDialog) {
                 AdditionalDishesDialog(this).show(childFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
             }
-
         })
 
         viewModel.getReviewsEvent.observe(this, Observer { event ->
@@ -187,7 +185,7 @@ class SingleDishFragment() : Fragment(),
     }
 
     override fun onAdditionalDialogDismiss() {
-
+        ordersViewModel.checkCartStatus()
     }
 
     override fun onProceedToCheckout() {
@@ -203,10 +201,10 @@ class SingleDishFragment() : Fragment(),
             updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = ordersViewModel.calcTotalDishesPrice())
             singleDishHeader.updateUi(SingleDishHeader.COOK)
             singleDishScrollView.fullScroll(View.FOCUS_DOWN)
+            singleDishStatusBar.handleBottomBar(false)
         } else {
             Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     override fun onUserImageClick(cook: Cook?) {
@@ -251,6 +249,7 @@ class SingleDishFragment() : Fragment(),
         hidePages()
         when (page) {
             SingleDishHeader.INFO -> {
+                singleDishStatusBar.handleBottomBar(true)
                 singleDishScrollView.smoothScrollTo(0, singleDishInfoLayout.top)
                 singleDishInfoLayout.visibility = View.VISIBLE
             }
@@ -326,7 +325,7 @@ class SingleDishFragment() : Fragment(),
 
     fun addToCart() {
 //        singleDishPb.show()
-        val quantity = singleDishInfoDishCounter.getDishCount()
+        val quantity = singleDishPlusMinus.counter
         val removedIngredients = ingredientsAdapter?.ingredientsRemoved
         val note = singleDishIngredientInstructions.getText()
         ordersViewModel.addToCart(
@@ -376,13 +375,19 @@ class SingleDishFragment() : Fragment(),
         if (menuItem != null) {
             singleDishQuantityView.initQuantityView(menuItem)
             val quantityLeft = menuItem.quantity - menuItem.unitsSold
-            singleDishInfoDishCounter.setDishCounterViewListener(this, quantityLeft)
-//            singleDishInfoQuantity.text = "$quantityLeft Left"
+            singleDishPlusMinus.setPlusMinusListener(this, initalCounter = 1, quantityLeft = quantityLeft)
         }
 
         initOrderDate(currentDish)
         singleDishInfoRatingVal.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
+
+        if(currentDish.cooksInstructions!= null){
+            singleDishInstructionsLayout.visibility = View.VISIBLE
+            singleDishInstructionsBody.text = currentDish.cooksInstructions
+        }else{
+            singleDishInstructionsLayout.visibility = View.GONE
+        }
     }
 
     override fun onPlayClick(url: String) {
@@ -402,23 +407,31 @@ class SingleDishFragment() : Fragment(),
             singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
         }
         if (viewModel.isEvent) {
-            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         } else {
-            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icons_edit, 0, 0, 0);
-            singleDishInfoDate.setOnClickListener { openOrderTimeDialog() }
+//            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icons_edit, 0, 0, 0);
+            singleDishChangeTimeBtn.setOnClickListener { openOrderTimeDialog() }
         }
         singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
 
         singleDishInfoDate.setPaintFlags(singleDishInfoDate.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG);
     }
 
-    override fun onDishCounterChanged(count: Int) {
-        //update order manager
-        //todo - refactor this
+//    override fun onDishCounterChanged(count: Int) {
+//        //updating ui only
+//        viewModel.getCurrentDish()?.let {
+//            val newValue = it.price.value * count
+//            updateStatusBottomBar(price = newValue, itemCount = count)
+//        }
+//    }
+
+    override fun onPlusMinusChange(counter: Int, position: Int) {
+        //updating ui only
         viewModel.getCurrentDish()?.let {
-            val newValue = it.price.value * count
-            updateStatusBottomBar(price = newValue, itemCount = count)
+            val newValue = it.price.value * counter
+            updateStatusBottomBar(price = newValue, itemCount = counter)
         }
+        singleDishCount.text = "$counter"
     }
 
     private fun openOrderTimeDialog() {

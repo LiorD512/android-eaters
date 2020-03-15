@@ -41,7 +41,7 @@ class OrderItemsAdapter(val context: Context, val listener: OrderItemsListener) 
     }
 
     override fun onDishCountChange(counter: Int, position: Int) {
-        val updatedOrderItem = getItem(position)
+        val updatedOrderItem = getItem(position).copy()
         updatedOrderItem.quantity = counter
         listener.onDishCountChange(counter, updatedOrderItem)
     }

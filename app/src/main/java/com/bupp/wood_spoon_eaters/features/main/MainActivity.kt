@@ -133,6 +133,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
                 mainActOrdersBB.handleBottomBar(showCheckout = true)
+                pendingOrderEvent.totalPrice?.let{
+                    mainActOrdersBB.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = it)
+                }
             }else{
                 mainActOrdersBB.handleBottomBar(showCheckout = false)
             }

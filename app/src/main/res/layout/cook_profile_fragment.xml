@@ -51,7 +51,7 @@
                         style="@style/SemiBold15Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Neta Nachmias, 29" />
+                        tools:text="Neta Nachmias, 29" />
 
                 <LinearLayout
                         android:layout_marginTop="8.3dp"
@@ -66,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Architect, Israel" />
+                            tools:text="Architect, Israel" />
 
                     <ImageView
                             android:layout_marginLeft="7dp"
@@ -95,7 +95,7 @@
                     android:drawableStart="@drawable/icons_raitings_selected"
                     android:drawablePadding="8.7dp"
                     android:gravity="center"
-                    android:text="4.8" />
+                    tools:text="4.8" />
 
 
 
@@ -132,7 +132,7 @@
                     android:drawableStart="@drawable/icons_certificate"
                     android:drawablePadding="7.4dp"
                     android:gravity="center"
-                    android:text="Certificate in Culinary Arts" />
+                    tools:text="Certificate in Culinary Arts" />
 
             <TextView
                     android:id="@+id/cookProfileFragCertificateCount"
@@ -142,7 +142,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="9.8dp"
                     android:gravity="center"
-                    android:text="+ 2 More" />
+                    tools:text="+ 2 More" />
 
         </LinearLayout>
 
@@ -181,7 +181,7 @@ with a lot more" />
                 android:id="@+id/cookProfileFragDishBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dishes By Oded" />
+                tools:text="Dishes By Oded" />
 
     </LinearLayout>
 

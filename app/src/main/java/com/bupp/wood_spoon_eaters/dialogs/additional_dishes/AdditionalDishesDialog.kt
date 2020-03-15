@@ -11,7 +11,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
@@ -20,9 +19,10 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.additional_dishes_dialog.*
-import kotlinx.android.synthetic.main.checkout_fragment.*
+import kotlinx.android.synthetic.main.additional_dishes_dialog.dishAddonPrice
+import kotlinx.android.synthetic.main.dish_addon_view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.DecimalFormat
 
 class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : DialogFragment(), AdditionalDishesAdapter.AdditionalDishesListener, OrderItemsAdapter.OrderItemsListener,
     ClearCartDialog.ClearCartDialogListener {
@@ -70,24 +70,32 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
                 false -> dishAddonPb.hide()
             }
         })
+        sharedViewModel.emptyCartEvent.observe(this, Observer { emptyCartEvent ->
+            if(emptyCartEvent.shouldShow) {
+                ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+            }
+        })
     }
 
     private fun handleOrderItems(order: Order?) {
         order?.let {
             it.orderItems.let {
                 mainAdapter?.refreshOrderItems(it)
-                if (it.size == 0) {
-                    ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-                }
+
             }
 
-            dishAddonPrice.text = "$${sharedViewModel.calcTotalDishesPrice().toString()}"
+            val priceStr = DecimalFormat("##.##").format(sharedViewModel.calcTotalDishesPrice())
+            dishAddonPrice.text = "$$priceStr"
         }
     }
 
     override fun onClearCart() {
         sharedViewModel.clearCart()
         dismiss()
+    }
+
+    override fun onCancelClearCart() {
+        dishAddonPlusMinus.updateCounterUiOnly(1)
     }
 
     private fun handleAdditionalDishes(additionalDishes: ArrayList<Dish>?) {
@@ -122,7 +130,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-//        listener.onAdditionalDialogDismiss()
+        listener.onAdditionalDialogDismiss()
     }
 }
 

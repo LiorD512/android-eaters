@@ -69,10 +69,19 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
     }
 
     val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
-    data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
+    data class CheckCartStatusEvent(val hasPendingOrder: Boolean, val totalPrice: Double?)
     fun checkCartStatus() {
         hasPendingOrder = orderManager.haveCurrentActiveOrder()
-        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder))
+        var totalPrice = 0.0
+        if(hasPendingOrder){
+            orderManager.curOrderResponse?.orderItems?.let{
+                    it.forEach {
+                        totalPrice += (it.price?.value * it.quantity)
+                    }
+            }
+//            totalPrice = orderManager.curOrderResponse?.total?.value
+        }
+        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder, totalPrice))
     }
 
     val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
