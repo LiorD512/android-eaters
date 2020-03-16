@@ -15,6 +15,7 @@
             <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SAVE" value="5"/>
             <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE" value="6"/>
             <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS" value="7"/>
+            <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_DONE" value="8"/>
         </attr>
         <attr name="title"/>
         <attr name="isWithSep" format="boolean"/>
@@ -127,6 +128,7 @@
             <enum name="MANY_COOKS_VIEW" value="4"/>
         </attr>
         <attr name="isWithStroke" format="boolean"/>
+        <attr name="isWithShadow" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="TagInputView">

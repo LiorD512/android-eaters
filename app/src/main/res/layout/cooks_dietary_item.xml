@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:background="@color/white"
-            android:layout_marginRight="7.7dp"
-             android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_gravity="center|top"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <ImageView
+            tools:src="@drawable/ic_play_vid"
+            android:layout_gravity="center"
             android:id="@+id/dietaryItem"
-            android:layout_width="35dp"
-            android:layout_height="35dp"/>
+            android:layout_width="39dp"
+            android:layout_height="39dp"/>
 
-</FrameLayout>
+    <TextView
+            android:layout_marginTop="2.3dp"
+            android:id="@+id/dietaryItemName"
+            android:layout_gravity="center"
+            tools:text="blalblla"
+            style="@style/SemiBold9Grey"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+</LinearLayout>

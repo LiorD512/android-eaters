@@ -12,6 +12,8 @@ data class ServerResponse<T> (
     @SerializedName("data") var data: T? = null
 )
 
+
+
 data class MetaDataModel(
     @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>? = arrayListOf(),

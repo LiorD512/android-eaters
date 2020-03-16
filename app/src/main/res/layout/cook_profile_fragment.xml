@@ -19,22 +19,22 @@
                 android:layout_height="134dp"
                 android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                    android:id="@+id/manyCooksViewBkg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:cardBackgroundColor="@color/white_to_blue_selector"
-                    app:cardElevation="@dimen/shadow_elevation"
-                    app:cardCornerRadius="40dp">
+            <!--<androidx.cardview.widget.CardView-->
+                    <!--android:id="@+id/manyCooksViewBkg"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--app:cardElevation="0dp"-->
+                    <!--app:cardCornerRadius="40dp">-->
 
                 <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                         app:imageSize="BIG"
+                        app:isWithShadow="true"
                         android:id="@+id/cookProfileImageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-            </androidx.cardview.widget.CardView>
+            <!--</androidx.cardview.widget.CardView>-->
 
 
             <LinearLayout
@@ -96,8 +96,6 @@
                     android:drawablePadding="8.7dp"
                     android:gravity="center"
                     tools:text="4.8" />
-
-
 
         </LinearLayout>
 

@@ -55,13 +55,15 @@ class NewOrderSharedViewModel(
         postUpdateOrder(orderRequest)
     }
 
-    fun updateAddress() {
+    fun  updateAddress() {
 //        orderManager.updateOrderRequest(deliveryAddress = deliveryAddress)
 //        orderData.postValue(orderData.value)
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
-        val orderRequest = OrderRequest()
-        orderRequest.deliveryAddress = deliveryAddress
-        postUpdateOrder(orderRequest)
+        deliveryAddress?.let{
+            val orderRequest = OrderRequest()
+            orderRequest.deliveryAddressId = it.id
+            postUpdateOrder(orderRequest)
+        }
     }
 
     data class EmptyCartEvent(val shouldShow: Boolean = false)

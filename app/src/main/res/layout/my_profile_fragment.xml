@@ -191,6 +191,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+
+            <com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
+                    android:id="@+id/myProfileFragCuisineIcons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="38.2dp"
+                    app:subTitle="Change your preferences at any time"
+                    app:title="Cooking Cuisines" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
+                    android:id="@+id/myProfileFragDietaryIcons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15.8dp"
+                    app:subTitle="Pick one or more"
+                    app:title="Dietary" />
+
+
             <ImageView
                     android:id="@+id/myProfileFragShareBtnLayout"
                     android:layout_width="match_parent"

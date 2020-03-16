@@ -24,6 +24,13 @@ class MetaDataManager {
         }
         return arrayListOf()
     }
+
+    fun getCuisineListSelectableIcons(): ArrayList<SelectableIcon>{
+        if(getMetaDataObject()?.cuisines != null) {
+            return metaDataObject.cuisines as ArrayList<SelectableIcon>
+        }
+        return arrayListOf()
+    }
 //
     fun getDietaryList(): ArrayList<SelectableIcon> {
         if (getMetaDataObject()?.diets != null) {

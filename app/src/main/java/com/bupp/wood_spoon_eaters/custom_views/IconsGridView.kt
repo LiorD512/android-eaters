@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.icons_grid_view.view.*
 class IconsGridView : FrameLayout, IconsGridViewAdapter.IconGridViewAdapterListener {
 
     interface IconsGridViewListener{
-        fun onIconClick(selected: SelectableIcon)
+        fun onIconClick(selected: ArrayList<SelectableIcon>)
     }
 
     private var listener: IconsGridViewListener? = null
@@ -83,6 +83,6 @@ class IconsGridView : FrameLayout, IconsGridViewAdapter.IconGridViewAdapterListe
     }
 
     override fun onItemClick(selected: SelectableIcon) {
-        listener?.onIconClick(selected)
+        listener?.onIconClick(getSelectedItems())
     }
 }

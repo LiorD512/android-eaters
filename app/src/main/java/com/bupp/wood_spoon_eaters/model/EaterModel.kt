@@ -16,6 +16,8 @@ data class Eater(
     @SerializedName("invite_url") val inviteUrl: String? = "",
     @SerializedName("email") val email: String,
     @SerializedName("addresses") val addresses: ArrayList<Address>,
+    @SerializedName("cuisines") var cuisines: ArrayList<CuisineLabel>? = null,
+    @SerializedName("diets") var diets: ArrayList<DietaryIcon>? = null,
     @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>
 ){
     fun getFullName(): String{
@@ -38,13 +40,15 @@ data class Eater(
 }
 
 data class EaterRequest(
-    @SerializedName("first_name") var firstName: String = "",
-    @SerializedName("last_name") var lastName: String = "",
+    @SerializedName("first_name") var firstName: String? = null,
+    @SerializedName("last_name") var lastName: String? = null,
     @SerializedName("thumbnail") var thumbnail: String? = null,
-    @SerializedName("email") var email: String = "",
-    @SerializedName("addresses") var addresses: ArrayList<AddressRequest> = arrayListOf(),
+    @SerializedName("email") var email: String? = null,
+    @SerializedName("addresses") var addresses: ArrayList<AddressRequest>? = null,
     @SerializedName("time_zone") var timezone: String = TimeZone.getDefault().id,
     @SerializedName("device") var device: Device? = null,
+    @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Int>? = null,
+    @SerializedName("diet_ids") var dietIds: ArrayList<Int>? = null,
     var tempThumbnail: Uri? = null
 )
 

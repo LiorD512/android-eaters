@@ -14,7 +14,6 @@ import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
@@ -24,11 +23,16 @@ import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.content.Intent
 import android.net.Uri
+import com.bupp.wood_spoon.dialogs.CuisinesChooserDialog
+import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
+import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
+import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
-    FavoritesView.FavoritesViewListener {
+    FavoritesView.FavoritesViewListener, EmptyIconsGridView.OnItemSelectedListener, CuisinesChooserDialog.CuisinesChooserListener,
+    IconsGridView.IconsGridViewListener {
 
     companion object {
         fun newInstance() = MyProfileFragment()
@@ -58,6 +62,25 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         viewModel.getUserDetails()
         viewModel.getStripeCustomerCards()
         myProfileFragFavorites.initFavorites()
+
+        myProfileFragCuisineIcons.setListener(this)
+        myProfileFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.MULTI_SELECTION)
+        myProfileFragDietaryIcons.setIconsGridViewListener(this)
+    }
+
+    override fun OnEmptyItemSelected() {
+        var cuisineFragment = CuisinesChooserDialog(this, viewModel.getCuisineList(), Constants.MULTI_SELECTION)
+        cuisineFragment.setSelectedCuisine(myProfileFragCuisineIcons.getSelectedCuisines())
+        cuisineFragment.show(childFragmentManager, "CookingCuisine")
+    }
+
+    override fun onCuisineChoose(selectedCuisines: ArrayList<SelectableIcon>) {
+        myProfileFragCuisineIcons.updateItems(selectedCuisines)
+        viewModel.updateClientAccount(cuisineIcons = selectedCuisines)
+    }
+
+    override fun onIconClick(selectedDiets: ArrayList<SelectableIcon>) {
+        viewModel.updateClientAccount(dietaryIcons = selectedDiets)
     }
 
     private fun initObservers() {
@@ -80,17 +103,20 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
 
     private fun handleUserDetails(eater: Eater) {
-        initEaterData(eater)
-    }
-
-
-    private fun initEaterData(eater: Eater) {
         myProfileFragUserName.text = eater.getFullName()
         myProfileFragEditLocation.setOnClickListener { (activity as MainActivity).openAddressChooser() }
         myProfileFragUserPhoto.setImage(eater.thumbnail)
-//        myProfileFragEditLocation.updateDeliveryDetails(viewModel.getDeliveryAddress())
 
+        //load selected cuisines and dietary
+        eater.cuisines?.let{
+            myProfileFragCuisineIcons.initIconsGrid(eater.cuisines as ArrayList<SelectableIcon>)
+        }
+        eater.diets?.let{
+            myProfileFragDietaryIcons.setSelectedItems(eater.diets as ArrayList<SelectableIcon>)
+        }
     }
+
+
 
     override fun onDishClick(dish: Dish) {
         dish.menuItem?.let{

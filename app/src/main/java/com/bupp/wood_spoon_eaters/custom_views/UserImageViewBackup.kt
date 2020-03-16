@@ -18,10 +18,9 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.trading212.stickyheader.dpToPx
 
 
-class UserImageView : FrameLayout {
+class UserImageViewBackup : FrameLayout {
 
     private var curEater: Eater? = null
     private var curCook: Cook? = null
@@ -30,7 +29,6 @@ class UserImageView : FrameLayout {
 
     private var isWithStroke: Boolean = false
     private var isWithBkg: Boolean = false
-    private var isWithShadow: Boolean = false
     private var placeHolder: Drawable? = null
 
 
@@ -59,7 +57,6 @@ class UserImageView : FrameLayout {
             imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.SMALL_IMAGE_SIZE)
             placeHolder = a.getDrawable(R.styleable.UserImageView_placeHolder)
             isWithStroke = a.getBoolean(R.styleable.UserImageView_isWithStroke, false)
-            isWithShadow = a.getBoolean(R.styleable.UserImageView_isWithShadow, false)
             a.recycle()
         }
 
@@ -94,7 +91,7 @@ class UserImageView : FrameLayout {
                     cookImageView.setPadding(10, 10, 10, 10)
             }
             Constants.BIG_IMAGE_SIZE -> {
-                val bkgLayout = LayoutParams(80.toPx(), 80.toPx())
+                val bkgLayout = LayoutParams(90.toPx(), 90.toPx())
                 cookImageViewLayout.layoutParams = bkgLayout
 
                 if (isWithBkg){
@@ -110,7 +107,6 @@ class UserImageView : FrameLayout {
                 }
                 if(isWithStroke){
                     cookImageViewPlay.visibility = View.VISIBLE
-                    cookImageViewPlay.elevation = dpToPx(8F).toFloat()
                 }else{
                     cookImageViewPlay.visibility = View.GONE
                 }
@@ -141,12 +137,6 @@ class UserImageView : FrameLayout {
 //            cookImageViewPlay.visibility = View.VISIBLE
         }else{
             cookImageView.background = null
-        }
-
-        if(isWithShadow){
-            cookImageViewLayoutCardView.elevation = dpToPx(8F).toFloat()
-        }else{
-            cookImageViewLayoutCardView.elevation = 0F
         }
 
 //        if (isWithBkg) {

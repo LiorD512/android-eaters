@@ -211,52 +211,55 @@
                                 </LinearLayout>
                                 
                                 <!--<LinearLayout-->
-                                        <!--android:orientation="horizontal"-->
+                                        <!--android:visibility="gone"-->
+                                        <!--android:orientation="vertical"-->
                                         <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
-                                    <RadioGroup
-                                        android:layout_marginTop="40dp"
-                                            android:orientation="horizontal"
-                                            android:layout_width="match_parent" android:layout_height="wrap_content">
+                                    <!--<RadioGroup-->
+                                        <!--android:layout_marginTop="40dp"-->
+                                            <!--android:orientation="horizontal"-->
+                                            <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
 
-                                        <RadioButton
-                                                android:checked="true"
-                                                android:layout_marginRight="7.7dp"
-                                                android:id="@+id/singleDishSingleDishCb"
-                                                android:fontFamily="@font/open_sans_reg"
-                                                android:textSize="13.4sp"
-                                                android:text="Single Dish"
-                                                android:paddingLeft="7.2dp"
-                                                android:textColor="@color/grey_to_black_cb_selector"
-                                                android:button="@drawable/checkbox_selector"
-                                                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                                        <!--<RadioButton-->
+                                                <!--android:checked="true"-->
+                                                <!--android:layout_marginRight="7.7dp"-->
+                                                <!--android:id="@+id/singleDishSingleDishCb"-->
+                                                <!--android:fontFamily="@font/open_sans_reg"-->
+                                                <!--android:textSize="13.4sp"-->
+                                                <!--android:text="Single Dish"-->
+                                                <!--android:paddingLeft="7.2dp"-->
+                                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
+                                                <!--android:button="@drawable/checkbox_selector"-->
+                                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
 
-                                        <RadioButton
-                                                android:layout_marginRight="7.7dp"
-                                                android:id="@+id/singleDishWholeBatchCb"
-                                                android:text="The Whole Batch (10 dishes)"
-                                                android:paddingLeft="7.2dp"
-                                                android:layout_marginLeft="8.6dp"
-                                                android:fontFamily="@font/open_sans_reg"
-                                                android:textSize="13.4sp"
-                                                android:button="@drawable/checkbox_selector"
-                                                android:textColor="@color/grey_to_black_cb_selector"
-                                                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                                        <!--<RadioButton-->
+                                                <!--android:layout_marginRight="7.7dp"-->
+                                                <!--android:id="@+id/singleDishWholeBatchCb"-->
+                                                <!--android:text="The Whole Batch (10 dishes)"-->
+                                                <!--android:paddingLeft="7.2dp"-->
+                                                <!--android:layout_marginLeft="8.6dp"-->
+                                                <!--android:fontFamily="@font/open_sans_reg"-->
+                                                <!--android:textSize="13.4sp"-->
+                                                <!--android:button="@drawable/checkbox_selector"-->
+                                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
+                                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
 
-                                    </RadioGroup>
+                                    <!--</RadioGroup>-->
 
-                                <TextView
-                                        android:layout_marginTop="9dp"
-                                        style="@style/Reg11PurpleyGrey"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Buy the whole batch for a 20% discount"/>
+                                <!--<TextView-->
+                                        <!--android:layout_marginTop="9dp"-->
+                                        <!--style="@style/Reg11PurpleyGrey"-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:text="Buy the whole batch for a 20% discount"/>-->
 
                                 <View
-                                        android:layout_marginTop="8dp"
+                                        android:layout_marginTop="18dp"
                                         android:layout_marginBottom="10dp"
                                         android:background="@color/silver"
                                         android:layout_width="match_parent"
                                         android:layout_height="1dp"/>
+                                <!---->
+                            <!--</LinearLayout>-->
 
                                 <LinearLayout
                                         android:gravity="start|center_vertical"
@@ -380,6 +383,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                                android:visibility="gone"
                                 android:layout_marginTop="30dp"
                                 android:paddingRight="15.4dp"
                                 android:paddingLeft="15.4dp"
@@ -396,12 +400,13 @@
                                     android:id="@+id/singleDishInfoDietryList"
                                     android:layout_gravity="center"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="84dp"/>
 
                             <View
+                                    android:layout_marginTop="8.4dp"
                                     android:background="@color/silver"
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"/>
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"/>
 
                             <LinearLayout
                                     android:weightSum="2"
@@ -551,6 +556,7 @@ into consideration"/>
                         </LinearLayout>
 
                         <FrameLayout
+                                android:visibility="gone"
                                 android:id="@+id/singleDishCookLayout"
                                 android:background="@color/white"
                                 android:layout_width="match_parent"
