@@ -72,5 +72,12 @@ class AdditionalDishMainAdapter(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    fun removeDish(currentAddedDish: Dish) {
+        val currentAdditional = additionalDishesSection.item?.dishes
+        currentAdditional?.remove(currentAddedDish)
+        additionalDishesSection.removeItem()
+        additionalDishesSection.setItem(AdditionalDishes(currentAdditional!!))
+    }
+
 
 }

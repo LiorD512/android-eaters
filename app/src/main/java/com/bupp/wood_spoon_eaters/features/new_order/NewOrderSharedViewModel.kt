@@ -55,11 +55,11 @@ class NewOrderSharedViewModel(
         postUpdateOrder(orderRequest)
     }
 
-    fun  updateAddress() {
+    fun updateAddress() {
 //        orderManager.updateOrderRequest(deliveryAddress = deliveryAddress)
 //        orderData.postValue(orderData.value)
         val deliveryAddress = eaterDataManager.getLastChosenAddress()
-        deliveryAddress?.let{
+        deliveryAddress?.let {
             val orderRequest = OrderRequest()
             orderRequest.deliveryAddressId = it.id
             postUpdateOrder(orderRequest)
@@ -67,6 +67,7 @@ class NewOrderSharedViewModel(
     }
 
     data class EmptyCartEvent(val shouldShow: Boolean = false)
+
     val emptyCartEvent = SingleLiveEvent<EmptyCartEvent>()
 
     data class NavigationEvent(val menuItemId: Long = -1, val isCheckout: Boolean = false)
@@ -241,6 +242,21 @@ class NewOrderSharedViewModel(
                         val updatedOrder = response.body()?.data
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
+
+                        //update additionalDish list (remove new added dish)
+//                        val newAdditionalDishes = arrayListOf<Dish>()
+//                        additionalDishes.value?.forEach {
+//                            if(it.id != dishId){
+//                                newAdditionalDishes.add(it)
+//                            }
+//                        }
+//                        additionalDishes.value?.clear()
+//                        additionalDishes.postValue(additionalDishes.value)
+
+//                        additionalDishes.value?.let{
+//                            setAdditionalDishes(it)
+//                        }
+
                         //getOrderDetails()
                     } else {
                         Log.d("wowCheckoutVm", "updateOrder FAILED")
@@ -332,8 +348,8 @@ class NewOrderSharedViewModel(
     fun checkForOpenOrder(currentCookingSlotid: Long?, currentShowingCookName: String) {
         if (orderManager.haveCurrentActiveOrder()) {
             val inCartOrder = orderManager.curOrderResponse
-                val inCartCookingSlot = inCartOrder?.cookingSlot
-            inCartCookingSlot?.let{
+            val inCartCookingSlot = inCartOrder?.cookingSlot
+            inCartCookingSlot?.let {
                 if (it.id != currentCookingSlotid) {
                     val cookInCartName = inCartOrder?.cook.getFullName()
                     //if the showing dish's (cook) is the same as the in-cart order's cook
@@ -349,6 +365,7 @@ class NewOrderSharedViewModel(
 
 
     val checkCartStatus: MutableLiveData<CheckCartStatusEvent> = SingleLiveEvent()
+
     data class CheckCartStatusEvent(val hasPendingOrder: Boolean)
 
     fun checkCartStatus() {
@@ -435,7 +452,7 @@ class NewOrderSharedViewModel(
                 }
             }
         } else {
-            //todo - first case when entering screen and there is not clooing slot yet for order.
+            //todo - first case when entering screen and there is not cooking slot yet for order.
             dishes.forEach { dish ->
                 dish.menuItem?.let {
                     availableArr.add(dish)

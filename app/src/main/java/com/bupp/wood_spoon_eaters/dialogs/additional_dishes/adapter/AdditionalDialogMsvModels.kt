@@ -7,5 +7,5 @@ import com.bupp.wood_spoon_eaters.model.OrderItem
 data class OrderItems(val orderItems: List<OrderItem>)
 
 data class AdditionalDishHeader(val cooksName: String)
-data class AdditionalDishes(val dishes: List<Dish>)
+data class AdditionalDishes(val dishes: ArrayList<Dish>)
 

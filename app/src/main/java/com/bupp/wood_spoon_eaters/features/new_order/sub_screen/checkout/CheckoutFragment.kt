@@ -45,8 +45,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     private var hasPaymentMethod: Boolean = false
     lateinit var curOrder: Order
-//    var tipPercent: Int = 0
-//    var tipInDollars: Int = 0
 
     interface CheckoutDialogListener{
         fun onCheckoutDone()
@@ -85,7 +83,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             }
         })
 
-//        ordersViewModel.getOrderDetailsEvent.observe(this, Observer { orderDetails -> handleOrderDetails(orderDetails.order) })
         ordersViewModel.orderData.observe(this, Observer { orderData ->
             handleOrderDetails(orderData)
             checkoutFragTipPercntView.updateCurrentTip(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
@@ -93,12 +90,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         })
 
         ordersViewModel.tipInDollars.observe(this, Observer { orderData ->
-//            checkoutFragTipPercntView.updateCurrentTip(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
             updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
         })
 
         ordersViewModel.tipPercentage.observe(this, Observer { orderData ->
-//            checkoutFragTipPercntView.updateCurrentTip(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
             updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
         })
 
@@ -170,8 +165,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         hasPaymentMethod = false
         checkoutFragChangePaymentTitle.text = "Insert payment method"
         checkoutFragChangePaymentChangeBtn.alpha = 1f
-//        checkoutFragStatusBar.setEnabled(false)
-
     }
 
     private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
@@ -207,6 +200,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 if(order.deliveryAddress != null ){
                     checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
                 }
+
+
                 val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
                 if(time != null){
                     checkoutFragDeliveryTime.updateDeliveryDetails(time)
@@ -228,10 +223,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         val serviceFee = curOrder.serviceFee.value
         val deliveryFee = curOrder.deliveryFee.value
         val discount = curOrder.discount.value
-
-//        val tipPercent = ordersViewModel.getTempTipPercent()
-//        val tipInDollars = ordersViewModel.getTempTipInDollars()
-//        Log.d("wowCheckout","tipinDollars $tipInDollars")
 
         val promo = curOrder.promoCode
 
@@ -292,10 +283,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     }
 
-//    private fun showEmptyCartDialog() {
-//        ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-//    }
-
     override fun onClearCart() {
         ordersViewModel.clearCart()
         (activity as NewOrderActivity).finish()
@@ -316,8 +303,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         } else {
             ordersViewModel.updateTipInDollars(0)
             ordersViewModel.updateTipPercentage(tipSelection)
-//            ordersViewModel.getOrderDetails()
-//            updatePriceUi()
             Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
             }
     }
@@ -326,8 +311,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         checkoutFragTipPercntView.setCustomTipValue(tipAmount)
         ordersViewModel.updateTipPercentage(0)
         ordersViewModel.updateTipInDollars(tipAmount)
-//        ordersViewModel.getOrderDetails()
-//        updatePriceUi()
     }
 
     override fun onChangeLocationClick() {
@@ -335,61 +318,18 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onChangeTimeClick() {
-//        openDatePicker()
         openOrderTimeDialog()
     }
 
     private fun openOrderTimeDialog() {
         ordersViewModel.editDeliveryTime()
-//        viewModel.getCurrentDish()?.let {
-//            val currentDateSelected = it.menuItem
-//            val availableMenuItems = it.availableMenuItems
-//            OrderDateChooserDialog(currentDateSelected, availableMenuItems, this).show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
-//        }
     }
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
         if (selectedMenuItem != null) {
-            //update order manager
-//            currentDish.menuItem = selectedMenuItem // update menuItem to update ui in the next visit in openOrderTimeDialog()
-//            viewModel.updateChosenDeliveryDate(selectedMenuItem, newChosenDate)
             ordersViewModel.updateDeliveryTime(newChosenDate)
-//            singleDishInfoDate.text = "${Utils.parseDateToDayDateHour(newChosenDate)}"
-//            singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
         }
     }
-
-
-//    fun openDatePicker(){
-//        val c = Calendar.getInstance()
-//        val year = c.get(Calendar.YEAR)
-//        val month = c.get(Calendar.MONTH)
-//        val day = c.get(Calendar.DAY_OF_MONTH)
-//
-//        val dpd = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-//            openTimePicker(year, monthOfYear, dayOfMonth)
-//        }, year, month, day)
-//
-//        dpd.datePicker.minDate = Date().time
-//
-//        dpd.show()
-//    }
-//
-//    fun openTimePicker(year: Int, monthOfYear: Int, dayOfMonth: Int) {
-//        val cal = Calendar.getInstance()
-//        cal.set(year, monthOfYear, dayOfMonth)
-//        val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-//            cal.set(Calendar.HOUR_OF_DAY, hour)
-//            cal.set(Calendar.MINUTE, minute)
-//
-//            checkoutFragDeliveryTime.updateDeliveryDetails(Utils.parseDateToDayDateHour(cal.time))
-//
-//            ordersViewModel.updateDeliveryTime(cal.time)
-//
-//        }
-//        TimePickerDialog(context, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false).show()
-//    }
-
 
 
     override fun onHeaderBackClick() {
@@ -399,17 +339,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     fun onAddressChooserSelected() {
         Log.d("wow","onAddressChooserSelected")
         ordersViewModel.updateAddress()
-//        ordersViewModel.getLastOrderDetails()
-//        viewModel.getDeliveryDetails()
     }
 
 
     fun onEditDateClick(startsAt: Date, endsAt: Date) {
-//        this.newSelectedMenuItem = selected
-
-//        val startDate: Date = selected.cookingSlot.startsAt
-//        val endDate: Date = selected.cookingSlot.endsAt
-
         val calStart = Calendar.getInstance()
         calStart.time = startsAt
 
@@ -418,7 +351,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
         if(Utils.isSameDay(calStart, calEnd)){
             openTimePicker(calStart, calEnd)
-//            dismiss()
         }else{
             openDatePicker(calStart, calEnd)
         }
@@ -465,8 +397,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
         newCal.set(Calendar.MINUTE, minute)
         ordersViewModel.updateDeliveryTime(newCal.time)
-
-//        listener.onDateChoose(newSelectedMenuItem!!, newChosenDate)
     }
 
 

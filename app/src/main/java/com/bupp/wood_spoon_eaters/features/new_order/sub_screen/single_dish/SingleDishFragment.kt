@@ -107,7 +107,7 @@ class SingleDishFragment() : Fragment(),
 
 
     private fun checkForOpenOrder(currentDish: FullDish) {
-        ordersViewModel.checkForOpenOrder(currentDish.availableMenuItems[0].cookingSlot.id, currentDish.cook.getFullName())
+        ordersViewModel.checkForOpenOrder(currentDish.menuItem?.cookingSlot?.id, currentDish.cook.getFullName())
     }
 
     private fun initObservers() {
@@ -225,6 +225,7 @@ class SingleDishFragment() : Fragment(),
 
     override fun onNewCartClick() {
         ordersViewModel.initNewOrder()
+        ordersViewModel.checkCartStatus()
     }
 
     private fun initUi(fullDish: FullDish) {

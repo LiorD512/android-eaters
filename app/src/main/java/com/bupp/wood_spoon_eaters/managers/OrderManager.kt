@@ -38,7 +38,9 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
                            promoCode: String? = null,
                            addUtensils: Boolean? = null,
                            recurringOrder: Boolean? = null){
-        if(currentOrderRequest != null){
+        if(currentOrderRequest == null) {
+            initNewOrder()
+        }
             if(cookId != null) currentOrderRequest!!.cookId = cookId
             if(cookingSlotId != null) currentOrderRequest!!.cookingSlotId = cookingSlotId
             if(deliveryAt != null) currentOrderRequest!!.deliveryAt = deliveryAt
@@ -50,7 +52,7 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
             if(promoCode != null) currentOrderRequest!!.promoCode = promoCode
             if(addUtensils != null) currentOrderRequest!!.addUtensils = addUtensils
 //            if(recurringOrder != null) currentOrderRequest!!.recurringOrder = recurringOrder
-        }
+
     }
 
     private fun getLastOrderAddressParam(): Address? {

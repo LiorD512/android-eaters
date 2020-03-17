@@ -48,8 +48,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
     }
 
     override fun onAddBtnClick(position: Int) {
-       listener.onAddBtnClick(getItem(position))
-//       listener.onAddBtnClick(dish)
+        listener.onAddBtnClick(getItem(position))
     }
 
     override fun onDishClick(position: Int) {
