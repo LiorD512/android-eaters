@@ -8,15 +8,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import kotlinx.android.synthetic.main.clear_cart_dialog.*
 import kotlinx.android.synthetic.main.order_update_error_dialog.*
 
-class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() {
+class OrderUpdateErrorDialog(val listener: updateErrorDialogListener) : DialogFragment() {
 
-    interface ClearCartDialogListener {
+
+    interface updateErrorDialogListener {
         fun onClearCart()
-        fun onCancelClearCart(){}
+        fun onCancelUpdateOrderError(){}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +24,7 @@ class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.clear_cart_dialog, null)
+        val view = inflater!!.inflate(R.layout.order_update_error_dialog, null)
         dialog!!.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
         return view
     }
@@ -36,15 +35,15 @@ class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() 
     }
 
     private fun initUi() {
-        clearCartDialogYesBtn.setOnClickListener {
-            listener.onClearCart()
+        updateErrorDialogCancelBtn.setOnClickListener {
+            listener.onCancelUpdateOrderError()
             dismiss()
         }
-        clearCartDialogCloseBtn.setOnClickListener {
-            listener.onCancelClearCart()
+        updateErrorDialogCloseBtn.setOnClickListener {
+            listener.onCancelUpdateOrderError()
             dismiss()}
-        clearCartDialogNoBtn.setOnClickListener {
-            listener.onCancelClearCart()
+        updateErrorDialogClearBtn.setOnClickListener {
+            listener.onClearCart()
             dismiss()
         }
 

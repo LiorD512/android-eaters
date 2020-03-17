@@ -83,6 +83,12 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         calEnd.time = endDate
 
         if(Utils.isSameDay(calStart, calEnd)){
+            val now = Date()
+            calStart?.let{
+                if(now.time > it.time.time){
+                    calStart.time = now
+                }
+            }
             openTimePicker(calStart, calEnd)
 //            dismiss()
         }else{

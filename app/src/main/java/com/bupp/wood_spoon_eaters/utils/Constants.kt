@@ -150,6 +150,7 @@ class Constants {
         const val ADDRESS_MISSING_DIALOG = "address_missing_dialog"
         const val VIDEO_PLAYER_DIALOG = "video_player_dialog"
         const val ADDITIONAL_DISHES_DIALOG = "additional_dishes_dialog"
+        const val ORDER_UPDATE_ERROR_DIALOG = "order_update_error_dialog"
 
 
 

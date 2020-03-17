@@ -104,6 +104,10 @@ class CheckoutViewModel(val api: ApiService, val orderManager: OrderManager, val
         eaterDataManager.updateCustomerCard(paymentMethod)
     }
 
+    fun rollBackToPreviousAddress() {
+            eaterDataManager.rollBackToPreviousAddress()
+    }
+
 //    fun updateTipPercentage(tipSelection: Int) {
 //        orderManager.tempTipPercentage = tipSelection
 //    }

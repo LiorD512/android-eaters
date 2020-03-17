@@ -42,7 +42,7 @@ class SingleDishFragment() : Fragment(),
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
     UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener,
     DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener,
-    PlusMinusView.PlusMinusInterface {
+    PlusMinusView.PlusMinusInterface{
 
 //    StatusBottomBar.StatusBottomBarListener,
 

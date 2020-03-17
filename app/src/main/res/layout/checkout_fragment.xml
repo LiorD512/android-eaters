@@ -71,49 +71,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            <LinearLayout
-                    android:background="@color/white"
-                    android:layout_marginTop="15.4dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <!--<LinearLayout-->
+                    <!--android:background="@color/white"-->
+                    <!--android:layout_marginTop="15.4dp"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
 
-                <LinearLayout
-                        android:paddingTop="21dp"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                <!--<LinearLayout-->
+                        <!--android:paddingTop="21dp"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
 
-                    <TextView
-                            android:layout_marginStart="15.4dp"
-                            style="@style/SemiBold13Dark"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="Recurring Order"/>
+                    <!--<TextView-->
+                            <!--android:layout_marginStart="15.4dp"-->
+                            <!--style="@style/SemiBold13Dark"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Recurring Order"/>-->
 
-                    <androidx.appcompat.widget.SwitchCompat
-                            android:layout_marginEnd="15.4dp"
-                            android:id="@+id/checkoutFragRecurringSwitch"
-                            android:layout_width="wrap_content"
-                            android:checked="false"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12.3dp"
-                            android:thumb="@drawable/stroked_white_circle"
-                            app:track="@drawable/red_green_switch_track_selector"/>
+                    <!--<androidx.appcompat.widget.SwitchCompat-->
+                            <!--android:layout_marginEnd="15.4dp"-->
+                            <!--android:id="@+id/checkoutFragRecurringSwitch"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:checked="false"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginStart="12.3dp"-->
+                            <!--android:thumb="@drawable/stroked_white_circle"-->
+                            <!--app:track="@drawable/red_green_switch_track_selector"/>-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <TextView
-                        style="@style/Reg13Dark_50"
-                        android:layout_marginTop="7.7dp"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginBottom="15.4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="This order will repeat every week ,unless you cancel it"/>
+                <!--<TextView-->
+                        <!--style="@style/Reg13Dark_50"-->
+                        <!--android:layout_marginTop="7.7dp"-->
+                        <!--android:layout_marginStart="15.4dp"-->
+                        <!--android:layout_marginBottom="15.4dp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="This order will repeat every week ,unless you cancel it"/>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <LinearLayout
                     android:background="@color/white"

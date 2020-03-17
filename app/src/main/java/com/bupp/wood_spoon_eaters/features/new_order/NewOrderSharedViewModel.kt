@@ -150,7 +150,6 @@ class NewOrderSharedViewModel(
     val showDialogEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
-
     val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
     //post current order - order details and order items - this method is used to add single dish to cart.
     fun addToCart(
@@ -307,6 +306,9 @@ class NewOrderSharedViewModel(
 
     }
 
+//    data class UpdateOrderError()
+
+    val updateOrderError: SingleLiveEvent<Int> = SingleLiveEvent()
     private fun postUpdateOrder(orderRequest: OrderRequest) {
         progressData.startProgress()
         apiService.updateOrder(orderManager.curOrderResponse!!.id, orderRequest)
@@ -320,6 +322,10 @@ class NewOrderSharedViewModel(
                         //getOrderDetails()
                     } else {
                         Log.d("wowCheckoutVm", "updateOrder FAILED")
+                        val errorCode = response.code()
+                        if(errorCode == 400){
+                            updateOrderError.postValue(errorCode)
+                        }
                     }
                 }
 
@@ -466,7 +472,13 @@ class NewOrderSharedViewModel(
 
     val editDeliveryTime: SingleLiveEvent<EditDeliveryTime> = SingleLiveEvent()
     fun editDeliveryTime() {
-        val availableCookingSlotStartsAt = orderData.value?.cookingSlot?.startsAt
+        val now = Date()
+        var availableCookingSlotStartsAt = orderData.value?.cookingSlot?.startsAt
+        availableCookingSlotStartsAt?.let{
+            if(now.time > it.time){
+                availableCookingSlotStartsAt = now
+            }
+        }
         val availableCookingSlotEndsAt = orderData.value?.cookingSlot?.endsAt
         editDeliveryTime.postValue(EditDeliveryTime(availableCookingSlotStartsAt, availableCookingSlotEndsAt))
     }

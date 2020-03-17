@@ -92,6 +92,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
     private var lastChosenAddress: Address? = null
     private var eventChosenAddress: Address? = null
+    private var previousChosenAddress: Address? = null
 
 
     fun getLastChosenAddress(): Address? {
@@ -107,7 +108,17 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             true -> this.eventChosenAddress = address
             false -> this.lastChosenAddress = address
         }
+    }
 
+    fun setPreviousChosenAddress(previousChosenAddress: Address?) {
+        //todo what about event
+        this.previousChosenAddress = previousChosenAddress
+    }
+
+    fun rollBackToPreviousAddress(){
+        previousChosenAddress?.let{
+            setLastChosenAddress(previousChosenAddress)
+        }
     }
 
     fun removeAddressById(deletedAddressId: Long) {
@@ -251,6 +262,8 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         eventChosenAddress = null
         eventOrderTime = null
     }
+
+
 
 
 }

@@ -288,7 +288,7 @@
                                     <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
                                             android:id="@+id/singleDishPlusMinus"
                                             android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="80dp"/>
 
                                 </LinearLayout>
 
@@ -333,11 +333,11 @@
                                             app:cardCornerRadius="2.9dp"
                                             app:cardElevation="8dp"
                                             app:cardBackgroundColor="@color/white"
-                                            android:layout_width="114dp"
-                                           android:layout_height="68dp">
+                                            android:layout_width="117dp"
+                                           android:layout_height="79dp">
 
                                         <TextView
-                                                style="@style/SemiBold13Blue"
+                                                style="@style/SemiBold15Blue"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:gravity="center"
@@ -348,12 +348,12 @@
 
                                 </LinearLayout>
 
-                                <View
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginBottom="22dp"
-                                        android:background="@color/silver"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"/>
+                                <!--<View-->
+                                        <!--android:layout_marginTop="10dp"-->
+                                        <!--android:layout_marginBottom="22dp"-->
+                                        <!--android:background="@color/silver"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="1dp"/>-->
 
                                 <LinearLayout
                                         android:visibility="gone"
@@ -384,7 +384,6 @@
 
                         <LinearLayout
                                 android:visibility="gone"
-                                android:layout_marginTop="30dp"
                                 android:paddingRight="15.4dp"
                                 android:paddingLeft="15.4dp"
                                 android:paddingBottom="38dp"

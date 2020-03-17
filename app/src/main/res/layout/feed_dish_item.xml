@@ -115,51 +115,62 @@
                         android:layout_height="wrap_content"
                         tools:text="By Noa Shlonsky"/>
 
-                <LinearLayout
-                        android:weightSum="3"
+                        <!--android:gravity="center"-->
+                <RelativeLayout
                         android:layout_marginTop="11dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
-                    <TextView
+                    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentStart="true"
                             android:gravity="center|left"
-                            android:layout_weight="0.5"
                             android:id="@+id/feedDishItemRating"
                             android:drawableLeft="@drawable/icons_raitings"
-                            android:drawablePadding="7.7dp"
+                            android:drawablePadding="3dp"
                             style="@style/Bold13Dark"
+                            app:minTextSize="7sp"
+                            android:ellipsize="none"
+                            android:singleLine="true"
+                            android:layout_marginRight="15dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="5"/>
 
-                    <!--<View android:layout_weight="1" android:layout_width="0dp" android:layout_height="1dp"/>-->
-
-                    <TextView
-                            android:gravity="center|left"
-                            android:layout_weight="1.7"
-                            android:padding="2dp"
+                    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+                            android:layout_centerInParent="true"
+                            android:layout_toEndOf="@+id/feedDishItemRating"
+                            android:layout_toStartOf="@+id/feedDishItemFreeDelivery"
+                            android:gravity="center|start"
+                            app:minTextSize="7sp"
+                            android:layout_marginEnd="5dp"
+                            android:singleLine="true"
                             android:id="@+id/feedDishItemDate"
-                            android:drawableLeft="@drawable/icons_time"
-                            android:drawablePadding="7.7dp"
+                            android:drawableStart="@drawable/icons_time"
+                            android:drawablePadding="7dp"
                             style="@style/Bold13Dark"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             tools:text="Mon, 24, 4PM"/>
 
                     <!--<View android:layout_weight="1" android:layout_width="0dp" android:layout_height="1dp"/>-->
 
-                    <TextView
-                            android:layout_weight="0.8"
+                    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentEnd="true"
+                            app:minTextSize="7sp"
+                            android:gravity="right|center"
+                            android:layout_gravity="center|end"
                             style="@style/Bold13Dark"
-                            android:id="@+id/feedDishItemFreeDelivery"
-                            android:layout_width="wrap_content"
+                            android:singleLine="true"
+                            android:ellipsize="none"
+                            android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:textSize="13.4sp"
-                            android:gravity="right"
+                            android:id="@+id/feedDishItemFreeDelivery"
                             tools:text="Free Delivery"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 

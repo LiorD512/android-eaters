@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.OrderDateChooserDialog
+import com.bupp.wood_spoon_eaters.dialogs.OrderUpdateErrorDialog
 import com.bupp.wood_spoon_eaters.dialogs.TipCourierDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
@@ -41,7 +42,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener,
     StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
-    com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener {
+    com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, OrderUpdateErrorDialog.updateErrorDialogListener {
 
     private var hasPaymentMethod: Boolean = false
     lateinit var curOrder: Order
@@ -117,6 +118,19 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             }
         })
 
+        ordersViewModel.updateOrderError.observe(this, Observer { errorEvent ->
+            when(errorEvent){
+                400 -> {
+                    OrderUpdateErrorDialog(this).show(childFragmentManager, Constants.ORDER_UPDATE_ERROR_DIALOG)
+                }
+                else -> {}
+            }
+        })
+
+    }
+
+    override fun onCancelUpdateOrderError() {
+        viewModel.rollBackToPreviousAddress()
     }
 
 
@@ -151,9 +165,9 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             }
         }
 
-        checkoutFragRecurringSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            ordersViewModel.updateRecurringOrder(isChecked)
-        }
+//        checkoutFragRecurringSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+//            ordersViewModel.updateRecurringOrder(isChecked)
+//        }
 
         ordersViewModel.getLastOrderDetails()
         viewModel.getStripeCustomerCards()
@@ -200,7 +214,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 if(order.deliveryAddress != null ){
                     checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
                 }
-
 
                 val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
                 if(time != null){
