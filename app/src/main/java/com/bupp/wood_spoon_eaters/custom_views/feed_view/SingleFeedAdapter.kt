@@ -76,6 +76,11 @@ class SingleFeedAdapter(
                     holder.freeDelivery.text = "$deliveryFee Delivery"
                 }
             }
+
+            val quantityLeft = dish.menuItem.quantity - dish.menuItem.unitsSold
+            if(quantityLeft <= 0){
+                holder.soldOutLayout.visibility = View.VISIBLE
+            }
         }else{
             holder.unAvailableLayout.visibility = View.VISIBLE
         }
@@ -101,6 +106,7 @@ class SingleFeedAdapter(
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val mainLayout = view.feedDishItemLayout
+    val soldOutLayout = view.feedDishItemSoldOutLayout
     val unAvailableLayout = view.feedDishUnAvailable
     val bkgImg = view.feedDishItemBkg
     val cookImg = view.feedDishItemUserImg

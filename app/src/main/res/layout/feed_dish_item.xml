@@ -24,43 +24,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="153.6dp">
+            <FrameLayout android:layout_width="match_parent"
+                         android:layout_height="153.6dp">
 
-                <ImageView
-                        android:scaleType="centerCrop"
-                        android:id="@+id/feedDishItemBkg"
+                <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent">
 
-                <TextView
+                    <ImageView
+                            android:scaleType="centerCrop"
+                            android:id="@+id/feedDishItemBkg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    <TextView
+                            android:visibility="gone"
+                            android:id="@+id/feedDishUnAvailable"
+                            android:gravity="center"
+                            style="@style/SemiBold17White"
+                            android:text="Currently Not Available"
+                            android:background="@color/dark_50"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                            app:imageSize="SMALL"
+                            app:isWithStroke="true"
+                            android:id="@+id/feedDishItemUserImg"
+                            android:layout_marginTop="7.7dp"
+                            android:layout_marginLeft="7.7dp"
+                            android:layout_gravity="top|left"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+                            android:id="@+id/feedDishItemFavorite"
+                            android:layout_marginRight="7.7dp"
+                            android:layout_marginBottom="7.7dp"
+                            android:layout_gravity="bottom|right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                </FrameLayout>
+
+                <FrameLayout
                         android:visibility="gone"
-                        android:id="@+id/feedDishUnAvailable"
-                        android:gravity="center"
-                        style="@style/SemiBold17White"
-                        android:text="Currently Not Available"
-                        android:background="@color/dark_50"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:id="@+id/feedDishItemSoldOutLayout"
+                        android:background="@color/dark_80"
+                        android:layout_width="match_parent" android:layout_height="match_parent">
 
-                <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                        app:imageSize="SMALL"
-                        app:isWithStroke="true"
-                        android:id="@+id/feedDishItemUserImg"
-                        android:layout_marginTop="7.7dp"
-                        android:layout_marginLeft="7.7dp"
-                        android:layout_gravity="top|left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                    <ImageView
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_sold_out"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
-                <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
-                        android:id="@+id/feedDishItemFavorite"
-                        android:layout_marginRight="7.7dp"
-                        android:layout_marginBottom="7.7dp"
-                        android:layout_gravity="bottom|right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                </FrameLayout>
 
             </FrameLayout>
 
@@ -97,13 +115,13 @@
                             android:layout_height="wrap_content"/>
 
                     <!--<TextView-->
-                            <!--android:id="@+id/feedDishItemDishCount"-->
-                            <!--android:drawableLeft="@drawable/icons_dishes"-->
-                            <!--android:drawablePadding="7.7dp"-->
-                            <!--style="@style/Reg15Dark"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--tools:text="15/30"/>-->
+                    <!--android:id="@+id/feedDishItemDishCount"-->
+                    <!--android:drawableLeft="@drawable/icons_dishes"-->
+                    <!--android:drawablePadding="7.7dp"-->
+                    <!--style="@style/Reg15Dark"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--tools:text="15/30"/>-->
 
                 </LinearLayout>
 
@@ -115,7 +133,7 @@
                         android:layout_height="wrap_content"
                         tools:text="By Noa Shlonsky"/>
 
-                        <!--android:gravity="center"-->
+                <!--android:gravity="center"-->
                 <RelativeLayout
                         android:layout_marginTop="11dp"
                         android:orientation="horizontal"
@@ -176,8 +194,6 @@
 
 
         </LinearLayout>
-
-
 
 
     </androidx.cardview.widget.CardView>
