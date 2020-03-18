@@ -113,6 +113,8 @@ class SingleDishFragment() : Fragment(),
     private fun initObservers() {
         ordersViewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
+//                updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = ordersViewModel.calcTotalDishesPrice())
+                ordersViewModel.getLastOrderDetails()
                 singleDishStatusBar.handleBottomBar(showCheckout = true)
             }else{
                 singleDishStatusBar.handleBottomBar(showCheckout = false)
@@ -168,6 +170,8 @@ class SingleDishFragment() : Fragment(),
         ordersViewModel.showDialogEvent.observe(this, Observer { showDialog ->
             if (showDialog) {
                 AdditionalDishesDialog(this).show(childFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
+            }else{
+                onProceedToCheckout()
             }
         })
 
@@ -504,7 +508,7 @@ class SingleDishFragment() : Fragment(),
             cookProfileFragCertificateLayout.visibility = View.GONE
         }
 
-        ordersViewModel.setAdditionalDishes(currentDish.cook.dishes)
+        ordersViewModel.setAdditionalDishes(currentDish.getAdditionalDishes())
         cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
         dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this, viewModel.getDeliveryFeeString())
         cookProfileFragDishList.adapter = dishAdapter

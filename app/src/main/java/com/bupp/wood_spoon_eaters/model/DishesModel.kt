@@ -93,6 +93,27 @@ data class FullDish(
         }
         return mediaList
     }
+
+    fun getAdditionalDishes(curCookingSlotId: Long? = null): ArrayList<Dish>{
+        val availableArr = arrayListOf<Dish>()
+        if (curCookingSlotId != null) {
+            cook.dishes.forEach { dish ->
+                dish.menuItem?.let {
+                    if (it.cookingSlot.id == curCookingSlotId) {
+                        availableArr.add(dish)
+                    }
+                }
+            }
+        } else {
+            //todo - first case when entering screen and there is not cooking slot yet for order.
+            cook.dishes.forEach { dish ->
+                dish.menuItem?.let {
+                    availableArr.add(dish)
+                }
+            }
+        }
+        return availableArr
+    }
 }
 
 data class MediaList(

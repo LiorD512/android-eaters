@@ -57,7 +57,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                         val dish = response.body()?.data
                         dish?.let {
                             fullDish.postValue(dish)
-                            availability.postValue(DishAvailability(checkCookingSlotAvailability(dish),dish.menuItem?.cookingSlot?.startsAt))
+                            availability.postValue(DishAvailability(checkCookingSlotAvailability(dish), getStartingDate(dish.menuItem?.cookingSlot?.startsAt)))
                         }
 //                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
 //                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
@@ -75,6 +75,16 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                     dishDetailsEvent.postValue(DishDetailsEvent(false, null))
                 }
             })
+    }
+
+    private fun getStartingDate(startsAt: Date?): Date? {
+        var newDate = Date()
+        startsAt?.let{
+            if(startsAt.after(newDate)){
+                newDate = startsAt
+            }
+        }
+        return newDate
     }
 
 

@@ -202,11 +202,17 @@ class NewOrderSharedViewModel(
                         Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
                         //update additional dishes
                         fullDish?.let {
-                            setAdditionalDishes(it.cook.dishes)
+                            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+                            if(it.getAdditionalDishes().size > 1){
+                                showDialogEvent.postValue(isFirst)
+                                isFirst = false
+                            }else{
+                                showDialogEvent.postValue(false)
+                            }
                         }
                         postOrderEvent.postValue(PostOrderEvent(true, order))
-                        showDialogEvent.postValue(isFirst)
-                        isFirst = false
+
+
                     } else {
                         Log.d("wowFeedVM", "postOrder fail")
                         postOrderEvent.postValue(PostOrderEvent(false, null))
@@ -447,25 +453,8 @@ class NewOrderSharedViewModel(
     }
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
-        val availableArr = arrayListOf<Dish>()
         //get only available dishes
-        if (curCookingSlotId != null) {
-            dishes.forEach { dish ->
-                dish.menuItem?.let {
-                    if (it.cookingSlot.id == curCookingSlotId) {
-                        availableArr.add(dish)
-                    }
-                }
-            }
-        } else {
-            //todo - first case when entering screen and there is not cooking slot yet for order.
-            dishes.forEach { dish ->
-                dish.menuItem?.let {
-                    availableArr.add(dish)
-                }
-            }
-        }
-        additionalDishes.postValue(availableArr)
+        additionalDishes.postValue(dishes)
     }
 
     data class EditDeliveryTime(val startAt: Date?, val endsAt: Date?)

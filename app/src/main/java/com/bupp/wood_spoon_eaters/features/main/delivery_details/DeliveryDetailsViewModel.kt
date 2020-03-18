@@ -35,12 +35,12 @@ class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManag
         eaterDataManager.orderTime = null
     }
 
-    fun getDeliveryTime(): String? {
-        if(eaterDataManager.orderTime != null){
-            return Utils.parseTime(eaterDataManager.orderTime)
-        }
-        return "ASAP"
-    }
+//    fun getDeliveryTime(): String? {
+//        if(eaterDataManager.orderTime != null){
+//            return Utils.parseTime(eaterDataManager.orderTime)
+//        }
+//        return "ASAP"
+//    }
 
     fun getListOfAddresses(): ArrayList<Address>? {
         return eaterDataManager.currentEater!!.addresses
