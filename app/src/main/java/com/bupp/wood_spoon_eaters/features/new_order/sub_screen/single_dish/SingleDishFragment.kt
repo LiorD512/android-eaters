@@ -232,6 +232,7 @@ class SingleDishFragment() : Fragment(),
     private fun handleSoldoutCookingSlot(startsAt: Date) {
         DishSoldOutDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
         singleDishStatusBar.handleBottomBar(showActiveOrders = false)
+        singleDishPlusMinus.setViewEnabled(false)
     }
 
 
@@ -351,6 +352,7 @@ class SingleDishFragment() : Fragment(),
 
 
     private fun initInfo(currentDish: FullDish) {
+        singleDishPlusMinus.setViewEnabled(true)
         singleDishInfoCook.setUser(currentDish.cook)
         singleDishInfoCook.setUserImageViewListener(this)
 //        Glide.with(context!!).load(currentDish.thumbnail).into(singleDishInfoImg)
@@ -461,6 +463,7 @@ class SingleDishFragment() : Fragment(),
 //            currentDish.menuItem = selectedMenuItem // update menuItem to update ui in the next visit in openOrderTimeDialog()
             viewModel.updateChosenDeliveryDate(selectedMenuItem, newChosenDate)
             singleDishInfoDate.text = "${Utils.parseDateToDayDateHour(newChosenDate)}"
+            viewModel.fetchDishForNewDate(selectedMenuItem.id)
 //            singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
         }
     }

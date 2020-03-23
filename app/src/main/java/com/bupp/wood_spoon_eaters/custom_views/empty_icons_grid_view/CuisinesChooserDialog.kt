@@ -55,10 +55,9 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
 //    }
 
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
-
     override fun onHeaderSaveClick() {
     }
 

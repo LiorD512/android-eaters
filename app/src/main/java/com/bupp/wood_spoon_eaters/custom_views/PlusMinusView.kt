@@ -29,6 +29,21 @@ class PlusMinusView : FrameLayout {
         plusMinusCounter.text = "$counter"
     }
 
+    fun setViewEnabled(isEnabled: Boolean) {
+        when(isEnabled){
+            true ->{
+
+            }
+            false -> {
+                plusMinusPlus.isEnabled = false
+                plusMinusPlus.alpha = 0.5f
+                plusMinusMinus.isEnabled = false
+                plusMinusMinus.alpha = 0.5f
+                plusMinusCounter.alpha = 0.5f
+            }
+        }
+    }
+
     interface PlusMinusInterface {
         fun onPlusMinusChange(counter: Int, position: Int)
     }

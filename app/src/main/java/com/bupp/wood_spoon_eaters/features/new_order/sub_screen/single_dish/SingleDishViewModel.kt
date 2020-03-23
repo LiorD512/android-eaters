@@ -200,6 +200,13 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         return eaterDataManager.getLastChosenAddress()?.id != null
     }
 
+
+
+    fun fetchDishForNewDate(menuItemId: Long) {
+        this.menuItemId = menuItemId
+        getFullDish()
+    }
+
     data class AdditionalDishesEvent(val orderItems: List<OrderItem>?, val moreDishes: List<Dish>?)
 
 
