@@ -19,8 +19,8 @@ android {
         minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 13
-        versionName "1.0"
+        versionCode 14
+        versionName "1.1"
 //        multiDexEnabled true
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

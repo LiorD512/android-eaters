@@ -63,7 +63,7 @@
             <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
                     android:id="@+id/createAccountFragmentDietaryGridView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="15.4dp"
                     app:subTitle="Pick one or more"
                     app:title="My Dietary" />

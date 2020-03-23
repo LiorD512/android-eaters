@@ -23,36 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"/>
 
-        <!--<LinearLayout-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-            <!--<TextView-->
-                    <!--android:visibility="gone"-->
-                    <!--android:id="@+id/checkOutBottomBarTitle"-->
-                    <!--android:layout_gravity="bottom"-->
-                    <!--style="@style/Bold17White"-->
-                    <!--android:gravity="center"-->
-                    <!--android:background="@color/teal_blue"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/status_bottom_bar_height"-->
-                    <!--android:text="Checkout"/>-->
-
-            <!--<TextView-->
-                    <!--android:visibility="gone"-->
-                    <!--android:layout_marginTop="15.4dp"-->
-                    <!--android:id="@+id/activeOrderBottomBarTitle"-->
-                    <!--android:layout_gravity="bottom"-->
-                    <!--style="@style/Bold17White"-->
-                    <!--android:gravity="center"-->
-                    <!--android:background="@color/teal_blue"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/status_bottom_bar_height"-->
-                    <!--android:text="Track Your Order"/>-->
-
-        <!--</LinearLayout>-->
-
         <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
                 android:id="@+id/mainActOrdersBB"
                 android:layout_width="match_parent"
