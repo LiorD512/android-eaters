@@ -90,7 +90,6 @@ class MetaDataManager {
                 return settings.value!! as String
         }
         return ""
-
     }
 
     fun getReportsEmailAddress(): String? {

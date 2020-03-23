@@ -133,6 +133,9 @@ class SingleDishFragment() : Fragment(),
                 if (!availabilityEvent.isAvailable) {
                     handleUnAvailableCookingSlot(it)
                 }
+                if (availabilityEvent.isSoldOut) {
+                    handleSoldoutCookingSlot(it)
+                }
             }
 
         })
@@ -224,6 +227,11 @@ class SingleDishFragment() : Fragment(),
         if (cookingSlotStartingTime != null) {
             viewModel.updateChosenDeliveryDate(newChosenDate = startsAt)
         }
+    }
+
+    private fun handleSoldoutCookingSlot(startsAt: Date) {
+        DishSoldOutDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
+        singleDishStatusBar.handleBottomBar(showActiveOrders = false)
     }
 
 
@@ -419,7 +427,7 @@ class SingleDishFragment() : Fragment(),
         }
         singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
 
-        singleDishInfoDate.setPaintFlags(singleDishInfoDate.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG);
+//        singleDishInfoDate.setPaintFlags(singleDishInfoDate.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG);
     }
 
 //    override fun onDishCounterChanged(count: Int) {

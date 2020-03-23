@@ -11,11 +11,11 @@ import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
 
@@ -36,7 +36,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
     val fullDish = MutableLiveData<FullDish>()
 
-    data class DishAvailability(val isAvailable: Boolean, val startingTime: Date?)
+    data class DishAvailability(val isAvailable: Boolean, val startingTime: Date?, val isSoldOut: Boolean = false)
 
     val availability = MutableLiveData<DishAvailability>()
 
@@ -56,8 +56,8 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                         Log.d("wowSingleDishVM", "getMenuItemsDetails success")
                         val dish = response.body()?.data
                         dish?.let {
-                            fullDish.postValue(dish)
-                            availability.postValue(DishAvailability(checkCookingSlotAvailability(dish), getStartingDate(dish.menuItem?.cookingSlot?.startsAt)))
+                            fullDish.postValue(it)
+                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
                         }
 //                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
 //                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
@@ -75,6 +75,17 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                     dishDetailsEvent.postValue(DishDetailsEvent(false, null))
                 }
             })
+    }
+
+    private fun checkDishSoldout(dish: FullDish): Boolean {
+        val quantity = dish.menuItem?.quantity
+        val unitsSold = dish.menuItem?.unitsSold
+         quantity?.let{
+             unitsSold?.let{
+                 return ((quantity - unitsSold <= 0))
+             }
+         }
+        return false
     }
 
     private fun getStartingDate(startsAt: Date?): Date? {
@@ -120,9 +131,14 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     }
 
 
-    fun updateChosenDeliveryDate(selectedMenuItem: MenuItem? = null, newChosenDate: Date) {
+    fun updateChosenDeliveryDate(selectedMenuItem: MenuItem? = null, newChosenDate: Date?) {
         getCurrentDish()?.let {
-            eaterDataManager.orderTime = newChosenDate
+            //if new chosen time is approximently now - set null
+            var newDate = newChosenDate
+            if(Utils.isNow(newChosenDate)){
+                newDate = null
+            }
+            eaterDataManager.orderTime = newDate
             selectedMenuItem?.let {
                 getCurrentDish()!!.menuItem = it
             }

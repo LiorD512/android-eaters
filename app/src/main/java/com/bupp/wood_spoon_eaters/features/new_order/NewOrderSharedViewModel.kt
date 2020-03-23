@@ -150,6 +150,7 @@ class NewOrderSharedViewModel(
     val showDialogEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
+
     val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
     //post current order - order details and order items - this method is used to add single dish to cart.
     fun addToCart(
@@ -162,70 +163,70 @@ class NewOrderSharedViewModel(
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
         if (hasPendingOrder) {
             fullDish?.let {
-                addNewDishToCart(it.id, quantity)
+                checkForOpenOrder(fullDish.menuItem?.cookingSlot?.id, fullDish.cook.getFullName())
             }
         } else {
-            var cookId: Long = -1
-            var dishId: Long = -1
-            var cookingSlotId: Long = -1
+        var cookId: Long = -1
+        var dishId: Long = -1
+        var cookingSlotId: Long = -1
 
-            fullDish?.let {
-                cookId = it.cook.id
-                dishId = it.id
-                it.menuItem?.let {
-                    cookingSlotId = it.cookingSlot?.id
+        fullDish?.let {
+            cookId = it.cook.id
+            dishId = it.id
+            it.menuItem?.let {
+                cookingSlotId = it.cookingSlot?.id
+            }
+        }
+
+        val deliveryAddress = eaterDataManager.getLastChosenAddress()
+        val orderItem = OrderItemRequest(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
+
+        orderManager.updateOrderRequest(
+            cookId = cookId,
+            cookingSlotId = cookingSlotId,
+            deliveryAddress = deliveryAddress,
+            tipPercentage = tipPercentage,
+            tipAmount = tipAmount,
+            promoCode = promoCode
+        )
+
+        orderManager.addOrderItem(orderItem)
+        progressData.startProgress()
+        apiService.postOrder(orderManager.getOrderRequest()).enqueue(object : Callback<ServerResponse<Order>> {
+            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
+                progressData.endProgress()
+                if (response.isSuccessful) {
+                    val order = response.body()?.data
+                    curCookingSlotId = order?.cookingSlot?.id
+                    orderManager.setOrderResponse(order)
+                    orderData.postValue(order)
+                    Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
+                    //update additional dishes
+                    fullDish?.let {
+                        setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+                        if (it.getAdditionalDishes().size > 1) {
+                            showDialogEvent.postValue(isFirst)
+                            isFirst = false
+                        } else {
+                            showDialogEvent.postValue(false)
+                        }
+                    }
+                    postOrderEvent.postValue(PostOrderEvent(true, order))
+
+
+                } else {
+                    Log.d("wowFeedVM", "postOrder fail")
+                    postOrderEvent.postValue(PostOrderEvent(false, null))
                 }
             }
 
-            val deliveryAddress = eaterDataManager.getLastChosenAddress()
-            val orderItem = OrderItemRequest(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
-
-            orderManager.updateOrderRequest(
-                cookId = cookId,
-                cookingSlotId = cookingSlotId,
-                deliveryAddress = deliveryAddress,
-                tipPercentage = tipPercentage,
-                tipAmount = tipAmount,
-                promoCode = promoCode
-            )
-
-            orderManager.addOrderItem(orderItem)
-            progressData.startProgress()
-            apiService.postOrder(orderManager.getOrderRequest()).enqueue(object : Callback<ServerResponse<Order>> {
-                override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
-                    progressData.endProgress()
-                    if (response.isSuccessful) {
-                        val order = response.body()?.data
-                        curCookingSlotId = order?.cookingSlot?.id
-                        orderManager.setOrderResponse(order)
-                        orderData.postValue(order)
-                        Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
-                        //update additional dishes
-                        fullDish?.let {
-                            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
-                            if(it.getAdditionalDishes().size > 1){
-                                showDialogEvent.postValue(isFirst)
-                                isFirst = false
-                            }else{
-                                showDialogEvent.postValue(false)
-                            }
-                        }
-                        postOrderEvent.postValue(PostOrderEvent(true, order))
-
-
-                    } else {
-                        Log.d("wowFeedVM", "postOrder fail")
-                        postOrderEvent.postValue(PostOrderEvent(false, null))
-                    }
-                }
-
-                override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                    Log.d("wowFeedVM", "postOrder big fail")
-                    progressData.endProgress()
-                    postOrderEvent.postValue(PostOrderEvent(false, null))
-                }
-            })
-            Log.d("wowSingleDishVM", "addToCart finish")
+            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
+                Log.d("wowFeedVM", "postOrder big fail")
+                progressData.endProgress()
+                postOrderEvent.postValue(PostOrderEvent(false, null))
+            }
+        })
+        Log.d("wowSingleDishVM", "addToCart finish")
         }
 
     }
@@ -247,22 +248,6 @@ class NewOrderSharedViewModel(
                         val updatedOrder = response.body()?.data
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
-
-                        //update additionalDish list (remove new added dish)
-//                        val newAdditionalDishes = arrayListOf<Dish>()
-//                        additionalDishes.value?.forEach {
-//                            if(it.id != dishId){
-//                                newAdditionalDishes.add(it)
-//                            }
-//                        }
-//                        additionalDishes.value?.clear()
-//                        additionalDishes.postValue(additionalDishes.value)
-
-//                        additionalDishes.value?.let{
-//                            setAdditionalDishes(it)
-//                        }
-
-                        //getOrderDetails()
                     } else {
                         Log.d("wowCheckoutVm", "updateOrder FAILED")
                     }
@@ -312,7 +297,6 @@ class NewOrderSharedViewModel(
 
     }
 
-//    data class UpdateOrderError()
 
     val updateOrderError: SingleLiveEvent<Int> = SingleLiveEvent()
     private fun postUpdateOrder(orderRequest: OrderRequest) {
@@ -329,7 +313,7 @@ class NewOrderSharedViewModel(
                     } else {
                         Log.d("wowCheckoutVm", "updateOrder FAILED")
                         val errorCode = response.code()
-                        if(errorCode == 400){
+                        if (errorCode == 400) {
                             updateOrderError.postValue(errorCode)
                         }
                     }
@@ -463,8 +447,8 @@ class NewOrderSharedViewModel(
     fun editDeliveryTime() {
         val now = Date()
         var availableCookingSlotStartsAt = orderData.value?.cookingSlot?.startsAt
-        availableCookingSlotStartsAt?.let{
-            if(now.time > it.time){
+        availableCookingSlotStartsAt?.let {
+            if (now.time > it.time) {
                 availableCookingSlotStartsAt = now
             }
         }

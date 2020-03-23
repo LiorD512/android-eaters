@@ -44,8 +44,8 @@ interface ApiService {
     @GET("eaters/me/stripe/ephemeral_key")
     fun getEphemeralKey(): Observable<ResponseBody>
 
-    @GET("eaters/me/stripe/ephemeral_key")
-    fun getEphemeralKey2(): Call<ServerResponse<Any>>
+//    @GET("eaters/me/stripe/ephemeral_key")
+//    fun getEphemeralKey2(): Call<ServerResponse<Any>>
 
 
 
@@ -99,14 +99,13 @@ interface ApiService {
     fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
 
     @POST("eaters/me/orders/{order_id}/checkout")
-    fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>
+        fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>
 
     @POST("eaters/me/orders/{order_id}/finalize")
     fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
 
     @DELETE("eaters/me/orders/{order_id}/")
     fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
-
 
 
     //Active Order

@@ -150,11 +150,19 @@ object Utils {
 
     fun parseUnixTimestamp(date: Date?): String {
         var yourmilliseconds: Long = Date().time
-        if (date != null) {
+        date?.let{
             yourmilliseconds = date.time
         }
         val droppedMillis = yourmilliseconds / 1000
         return droppedMillis.toString()
+    }
+
+    fun isNow(newChosenDate: Date?): Boolean {
+        newChosenDate?.let{
+            val now = Date().time
+            return it.time-1000 < now
+        }
+        return true
     }
 
     fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
@@ -267,6 +275,8 @@ object Utils {
         shareIntent.putExtra(Intent.EXTRA_TEXT, text)
         activity.startActivity(Intent.createChooser(shareIntent, "Share"))
     }
+
+
 
 
 }

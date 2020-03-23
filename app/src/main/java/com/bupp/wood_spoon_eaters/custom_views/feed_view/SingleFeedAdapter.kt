@@ -46,6 +46,7 @@ class SingleFeedAdapter(
         holder.rating.text = "${dish.rating}"
 
         if (dish.menuItem != null) {
+            holder.unAvailableLayout.visibility = View.GONE
             holder.dishCount.initQuantityView(dish.menuItem)
 
             if(dish.menuItem.orderAt == null){

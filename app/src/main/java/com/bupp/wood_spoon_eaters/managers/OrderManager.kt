@@ -41,9 +41,9 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         if(currentOrderRequest == null) {
             initNewOrder()
         }
+            currentOrderRequest!!.deliveryAt = deliveryAt
             if(cookId != null) currentOrderRequest!!.cookId = cookId
             if(cookingSlotId != null) currentOrderRequest!!.cookingSlotId = cookingSlotId
-            if(deliveryAt != null) currentOrderRequest!!.deliveryAt = deliveryAt
             if(deliveryAddress != null) currentOrderRequest!!.deliveryAddressId = deliveryAddress.id
             if(orderItemRequests != null) currentOrderRequest!!.orderItemRequests = orderItemRequests
             if(tipPercentage != null) currentOrderRequest!!.tipPercentage = tipPercentage
