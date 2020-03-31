@@ -430,11 +430,12 @@ class NewOrderSharedViewModel(
 
     fun updateAddUtensils(shouldAdd: Boolean) {
         orderManager.updateOrderRequest(addUtensils = shouldAdd)
+        postUpdateOrder(OrderRequest(addUtensils = shouldAdd))
     }
 
-    fun updateRecurringOrder(isRecurring: Boolean) {
-        orderManager.updateOrderRequest(recurringOrder = isRecurring)
-    }
+//    fun updateRecurringOrder(isRecurring: Boolean) {
+//        orderManager.updateOrderRequest(recurringOrder = isRecurring)
+//    }
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
         //get only available dishes

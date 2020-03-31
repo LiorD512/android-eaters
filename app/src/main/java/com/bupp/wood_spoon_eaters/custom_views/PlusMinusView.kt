@@ -22,6 +22,11 @@ class PlusMinusView : FrameLayout {
         this.counter = initalCounter
         this.quantityLeft = quantityLeft
         plusMinusCounter.text = "$counter"
+
+        if(counter >= quantityLeft){
+            plusMinusPlus.isEnabled = false
+            plusMinusPlus.alpha = 0.5f
+        }
     }
 
     fun updateCounterUiOnly(count: Int) {
@@ -75,7 +80,7 @@ class PlusMinusView : FrameLayout {
             plusMinusCounter.text = "$counter"
             listener?.onPlusMinusChange(counter, position)
 
-            if(counter == quantityLeft){
+            if(counter >= quantityLeft){
                 plusMinusPlus.isEnabled = false
                 plusMinusPlus.alpha = 0.5f
             }else{

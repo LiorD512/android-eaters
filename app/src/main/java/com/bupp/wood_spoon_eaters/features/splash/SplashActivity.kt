@@ -13,16 +13,26 @@ import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import kotlin.concurrent.schedule
-
+import io.branch.referral.BranchError
+import org.json.JSONObject
+import io.branch.referral.Branch
+import com.google.firebase.analytics.FirebaseAnalytics
+import java.lang.Exception
 
 
 class SplashActivity : AppCompatActivity() {
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    private var cookId: String? = null
+    private var menuItemId: String? = null
     val viewModel: SplashViewModel by viewModel<SplashViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         initObservers()
         Appsee.start()
@@ -60,7 +70,15 @@ class SplashActivity : AppCompatActivity() {
 
     private fun redirectToMain() {
         Log.d("wowSplash","redirectToMain")
-        startActivity(Intent(this, MainActivity::class.java))
+        val intent = Intent(this, MainActivity::class.java)
+        cookId?.let{
+            intent.putExtra("cook_id", it.toLong())
+    }
+        menuItemId?.let{
+            intent.putExtra("menu_item_id", it.toLong())
+        }
+        startActivity(intent)
+
         finish()
     }
 
@@ -72,6 +90,33 @@ class SplashActivity : AppCompatActivity() {
 
     private fun init() {
         viewModel.initServerCall() //init all data
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        Branch.sessionBuilder(this).withCallback(callback).withData(if (intent != null) intent.data else null).init()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        // if activity is in foreground (or in backstack but partially visible) launching the same
+        // activity will skip onStart, handle this case with reInitSession
+        Branch.sessionBuilder(this).withCallback(callback).reInit()
+    }
+
+    private val callback = Branch.BranchReferralInitListener { linkProperties, error ->
+        linkProperties?.let{
+            Log.d("wowSplash","Branch.io intent $linkProperties")
+                if(it.has("cook_id")){
+                    cookId = it.get("cook_id") as String
+                }
+                if(it.has("menu_item_id")){
+                    menuItemId = it.get("menu_item_id") as String
+                }
+
+
+        }
     }
 
 }

@@ -76,7 +76,7 @@ data class FullDish(
     @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>
 ){
     fun getPriceObj(): Price {
-        if(availableMenuItems[0].price != null){
+        if(availableMenuItems.size > 0 && availableMenuItems[0].price != null){
             return availableMenuItems[0].price!!
         }else{
             return price

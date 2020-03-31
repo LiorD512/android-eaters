@@ -12,6 +12,7 @@ import org.koin.core.context.startKoin
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.appsee.Appsee
+import io.branch.referral.Branch
 
 
 class WoodSpoonApplication : Application() {
@@ -27,6 +28,11 @@ class WoodSpoonApplication : Application() {
             modules(listOf(appModule, networkModule))
         }
 
+        // Branch logging for debugging
+        Branch.enableLogging()
+
+        // Branch object initialization
+        Branch.getAutoInstance(this)
 
 
         val conversionDataListener  = object : AppsFlyerConversionListener{

@@ -22,8 +22,10 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
                     val eaterDataManager: EaterDataManager, val fcmManager: FcmManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
+    var waitingForAddressAction: Boolean = false
     private var hasPendingOrder: Boolean = false
     private var hasActiveOrder: Boolean = false
+    val addressUpdateActionEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
     val addressUpdateEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
     data class AddressUpdateEvent(val currentAddress: Address?)
 
@@ -65,7 +67,11 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
 
 
     override fun onAddressChanged(updatedAddress: Address?) {
+        Log.d("wowMainVM","onAddressChanged")
         addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
+        if(waitingForAddressAction){
+            addressUpdateActionEvent.postValue(AddressUpdateEvent(updatedAddress))
+        }
     }
 
     val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
@@ -141,9 +147,39 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         })
     }
 
+    val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
+    data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
+    fun getCurrentCook(id: Long) {
+        api.getCook(id).enqueue(object: Callback<ServerResponse<Cook>>{
+            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
+                if(response.isSuccessful){
+                    val cook = response.body()?.data
+                    Log.d("wowFeedVM","getCurrentCook success: ")
+                    getCookEvent.postValue(CookEvent(true, cook))
+                }else{
+                    Log.d("wowFeedVM","getCurrentCook fail")
+                    getCookEvent.postValue(CookEvent(false,null))
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
+                Log.d("wowFeedVM","getCurrentCook big fail")
+                getCookEvent.postValue(CookEvent(false,null))
+            }
+        })
+    }
+
 
     fun getCurrentEater(): Eater? {
         return eaterDataManager.currentEater
+    }
+
+    fun hasAddress(): Boolean {
+        return eaterDataManager.getLastChosenAddress() != null
+    }
+
+    fun getAddressAndProcceed() {
+
     }
 
 //    fun disableEventData() {

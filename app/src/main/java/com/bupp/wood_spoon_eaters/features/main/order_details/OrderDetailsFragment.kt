@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -94,6 +95,11 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragOrderDate.text = "$date at $time"
 
         orderDetailsFragTotalPrice.text = curOrder.total.formatedValue
+
+        if(curOrder.status.equals("cancelled")){
+            orderDetailsStatus.text = "Order Cancelled"
+            orderDetailsStatus.setTextColor(ContextCompat.getColor(context!!, R.color.red))
+        }
 
 
     }

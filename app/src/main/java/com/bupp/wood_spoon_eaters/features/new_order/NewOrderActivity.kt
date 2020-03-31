@@ -91,20 +91,6 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         viewModel.setIntentParams(menuItemId, isCheckout, isEvent)
     }
 
-//    private fun showEmptyCartDialog() {
-//        ClearCartDialog(object: ClearCartDialog.ClearCartDialogListener{
-//            override fun onClearCart() {
-//                viewModel.initNewOrder()
-//            }
-//        }).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-//    }
-
-//    override fun onClearCart() {
-//        viewModel.clearCart()
-//        val menuItemId = intent.getLongExtra("menuItemId", -1)
-//        loadSingleDish(menuItemId)
-//    }
-
     fun startPaymentMethodActivity() {
         PaymentMethodsActivityStarter(this).startForResult()
     }

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,6 +18,7 @@ import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFr
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.events.EventActivity
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -45,6 +45,7 @@ import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -53,7 +54,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    OrdersBottomBar.OrderBottomBatListener {
+    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
+
 
 
     private var lastFragmentTag: String? = null
@@ -81,8 +83,39 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
 //        checkForActiveOrder()
         checkForTriggers()
+        checkForBranchIntent()
 
         initFcm()
+    }
+
+    private fun checkForBranchIntent() {
+        intent?.let{
+            val cookId = intent.getLongExtra("cook_id", -1)
+            val menuItemId = intent.getLongExtra("menu_item_id", -1)
+            Log.d("wowMain","branch: cook $cookId, menuItem: $menuItemId")
+            if(cookId > 0){
+                viewModel.getCurrentCook(cookId)
+            }else if(menuItemId > 0){
+                if(viewModel.hasAddress()){
+                    loadNewOrderActivity(menuItemId)
+                }else{
+                    handlePb(true)
+                    Log.d("wowMain","brnach intent observing address change")
+                    viewModel.waitingForAddressAction = true
+                    viewModel.addressUpdateActionEvent.observe(this, Observer { newAddressEvent ->
+                        Log.d("wowMain","brnach intent observing address - ON CHANGE")
+                        if (newAddressEvent != null) {
+                            handlePb(false)
+                            loadNewOrderActivity(menuItemId)
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    override fun onDishClick(menuItemId: Long) {
+        loadNewOrderActivity(menuItemId)
     }
 
     fun initFcm(){
@@ -140,14 +173,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 mainActOrdersBB.handleBottomBar(showCheckout = false)
             }
         })
-
-//        viewModel.heightHandling.observe(this, Observer { heightHandlingEvent ->
-//            if (heightHandlingEvent.changeContainerHeight) {
-//                showCheckOutBottomBar(true)
-//            }else{
-//                showCheckOutBottomBar(false)
-//            }
-//        })
+        viewModel.getCookEvent.observe(this, Observer { event ->
+            feedFragPb.hide()
+            if(event.isSuccess){
+                CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+            }
+        })
 
     }
 
@@ -161,37 +192,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Constants.NEW_ORDER_REQUEST_CODE
         )
     }
-
-//    private fun showCheckOutBottomBar(shouldShow: Boolean) {
-//        if(shouldShow){
-//            checkOutBottomBarTitle.visibility = View.VISIBLE
-//            checkOutBottomBarTitle.setOnClickListener { loadNewOrderActivityCheckOut() }
-//        }else{
-//            checkOutBottomBarTitle.visibility = View.GONE
-//        }
-////        handleContainerPadding()
-//    }
-//
-//    private fun handleActiveOrderBottomBar(shouldShow: Boolean) {
-//        if (shouldShow) {
-//            Log.d("wowMain", "show bottom bar")
-////            handleContainerPadding()
-//            activeOrderBottomBarTitle.visibility = View.VISIBLE
-//            activeOrderBottomBarTitle.setOnClickListener {
-//                mainActPb.show()
-//                viewModel.checkForActiveOrder()
-//            }
-//        } else {
-//            Log.d("wowMain", "hide bottom bar")
-////            handleContainerPadding()
-//            activeOrderBottomBarTitle.visibility = View.GONE
-//        }
-//    }
-
-//    private fun handleContainerPadding() {
-//        val padding = viewModel.getContainerPaddingBottom()
-//        mainActContainer.setPadding(0,0,0, padding.toInt())
-//    }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
         ActiveOrderTrackerDialog(orders, this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
@@ -267,17 +267,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
     }
 
-    fun loadCheckout() {
-//        currentFragmentTag = Constants.CHECKOUT_TAG
-//        CheckoutFragment(this).show(supportFragmentManager, Constants.CHECKOUT_TAG)
-    }
-
-//    override fun onCheckoutDone() {
-//
-//    }
-
-
-
     fun loadReport(orderId: Long) {
         loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Report issue")
@@ -305,15 +294,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Delivery Details")
     }
 
-//    fun loadAddNewAddress() {
-//        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
-//        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
-//    }
-
-//    fun loadLocationChooser(input: String?) {
-//        LocationChooserFragment(this, input)
-//            .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
-//    }
 
     fun loadSettingsFragment() {
         loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
