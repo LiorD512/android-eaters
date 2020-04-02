@@ -75,7 +75,7 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
                 orderItem.quantity = counter
                 listener.onDishCountChange(counter, orderItem)
             }
-        }, position, orderItem.quantity)
+        }, position, initalCounter = orderItem.quantity, quantityLeft = orderItem.menuItem.quantity)
 
         if(orderItem.notes.isNullOrEmpty()){
             holder.note.visibility = View.GONE
