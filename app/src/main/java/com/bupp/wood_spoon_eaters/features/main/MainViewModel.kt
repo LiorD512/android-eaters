@@ -1,13 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.main
 
 import android.app.Activity
-import android.content.Context
-import android.content.res.Resources
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
@@ -19,7 +15,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel(val api: ApiService, val settings: AppSettings, val permissionManager:PermissionManager, val orderManager: OrderManager,
-                    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
+                    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager
+): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     var waitingForAddressAction: Boolean = false

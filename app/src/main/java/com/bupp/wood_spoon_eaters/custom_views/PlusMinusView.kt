@@ -16,14 +16,16 @@ class PlusMinusView : FrameLayout {
     private var position: Int = -1
     private var quantityLeft: Int = -1
 
-    fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initalCounter: Int = 0, quantityLeft: Int = 1) {
+    fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initialCounter: Int = 0, quantityLeft: Int? = 1) {
         this.listener = listener
         this.position = position
-        this.counter = initalCounter
-        this.quantityLeft = quantityLeft
+        this.counter = initialCounter
+        quantityLeft?.let{
+            this.quantityLeft = it
+        }
         plusMinusCounter.text = "$counter"
 
-        if(counter >= quantityLeft){
+        if(counter >= this.quantityLeft){
             plusMinusPlus.isEnabled = false
             plusMinusPlus.alpha = 0.5f
         }

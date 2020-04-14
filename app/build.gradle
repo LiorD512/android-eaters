@@ -99,6 +99,7 @@ dependencies {
 
     //utils
     implementation 'com.stripe:stripe-android:10.4.1'
+    implementation 'com.tapadoo.android:alerter:5.1.2'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.10.8'

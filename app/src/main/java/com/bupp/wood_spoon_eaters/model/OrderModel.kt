@@ -63,7 +63,7 @@ data class OrderItem(
     @SerializedName("id") val id: Long,
     @SerializedName("dish") val dish: Dish,
     @SerializedName("quantity") var quantity: Int,
-    @SerializedName("matching_menu") var menuItem: MenuItem,
+    @SerializedName("matching_menu") var menuItem: MenuItem?,
     @SerializedName("removed_ingredients") var removedIndredients: ArrayList<Ingredient>,
     @SerializedName("price") val price: Price,
     @SerializedName("notes") var notes: String?

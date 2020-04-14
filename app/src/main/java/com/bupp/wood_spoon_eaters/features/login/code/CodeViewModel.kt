@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.features.login.code
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.FcmManager
+import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -14,7 +14,8 @@ import retrofit2.Response
 
 
 class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager
-                    , val deviceDetailsManager: FcmManager) : ViewModel() {
+                    , val deviceDetailsManager: FcmManager
+) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val resendCodeEvent: SingleLiveEvent<ResendCodeEvent> = SingleLiveEvent()

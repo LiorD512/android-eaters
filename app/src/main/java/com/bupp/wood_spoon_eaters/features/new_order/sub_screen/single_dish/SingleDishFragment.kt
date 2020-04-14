@@ -1,13 +1,14 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
-import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.tapadoo.alerter.Alerter
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 import kotlin.collections.ArrayList
@@ -107,7 +109,7 @@ class SingleDishFragment() : Fragment(),
 
 
     private fun checkForOpenOrder(currentDish: FullDish) {
-        ordersViewModel.checkForOpenOrder(currentDish.menuItem?.cookingSlot?.id, currentDish.cook.getFullName())
+        ordersViewModel.checkForOpenOrderAndShowClearCartDialog(currentDish.menuItem?.cookingSlot?.id, currentDish.cook.getFullName())
     }
 
     private fun initObservers() {
@@ -179,10 +181,10 @@ class SingleDishFragment() : Fragment(),
         })
 
         viewModel.getReviewsEvent.observe(this, Observer { event ->
-            if (event != null) {
+            event?.let{
                 if (event.isSuccess) {
-                    if (event.reviews != null) {
-                        RatingsDialog(event.reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+                    event.reviews?.let{
+                        RatingsDialog(it).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
                     }
                 } else {
                     Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
@@ -222,12 +224,27 @@ class SingleDishFragment() : Fragment(),
 
 
     private fun handleUnAvailableCookingSlot(startsAt: Date) {
-        DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
+//        DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
+        showUnavailableDishAlerter()
         val cookingSlotStartingTime = startsAt
         if (cookingSlotStartingTime != null) {
             viewModel.updateChosenDeliveryDate(newChosenDate = startsAt)
         }
     }
+
+    private fun showUnavailableDishAlerter() {
+//            val icon = R.mipmap.ic_launcher
+            Alerter.create(activity)
+//                .setIcon(icon)
+                .setText(R.string.un_available_dish_alerter_body)
+                .setTextAppearance(R.style.flashbar_msg_appearence)
+                .setTextTypeface(ResourcesCompat.getFont(context!!, R.font.open_sans_reg)!!)
+                .setBackgroundColorRes(R.color.teal_blue)
+                .setDuration(2000)
+                .setContentGravity(Gravity.END)
+                .enableSwipeToDismiss().show()
+        }
+
 
     private fun handleSoldoutCookingSlot(startsAt: Date) {
         DishSoldOutDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
@@ -390,7 +407,7 @@ class SingleDishFragment() : Fragment(),
         if (menuItem != null) {
             singleDishQuantityView.initQuantityView(menuItem)
             val quantityLeft = menuItem.quantity - menuItem.unitsSold
-            singleDishPlusMinus.setPlusMinusListener(this, initalCounter = 1, quantityLeft = quantityLeft)
+            singleDishPlusMinus.setPlusMinusListener(this, initialCounter = 1, quantityLeft = quantityLeft)
         }
 
         initOrderDate(currentDish)

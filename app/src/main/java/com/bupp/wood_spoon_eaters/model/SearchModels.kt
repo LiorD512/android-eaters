@@ -30,26 +30,26 @@ data class Search(
     @SerializedName("pagination") var pagination: Pagination = Pagination()
 ):Parcelable {
     fun cooksCount(): Int {
-//        results?.let{
-//            when (resource) {
-//                Constants.RESOURCE_TYPE_COOK -> {
-//                    return results!!.size
-//                }
-//                else -> return 0
-//            }
-//        }
+        results?.let{
+            when (resource) {
+                Constants.RESOURCE_TYPE_COOK -> {
+                    return results!!.size
+                }
+                else -> return 0
+            }
+        }
         return 0
     }
 
     fun dishCount(): Int {
-//        results?.let{
-//            when (resource) {
-//                Constants.RESOURCE_TYPE_DISH -> {
-//                    return results!!.size
-//                }
-//                else -> return 0
-//            }
-//        }
+        results?.let{
+            when (resource) {
+                Constants.RESOURCE_TYPE_DISH -> {
+                    return results!!.size
+                }
+                else -> return 0
+            }
+        }
         return 0
     }
 

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.managers
+package com.bupp.wood_spoon_eaters.fcm
 
 import android.os.Build
 import android.util.Log

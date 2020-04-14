@@ -180,7 +180,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     override fun onCuisineClick(cuisine: CuisineLabel) {
         Log.d("wowSearch","onCuisineClick")
         updateInput(cuisine.name)
-        viewModel.getDishesByCisineId(cuisine.id)
+        viewModel.getDishesByCusineId(cuisine.id)
     }
 
     private fun updateInput(name: String) {

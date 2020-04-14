@@ -47,7 +47,7 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
         doSearch(curSearchObj)
     }
 
-    fun getDishesByCisineId(id: Long) {
+    fun getDishesByCusineId(id: Long) {
         val cuisineId: ArrayList<Long> = arrayListOf<Long>()
         cuisineId.add(id)
         val curSearchObj = searchManager.getSearchRequest("", cuisineIds = cuisineId)

@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
+import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserViewModel
 import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel

@@ -161,72 +161,73 @@ class NewOrderSharedViewModel(
 
 
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
-        if (hasPendingOrder) {
+        val hasPendingOrderFromDifferentCook = checkForDifferentOpenOrder(fullDish?.menuItem?.cookingSlot?.id)
+        if (hasPendingOrder && hasPendingOrderFromDifferentCook) {
             fullDish?.let {
-                checkForOpenOrder(fullDish.menuItem?.cookingSlot?.id, fullDish.cook.getFullName())
+                checkForOpenOrderAndShowClearCartDialog(fullDish.menuItem?.cookingSlot?.id, fullDish.cook.getFullName())
             }
         } else {
-        var cookId: Long = -1
-        var dishId: Long = -1
-        var cookingSlotId: Long = -1
+            var cookId: Long = -1
+            var dishId: Long = -1
+            var cookingSlotId: Long = -1
 
-        fullDish?.let {
-            cookId = it.cook.id
-            dishId = it.id
-            it.menuItem?.let {
-                cookingSlotId = it.cookingSlot?.id
-            }
-        }
-
-        val deliveryAddress = eaterDataManager.getLastChosenAddress()
-        val orderItem = OrderItemRequest(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
-
-        orderManager.updateOrderRequest(
-            cookId = cookId,
-            cookingSlotId = cookingSlotId,
-            deliveryAddress = deliveryAddress,
-            tipPercentage = tipPercentage,
-            tipAmount = tipAmount,
-            promoCode = promoCode
-        )
-
-        orderManager.addOrderItem(orderItem)
-        progressData.startProgress()
-        apiService.postOrder(orderManager.getOrderRequest()).enqueue(object : Callback<ServerResponse<Order>> {
-            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
-                progressData.endProgress()
-                if (response.isSuccessful) {
-                    val order = response.body()?.data
-                    curCookingSlotId = order?.cookingSlot?.id
-                    orderManager.setOrderResponse(order)
-                    orderData.postValue(order)
-                    Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
-                    //update additional dishes
-                    fullDish?.let {
-                        setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
-                        if (it.getAdditionalDishes().size > 1) {
-                            showDialogEvent.postValue(isFirst)
-                            isFirst = false
-                        } else {
-                            showDialogEvent.postValue(false)
-                        }
-                    }
-                    postOrderEvent.postValue(PostOrderEvent(true, order))
-
-
-                } else {
-                    Log.d("wowFeedVM", "postOrder fail")
-                    postOrderEvent.postValue(PostOrderEvent(false, null))
+            fullDish?.let {
+                cookId = it.cook.id
+                dishId = it.id
+                it.menuItem?.let {
+                    cookingSlotId = it.cookingSlot?.id
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                Log.d("wowFeedVM", "postOrder big fail")
-                progressData.endProgress()
-                postOrderEvent.postValue(PostOrderEvent(false, null))
-            }
-        })
-        Log.d("wowSingleDishVM", "addToCart finish")
+            val deliveryAddress = eaterDataManager.getLastChosenAddress()
+            val orderItem = OrderItemRequest(dishId = dishId, quantity = quantity, removedIndredientsIds = removedIngredients, notes = note)
+
+            orderManager.updateOrderRequest(
+                cookId = cookId,
+                cookingSlotId = cookingSlotId,
+                deliveryAddress = deliveryAddress,
+                tipPercentage = tipPercentage,
+                tipAmount = tipAmount,
+                promoCode = promoCode
+            )
+
+            orderManager.addOrderItem(orderItem)
+            progressData.startProgress()
+            apiService.postOrder(orderManager.getOrderRequest()).enqueue(object : Callback<ServerResponse<Order>> {
+                override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
+                    progressData.endProgress()
+                    if (response.isSuccessful) {
+                        val order = response.body()?.data
+                        curCookingSlotId = order?.cookingSlot?.id
+                        orderManager.setOrderResponse(order)
+                        orderData.postValue(order)
+                        Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
+                        //update additional dishes
+                        fullDish?.let {
+                            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+                            if (it.getAdditionalDishes().size > 1) {
+                                showDialogEvent.postValue(isFirst)
+                                isFirst = false
+                            } else {
+                                showDialogEvent.postValue(false)
+                            }
+                        }
+                        postOrderEvent.postValue(PostOrderEvent(true, order))
+
+
+                    } else {
+                        Log.d("wowFeedVM", "postOrder fail")
+                        postOrderEvent.postValue(PostOrderEvent(false, null))
+                    }
+                }
+
+                override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
+                    Log.d("wowFeedVM", "postOrder big fail")
+                    progressData.endProgress()
+                    postOrderEvent.postValue(PostOrderEvent(false, null))
+                }
+            })
+            Log.d("wowSingleDishVM", "addToCart finish")
         }
 
     }
@@ -341,7 +342,7 @@ class NewOrderSharedViewModel(
     data class HasOpenOrder(val hasOpenOrder: Boolean, val cookInCartName: String? = null, val currentShowingCookName: String? = null)
 
     //check order status - is there any open order?
-    fun checkForOpenOrder(currentCookingSlotid: Long?, currentShowingCookName: String) {
+    fun checkForOpenOrderAndShowClearCartDialog(currentCookingSlotid: Long?, currentShowingCookName: String) {
         if (orderManager.haveCurrentActiveOrder()) {
             val inCartOrder = orderManager.curOrderResponse
             val inCartCookingSlot = inCartOrder?.cookingSlot
@@ -357,6 +358,20 @@ class NewOrderSharedViewModel(
         } else {
             hasOpenOrder.postValue(HasOpenOrder(false))
         }
+    }
+
+    //check if there is an order in cart from diffrent cook
+    fun checkForDifferentOpenOrder(currentCookingSlotId: Long?): Boolean {
+        if (orderManager.haveCurrentActiveOrder()) {
+            val inCartOrder = orderManager.curOrderResponse
+            val inCartCookingSlot = inCartOrder?.cookingSlot
+            inCartCookingSlot?.let {
+                if (it.id != currentCookingSlotId) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 

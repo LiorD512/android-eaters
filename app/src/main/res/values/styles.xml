@@ -364,5 +364,13 @@
     <declare-styleable name="WoodSpoonProgressBar">
         <attr format="boolean" name="isBlueStyle"/>
     </declare-styleable>
+
+    <style name="flashbar_msg_appearence">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">15.1sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
     <color name="purpely_grey">#929092</color>
 </resources>

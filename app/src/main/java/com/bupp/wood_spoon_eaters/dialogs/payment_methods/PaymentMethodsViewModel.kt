@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.dialogs.payment_methods
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.stripe.android.SourceCallback
 import com.stripe.android.Stripe
 import com.stripe.android.model.Card
 import com.stripe.android.model.SourceParams
