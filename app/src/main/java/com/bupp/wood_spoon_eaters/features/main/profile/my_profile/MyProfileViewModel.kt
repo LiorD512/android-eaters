@@ -118,7 +118,7 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
     }
 
     fun initStripe(activity: Activity) {
-        PaymentConfiguration.init(metaDataManager.getStripePublishableKey())
+        PaymentConfiguration.init(activity, metaDataManager.getStripePublishableKey())
         CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
     }
 

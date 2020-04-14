@@ -100,14 +100,14 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    val paymentMethod: PaymentMethod =
-                        (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
-                    if (paymentMethod != null && paymentMethod.card != null) {
+                    Log.d("wowNewOrder", "Stripe")
+                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+                    result?.let {
                         Log.d("wowNewOrder", "payment method success")
                         if (getFragmentByTag(Constants.CHECKOUT_TAG) != null) {
-                            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).updateCustomerPaymentMethod(
-                                paymentMethod
-                            )
+                            result.paymentMethod?.let{
+                                (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).updateCustomerPaymentMethod(it)
+                            }
                         }
                     }
                 }

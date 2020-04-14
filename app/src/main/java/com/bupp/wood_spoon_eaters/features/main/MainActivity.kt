@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
 
 
-
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -89,21 +88,21 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun checkForBranchIntent() {
-        intent?.let{
+        intent?.let {
             val cookId = intent.getLongExtra("cook_id", -1)
             val menuItemId = intent.getLongExtra("menu_item_id", -1)
-            Log.d("wowMain","branch: cook $cookId, menuItem: $menuItemId")
-            if(cookId > 0){
+            Log.d("wowMain", "branch: cook $cookId, menuItem: $menuItemId")
+            if (cookId > 0) {
                 viewModel.getCurrentCook(cookId)
-            }else if(menuItemId > 0){
-                if(viewModel.hasAddress()){
+            } else if (menuItemId > 0) {
+                if (viewModel.hasAddress()) {
                     loadNewOrderActivity(menuItemId)
-                }else{
+                } else {
                     handlePb(true)
-                    Log.d("wowMain","brnach intent observing address change")
+                    Log.d("wowMain", "brnach intent observing address change")
                     viewModel.waitingForAddressAction = true
                     viewModel.addressUpdateActionEvent.observe(this, Observer { newAddressEvent ->
-                        Log.d("wowMain","brnach intent observing address - ON CHANGE")
+                        Log.d("wowMain", "brnach intent observing address - ON CHANGE")
                         if (newAddressEvent != null) {
                             handlePb(false)
                             loadNewOrderActivity(menuItemId)
@@ -118,7 +117,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadNewOrderActivity(menuItemId)
     }
 
-    fun initFcm(){
+    fun initFcm() {
         viewModel.initFcmListener()
     }
 
@@ -129,7 +128,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     fun checkForTriggers() {
         viewModel.checkForTriggers()
     }
-    fun checkCartStatus(){
+
+    fun checkCartStatus() {
         viewModel.checkCartStatus()
     }
 
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             mainActPb.hide()
             if (ordersEvent.isSuccess) {
                 mainActOrdersBB.handleBottomBar(showActiveOrders = true)
-                if(ordersEvent.showDialog){
+                if (ordersEvent.showDialog) {
                     openActiveOrdersDialog(ordersEvent.orders!!)
                 }
             } else {
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         viewModel.getTriggers.observe(this, Observer { triggerEvent ->
             if (triggerEvent.isSuccess) {
-                Log.d("wowMain","found should rate id !: ${triggerEvent.trigger?.shouldRateOrder}")
+                Log.d("wowMain", "found should rate id !: ${triggerEvent.trigger?.shouldRateOrder}")
                 RateLastOrderDialog(triggerEvent.trigger?.shouldRateOrder!!.id, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
             }
         })
@@ -166,16 +166,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
                 mainActOrdersBB.handleBottomBar(showCheckout = true)
-                pendingOrderEvent.totalPrice?.let{
+                pendingOrderEvent.totalPrice?.let {
                     mainActOrdersBB.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = it)
                 }
-            }else{
+            } else {
                 mainActOrdersBB.handleBottomBar(showCheckout = false)
             }
         })
         viewModel.getCookEvent.observe(this, Observer { event ->
             feedFragPb.hide()
-            if(event.isSuccess){
+            if (event.isSuccess) {
                 CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
@@ -352,7 +352,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     fun loadDishOfferedDialog() {
         NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
-        if(getFragmentByTag(Constants.SEARCH_TAG) != null){
+        if (getFragmentByTag(Constants.SEARCH_TAG) != null) {
             (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged("")
         }
     }
@@ -440,7 +440,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null) {
 //            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).saveAddressDetails()
 //        } else
-            if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
+        if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
             handlePb(true)
             (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
         }
@@ -506,12 +506,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == Constants.NEW_ORDER_REQUEST_CODE){
-                loadFeed()
-                checkForActiveOrder()
-                checkCartStatus()
+        if (requestCode == Constants.NEW_ORDER_REQUEST_CODE) {
+            loadFeed()
+            checkForActiveOrder()
+            checkCartStatus()
         }
-        if(requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE){
+        if (requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE) {
 //            viewModel.disableEventData()
             checkForActiveOrder()
         }
@@ -528,17 +528,21 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     }
                 }
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivity.EXTRA_SELECTED_PAYMENT) as PaymentMethod)
-
-                    if (paymentMethod != null && paymentMethod.card != null) {
-                        Log.d("wowNewOrder","payment method success")
-                        if(getFragmentByTag(Constants.MY_PROFILE_TAG) != null){
-                            (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(paymentMethod)
+                    Log.d("wowMainActivity", "Stripe")
+//                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivityStarter.REQUEST_CODE) as PaymentMethod)
+//                    if (paymentMethod != null && paymentMethod.card != null) {
+                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+                    result?.let {
+                        Log.d("wowNewOrder", "payment method success")
+                        if (getFragmentByTag(Constants.MY_PROFILE_TAG) != null) {
+                            result.paymentMethod?.let{
+                                (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(it)
+                            }
                         }
                     }
                 }
                 Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
-                    Log.d("wowMianActivity","result ADDRESS_CHOOSER_REQUEST_CODE success")
+                    Log.d("wowMianActivity", "result ADDRESS_CHOOSER_REQUEST_CODE success")
                     handlePb(false)
                     updateAddressTimeView()
 
