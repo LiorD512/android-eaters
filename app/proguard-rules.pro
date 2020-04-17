@@ -39,8 +39,10 @@
 -keep class androidx.** { *; }
 -keep interface androidx.** { *; }
 -keepattributes SourceFile,LineNumberTable
-
+-keepclassmembers enum * { *; }
 -keepclassmembernames class com.bupp.wood_spoon_eaters.model.** { *; }
+
+-dontwarn module-info
 
 
 

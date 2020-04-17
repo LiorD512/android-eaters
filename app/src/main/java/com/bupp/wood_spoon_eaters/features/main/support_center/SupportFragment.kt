@@ -53,8 +53,10 @@ class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {
         intent.data = Uri.parse("mailto:$address")
         intent.putExtra(Intent.EXTRA_EMAIL, address)
         intent.putExtra(Intent.EXTRA_SUBJECT, text)
-        if (intent.resolveActivity(activity?.packageManager) != null) {
-            startActivity(intent)
+        activity?.let{
+            if (intent.resolveActivity(it.packageManager) != null) {
+                startActivity(intent)
+            }
         }
     }
 

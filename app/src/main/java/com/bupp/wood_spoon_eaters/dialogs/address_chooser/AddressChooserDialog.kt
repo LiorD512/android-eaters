@@ -33,8 +33,8 @@ class AddressChooserDialog(val listener: AddressChooserDialogListener, private v
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.address_chooser_dialog, null)
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        val view = inflater.inflate(R.layout.address_chooser_dialog, null)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
         return view
     }
 

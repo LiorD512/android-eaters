@@ -44,8 +44,8 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.cook_profile_dialog, null)
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        val view = inflater.inflate(R.layout.cook_profile_dialog, null)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
         return view
     }
 
@@ -80,7 +80,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
 
         var profession = cook.profession
         var country = ""
-        cook.country?.let{
+        cook.country.let{
             country = ", ${it.name}"
             Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }

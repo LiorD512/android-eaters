@@ -33,17 +33,21 @@ class IconsGridView : FrameLayout, IconsGridViewAdapter.IconGridViewAdapterListe
             val a = context.obtainStyledAttributes(attrs, R.styleable.IconsGridView)
             if (a.hasValue(R.styleable.IconsGridView_title)) {
                 var title = a.getString(R.styleable.IconsGridView_title)
-                if (title.isBlank()) {
-                    iconsGridViewTitle.visibility = View.GONE
-                } else {
-                    iconsGridViewTitle.text = title
+                title?.let{
+                    if (it.isBlank()) {
+                        iconsGridViewTitle.visibility = View.GONE
+                    } else {
+                        iconsGridViewTitle.text = title
+                    }
                 }
 
                 var subTitle = a.getString(R.styleable.IconsGridView_subTitle)
-                if (subTitle.isBlank()) {
-                    iconsGridViewSubTitle.visibility = View.GONE
-                } else {
-                    iconsGridViewSubTitle.text = subTitle
+                subTitle?.let{
+                    if (subTitle.isBlank()) {
+                        iconsGridViewSubTitle.visibility = View.GONE
+                    } else {
+                        iconsGridViewSubTitle.text = subTitle
+                    }
                 }
             }
             a.recycle()

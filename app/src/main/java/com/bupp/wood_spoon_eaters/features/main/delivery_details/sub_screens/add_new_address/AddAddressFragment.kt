@@ -88,7 +88,7 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
     private fun handleSaveResponse(event: AddAddressViewModel.NavigationEvent?) {
         if (event != null) {
             addAddressFragPb.hide()
-            if (event!!.isSuccessful) {
+            if (event.isSuccessful) {
                 (activity as AddressChooserActivity).onNewAddressDone(location = event.addressStreetStr)
             } else {
                 Toast.makeText(context, "There was a problem", Toast.LENGTH_SHORT).show()
@@ -99,7 +99,7 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
 
     override fun onClick(view: View?) {
         if (view is RadioButton) {
-            this.isDelivery = view!!.id == addAddressFragDeliveryCb.id
+            this.isDelivery = view.id == addAddressFragDeliveryCb.id
 
             addAddressFragDeliveryCb.typeface = Typeface.DEFAULT
             addAddressFragPickUpCb.typeface = Typeface.DEFAULT

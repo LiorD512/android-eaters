@@ -35,17 +35,21 @@ class EmptyIconsGridView : FrameLayout, EmptyIconsGridViewAdapter.EmptyIconGridV
             val a = context.obtainStyledAttributes(attrs, R.styleable.EmptyIconsGridView)
             if (a.hasValue(R.styleable.EmptyIconsGridView_title)) {
                 var title = a.getString(R.styleable.EmptyIconsGridView_title)
-                if(title.isBlank()){
-                    iconsGridViewTitle.visibility = View.GONE
-                }else{
-                    iconsGridViewTitle.text = title
+                title?.let{
+                    if(title.isBlank()){
+                        iconsGridViewTitle.visibility = View.GONE
+                    }else{
+                        iconsGridViewTitle.text = title
+                    }
                 }
 
                 var subTitle = a.getString(R.styleable.EmptyIconsGridView_subTitle)
-                if(title.isBlank()){
-                    iconsGridViewSubTitle.visibility = View.GONE
-                }else{
-                    iconsGridViewSubTitle.text = subTitle
+                subTitle?.let{
+                    if(subTitle.isBlank()){
+                        iconsGridViewSubTitle.visibility = View.GONE
+                    }else{
+                        iconsGridViewSubTitle.text = subTitle
+                    }
                 }
             }
             a.recycle()
@@ -66,9 +70,7 @@ class EmptyIconsGridView : FrameLayout, EmptyIconsGridViewAdapter.EmptyIconGridV
 
     override fun onItemSelected(itemPosition: Int) {
         selectedItemPosition = itemPosition
-        if (listener != null){
-            listener.OnEmptyItemSelected()
-        }
+        listener.OnEmptyItemSelected()
     }
 
     fun updateItems(selectedCuisines: ArrayList<SelectableIcon>) {

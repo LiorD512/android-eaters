@@ -1,41 +1,43 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
+//import com.tapadoo.alerter.Alerter
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.androidadvance.topsnackbar.TSnackbar
 import com.bumptech.glide.Glide
-
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.cook_profile_fragment.*
-import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.lifecycle.Observer
-import com.bupp.wood_spoon_eaters.custom_views.*
+import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
+import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.AdditionalDishesDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.CertificatesDialog
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.tapadoo.alerter.Alerter
+import kotlinx.android.synthetic.main.cook_profile_fragment.*
+import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SingleDishFragment() : Fragment(),
@@ -233,16 +235,28 @@ class SingleDishFragment() : Fragment(),
     }
 
     private fun showUnavailableDishAlerter() {
+        val snackbar = TSnackbar.make(singleDishMainLayout,
+            R.string.un_available_dish_alerter_body,
+            TSnackbar.LENGTH_LONG)
+        val snackBarView = snackbar.view
+        snackBarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.teal_blue))
+        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            textView.setTextAppearance(R.style.SemiBold13Dark)
+        }
+        textView.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+        snackbar.show()
+        //alternative way ->
 //            val icon = R.mipmap.ic_launcher
-            Alerter.create(activity)
-//                .setIcon(icon)
-                .setText(R.string.un_available_dish_alerter_body)
-                .setTextAppearance(R.style.flashbar_msg_appearence)
-                .setTextTypeface(ResourcesCompat.getFont(context!!, R.font.open_sans_reg)!!)
-                .setBackgroundColorRes(R.color.teal_blue)
-                .setDuration(2000)
-                .setContentGravity(Gravity.END)
-                .enableSwipeToDismiss().show()
+//            Alerter.create(activity)
+////                .setIcon(icon)
+//                .setText(R.string.un_available_dish_alerter_body)
+//                .setTextAppearance(R.style.flashbar_msg_appearence)
+//                .setTextTypeface(ResourcesCompat.getFont(context!!, R.font.open_sans_reg)!!)
+//                .setBackgroundColorRes(R.color.teal_blue)
+//                .setDuration(2000)
+//                .setContentGravity(Gravity.END)
+//                .enableSwipeToDismiss().show()
         }
 
 

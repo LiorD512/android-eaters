@@ -47,11 +47,11 @@ data class Address(
         }
     }
 }
-
-enum class DropOffLocation(str: String) {
-    DELIVERY_TO_DOOR("Delivery to Door"),
-    PICK_OUTSIDE("Pick outside")
-}
+//
+//enum class DropOffLocation(str: String) {
+//    DELIVERY_TO_DOOR("Delivery to Door"),
+//    PICK_OUTSIDE("Pick outside")
+//}
 
 
 @Parcelize

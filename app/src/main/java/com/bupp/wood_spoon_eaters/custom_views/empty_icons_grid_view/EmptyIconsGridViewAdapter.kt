@@ -57,7 +57,7 @@ class EmptyIconsGridViewAdapter(val context: Context, val icons: ArrayList<Selec
                 holder.name.isSelected = false
             }
         }
-        holder?.background.setOnClickListener {
+        holder.background.setOnClickListener {
             listener.onItemSelected(holder.adapterPosition)
         }
     }

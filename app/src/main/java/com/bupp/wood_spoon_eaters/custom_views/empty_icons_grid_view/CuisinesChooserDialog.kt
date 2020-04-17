@@ -29,7 +29,7 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_cuisines_chooser, null)
+        val view = inflater.inflate(R.layout.fragment_cuisines_chooser, null)
         getDialog()?.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)));
         return view
     }

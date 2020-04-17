@@ -84,8 +84,10 @@ class InputTitleView : FrameLayout {
 
             if (a.hasValue(R.styleable.InputTitleView_hint)) {
                 val hint = a.getString(R.styleable.InputTitleView_hint)
-                if (hint.isNotEmpty()) {
-                    inputTitleViewInput.hint = hint
+                hint?.let{
+                    if (hint.isNotEmpty()) {
+                        inputTitleViewInput.hint = hint
+                    }
                 }
             }
 

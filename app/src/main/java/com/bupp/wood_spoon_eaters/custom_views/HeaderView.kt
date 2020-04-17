@@ -135,9 +135,9 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
 
     private fun getAutoCompleteTextWatecher(): AutoCompleteTextWatcher{
         return object : AutoCompleteTextWatcher() {
-            override fun handleInputString(str: String) {
-                Log.d("wowHeaderView", "afterTextChanged: $str")
-                listener?.onHeaderTextChange(str)
+            override fun handleInputString(input: String) {
+                Log.d("wowHeaderView", "afterTextChanged: $input")
+                listener?.onHeaderTextChange(input)
             }
         }
     }

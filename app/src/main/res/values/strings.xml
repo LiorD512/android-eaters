@@ -87,12 +87,12 @@
         start preparing your dish,
         per our cancellation policy, there is no cancellation fee. \n We hope you consider ordering again with us soon
     </string>
-    <string name="cancel_dialog_stage_2_title">50% Cancellation Fee</string>
+    <string name="cancel_dialog_stage_2_title">50%% Cancellation Fee</string>
     <string name="cancel_dialog_stage_2_body">We are sorry to see you have to cancel your order. Per our cancellation policy,
         because our cook already started to prepare your order, you will be charged for 50% of the order cost.
         \n We hope you can understand and wishing to see you ordering again soon
     </string>
-    <string name="cancel_dialog_stage_3_title">100% Cancellation Fee</string>
+    <string name="cancel_dialog_stage_3_title">100%% Cancellation Fee</string>
     <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancellation policy,
         because your order is already on its way, you will be charged for 100% of the order cost.
         \n We hope you can understand and wishing to see you ordering again soon

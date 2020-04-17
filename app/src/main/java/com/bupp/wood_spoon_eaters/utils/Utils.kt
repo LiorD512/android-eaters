@@ -36,11 +36,6 @@ object Utils {
         take(index) to substring(index)
     }
 
-    fun onContactUsClick(context: Context) {
-
-    }
-
-
     fun callPhone(activity: FragmentActivity){
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
@@ -101,7 +96,7 @@ object Utils {
     fun parseDateToTime(date: Date?): String {
         val sdf = SimpleDateFormat("h:mm a")
         if (date != null)
-            return sdf.format(date?.time)
+            return sdf.format(date.time)
         return ""
     }
 
@@ -127,11 +122,9 @@ object Utils {
     }
 
     fun parseTwoDates(startsAtDate: Date?, endsAtDate: Date?): String {
-//        val sdf = SimpleDateFormat("HH:mm a")
         val sdf = SimpleDateFormat("ha")
         if (startsAtDate != null && endsAtDate != null) {
-//            val start = sdf.format(startsAtDate?.time)
-            val end = sdf.format(endsAtDate?.time)
+            val end = sdf.format(endsAtDate.time)
             val dayDateHour = parseDateToDayDateHour(startsAtDate)
             return "$dayDateHour - $end"
         }
@@ -211,7 +204,7 @@ object Utils {
 
     fun parseDateForServer(date: Date): String {
         val sdf = SimpleDateFormat("dd/MM/YYYY")
-        return sdf.format(date?.time)
+        return sdf.format(date.time)
     }
 
     fun getFirstAndLastNames(fullName: String): Pair<String, String> {
@@ -241,15 +234,15 @@ object Utils {
         }
     }
 
-    fun getDiffYears(date: Date): Int {
-        val a = getCalendar(date)
-        val b = getCalendar(Date())
-        var diff = b.get(YEAR) - a.get(YEAR)
-        if (a.get(MONTH) > b.get(MONTH) || a.get(MONTH) === b.get(MONTH) && a.get(DATE) > b.get(DATE)) {
-            diff--
-        }
-        return diff
-    }
+//    fun getDiffYears(date: Date): Int {
+//        val a = getCalendar(date)
+//        val b = getCalendar(Date())
+//        var diff = b.get(YEAR) - a.get(YEAR)
+//        if (a.get(MONTH) > b.get(MONTH) || a.get(MONTH) === b.get(MONTH) && a.get(DATE) > b.get(DATE)) {
+//            diff--
+//        }
+//        return diff
+//    }
 
     fun getCalendar(date: Date): Calendar {
         val cal = Calendar.getInstance(Locale.US)

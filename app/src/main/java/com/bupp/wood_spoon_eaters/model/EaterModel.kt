@@ -23,9 +23,9 @@ data class Eater(
     fun getFullName(): String{
         var first = "Anonymous"
         var last = ""
-        if(firstName?.isNotEmpty())
+        if(firstName != null && firstName?.isNotEmpty())
             first = firstName
-        if(lastName?.isNotEmpty())
+        if(lastName != null && lastName?.isNotEmpty())
             last = lastName
        return "$first $last"
     }

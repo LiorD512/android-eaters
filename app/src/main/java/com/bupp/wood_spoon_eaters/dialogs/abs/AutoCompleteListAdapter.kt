@@ -38,13 +38,13 @@ class AutoCompleteListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val curObj = presentedList.get(position)
 
-        holder?.title.text = curObj.name
+        holder.title.text = curObj.name
 
-        holder?.title.setOnClickListener {
+        holder.title.setOnClickListener {
             listener.onItemClick(curObj)
         }
 
-        holder?.title.isSelected = curObj == lastSelectedItem
+        holder.title.isSelected = curObj == lastSelectedItem
     }
 
     fun sortList(queryStr: String) {

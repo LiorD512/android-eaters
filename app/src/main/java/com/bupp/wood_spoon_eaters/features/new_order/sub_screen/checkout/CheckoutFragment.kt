@@ -376,7 +376,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         val month = calStart.get(Calendar.MONTH)
         val day = calStart.get(Calendar.DAY_OF_MONTH)
 
-        val dpd = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val dpd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year, monthOfYear, dayOfMonth)
             if(Utils.isSameDay(selectedDate, calStart)){
