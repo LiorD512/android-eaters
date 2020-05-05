@@ -421,7 +421,8 @@ class SingleDishFragment() : Fragment(),
         if (menuItem != null) {
             singleDishQuantityView.initQuantityView(menuItem)
             val quantityLeft = menuItem.quantity - menuItem.unitsSold
-            singleDishPlusMinus.setPlusMinusListener(this, initialCounter = 1, quantityLeft = quantityLeft)
+            val currentCounter = singleDishCount.text.toString()
+            singleDishPlusMinus.setPlusMinusListener(this, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft)
         }
 
         initOrderDate(currentDish)

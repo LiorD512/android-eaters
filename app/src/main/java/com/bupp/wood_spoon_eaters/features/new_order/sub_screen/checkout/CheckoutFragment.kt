@@ -386,8 +386,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 selectedDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
                 openTimePicker(selectedDate, calEnd)
             }
-
-
         }, year, month, day)
 
         dpd.datePicker.minDate = calStart.timeInMillis

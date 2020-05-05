@@ -55,7 +55,6 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         initObservers()
 
         cookProfileHeader.setHeaderViewListener(this)
-
     }
 
     private fun initObservers() {
@@ -80,7 +79,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
 
         var profession = cook.profession
         var country = ""
-        cook.country.let{
+        cook.country?.let{
             country = ", ${it.name}"
             Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }

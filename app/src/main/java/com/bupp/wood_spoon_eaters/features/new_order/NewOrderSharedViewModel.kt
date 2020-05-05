@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -24,7 +25,8 @@ class NewOrderSharedViewModel(
     val apiService: ApiService,
     val metaDataManager: MetaDataManager,
     val orderManager: OrderManager,
-    val eaterDataManager: EaterDataManager
+    val eaterDataManager: EaterDataManager,
+    val eventsManager: EventsManager
 ) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -99,22 +101,15 @@ class NewOrderSharedViewModel(
 
 
     val ephemeralKeyProvider: SingleLiveEvent<EphemeralKeyProviderEvent> = SingleLiveEvent()
-
     data class EphemeralKeyProviderEvent(val isSuccess: Boolean = false)
-
     override fun onEphemeralKeyProviderError() {
         ephemeralKeyProvider.postValue(EphemeralKeyProviderEvent(false))
     }
-
 
     fun setChosenAddress(address: Address) {
         eaterDataManager.setUserChooseSpecificAddress(true)
         eaterDataManager.setLastChosenAddress(address)
     }
-
-//    fun clearCart() {
-//        orderManager.clearCurrentOrder()
-//    }
 
     fun loadPreviousDish() {
         navigationEvent.postValue(NavigationEvent(menuItemId = menuItemId))
@@ -122,7 +117,6 @@ class NewOrderSharedViewModel(
 
 
     //ORDER DATA
-
     val orderData = MutableLiveData<Order>() //current order result
     val orderRequestData = MutableLiveData<OrderRequest>() // current order request
     val additionalDishes = MutableLiveData<ArrayList<Dish>>() // current order other available dishes
@@ -139,13 +133,6 @@ class NewOrderSharedViewModel(
         orderRequestData.postValue(orderManager.initNewOrder())
     }
 
-//    //get current orser
-//    data class OrderDetailsEvent(val order: Order?)
-//    val getOrderDetailsEvent: SingleLiveEvent<OrderDetailsEvent> = SingleLiveEvent()
-//    fun getOrderDetails() {
-//        getOrderDetailsEvent.postValue(OrderDetailsEvent(orderManager.curOrderResponse))
-//    }
-
     var isFirst: Boolean = true
     val showDialogEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
@@ -158,8 +145,6 @@ class NewOrderSharedViewModel(
         tipAmount: String? = null,
         promoCode: String? = null
     ) {
-
-
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
         val hasPendingOrderFromDifferentCook = checkForDifferentOpenOrder(fullDish?.menuItem?.cookingSlot?.id)
         if (hasPendingOrder && hasPendingOrderFromDifferentCook) {
@@ -213,6 +198,8 @@ class NewOrderSharedViewModel(
                             }
                         }
                         postOrderEvent.postValue(PostOrderEvent(true, order))
+
+                        eventsManager.sendAddToCart(order?.id)
 
 
                     } else {
@@ -398,6 +385,7 @@ class NewOrderSharedViewModel(
                     if (response.isSuccessful) {
                         checkoutOrderEvent.postValue(CheckoutEvent(true))
                         orderManager.clearCurrentOrder()
+                        eventsManager.sendPurchaseEvent(orderId)
                     } else {
                         checkoutOrderEvent.postValue(CheckoutEvent(false))
                     }
@@ -418,7 +406,6 @@ class NewOrderSharedViewModel(
 
 
     //Additional single params
-
     fun resetTip() {
         tipInDollars.postValue(0)
         tipPercentage.postValue(0)
@@ -426,7 +413,6 @@ class NewOrderSharedViewModel(
 
     val tipInDollars = MutableLiveData<Int>()
     val tipPercentage = MutableLiveData<Int>()
-    //    val orderData = MutableLiveData<Order>()
     fun updateTipPercentage(tipPercentage: Int) {
         this.tipPercentage.postValue(tipPercentage)
     }
@@ -435,22 +421,11 @@ class NewOrderSharedViewModel(
         this.tipInDollars.postValue(tipInDollars)
     }
 
-//    fun getTempTipPercent(): Int {
-//        return orderManager.tempTipPercentage
-//    }
-//
-//    fun getTempTipInDollars(): Int {
-//        return orderManager.tempTipInDollars
-//    }
-
     fun updateAddUtensils(shouldAdd: Boolean) {
         orderManager.updateOrderRequest(addUtensils = shouldAdd)
         postUpdateOrder(OrderRequest(addUtensils = shouldAdd))
     }
 
-//    fun updateRecurringOrder(isRecurring: Boolean) {
-//        orderManager.updateOrderRequest(recurringOrder = isRecurring)
-//    }
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
         //get only available dishes

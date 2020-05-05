@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.managers
 
 import android.util.Log
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.model.*
 
 class MetaDataManager {
@@ -106,6 +107,41 @@ class MetaDataManager {
                 return (settings.value!! as Price).formatedValue as String
         }
         return ""
+    }
+
+    fun getMinAndroidVersion():String?{
+        for (settings in getSettings()){
+            if(settings.key == "eaters_min_android_version")
+                return (settings.value!!) as String
+        }
+        return ""
+    }
+
+    fun checkMinVersionFail(): Boolean {
+        val minVersion = getMinAndroidVersion()
+        Log.d("wowMetaDataRepo", "minimum version: $minVersion")
+        minVersion?.let{
+            val versionName = BuildConfig.VERSION_NAME
+
+            val myCurrVersion = getNumberFromStr(versionName)
+            val minimumVersion = getNumberFromStr(minVersion)
+            Log.d("wowMetaDataRepo", "curVersion: $myCurrVersion, minimum version: $minimumVersion")
+            return myCurrVersion < minimumVersion
+        }
+        return true
+    }
+
+    fun getNumberFromStr(str: String): Int {
+        var versionNumber = 0
+        val numParts = str.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        if (numParts.size > 0 && numParts.size <= 3) {
+            var multiplier = 1
+            for (i in numParts.indices.reversed()) {
+                versionNumber += Integer.parseInt(numParts[i].replace("\"", "")) * multiplier
+                multiplier *= 1000
+            }
+        }
+        return versionNumber
     }
 
 

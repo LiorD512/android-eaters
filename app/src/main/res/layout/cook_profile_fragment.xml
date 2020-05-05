@@ -85,17 +85,37 @@
                     android:layout_height="46dp"
                     android:background="@color/dark" />
 
-            <TextView
-                    android:id="@+id/cookProfileFragRating"
-                    style="@style/SemiBold13Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+            <LinearLayout
+                    android:gravity="start|center"
                     android:layout_marginStart="7.2dp"
-                    android:drawableStart="@drawable/icons_raitings_selected"
-                    android:drawablePadding="8.7dp"
-                    android:gravity="center"
-                    tools:text="4.8" />
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content" android:layout_height="match_parent">
+
+                <TextView
+                        android:id="@+id/cookProfileFragRating"
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:drawableStart="@drawable/icons_raitings_selected"
+                        android:drawablePadding="8.7dp"
+                        tools:text="4.8" />
+
+                <TextView
+                        android:visibility="gone"
+                        android:id="@+id/cookProfileFragReviews"
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        tools:text="15 Reviewers" />
+
+
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

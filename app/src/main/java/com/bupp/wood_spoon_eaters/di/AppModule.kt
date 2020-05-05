@@ -47,6 +47,7 @@ val appModule = module {
     single { OrderManager(get(), get(), get()) }
     single { LocationManager(get(), get()) }
     single { MetaDataManager() }
+    single { EventsManager(get(), get()) }
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }
@@ -69,7 +70,7 @@ val appModule = module {
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { NewOrderSharedViewModel(get(), get(), get(), get()) }
+    viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get()) }
 
     viewModel { FeedViewModel(get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }

@@ -45,7 +45,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/singleDishHeaderIngredient"
             android:id="@+id/singleDishHeaderCook"
-            android:text="Cook"
+            android:text="Home Chef"
             android:textColor="@color/grey_to_black_selector"
             android:layout_marginLeft="35dp"
             android:background="@null"

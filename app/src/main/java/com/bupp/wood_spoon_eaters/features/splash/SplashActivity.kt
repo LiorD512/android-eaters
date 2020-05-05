@@ -1,15 +1,18 @@
 package com.bupp.wood_spoon_eaters.features.splash
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.appsee.Appsee
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.dialogs.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
+import com.bupp.wood_spoon_eaters.utils.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import kotlin.concurrent.schedule
@@ -20,7 +23,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import java.lang.Exception
 
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -46,19 +49,44 @@ class SplashActivity : AppCompatActivity() {
             if (event != null) {
                 if (event.isSuccess) {
                     // all data received
-                    if (event.isRegistered) {
+                    if(event.shouldUpdateVersion){
+                        openVersionUpdateDialog()
+                    }
+                    else if (event.isRegistered) {
                         redirectToMain()
                     } else {
                         redirectToCreateAccount()
                     }
                 } else {
-                    redirectToWelcome()
+                    if(event.shouldUpdateVersion){
+                        openVersionUpdateDialog()
+                    }else{
+                        redirectToWelcome()
+                    }
                 }
             } else {
                 redirectToWelcome()
                 //server fail
             }
         })
+    }
+
+    override fun onUpdate() {
+        val appPackageName = packageName // getPackageName() from Context or Activity object
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (anfe: android.content.ActivityNotFoundException) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
+                )
+            )
+        }
+    }
+
+    private fun openVersionUpdateDialog() {
+        UpdateRequiredDialog().show(supportFragmentManager, Constants.UPDATE_REQUIRED_DIALOG)
     }
 
 

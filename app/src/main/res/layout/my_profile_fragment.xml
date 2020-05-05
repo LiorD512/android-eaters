@@ -328,7 +328,7 @@
             <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                     android:id="@+id/myProfileFragJoinBtn"
                     android:layout_marginBottom="23.5dp"
-                    app:title="Join WoodSpoon's Cooks"
+                    app:title="Join WoodSpoon's Home Chefs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -338,6 +338,15 @@
                     app:title="Join Event"
                     android:layout_width="match_parent"
                                                                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    style="@style/Reg11Dark"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:layout_marginStart="15.4dp"
+                    android:id="@+id/myProfileFragVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
         </LinearLayout>
 
     </ScrollView>

@@ -29,7 +29,8 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
 
     data class NavigationEvent(
         val isSuccess: Boolean = false,
-        val isRegistered: Boolean = false
+        val isRegistered: Boolean = false,
+        val shouldUpdateVersion: Boolean = false
     )
 
 
@@ -52,16 +53,17 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
                         Log.d("wowSplashVM", "getMetaData success")
                         val metaDataResponse = response.body() as ServerResponse<MetaDataModel>
                         metaDataManager.setMetaDataObject(metaDataResponse.data!!)
-                        navigationEvent.postValue(NavigationEvent(false, isRegistered))
+                        val shouldUpdateVersion = metaDataManager.checkMinVersionFail()
+                        navigationEvent.postValue(NavigationEvent(false, isRegistered, shouldUpdateVersion))
                     } else {
                         Log.d("wowSplashVM", "getMetaData fail")
-                        navigationEvent.postValue(NavigationEvent(false, isRegistered))
+                        navigationEvent.postValue(NavigationEvent(false, isRegistered, false))
                     }
                 }
 
                 override fun onFailure(call: Call<ServerResponse<MetaDataModel>>, t: Throwable) {
                     Log.d("wowVerificationVM", "getMetaData big fail")
-                    navigationEvent.postValue(NavigationEvent(false, isRegistered))
+                    navigationEvent.postValue(NavigationEvent(false, isRegistered, false))
                 }
             })
         }
@@ -87,15 +89,15 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
             //parse metaData
             val metaDataResponse = objects[1] as ServerResponse<MetaDataModel>
             metaDataManager.setMetaDataObject(metaDataResponse.data!!)
-
+            val shouldUpdateVersion = metaDataManager.checkMinVersionFail()
             if (eater == null) {
-                navigationEvent.postValue(NavigationEvent(false, false))
+                navigationEvent.postValue(NavigationEvent(false, false, shouldUpdateVersion))
             } else {
                 eaterDataManager.currentEater = eater
                 if (eaterDataManager.isAfterLogin()) {
-                    navigationEvent.postValue(NavigationEvent(true, true))
+                    navigationEvent.postValue(NavigationEvent(true, true, shouldUpdateVersion))
                 } else {
-                    navigationEvent.postValue(NavigationEvent(true, false))
+                    navigationEvent.postValue(NavigationEvent(true, false, shouldUpdateVersion))
                 }
             }
             Any()

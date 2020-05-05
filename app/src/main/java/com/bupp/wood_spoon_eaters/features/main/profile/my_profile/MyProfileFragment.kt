@@ -24,6 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.content.Intent
 import android.net.Uri
 import com.bupp.wood_spoon.dialogs.CuisinesChooserDialog
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
@@ -66,6 +67,8 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragCuisineIcons.setListener(this)
         myProfileFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.MULTI_SELECTION)
         myProfileFragDietaryIcons.setIconsGridViewListener(this)
+
+        myProfileFragVersion.text = "Version: ${BuildConfig.VERSION_NAME}"
     }
 
     override fun OnEmptyItemSelected() {
