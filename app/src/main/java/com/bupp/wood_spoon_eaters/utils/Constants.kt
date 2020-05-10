@@ -153,6 +153,7 @@ class Constants {
         const val ADDITIONAL_DISHES_DIALOG = "additional_dishes_dialog"
         const val ORDER_UPDATE_ERROR_DIALOG = "order_update_error_dialog"
         const val UPDATE_REQUIRED_DIALOG = "update_required_dialog"
+        const val NO_LOCATION_DIALOG = "no_location_dialog"
         const val ERROR_DIALOG = "error_dialog"
 
 

@@ -89,9 +89,9 @@ class ToolTipView : FrameLayout {
             }
             Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
                 titleText = resources.getString(R.string.tool_tip_min_order_fee_title)
-                bodyText = "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()}"
+                bodyText = "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} \n ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
-                bubbleLayout.arrowPosition = 85.toPx().toFloat()
+                bubbleLayout.arrowPosition = 95.toPx().toFloat()
             }
         }
     }
@@ -121,7 +121,7 @@ class ToolTipView : FrameLayout {
                 popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
             }
             Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
-                val marginLeft = 15.toPx()
+                val marginLeft = 23.toPx()
                 popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
             }
 //            REGISTRATION -> {

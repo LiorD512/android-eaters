@@ -55,6 +55,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
     interface LocationManagerListener{
         fun onLocationChanged(mLocation: Address)
+        fun onLocationEmpty()
     }
 
     var listener: LocationManagerListener? = null
@@ -153,6 +154,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
 //                        Toast.makeText(context, "location setting failed - RESOLUTION_REQUIRED", Toast.LENGTH_SHORT).show()
                         Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings")
+                        listener?.onLocationEmpty()
                         val rae = exception as ResolvableApiException
 //                        rae.startResolutionForResult(context, Constants.REQUEST_CHECK_SETTINGS);
                     }

@@ -64,7 +64,9 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
                 dishArr.add(item)
             }
             else if(isACookResource(item)){
-                cooksTitle = item.title
+                item.title?.let{
+                    cooksTitle = it
+                }
                 cooksArr.addAll(item.search?.results as ArrayList<Cook>)
             }
         }

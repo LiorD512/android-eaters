@@ -191,6 +191,12 @@
         <item name="android:textColor">@color/dark</item>
     </style>
 
+    <style name="SemiBold11PurpelyGrey">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/purpley_grey</item>
+    </style>
+
     <style name="SemiBold13Dark50">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">13.4sp</item>

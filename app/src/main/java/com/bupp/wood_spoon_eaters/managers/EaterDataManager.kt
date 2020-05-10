@@ -16,11 +16,13 @@ import java.util.*
 class EaterDataManager(val context: Context, val appSettings: AppSettings, val locationManager: LocationManager) :
     LocationManager.LocationManagerListener {
 
+
     private val TAG = "wowEaterAddressManager"
     private var currentPaymentMethod: PaymentMethod? = null
 
     interface EaterDataMangerListener{
         fun onAddressChanged(currentAddress: Address?)
+        fun onLocationEmpty(){}
     }
 
     //order location
@@ -54,6 +56,12 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             for(listener in listeners){
                 listener.onAddressChanged(null)
             }
+        }
+    }
+
+    override fun onLocationEmpty() {
+        for(listener in listeners){
+            listener.onLocationEmpty()
         }
     }
 
@@ -100,7 +108,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             true -> return eventChosenAddress ?: null
             false -> return lastChosenAddress ?: getCurrentAddress()
         }
-
     }
 
     fun setLastChosenAddress(address: Address?) {

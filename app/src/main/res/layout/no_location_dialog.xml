@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:background="@color/dark_43"
+             android:id="@+id/noLocationDialogLayout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+            android:background="@drawable/rounded_white_bkg"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginRight="50.9dp"
+            android:layout_marginLeft="50.9dp"
+            android:paddingLeft="7.7dp"
+            android:paddingRight="7.7dp"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/noLocationDialogCloseBtn"
+                android:layout_gravity="start"
+                android:src="@drawable/icons_close"
+                android:paddingLeft="7.7dp"
+                android:paddingTop="23.5dp"
+                android:paddingBottom="15dp"
+                android:paddingRight="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                style="@style/SemiBold15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="We need your address to show you cooks in your neighborhood"/>
+
+        <TextView
+                style="@style/Reg13Dark_50"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="7.7dp"
+                android:layout_marginEnd="7.7dp"
+                android:layout_marginTop="15.5dp"
+                android:layout_marginBottom="35.8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please click the top row to enter your address or enable an automatic location services from your privacy section in settings"/>
+
+
+        <View
+                android:layout_marginTop="24.2dp"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43"
+                android:layout_width="match_parent"/>
+
+        <TextView
+                android:id="@+id/noLocationDialogSettings"
+                style="@style/SemiBold15Blue"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="Go To Settings"/>
+
+
+        <View
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43"
+                android:layout_width="match_parent"/>
+
+        <TextView
+                android:id="@+id/noLocationDialogClose"
+                style="@style/SemiBold15Red"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="No Thanks"/>
+
+    </LinearLayout>
+
+</FrameLayout>

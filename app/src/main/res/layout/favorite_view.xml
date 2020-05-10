@@ -2,13 +2,14 @@
 <LinearLayout
         android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_gravity="center"
+        android:layout_gravity="top|center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         xmlns:tools="http://schemas.android.com/tools">
 
 
     <TextView
+            android:paddingTop="15.4dp"
             android:layout_marginRight="15.4dp"
             android:layout_marginLeft="15.4dp"
             style="@style/SemiBold13Dark"

@@ -62,6 +62,28 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         return currentAddress
     }
 
+    fun getListOfAddresses(): ArrayList<Address>? {
+        if(eaterDataManager.currentEater != null){
+            return eaterDataManager.currentEater!!.addresses
+        }
+        return null
+    }
+
+    enum class NoLocationUiEvent{
+        DEVICE_LOCATION_OFF,
+        NO_LOCATIONS_SAVED
+    }
+    val noUserLocationEvent = SingleLiveEvent<NoLocationUiEvent>()
+    override fun onLocationEmpty() {
+        //this method fires when device location services is off
+        if(getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()){
+            //if user never saved a location -> will show dialog
+            noUserLocationEvent.postValue(NoLocationUiEvent.NO_LOCATIONS_SAVED)
+        }else{
+            noUserLocationEvent.postValue(NoLocationUiEvent.DEVICE_LOCATION_OFF)
+        }
+    }
+
 
     override fun onAddressChanged(updatedAddress: Address?) {
         Log.d("wowMainVM","onAddressChanged")

@@ -18,6 +18,7 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
 
     private var deliveryFee: String = ""
     lateinit var listener: SingleFeedListViewListener
+
     interface SingleFeedListViewListener {
         fun onDishClick(dish: Dish)
 //        fun onFavClick(dishId: Long, isFavorite: Boolean)
@@ -43,13 +44,26 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener, deliveryFee: String, isEvent: Boolean = false) {
         this.deliveryFee = deliveryFee
         this.listener = listener
-        singleFeedListViewTitle.text = feedObj.title
+        feedObj.title?.let{
+            if(it.isNotEmpty()){
+                    singleFeedListViewTitle.text = feedObj.title
+                singleFeedListViewTitle.visibility = View.VISIBLE
+
+            }
+        }
+        feedObj.subtitle?.let{
+            if(it.isNotEmpty()){
+                singleFeedListViewSubtitle.text = feedObj.subtitle
+                singleFeedListViewSubtitle.visibility = View.VISIBLE
+
+            }
+        }
 
         adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this, deliveryFee, isEvent)
         singleFeedListView.adapter = adapter
     }
 
-    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener, deliveryFee: String){
+    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener, deliveryFee: String) {
         this.listener = listener
         singleFeedListViewTitle.visibility = View.GONE
         adapter = SingleFeedAdapter(context!!, dishes, this, deliveryFee)
@@ -57,7 +71,7 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     }
 
     override fun onDishClick(dish: Dish) {
-        if(::listener.isInitialized){
+        if (::listener.isInitialized) {
             listener.onDishClick(dish)
         }
     }

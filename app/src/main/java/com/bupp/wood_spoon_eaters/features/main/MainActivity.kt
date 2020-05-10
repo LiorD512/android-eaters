@@ -4,12 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
@@ -46,6 +50,7 @@ import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_feed.*
+import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -179,7 +184,37 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
+        viewModel.noUserLocationEvent.observe(this, Observer {
+            when(it){
+                MainViewModel.NoLocationUiEvent.DEVICE_LOCATION_OFF -> {
+                    handleDeviceLocationOff()
+                }
+                MainViewModel.NoLocationUiEvent.NO_LOCATIONS_SAVED -> {
+                    NoLocationsDialog().show(supportFragmentManager, Constants.NO_LOCATION_DIALOG)
+                }
+            }
+        })
+    }
 
+    private fun handleDeviceLocationOff() {
+        val snackbar = TSnackbar.make(
+            mainActMainLayout,
+            R.string.device_location_off_alerter_body,
+            TSnackbar.LENGTH_LONG
+        )
+        val snackBarView = snackbar.view
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.teal_blue))
+        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            textView.setTextAppearance(R.style.SemiBold13Dark)
+        }
+        textView.setTextColor(ContextCompat.getColor(this, R.color.white))
+        snackBarView.setOnClickListener { openDeviceLocationSettings() }
+        snackbar.show()
+    }
+
+    private fun openDeviceLocationSettings() {
+        startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
     }
 
     override fun onBottomBarOrdersClick(type: Int) {
@@ -494,6 +529,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         }
     }
+
+
 
 
     fun updateSearchBarTitle(str: String) {

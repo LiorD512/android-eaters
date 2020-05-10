@@ -6,7 +6,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Feed(
-    @SerializedName("title") var title: String = "",
+    @SerializedName("title") var title: String? = null,
+    @SerializedName("subtitle") var subtitle: String? = null,
     @SerializedName("search") var search: Search? = Search()
 ): Parcelable
 
