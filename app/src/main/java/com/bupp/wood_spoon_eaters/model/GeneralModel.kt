@@ -10,9 +10,18 @@ data class ServerResponse<T> (
     @SerializedName("code") var code: Int = 0,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: T? = null
+//    @SerializedName("errors") var errors: List<WSError>? = null
 )
 
-
+data class WSServerError(
+    @SerializedName("code") val resultCode: Int? = null,
+    @SerializedName("message") val msg: String? = null,
+    @SerializedName("errors") var errors: List<WSError>? = null
+)
+data class WSError(
+    @SerializedName("code") val code: Int?,
+    @SerializedName("message") val msg: String?
+)
 
 data class MetaDataModel(
     @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),

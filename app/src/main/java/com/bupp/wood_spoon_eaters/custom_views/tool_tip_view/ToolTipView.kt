@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views
+package com.bupp.wood_spoon_eaters.custom_views.tool_tip_view
 
 import android.content.Context
 import android.content.res.Resources
@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import com.daasuu.bl.ArrowDirection
 import com.daasuu.bl.BubbleLayout
 import com.daasuu.bl.BubblePopupHelper
+import com.example.matthias.mvvmcustomviewexample.custom.ToolTipViewModel
 import kotlinx.android.synthetic.main.tool_tip_view.view.*
 
 
@@ -29,6 +30,8 @@ class ToolTipView : FrameLayout {
     private var titleText: String = ""
     private var popupWindow: PopupWindow? = null
     private lateinit var bubbleLayout: BubbleLayout
+
+    val viewModel = ToolTipViewModel()
 
     constructor(context: Context) : this(context, null)
 
@@ -84,6 +87,12 @@ class ToolTipView : FrameLayout {
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 85.toPx().toFloat()
             }
+            Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
+                titleText = resources.getString(R.string.tool_tip_min_order_fee_title)
+                bodyText = "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()}"
+                bubbleLayout.arrowDirection = ArrowDirection.TOP
+                bubbleLayout.arrowPosition = 85.toPx().toFloat()
+            }
         }
     }
 
@@ -109,6 +118,10 @@ class ToolTipView : FrameLayout {
             }
             Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
                 val marginLeft = 8.toPx()
+                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+            }
+            Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
+                val marginLeft = 15.toPx()
                 popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
             }
 //            REGISTRATION -> {

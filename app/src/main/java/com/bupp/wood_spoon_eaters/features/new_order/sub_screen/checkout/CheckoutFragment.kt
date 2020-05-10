@@ -236,6 +236,17 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         val serviceFee = curOrder.serviceFee.value
         val deliveryFee = curOrder.deliveryFee.value
         val discount = curOrder.discount.value
+        curOrder.minPrice?.let{
+            val minPrice = it.value
+            if(minPrice > 0.0){
+                checkoutFragMinPriceText.text = "$$minPrice"
+                checkoutFragMinPriceLayout.visibility = View.VISIBLE
+                checkoutFragMinPriceSep.visibility = View.VISIBLE
+            }else{
+                checkoutFragMinPriceSep.visibility = View.GONE
+                checkoutFragMinPriceLayout.visibility = View.GONE
+            }
+        }
 
         val promo = curOrder.promoCode
 
@@ -269,6 +280,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             checkoutFragDeliveryFeePriceText.visibility = View.GONE
             checkoutFragDeliveryFeePriceFree.visibility = View.VISIBLE
         }
+
+
 
         val allDishSubTotal = checkoutFragOrderItemsView.getAllDishPriceValue()
         val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)

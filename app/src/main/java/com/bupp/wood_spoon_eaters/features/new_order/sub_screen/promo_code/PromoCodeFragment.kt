@@ -16,7 +16,9 @@ import androidx.lifecycle.Observer
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.promo_code_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -55,10 +57,16 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
             if(event.isSuccess){
 //                listener.onPromoCodeDone()
                 (activity as NewOrderActivity).onCheckout()
-            }else{
-                showWrongPromoCodeNotification()
             }
         })
+        viewModel.errorEvent.observe(this, Observer {
+            promoCodeFragPb.hide()
+            it?.let{
+                WSErrorDialog(it.msg).show(childFragmentManager, Constants.ERROR_DIALOG)
+//                showWrongPromoCodeNotification()
+            }
+        })
+
         openKeyboard(promoCodeFragCodeInput)
     }
 

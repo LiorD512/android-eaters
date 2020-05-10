@@ -35,6 +35,7 @@ import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountV
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.example.matthias.mvvmcustomviewexample.custom.ToolTipViewModel
 //import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 

@@ -124,8 +124,6 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         }
     }
 
-
-
     private fun buildLocationSettingsRequest() {
         val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(mLocationRequest)

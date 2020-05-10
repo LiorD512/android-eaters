@@ -5,15 +5,26 @@ import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.network.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+import android.widget.Toast
+import com.facebook.FacebookSdk.getApplicationContext
+import retrofit2.adapter.rxjava2.Result.response
+import android.R.string
+import com.bupp.wood_spoon_eaters.model.WSServerError
+import java.io.IOException
+
 
 class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : ViewModel() {
 
 
     val promoCodeEvent: SingleLiveEvent<PromoCodeEvent> = SingleLiveEvent()
+    val errorEvent: SingleLiveEvent<WSError?> = SingleLiveEvent()
     data class PromoCodeEvent(val isSuccess: Boolean = false)
 
     fun savePromoCode(code: String) {
@@ -25,7 +36,21 @@ class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : V
                     orderManager.setOrderResponse(order)
                     promoCodeEvent.postValue(PromoCodeEvent(true))
                 }else{
-                    promoCodeEvent.postValue(PromoCodeEvent(false))
+                    val gson = GsonBuilder().create()
+                    var mError = WSServerError()
+                    try {
+                        mError = gson.fromJson(response.errorBody()?.string(), WSServerError::class.java)
+                        mError?.let{
+                            it.errors?.let{
+                                errorEvent.postValue(it[0])
+                            }
+                        }
+//                        Toast.makeText(getApplicationContext(), mError.getErrorDescription(), Toast.LENGTH_LONG).show()
+//                        promoCodeEvent.postValue(PromoCodeEvent(false, mError.errors))
+                    } catch (e: IOException) {
+                        // handle failure to read error
+                    }
+
                 }
             }
 
@@ -35,4 +60,6 @@ class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : V
 
         })
     }
+
+
 }

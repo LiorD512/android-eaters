@@ -96,6 +96,7 @@
             <enum name="SERVICE_FEE" value="0" />
             <enum name="CHECKOUT_SERVICE_FEE" value="2" />
             <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
+            <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
         </attr>
     </declare-styleable>
 

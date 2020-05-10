@@ -109,6 +109,15 @@ class MetaDataManager {
         return ""
     }
 
+
+    fun getMinOrderFeeStr(): String {
+        for (settings in getSettings()){
+            if(settings.key == "min_order")
+                return (settings.value!! as Price).formatedValue as String
+        }
+        return ""
+    }
+
     fun getMinAndroidVersion():String?{
         for (settings in getSettings()){
             if(settings.key == "eaters_min_android_version")

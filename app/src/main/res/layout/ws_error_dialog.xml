@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/errorDialogBkg"
+        android:background="@color/dark_43"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:background="@drawable/rounded_white_bkg"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginRight="50.9dp"
+            android:layout_marginLeft="50.9dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/SemiBold15Dark"
+                android:layout_gravity="center"
+                android:layout_marginTop="23.5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Error"/>
+
+            <TextView
+                    android:id="@+id/errorDialogBody"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginLeft="15.4dp"
+                style="@style/Reg13Dark_50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:text="Are you sure you want to Sign Out?"/>
+
+
+            <View
+                android:layout_marginTop="24.2dp"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43"
+                android:layout_width="match_parent"/>
+
+            <TextView
+                android:id="@+id/errorDialogClose"
+                style="@style/SemiBold15Red"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                    android:text="Close"/>
+
+
+        </LinearLayout>
+
+
+
+</FrameLayout>

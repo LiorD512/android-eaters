@@ -81,6 +81,7 @@ class Constants {
         const val TOOL_TIP_SERVICE_FEE = 0
         const val TOOL_TIP_CHECKOUT_SERVICE_FEE = 2
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
+        const val TOOL_TIP_MINMUM_ORDER_FEE = 4
 
         //status bottom bar types
         const val STATUS_BAR_TYPE_CART = 0
@@ -152,6 +153,7 @@ class Constants {
         const val ADDITIONAL_DISHES_DIALOG = "additional_dishes_dialog"
         const val ORDER_UPDATE_ERROR_DIALOG = "order_update_error_dialog"
         const val UPDATE_REQUIRED_DIALOG = "update_required_dialog"
+        const val ERROR_DIALOG = "error_dialog"
 
 
 

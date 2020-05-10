@@ -50,6 +50,7 @@ data class Order (
     @SerializedName("cooking_slot") val cookingSlot: CookingSlot,
     @SerializedName("order_items") val orderItems: ArrayList<OrderItem>,
     @SerializedName("subtotal") val subtotal: Price,
+    @SerializedName("min_order_fee") val minPrice: Price?,
     @SerializedName("tax") val tax: Price,
     @SerializedName("service_fee") val serviceFee: Price,
     @SerializedName("delivery_fee") val deliveryFee: Price,
