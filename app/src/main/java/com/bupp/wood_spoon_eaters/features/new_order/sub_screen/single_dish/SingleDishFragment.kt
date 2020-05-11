@@ -152,13 +152,6 @@ class SingleDishFragment() : Fragment(),
             handlerRequestOrderData(orderRequestData)
         })
 
-        ordersViewModel.progressData.observe(this, Observer { shouldShow ->
-            if(shouldShow){
-                singleDishPb.show()
-            }else{
-                singleDishPb.hide()
-            }
-        })
         viewModel.progressData.observe(this, Observer { shouldShow ->
             if(shouldShow){
                 singleDishPb.show()
@@ -166,7 +159,6 @@ class SingleDishFragment() : Fragment(),
                 singleDishPb.hide()
             }
         })
-
 
         ordersViewModel.hasOpenOrder.observe(this, Observer { event ->
             if (event.hasOpenOrder) {
@@ -228,9 +220,8 @@ class SingleDishFragment() : Fragment(),
     private fun handleUnAvailableCookingSlot(startsAt: Date) {
 //        DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
         showUnavailableDishAlerter()
-        val cookingSlotStartingTime = startsAt
-        if (cookingSlotStartingTime != null) {
-            viewModel.updateChosenDeliveryDate(newChosenDate = startsAt)
+        startsAt?.let{
+            viewModel.updateChosenDeliveryDate(newChosenDate = it)
         }
     }
 
@@ -246,17 +237,6 @@ class SingleDishFragment() : Fragment(),
         }
         textView.setTextColor(ContextCompat.getColor(context!!, R.color.white))
         snackbar.show()
-        //alternative way ->
-//            val icon = R.mipmap.ic_launcher
-//            Alerter.create(activity)
-////                .setIcon(icon)
-//                .setText(R.string.un_available_dish_alerter_body)
-//                .setTextAppearance(R.style.flashbar_msg_appearence)
-//                .setTextTypeface(ResourcesCompat.getFont(context!!, R.font.open_sans_reg)!!)
-//                .setBackgroundColorRes(R.color.teal_blue)
-//                .setDuration(2000)
-//                .setContentGravity(Gravity.END)
-//                .enableSwipeToDismiss().show()
         }
 
 
@@ -553,7 +533,7 @@ class SingleDishFragment() : Fragment(),
 
         ordersViewModel.setAdditionalDishes(currentDish.getAdditionalDishes())
         cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-        dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this, viewModel.getDeliveryFeeString())
+        dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this)
         cookProfileFragDishList.adapter = dishAdapter
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }

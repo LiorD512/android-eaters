@@ -57,84 +57,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-
-
                     <LinearLayout
                             android:layout_marginStart="15.2dp"
                             android:layout_marginEnd="15.4dp"
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-
-
-                        <!--<TextView-->
-                                <!--android:text="Order Details"-->
-                                <!--style="@style/SemiBold15Dark"-->
-                                <!--android:layout_gravity="start"-->
-                                <!--android:layout_marginTop="15.8dp"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"/>-->
-
-                        <!--<LinearLayout-->
-                                <!--android:orientation="horizontal"-->
-                                <!--android:layout_marginTop="15.7dp"-->
-                                <!--android:layout_marginBottom="15.3dp"-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content">-->
-
-                            <!--<TextView-->
-                                    <!--android:text="Order type"-->
-                                    <!--style="@style/Reg13Dark"-->
-                                    <!--android:layout_gravity="start"-->
-                                    <!--android:layout_weight="1"-->
-                                    <!--android:layout_width="0dp"-->
-                                    <!--android:layout_height="wrap_content"/>-->
-
-                            <!--<TextView-->
-                                    <!--android:id="@+id/orderDetailsFragOrderType"-->
-                                    <!--tools:text="Delivery"-->
-                                    <!--style="@style/Reg13Dark"-->
-                                    <!--android:layout_gravity="start"-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"/>-->
-
-
-                        <!--</LinearLayout>-->
-
-                        <!--<View-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="1dp"-->
-                                <!--android:background="@color/silver"/>-->
-
-                        <!--<LinearLayout-->
-                                <!--android:orientation="horizontal"-->
-                                <!--android:layout_marginTop="15.7dp"-->
-                                <!--android:layout_marginBottom="15.3dp"-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content">-->
-
-                            <!--<TextView-->
-                                    <!--android:text="Order status"-->
-                                    <!--style="@style/Reg13Dark"-->
-                                    <!--android:layout_gravity="start"-->
-                                    <!--android:layout_weight="1"-->
-                                    <!--android:layout_width="0dp"-->
-                                    <!--android:layout_height="wrap_content"/>-->
-
-                            <!--<TextView-->
-                                    <!--android:id="@+id/orderDetailsFragOrderStatus"-->
-                                    <!--tools:text="Delivered"-->
-                                    <!--style="@style/Reg13Dark"-->
-                                    <!--android:layout_gravity="start"-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"/>-->
-
-                        <!--</LinearLayout>-->
-
-                        <!--<View-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="1dp"-->
-                                <!--android:background="@color/silver"/>-->
 
                         <TextView
                                 android:text="Items"
@@ -157,7 +85,6 @@
                                 android:layout_height="wrap_content">
 
                             <TextView
-
                                     android:text="Tax"
                                     style="@style/Reg13Dark"
                                     android:layout_gravity="start"
@@ -206,6 +133,40 @@
                         </LinearLayout>
 
                         <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/silver"/>
+
+                        <LinearLayout
+                                android:visibility="gone"
+                                android:id="@+id/orderDetailsSmallOrderFeeLayout"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="15.7dp"
+                                android:layout_marginBottom="15.3dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            <TextView
+                                    android:text="Small Order Fee"
+                                    style="@style/Reg13Dark"
+                                    android:layout_gravity="start"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"/>
+
+                            <TextView
+                                    android:id="@+id/orderDetailsSmallOrderFee"
+                                    tools:text="$0.8"
+                                    style="@style/Reg13Dark"
+                                    android:layout_gravity="start"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <View
+                                android:visibility="gone"
+                                android:id="@+id/orderDetailsSmallOrderFeeSep"
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:background="@color/silver"/>

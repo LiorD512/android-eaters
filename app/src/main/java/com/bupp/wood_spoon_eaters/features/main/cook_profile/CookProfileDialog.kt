@@ -80,7 +80,9 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         var profession = cook.profession
         var country = ""
         cook.country?.let{
-            country = ", ${it.name}"
+            it.name?.let{
+                country = ", ${it}"
+            }
             Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }
         cookProfileFragProfession.text = "$profession"// $country"
@@ -105,7 +107,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         }
 
         cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-        dishAdapter = SingleFeedAdapter(context!!, cook.dishes, this, viewModel.getDeliveryFeeString())
+        dishAdapter = SingleFeedAdapter(context!!, cook.dishes, this)
         cookProfileFragDishList.adapter = dishAdapter
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }

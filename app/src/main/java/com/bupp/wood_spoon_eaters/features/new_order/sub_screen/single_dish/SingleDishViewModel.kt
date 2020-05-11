@@ -146,12 +146,12 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     }
 
 
-    fun getUserChosenDeliveryDate(): Date? {
-        if (eaterDataManager.getLastOrderTime() != null) {
-            return eaterDataManager.getLastOrderTime()
-        }
-        return Date()
-    }
+//    fun getUserChosenDeliveryDate(): Date? {
+//        if (eaterDataManager.getLastOrderTime() != null) {
+//            return eaterDataManager.getLastOrderTime()
+//        }
+//        return Date()
+//    }
 
     fun getDropoffLocation(): String? {
         return eaterDataManager.getDropoffLocation()
@@ -192,9 +192,9 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
 
 
-    fun getDeliveryFeeString(): String {
-        return metaDataManager.getDeliveryFeeStr()
-    }
+//    fun getDeliveryFeeString(): String {
+//        return metaDataManager.getDeliveryFeeStr()
+//    }
 
     fun hasValidDeliveryAddress(): Boolean {
         return eaterDataManager.getLastChosenAddress()?.id != null

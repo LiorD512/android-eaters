@@ -35,9 +35,9 @@ class CookProfileViewModel(val api: ApiService, val metaDataManager: MetaDataMan
         })
     }
 
-    fun getDeliveryFeeString(): String {
-        return metaDataManager.getDeliveryFeeStr()
-    }
+//    fun getDeliveryFeeString(): String {
+//        return metaDataManager.getDeliveryFeeStr()
+//    }
 
 
 }

@@ -154,9 +154,9 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
         })
     }
 
-    fun getDeliveryFeeString(): String {
-        return metaDataManager.getDeliveryFeeStr()
-    }
+//    fun getDeliveryFeeString(): String {
+//        return metaDataManager.getDeliveryFeeStr()
+//    }
 
     fun getShareText(): String {
         val inviteUrl = eaterDataManager.currentEater?.inviteUrl

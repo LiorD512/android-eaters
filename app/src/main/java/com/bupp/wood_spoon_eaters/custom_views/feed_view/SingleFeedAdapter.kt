@@ -18,7 +18,7 @@ class SingleFeedAdapter(
     val context: Context,
     val dishes: ArrayList<Dish>,
     val listener: SearchAdapterListener,
-    val deliveryFee: String,
+//    val deliveryFee: String,
     val isEvent: Boolean = false
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){//}, FavoriteBtn.FavoriteBtnListener {
@@ -74,7 +74,7 @@ class SingleFeedAdapter(
                 if(it.freeDelivery){
                     holder.freeDelivery.text = "Free Delivery"
                 }else{
-                    holder.freeDelivery.text = "$deliveryFee Delivery"
+                    holder.freeDelivery.text = "${upcomingSlot.deliveryFee?.formatedValue}"
                 }
             }
 

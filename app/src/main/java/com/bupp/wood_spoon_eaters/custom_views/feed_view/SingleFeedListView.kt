@@ -41,32 +41,34 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     }
 
 
-    fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener, deliveryFee: String, isEvent: Boolean = false) {
+    fun initSingleFeed(feedObj: Feed, listener: SingleFeedListViewListener, isEvent: Boolean = false, isFirst: Boolean = false) {
         this.deliveryFee = deliveryFee
         this.listener = listener
-        feedObj.title?.let{
-            if(it.isNotEmpty()){
-                    singleFeedListViewTitle.text = feedObj.title
+        feedObj.title?.let {
+            if (it.isNotEmpty()) {
+                singleFeedListViewTitle.text = feedObj.title
                 singleFeedListViewTitle.visibility = View.VISIBLE
-
+                if(!isFirst){
+                    singleFeedListViewSep.visibility = View.VISIBLE
+                }
             }
         }
-        feedObj.subtitle?.let{
-            if(it.isNotEmpty()){
+        feedObj.subtitle?.let {
+            if (it.isNotEmpty()) {
                 singleFeedListViewSubtitle.text = feedObj.subtitle
                 singleFeedListViewSubtitle.visibility = View.VISIBLE
 
             }
         }
 
-        adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this, deliveryFee, isEvent)
+        adapter = SingleFeedAdapter(context!!, feedObj.search!!.results as ArrayList<Dish>, this, isEvent)
         singleFeedListView.adapter = adapter
     }
 
-    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener, deliveryFee: String) {
+    fun initWithDishList(dishes: ArrayList<Dish>, listener: SingleFeedListViewListener) {
         this.listener = listener
         singleFeedListViewTitle.visibility = View.GONE
-        adapter = SingleFeedAdapter(context!!, dishes, this, deliveryFee)
+        adapter = SingleFeedAdapter(context!!, dishes, this)
         singleFeedListView.adapter = adapter
     }
 

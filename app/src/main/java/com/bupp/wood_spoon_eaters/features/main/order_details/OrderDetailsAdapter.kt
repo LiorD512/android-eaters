@@ -27,9 +27,14 @@ class OrderDetailsAdapter(val context: Context, private var dishes: ArrayList<Or
 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
         val orderItem: OrderItem? = dishes[position]
+        orderItem?.let{
+            var count = ""
+            if(it.quantity > 1){
+                count = "X${it.quantity}"
+            }
+                holder.name.text = "${it.dish.name} $count"
 
-        holder.name.text = "${orderItem!!.dish.name}"
-
-        holder.price.text = orderItem!!.price!!.formatedValue
+            holder.price.text = it.price.formatedValue
+        }
     }
 }

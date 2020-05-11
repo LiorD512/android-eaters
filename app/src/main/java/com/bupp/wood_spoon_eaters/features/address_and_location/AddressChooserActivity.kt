@@ -129,6 +129,7 @@ class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.Addres
 
     override fun onHeaderSaveClick() {
         if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null) {
+            setHeaderViewSaveBtnClickable(false)
             (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).saveAddressDetails()
         }
     }

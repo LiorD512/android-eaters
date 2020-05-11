@@ -227,6 +227,50 @@
                             tools:text="($2.0)"/>
                 </LinearLayout>
 
+                <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/checkoutFragMinPriceLayout"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            style="@style/Reg13Dark"
+                            android:layout_width="wrap_content"
+                            android:gravity="center"
+                            android:layout_height="match_parent"
+                            android:text="Small Order Fee"/>
+
+                    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+                            app:tip_type="CHECKOUT_MINIMUM_FEE"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:id="@+id/checkoutFragMinPriceText"
+                            style="@style/SemiBold13Dark50"
+                            android:layout_weight="1"
+                            android:gravity="end|center"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            tools:text="$6.6"/>
+
+                </LinearLayout>
+
+                <View
+                        android:visibility="gone"
+                        android:id="@+id/checkoutFragMinPriceSep"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:background="@color/light_periwinkle"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
+
                 <View
                         android:id="@+id/checkoutFragPromoCodeSep"
                         android:layout_marginStart="15.4dp"
@@ -234,8 +278,6 @@
                         android:background="@color/light_periwinkle"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
-
-
 
                 <LinearLayout
                         android:orientation="horizontal"
@@ -278,6 +320,7 @@
                             android:layout_height="match_parent"
                             android:text="FREE"/>
                 </LinearLayout>
+
                 <View
                         android:layout_marginStart="15.4dp"
                         android:layout_marginEnd="15.4dp"
@@ -333,53 +376,6 @@
                         android:background="@color/light_periwinkle"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"/>
-
-                <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/checkoutFragMinPriceLayout"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    <TextView
-                            style="@style/Reg13Dark"
-                            android:layout_width="wrap_content"
-                            android:gravity="center"
-                            android:layout_height="match_parent"
-                            android:text="Small Order Fee"/>
-
-                    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
-                            app:tip_type="CHECKOUT_MINIMUM_FEE"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    <TextView
-                            android:id="@+id/checkoutFragMinPriceText"
-                            style="@style/SemiBold13Dark50"
-                            android:layout_weight="1"
-                            android:gravity="end|center"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            tools:text="$6.6"/>
-
-
-
-                </LinearLayout>
-
-                <View
-                        android:visibility="gone"
-                        android:id="@+id/checkoutFragMinPriceSep"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:background="@color/light_periwinkle"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
-
 
                 <LinearLayout
                         android:orientation="horizontal"

@@ -62,7 +62,6 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
                 initFeed(event.feedArr!!)
             }
         })
-
         viewModel.getCookEvent.observe(this, Observer { event ->
             feedFragPb.hide()
             if(event.isSuccess){
@@ -80,14 +79,13 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     private fun initFeed(feedArr: ArrayList<Feed>) {
         feedFragEmptyLayout.visibility = View.GONE
         feedFragListLayout.visibility = View.VISIBLE
-        feedFragSectionsView.initFeed(feedArr, viewModel.getDeliveryFeeString(), stubView = Constants.FEED_VIEW_STUB_SHARE)
+        feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
     }
 
     private fun FetchLocationAndFeed() {
         Log.d(TAG, "feed fragment started")
         feedFragPb.show()
         viewModel.getFeed()
-
     }
 
     override fun refreshList() {

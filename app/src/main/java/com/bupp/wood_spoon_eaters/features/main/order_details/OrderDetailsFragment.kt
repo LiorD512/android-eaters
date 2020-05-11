@@ -81,10 +81,17 @@ class OrderDetailsFragment() : Fragment() {
         val serviceFee = curOrder.serviceFee.value
         val deliveryFee = curOrder.deliveryFee.value
         val discount = curOrder.discount.value
+        val smallOrderFee = curOrder.minPrice?.value
 
         orderDetailsFragTax.text = "$$tax"
         orderDetailsFragServiceFee.text = "$$serviceFee"
         orderDetailsFragDeliveryFee.text = "$$deliveryFee"
+
+        smallOrderFee?.let{
+            orderDetailsSmallOrderFeeLayout.visibility = View.VISIBLE
+            orderDetailsSmallOrderFeeSep.visibility = View.VISIBLE
+            orderDetailsSmallOrderFee.text = "$$it"
+        }
 
         orderDetailsFragPromoDiscount.text = "$$discount" //todo - add this when server ready
         orderDetailsFragOrderId.text = "${curOrder.orderNumber}"

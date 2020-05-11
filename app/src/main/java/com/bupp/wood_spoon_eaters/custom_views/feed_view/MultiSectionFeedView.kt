@@ -52,7 +52,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         this.listener = listener
     }
 
-    fun initFeed(feedArr: ArrayList<Feed>, deliveryFee: String, isWithFavorites: Boolean = true, stubView: Int, isPullToRefreshEnabled: Boolean = true, isEvent: Boolean = false) {
+    fun initFeed(feedArr: ArrayList<Feed>, isWithFavorites: Boolean = true, stubView: Int, isPullToRefreshEnabled: Boolean = true, isEvent: Boolean = false) {
         clearFeed()
         multiSectionViewRefreshLayout.setRefreshing(false)
         val dishArr: ArrayList<Feed> = arrayListOf()
@@ -72,7 +72,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         }
 
         if(dishArr.size > 0){
-            initDishesList(dishArr, deliveryFee, isEvent)
+            initDishesList(dishArr, isEvent)
         }else{
             listener.onEmptyhDishList()
         }
@@ -111,12 +111,14 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         multiSectionViewDishList.removeAllViews()
     }
 
-    private fun initDishesList(dishArr: ArrayList<Feed>, deliveryFee: String, isEvent: Boolean) {
-        for(item in dishArr){
+    private fun initDishesList(dishArr: ArrayList<Feed>, isEvent: Boolean) {
+        dishArr.forEachIndexed { index, feed ->
             val singleFeedListView = SingleFeedListView(context)
-            singleFeedListView.initSingleFeed(item, this, deliveryFee, isEvent)
+            singleFeedListView.initSingleFeed(feed, this, isEvent, index == 0)
             multiSectionViewDishList.addView(singleFeedListView)
+
         }
+
     }
 
     private fun initCooksList(cooksArr: ArrayList<Cook>, cooksTitle: String) {

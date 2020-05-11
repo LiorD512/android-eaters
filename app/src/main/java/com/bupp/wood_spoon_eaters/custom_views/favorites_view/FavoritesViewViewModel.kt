@@ -30,9 +30,9 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
         this.listener = listener
     }
 
-    fun getDeliveryFeeString(): String {
-        return metaDataManager.getDeliveryFeeStr()
-    }
+//    fun getDeliveryFeeString(): String {
+//        return metaDataManager.getDeliveryFeeStr()
+//    }
 
     fun fetchFavorites() {
         Log.d(TAG, "fetchFavorites start")

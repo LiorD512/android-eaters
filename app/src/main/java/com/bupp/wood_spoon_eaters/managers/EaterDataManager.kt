@@ -23,6 +23,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     interface EaterDataMangerListener{
         fun onAddressChanged(currentAddress: Address?)
         fun onLocationEmpty(){}
+        fun onUsingPreviousLocation(){}
     }
 
     //order location
@@ -36,11 +37,12 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
 
     //my location listener interface
-    var listeners: ArrayList<EaterDataMangerListener> = arrayListOf()
+    var listeners: MutableSet<EaterDataMangerListener> = mutableSetOf()
     fun setLocationListener(listener: EaterDataMangerListener) {
         locationManager.setLocationManagerListener(this)
         listeners.add(listener)
     }
+
 
     override fun onLocationChanged(mLocation: Address) {
         val myAddress: Address? = getClosestAddressToLocation(mLocation)
@@ -49,7 +51,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             for(listener in listeners){
                 listener.onAddressChanged(myAddress)
             }
-            listeners.clear()
+//            listeners.clear()
             locationManager.removeLocationManagerListener()
 
         }else{
@@ -59,10 +61,29 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
     }
 
-    override fun onLocationEmpty() {
-        for(listener in listeners){
-            listener.onLocationEmpty()
+    fun getListOfAddresses(): ArrayList<Address>? {
+        currentEater?.let{
+            return it.addresses
         }
+        return null
+    }
+
+    override fun onLocationEmpty() {
+        if(getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()){
+            //if user never saved a location -> will show dialog
+            listeners.forEach {
+                it.onLocationEmpty()
+            }
+        }else{
+            getListOfAddresses()?.let{
+                onLocationChanged(it.get(0))
+
+            listeners.forEach {
+                it.onUsingPreviousLocation()
+            }
+            }
+        }
+
     }
 
 
@@ -101,7 +122,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     private var lastChosenAddress: Address? = null
     private var eventChosenAddress: Address? = null
     private var previousChosenAddress: Address? = null
-
 
     fun getLastChosenAddress(): Address? {
         when(isInEvent){
@@ -180,9 +200,34 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
     var isInEvent: Boolean = false
 
+    var hasSpecificTime: Boolean = false //this param indicates whether a user specified a time for search
+
     //order date and time !!
     var orderTime: Date? = null
     var eventOrderTime: Date? = null
+
+    fun getFeedSearchTime(): Date?{
+        if(hasSpecificTime){
+            return getLastOrderTime()
+        }else{
+            return null
+        }
+    }
+    fun getFeedSearchTimeString(): String?{
+        if(hasSpecificTime){
+            return getLastOrderTimeString()
+        }else{
+            return null
+        }
+    }
+    fun getFeedSearchTimeStringParam(): String?{
+        if(hasSpecificTime){
+            return getLastOrderTimeParam()
+        }else{
+            return null
+        }
+    }
+
 
     fun getLastOrderTime(): Date? {
         return when(isInEvent){
@@ -270,7 +315,9 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         eventOrderTime = null
     }
 
-
+    fun setUserChooseSpecificTime(hasSpecificTime: Boolean) {
+        this.hasSpecificTime = hasSpecificTime
+    }
 
 
 }

@@ -101,14 +101,14 @@ class MetaDataManager {
         return ""
     }
 
-    fun getDeliveryFeeStr(): String {
-        for (settings in getSettings()){
-            if(settings.key == "delivery_fee")
-                return (settings.value!! as Price).formatedValue as String
-        }
-        return ""
-    }
-
+//    fun getDeliveryFeeStr(): String {
+//        for (settings in getSettings()){
+//            if(settings.key == "delivery_fee")
+//                return (settings.value!! as Price).formatedValue as String
+//        }
+//        return ""
+//    }
+//
 
     fun getMinOrderFeeStr(): String {
         for (settings in getSettings()){

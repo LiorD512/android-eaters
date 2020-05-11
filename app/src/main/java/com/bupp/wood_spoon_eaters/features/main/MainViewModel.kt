@@ -37,7 +37,7 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
     }
 
     fun getLastOrderTime(): String? {
-        return eaterDataManager.getLastOrderTimeString()
+        return eaterDataManager.getFeedSearchTimeString()
     }
 
     fun startLocationUpdates(activity: Activity) {
@@ -79,9 +79,18 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         if(getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()){
             //if user never saved a location -> will show dialog
             noUserLocationEvent.postValue(NoLocationUiEvent.NO_LOCATIONS_SAVED)
-        }else{
-            noUserLocationEvent.postValue(NoLocationUiEvent.DEVICE_LOCATION_OFF)
         }
+//        else{
+//            getListOfAddresses()?.let{
+//                eaterDataManager.setLastChosenAddress(it.get(0))
+//                onAddressChanged(it.get(0))
+//            }
+//
+//        }
+    }
+
+    override fun onUsingPreviousLocation() {
+        noUserLocationEvent.postValue(NoLocationUiEvent.DEVICE_LOCATION_OFF)
     }
 
 

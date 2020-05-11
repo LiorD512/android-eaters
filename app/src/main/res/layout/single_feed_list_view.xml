@@ -7,11 +7,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+    <View
+            android:visibility="gone"
+            android:id="@+id/singleFeedListViewSep"
+            android:layout_width="match_parent" android:layout_height="15.4dp"
+            android:background="@color/silver_20"/>
+
     <TextView
             android:visibility="gone"
             android:layout_marginTop="15.4dp"
             android:layout_marginLeft="15.4dp"
-            style="@style/SemiBold13Dark"
+            style="@style/SemiBold17Dark"
             android:id="@+id/singleFeedListViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,8 +45,5 @@
             android:id="@+id/singleFeedListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-    <View android:layout_width="match_parent" android:layout_height="15.4dp"
-          android:background="@color/silver_20"/>
 
 </LinearLayout>

@@ -6,7 +6,6 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Utils
 import java.util.*
 
 class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(){//}, LocationManager.LocationManagerListener {
@@ -15,23 +14,19 @@ class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManag
     data class LastDataEvent(val address: Address?, val time: Date?)
     val lastDeliveryDetails: SingleLiveEvent<LastDataEvent> = SingleLiveEvent()
 
-//    fun getCurrentDeliveryDetails(): CurrentDataEvent {
-//        val address = orderManager.getLastOrderAddress()
-//        val isDelivery = orderManager.isDelivery
-//        return CurrentDataEvent(address, isDelivery)
-//    }
-
     fun getLastDeliveryDetails() {
         val address = eaterDataManager.getLastChosenAddress()
-        val time = eaterDataManager.getLastOrderTime()
+        val time = eaterDataManager.getFeedSearchTime()
         lastDeliveryDetails.postValue(LastDataEvent(address, time))
     }
 
     fun setDeliveryTime(time: Date) {
+        eaterDataManager.setUserChooseSpecificTime(true)
         eaterDataManager.orderTime = time
     }
 
     fun setDeliveryTimeAsap() {
+        eaterDataManager.setUserChooseSpecificTime(false)
         eaterDataManager.orderTime = null
     }
 

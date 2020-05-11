@@ -89,7 +89,7 @@ class ToolTipView : FrameLayout {
             }
             Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
                 titleText = resources.getString(R.string.tool_tip_min_order_fee_title)
-                bodyText = "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} \n ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
+                bodyText = "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 95.toPx().toFloat()
             }

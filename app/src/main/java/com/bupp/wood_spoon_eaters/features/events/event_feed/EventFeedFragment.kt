@@ -62,7 +62,7 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
             eventFeedPb.hide()
             event.event.let {
                 initEventUi(event.event)
-                initFeed(event.event.feed, event.event.deliveryFee)
+                initFeed(event.event.feed)
             }
         })
 //
@@ -86,11 +86,10 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
     }
 
     private fun initFeed(
-        feedArr: ArrayList<Feed>?,
-        deliveryFee: Price
+        feedArr: ArrayList<Feed>?
     ) {
         feedArr?.let{
-            eventFeedFeedView.initFeed(feedArr, deliveryFee.formatedValue, false, Constants.FEED_VIEW_STUB_PROMO, false, true)
+            eventFeedFeedView.initFeed(feedArr, false, Constants.FEED_VIEW_STUB_PROMO, false, true)
         }
     }
 

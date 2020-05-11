@@ -10,7 +10,7 @@
 
     <TextView
             android:id="@+id/orderDetailsDishName"
-            tools:text="Tomato Soup"
+            tools:text="Tomato Soup x2"
             style="@style/Reg13Dark"
             android:layout_gravity="start"
             android:layout_weight="1"

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.LocationManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -81,7 +80,7 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getLastOrderTimeParam()
+        feedRequest.timestamp = eaterDataManager.getFeedSearchTimeStringParam()
 
 
         return feedRequest
@@ -113,9 +112,9 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
         })
     }
 
-    fun getDeliveryFeeString(): String {
-        return metaDataManager.getDeliveryFeeStr()
-    }
+//    fun getDeliveryFeeString(): String {
+//        return metaDataManager.getDeliveryFeeStr()
+//    }
 
     fun getShareText(): String {
         val inviteUrl = eaterDataManager.currentEater?.inviteUrl

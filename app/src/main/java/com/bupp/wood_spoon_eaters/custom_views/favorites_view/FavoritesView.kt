@@ -41,7 +41,7 @@ class FavoritesView : FrameLayout, FavoritesViewViewModel.FavoritesViewListener,
 
     override fun onDone(favorites: ArrayList<Dish>?) {
         if(favorites != null && favorites.size > 0){
-            favoritesViewList.initWithDishList(favorites, this, viewModel.getDeliveryFeeString())
+            favoritesViewList.initWithDishList(favorites, this)//, viewModel.getDeliveryFeeString())
 
             favoritesViewEmptyLayout.visibility = View.GONE
             favoritesViewList.visibility = View.VISIBLE
