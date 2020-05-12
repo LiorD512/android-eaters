@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +42,7 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.google.android.material.snackbar.Snackbar
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
@@ -197,20 +200,26 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun handleDeviceLocationOff() {
-        val snackbar = TSnackbar.make(
-            mainActMainLayout,
-            R.string.device_location_off_alerter_body,
-            TSnackbar.LENGTH_LONG
-        )
-        val snackBarView = snackbar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.teal_blue))
-        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textView.setTextAppearance(R.style.SemiBold13Dark)
-        }
-        textView.setTextColor(ContextCompat.getColor(this, R.color.white))
-        snackBarView.setOnClickListener { openDeviceLocationSettings() }
-        snackbar.show()
+        mainActLocationDisabledText.visibility = View.VISIBLE
+        mainActLocationDisabledText.setOnClickListener {
+            mainActLocationDisabledText.visibility = View.GONE
+            openDeviceLocationSettings() }
+
+//        val snackbar = TSnackbar.make(
+//            mainActContainerLayout,
+//            R.string.device_location_off_alerter_body,
+//            TSnackbar.LENGTH_INDEFINITE
+//        )
+//        val snackBarView = snackbar.view
+//        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.teal_blue))
+//        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            textView.setTextAppearance(R.style.SemiBold13Dark)
+//        }
+//
+//        textView.setTextColor(ContextCompat.getColor(this, R.color.white))
+//        textView.gravity = Gravity.CENTER
+//        snackbar.show()
     }
 
     private fun openDeviceLocationSettings() {

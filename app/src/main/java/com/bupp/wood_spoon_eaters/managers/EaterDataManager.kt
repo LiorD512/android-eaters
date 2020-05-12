@@ -76,7 +76,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             }
         }else{
             getListOfAddresses()?.let{
-                onLocationChanged(it.get(0))
+                onLocationChanged(it.last())
 
             listeners.forEach {
                 it.onUsingPreviousLocation()

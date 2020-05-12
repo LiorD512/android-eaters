@@ -14,9 +14,22 @@
             android:layout_height="wrap_content"/>
 
     <LinearLayout
+            android:animateLayoutChanges="true"
+            android:id="@+id/mainActContainerLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+        <TextView
+                android:visibility="gone"
+                android:paddingStart="15.4dp"
+                android:paddingEnd="15.4dp"
+                android:id="@+id/mainActLocationDisabledText"
+                style="@style/SemiBold13White"
+                android:background="@color/teal_blue"
+                android:gravity="center"
+                android:text="@string/device_location_off_alerter_body"
+                android:layout_width="match_parent" android:layout_height="60dp"/>
 
         <FrameLayout
                 android:id="@+id/mainActContainer"

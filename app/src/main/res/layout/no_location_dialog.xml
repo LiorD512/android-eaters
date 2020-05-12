@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="We need your address to show you cooks in your neighborhood"/>
+                android:text="We need your address to show you home chefs in your neighborhood"/>
 
         <TextView
                 style="@style/Reg13Dark_50"
