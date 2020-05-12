@@ -8,11 +8,16 @@
         xmlns:tools="http://schemas.android.com/tools">
 
 
+    <View
+            android:id="@+id/singleFeedListViewSep"
+            android:layout_width="match_parent" android:layout_height="15.4dp"
+            android:background="@color/silver_20"/>
+
     <TextView
             android:paddingTop="15.4dp"
             android:layout_marginRight="15.4dp"
             android:layout_marginLeft="15.4dp"
-            style="@style/SemiBold13Dark"
+            style="@style/SemiBold17Dark"
             android:id="@+id/singleFeedListViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

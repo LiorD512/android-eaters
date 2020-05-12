@@ -256,6 +256,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             checkoutFragPromoCodeStr.visibility = View.VISIBLE
             checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
             checkoutFragAddPromoCodeBtn.visibility = View.GONE
+            checkoutFragPromoCodeSep.visibility = View.VISIBLE
         }else{
             checkoutFragPromoCodeStr.visibility = View.GONE
             checkoutFragPromoCodeSep.visibility = View.GONE
@@ -298,12 +299,13 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             }
         }
 
-        val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee).plus(discount))
+//        val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee).plus(discount))
+        val total: Double = curOrder.discount.value
         val totalWithTip: Double = total.plus(tipValue)
 
 
         checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
-        checkoutFragTotalPriceText.text = "$${DecimalFormat("##.##").format(total)}"
+        checkoutFragTotalPriceText.text = "${curOrder.totalBeforeTip.formatedValue}"
 
         checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_FINALIZE, price = totalWithTip)
 

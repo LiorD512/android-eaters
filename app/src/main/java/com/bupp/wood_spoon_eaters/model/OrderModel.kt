@@ -46,6 +46,7 @@ data class Order (
     @SerializedName("tip_percentage") val tipPercentage: Int,
     @SerializedName("notes") val notes: String,
     @SerializedName("total") val total: Price,
+    @SerializedName("total_before_tip") val totalBeforeTip: Price,
     @SerializedName("cook") val cook: Cook,
     @SerializedName("cooking_slot") val cookingSlot: CookingSlot,
     @SerializedName("order_items") val orderItems: ArrayList<OrderItem>,

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import mva2.adapter.HeaderSection
 import mva2.adapter.ItemSection
@@ -45,24 +46,36 @@ class AdditionalDishMainAdapter(
         orderItemsSection.showSection()
     }
 
+    fun ArrayList<Dish>.f(orderItems: List<Dish>) = filter { dish ->
+        orderItems.any { orderItem ->
+            orderItem.id != dish.id
+        }
+    }
+
     @SuppressLint("LongLogTag")
     fun refreshAdditionalDishes(dishes: ArrayList<Dish>) {
         Log.d(TAG, "refreshAdditionalDishes")
         val orderItems = orderItemsSection.item?.orderItems
-        val additionalArr = arrayListOf<Dish>()
         //remove order items from additional dish list
-        dishes.forEach { dish ->
-            orderItems?.forEach { orderItem ->
-                if (orderItem.dish.id == dish.id) {
-                    return@forEach
-                }
-                additionalArr.add(dish)
+        val sum = mutableSetOf<Dish>()
+        val orderItemDishes = mutableListOf<Dish>()
+        orderItems?.forEach {
+            orderItemDishes.add(it.dish)
+        }
+        val additioanlDishes = dishes.mapNotNull {
+            dish ->
+            if (orderItemDishes.find { it.id == dish.id} != null){
+                null
+            }else{
+                dish
             }
         }
-        if (additionalArr.isNotEmpty()) {
+
+
+        if (additioanlDishes.isNotEmpty()) {
             additionalDishesSection.removeItem()
-            additionalDishesSection.setItem(AdditionalDishes(additionalArr))
-            additionalDishesHeaderAndSection.header = AdditionalDishHeader(additionalArr[0].cook.firstName)
+            additionalDishesSection.setItem(AdditionalDishes(ArrayList(additioanlDishes)))
+            additionalDishesHeaderAndSection.header = AdditionalDishHeader(ArrayList(additioanlDishes)[0]?.cook?.firstName)
             additionalDishesSection.showSection()
             additionalDishesHeaderAndSection.showSection()
         }
