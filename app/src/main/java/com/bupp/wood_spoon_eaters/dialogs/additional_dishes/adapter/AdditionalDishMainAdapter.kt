@@ -71,7 +71,6 @@ class AdditionalDishMainAdapter(
             }
         }
 
-
         if (additioanlDishes.isNotEmpty()) {
             additionalDishesSection.removeItem()
             additionalDishesSection.setItem(AdditionalDishes(ArrayList(additioanlDishes)))

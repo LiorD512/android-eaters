@@ -206,8 +206,8 @@ class MainViewModel(val api: ApiService, val settings: AppSettings, val permissi
         return eaterDataManager.getLastChosenAddress() != null
     }
 
-    fun getAddressAndProcceed() {
-
+    fun initLocationFalse() {
+        eaterDataManager.onLocationEmpty()
     }
 
 //    fun disableEventData() {

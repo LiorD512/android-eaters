@@ -405,6 +405,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     viewModel.startLocationUpdates(this)
+                }else{
+                    viewModel.initLocationFalse()
                 }
             }
             Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {

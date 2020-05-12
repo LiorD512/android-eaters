@@ -307,7 +307,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
         checkoutFragTotalPriceText.text = "${curOrder.totalBeforeTip.formatedValue}"
 
-        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_FINALIZE, price = totalWithTip)
+        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_FINALIZE, price = curOrder.totalBeforeTip.value)
 
     }
 

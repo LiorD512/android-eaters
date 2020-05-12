@@ -88,9 +88,11 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragDeliveryFee.text = "$$deliveryFee"
 
         smallOrderFee?.let{
-            orderDetailsSmallOrderFeeLayout.visibility = View.VISIBLE
-            orderDetailsSmallOrderFeeSep.visibility = View.VISIBLE
-            orderDetailsSmallOrderFee.text = "$$it"
+            if(it > 0){
+                orderDetailsSmallOrderFeeLayout.visibility = View.VISIBLE
+                orderDetailsSmallOrderFeeSep.visibility = View.VISIBLE
+                orderDetailsSmallOrderFee.text = "$$it"
+            }
         }
 
         orderDetailsFragPromoDiscount.text = "$$discount" //todo - add this when server ready
