@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.appsee.Appsee
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
@@ -20,6 +20,7 @@ import io.branch.referral.BranchError
 import org.json.JSONObject
 import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.uxcam.UXCam
 import java.lang.Exception
 
 
@@ -38,7 +39,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         initObservers()
-        Appsee.start()
+
         Timer("SettingUp", false).schedule(1000) {
             init()
         }

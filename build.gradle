@@ -11,10 +11,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
@@ -22,16 +19,16 @@ buildscript {
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'io.fabric.tools:gradle:1.31.0'
-        classpath 'com.appsee:appsee-plugin:+'
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
         mavenLocal()
         jcenter()
         google()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://sdk.uxcam.com/android/' }
     }
 }
 

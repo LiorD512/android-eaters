@@ -11,7 +11,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.appsee.Appsee
+import com.uxcam.UXCam
 import io.branch.referral.Branch
 
 
@@ -61,6 +61,11 @@ class WoodSpoonApplication : Application() {
 
         AppsFlyerLib.getInstance().init(devKey, conversionDataListener, applicationContext)
         AppsFlyerLib.getInstance().startTracking(this)
+
+        if(BuildConfig.BUILD_TYPE.equals("release", true)) {
+            Log.d("wowSplash","uxcam is on!")
+            UXCam.startWithKey(getString(R.string.ux_cam_app_key))
+        }
 
     }
 

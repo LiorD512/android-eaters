@@ -9,8 +9,8 @@ import kotlin.collections.ArrayList
 data class ServerResponse<T> (
     @SerializedName("code") var code: Int = 0,
     @SerializedName("message") var message: String? = null,
-    @SerializedName("data") var data: T? = null
-//    @SerializedName("errors") var errors: List<WSError>? = null
+    @SerializedName("data") var data: T? = null,
+    @SerializedName("errors") var errors: List<WSError>? = null
 )
 
 data class WSServerError(

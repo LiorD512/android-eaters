@@ -45,4 +45,5 @@
 -dontwarn module-info
 
 
-
+-keep class com.uxcam.** { *; }
+-dontwarn com.uxcam.**

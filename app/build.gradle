@@ -124,7 +124,7 @@ dependencies {
     implementation 'dev.ahamed.mva2:ext-diffutil-rx:2.0.0'  // RxDiffUtil
 
     //3rd party events
-    implementation 'com.appsee:appsee-android:2.6.0'
+    implementation 'com.uxcam:uxcam:3.2.1'
     implementation 'com.appsflyer:af-android-sdk:4.11.0'
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
     implementation 'com.facebook.android:facebook-core:5.15.3'
@@ -181,4 +181,3 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.appsee.appsee-plugin'
