@@ -57,7 +57,8 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
                         val dish = response.body()?.data
                         dish?.let {
                             fullDish.postValue(it)
-                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
+//                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
+                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.orderFrom), checkDishSoldout(it)))
                         }
 //                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
 //                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
@@ -100,7 +101,8 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
 
     private fun checkCookingSlotAvailability(dish: FullDish?): Boolean {
-        val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
+//        val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
+        val start: Date? = dish?.menuItem?.cookingSlot?.orderFrom
         val end: Date? = dish?.menuItem?.cookingSlot?.endsAt
         var userSelection: Date? = eaterDataManager.getLastOrderTime()
 

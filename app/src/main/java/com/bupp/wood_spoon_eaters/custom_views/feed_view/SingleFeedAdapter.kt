@@ -56,11 +56,13 @@ class SingleFeedAdapter(
                 }
             }else{
                 if(isEvent){
-                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
+//                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
+                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
                 }else{
                     if(Utils.isTodayOrTomorrow(dish.menuItem.orderAt)){
                         //Dish is offered today or tomorrow.
-                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
+//                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
+                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.orderFrom, dish.menuItem.cookingSlot.endsAt)
                     }else{
                         //Dish is offered later this week and beyond
                         holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.orderAt)

@@ -49,8 +49,10 @@ data class CookingSlot(
     @SerializedName("id") val id: Long,
     @SerializedName("ends_at") val endsAt: Date,
     @SerializedName("starts_at") val startsAt: Date,
-    @SerializedName("free_delivery") val freeDelivery: Boolean,
-    @SerializedName("delivery_fee") val deliveryFee: Price?
+    @SerializedName("order_from") val orderFrom: Date,
+    @SerializedName("last_call_at") val lastCallAt: Date,
+    @SerializedName("delivery_fee") val deliveryFee: Price?,
+    @SerializedName("free_delivery") val freeDelivery: Boolean
 ): Parcelable
 
 data class FullDish(
@@ -58,10 +60,10 @@ data class FullDish(
     @SerializedName("cook") val cook: Cook,
     @SerializedName("name") val name: String,
     @SerializedName("price") val price: Price,
-    @SerializedName("video") val video: String? = null,
     @SerializedName("avg_rating") val rating: Double,
     @SerializedName("proteins") val proteins: Double,
     @SerializedName("thumbnail") val thumbnail: String,
+    @SerializedName("video") val video: String? = null,
     @SerializedName("is_favorite") val isFavorite: Boolean,
     @SerializedName("description") val description: String,
     @SerializedName("matching_menu") var menuItem: MenuItem?,
@@ -70,9 +72,9 @@ data class FullDish(
     @SerializedName("calorific_value") val calorificValue: Double,
     @SerializedName("door_to_door_time") val doorToDoorTime: String,
     @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
+    @SerializedName("instructions") val cooksInstructions: String? = null,
     @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>,
     @SerializedName("image_gallery") val imageGallery: ArrayList<String>? = null,
-    @SerializedName("instructions") val cooksInstructions: String? = null,
     @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
     @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>
 ){

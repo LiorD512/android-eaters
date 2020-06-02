@@ -437,7 +437,8 @@ class NewOrderSharedViewModel(
     val editDeliveryTime: SingleLiveEvent<EditDeliveryTime> = SingleLiveEvent()
     fun editDeliveryTime() {
         val now = Date()
-        var availableCookingSlotStartsAt = orderData.value?.cookingSlot?.startsAt
+//        var availableCookingSlotStartsAt = orderData.value?.cookingSlot?.startsAt
+        var availableCookingSlotStartsAt = orderData.value?.cookingSlot?.orderFrom
         availableCookingSlotStartsAt?.let {
             if (now.time > it.time) {
                 availableCookingSlotStartsAt = now

@@ -419,7 +419,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     override fun onTimeSet(view: com.wdullaer.materialdatetimepicker.time.TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         val newCal = Calendar.getInstance()
-        newCal.time = ordersViewModel.orderData.value?.cookingSlot?.startsAt
+//        newCal.time = ordersViewModel.orderData.value?.cookingSlot?.startsAt
+        newCal.time = ordersViewModel.orderData.value?.cookingSlot?.orderFrom
         newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
         newCal.set(Calendar.MINUTE, minute)
         ordersViewModel.updateDeliveryTime(newCal.time)
