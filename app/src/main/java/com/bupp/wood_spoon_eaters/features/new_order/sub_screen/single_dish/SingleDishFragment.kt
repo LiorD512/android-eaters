@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -232,6 +233,7 @@ class SingleDishFragment() : Fragment(),
         val snackBarView = snackbar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.teal_blue))
         val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+        textView.setGravity(Gravity.CENTER_HORIZONTAL)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             textView.setTextAppearance(R.style.SemiBold13Dark)
         }

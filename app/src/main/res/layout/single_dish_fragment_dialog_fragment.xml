@@ -358,6 +358,7 @@
                                         <!--android:layout_height="1dp"/>-->
 
                                 <LinearLayout
+                                        tools:visibility="visible"
                                         android:visibility="gone"
                                         android:id="@+id/singleDishInstructionsLayout"
                                         android:orientation="vertical"
@@ -367,11 +368,10 @@
                                             style="@style/SemiBold15Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Cook’s Instructions"/>
+                                            android:text="Home Chef's Instructions"/>
 
                                     <TextView
                                             style="@style/Reg13Dark"
-                                            android:layout_marginTop="7.8dp"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:id="@+id/singleDishInstructionsBody"
@@ -379,11 +379,35 @@
 
                                 </LinearLayout>
 
+                                <TextView
+                                        style="@style/SemiBold15Dark"
+                                        android:layout_marginTop="15.4dp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Personal Request"/>
+
+                                <TextView
+                                        style="@style/Reg13Dark_50"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="The home chef will try to take your request into consideration"/>
+
+                                <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                                        android:layout_marginTop="15.4dp"
+                                        app:inputType="INPUT_TYPE_DONE_BTN"
+                                        app:hint="Add your request here..."
+                                        app:lines="3"
+                                        android:layout_marginBottom="23dp"
+                                        android:id="@+id/singleDishIngredientInstructions"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"/>
+
                             </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
+                                tools:visibility="visible"
                                 android:visibility="gone"
                                 android:paddingRight="15.4dp"
                                 android:paddingLeft="15.4dp"
@@ -530,28 +554,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>
 
-                            <TextView
-                                    style="@style/SemiBold15Dark"
-                                    android:layout_marginTop="15.4dp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Special instructions"/>
 
-                            <TextView
-                                    style="@style/Reg13Dark_50"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="The cook will try to take your request
-into consideration"/>
-
-                            <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-                                    android:layout_marginTop="15.4dp"
-                                    app:inputType="INPUT_TYPE_DONE_BTN"
-                                    app:hint="Add your request here..."
-                                    app:lines="3"
-                                    android:id="@+id/singleDishIngredientInstructions"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
 
                         </LinearLayout>
 

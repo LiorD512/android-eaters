@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
+import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 
@@ -47,7 +48,7 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
         bundle.putString("OrderId", orderId.toString())
 
         val logger = AppEventsLogger.newLogger(context)
-        logger.logEvent("first purchase", bundle)
+        logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_WISHLIST, bundle)
     }
 
     fun sendOtherPurchaseEvent(orderId: Long?) {
@@ -56,7 +57,7 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
         bundle.putString("OrderId", orderId.toString())
 
         val logger = AppEventsLogger.newLogger(context)
-        logger.logEvent("repeat purchase", bundle)
+        logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, bundle)
     }
 
 }
