@@ -16,10 +16,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
-import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
-import com.bupp.wood_spoon_eaters.dialogs.OrderDateChooserDialog
-import com.bupp.wood_spoon_eaters.dialogs.OrderUpdateErrorDialog
-import com.bupp.wood_spoon_eaters.dialogs.TipCourierDialog
+import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.model.MenuItem
@@ -124,6 +121,13 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                     OrderUpdateErrorDialog(this).show(childFragmentManager, Constants.ORDER_UPDATE_ERROR_DIALOG)
                 }
                 else -> {}
+            }
+        })
+        ordersViewModel.errorEvent.observe(this, Observer{
+            it?.let{
+                it.msg?.let{
+                    ErrorDialog.newInstance(it).show(childFragmentManager, Constants.ERROR_DIALOG)
+                }
             }
         })
 

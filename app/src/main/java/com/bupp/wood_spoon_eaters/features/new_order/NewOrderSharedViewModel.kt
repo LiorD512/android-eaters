@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.network.BaseCallback
 import com.stripe.android.CustomerSession
 import com.stripe.android.PaymentConfiguration
 import retrofit2.Call
@@ -36,6 +37,7 @@ class NewOrderSharedViewModel(
     var isEvent: Boolean = false
 
     val progressData = ProgressData()
+    val errorEvent: SingleLiveEvent<WSError> = SingleLiveEvent()
 
 
     fun getListOfAddresses(): java.util.ArrayList<Address>? {
@@ -290,26 +292,22 @@ class NewOrderSharedViewModel(
     private fun postUpdateOrder(orderRequest: OrderRequest) {
         progressData.startProgress()
         apiService.updateOrder(orderManager.curOrderResponse!!.id, orderRequest)
-            .enqueue(object : Callback<ServerResponse<Order>> {
-                override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
+            .enqueue(object : BaseCallback<ServerResponse<Order>>() {
+                override fun onSuccess(result: ServerResponse<Order>) {
                     progressData.endProgress()
-                    if (response.isSuccessful) {
-                        val updatedOrder = response.body()?.data
-                        orderManager.setOrderResponse(updatedOrder)
-                        orderData.postValue(updatedOrder)
-                        //getOrderDetails()
-                    } else {
-                        Log.d("wowCheckoutVm", "updateOrder FAILED")
-                        val errorCode = response.code()
-                        if (errorCode == 400) {
-                            updateOrderError.postValue(errorCode)
-                        }
-                    }
+                    val updatedOrder = result.data
+                    orderManager.setOrderResponse(updatedOrder)
+                    orderData.postValue(updatedOrder)
                 }
 
-                override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
+                override fun onError(error: WSError) {
                     progressData.endProgress()
-                    Log.d("wowCheckoutVm", "updateOrder big FAILED")
+                    errorEvent.postValue(error)
+
+//                    val errorCode = response.code()
+//                    if (errorCode == 400) {
+//                        updateOrderError.postValue(errorCode)
+//                    }
                 }
             })
     }
@@ -379,21 +377,17 @@ class NewOrderSharedViewModel(
     fun checkoutOrder(orderId: Long) {
         progressData.startProgress()
         apiService.checkoutOrder(orderId, eaterDataManager.getCustomerCardId())
-            .enqueue(object : Callback<ServerResponse<Void>> {
-                override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+            .enqueue(object : BaseCallback<ServerResponse<Void>>() {
+                override fun onSuccess(result: ServerResponse<Void>) {
                     progressData.endProgress()
-                    if (response.isSuccessful) {
-                        checkoutOrderEvent.postValue(CheckoutEvent(true))
-                        orderManager.clearCurrentOrder()
-                        eventsManager.sendPurchaseEvent(orderId)
-                    } else {
-                        checkoutOrderEvent.postValue(CheckoutEvent(false))
-                    }
+                    checkoutOrderEvent.postValue(CheckoutEvent(true))
+                    orderManager.clearCurrentOrder()
+                    eventsManager.sendPurchaseEvent(orderId)
                 }
 
-                override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                override fun onError(error: WSError) {
                     progressData.endProgress()
-                    checkoutOrderEvent.postValue(CheckoutEvent(false))
+                    errorEvent.postValue(error)
                 }
             })
     }

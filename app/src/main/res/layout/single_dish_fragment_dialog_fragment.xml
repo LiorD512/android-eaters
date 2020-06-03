@@ -350,12 +350,12 @@
 
                                 </LinearLayout>
 
-                                <!--<View-->
-                                        <!--android:layout_marginTop="10dp"-->
-                                        <!--android:layout_marginBottom="22dp"-->
-                                        <!--android:background="@color/silver"-->
-                                        <!--android:layout_width="match_parent"-->
-                                        <!--android:layout_height="1dp"/>-->
+                                <View
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginBottom="22dp"
+                                        android:background="@color/silver"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"/>
 
                                 <LinearLayout
                                         tools:visibility="visible"
@@ -377,14 +377,20 @@
                                             android:id="@+id/singleDishInstructionsBody"
                                             tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness."/>
 
+                                    <View
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginBottom="16dp"
+                                            android:background="@color/silver"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"/>
+
                                 </LinearLayout>
 
                                 <TextView
                                         style="@style/SemiBold15Dark"
-                                        android:layout_marginTop="15.4dp"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Personal Request"/>
+                                        android:text="Special Requests"/>
 
                                 <TextView
                                         style="@style/Reg13Dark_50"
