@@ -37,16 +37,16 @@ class NewOrderSharedViewModel(
     var isEvent: Boolean = false
 
     val progressData = ProgressData()
-    val errorEvent: SingleLiveEvent<WSError> = SingleLiveEvent()
+    val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()
 
 
-    fun getListOfAddresses(): java.util.ArrayList<Address>? {
-        return eaterDataManager.currentEater!!.addresses
-    }
-
-    fun getChosenAddress(): Address? {
-        return eaterDataManager.getLastChosenAddress()
-    }
+//    fun getListOfAddresses(): java.util.ArrayList<Address>? {
+//        return eaterDataManager.currentEater!!.addresses
+//    }
+//
+//    fun getChosenAddress(): Address? {
+//        return eaterDataManager.getLastChosenAddress()
+//    }
 
     fun updateDeliveryTime(time: Date) {
 //        progressData.startProgress()
@@ -162,7 +162,7 @@ class NewOrderSharedViewModel(
                 cookId = it.cook.id
                 dishId = it.id
                 it.menuItem?.let {
-                    cookingSlotId = it.cookingSlot?.id
+                    cookingSlotId = it.cookingSlot.id
                 }
             }
 
@@ -300,7 +300,7 @@ class NewOrderSharedViewModel(
                     orderData.postValue(updatedOrder)
                 }
 
-                override fun onError(error: WSError) {
+                override fun onError(error: List<WSError>) {
                     progressData.endProgress()
                     errorEvent.postValue(error)
 
@@ -316,7 +316,7 @@ class NewOrderSharedViewModel(
         var total = 0.0
         orderData.value?.orderItems?.let {
             it.forEach {
-                total += (it.price?.value * it.quantity)
+                total += (it.price.value * it.quantity)
             }
         }
         return total
@@ -333,7 +333,7 @@ class NewOrderSharedViewModel(
             val inCartCookingSlot = inCartOrder?.cookingSlot
             inCartCookingSlot?.let {
                 if (it.id != currentCookingSlotid) {
-                    val cookInCartName = inCartOrder?.cook.getFullName()
+                    val cookInCartName = inCartOrder.cook.getFullName()
                     //if the showing dish's (cook) is the same as the in-cart order's cook
                     hasOpenOrder.postValue(HasOpenOrder(true, cookInCartName, currentShowingCookName))
                 } else {
@@ -385,9 +385,9 @@ class NewOrderSharedViewModel(
                     eventsManager.sendPurchaseEvent(orderId)
                 }
 
-                override fun onError(error: WSError) {
+                override fun onError(errors: List<WSError>) {
                     progressData.endProgress()
-                    errorEvent.postValue(error)
+                    errorEvent.postValue(errors)
                 }
             })
     }

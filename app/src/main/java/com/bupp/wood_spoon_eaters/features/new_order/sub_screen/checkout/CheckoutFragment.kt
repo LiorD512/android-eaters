@@ -125,9 +125,11 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         })
         ordersViewModel.errorEvent.observe(this, Observer{
             it?.let{
-                it.msg?.let{
-                    ErrorDialog.newInstance(it).show(childFragmentManager, Constants.ERROR_DIALOG)
+                var errorStr = ""
+                it.forEach {
+                    errorStr += "${it.msg} \n"
                 }
+                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
             }
         })
 

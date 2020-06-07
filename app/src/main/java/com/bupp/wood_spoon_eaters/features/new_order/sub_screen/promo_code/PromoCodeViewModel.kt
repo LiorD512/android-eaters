@@ -16,7 +16,8 @@ import android.widget.Toast
 import com.facebook.FacebookSdk.getApplicationContext
 import retrofit2.adapter.rxjava2.Result.response
 import android.R.string
-import com.bupp.wood_spoon_eaters.model.WSServerError
+import com.bupp.wood_spoon_eaters.network.BaseCallback
+import com.uxcam.internals.it
 import java.io.IOException
 
 
@@ -24,39 +25,23 @@ class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : V
 
 
     val promoCodeEvent: SingleLiveEvent<PromoCodeEvent> = SingleLiveEvent()
-    val errorEvent: SingleLiveEvent<WSError?> = SingleLiveEvent()
+    val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()
     data class PromoCodeEvent(val isSuccess: Boolean = false)
 
     fun savePromoCode(code: String) {
         orderManager.updateOrderRequest(promoCode = code)
-        api.updateOrder(orderManager.curOrderResponse!!.id, orderManager.getPromoCodeOrderRequest()).enqueue(object: Callback<ServerResponse<Order>>{
-            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
-                if(response.isSuccessful){
-                    val order = response.body()?.data
-                    orderManager.setOrderResponse(order)
-                    promoCodeEvent.postValue(PromoCodeEvent(true))
-                }else{
-                    val gson = GsonBuilder().create()
-                    var mError = WSServerError()
-                    try {
-                        mError = gson.fromJson(response.errorBody()?.string(), WSServerError::class.java)
-                        mError?.let{
-                            it.errors?.let{
-                                errorEvent.postValue(it[0])
-                            }
-                        }
-//                        Toast.makeText(getApplicationContext(), mError.getErrorDescription(), Toast.LENGTH_LONG).show()
-//                        promoCodeEvent.postValue(PromoCodeEvent(false, mError.errors))
-                    } catch (e: IOException) {
-                        // handle failure to read error
-                    }
-
-                }
+        api.updateOrder(orderManager.curOrderResponse!!.id, orderManager.getPromoCodeOrderRequest()).enqueue(object: BaseCallback<ServerResponse<Order>>(){
+            override fun onSuccess(result: ServerResponse<Order>) {
+                val order = result.data
+                orderManager.setOrderResponse(order)
+                promoCodeEvent.postValue(PromoCodeEvent(true))
             }
 
-            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                promoCodeEvent.postValue(PromoCodeEvent(false))
+            override fun onError(errors: List<WSError>) {
+                errorEvent.postValue(errors)
             }
+
+
 
         })
     }

@@ -13,11 +13,11 @@ data class ServerResponse<T> (
     @SerializedName("errors") var errors: List<WSError>? = null
 )
 
-data class WSServerError(
-    @SerializedName("code") val resultCode: Int? = null,
-    @SerializedName("message") val msg: String? = null,
-    @SerializedName("errors") var errors: List<WSError>? = null
-)
+//data class WSServerError(
+//    @SerializedName("code") val resultCode: Int? = null,
+//    @SerializedName("message") val msg: String? = null,
+//    @SerializedName("errors") var errors: List<WSError>? = null
+//)
 data class WSError(
     @SerializedName("code") val code: Int?,
     @SerializedName("message") val msg: String?

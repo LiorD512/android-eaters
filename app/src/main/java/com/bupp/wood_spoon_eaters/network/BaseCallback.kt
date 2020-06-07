@@ -38,26 +38,30 @@ abstract class BaseCallback<T> : Callback<T> {
             Log.d(TAG, "Can't parse error body", e)
         }
 
-        val error = WSError(
-                errorResponse?.code ?: 0,
-                errorResponse?.message ?: "Unknown error \uD83D\uDE1E")
+//        val error = WSError(
+//                errorResponse?.code ?: 0,
+//                errorResponse?.message ?: "Unknown error \uD83D\uDE1E")
 
-        if (response.code() != NETWORK_SUCCESS || response.code() != NETWORK_SUCCESS2) {
-            val error = WSError(
-                    errorResponse?.code ?: response.code(),
-                    errorResponse?.message ?: "Unknown error \uD83D\uDE1E")
-            onError(error)
-            return
+        val errors: List<WSError>? = errorResponse?.errors
+
+//        if (response.code() != NETWORK_SUCCESS || response.code() != NETWORK_SUCCESS2) {
+//            val error = WSError(
+//                    errorResponse?.code ?: response.code(),
+//                    errorResponse?.message ?: "Unknown error \uD83D\uDE1E")
+//            onError(error)
+//            return
+//        }
+        errors?.let{
+            onError(it)
         }
-        onError(error)
     }
 
     override fun onFailure(call: Call<T>, t: Throwable) {
         try {
             if (t is IOException) {
-                onError(NETWORK)
+                onError(listOf(NETWORK))
             } else {
-                onError(UNKNOWN)
+                onError(listOf(UNKNOWN))
             }
         } finally {
             onFinally()
@@ -66,7 +70,7 @@ abstract class BaseCallback<T> : Callback<T> {
 
     abstract fun onSuccess(result: T)
 
-    abstract fun onError(error: WSError)
+    abstract fun onError(errors: List<WSError>)
 
     fun onFinally() {}
 
