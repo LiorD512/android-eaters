@@ -411,7 +411,7 @@ class SingleDishFragment() : Fragment(),
         singleDishInfoRatingVal.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
 
-        if(currentDish.cooksInstructions!= null){
+        if(currentDish.cooksInstructions != null && currentDish.cooksInstructions.isNotEmpty()){
             singleDishInstructionsLayout.visibility = View.VISIBLE
             singleDishInstructionsBody.text = currentDish.cooksInstructions
         }else{

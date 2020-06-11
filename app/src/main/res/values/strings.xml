@@ -101,7 +101,7 @@
         \n We hope you can understand and wishing to see you ordering again soon
     </string>
     <string name="title_activity_address_chooser">AddressChooserActivity</string>
-    <string name="fcm_message_title">WoodSpoon Eaters</string>
+    <string name="fcm_message_title">WoodSpoon</string>
     <string name="title_activity_event">EventActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
