@@ -381,8 +381,10 @@ class NewOrderSharedViewModel(
                 override fun onSuccess(result: ServerResponse<Void>) {
                     progressData.endProgress()
                     checkoutOrderEvent.postValue(CheckoutEvent(true))
+                    //todo - check this ! that it send purchase cost
+                    val totalCost = orderManager.getTotalCost()
+                    eventsManager.sendPurchaseEvent(orderId, "")
                     orderManager.clearCurrentOrder()
-                    eventsManager.sendPurchaseEvent(orderId)
                 }
 
                 override fun onError(errors: List<WSError>) {
@@ -403,16 +405,20 @@ class NewOrderSharedViewModel(
     fun resetTip() {
         tipInDollars.postValue(0)
         tipPercentage.postValue(0)
+        postUpdateOrder(OrderRequest(tipPercentage = null))
+        postUpdateOrder(OrderRequest(tip = null))
     }
 
     val tipInDollars = MutableLiveData<Int>()
     val tipPercentage = MutableLiveData<Int>()
     fun updateTipPercentage(tipPercentage: Int) {
         this.tipPercentage.postValue(tipPercentage)
+        postUpdateOrder(OrderRequest(tipPercentage = tipPercentage.toFloat()))
     }
 
-    fun updateTipInDollars(tipInDollars: Int) {
-        this.tipInDollars.postValue(tipInDollars)
+    fun updateTipInDollars(tipInCents: Int) {
+        this.tipInDollars.postValue(tipInCents)
+        postUpdateOrder(OrderRequest(tip = tipInCents*100))
     }
 
     fun updateAddUtensils(shouldAdd: Boolean) {

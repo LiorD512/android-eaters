@@ -115,6 +115,7 @@ class Constants {
         const val PICK_FILTERS_TAG = "pick_filters_tag"
         const val MY_PROFILE_TAG = "my_profile_tag"
         const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
+        const val NO_LOCATIONS_AVAILABLE_TAG = "no_locations_available_tag"
 
         const val GET_EVENT_TAG = "get_event_tag"
         const val EVENT_FEED_TAG = "event_feed_tag"
@@ -155,6 +156,7 @@ class Constants {
         const val UPDATE_REQUIRED_DIALOG = "update_required_dialog"
         const val NO_LOCATION_DIALOG = "no_location_dialog"
         const val ERROR_DIALOG = "error_dialog"
+        const val SHARE_CAMPAIGN_DIALOG = "campaign_dialog"
 
 
 
@@ -225,6 +227,7 @@ class Constants {
         const val PAYMENT_METHOD_DIALOG_REQUEST_CODE = 440
         const val ADDRESS_CHOOSER_REQUEST_CODE = 450
         const val EVENT_ACTIVITY_REQUEST_CODE = 112
+        const val ANDROID_SETTINGS_REQUEST_CODE = 113
 
 
 

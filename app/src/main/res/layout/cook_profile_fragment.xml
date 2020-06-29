@@ -16,26 +16,16 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="134dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <!--<androidx.cardview.widget.CardView-->
-                    <!--android:id="@+id/manyCooksViewBkg"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--app:cardElevation="0dp"-->
-                    <!--app:cardCornerRadius="40dp">-->
-
-                <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                        app:imageSize="BIG"
-                        app:isWithShadow="true"
-                        android:id="@+id/cookProfileImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-            <!--</androidx.cardview.widget.CardView>-->
-
+            <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                    app:imageSize="BIG"
+                    app:isWithShadow="true"
+                    android:layout_gravity="center"
+                    android:id="@+id/cookProfileImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
             <LinearLayout
                     android:gravity="center|left"
@@ -51,7 +41,7 @@
                         style="@style/SemiBold15Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Neta Nachmias, 29" />
+                        tools:text="Neta Nachmias, 29"/>
 
                 <LinearLayout
                         android:layout_marginTop="8.3dp"
@@ -66,13 +56,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            tools:text="Architect, Israel" />
+                            tools:text="Architect, Israel"/>
 
                     <ImageView
                             android:layout_marginLeft="7dp"
                             android:id="@+id/cookProfileFragFlag"
                             android:layout_width="23dp"
-                            android:layout_height="23dp" />
+                            android:layout_height="23dp"/>
 
                 </LinearLayout>
 
@@ -83,7 +73,7 @@
                     android:layout_gravity="center"
                     android:layout_width="1dp"
                     android:layout_height="46dp"
-                    android:background="@color/dark" />
+                    android:background="@color/dark"/>
 
             <LinearLayout
                     android:gravity="start|center"
@@ -99,7 +89,7 @@
                         android:layout_gravity="start"
                         android:drawableStart="@drawable/icons_raitings_selected"
                         android:drawablePadding="8.7dp"
-                        tools:text="4.8" />
+                        tools:text="4.8"/>
 
                 <TextView
                         android:visibility="gone"
@@ -109,13 +99,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        tools:text="15 Reviewers" />
-
-
+                        tools:text="15 Reviewers"/>
 
             </LinearLayout>
-
-
 
         </LinearLayout>
 
@@ -123,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="15.3dp"
-                android:background="@color/silver" />
+                android:background="@color/silver"/>
 
         <com.bupp.wood_spoon_eaters.custom_views.stackableTextView.StackableTextView
                 android:layout_weight="1"
@@ -131,7 +117,7 @@
                 android:id="@+id/cookProfileFragCuisineGrid"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginTop="14dp" />
+                android:layout_marginTop="14dp"/>
 
         <LinearLayout
                 android:layout_marginTop="23dp"
@@ -150,7 +136,7 @@
                     android:drawableStart="@drawable/icons_certificate"
                     android:drawablePadding="7.4dp"
                     android:gravity="center"
-                    tools:text="Certificate in Culinary Arts" />
+                    tools:text="Certificate in Culinary Arts"/>
 
             <TextView
                     android:id="@+id/cookProfileFragCertificateCount"
@@ -160,7 +146,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="9.8dp"
                     android:gravity="center"
-                    tools:text="+ 2 More" />
+                    tools:text="+ 2 More"/>
 
         </LinearLayout>
 
@@ -168,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="15.4dp"
-                android:background="@color/silver" />
+                android:background="@color/silver"/>
 
         <TextView
                 android:id="@+id/cookProfileFragStoryName"
@@ -176,7 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15.4dp"
-                tools:text="Neta’s Story" />
+                tools:text="Neta’s Story"/>
 
         <TextView
                 android:id="@+id/cookProfileFragStory"
@@ -185,13 +171,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7.7dp"
                 tools:text="I love that cooking gives me a chance to be creative and indulge in some ‘play’ time – something we adults could do
-with a lot more" />
+with a lot more"/>
 
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="15.4dp"
-                android:background="@color/silver" />
+                android:background="@color/silver"/>
 
         <TextView
                 style="@style/SemiBold13Dark"
@@ -199,10 +185,9 @@ with a lot more" />
                 android:id="@+id/cookProfileFragDishBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Dishes By Oded" />
+                tools:text="Dishes By Oded"/>
 
     </LinearLayout>
-
 
 
     <androidx.recyclerview.widget.RecyclerView

@@ -18,6 +18,7 @@ data class Eater(
     @SerializedName("addresses") val addresses: ArrayList<Address>,
     @SerializedName("cuisines") var cuisines: ArrayList<CuisineLabel>? = null,
     @SerializedName("diets") var diets: ArrayList<DietaryIcon>? = null,
+    @SerializedName("active_campaign") val activeCampaign: ActiveCampaign? = null,
     @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>
 ){
     fun getFullName(): String{

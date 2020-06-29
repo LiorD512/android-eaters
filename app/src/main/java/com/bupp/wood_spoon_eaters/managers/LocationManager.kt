@@ -5,7 +5,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import android.os.Looper
+import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.NonNull
@@ -75,7 +78,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
     fun start() {
         if (!isStarted) {
 //            Toast.makeText(context, "starting location manager", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "startLocationUpdates")
+            Log.d(TAG, "startLocationManager")
             isStarted = true
 //            this.activity = activity
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -154,7 +157,9 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
 //                        Toast.makeText(context, "location setting failed - RESOLUTION_REQUIRED", Toast.LENGTH_SHORT).show()
                         Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings")
-                        listener?.onLocationEmpty()
+                        if(!isLocationEnabled(context)){
+                            listener?.onLocationEmpty()
+                        }
                         val rae = exception as ResolvableApiException
 //                        rae.startResolutionForResult(context, Constants.REQUEST_CHECK_SETTINGS);
                     }
@@ -168,6 +173,29 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                 }
             }
         }
+    }
+
+    fun isLocationEnabled(context: Context): Boolean {
+        var locationMode = 0
+        val locationProviders: String
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.contentResolver, Settings.Secure.LOCATION_MODE)
+
+            } catch (e: Settings.SettingNotFoundException) {
+                e.printStackTrace()
+                return false
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF
+
+        } else {
+            locationProviders = Settings.Secure.getString(context.contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+            return !TextUtils.isEmpty(locationProviders)
+        }
+
+
     }
 
     fun stopLocationUpdates() {

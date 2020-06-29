@@ -18,7 +18,6 @@
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <include layout="@layout/cook_profile_fragment"/>
 
     </ScrollView>

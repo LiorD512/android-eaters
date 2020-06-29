@@ -50,18 +50,17 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             if (event != null) {
                 if (event.isSuccess) {
                     // all data received
-                    if(event.shouldUpdateVersion){
+                    if (event.shouldUpdateVersion) {
                         openVersionUpdateDialog()
-                    }
-                    else if (event.isRegistered) {
+                    } else if (event.isRegistered) {
                         redirectToMain()
                     } else {
                         redirectToCreateAccount()
                     }
                 } else {
-                    if(event.shouldUpdateVersion){
+                    if (event.shouldUpdateVersion) {
                         openVersionUpdateDialog()
-                    }else{
+                    } else {
                         redirectToWelcome()
                     }
                 }
@@ -92,18 +91,18 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
 
     private fun redirectToCreateAccount() {
-        Log.d("wowSplash","redirectToCreateAccount")
+        Log.d("wowSplash", "redirectToCreateAccount")
         startActivity(Intent(this, SignUpActivity::class.java))
         finish()
     }
 
     private fun redirectToMain() {
-        Log.d("wowSplash","redirectToMain")
+        Log.d("wowSplash", "redirectToMain")
         val intent = Intent(this, MainActivity::class.java)
-        cookId?.let{
+        cookId?.let {
             intent.putExtra("cook_id", it.toLong())
-    }
-        menuItemId?.let{
+        }
+        menuItemId?.let {
             intent.putExtra("menu_item_id", it.toLong())
         }
         startActivity(intent)
@@ -112,7 +111,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun redirectToWelcome() {
-        Log.d("wowSplash","redirectToWelcome")
+        Log.d("wowSplash", "redirectToWelcome")
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
@@ -135,16 +134,24 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private val callback = Branch.BranchReferralInitListener { linkProperties, error ->
-        linkProperties?.let{
-            Log.d("wowSplash","Branch.io intent $linkProperties")
-                if(it.has("cook_id")){
-                    cookId = it.get("cook_id") as String
-                }
-                if(it.has("menu_item_id")){
-                    menuItemId = it.get("menu_item_id") as String
-                }
+        linkProperties?.let {
+            Log.d("wowSplash", "Branch.io intent $linkProperties")
+            if (it.has("cook_id")) {
+                cookId = it.get("cook_id") as String
+            }
+            if (it.has("menu_item_id")) {
+                menuItemId = it.get("menu_item_id") as String
+            }
+            if(it.has("+non_branch_link")){
+                val link = it.get("+non_branch_link") as String
+                val sidIndex = link.indexOf("sid=")
+                val cidIndex = link.indexOf("cid=")
 
-
+                val sid: String? = if (sidIndex == -1) null else link.substring(sidIndex+4, cidIndex-1)
+                val cid: String? = if (cidIndex == -1) null else link.substring(cidIndex+4)
+                Log.d("wowSplash", "sid: $sid cid: $cid")
+                viewModel.setUserCampaignParam(sid, cid)
+            }
         }
     }
 

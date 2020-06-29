@@ -28,7 +28,7 @@ class FcmManager(val api: ApiService) : MyFirebaseMessagingService.FirebaseMessa
     }
 
     fun getAppVersion(): String {
-        return BuildConfig.VERSION_CODE.toString()
+        return BuildConfig.VERSION_NAME.toString()
     }
 
     fun refreshPushNotificationToken() {

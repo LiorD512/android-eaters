@@ -39,23 +39,23 @@ class WoodSpoonApplication : Application() {
             override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {
                 data?.let { cvData ->
                     cvData.map {
-                        Log.i("wowApplication", "conversion_attribute:  ${it.key} = ${it.value}")
+//                        Log.i("wowApplication", "conversion_attribute:  ${it.key} = ${it.value}")
                     }
                 }
             }
 
             override fun onInstallConversionFailure(error: String?) {
-                Log.e("wowApplication", "error onAttributionFailure :  $error")
+//                Log.e("wowApplication", "error onAttributionFailure :  $error")
             }
 
             override fun onAppOpenAttribution(data: MutableMap<String, String>?) {
                 data?.map {
-                    Log.d("wowApplication", "onAppOpen_attribute: ${it.key} = ${it.value}")
+//                    Log.d("wowApplication", "onAppOpen_attribute: ${it.key} = ${it.value}")
                 }
             }
 
             override fun onAttributionFailure(error: String?) {
-                Log.e("wowApplication", "error onAttributionFailure :  $error")
+//                Log.e("wowApplication", "error onAttributionFailure :  $error")
             }
         }
 
@@ -63,7 +63,7 @@ class WoodSpoonApplication : Application() {
         AppsFlyerLib.getInstance().startTracking(this)
 
         if(BuildConfig.BUILD_TYPE.equals("release", true)) {
-            Log.d("wowSplash","uxcam is on!")
+            Log.d("wowApplication","uxcam is on!")
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
         }
 

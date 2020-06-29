@@ -47,7 +47,12 @@ interface ApiService {
 //    @GET("eaters/me/stripe/ephemeral_key")
 //    fun getEphemeralKey2(): Call<ServerResponse<Any>>
 
+    @FormUrlEncoded
+    @POST("eaters/me/referrals")
+    fun postCampaignReferrals(@Field("sid") sid: String, @Field("cid") cid: String? = null): Observable<ServerResponse<Void>>
 
+    @GET("eaters/me/campaigns/current")
+    fun getCurrentShareCampaign(): Call<ServerResponse<Campaign>>
 
 
     //Utils

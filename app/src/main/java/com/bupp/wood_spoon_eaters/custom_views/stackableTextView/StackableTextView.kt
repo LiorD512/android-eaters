@@ -54,4 +54,8 @@ class StackableTextView : FrameLayout {
         adapter.addItem(bundles)
         adapter.notifyDataSetChanged()
     }
+
+    fun clear() {
+        adapter.clear()
+    }
 }

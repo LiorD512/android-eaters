@@ -4,18 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.androidadvance.topsnackbar.TSnackbar
+import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
@@ -29,6 +26,7 @@ import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetails
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
+import com.bupp.wood_spoon_eaters.features.main.no_locations.NoLocationsAvailableFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
@@ -42,18 +40,14 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.google.android.material.snackbar.Snackbar
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_feed.*
-import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -88,11 +82,15 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         updateAddressTimeView()
         loadFeed()
 
-//        checkForActiveOrder()
         checkForTriggers()
         checkForBranchIntent()
+        checkForCampaignReferrals()
 
         initFcm()
+    }
+
+    private fun checkForCampaignReferrals() {
+        viewModel.checkForCampaignReferrals()
     }
 
     private fun checkForBranchIntent() {
@@ -146,6 +144,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             if (newAddressEvent != null) {
                 if (newAddressEvent.currentAddress != null) {
                     updateAddressTimeView()
+                    refreshFeedIfNecessary()
                 } else {
 
                 }
@@ -193,10 +192,47 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     handleDeviceLocationOff()
                 }
                 MainViewModel.NoLocationUiEvent.NO_LOCATIONS_SAVED -> {
-                    NoLocationsDialog().show(supportFragmentManager, Constants.NO_LOCATION_DIALOG)
+                    loadFragment(NoLocationsAvailableFragment(), Constants.NO_LOCATIONS_AVAILABLE_TAG)
                 }
             }
         })
+        viewModel.locationSettingsEvent.observe(this, Observer {
+            startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), Constants.ANDROID_SETTINGS_REQUEST_CODE)
+        })
+        viewModel.getShareCampaignEvent.observe(this, Observer{
+            it?.let{
+                SharingCampaignDialog.newInstance(it).show(supportFragmentManager, Constants.SHARE_CAMPAIGN_DIALOG)
+            }
+        })
+        viewModel.activeCampaignEvent.observe(this, Observer{
+            val activeCampaign = it
+            if(activeCampaign != null){
+                mainActCampaignHeader.visibility = View.VISIBLE
+                mainActCampaignTitle.text = it.title
+                mainActCampaignSubTitle.text = it.terms
+                it.image?.let{
+                    Glide.with(this).load(it).into(mainActCampaignImg)
+                }
+
+                mainActCampaignHeader.setOnClickListener {
+                    if(mainActCampaignImg.visibility == View.VISIBLE){
+                        mainActCampaignImg.visibility = View.GONE
+                        mainActCampaignSubTitle.visibility = View.GONE
+                    }else{
+                        mainActCampaignImg.visibility = View.VISIBLE
+                        mainActCampaignSubTitle.visibility = View.VISIBLE
+                    }
+                }
+            }else{
+                mainActCampaignHeader.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun refreshFeedIfNecessary() {
+        if(currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG){
+            loadFeed()
+        }
     }
 
     private fun handleDeviceLocationOff() {
@@ -205,21 +241,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             mainActLocationDisabledText.visibility = View.GONE
             openDeviceLocationSettings() }
 
-//        val snackbar = TSnackbar.make(
-//            mainActContainerLayout,
-//            R.string.device_location_off_alerter_body,
-//            TSnackbar.LENGTH_INDEFINITE
-//        )
-//        val snackBarView = snackbar.view
-//        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.teal_blue))
-//        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            textView.setTextAppearance(R.style.SemiBold13Dark)
-//        }
-//
-//        textView.setTextColor(ContextCompat.getColor(this, R.color.white))
-//        textView.gravity = Gravity.CENTER
-//        snackbar.show()
     }
 
     private fun openDeviceLocationSettings() {
@@ -288,6 +309,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     private fun loadFeed() {
         loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
+
+//        viewModel.checkForShareCampaign()
 //        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getLastOrderAddress())
     }
 
@@ -558,10 +581,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             loadFeed()
             checkForActiveOrder()
             checkCartStatus()
+            checkForActiveCampaign()
+            refreshUser()
         }
         if (requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE) {
 //            viewModel.disableEventData()
             checkForActiveOrder()
+        }
+        if (requestCode == Constants.ANDROID_SETTINGS_REQUEST_CODE) {
+            Log.d("wowMainActivity", "BACK FROM SETTINGS")
+            startLocationUpdates()
         }
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
@@ -605,11 +634,24 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                                 (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
                             }
                         }
+                        Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
+                            loadFeed()
+                        }
                     }
                 }
             }
         }
         updateAddressTimeView()
+    }
+
+    private fun refreshUser() {
+        //refresh user data for changes made after checkout (used campaign coupon)
+        viewModel.refreshUserData()
+    }
+
+    private fun checkForActiveCampaign() {
+        //check for active banner campaign after checkout
+        viewModel.checkForShareCampaign()
     }
 
 

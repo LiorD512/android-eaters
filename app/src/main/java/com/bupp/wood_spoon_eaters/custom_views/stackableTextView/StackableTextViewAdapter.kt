@@ -35,4 +35,9 @@ class StackableTextViewAdapter(val context: Context) : RecyclerView.Adapter<Stac
        notifyDataSetChanged()
 
     }
+
+    fun clear() {
+        bundles.clear()
+        notifyDataSetChanged()
+    }
 }

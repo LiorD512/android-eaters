@@ -113,4 +113,14 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
             }, { result -> Log.d("wowSplash", "wowException $result") })
 
     }
+
+    fun setUserCampaignParam(sid: String?, cid: String?) {
+        sid?.let{
+           eaterDataManager.setUserCampaignParam(sid = it)
+        }
+        cid?.let{
+            eaterDataManager.setUserCampaignParam(cid = it)
+        }
+
+    }
 }

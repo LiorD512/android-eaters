@@ -83,11 +83,13 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
             it.name?.let{
                 country = ", ${it}"
             }
-            Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
+            Glide.with(context!!).load(it.flagUrl).circleCrop().into(cookProfileFragFlag)
         }
         cookProfileFragProfession.text = "$profession"// $country"
         cookProfileFragRating.text = cook.rating.toString()
+        cookProfileFragCuisineGrid.clear()
         cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
+        cookProfileFragCuisineGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
         cookProfileFragStoryName.text = "${cook.firstName}'s Story"
         cookProfileFragStory.text = "${cook.about}"
         cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"

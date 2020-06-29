@@ -208,6 +208,11 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="Reg13White">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="Reg13Dark_50">
         <item name="android:fontFamily">@font/open_sans_reg</item>

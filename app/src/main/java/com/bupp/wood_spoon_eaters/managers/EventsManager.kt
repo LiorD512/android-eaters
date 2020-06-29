@@ -31,27 +31,30 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
         }
     }
 
-    fun sendPurchaseEvent(orderId: Long?) {
+    fun sendPurchaseEvent(orderId: Long?, purchaseCost: String) {
         orderId?.let{
             if (isFirstPurchase) {
-                sendFirstPurchaseEvent(it)
+                sendFirstPurchaseEvent(it, purchaseCost)
                 isFirstPurchase = false
             } else {
-                sendOtherPurchaseEvent(it)
+                sendOtherPurchaseEvent(it, purchaseCost)
             }
         }
     }
 
-    fun sendFirstPurchaseEvent(orderId: Long?) {
+    fun sendFirstPurchaseEvent(orderId: Long?, purchaseCost: String) {
         Log.d("wowEventsManager", "sendFirstPurchaseEvent")
         val bundle = Bundle()
         bundle.putString("OrderId", orderId.toString())
+
+        bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "$")
+        bundle.putString(AppEventsConstants.EVENT_PARAM_VALUE_TO_SUM, purchaseCost)
 
         val logger = AppEventsLogger.newLogger(context)
         logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_WISHLIST, bundle)
     }
 
-    fun sendOtherPurchaseEvent(orderId: Long?) {
+    fun sendOtherPurchaseEvent(orderId: Long?, purchaseCost: String) {
         Log.d("wowEventsManager", "sendOtherPurchaseEvent")
         val bundle = Bundle()
         bundle.putString("OrderId", orderId.toString())

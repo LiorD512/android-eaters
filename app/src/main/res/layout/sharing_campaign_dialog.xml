@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/dialogBkg"
+             android:background="@color/dark_43"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <FrameLayout
+            android:background="@drawable/rounded_white_bkg"
+            android:layout_gravity="center"
+            android:layout_marginRight="50.9dp"
+            android:layout_marginLeft="50.9dp"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/sharingCampaignDialogCover"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="117dp"/>
+
+            <TextView
+                    android:id="@+id/sharingCampaignDialogBody"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginEnd="22dp"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    tools:text="Share Woodspoon With Your Friends, and you all can get a 30% off your next order"/>
+
+            <View
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginLeft="7.7dp"
+                    android:layout_marginRight="7.7dp"
+                    android:background="@color/dark_43"
+                    android:layout_width="match_parent"/>
+
+            <TextView
+                    android:id="@+id/sharingCampaignDialogShareBtn"
+                    style="@style/SemiBold15Dark"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="23dp"
+                    android:text="Share"/>
+
+        </LinearLayout>
+
+        <ImageButton
+                android:padding="15dp"
+                android:background="@null"
+                android:src="@drawable/icons_close"
+                android:id="@+id/sharingCampaignDialogCloseBtn"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+</FrameLayout>

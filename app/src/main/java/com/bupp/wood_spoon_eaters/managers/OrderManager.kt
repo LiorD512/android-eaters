@@ -86,6 +86,13 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         curOrderResponse = null
     }
 
+    fun getTotalCost(): String {
+        val total = curOrderResponse?.total?.cents ?: 0
+        val tip = curOrderResponse?.tip?.cents ?: 0
+        val sum = total+tip
+        return "$sum"
+    }
+
 
     var tempTipPercentage: Int = 0
     var tempTipInDollars: Int = 0

@@ -7,4 +7,5 @@
     <dimen name="status_bottom_bar_height">57.3dp</dimen>
     <dimen name="dish_padding">15.4dp</dimen>
     <dimen name="shadow_elevation">8dp</dimen>
+    <dimen name="default_corner_radius">6.9dp</dimen>
 </resources>

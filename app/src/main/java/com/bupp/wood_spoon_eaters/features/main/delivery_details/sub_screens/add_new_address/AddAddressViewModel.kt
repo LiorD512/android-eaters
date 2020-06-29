@@ -33,6 +33,7 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
             myLocationEvent.postValue(MyLocationEvent(myLocation))
         } else {
             eaterDataManager.setLocationListener(this)
+            eaterDataManager.startLocationUpdates()
         }
     }
 

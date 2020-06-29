@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/mainActMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+    <LinearLayout
+            android:visibility="gone"
+            android:background="@color/teal_blue"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            android:id="@+id/mainActCampaignHeader"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <ImageView
+                android:visibility="gone"
+                android:id="@+id/mainActCampaignImg"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/mainActCampaignTitle"
+                android:padding="5dp"
+                style="@style/Bold15White"
+                android:gravity="center"
+                tools:text="this is a campaign coupon that gives yoi 20% off"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <TextView
+                android:visibility="gone"
+                android:id="@+id/mainActCampaignSubTitle"
+                android:padding="5dp"
+                style="@style/Reg13White"
+                android:gravity="start"
+                tools:text="this is a campaign coupon that gives yoi 20% off"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
             android:id="@+id/mainActHeaderView"

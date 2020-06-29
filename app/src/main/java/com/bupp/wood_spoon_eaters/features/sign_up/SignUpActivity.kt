@@ -24,8 +24,7 @@ class SignUpActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
     private fun initUi() {
         headerSignUpFragment.setType(Constants.HEADER_VIEW_TYPE_SIGNUP, getString(R.string.create_account_fragment_title))
-        headerSignUpFragment.isSkipable(true)
-
+//        headerSignUpFragment.isSkipable(false)
         headerSignUpFragment.setHeaderViewListener(this)
 
         loadFragment(CreateAccountFragment(), Constants.CREATE_ACCOUNT_TAG)
