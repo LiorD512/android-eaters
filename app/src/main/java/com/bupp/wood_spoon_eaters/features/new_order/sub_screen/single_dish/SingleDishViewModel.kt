@@ -17,7 +17,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val orderManager: OrderManager, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) : ViewModel() {
+class SingleDishViewModel(
+    val api: ApiService,
+    val settings: AppSettings,
+    val orderManager: OrderManager,
+    val eaterDataManager: EaterDataManager,
+    val metaDataManager: MetaDataManager
+) : ViewModel() {
 
     var menuItemId: Long = -1
     var isEvent: Boolean = false
@@ -50,49 +56,55 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
             addressId = feedRequest.addressId,
             timestamp = feedRequest.timestamp
         ).enqueue(object : Callback<ServerResponse<FullDish>> {
-                override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
-                    progressData.endProgress()
-                    if (response.isSuccessful) {
-                        Log.d("wowSingleDishVM", "getMenuItemsDetails success")
-                        val dish = response.body()?.data
-                        dish?.let {
-                            fullDish.postValue(it)
+            override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
+                progressData.endProgress()
+                if (response.isSuccessful) {
+                    Log.d("wowSingleDishVM", "getMenuItemsDetails success")
+                    val dish = response.body()?.data
+                    dish?.let {
+                        fullDish.postValue(it)
 //                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
-                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.orderFrom), checkDishSoldout(it)))
-                        }
+                        availability.postValue(
+                            DishAvailability(
+                                checkCookingSlotAvailability(it),
+                                getStartingDate(it.menuItem?.cookingSlot?.orderFrom),
+                                checkDishSoldout(it)
+                            )
+                        )
+                    }
 //                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
 //                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
 //                    val shouldClearCart = checkForDifferentCook(dish)
 
-                    } else {
-                        Log.d("wowSingleDishVM", "getMenuItemsDetails fail")
-                        dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-                    }
-                }
-
-                override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
-                    progressData.endProgress()
-                    Log.d("wowSingleDishVM", "getMenuItemsDetails big fail: ${t.message}")
+                } else {
+                    Log.d("wowSingleDishVM", "getMenuItemsDetails fail")
                     dishDetailsEvent.postValue(DishDetailsEvent(false, null))
                 }
-            })
+            }
+
+            override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
+                progressData.endProgress()
+                Log.d("wowSingleDishVM", "getMenuItemsDetails big fail: ${t.message}")
+                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+            }
+        })
     }
 
     private fun checkDishSoldout(dish: FullDish): Boolean {
         val quantity = dish.menuItem?.quantity
         val unitsSold = dish.menuItem?.unitsSold
-         quantity?.let{
-             unitsSold?.let{
-                 return ((quantity - unitsSold <= 0))
-             }
-         }
+        quantity?.let {
+            unitsSold?.let {
+                return ((quantity - unitsSold <= 0))
+            }
+        }
         return false
     }
 
     private fun getStartingDate(startsAt: Date?): Date? {
         var newDate = Date()
-        startsAt?.let{
-            if(startsAt.after(newDate)){
+        startsAt?.let {
+            if (startsAt.after(newDate)) {
                 newDate = startsAt
             }
         }
@@ -101,8 +113,8 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
 
 
     private fun checkCookingSlotAvailability(dish: FullDish?): Boolean {
-//        val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
-        val start: Date? = dish?.menuItem?.cookingSlot?.orderFrom
+        val orderFrom: Date? = dish?.menuItem?.cookingSlot?.orderFrom
+        val start: Date? = dish?.menuItem?.cookingSlot?.startsAt
         val end: Date? = dish?.menuItem?.cookingSlot?.endsAt
         var userSelection: Date? = eaterDataManager.getLastOrderTime()
 
@@ -110,9 +122,11 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
             return false
         }
         if (userSelection == null) {
+            //in this case order is ASAP - then check from starting time and not orderingFrom time
             userSelection = Date()
+            return (userSelection.equals(start) || userSelection.equals(end)) || (userSelection.after(start) && userSelection.before(end))
         }
-        return (userSelection.equals(start) || userSelection.equals(end)) || (userSelection.after(start) && userSelection.before(end))
+        return (userSelection.equals(orderFrom) || userSelection.equals(end)) || (userSelection.after(orderFrom) && userSelection.before(end))
     }
 
     private fun getFeedRequest(): FeedRequest {
@@ -137,7 +151,7 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
         getCurrentDish()?.let {
             //if new chosen time is approximently now - set null
             var newDate = newChosenDate
-            if(Utils.isNow(newChosenDate)){
+            if (Utils.isNow(newChosenDate)) {
                 newDate = null
             }
             eaterDataManager.orderTime = newDate
@@ -193,7 +207,6 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     }
 
 
-
 //    fun getDeliveryFeeString(): String {
 //        return metaDataManager.getDeliveryFeeStr()
 //    }
@@ -203,15 +216,12 @@ class SingleDishViewModel(val api: ApiService, val settings: AppSettings, val or
     }
 
 
-
     fun fetchDishForNewDate(menuItemId: Long) {
         this.menuItemId = menuItemId
         getFullDish()
     }
 
     data class AdditionalDishesEvent(val orderItems: List<OrderItem>?, val moreDishes: List<Dish>?)
-
-
 
 
 }

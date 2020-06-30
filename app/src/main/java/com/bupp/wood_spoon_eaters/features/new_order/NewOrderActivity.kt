@@ -134,14 +134,14 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
         loadFragment(PromoCodeFragment(), Constants.PROMO_CODE_TAG)
     }
 
-
     //Checkout
     override fun onCheckout() {
         loadFragment(CheckoutFragment(this), Constants.CHECKOUT_TAG)
     }
 
     override fun onCheckoutDone() {
-        setResult(Activity.RESULT_OK)
+        intent.putExtra("isAfterPurchase", true)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

@@ -25,14 +25,15 @@ data class Campaign(
     @SerializedName("name") val name: String,
     @SerializedName("description") val description: String,
     @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("share_button_text") val shareBtnText: String,
-    @SerializedName("share_text") val shareText: String,
-    @SerializedName("invite_url") val inviteUrl: String
+    @SerializedName("share_button_text") val shareBtnText: String?,
+    @SerializedName("share_text") val shareText: String?,
+    @SerializedName("invite_url") val inviteUrl: String?
 ):Parcelable
 
 data class ActiveCampaign(
     @SerializedName("id") val id: Long,
     @SerializedName("banner_title") val title: String?,
     @SerializedName("banner_image") val image: String?,
-    @SerializedName("banner_terms") val terms: String?
+    @SerializedName("banner_terms") val terms: String?,
+    @SerializedName("banner_color") val color: String?
 )

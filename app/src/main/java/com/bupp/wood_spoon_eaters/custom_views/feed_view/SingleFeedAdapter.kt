@@ -65,7 +65,7 @@ class SingleFeedAdapter(
                         holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.orderFrom, dish.menuItem.cookingSlot.endsAt)
                     }else{
                         //Dish is offered later this week and beyond
-                        holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.orderAt)
+                        holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.cookingSlot.orderFrom)
                     }
                 }
             }

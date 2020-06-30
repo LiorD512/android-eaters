@@ -71,7 +71,9 @@ class SharingCampaignDialog() : DialogFragment(){
             Glide.with(context!!).load(it.thumbnail).into(sharingCampaignDialogCover)
 
             sharingCampaignDialogBody.text = it.description
-            sharingCampaignDialogShareBtn.text = it.shareBtnText
+            it.shareBtnText?.let{
+                sharingCampaignDialogShareBtn.text = it
+            }
 
         }
 

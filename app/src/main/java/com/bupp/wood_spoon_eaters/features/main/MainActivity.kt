@@ -2,7 +2,9 @@ package com.bupp.wood_spoon_eaters.features.main
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -39,6 +41,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.GPSBroadcastReceiver
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
@@ -56,9 +59,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
+    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, GPSBroadcastReceiver.GPSBroadcastListener {
 
-
+    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -194,6 +197,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 MainViewModel.NoLocationUiEvent.NO_LOCATIONS_SAVED -> {
                     loadFragment(NoLocationsAvailableFragment(), Constants.NO_LOCATIONS_AVAILABLE_TAG)
                 }
+                else -> {}
             }
         })
         viewModel.locationSettingsEvent.observe(this, Observer {
@@ -214,6 +218,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     Glide.with(this).load(it).into(mainActCampaignImg)
                 }
 
+                it.color?.let{
+                    mainActCampaignHeader.setBackgroundColor(Color.parseColor(it))
+                }
+
                 mainActCampaignHeader.setOnClickListener {
                     if(mainActCampaignImg.visibility == View.VISIBLE){
                         mainActCampaignImg.visibility = View.GONE
@@ -230,7 +238,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun refreshFeedIfNecessary() {
-        if(currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG){
+        if(currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG){
             loadFeed()
         }
     }
@@ -547,8 +555,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 loadOrderHistoryFragment()
             }
             Constants.DELIVERY_DETAILS_TAG -> {
-                updateAddressTimeView()
-                loadFeed()
+                when(lastFragmentTag){
+                    Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
+                        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
+                        startLocationUpdates()
+                    }
+                    else -> {
+                        updateAddressTimeView()
+                        loadFeed()
+                    }
+                }
             }
             Constants.ORDER_HISTORY_TAG -> {
                 loadMyProfile()
@@ -556,16 +572,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Constants.ORDER_DETAILS_TAG -> {
                 loadOrderHistoryFragment()
             }
-
             else -> {
                 loadFeed()
             }
 
         }
     }
-
-
-
 
     fun updateSearchBarTitle(str: String) {
         mainActHeaderView.updateSearchTitle(str)
@@ -581,8 +593,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             loadFeed()
             checkForActiveOrder()
             checkCartStatus()
-            checkForActiveCampaign()
-            refreshUser()
+            data?.let{
+                if(it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)){
+                    checkForSharingCampaign()
+                    refreshUser()
+                }
+            }
         }
         if (requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE) {
 //            viewModel.disableEventData()
@@ -634,9 +650,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                                 (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
                             }
                         }
-                        Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
-                            loadFeed()
-                        }
+//                        Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
+//                            startLocationUpdates()
+////                            loadFeed()
+//                        }
                     }
                 }
             }
@@ -649,7 +666,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.refreshUserData()
     }
 
-    private fun checkForActiveCampaign() {
+    private fun checkForSharingCampaign() {
         //check for active banner campaign after checkout
         viewModel.checkForShareCampaign()
     }
@@ -666,14 +683,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Constants.NEW_ORDER_REQUEST_CODE
         )
     }
-
-    fun loadNewOrderActivityCheckOut() {
-        startActivityForResult(
-            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true),
-            Constants.NEW_ORDER_REQUEST_CODE
-        )
-    }
-
 
     fun onReportIssueDone() {
         loadFeed()
@@ -692,6 +701,25 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onResume() {
         super.onResume()
         checkForActiveOrder()
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
+        registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(gpsBroadcastReceiver)
+    }
+
+    override fun onGPSChanged(isEnabled: Boolean) {
+        if(isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG){
+            startLocationUpdates()
+            loadFeed()
+        }
     }
 
 
