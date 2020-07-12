@@ -82,7 +82,7 @@ class SharingCampaignDialog() : DialogFragment(){
     fun getShareText(): String {
         val inviteUrl = curCampaign?.inviteUrl
 //        val text = curCampaign?.description
-        val text = "${curCampaign?.shareText} \n ${curCampaign?.description}"
+        val text = "${curCampaign?.shareText}"// \n ${curCampaign?.description}"
         return "$text \n $inviteUrl"
     }
 

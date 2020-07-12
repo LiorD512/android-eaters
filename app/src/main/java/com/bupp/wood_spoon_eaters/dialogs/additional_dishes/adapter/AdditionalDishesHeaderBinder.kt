@@ -19,7 +19,7 @@ class AdditionalDishesHeaderBinder : ItemBinder<AdditionalDishHeader, Additional
     }
 
     override fun bindViewHolder(holder: AdditionalHeader, item: AdditionalDishHeader) {
-        holder.body.text = "People who ordered from ${item.cooksName} usually added these following dishes"
+        holder.body.text = "People who order from ${item.cooksName} usually added the following dishes"
     }
 
     class AdditionalHeader(itemView: View) : ItemViewHolder<AdditionalDishHeader>(itemView) {

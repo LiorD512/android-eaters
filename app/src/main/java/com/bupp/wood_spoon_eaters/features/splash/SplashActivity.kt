@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.appsflyer.AppsFlyerConversionListener
+import com.appsflyer.AppsFlyerLib
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.UpdateRequiredDialog
@@ -39,10 +41,31 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         initObservers()
+        initCampaignCallback()
 
         Timer("SettingUp", false).schedule(1000) {
             init()
         }
+    }
+
+    private fun initCampaignCallback() {
+        AppsFlyerLib.getInstance().registerConversionListener(this, object: AppsFlyerConversionListener{
+            override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
+                Log.d("wowSplash", "onAppOpenAttribution")
+            }
+
+            override fun onAttributionFailure(err: String?) {
+                Log.d("wowSplash", "onAttributionFailure $err")
+            }
+
+            override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {
+                Log.d("wowSplash", "onInstallConversionDataLoaded $data")
+            }
+
+            override fun onInstallConversionFailure(p0: String?) {
+                Log.d("wowSplash", "onInstallConversionFailure")
+            }
+        })
     }
 
     private fun initObservers() {

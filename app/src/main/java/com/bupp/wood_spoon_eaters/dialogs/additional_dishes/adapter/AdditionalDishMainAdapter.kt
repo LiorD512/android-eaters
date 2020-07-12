@@ -89,6 +89,10 @@ class AdditionalDishMainAdapter(
         currentAdditional?.remove(currentAddedDish)
         additionalDishesSection.removeItem()
         additionalDishesSection.setItem(AdditionalDishes(currentAdditional!!))
+
+        if(currentAdditional.size == 0){
+            additionalDishesHeaderAndSection.hideSection()
+        }
     }
 
 

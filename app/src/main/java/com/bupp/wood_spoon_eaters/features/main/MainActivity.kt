@@ -148,8 +148,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 if (newAddressEvent.currentAddress != null) {
                     updateAddressTimeView()
                     refreshFeedIfNecessary()
-                } else {
-
                 }
             }
         })
@@ -650,10 +648,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                                 (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
                             }
                         }
-//                        Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
-//                            startLocationUpdates()
-////                            loadFeed()
-//                        }
                     }
                 }
             }

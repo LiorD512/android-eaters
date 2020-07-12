@@ -117,8 +117,8 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
 //    }
 
     fun getShareText(): String {
-        val inviteUrl = eaterDataManager.currentEater?.inviteUrl
-        val text = "Hey there, I just thought of you and realized you would love this new app. WoodSpoon is the first on-demand homemade food delivery app. You should definitely try it! Download WoodSpoon now and get 30% off your next dish with \"NEWSPOONIE\" promo code \n"
+        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
         return "$text \n $inviteUrl"
     }
 
