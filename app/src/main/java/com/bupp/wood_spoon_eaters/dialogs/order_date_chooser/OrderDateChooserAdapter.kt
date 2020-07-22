@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs.abs
+package com.bupp.wood_spoon_eaters.dialogs.order_date_chooser
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -24,7 +24,9 @@ class OrderDateChooserAdapter(val context: Context, private val menuItems: Array
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.order_date_chooser_item, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.order_date_chooser_item, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {

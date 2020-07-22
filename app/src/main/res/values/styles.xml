@@ -11,7 +11,9 @@
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
         <item name="android:navigationBarColor" tools:targetApi="27">@color/white</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
+        <item name="android:windowBackground">@drawable/splash_bkg</item>
     </style>
+
 
     <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
@@ -94,6 +96,11 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+    <style name="Bold11Dark">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
 
     <style name="Bold15White">
         <item name="android:fontFamily">@font/open_sans_bold</item>
@@ -166,6 +173,11 @@
         <item name="android:textSize">15.1sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="ExtraBold23White">
+        <item name="android:fontFamily">@font/open_sans_extra_bold</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="SemiBold15Dark_50">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
@@ -185,10 +197,21 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="Bold13TealBlue">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
     <style name="SemiBold13Dark">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="SemiBold13Dark_50">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_50</item>
     </style>
 
     <style name="SemiBold11PurpelyGrey">
@@ -234,7 +257,7 @@
     <style name="Reg11PurpleyGrey">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">11.5sp</item>
-        <item name="android:textColor">@color/purpely_grey</item>
+        <item name="android:textColor">@color/purpley_grey</item>
     </style>
 
     <style name="SemiBold13Silver">
@@ -382,6 +405,4 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-
-    <color name="purpely_grey">#929092</color>
 </resources>

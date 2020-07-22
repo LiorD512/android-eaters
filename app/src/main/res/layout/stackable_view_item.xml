@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        android:layout_gravity="center"
+<FrameLayout android:layout_gravity="center"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:orientation="horizontal">
 
         <TextView
-                android:layout_gravity="center"
                 android:id="@+id/stackableViewItem1"
                 style="@style/Reg13Dark_50"
                 android:layout_width="wrap_content"
@@ -25,7 +23,6 @@
                 tools:text="adjaslkdasj"/>
 
         <LinearLayout
-                android:layout_gravity="center"
                 tools:visibility="visible"
                 android:id="@+id/stackableViewItem2Layout"
                 android:layout_width="0dp"
@@ -53,7 +50,6 @@
         </LinearLayout>
 
         <LinearLayout
-                android:layout_gravity="center"
                 tools:visibility="gone"
                 android:id="@+id/stackableViewItem3Layout"
                 android:layout_width="wrap_content"

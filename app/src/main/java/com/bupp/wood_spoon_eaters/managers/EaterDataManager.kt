@@ -54,7 +54,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         listeners.add(listener)
     }
 
-
     override fun onLocationChanged(mLocation: Address) {
         val myAddress: Address? = getClosestAddressToLocation(mLocation)
         if (myAddress != null) {
@@ -192,6 +191,10 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     //Stripe customer card
     fun updateCustomerCard(paymentMethod: PaymentMethod) {
         this.currentPaymentMethod = paymentMethod
+    }
+
+    fun getCurrentPaymentMethod(): PaymentMethod?{
+        return currentPaymentMethod
     }
 
     fun getCustomerCardId(): String {

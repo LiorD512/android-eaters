@@ -26,6 +26,7 @@
     <color name="black_three">#111111</color>
     <color name="black_two">#030303</color>
     <color name="dark">#252126</color>
+    <color name="dark_40">#66252126</color>
     <color name="dark_43">#2b252126</color>
     <color name="dark_50">#80252126</color>
     <color name="dark_80">#cc252126</color>
@@ -50,6 +51,8 @@
     <color name="light_teal">#b0ece4</color>
     <color name="light_rose">#ffc0c3</color>
     <color name="darkish_pink">#e5455c</color>
+    <color name="charcoal_grey_20">#332e2a2f</color>
+    <color name="petrol">#00656d</color>
 
 </resources>
 

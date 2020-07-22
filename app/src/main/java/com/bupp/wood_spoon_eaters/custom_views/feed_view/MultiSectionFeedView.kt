@@ -28,6 +28,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         fun onCookClick(cook: Cook)
         fun refreshList(){}
         fun onEmptyhDishList(){}
+        fun onWorldwideInfoClick()
 //        fun onFavClick(dishId: Long, isFavorite: Boolean)
         fun onShareClick()
     }
@@ -146,5 +147,11 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         }
     }
 
+
+    override fun onWorldwideInfoClick() {
+        if(::listener.isInitialized){
+            listener.onWorldwideInfoClick()
+        }
+    }
 
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.model.DietaryIcon
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import kotlinx.android.synthetic.main.stackable_text_view.view.*
 
@@ -47,13 +48,22 @@ class StackableTextView : FrameLayout {
                 }
                 i++
             }
-
             val stackableBundle: StackablesBundle = StackablesBundle(iconsBundle)
             bundles.add(stackableBundle)
         }
         adapter.addItem(bundles)
         adapter.notifyDataSetChanged()
     }
+
+    fun initStackableViewWith(strings: ArrayList<String>){
+        val selectables = arrayListOf<DietaryIcon>()
+        strings.forEach {
+            selectables.add(DietaryIcon(it, "", 0))
+        }
+        initStackableView(selectables as ArrayList<SelectableIcon>)
+    }
+
+
 
     fun clear() {
         adapter.clear()

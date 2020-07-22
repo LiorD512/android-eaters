@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.order_date_chooser
 
 import android.app.DatePickerDialog
 import android.content.DialogInterface
@@ -13,7 +13,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
-import com.bupp.wood_spoon_eaters.dialogs.abs.OrderDateChooserAdapter
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog

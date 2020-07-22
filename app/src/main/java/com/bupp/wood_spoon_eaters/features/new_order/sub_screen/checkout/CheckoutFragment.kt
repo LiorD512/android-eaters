@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.model.MenuItem
@@ -26,7 +26,6 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.checkout_fragment.*
-import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
@@ -38,7 +37,7 @@ import kotlin.collections.ArrayList
 class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener,
-    StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
+    StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener, NationwideShippingChooserDialog.OrderDateChooserDialogListener,
     com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, OrderUpdateErrorDialog.updateErrorDialogListener {
 
     private var hasPaymentMethod: Boolean = false
@@ -49,13 +48,12 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         fun onCheckoutCanceled()
     }
 
-    val viewModel by viewModel<CheckoutViewModel>()
+//    val viewModel by viewModel<CheckoutViewModel>()
     val ordersViewModel by sharedViewModel<NewOrderSharedViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.checkout_fragment, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,9 +71,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
          })
 
 
-        viewModel.getStripeCustomerCards.observe(this, Observer { cardsEvent ->
-            if(cardsEvent.isSuccess){
-                handleCustomerCards(cardsEvent.paymentMethods)
+        ordersViewModel.getStripeCustomerCards().observe(this, Observer { cardsEvent ->
+            Log.d("wowCheckoutFrag","getStripeCustomerCards()")
+            if(cardsEvent != null){
+                handleCustomerCards(cardsEvent)
             }else {
                 setEmptyPaymentMethod()
             }
@@ -136,7 +135,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onCancelUpdateOrderError() {
-        viewModel.rollBackToPreviousAddress()
+        ordersViewModel.rollBackToPreviousAddress()
     }
 
 
@@ -176,8 +175,8 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 //        }
 
         ordersViewModel.getLastOrderDetails()
-        viewModel.getStripeCustomerCards()
-        viewModel.getCurrentCustomer()
+//        ordersViewModel.getStripeCustomerCards()
+//        viewModel.getCurrentCustomer()
         ordersViewModel.resetTip()
     }
 
@@ -204,7 +203,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             checkoutFragStatusBar.setEnabled(true)
             checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
             checkoutFragChangePaymentChangeBtn.alpha = 0.3f
-            viewModel.updateUserCustomerCard(paymentMethod)
+            ordersViewModel.updateUserCustomerCard(paymentMethod)
         }
     }
 
@@ -288,8 +287,6 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             checkoutFragDeliveryFeePriceFree.visibility = View.VISIBLE
         }
 
-
-
         val allDishSubTotal = checkoutFragOrderItemsView.getAllDishPriceValue()
         val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
@@ -306,14 +303,15 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         }
 
 //        val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee).plus(discount))
-        val total: Double = curOrder.discount.value
+//        val total: Double = curOrder.discount.value
+        val total: Double = curOrder.totalBeforeTip.value
         val totalWithTip: Double = total.plus(tipValue)
 
 
         checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
         checkoutFragTotalPriceText.text = "${curOrder.totalBeforeTip.formatedValue}"
 
-        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_FINALIZE, price = curOrder.totalBeforeTip.value)
+        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_FINALIZE, price = totalWithTip)
 
     }
 
@@ -335,16 +333,17 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            ordersViewModel.updateTipInDollars(0)
-            ordersViewModel.updateTipPercentage(tipSelection)
+            ordersViewModel.updateTip(tipPercentage = tipSelection)
+//            ordersViewModel.updateTipPercentage(tipSelection)
             Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
             }
     }
 
     override fun onTipDone(tipAmount: Int) {
         checkoutFragTipPercntView.setCustomTipValue(tipAmount)
-        ordersViewModel.updateTipPercentage(0)
-        ordersViewModel.updateTipInDollars(tipAmount)
+        ordersViewModel.updateTip(tipInCents = tipAmount)
+//        ordersViewModel.updateTipPercentage(0)
+//        ordersViewModel.updateTipInDollars(tipAmount)
     }
 
     override fun onChangeLocationClick() {

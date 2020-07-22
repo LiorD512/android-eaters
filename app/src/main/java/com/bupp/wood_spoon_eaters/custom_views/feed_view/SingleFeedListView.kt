@@ -21,6 +21,7 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
 
     interface SingleFeedListViewListener {
         fun onDishClick(dish: Dish)
+        fun onWorldwideInfoClick()
 //        fun onFavClick(dishId: Long, isFavorite: Boolean)
     }
 
@@ -75,6 +76,12 @@ class SingleFeedListView : FrameLayout, SingleFeedAdapter.SearchAdapterListener 
     override fun onDishClick(dish: Dish) {
         if (::listener.isInitialized) {
             listener.onDishClick(dish)
+        }
+    }
+
+    override fun onWorldwideInfoClick() {
+        if (::listener.isInitialized) {
+            listener.onWorldwideInfoClick()
         }
     }
 

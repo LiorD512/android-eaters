@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.dialogs.NoDishesAvailableDialog
+import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.model.Cook
@@ -57,6 +58,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     private fun initObservers() {
         viewModel.feedEvent.observe(this, Observer { event ->
+            (activity as MainActivity).isFeedReady = true
             feedFragPb.hide()
             if(event.isSuccess){
                 initFeed(event.feedArr!!)
@@ -117,6 +119,15 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     override fun onShareClick() {
         val text = viewModel.getShareText()
         Utils.shareText(activity!!, text)
+    }
+
+    override fun onWorldwideInfoClick() {
+        WorldwideShippmentDialog().show(childFragmentManager, Constants.WORLD_WIDE_SHIPPMENT_DIALOG)
+    }
+
+    fun silentRefresh() {
+        Log.d("wowFeedFrag","silentRefresh")
+        viewModel.getFeed()
     }
 
 }

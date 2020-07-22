@@ -24,6 +24,11 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning"
             tools:replace="android:allowBackup,android:supportsRtl">
+
+        <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"/>
+
         <activity
                 android:screenOrientation="portrait"
                 android:name=".features.events.EventActivity"

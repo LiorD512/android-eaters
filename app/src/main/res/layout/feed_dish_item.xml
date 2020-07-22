@@ -8,11 +8,10 @@
         android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-            app:cardElevation="@dimen/shadow_elevation"
-            android:layout_marginEnd="8.9dp"
-            android:layout_marginStart="8.9dp"
+            android:id="@+id/feedDishItemCardLayout"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true"
             android:background="@color/white"
-            android:layout_marginBottom="13dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -37,6 +36,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
 
+                    <View
+                            android:background="@color/charcoal_grey_20"
+                            android:id="@+id/overlay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    <TextView
+                            android:shadowColor="@color/dark"
+                            android:shadowDx="3"
+                            android:shadowDy="3"
+                            android:shadowRadius="5"
+                            android:singleLine="true"
+                            android:id="@+id/feedDishItemDishName"
+                            style="@style/ExtraBold23White"
+                            android:paddingStart="6dp"
+                            android:paddingBottom="3dp"
+                            android:layout_gravity="bottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="Barbaqua Boul $7"/>
+
                     <TextView
                             android:visibility="gone"
                             android:id="@+id/feedDishUnAvailable"
@@ -47,15 +67,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
 
-                    <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                            app:imageSize="SMALL"
-                            app:isWithStroke="true"
-                            android:id="@+id/feedDishItemUserImg"
-                            android:layout_marginTop="7.7dp"
-                            android:layout_marginLeft="7.7dp"
-                            android:layout_gravity="top|left"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+<!--                    <com.bupp.wood_spoon_eaters.custom_views.UserImageView-->
+<!--                            app:imageSize="SMALL"-->
+<!--                            app:isWithStroke="true"-->
+<!--                            android:id="@+id/feedDishItemUserImg"-->
+<!--                            android:layout_marginTop="7.7dp"-->
+<!--                            android:layout_marginLeft="7.7dp"-->
+<!--                            android:layout_gravity="top|left"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"/>-->
 
                     <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
                             android:id="@+id/feedDishItemFavorite"
@@ -83,6 +103,7 @@
             </FrameLayout>
 
             <LinearLayout
+
                     android:paddingLeft="7.7dp"
                     android:paddingRight="7.7dp"
                     android:paddingBottom="7.7dp"
@@ -97,41 +118,71 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
-                            android:singleLine="true"
-                            app:minTextSize="11sp"
-                            android:id="@+id/feedDishItemDishName"
-                            style="@style/SemiBold15Dark"
+                    <ImageView
+
+                            android:scaleType="centerCrop"
+                            android:id="@+id/feedDishItemUserImg"
+                            android:layout_width="39dp"
+                            android:layout_height="39dp"/>
+
+                    <LinearLayout
+                            android:layout_marginStart="7dp"
                             android:layout_weight="1"
+                            android:orientation="vertical"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content">
+
+                        <LinearLayout
+                                android:gravity="center|start"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                            <TextView
+                                    android:id="@+id/feedDishItemCookName"
+                                    style="@style/SemiBold13Dark"
+                                    android:ellipsize="end"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    tools:text="By John Taylor"/>
+
+                            <ImageView
+                                    android:layout_marginStart="3dp"
+                                    android:id="@+id/feedDishCookFlag"
+                                    android:layout_width="23dp"
+                                    android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                                android:id="@+id/feedDishQuantityLeft"
+                                style="@style/SemiBold13Dark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="7 Left"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                            android:id="@+id/feedDishItemPrice"
+                            android:paddingStart="13dp"
+                            android:paddingEnd="13dp"
+                            android:background="@color/light_periwinkle_20"
+                            style="@style/Bold17Blue"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="Barbaqua Boul $7"/>
-
-                    <com.bupp.wood_spoon_eaters.custom_views.QuantityView
-                            android:id="@+id/feedDishQuantityView"
-                            android:layout_weight="1"
-                            app:views_gravity="RIGHT"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"/>
-
-                    <!--<TextView-->
-                    <!--android:id="@+id/feedDishItemDishCount"-->
-                    <!--android:drawableLeft="@drawable/icons_dishes"-->
-                    <!--android:drawablePadding="7.7dp"-->
-                    <!--style="@style/Reg15Dark"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--tools:text="15/30"/>-->
+                            android:letterSpacing="0.03"
+                            tools:text="$7"/>
 
                 </LinearLayout>
 
-                <TextView
-                        android:layout_marginTop="2.2dp"
-                        android:id="@+id/feedDishItemCookName"
-                        style="@style/Reg13Dark_50"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="By Noa Shlonsky"/>
+                <View
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/dashed_grey_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"/>
 
                 <!--android:gravity="center"-->
                 <RelativeLayout
@@ -189,13 +240,45 @@
                             tools:text="Free Delivery"/>
 
                 </RelativeLayout>
-
             </LinearLayout>
-
-
         </LinearLayout>
 
-
     </androidx.cardview.widget.CardView>
+    
+    <LinearLayout
+            android:elevation="5dp"
+            android:layout_marginTop="3dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/feedDishItemWorldwideLayout"
+            android:layout_marginEnd="35dp"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        
+        <View
+                android:rotation="-180"
+                android:background="@drawable/nationwide_rect"
+                android:layout_width="5dp"
+                android:layout_height="15dp"/>
+
+        <TextView
+                android:elevation="8dp"
+                android:padding="7dp"
+                android:drawableTint="@color/white"
+                android:gravity="center"
+                android:drawablePadding="5dp"
+                android:drawableEnd="@drawable/ic_small_tooltip"
+                android:background="@drawable/blue_bkg_cornered"
+                style="@style/SemiBold13White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:text="Ships Nationwide"/>
+        
+    </LinearLayout>
+
+    
 
 </FrameLayout>

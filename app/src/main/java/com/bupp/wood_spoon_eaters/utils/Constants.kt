@@ -157,6 +157,7 @@ class Constants {
         const val NO_LOCATION_DIALOG = "no_location_dialog"
         const val ERROR_DIALOG = "error_dialog"
         const val SHARE_CAMPAIGN_DIALOG = "campaign_dialog"
+        const val WORLD_WIDE_SHIPPMENT_DIALOG = "WORLD_WIDE_DIALOG"
 
 
 

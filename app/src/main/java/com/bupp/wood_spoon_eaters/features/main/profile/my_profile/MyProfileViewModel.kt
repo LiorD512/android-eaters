@@ -118,8 +118,9 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
     }
 
     fun initStripe(activity: Activity) {
-        PaymentConfiguration.init(activity, metaDataManager.getStripePublishableKey())
-        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
+        //todo - fix this
+//        PaymentConfiguration.init(activity, metaDataManager.getStripePublishableKey())
+//        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
     }
 
     val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
@@ -128,12 +129,12 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
         CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,
             object : CustomerSession.PaymentMethodsRetrievalListener {
                 override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                    Log.d("wowCheckoutVM","getStripeCustomerCards $paymentMethods")
+                    Log.d("wowProfileVM","getStripeCustomerCards $paymentMethods")
                     getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethods))
                 }
 
                 override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-                    Log.d("wowCheckoutVM","getStripeCustomerCards ERROR $errorMessage")
+                    Log.d("wowProfileVM","getStripeCustomerCards ERROR $errorMessage")
                     getStripeCustomerCards.postValue(StripeCustomerCardsEvent(false))
                 }
             })

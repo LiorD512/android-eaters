@@ -31,6 +31,7 @@ class MainViewModel(
     val addressUpdateActionEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
     val addressUpdateEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
 
+
     data class AddressUpdateEvent(val currentAddress: Address?)
 
     private val TAG = "wowMainVM"
@@ -330,6 +331,12 @@ class MainViewModel(
                 Log.d(TAG, "on big Failure! " + t.message)
             }
         })
+    }
+
+    fun resetOrderTimeIfNeeded() {
+        if(!eaterDataManager.hasSpecificTime){
+            eaterDataManager.orderTime = null
+        }
     }
 
 

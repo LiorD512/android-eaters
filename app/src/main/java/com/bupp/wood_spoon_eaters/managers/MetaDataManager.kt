@@ -85,12 +85,12 @@ class MetaDataManager {
         return ""
     }
 
-    fun getStripePublishableKey(): String{
+    fun getStripePublishableKey(): String?{
         for (settings in getSettings()){
             if(settings.key == "stripe_publishable_key")
                 return settings.value!! as String
         }
-        return ""
+        return null
     }
 
     fun getReportsEmailAddress(): String? {

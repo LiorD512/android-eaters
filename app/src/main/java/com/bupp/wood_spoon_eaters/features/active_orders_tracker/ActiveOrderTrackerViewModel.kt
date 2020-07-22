@@ -2,8 +2,10 @@ package com.bupp.wood_spoon_eaters.features.active_orders_tracker
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -18,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager) : ViewModel() {
+class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val paymentManager: PaymentManager) : ViewModel() {
 
 
     private val compositeDisposable: ArrayList<Disposable> = arrayListOf()
@@ -41,7 +43,8 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
                     Log.d("wowActiveOrderTrackerVM", "getTrackableOrders success")
                     val activeOrders = response.body()!!.data
                     if(activeOrders != null && activeOrders.size > 0){
-                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders))
+                        val userInfo = getOrderUserInfo()
+                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, userInfo))
                     }else{
                         getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
                     }
@@ -59,6 +62,25 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
             }
         })
     }
+
+    val paymentCardEvent = SingleLiveEvent<Boolean>()
+    private fun getOrderUserInfo(): OrderUserInfo? {
+        var paymentString = "Fetching data...."
+        val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()
+        if(paymentMethod != null){
+            paymentString = "${paymentMethod.card?.brand} ending in ${paymentMethod.card?.last4}"
+        }
+
+        val userName = eaterDataManager.currentEater?.getFullName()
+        val phoneNumber = eaterDataManager.currentEater?.phoneNumber
+        val userInfo = "$userName, $phoneNumber"
+
+        val userLocation = eaterDataManager.getLastChosenAddress()
+
+        return OrderUserInfo(paymentString, userInfo, userLocation)
+    }
+
+
 
 
     fun startSilentUpdate() {
@@ -87,6 +109,6 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
 
     val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
-    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?)
+    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?, val userInfo: OrderUserInfo? = null)
 
 }

@@ -22,11 +22,15 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
+import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.AdditionalDishesDialog
+import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
+import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CooksProfileDishesAdapter
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
@@ -42,12 +46,12 @@ import java.util.*
 
 
 class SingleDishFragment() : Fragment(),
-    OrderDateChooserDialog.OrderDateChooserDialogListener, //DishCounterView.DishCounterViewListener,
+    NationwideShippingChooserDialog.OrderDateChooserDialogListener, //DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
     UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener,
     DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener,
-    PlusMinusView.PlusMinusInterface {
+    PlusMinusView.PlusMinusInterface, CooksProfileDishesAdapter.CooksProfileDishesListener, OrderDateChooserDialog.OrderDateChooserDialogListener {
 
 
     var listener: SingleDishDialogListener? = null
@@ -94,7 +98,7 @@ class SingleDishFragment() : Fragment(),
 
     var ingredientsAdapter: DishIngredientsAdapter? = null
     //    private lateinit var currentDish: FullDish
-    private lateinit var dishAdapter: SingleFeedAdapter
+    private lateinit var dishAdapter: CooksProfileDishesAdapter
 
     val viewModel by viewModel<SingleDishViewModel>()
     val ordersViewModel by sharedViewModel<NewOrderSharedViewModel>()
@@ -219,28 +223,28 @@ class SingleDishFragment() : Fragment(),
     private fun handleUnAvailableCookingSlot(startsAt: Date) {
 //        DishUnAvailableDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
         Log.d("wowSingleDish", "handleUnAvailableCookingSlot startsAt: $startsAt")
-        showUnavailableDishAlerter()
+//        showUnavailableDishAlerter()
         startsAt?.let {
             viewModel.updateChosenDeliveryDate(newChosenDate = it)
         }
     }
 
-    private fun showUnavailableDishAlerter() {
-        val snackbar = TSnackbar.make(
-            singleDishMainLayout,
-            R.string.un_available_dish_alerter_body,
-            TSnackbar.LENGTH_LONG
-        )
-        val snackBarView = snackbar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.teal_blue))
-        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
-        textView.setGravity(Gravity.CENTER_HORIZONTAL)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textView.setTextAppearance(R.style.SemiBold13Dark)
-        }
-        textView.setTextColor(ContextCompat.getColor(context!!, R.color.white))
-        snackbar.show()
-    }
+//    private fun showUnavailableDishAlerter() {
+//        val snackbar = TSnackbar.make(
+//            singleDishMainLayout,
+//            R.string.un_available_dish_alerter_body,
+//            TSnackbar.LENGTH_LONG
+//        )
+//        val snackBarView = snackbar.view
+//        snackBarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.teal_blue))
+//        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+//        textView.setGravity(Gravity.CENTER_HORIZONTAL)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            textView.setTextAppearance(R.style.SemiBold13Dark)
+//        }
+//        textView.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+//        snackbar.show()
+//    }
 
 
     private fun handleSoldoutCookingSlot(startsAt: Date) {
@@ -430,22 +434,36 @@ class SingleDishFragment() : Fragment(),
     }
 
     private fun initOrderDate(currentDish: FullDish) {
-        val orderAtDate = currentDish.menuItem?.orderAt
-        if (orderAtDate != null) {
-            currentDish.menuItem?.cookingSlot?.orderFrom?.let{
-                singleDishInfoDate.text = Utils.parseDateToDayDateHour(it)
-            }
+        if(currentDish.isNationwide){
+            singleDishInfoNationwideLayout.visibility = View.VISIBLE
+            singleDishInfoDeliveryTimeLayout.visibility = View.GONE
 
-        } else if (currentDish.doorToDoorTime != null) {
-            singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
-        }
-        if (viewModel.isEvent) {
+//            singleDishNationwideBtn.setOnClickListener { viewModel.onShippingMethodSelectClick() }
+        }else {
+            singleDishInfoNationwideLayout.visibility = View.GONE
+            singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
+
+            val orderAtDate = currentDish.menuItem?.orderAt
+            if (orderAtDate != null) {
+                currentDish.menuItem?.cookingSlot?.orderFrom?.let {
+                    singleDishInfoDate.text = Utils.parseDateToDayDateHour(it)
+                }
+
+            } else if (currentDish.doorToDoorTime != null) {
+                singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
+            }
+            if (viewModel.isEvent) {
 //            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        } else {
+            } else {
 //            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icons_edit, 0, 0, 0);
-            singleDishChangeTimeBtn.setOnClickListener { openOrderTimeDialog() }
+                singleDishChangeTimeBtn.setOnClickListener { openOrderTimeDialog() }
+            }
+            singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
         }
-        singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
+    }
+
+    private fun openNationWideChooser() {
+
     }
 
 
@@ -462,7 +480,8 @@ class SingleDishFragment() : Fragment(),
         viewModel.getCurrentDish()?.let {
             val currentDateSelected = it.menuItem
             val availableMenuItems = it.availableMenuItems
-            OrderDateChooserDialog(currentDateSelected, availableMenuItems, this).show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
+            OrderDateChooserDialog(currentDateSelected, availableMenuItems, this)
+                .show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
         }
     }
 
@@ -497,42 +516,57 @@ class SingleDishFragment() : Fragment(),
 
 
     private fun initCook(currentDish: FullDish) {
-        cookProfileImageView.setUser(currentDish.cook)
+        val cook = currentDish.cook
+        cookProfileImageView.setUser(cook)
         cookProfileImageView.setUserImageViewListener(this)
-        cookProfileFragNameAndAge.text = "${currentDish.cook.getFullName()}"//, ${currentDish.cook.getAge()}"
+        cookProfileFragNameAndAge.text = "${cook.getFullName()}"//, ${currentDish.cook.getAge()}"
 
-        var profession = currentDish.cook.profession
+        var profession = cook.profession
         var country = ""
-        currentDish.cook.country?.let {
+        cook.country?.let {
             country = ", ${it.name}"
             Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }
         cookProfileFragProfession.text = "$profession"// $country"
-        cookProfileFragRating.text = currentDish.cook.rating.toString()
-        cookProfileFragCuisineGrid.initStackableView(currentDish.cook.cuisines as ArrayList<SelectableIcon>)
-        cookProfileFragCuisineGrid.initStackableView(currentDish.cook.diets as ArrayList<SelectableIcon>)
-        cookProfileFragStoryName.text = "${currentDish.cook.firstName}'s Story"
-        cookProfileFragStory.text = "${currentDish.cook.about}"
-        cookProfileFragDishBy.text = "Dishes By ${currentDish.cook.firstName}"
+        cookProfileFragRating.text = cook.rating.toString()
+        //cuisine
+        if(cook.cuisines != null && cook.cuisines.size > 0){
+            cookProfileFragCuisineLayout.visibility = View.VISIBLE
+            cookProfileFragCuisineGrid.clear()
+            cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
+        }else{
+            cookProfileFragCuisineLayout.visibility = View.GONE
+        }
 
-        val certificates = currentDish.cook.certificates
-        cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }
-        if (certificates.size > 0) {
-            cookProfileFragCertificate.text = "Certificate in ${currentDish.cook.certificates[0]}"
-            if (certificates.size > 1) {
-                cookProfileFragCertificateCount.visibility = View.VISIBLE
-                cookProfileFragCertificateCount.text = "+ ${certificates.size - 1} More"
-            } else {
-                cookProfileFragCertificateCount.visibility = View.GONE
-            }
+        //dietry
+        if(cook.diets != null && cook.diets.size > 0){
+            cookProfileFragDietaryLayout.visibility = View.VISIBLE
+            cookProfileFragDietryGrid.clear()
+            cookProfileFragDietryGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
+        }else{
+            cookProfileFragDietaryLayout.visibility = View.GONE
+        }
+
+        //Certificates
+        val certificates = cook.certificates
+//        cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }
+        if (certificates != null && certificates.size > 0) {
+            cookProfileFragCertificateLayout.visibility = View.VISIBLE
+            cookProfileFragCertificateGrid.clear()
+            cookProfileFragCertificateGrid.initStackableViewWith(certificates)
         } else {
             cookProfileFragCertificateLayout.visibility = View.GONE
         }
 
-        ordersViewModel.setAdditionalDishes(currentDish.getAdditionalDishes())
-        cookProfileFragDishList.setLayoutManager(LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false))
-        dishAdapter = SingleFeedAdapter(context!!, currentDish.cook.dishes, this)
+        cookProfileFragStoryName.text = "${cook.firstName}'s Story"
+        cookProfileFragStory.text = "${cook.about}"
+        cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
+
+        cookProfileFragDishList.layoutManager = LinearLayoutManager(context)
+        dishAdapter = CooksProfileDishesAdapter(context!!, cook.dishes, this)
         cookProfileFragDishList.adapter = dishAdapter
+        val divider = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        cookProfileFragDishList.addItemDecoration(divider)
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }
     }

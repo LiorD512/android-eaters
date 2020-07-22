@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cooksDishItemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+            <ImageView
+                    android:id="@+id/cooksDishItemImg"
+                    android:layout_width="61dp"
+                    android:layout_height="61dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/cooksDishItemTitle"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    tools:text="Tomato and ricotte tart"/>
+
+            <TextView
+                    android:id="@+id/cooksDishItemDescription"
+                    style="@style/Reg13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Tomato tart with flaky puff pastry, creamy and amazing"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/cooksDishItemPrice"
+                        android:layout_marginEnd="15dp"
+                        style="@style/Bold13TealBlue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        tools:text="$6"/>
+
+                <View
+                        android:layout_gravity="center"
+                        tools:visibility="visible"
+                        android:id="@+id/cooksDishItemQuantitySep"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="@color/purpley_grey"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"/>
+
+                <TextView
+                        android:id="@+id/cooksDishItemQuantityLeft"
+                        android:layout_marginStart="15dp"
+                        style="@style/SemiBold13Dark50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="7 Left"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>

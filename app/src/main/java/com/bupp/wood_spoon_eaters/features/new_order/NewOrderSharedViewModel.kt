@@ -2,20 +2,21 @@ package com.bupp.wood_spoon_eaters.features.new_order
 
 import android.app.Activity
 import android.util.Log
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
+import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.BaseCallback
 import com.stripe.android.CustomerSession
 import com.stripe.android.PaymentConfiguration
+import com.stripe.android.StripeError
+import com.stripe.android.model.PaymentMethod
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +28,8 @@ class NewOrderSharedViewModel(
     val metaDataManager: MetaDataManager,
     val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager,
-    val eventsManager: EventsManager
+    val eventsManager: EventsManager,
+    val paymentManager: PaymentManager
 ) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -97,8 +99,9 @@ class NewOrderSharedViewModel(
     }
 
     fun initStripe(activity: Activity) {
-        PaymentConfiguration.init(activity, metaDataManager.getStripePublishableKey())
-        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
+        //todo - fix this
+//        PaymentConfiguration.init(activity, metaDataManager.getStripePublishableKey())
+//        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
     }
 
 
@@ -411,14 +414,24 @@ class NewOrderSharedViewModel(
 
     val tipInDollars = MutableLiveData<Int>()
     val tipPercentage = MutableLiveData<Int>()
-    fun updateTipPercentage(tipPercentage: Int) {
-        this.tipPercentage.postValue(tipPercentage)
-        postUpdateOrder(OrderRequest(tipPercentage = tipPercentage.toFloat()))
-    }
+//    fun updateTipPercentage(tipPercentage: Int) {
+//
+//        postUpdateOrder(OrderRequest(tipPercentage = tipPercentage.toFloat()))
+//    }
+//
+//    fun updateTipInDollars(tipInCents: Int) {
+//        this.tipInDollars.postValue(tipInCents)
+//        postUpdateOrder(OrderRequest(tip = tipInCents*100))
+//    }
 
-    fun updateTipInDollars(tipInCents: Int) {
-        this.tipInDollars.postValue(tipInCents)
-        postUpdateOrder(OrderRequest(tip = tipInCents*100))
+    fun updateTip(tipPercentage: Int? = null, tipInCents: Int? = null){
+        tipPercentage?.let{
+            this.tipPercentage.postValue(tipPercentage)
+        }
+        tipInCents?.let{
+            this.tipInDollars.postValue(tipInCents)
+        }
+        postUpdateOrder(OrderRequest(tip = tipInCents?.times(100), tipPercentage = tipPercentage?.toFloat()))
     }
 
     fun updateAddUtensils(shouldAdd: Boolean) {
@@ -446,6 +459,30 @@ class NewOrderSharedViewModel(
         }
         val availableCookingSlotEndsAt = orderData.value?.cookingSlot?.endsAt
         editDeliveryTime.postValue(EditDeliveryTime(availableCookingSlotStartsAt, availableCookingSlotEndsAt))
+    }
+
+    fun rollBackToPreviousAddress() {
+        eaterDataManager.rollBackToPreviousAddress()
+    }
+
+
+    //Stripe stuff
+//    val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
+
+    data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
+    fun getStripeCustomerCards(): SingleLiveEvent<List<PaymentMethod>> {
+        return paymentManager.getStripeCustomerCards()
+    }
+
+    fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
+        eaterDataManager.updateCustomerCard(paymentMethod)
+    }
+
+    val shippingMethods = MutableLiveData<List<ShippingMethod>>()
+    fun onShippingMethodSelectClick() {
+        if(shippingMethods.value == null){
+//            api.getShippingMethod(or)
+        }
     }
 
 

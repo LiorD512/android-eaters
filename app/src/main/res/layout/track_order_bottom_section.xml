@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <View
+            android:background="@color/light_periwinkle"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+    <LinearLayout
+            android:id="@+id/trackOrderBottomContactUsBtn"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                style="@style/Reg15Dark"
+                android:layout_gravity="center"
+                android:layout_marginTop="22.6dp"
+                android:layout_marginBottom="22.2dp"
+                android:drawablePadding="7.7dp"
+                android:drawableStart="@drawable/ic_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Us"/>
+
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/trackOrderBottomShareImageBtn"
+            android:src="@drawable/refferal_banner_pic"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="144dp"/>
+
+    <TextView
+            android:id="@+id/trackOrderBottomCancelBtn"
+            style="@style/SemiBold15Dark"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="23.2dp"
+            android:textColor="@color/red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel Order"/>
+
+</LinearLayout>

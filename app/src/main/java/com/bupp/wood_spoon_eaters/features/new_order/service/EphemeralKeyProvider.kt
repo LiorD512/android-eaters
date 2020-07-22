@@ -20,6 +20,7 @@ class EphemeralKeyProvider(val listener: EphemeralKeyProviderListener) : Ephemer
 
     interface EphemeralKeyProviderListener{
         fun onEphemeralKeyProviderError(){}
+//        fun onEphemeralKeyProviderSuccess(){}
     }
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -35,6 +36,8 @@ class EphemeralKeyProvider(val listener: EphemeralKeyProviderListener) : Ephemer
                         val jsObject = JSONObject(responseBody.string())
                         val ephemeralKeyJson = jsObject.get("data").toString()
                         keyUpdateListener.onKeyUpdate(ephemeralKeyJson)
+                        Log.d("wowEphemeralKeyProvider","success")
+//                        listener.onEphemeralKeyProviderSuccess()
                     } catch (e: IOException) {
                         keyUpdateListener.onKeyUpdateFailure(0, e.message ?: "")
                     }}, {e -> showError(e)}
@@ -43,7 +46,7 @@ class EphemeralKeyProvider(val listener: EphemeralKeyProviderListener) : Ephemer
     }
 
     private fun showError(e: Throwable?) {
-        Log.d("EphemeralKeyProvider","error ${e?.message}")
+        Log.d("wowEphemeralKeyProvider","error ${e?.message}")
         listener.onEphemeralKeyProviderError()
     }
 }

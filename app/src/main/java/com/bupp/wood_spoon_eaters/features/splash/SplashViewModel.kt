@@ -1,10 +1,13 @@
 package com.bupp.wood_spoon_eaters.features.splash
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Client
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.MetaDataModel
@@ -12,6 +15,8 @@ import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.stripe.android.CustomerSession
+import com.stripe.android.PaymentConfiguration
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -22,7 +27,8 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 
-class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterDataManager, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
+class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterDataManager, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager,
+val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     var serverCallMap = mutableMapOf<Int, Observable<*>>()
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
@@ -69,6 +75,8 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
         }
     }
 
+
+
     fun getUserAndMetaData() {
         Log.d("wowSplash", "init start")
         serverCallMap.put(0, api.getMe())
@@ -95,6 +103,7 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
             } else {
                 eaterDataManager.currentEater = eater
                 if (eaterDataManager.isAfterLogin()) {
+                    initRelevantRepositories()
                     navigationEvent.postValue(NavigationEvent(true, true, shouldUpdateVersion))
                 } else {
                     navigationEvent.postValue(NavigationEvent(true, false, shouldUpdateVersion))
@@ -112,6 +121,10 @@ class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterD
                 }
             }, { result -> Log.d("wowSplash", "wowException $result") })
 
+    }
+
+    private fun initRelevantRepositories() {
+        paymentManager.initPaymentManager()
     }
 
     fun setUserCampaignParam(sid: String?, cid: String?) {

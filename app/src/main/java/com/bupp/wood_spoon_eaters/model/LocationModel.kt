@@ -40,6 +40,9 @@ data class Address(
     @SerializedName("notes") val notes: String = ""
 ) : Parcelable {
 
+    fun getUserLocationStr(): String{
+        return "$streetLine1, ${city?.name ?: ""} ${state?.name ?: ""}"
+    }
     fun getDropoffLocationStr(): String {
         when (dropOfLocationStr) {
             "delivery_to_door" -> return "Delivered To Your Door"

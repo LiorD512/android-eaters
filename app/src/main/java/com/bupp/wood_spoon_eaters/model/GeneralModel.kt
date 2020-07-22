@@ -92,7 +92,7 @@ data class CuisineLabel(
 
 interface SelectableIcon {
     val id: Long
-    val name: String
+    val name: String?
     val icon: String
 }
 

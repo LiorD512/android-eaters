@@ -23,14 +23,6 @@ import com.stripe.android.CustomerSession.CustomerRetrievalListener
 class CheckoutViewModel(val api: ApiService, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) :
     ViewModel() {
 
-//    data class DeliveryDetailsEvent(val address: Address?, val time: String?)
-//    val getDeliveryDetailsEvent: SingleLiveEvent<DeliveryDetailsEvent> = SingleLiveEvent()
-//    fun getDeliveryDetails() {
-//        val address = eaterDataManager.getLastChosenAddress()
-//        val time = eaterDataManager.getLastOrderTimeString()
-//        getDeliveryDetailsEvent.postValue(DeliveryDetailsEvent(address, time))
-//
-//    }
 
     val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
 
@@ -51,26 +43,26 @@ class CheckoutViewModel(val api: ApiService, val orderManager: OrderManager, val
             })
     }
 
-
-    fun getCurrentCustomer() {
-        CustomerSession.getInstance().retrieveCurrentCustomer(object : CustomerRetrievalListener {
-            override fun onCustomerRetrieved(customer: Customer) {
-                Log.d("wowCheckoutVM", "getCurrentCustomer ${customer.defaultSource}")
-            }
-
-            override fun onError(errorCode: Int, errorMessage: String, stripeError: StripeError?) {
-                Log.d("wowCheckoutVM", "getCurrentCustomer ERROR $errorMessage")
-            }
-        })
-    }
-
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
         eaterDataManager.updateCustomerCard(paymentMethod)
     }
 
-    fun rollBackToPreviousAddress() {
-            eaterDataManager.rollBackToPreviousAddress()
-    }
+
+//    fun getCurrentCustomer() {
+//        CustomerSession.getInstance().retrieveCurrentCustomer(object : CustomerRetrievalListener {
+//            override fun onCustomerRetrieved(customer: Customer) {
+//                Log.d("wowCheckoutVM", "getCurrentCustomer ${customer.defaultSource}")
+//            }
+//
+//            override fun onError(errorCode: Int, errorMessage: String, stripeError: StripeError?) {
+//                Log.d("wowCheckoutVM", "getCurrentCustomer ERROR $errorMessage")
+//            }
+//        })
+//    }
+
+
+
+
 
 
 }

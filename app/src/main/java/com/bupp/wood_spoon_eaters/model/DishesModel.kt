@@ -12,9 +12,11 @@ data class Dish(
     @SerializedName("cook") val cook: Cook,
     @SerializedName("name") val name: String,
     @SerializedName("price") val price: Price,
+    @SerializedName("description") val description: String,
     @SerializedName("avg_rating") val rating: Double,
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("is_favorite") val isFavorite: Boolean,
+    @SerializedName("nationwide_shipping") val worldwide: Boolean,
     @SerializedName("is_recurring") val isRecurring: Boolean,
     @SerializedName("matching_menu") val menuItem: MenuItem?,
     @SerializedName("matching_slot") val matchingSlot: String,
@@ -42,6 +44,9 @@ data class MenuItem(
         val left = quantity - unitsSold
         return "$left Left"
     }
+    fun getQuantityCount(): Int{
+        return quantity - unitsSold
+    }
 }
 
 @Parcelize
@@ -65,6 +70,7 @@ data class FullDish(
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("video") val video: String? = null,
     @SerializedName("is_favorite") val isFavorite: Boolean,
+    @SerializedName("nationwide_shipping") val isNationwide: Boolean,
     @SerializedName("description") val description: String,
     @SerializedName("matching_menu") var menuItem: MenuItem?,
     @SerializedName("matching_slot") val matchingSlot: String,

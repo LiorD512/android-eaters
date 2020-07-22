@@ -27,6 +27,7 @@ import com.bupp.wood_spoon.dialogs.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
+import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
 
@@ -212,5 +213,9 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     fun onAddressChooserSelected() {
         viewModel.getUserDetails()
+    }
+
+    override fun onWorldwideInfoClick() {
+        WorldwideShippmentDialog().show(childFragmentManager, Constants.WORLD_WIDE_SHIPPMENT_DIALOG)
     }
 }

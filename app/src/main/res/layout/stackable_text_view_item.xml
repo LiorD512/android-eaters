@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
+
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <com.bupp.wood_spoon_eaters.custom_views.stackableTextView.StackableViewItem
             android:id="@+id/stackableTextViewItem"
             android:layout_marginTop="7.7dp"
-            android:gravity="center"
-            android:layout_gravity="center|top"
+            android:gravity="start"
+            android:layout_gravity="start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

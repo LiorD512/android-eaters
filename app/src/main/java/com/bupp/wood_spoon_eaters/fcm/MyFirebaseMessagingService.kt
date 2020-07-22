@@ -52,8 +52,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
-            val msg = remoteMessage.data.getValue("message")
-            sendNotification(msg)
+            if(remoteMessage.data.containsValue("message")){
+                val msg = remoteMessage.data.getValue("message")
+                sendNotification(messageBody = msg)
+            }
 //            handleNow()
 
         }
@@ -61,6 +63,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
+            sendNotification(messageTitle = it.title, messageBody = it.body)
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -82,7 +85,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
 
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageTitle: String? = null, messageBody: String? = null) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -92,7 +95,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher_round)
-            .setContentTitle(getString(R.string.fcm_message_title))
+            .setContentTitle(messageTitle ?: getString(R.string.fcm_message_title))
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)

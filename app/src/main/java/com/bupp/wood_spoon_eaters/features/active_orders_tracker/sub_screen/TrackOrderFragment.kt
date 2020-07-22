@@ -1,31 +1,28 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
+import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderBottomBinder
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.utils.Constants
-import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.track_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 import kotlin.collections.ArrayList
 
 class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogListener) : Fragment(),
-    CancelOrderDialog.CancelOrderDialogListener {
+    CancelOrderDialog.CancelOrderDialogListener, TrackOrderBottomBinder.TrackOrderBottomListener {
 
 
+    private lateinit var mainAdapter: TrackOrderMainAdapter
     private var curOrderStage: Int = 0
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
@@ -51,8 +48,8 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initBtns()
-        initUi(curOrder)
+//        initBtns()
+        initUi()
         initUpdateObserver()
     }
 
@@ -64,92 +61,70 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
                 Log.d("wowActiveOrderTracker","updating orders")
                 for(order in result.orders){
                     if(order.id == curOrder.id){
-                        initUi(order)
+                        updateOrderUi(order, result.userInfo)
                     }
                 }
             }
         })
     }
 
-    private fun initBtns() {
-        trackOrderDialogMessageBtn.setOnClickListener {
-            listener.onMessageClick(curOrder)
-        }
-
-        trackOrderDialogContactUsBtn.setOnClickListener {
-            listener.onContactUsClick(curOrder)
-        }
-
-
-        trackOrderDialogCancelBtn.setOnClickListener {
-            if(curOrderStage <= 1){
-                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
-            }
-            if(curOrderStage == 2){
-                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_2, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
-            }
-            if(curOrderStage == 3){
-                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_3, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
-            }
-
-        }
-
-        trackOrderDialogShareImageBtn.setOnClickListener {
-            listener.onShareImageClick(curOrder)
-        }
-
-        trackOrderDialogCloseBtn.setOnClickListener {
-            listener.onCloseClick()
-        }
-
+    override fun onContactUsClick(order: Order) {
+        listener.onContactUsClick(curOrder)
     }
+
+    override fun onShareImageClick(order: Order) {
+        listener.onShareImageClick(curOrder)
+    }
+
+    private fun updateOrderUi(
+        order: Order,
+        userInfo: OrderUserInfo?
+    ){
+        mainAdapter.updateUi(order, userInfo)
+        trackOrderDialogList.scrollToPosition(0)
+    }
+
+//    private fun initBtns() {
+//        trackOrderDialogMessageBtn.setOnClickListener {
+//            listener.onMessageClick(curOrder)
+//        }
+//
+//        trackOrderDialogContactUsBtn.setOnClickListener {
+//            listener.onContactUsClick(curOrder)
+//        }
+//
+//
+//        trackOrderDialogCancelBtn.setOnClickListener {
+//            if(curOrderStage <= 1){
+//                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+//            }
+//            if(curOrderStage == 2){
+//                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_2, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+//            }
+//            if(curOrderStage == 3){
+//                CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_3, curOrder.id, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+//            }
+//        }
+//
+//        trackOrderDialogShareImageBtn.setOnClickListener {
+//            listener.onShareImageClick(curOrder)
+//        }
+//
+//        trackOrderDialogCloseBtn.setOnClickListener {
+//            listener.onCloseClick()
+//        }
+//
+//    }
 
     override fun onOrderCanceled() {
         listener.onOrderCanceled()
     }
 
-    private fun initUi(order: Order) {
+    private fun initUi() {
         Log.d("wowTrackOrderFragment","initUing now")
-        progressList = arrayListOf<CheckBox>(trackOrderDialogCb1, trackOrderDialogCb2, trackOrderDialogCb3, trackOrderDialogCb4)
-
-        val today = Calendar.getInstance()
-        today.time = Date()
-
-        val deliveryTime = Calendar.getInstance()
-        deliveryTime.time = order.estDeliveryTime
-
-        if(Utils.isSameDay(today, deliveryTime)){
-            trackOrderDialogArrivalTime.text = Utils.parseDateToTime(order.estDeliveryTime)
-        }else{
-            trackOrderDialogArrivalTime.text = Utils.parseDateToFullDate(order.estDeliveryTime)
-        }
-
-//        "idle", "received", "in_progress"
-        when(order.preparationStatus){
-            "in_progress" -> {
-                trackOrderDialogCb2.isChecked = true
-                curOrderStage = 2
-            }
-            "completed" -> {
-                trackOrderDialogCb2.isChecked = true
-                curOrderStage = 2
-            }
-        }
-
-        when(order.deliveryStatus){
-//            "idle", "awaiting" -> {
-//                trackOrderDialogCb2.isChecked = true
-//                curOrderStage = 2
-//            }
-            "on_the_way" -> {
-                trackOrderDialogCb3.isChecked = true
-                curOrderStage = 3
-            }
-            "shipped" -> {
-                trackOrderDialogCb4.isChecked = true
-                curOrderStage = 4
-            }
-        }
+        mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this)
+        trackOrderDialogList.layoutManager = LinearLayoutManager(requireContext())
+        trackOrderDialogList.adapter = mainAdapter
     }
 
 //    private fun handleOrderDetails(details: ActiveOrderTrackerViewModel.OrderDetailsEvent) {
@@ -159,39 +134,39 @@ class TrackOrderFragment(val curOrder: Order, val listener: TrackOrderDialogList
 //    }
 
     private fun setArrivalTime(arrivalTime: String){
-        trackOrderDialogArrivalTime.text = arrivalTime
+//        trackOrderDialogArrivalTime.text = arrivalTime
     }
 
     private fun setMessagesIcon(isNewMessages: Boolean) {
         trackOrderDialogMessageBtn.isSelected = isNewMessages
     }
 
-    private fun setProgress(stepNum: Int) {
-        clearProgress()
-        setOrderProgress(stepNum)
-    }
-
-    private fun clearProgress() {
-        for (cb in progressList){
-            cb.isSelected = false
-            cb.text = Utils.setCustomFontTypeSpan(context!!,cb.text.toString(),0,cb.text.toString().length,R.font.open_sans_reg)
-            cb.setTextColor(ContextCompat.getColor(context!!,R.color.dark_50))
-        }
-    }
-
-    private fun setOrderProgress(stepNum: Int) {
-        if (stepNum == Constants.ORDER_PROGRESS_NO_PROGRESS) {
-            return
-        }
-
-        var cbItem = progressList[stepNum]
-
-        cbItem.isSelected = true
-        cbItem.text = Utils.setCustomFontTypeSpan(context!!,cbItem.text.toString(),0,cbItem.text.toString().length,R.font.open_sans_semi_bold)
-        cbItem.setTextColor(ContextCompat.getColor(context!!,R.color.dark))
-
-        setOrderProgress(stepNum - 1)
-    }
+//    private fun setProgress(stepNum: Int) {
+//        clearProgress()
+//        setOrderProgress(stepNum)
+//    }
+//
+//    private fun clearProgress() {
+//        for (cb in progressList){
+//            cb.isSelected = false
+//            cb.text = Utils.setCustomFontTypeSpan(context!!,cb.text.toString(),0,cb.text.toString().length,R.font.open_sans_reg)
+//            cb.setTextColor(ContextCompat.getColor(context!!,R.color.dark_50))
+//        }
+//    }
+//
+//    private fun setOrderProgress(stepNum: Int) {
+//        if (stepNum == Constants.ORDER_PROGRESS_NO_PROGRESS) {
+//            return
+//        }
+//
+//        var cbItem = progressList[stepNum]
+//
+//        cbItem.isSelected = true
+//        cbItem.text = Utils.setCustomFontTypeSpan(context!!,cbItem.text.toString(),0,cbItem.text.toString().length,R.font.open_sans_semi_bold)
+//        cbItem.setTextColor(ContextCompat.getColor(context!!,R.color.dark))
+//
+//        setOrderProgress(stepNum - 1)
+//    }
 
     override fun onDestroy() {
         viewModel.endUpdates()

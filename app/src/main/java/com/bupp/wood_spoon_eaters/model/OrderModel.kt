@@ -35,9 +35,11 @@ data class Order (
     @SerializedName("id") val id: Long,
     @SerializedName("order_number") val orderNumber: String,
     @SerializedName("deliver_at") val deliverAt: Date,
+    @SerializedName("created_at") val created_at: Date,
     @SerializedName("delivery_address") val deliveryAddress: Address,
     @SerializedName("estimated_delivery_time") val estDeliveryTime: Date,
     @SerializedName("status") val status: String,
+    @SerializedName("courier") val courier: Courier?,
     @SerializedName("promo_code") val promoCode: String = "",
     @SerializedName("status_updated_at") val statusUpdatedAt: Date,
     @SerializedName("delivery_status") val deliveryStatus: String,
@@ -69,4 +71,25 @@ data class OrderItem(
     @SerializedName("removed_ingredients") var removedIndredients: ArrayList<Ingredient>,
     @SerializedName("price") val price: Price,
     @SerializedName("notes") var notes: String?
+): Parcelable
+
+data class ShippingMethod(
+    val code: String,
+    val name: String,
+    val fee: Price,
+    val days_in_transit: Int,
+    val deliver_by: String
+)
+
+@Parcelize
+data class Courier(
+    val id: Long,
+    val first_name: String?,
+    val last_name: String?,
+    val thumbnail: String?,
+    val phone_number: String?,
+    val email: String?,
+    val transport_type: String?,
+    val lat: Double?,
+    val lng: Double?
 ): Parcelable

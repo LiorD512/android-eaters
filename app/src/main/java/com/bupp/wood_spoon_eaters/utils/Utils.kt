@@ -28,9 +28,9 @@ import com.bupp.wood_spoon_eaters.R
 
 object Utils {
 
-    fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
-
-    fun Int.DptoPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+    fun toDp(int: Int): Int = (int / Resources.getSystem().displayMetrics.density).toInt()
+    fun toPx(int: Int): Int = (int * Resources.getSystem().displayMetrics.density).toInt()
+    fun toSp(int: Int): Int = (int / Resources.getSystem().displayMetrics.scaledDensity).toInt()
 
     fun String.splitAtIndex(index: Int) = require(index in 0..length).let {
         take(index) to substring(index)

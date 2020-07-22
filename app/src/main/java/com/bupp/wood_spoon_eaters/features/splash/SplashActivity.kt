@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.splash
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,9 +11,11 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
 import com.bupp.wood_spoon_eaters.dialogs.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import com.bupp.wood_spoon_eaters.utils.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,11 +25,14 @@ import io.branch.referral.BranchError
 import org.json.JSONObject
 import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.stripe.android.CustomerSession
+import com.stripe.android.PaymentConfiguration
 import com.uxcam.UXCam
+import kotlinx.android.synthetic.main.activity_splash.*
 import java.lang.Exception
 
 
-class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener {
+class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, LottieAnimationView.LottieAnimListener {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -34,38 +40,36 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     private var menuItemId: String? = null
     val viewModel: SplashViewModel by viewModel<SplashViewModel>()
 
+    var isFinishLoading = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
+        splashLottie.showDefaultAnimation(this)
+
         initObservers()
-        initCampaignCallback()
+//        initCampaignCallback()
 
         Timer("SettingUp", false).schedule(1000) {
             init()
         }
     }
 
-    private fun initCampaignCallback() {
-        AppsFlyerLib.getInstance().registerConversionListener(this, object: AppsFlyerConversionListener{
-            override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
-                Log.d("wowSplash", "onAppOpenAttribution")
-            }
+    private fun init() {
+        viewModel.initServerCall() //init all data
+    }
 
-            override fun onAttributionFailure(err: String?) {
-                Log.d("wowSplash", "onAttributionFailure $err")
-            }
 
-            override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {
-                Log.d("wowSplash", "onInstallConversionDataLoaded $data")
-            }
 
-            override fun onInstallConversionFailure(p0: String?) {
-                Log.d("wowSplash", "onInstallConversionFailure")
-            }
-        })
+    override fun onAnimationEnd() {
+        if(!isFinishLoading){
+            splashLottie.rollAnimation()
+        }else{
+            redirectToMain()
+        }
     }
 
     private fun initObservers() {
@@ -76,7 +80,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                     if (event.shouldUpdateVersion) {
                         openVersionUpdateDialog()
                     } else if (event.isRegistered) {
-                        redirectToMain()
+                        isFinishLoading = true
                     } else {
                         redirectToCreateAccount()
                     }
@@ -129,7 +133,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             intent.putExtra("menu_item_id", it.toLong())
         }
         startActivity(intent)
-
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         finish()
     }
 
@@ -139,9 +143,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         finish()
     }
 
-    private fun init() {
-        viewModel.initServerCall() //init all data
-    }
+
 
     public override fun onStart() {
         super.onStart()
@@ -165,17 +167,46 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             if (it.has("menu_item_id")) {
                 menuItemId = it.get("menu_item_id") as String
             }
-            if(it.has("+non_branch_link")){
-                val link = it.get("+non_branch_link") as String
-                val sidIndex = link.indexOf("sid=")
-                val cidIndex = link.indexOf("cid=")
+            if(it.has("referal")){
+                val sid = it.get("sid") as String
+                val cid = it.get("cid") as String
 
-                val sid: String? = if (sidIndex == -1) null else link.substring(sidIndex+4, cidIndex-1)
-                val cid: String? = if (cidIndex == -1) null else link.substring(cidIndex+4)
                 Log.d("wowSplash", "sid: $sid cid: $cid")
                 viewModel.setUserCampaignParam(sid, cid)
             }
+//            if(it.has("+non_branch_link")){
+//                val link = it.get("+non_branch_link") as String
+//                val sidIndex = link.indexOf("sid=")
+//                val cidIndex = link.indexOf("cid=")
+//
+//                val sid: String? = if (sidIndex == -1) null else link.substring(sidIndex+4, cidIndex-1)
+//                val cid: String? = if (cidIndex == -1) null else link.substring(cidIndex+4)
+//                Log.d("wowSplash", "sid: $sid cid: $cid")
+//                viewModel.setUserCampaignParam(sid, cid)
+//            }
         }
     }
+
+
+
+//    private fun initCampaignCallback() {
+//        AppsFlyerLib.getInstance().registerConversionListener(this, object: AppsFlyerConversionListener{
+//            override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
+//                Log.d("wowSplash", "onAppOpenAttribution")
+//            }
+//
+//            override fun onAttributionFailure(err: String?) {
+//                Log.d("wowSplash", "onAttributionFailure $err")
+//            }
+//
+//            override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {
+//                Log.d("wowSplash", "onInstallConversionDataLoaded $data")
+//            }
+//
+//            override fun onInstallConversionFailure(p0: String?) {
+//                Log.d("wowSplash", "onInstallConversionFailure")
+//            }
+//        })
+//    }
 
 }

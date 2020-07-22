@@ -18,6 +18,7 @@ class FavoritesView : FrameLayout, FavoritesViewViewModel.FavoritesViewListener,
     var listener: FavoritesViewListener? = null
     interface FavoritesViewListener{
         fun onDishClick(dish: Dish)
+        fun onWorldwideInfoClick()
     }
 
     fun setFavoritesViewListener(listener: FavoritesViewListener){
@@ -53,6 +54,10 @@ class FavoritesView : FrameLayout, FavoritesViewViewModel.FavoritesViewListener,
 
     override fun onDishClick(dish: Dish) {
         listener?.onDishClick(dish)
+    }
+
+    override fun onWorldwideInfoClick() {
+        listener?.onWorldwideInfoClick()
     }
 
 }

@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.feed_dish_item.view.*
@@ -28,6 +29,7 @@ class SingleFeedAdapter(
 
     interface SearchAdapterListener {
         fun onDishClick(dish: Dish) {}
+        fun onWorldwideInfoClick() {}
 //        fun onFavClick(dishId: Long, favSelected: Boolean){}
     }
 
@@ -37,17 +39,37 @@ class SingleFeedAdapter(
         var requestOptions = RequestOptions()
         requestOptions = requestOptions.transforms(CenterCrop(), RoundedCornersTransformation(context, 8, 0, RoundedCornersTransformation.CornerType.TOP))
         Glide.with(context).load(dish.thumbnail).apply(requestOptions).into((holder as DishItemViewHolder).bkgImg)
-        (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
+//        (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
 
         val name = dish.name
         val price = dish.getPriceObj().formatedValue
-        holder.name.text = "$name $price"
+        holder.name.text = "$name"
+        holder.price.text = "$price"
         holder.cookName.text = "By ${dish.cook.getFullName()}"
         holder.rating.text = "${dish.rating}"
 
+        Glide.with(context).load(dish.cook.thumbnail).circleCrop().into(holder.cookImg)
+        Glide.with(context).load(dish.cook.country?.flagUrl).circleCrop().into(holder.cookFlag)
+
+        if(dish.worldwide){
+            holder.worldwideLayout.visibility = View.VISIBLE
+            val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(Utils.toPx(9), Utils.toPx(9), Utils.toPx(9),0)
+            holder.cardLayout.layoutParams = param
+
+            holder.worldwideLayout.setOnClickListener {
+                listener.onWorldwideInfoClick()
+            }
+        }else{
+            holder.worldwideLayout.visibility = View.GONE
+            val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(Utils.toPx(9), 0,Utils.toPx(9),0)
+            holder.cardLayout.layoutParams = param
+        }
+
         if (dish.menuItem != null) {
             holder.unAvailableLayout.visibility = View.GONE
-            holder.dishCount.initQuantityView(dish.menuItem)
+            holder.dishCount.text = dish.menuItem.getQuantityLeft()
 
             if(dish.menuItem.orderAt == null){
                 //Dish is offered today.
@@ -72,17 +94,24 @@ class SingleFeedAdapter(
             holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
 
             val upcomingSlot = dish.menuItem.cookingSlot
+            val deliveryFee = upcomingSlot.deliveryFee?.cents
             upcomingSlot?.let {
                 if(it.freeDelivery){
                     holder.freeDelivery.text = "Free Delivery"
                 }else{
-                    holder.freeDelivery.text = "${upcomingSlot.deliveryFee?.formatedValue}"
+                    if(deliveryFee != null && deliveryFee.toInt() == 0){
+                        holder.freeDelivery.text = "Free Delivery"
+                    }else{
+                        holder.freeDelivery.text = "${upcomingSlot.deliveryFee?.formatedValue}"
+                    }
                 }
             }
 
             val quantityLeft = dish.menuItem.quantity - dish.menuItem.unitsSold
             if(quantityLeft <= 0){
                 holder.soldOutLayout.visibility = View.VISIBLE
+            }else{
+                holder.soldOutLayout.visibility = View.GONE
             }
         }else{
             holder.unAvailableLayout.visibility = View.VISIBLE
@@ -109,13 +138,17 @@ class SingleFeedAdapter(
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val mainLayout = view.feedDishItemLayout
+    val cardLayout = view.feedDishItemCardLayout
+    val worldwideLayout = view.feedDishItemWorldwideLayout
     val soldOutLayout = view.feedDishItemSoldOutLayout
     val unAvailableLayout = view.feedDishUnAvailable
     val bkgImg = view.feedDishItemBkg
     val cookImg = view.feedDishItemUserImg
+    val cookFlag = view.feedDishCookFlag
     val favBtn = view.feedDishItemFavorite
     val name = view.feedDishItemDishName
-    val dishCount = view.feedDishQuantityView
+    val price = view.feedDishItemPrice
+    val dishCount = view.feedDishQuantityLeft
     val cookName = view.feedDishItemCookName
     val rating = view.feedDishItemRating
     val date = view.feedDishItemDate

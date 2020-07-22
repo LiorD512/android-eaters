@@ -33,9 +33,6 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
         val price: TextView = view.orderItemPrice
         val image: ImageView = view.orderItemImage
         val name: TextView = view.orderItemName
-//        val plusBtn: CardView = view.orderItemCountPlus
-//        val minusBtn: CardView = view.orderItemCountMinus
-//        val counterText: TextView = view.orderItemCounter
         val plusMinusView: PlusMinusView = view.orderItemPlusMinus
         val note: TextView = view.orderItemNote
         val ingredientsList = view.orderItemIngredientsRecyclerView!!

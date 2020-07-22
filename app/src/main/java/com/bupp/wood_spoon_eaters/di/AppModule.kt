@@ -52,6 +52,7 @@ val appModule = module {
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }
+    single { PaymentManager(get(), get()) }
 
     factory { PermissionManager() }
 
@@ -59,7 +60,7 @@ val appModule = module {
 
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
 
     //login
     viewModel { WelcomeViewModel(get()) }
@@ -71,7 +72,7 @@ val appModule = module {
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get()) }
+    viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get(), get()) }
 
     viewModel { FeedViewModel(get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
@@ -89,7 +90,7 @@ val appModule = module {
     viewModel { PaymentMethodsViewModel(get()) }
 
     viewModel { NewOrderViewModel(get(), get(), get()) }
-    viewModel { ActiveOrderTrackerViewModel(get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:background="@color/dark_43"
-             android:id="@+id/trackOrderDialogLayout"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/dark_43"
+        android:id="@+id/trackOrderDialogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
-            android:background="@drawable/rounded_95white_bkg"
+            android:background="@drawable/rounded_white_bkg"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:layout_margin="7.7dp"
@@ -50,165 +51,104 @@
 
         </LinearLayout>
 
-        <View
-                android:background="@color/dark"
+        <androidx.recyclerview.widget.RecyclerView
+                android:background="@color/white"
+                android:id="@+id/trackOrderDialogList"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-        <ScrollView
-                android:fillViewport="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"/>
 
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--        <View-->
+<!--                android:background="@color/dark"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"/>-->
 
+<!--        <ScrollView-->
+<!--                android:fillViewport="true"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
 
-                <LinearLayout
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="15.4dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    <TextView
-                            style="@style/SemiBold13Dark"
-                            android:layout_marginStart="15.4dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Estimated arrival:"/>
-
-                    <TextView
-                            android:id="@+id/trackOrderDialogArrivalTime"
-                            style="@style/SemiBold19Blue"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="3.8dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="16:20 PM"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginStart="14.8dp"
-                        android:layout_marginTop="26.7dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    <CheckBox
-                            android:checked="true"
-                            android:button="@drawable/circle_checkbox_selector"
-                            android:id="@+id/trackOrderDialogCb1"
-                            android:paddingStart="7.3dp"
-                            android:text="We got your order"
-                            style="@style/Reg13Dark_50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    <View android:layout_width="1.9dp"
-                          android:layout_marginTop="-1dp"
-                          android:layout_marginBottom="-1dp"
-                          android:layout_marginStart="11dp"
-                          android:layout_height="30.7dp"
-                          android:background="@color/black"/>
-
-                    <CheckBox
-                            android:id="@+id/trackOrderDialogCb2"
-                            android:button="@drawable/circle_checkbox_selector"
-                            android:paddingStart="7.3dp"
-                            android:text="The cook started working on it"
-                            style="@style/Reg13Dark_50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    <View android:layout_width="1.9dp"
-                          android:layout_marginTop="-1dp"
-                          android:layout_marginBottom="-1dp"
-                          android:layout_marginStart="11dp"
-                          android:layout_height="30.7dp"
-                          android:background="@color/black"/>
+<!--            <LinearLayout-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
 
-                    <CheckBox
-                            android:id="@+id/trackOrderDialogCb3"
-                            android:button="@drawable/circle_checkbox_selector"
-                            android:paddingStart="7.3dp"
-                            android:text="Your order is on its way"
-                            style="@style/Reg13Dark_50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+<!--                <LinearLayout-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:gravity="center_vertical"-->
+<!--                        android:layout_marginTop="15.4dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content">-->
 
-                    <View android:layout_width="1.9dp"
-                          android:layout_marginTop="-1dp"
-                          android:layout_marginBottom="-1dp"
-                          android:layout_marginStart="11dp"
-                          android:layout_height="30.7dp"
-                          android:background="@color/black"/>
+<!--                    <TextView-->
+<!--                            style="@style/SemiBold13Dark"-->
+<!--                            android:layout_marginStart="15.4dp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Estimated arrival:"/>-->
 
-                    <CheckBox
-                            android:id="@+id/trackOrderDialogCb4"
-                            android:button="@drawable/circle_checkbox_selector"
-                            android:paddingStart="7.3dp"
-                            android:paddingBottom="5dp"
-                            android:layout_marginBottom="30.2dp"
-                            android:text="Delivered"
-                            style="@style/Reg13Dark_50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                            android:id="@+id/trackOrderDialogArrivalTime"-->
+<!--                            style="@style/SemiBold19Blue"-->
+<!--                            android:layout_gravity="start"-->
+<!--                            android:layout_marginStart="3.8dp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="16:20 PM"/>-->
 
-                <View
-                        android:layout_weight="1"
-                        android:layout_width="1dp" android:layout_height="0dp"/>
+<!--                </LinearLayout>-->
 
-                <View
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:background="@color/light_periwinkle"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
 
-                <LinearLayout
-                        android:id="@+id/trackOrderDialogContactUsBtn"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+<!--                <View-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_width="1dp" android:layout_height="0dp"/>-->
 
-                    <TextView
-                            style="@style/Reg15Dark"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="22.6dp"
-                            android:layout_marginBottom="22.2dp"
-                            android:drawablePadding="7.7dp"
-                            android:drawableStart="@drawable/ic_call"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Contact Us"/>
+<!--                <View-->
+<!--                        android:layout_marginStart="15.4dp"-->
+<!--                        android:layout_marginEnd="15.4dp"-->
+<!--                        android:background="@color/light_periwinkle"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="1dp"/>-->
 
-                </LinearLayout>
+<!--                <LinearLayout-->
+<!--                        android:id="@+id/trackOrderDialogContactUsBtn"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content">-->
 
-                <ImageView
-                        android:id="@+id/trackOrderDialogShareImageBtn"
-                        android:src="@drawable/refferal_banner_pic"
-                        android:scaleType="centerCrop"
-                        android:layout_width="match_parent"
-                        android:layout_height="144dp"/>
+<!--                    <TextView-->
+<!--                            style="@style/Reg15Dark"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="22.6dp"-->
+<!--                            android:layout_marginBottom="22.2dp"-->
+<!--                            android:drawablePadding="7.7dp"-->
+<!--                            android:drawableStart="@drawable/ic_call"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Contact Us"/>-->
 
-                <TextView
-                        android:id="@+id/trackOrderDialogCancelBtn"
-                        style="@style/SemiBold15Dark"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:paddingTop="22.6dp"
-                        android:paddingBottom="23.2dp"
-                        android:textColor="@color/red"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel Order"/>
-            </LinearLayout>
-        </ScrollView>
+<!--                </LinearLayout>-->
+
+<!--                <ImageView-->
+<!--                        android:id="@+id/trackOrderDialogShareImageBtn"-->
+<!--                        android:src="@drawable/refferal_banner_pic"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="144dp"/>-->
+
+<!--                <TextView-->
+<!--                        android:id="@+id/trackOrderDialogCancelBtn"-->
+<!--                        style="@style/SemiBold15Dark"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:paddingTop="22.6dp"-->
+<!--                        android:paddingBottom="23.2dp"-->
+<!--                        android:textColor="@color/red"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Cancel Order"/>-->
+<!--            </LinearLayout>-->
+<!--        </ScrollView>-->
 
     </LinearLayout>
 

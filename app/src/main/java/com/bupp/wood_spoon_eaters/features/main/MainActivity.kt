@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
@@ -59,12 +60,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, GPSBroadcastReceiver.GPSBroadcastListener {
+    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, GPSBroadcastReceiver.GPSBroadcastListener,
+    LottieAnimationView.LottieAnimListener {
 
     private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
+    var isFeedReady = false
 
     private lateinit var selectedGoogleAddress: GoogleAddressResponse
 
@@ -91,6 +94,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         initFcm()
     }
+
+
 
     private fun checkForCampaignReferrals() {
         viewModel.checkForCampaignReferrals()
@@ -588,7 +593,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.NEW_ORDER_REQUEST_CODE) {
-            loadFeed()
+            resetOrderTimeIfNeeded()
+            loadOrRefreshFeed()
             checkForActiveOrder()
             checkCartStatus()
             data?.let{
@@ -655,6 +661,18 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         updateAddressTimeView()
     }
 
+    private fun loadOrRefreshFeed() {
+        if(!currentFragmentTag.equals(Constants.FEED_TAG)){
+            loadFeed()
+        }else{
+            (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
+        }
+    }
+
+    private fun resetOrderTimeIfNeeded() {
+        viewModel.resetOrderTimeIfNeeded()
+    }
+
     private fun refreshUser() {
         //refresh user data for changes made after checkout (used campaign coupon)
         viewModel.refreshUserData()
@@ -702,6 +720,17 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         super.onStart()
         gpsBroadcastReceiver = GPSBroadcastReceiver(this)
         registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+
+        mainActLottieView.showDefaultAnimation(this)
+    }
+
+
+    override fun onAnimationEnd() {
+        if(!isFeedReady){
+            mainActLottieView.rollAnimation()
+        }else{
+            mainActLottieView.visibility = View.GONE
+        }
     }
 
     override fun onStop() {
@@ -715,6 +744,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             loadFeed()
         }
     }
+
 
 
 }

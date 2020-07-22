@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
+import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
 import com.bupp.wood_spoon_eaters.features.events.EventActivity
 import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
@@ -117,6 +118,10 @@ class EventFeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewL
 
     override fun refreshList(){
 
+    }
+
+    override fun onWorldwideInfoClick() {
+        WorldwideShippmentDialog().show(childFragmentManager, Constants.WORLD_WIDE_SHIPPMENT_DIALOG)
     }
 
 
