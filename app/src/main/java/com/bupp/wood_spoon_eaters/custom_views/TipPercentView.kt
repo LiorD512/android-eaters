@@ -40,20 +40,25 @@ class TipPercentView : FrameLayout, View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        clearAll()
-        v!!.isSelected = true
-        when (v.id) {
-            tipPercent10.id -> {
-                selectedTip = Constants.TIP_10_PERCENT_SELECTED
-            }
-            tipPercent15.id -> {
-                selectedTip = Constants.TIP_15_PERCENT_SELECTED
-            }
-            tipPercent20.id -> {
-                selectedTip = Constants.TIP_20_PERCENT_SELECTED
-            }
-            tipPercentCustom.id -> {
-                selectedTip = Constants.TIP_CUSTOM_SELECTED
+        if(v!!.isSelected){
+            v.isSelected = false
+            selectedTip = Constants.TIP_NOT_SELECTED
+        }else {
+            clearAll()
+            v!!.isSelected = true
+            when (v.id) {
+                tipPercent10.id -> {
+                    selectedTip = Constants.TIP_10_PERCENT_SELECTED
+                }
+                tipPercent15.id -> {
+                    selectedTip = Constants.TIP_15_PERCENT_SELECTED
+                }
+                tipPercent20.id -> {
+                    selectedTip = Constants.TIP_20_PERCENT_SELECTED
+                }
+                tipPercentCustom.id -> {
+                    selectedTip = Constants.TIP_CUSTOM_SELECTED
+                }
             }
         }
         listener?.onTipIconClick(selectedTip)

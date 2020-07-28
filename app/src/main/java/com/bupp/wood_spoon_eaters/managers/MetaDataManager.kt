@@ -101,6 +101,30 @@ class MetaDataManager {
         return ""
     }
 
+    fun getUpdateDialogTitle(): String {
+        for (settings in getSettings()){
+            if(settings.key == "android_version_control_title")
+                return settings.value!! as String
+        }
+        return ""
+    }
+
+    fun getUpdateDialogBody(): String {
+        for (settings in getSettings()){
+            if(settings.key == "android_version_control_body")
+                return settings.value!! as String
+        }
+        return ""
+    }
+
+    fun getUpdateDialogUrl(): String {
+        for (settings in getSettings()){
+            if(settings.key == "android_version_control_link")
+                return settings.value!! as String
+        }
+        return ""
+    }
+
 //    fun getDeliveryFeeStr(): String {
 //        for (settings in getSettings()){
 //            if(settings.key == "delivery_fee")

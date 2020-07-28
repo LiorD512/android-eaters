@@ -40,7 +40,7 @@ class AdditionalDishMainAdapter(
 
     @SuppressLint("LongLogTag")
     fun refreshOrderItems(orderItemList: ArrayList<OrderItem>) {
-        Log.d(TAG, "refreshOrderItems")
+        Log.d(TAG, "refreshOrderItems $orderItemList")
         orderItemsSection.removeItem()
         orderItemsSection.setItem(OrderItems(orderItemList))
         orderItemsSection.showSection()

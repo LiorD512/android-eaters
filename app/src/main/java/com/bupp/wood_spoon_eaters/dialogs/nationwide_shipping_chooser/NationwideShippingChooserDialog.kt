@@ -1,10 +1,10 @@
 package com.bupp.wood_spoon_eaters.dialogs.order_date_chooser
 
-import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,34 +13,44 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
-import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
-import com.bupp.wood_spoon_eaters.utils.Utils
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.nationwide_shipping_chooser_dialog.*
-import kotlinx.android.synthetic.main.order_date_chooser_dialog.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 
+class NationwideShippingChooserDialog() : DialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {
 
-class NationwideShippingChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: ArrayList<MenuItem>, val listener: OrderDateChooserDialogListener) : DialogFragment(),
-    NationwideShippingChooserAdapter.NationwideShippingAdapterListener{
+    private var newSelectedItem: ShippingMethod? = null
+    private lateinit var adapter: NationwideShippingChooserAdapter
+    private var listener: NationwideShippingChooserListener? = null
 
-    private var newSelectedMenuItem: ShippingMethod? = null
-    private lateinit var addressAdapter: NationwideShippingChooserAdapter
-
-    interface OrderDateChooserDialogListener {
-        fun onDateChoose(menuItem: MenuItem, newChosenDate: Date)
+    interface NationwideShippingChooserListener {
+        fun onShippingMethodChoose(choosenShippingMethod: ShippingMethod)
     }
+
+    private var shippingMethods: ArrayList<ShippingMethod>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+        setStyle(STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
+        arguments?.let {
+            shippingMethods = it.getParcelableArrayList(DIALOG_ARGS)
+        }
     }
 
+    companion object {
+        const val DIALOG_ARGS = "shippingData"
+        @JvmStatic
+        fun newInstance(shippingMethods: ArrayList<ShippingMethod>) =
+            NationwideShippingChooserDialog().apply {
+                arguments = Bundle().apply {
+                    putParcelableArrayList(DIALOG_ARGS, shippingMethods)
+                }
+            }
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.nationwide_shipping_chooser_dialog, null)
+        val view = inflater.inflate(R.layout.nationwide_shipping_chooser_dialog, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
         return view
     }
@@ -58,57 +68,38 @@ class NationwideShippingChooserDialog(val currentMenuItem: MenuItem?, val allMen
             dismiss()
         }
 
-//        addressAdapter = NationwideShippingChooserAdapter(context!!, allMenuItems, this)
-//        nationwideShippingChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
-//        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
-//        nationwideShippingChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
-//        nationwideShippingChooserDialogRecycler.adapter = addressAdapter
+        adapter = NationwideShippingChooserAdapter(context!!, this)
+        nationwideShippingChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
+        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        nationwideShippingChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
+        nationwideShippingChooserDialogRecycler.adapter = adapter
 
-        if(currentMenuItem != null){
-//            addressAdapter.setSelected(currentMenuItem)
+        shippingMethods?.let{
+            adapter.submitList(it.toList())
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is NationwideShippingChooserListener) {
+            listener = context
+        }
+        else if (parentFragment is NationwideShippingChooserListener){
+            this.listener = parentFragment as NationwideShippingChooserListener
+        }
+        else {
+            throw RuntimeException(context.toString() + " must implement NationwideShippingAdapterListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
     override fun onShippingMethodClick(selected: ShippingMethod) {
-        this.newSelectedMenuItem = selected
-
-//        val startDate: Date = selected.cookingSlot.startsAt
-//        val startDate: Date = selected.cookingSlot.orderFrom
-//        val endDate: Date = selected.cookingSlot.endsAt
-//
-//        val calStart = Calendar.getInstance()
-//        calStart.time = startDate
-//
-//        val calEnd = Calendar.getInstance()
-//        calEnd.time = endDate
-//
-//        if(Utils.isSameDay(calStart, calEnd)){
-//            val now = Date()
-//            calStart?.let{
-//                if(now.time > it.time.time){
-//                    calStart.time = now
-//                }
-//            }
-//            openTimePicker(calStart, calEnd)
-////            dismiss()
-//        }else{
-//            openDatePicker(calStart, calEnd)
-//        }
-
+        listener?.onShippingMethodChoose(selected)
+        dismiss()
     }
 
-
-
-
-
-
-
-
-//    fun addAddress(selected: Address) {
-//        addressAdapter.addAddress(selected)
-//    }
 }

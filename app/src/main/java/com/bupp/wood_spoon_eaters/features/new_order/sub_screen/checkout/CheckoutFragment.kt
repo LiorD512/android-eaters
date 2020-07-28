@@ -16,18 +16,20 @@ import com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserAdapter
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
+import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
+import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.checkout_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,9 +38,10 @@ import kotlin.collections.ArrayList
 
 class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
-    HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener,
-    StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener, NationwideShippingChooserDialog.OrderDateChooserDialogListener,
-    com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, OrderUpdateErrorDialog.updateErrorDialogListener {
+    HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
+    StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener,
+    com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, OrderUpdateErrorDialog.updateErrorDialogListener,
+    NationwideShippingChooserDialog.NationwideShippingChooserListener {
 
     private var hasPaymentMethod: Boolean = false
     lateinit var curOrder: Order
@@ -131,7 +134,11 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
             }
         })
-
+        ordersViewModel.shippingMethodsEvent.observe(viewLifecycleOwner, Observer{
+            it?.let{
+                NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
+            }
+        })
     }
 
     override fun onCancelUpdateOrderError() {
@@ -229,6 +236,17 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
             }
 
+            order.cookingSlot.isNationwide?.let{
+                if(it){
+                    checkoutFragDeliveryTime.visibility = View.GONE
+                    checkoutFragNationwideSelect.visibility = View.VISIBLE
+                    checkoutFragNationwideSelect.setDeliveryDetailsViewListener(this)
+                    if(ordersViewModel.selectedShippingMethod == null){
+                        checkoutFragStatusBar.isEnabled = false
+                    }
+                }
+            }
+
         }
     }
 
@@ -315,6 +333,12 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     }
 
+    override fun onShippingMethodChoose(choosenShippingMethod: ShippingMethod) {
+        checkoutFragStatusBar.isEnabled = true
+        checkoutFragNationwideSelect.updateNationwideShippingDetails("${choosenShippingMethod.name}")
+        ordersViewModel.updateShppingMethod(choosenShippingMethod)
+    }
+
     override fun onClearCart() {
         ordersViewModel.clearCart()
         (activity as NewOrderActivity).finish()
@@ -352,6 +376,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     override fun onChangeTimeClick() {
         openOrderTimeDialog()
+    }
+
+    override fun onNationwideShippingChange() {
+        ordersViewModel.onNationwideShippingSelectClick()
     }
 
     private fun openOrderTimeDialog() {

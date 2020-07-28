@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.repositories.SingleDishRepository
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.bupp.wood_spoon_eaters.utils.Utils
 import retrofit2.Call
@@ -22,7 +23,8 @@ class SingleDishViewModel(
     val settings: AppSettings,
     val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager,
-    val metaDataManager: MetaDataManager
+    val metaDataManager: MetaDataManager,
+    val singleDishRepository: SingleDishRepository
 ) : ViewModel() {
 
     var menuItemId: Long = -1
@@ -49,7 +51,7 @@ class SingleDishViewModel(
     fun getFullDish() {
         progressData.startProgress()
         val feedRequest = getFeedRequest()
-        api.getMenuItemsDetails(
+        api.getSingleDish(
             menuItemId = menuItemId,
             lat = feedRequest.lat,
             lng = feedRequest.lng,
@@ -63,32 +65,71 @@ class SingleDishViewModel(
                     val dish = response.body()?.data
                     dish?.let {
                         fullDish.postValue(it)
-//                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
                         availability.postValue(
                             DishAvailability(
-                                checkCookingSlotAvailability(it),
-                                getStartingDate(it.menuItem?.cookingSlot?.orderFrom),
-                                checkDishSoldout(it)
+                                isAvailable = checkCookingSlotAvailability(it),
+                                startingTime = getStartingDate(it.menuItem?.cookingSlot?.orderFrom),
+                                isSoldOut = checkDishSoldout(it)
                             )
                         )
                     }
-//                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
-//                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
-//                    val shouldClearCart = checkForDifferentCook(dish)
-
                 } else {
                     Log.d("wowSingleDishVM", "getMenuItemsDetails fail")
-                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+//                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
                 }
             }
 
             override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
                 progressData.endProgress()
                 Log.d("wowSingleDishVM", "getMenuItemsDetails big fail: ${t.message}")
-                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+//                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
             }
         })
     }
+
+//    fun getFullDish() {
+//        progressData.startProgress()
+//        val feedRequest = getFeedRequest()
+//        api.getSingleDish(
+//            menuItemId = menuItemId,
+//            lat = feedRequest.lat,
+//            lng = feedRequest.lng,
+//            addressId = feedRequest.addressId,
+//            timestamp = feedRequest.timestamp
+//        ).enqueue(object : Callback<ServerResponse<FullDish>> {
+//            override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
+//                progressData.endProgress()
+//                if (response.isSuccessful) {
+//                    Log.d("wowSingleDishVM", "getMenuItemsDetails success")
+//                    val dish = response.body()?.data
+//                    dish?.let {
+//                        fullDish.postValue(it)
+////                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
+//                        availability.postValue(
+//                            DishAvailability(
+//                                checkCookingSlotAvailability(it),
+//                                getStartingDate(it.menuItem?.cookingSlot?.orderFrom),
+//                                checkDishSoldout(it)
+//                            )
+//                        )
+//                    }
+////                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
+////                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
+////                    val shouldClearCart = checkForDifferentCook(dish)
+//
+//                } else {
+//                    Log.d("wowSingleDishVM", "getMenuItemsDetails fail")
+//                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
+//                progressData.endProgress()
+//                Log.d("wowSingleDishVM", "getMenuItemsDetails big fail: ${t.message}")
+//                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
+//            }
+//        })
+//    }
 
     private fun checkDishSoldout(dish: FullDish): Boolean {
         val quantity = dish.menuItem?.quantity

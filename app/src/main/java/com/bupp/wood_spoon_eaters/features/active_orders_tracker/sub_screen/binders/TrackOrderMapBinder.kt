@@ -85,14 +85,16 @@ class TrackOrderMapBinder(val fragManager: FragmentManager): ItemBinder<OrderTra
                             Log.d("wowMapBinder","myLocation $myLocation")
                         }
                     }
-                    val courierLat = curCourierData?.lat
-                    val courierLng = curCourierData?.lng
-                    courierLat?.let{
-                        courierLng?.let{
-                            val courierLocation = LatLng(courierLat, courierLng)
-                            mMap.addMarker(MarkerOptions().position(courierLocation).icon(bitmapDescriptorFromVector(itemView.context, R.drawable.ic_courier_marker)))
-                            builder.include(courierLocation)
-                            Log.d("wowMapBinder","courierLocation $courierLocation")
+                    curCourierData?.let{
+                        val courierLat = curCourierData?.lat
+                        val courierLng = curCourierData?.lng
+                        courierLat?.let{
+                            courierLng?.let{
+                                val courierLocation = LatLng(courierLat, courierLng)
+                                mMap.addMarker(MarkerOptions().position(courierLocation).icon(bitmapDescriptorFromVector(itemView.context, R.drawable.ic_courier_marker)))
+                                builder.include(courierLocation)
+                                Log.d("wowMapBinder","courierLocation $courierLocation")
+                            }
                         }
                     }
                     val bounds = builder.build()

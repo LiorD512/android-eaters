@@ -33,13 +33,9 @@ class TrackOrderMainAdapter(
         this.addSection(progressSection)
         this.addSection(bottomSection)
 
-
-
 //        hideAllSections()
         this.setSectionExpansionMode(Mode.SINGLE)
         orderDetailsSection.setSectionExpansionMode(Mode.MULTIPLE)
-
-
 
         bottomSection.setItem(OrderTrackBottom(arrayListOf()))
         bottomSection.showSection()
@@ -63,12 +59,12 @@ class TrackOrderMainAdapter(
 
     fun updateUi(order: Order, userInfo: OrderUserInfo?) {
         //update map
-        if(order.courier == null){
-            mapSection.hideSection()
-        }else{
-            mapSection.setItem(OrderTrackMapData(order, userInfo))
-            mapSection.showSection()
-        }
+//        if(order.courier == null){
+//            mapSection.hideSection()
+//        }else{
+        mapSection.setItem(OrderTrackMapData(order, userInfo))
+        mapSection.showSection()
+//        }
 
         //details Header
         orderDetailHeadersSection.setItem(OrderTrackDetailsHeader(order.orderNumber))

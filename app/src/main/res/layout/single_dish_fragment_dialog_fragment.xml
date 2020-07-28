@@ -302,64 +302,6 @@
                                         android:layout_height="1dp"/>
 
                                 <LinearLayout
-                                        android:visibility="gone"
-                                        android:id="@+id/singleDishInfoNationwideLayout"
-                                        android:gravity="center"
-                                        android:orientation="horizontal"
-                                        android:layout_width="match_parent" android:layout_height="wrap_content">
-
-                                    <LinearLayout
-                                            android:orientation="vertical"
-                                            android:layout_weight="1"
-                                            android:layout_width="0dp" android:layout_height="wrap_content">
-
-                                        <TextView
-                                                style="@style/SemiBold13Dark"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="match_parent"
-                                                tools:text="Ships Nationwide"/>
-
-                                        <TextView
-                                                android:layout_marginTop="7.9dp"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                style="@style/Reg13Dark"
-                                                android:letterSpacing="0.04"
-                                                tools:text="Select Shipping method"/>
-
-                                    </LinearLayout>
-
-                                    <androidx.cardview.widget.CardView
-                                            android:id="@+id/singleDishNationwideBtn"
-                                            app:cardUseCompatPadding="true"
-                                            app:cardCornerRadius="2.9dp"
-                                            app:cardElevation="8dp"
-                                            app:cardBackgroundColor="@color/white"
-                                            android:layout_width="117dp"
-                                            android:layout_height="79dp">
-
-                                        <TextView
-                                                style="@style/SemiBold15Blue"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:gravity="center"
-                                                android:text="Select"/>
-
-
-                                    </androidx.cardview.widget.CardView>
-
-
-                                    <View
-                                            android:layout_marginTop="10dp"
-                                            android:layout_marginBottom="22dp"
-                                            android:background="@color/silver"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="1dp"/>
-
-                                </LinearLayout>
-
-
-                                <LinearLayout
                                         android:id="@+id/singleDishInfoDeliveryTimeLayout"
                                         android:gravity="center"
                                         android:orientation="horizontal"

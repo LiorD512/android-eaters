@@ -43,6 +43,14 @@
                         android:layout_height="match_parent"
                         tools:text="Your Order From Cook Oded"/>
 
+
+                <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+                        android:id="@+id/checkoutFragNationwideSelect"
+                        app:changeable="true"
+                        app:detailsType="DELIVERY_DETAILS_NATIONWIDE_SHIPPING"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
                 <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
                         android:id="@+id/checkoutFragDeliveryTime"
                         app:changeable="true"

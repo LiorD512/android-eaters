@@ -28,6 +28,7 @@
             <enum name="DELIVERY_DETAILS_PAYMENT" value="2"/>
             <enum name="DELIVERY_DETAILS_CHECKOUT_DELIVERY" value="3"/>
             <enum name="DELIVERY_DETAILS_LOCATION_PROFILE" value="4"/>
+            <enum name="DELIVERY_DETAILS_NATIONWIDE_SHIPPING" value="5"/>
         </attr>
         <attr name="changeable" format="boolean" />
         <attr name="isSelectionGray" format="boolean" />

@@ -665,7 +665,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         if(!currentFragmentTag.equals(Constants.FEED_TAG)){
             loadFeed()
         }else{
-            (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
+            //change feeditemlist adapter to ListAdapter (singleItemSetChanged) and then remove comment from below
+//            (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
         }
     }
 

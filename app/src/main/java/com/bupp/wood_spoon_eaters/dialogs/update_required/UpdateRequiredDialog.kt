@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.update_required
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -8,15 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import kotlinx.android.synthetic.main.update_required_dialog.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class UpdateRequiredDialog : DialogFragment() {
 
-
+    val viewModel by viewModel<UpdateRequiredViewModel>()
     interface UpdateRequiredDialogListener {
-        fun onUpdate()
+        fun onUpdate(url: String)
     }
 
     private var listener: UpdateRequiredDialogListener? = null
@@ -32,16 +34,26 @@ class UpdateRequiredDialog : DialogFragment() {
     }
 
     private fun initUi() {
+        viewModel.getDialogData()
 
-        updateDialogBtn.setOnClickListener {
-            listener?.onUpdate()
-        }
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUi()
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.updateRequiredEvent.observe(this, Observer{event ->
+            updateDialogTitle.text = event.title
+            updateDialogBody.text = event.body
+
+            updateDialogBtn.setOnClickListener {
+                listener?.onUpdate(event.redirectUrl)
+            }
+        })
     }
 
     override fun onAttach(context: Context) {

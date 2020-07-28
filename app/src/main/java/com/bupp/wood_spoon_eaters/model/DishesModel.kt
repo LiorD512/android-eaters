@@ -57,7 +57,8 @@ data class CookingSlot(
     @SerializedName("order_from") val orderFrom: Date,
     @SerializedName("last_call_at") val lastCallAt: Date,
     @SerializedName("delivery_fee") val deliveryFee: Price?,
-    @SerializedName("free_delivery") val freeDelivery: Boolean
+    @SerializedName("free_delivery") val freeDelivery: Boolean,
+    @SerializedName("nationwide_shipping") val isNationwide: Boolean
 ): Parcelable
 
 data class FullDish(

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.custom_views.feed_view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.feed_dish_item.view.*
@@ -49,23 +49,37 @@ class SingleFeedAdapter(
         holder.rating.text = "${dish.rating}"
 
         Glide.with(context).load(dish.cook.thumbnail).circleCrop().into(holder.cookImg)
-        Glide.with(context).load(dish.cook.country?.flagUrl).circleCrop().into(holder.cookFlag)
+        Glide.with(context).load(dish.cook.country?.flagUrl).into(holder.cookFlag)
 
-        if(dish.worldwide){
-            holder.worldwideLayout.visibility = View.VISIBLE
-            val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
-            param.setMargins(Utils.toPx(9), Utils.toPx(9), Utils.toPx(9),0)
-            holder.cardLayout.layoutParams = param
+        Log.d("wowSingleFeed","isNationwide: ${dish.menuItem?.cookingSlot?.isNationwide}")
+        dish.menuItem?.cookingSlot?.isNationwide?.let{
+            if(it){
+                holder.worldwideLayout.visibility = View.VISIBLE
+                val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
+                param.setMargins(Utils.toPx(9), Utils.toPx(9), Utils.toPx(9),0)
+                holder.cardLayout.layoutParams = param
 
-            holder.worldwideLayout.setOnClickListener {
-                listener.onWorldwideInfoClick()
+                holder.worldwideLayout.setOnClickListener {
+                    listener.onWorldwideInfoClick()
+                }
+
+                holder.bottomLayout.alpha = 0.3f
+                holder.nationwideDate.visibility = View.VISIBLE
+                holder.date.visibility = View.GONE
+                holder.freeDelivery.visibility = View.GONE
+            }else{
+                holder.worldwideLayout.visibility = View.GONE
+                val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
+                param.setMargins(Utils.toPx(9), 0,Utils.toPx(9),0)
+                holder.cardLayout.layoutParams = param
+
+                holder.bottomLayout.alpha = 1f
+                holder.date.visibility = View.VISIBLE
+                holder.nationwideDate.visibility = View.GONE
+                holder.freeDelivery.visibility = View.VISIBLE
             }
-        }else{
-            holder.worldwideLayout.visibility = View.GONE
-            val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
-            param.setMargins(Utils.toPx(9), 0,Utils.toPx(9),0)
-            holder.cardLayout.layoutParams = param
         }
+
 
         if (dish.menuItem != null) {
             holder.unAvailableLayout.visibility = View.GONE
@@ -138,6 +152,8 @@ class SingleFeedAdapter(
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val mainLayout = view.feedDishItemLayout
+    val bottomLayout = view.feedDishItemBottomLayout
+    val nationwideDate = view.feedDishItemNationwideDate
     val cardLayout = view.feedDishItemCardLayout
     val worldwideLayout = view.feedDishItemWorldwideLayout
     val soldOutLayout = view.feedDishItemSoldOutLayout

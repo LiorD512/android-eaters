@@ -4,6 +4,7 @@ import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserVi
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsViewModel
+import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
@@ -34,6 +35,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
+import com.bupp.wood_spoon_eaters.repositories.SingleDishRepository
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import com.example.matthias.mvvmcustomviewexample.custom.ToolTipViewModel
 //import org.koin.android.viewmodel.dsl.viewModel
@@ -45,7 +47,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     single { AppSettings(get()) }
-    single { OrderManager(get(), get(), get()) }
+    single { OrderManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { MetaDataManager() }
     single { EventsManager(get(), get()) }
@@ -53,6 +55,8 @@ val appModule = module {
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }
     single { PaymentManager(get(), get()) }
+
+    single { SingleDishRepository(get(), get()) }
 
     factory { PermissionManager() }
 
@@ -76,7 +80,7 @@ val appModule = module {
 
     viewModel { FeedViewModel(get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
-    viewModel { SingleDishViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SingleDishViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AddressChooserViewModel(get(), get(), get()) }
     viewModel { AddAddressViewModel(get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
@@ -88,6 +92,7 @@ val appModule = module {
     viewModel { CookProfileViewModel(get(), get())}
 
     viewModel { PaymentMethodsViewModel(get()) }
+    viewModel { UpdateRequiredViewModel(get()) }
 
     viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { ActiveOrderTrackerViewModel(get(), get(), get()) }

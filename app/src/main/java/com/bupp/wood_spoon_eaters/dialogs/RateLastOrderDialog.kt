@@ -14,18 +14,21 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
 import com.bupp.wood_spoon_eaters.custom_views.metrics_view.MetricsViewAdapter
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import com.bupp.wood_spoon_eaters.utils.Constants
+import kotlinx.android.synthetic.main.checkout_fragment.*
 import kotlinx.android.synthetic.main.rate_last_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) : DialogFragment(),
     InputTitleView.InputTitleViewListener, RateLastOrderAdapter.RateOrderAdapterListener,
-    MetricsViewAdapter.MetricsViewAdapterListener, CompoundButton.OnCheckedChangeListener {
+    MetricsViewAdapter.MetricsViewAdapterListener, CompoundButton.OnCheckedChangeListener, TipPercentView.TipPercentViewListener,
+    TipCourierDialog.TipCourierDialogListener {
 
     interface RateDialogListener{
         fun onRatingDone()
@@ -59,6 +62,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
         rateLastOrderNotes.setInputTitleViewListener(this)
         rateLastOrderCloseBtn.setOnClickListener { dismiss() }
         rateLastOrderDoneBtn.setBtnEnabled(false)
+        rateLastOrderTipPercentView.setTipPercentViewListener(this)
 
         rateLastOrderDoneBtn.setOnClickListener {
             onDoneClick()
@@ -144,5 +148,19 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
         viewModel.postRating(orderId, reviewRequest)
 
+    }
+
+    override fun onTipIconClick(tipSelection: Int) {
+        if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
+            TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
+        } else {
+//            ordersViewModel.updateTip(tipPercentage = tipSelection)
+            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onTipDone(tipAmount: Int) {
+        rateLastOrderTipPercentView.setCustomTipValue(tipAmount)
+//        ordersViewModel.updateTip(tipInCents = tipAmount)
     }
 }

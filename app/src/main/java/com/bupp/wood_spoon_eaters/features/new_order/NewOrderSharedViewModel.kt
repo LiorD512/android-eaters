@@ -2,8 +2,6 @@ package com.bupp.wood_spoon_eaters.features.new_order
 
 import android.app.Activity
 import android.util.Log
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
@@ -13,9 +11,6 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.BaseCallback
-import com.stripe.android.CustomerSession
-import com.stripe.android.PaymentConfiguration
-import com.stripe.android.StripeError
 import com.stripe.android.model.PaymentMethod
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +29,7 @@ class NewOrderSharedViewModel(
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     private var curCookingSlotId: Long? = null
+    var selectedShippingMethod: ShippingMethod? = null
     var menuItemId: Long = -1
     var isCheckout: Boolean = false
     var isEvent: Boolean = false
@@ -106,7 +102,9 @@ class NewOrderSharedViewModel(
 
 
     val ephemeralKeyProvider: SingleLiveEvent<EphemeralKeyProviderEvent> = SingleLiveEvent()
+
     data class EphemeralKeyProviderEvent(val isSuccess: Boolean = false)
+
     override fun onEphemeralKeyProviderError() {
         ephemeralKeyProvider.postValue(EphemeralKeyProviderEvent(false))
     }
@@ -140,10 +138,12 @@ class NewOrderSharedViewModel(
 
     var isFirst: Boolean = true
     val showDialogEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val procceedToCheckoutEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     data class PostOrderEvent(val isSuccess: Boolean = false, val order: Order?)
 
     val postOrderEvent: SingleLiveEvent<PostOrderEvent> = SingleLiveEvent()
+
     //post current order - order details and order items - this method is used to add single dish to cart.
     fun addToCart(
         fullDish: FullDish? = null, quantity: Int = 1, removedIngredients: ArrayList<Long>? = null, note: String? = null, tipPercentage: Float? = null,
@@ -152,9 +152,13 @@ class NewOrderSharedViewModel(
     ) {
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
         val hasPendingOrderFromDifferentCook = checkForDifferentOpenOrder(fullDish?.menuItem?.cookingSlot?.id)
-        if (hasPendingOrder && hasPendingOrderFromDifferentCook) {
-            fullDish?.let {
-                checkForOpenOrderAndShowClearCartDialog(fullDish.menuItem?.cookingSlot?.id, fullDish.cook.getFullName())
+        if (hasPendingOrder) {
+            if (hasPendingOrderFromDifferentCook) {
+                fullDish?.let {
+                    checkForOpenOrderAndShowClearCartDialog(fullDish.menuItem?.cookingSlot?.id, fullDish.cook.getFullName())
+                }
+            }else{
+                addNewDishToCart(fullDish!!.id, quantity)
             }
         } else {
             var cookId: Long = -1
@@ -192,16 +196,17 @@ class NewOrderSharedViewModel(
                         orderManager.setOrderResponse(order)
                         orderData.postValue(order)
                         Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
+                        showAdditionalDialogOrProcceedToCheckout()
                         //update additional dishes
-                        fullDish?.let {
-                            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
-                            if (it.getAdditionalDishes().size > 1) {
-                                showDialogEvent.postValue(isFirst)
-                                isFirst = false
-                            } else {
-                                showDialogEvent.postValue(false)
-                            }
-                        }
+//                        fullDish?.let {
+//                            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+//                            if (it.getAdditionalDishes().size > 1) {
+//                                showDialogEvent.postValue(isFirst)
+//                                isFirst = false
+//                            } else {
+//                                showDialogEvent.postValue(false)
+//                            }
+//                        }
                         postOrderEvent.postValue(PostOrderEvent(true, order))
 
                         eventsManager.sendAddToCart(order?.id)
@@ -224,16 +229,46 @@ class NewOrderSharedViewModel(
 
     }
 
+    fun initAdditionalDishDialog(fullDish: FullDish) {
+        fullDish.let {
+            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+        }
+    }
+
+    fun showAdditionalDialogOrProcceedToCheckout() {
+        if (additionalDishes.value != null) {
+            if (additionalDishes.value!!.size > 1 && isFirst) {
+                showDialogEvent.postValue(isFirst)
+                isFirst = false
+            } else {
+                procceedToCheckoutEvent.postValue(true)
+            }
+        } else {
+            procceedToCheckoutEvent.postValue(true)
+        }
+    }
+
+    fun showAdditionalDialogIfFirst() {
+        if (additionalDishes.value != null) {
+            if (additionalDishes.value!!.size > 1 && isFirst) {
+                showDialogEvent.postValue(isFirst)
+                isFirst = false
+            }
+        }
+    }
+
+
     fun addNewDishToCart(dishId: Long = -1, quantity: Int? = 1) {
         progressData.startProgress()
 
         val newOrderItem = OrderItemRequest(dishId = dishId, quantity = quantity)
 
         val orderRequest = orderManager.getOrderRequest()
+
         orderRequest.orderItemRequests?.clear()
         orderRequest.orderItemRequests?.add(newOrderItem)
-
-        apiService.updateOrder(orderManager.curOrderResponse!!.id, orderRequest)
+        val orderId = orderManager.curOrderResponse!!.id
+        apiService.updateOrder(orderId, orderRequest)
             .enqueue(object : Callback<ServerResponse<Order>> {
                 override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
                     progressData.endProgress()
@@ -241,6 +276,7 @@ class NewOrderSharedViewModel(
                         val updatedOrder = response.body()?.data
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
+                        showAdditionalDialogIfFirst()
                     } else {
                         Log.d("wowCheckoutVm", "updateOrder FAILED")
                     }
@@ -376,6 +412,7 @@ class NewOrderSharedViewModel(
     data class CheckoutEvent(val isSuccess: Boolean)
 
     val checkoutOrderEvent: SingleLiveEvent<CheckoutEvent> = SingleLiveEvent()
+
     //checkout order
     fun checkoutOrder(orderId: Long) {
         progressData.startProgress()
@@ -414,21 +451,12 @@ class NewOrderSharedViewModel(
 
     val tipInDollars = MutableLiveData<Int>()
     val tipPercentage = MutableLiveData<Int>()
-//    fun updateTipPercentage(tipPercentage: Int) {
-//
-//        postUpdateOrder(OrderRequest(tipPercentage = tipPercentage.toFloat()))
-//    }
-//
-//    fun updateTipInDollars(tipInCents: Int) {
-//        this.tipInDollars.postValue(tipInCents)
-//        postUpdateOrder(OrderRequest(tip = tipInCents*100))
-//    }
 
-    fun updateTip(tipPercentage: Int? = null, tipInCents: Int? = null){
-        tipPercentage?.let{
+    fun updateTip(tipPercentage: Int? = null, tipInCents: Int? = null) {
+        tipPercentage?.let {
             this.tipPercentage.postValue(tipPercentage)
         }
-        tipInCents?.let{
+        tipInCents?.let {
             this.tipInDollars.postValue(tipInCents)
         }
         postUpdateOrder(OrderRequest(tip = tipInCents?.times(100), tipPercentage = tipPercentage?.toFloat()))
@@ -439,6 +467,10 @@ class NewOrderSharedViewModel(
         postUpdateOrder(OrderRequest(addUtensils = shouldAdd))
     }
 
+    fun updateShppingMethod(shippingMethod: ShippingMethod){
+        selectedShippingMethod = shippingMethod
+        postUpdateOrder(OrderRequest(shippingService = shippingMethod.code))
+    }
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
         //get only available dishes
@@ -470,6 +502,7 @@ class NewOrderSharedViewModel(
 //    val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
 
     data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
+
     fun getStripeCustomerCards(): SingleLiveEvent<List<PaymentMethod>> {
         return paymentManager.getStripeCustomerCards()
     }
@@ -478,10 +511,21 @@ class NewOrderSharedViewModel(
         eaterDataManager.updateCustomerCard(paymentMethod)
     }
 
-    val shippingMethods = MutableLiveData<List<ShippingMethod>>()
-    fun onShippingMethodSelectClick() {
-        if(shippingMethods.value == null){
-//            api.getShippingMethod(or)
+    val shippingMethodsEvent = SingleLiveEvent<ArrayList<ShippingMethod>>()
+    fun onNationwideShippingSelectClick() {
+        progressData.startProgress()
+        orderData.value?.id?.let {
+            apiService.getUpsShippingRates(it).enqueue(object : BaseCallback<ServerResponse<ArrayList<ShippingMethod>>>() {
+                override fun onSuccess(result: ServerResponse<ArrayList<ShippingMethod>>) {
+                    shippingMethodsEvent.postValue(result.data)
+                    progressData.endProgress()
+                }
+
+                override fun onError(errors: List<WSError>) {
+                    progressData.endProgress()
+                    errorEvent.postValue(errors)
+                }
+            })
         }
     }
 

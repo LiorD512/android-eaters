@@ -1,35 +1,24 @@
 package com.bupp.wood_spoon_eaters.features.splash
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.appsflyer.AppsFlyerConversionListener
-import com.appsflyer.AppsFlyerLib
-import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
-import com.bupp.wood_spoon_eaters.dialogs.UpdateRequiredDialog
+import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import com.bupp.wood_spoon_eaters.utils.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import kotlin.concurrent.schedule
-import io.branch.referral.BranchError
-import org.json.JSONObject
 import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.stripe.android.CustomerSession
-import com.stripe.android.PaymentConfiguration
-import com.uxcam.UXCam
 import kotlinx.android.synthetic.main.activity_splash.*
-import java.lang.Exception
 
 
 class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, LottieAnimationView.LottieAnimListener {
@@ -98,15 +87,15 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         })
     }
 
-    override fun onUpdate() {
+    override fun onUpdate(redirectUrl: String) {
         val appPackageName = packageName // getPackageName() from Context or Activity object
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl)))
         } catch (anfe: android.content.ActivityNotFoundException) {
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")
+                    Uri.parse(redirectUrl)
                 )
             )
         }

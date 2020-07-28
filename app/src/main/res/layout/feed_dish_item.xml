@@ -186,6 +186,7 @@
 
                 <!--android:gravity="center"-->
                 <RelativeLayout
+                        android:id="@+id/feedDishItemBottomLayout"
                         android:layout_marginTop="11dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -238,6 +239,21 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/feedDishItemFreeDelivery"
                             tools:text="Free Delivery"/>
+
+                    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+                            android:layout_centerInParent="true"
+                            android:layout_toEndOf="@+id/feedDishItemRating"
+                            android:gravity="center|start"
+                            app:minTextSize="7sp"
+                            android:layout_marginEnd="5dp"
+                            android:singleLine="true"
+                            android:id="@+id/feedDishItemNationwideDate"
+                            android:drawableStart="@drawable/icons_time"
+                            android:drawablePadding="7dp"
+                            style="@style/Bold13Dark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Variable will set at checkout"/>
 
                 </RelativeLayout>
             </LinearLayout>

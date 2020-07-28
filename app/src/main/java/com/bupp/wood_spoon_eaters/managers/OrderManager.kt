@@ -6,19 +6,18 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
 import java.util.*
 
-class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterDataManager: EaterDataManager) {
+class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager) {
 
     var curOrderResponse: Order? = null
     var currentOrderRequest: OrderRequest? = null
 
-    fun getOrderRequest():OrderRequest{
+    fun getOrderRequest(): OrderRequest {
         return currentOrderRequest!!
     }
 
     fun getPromoCodeOrderRequest(): OrderRequest {
         val promoCodeOrderRequest = OrderRequest()
         promoCodeOrderRequest.promoCode = getOrderRequest().promoCode
-//        promoCodeOrderRequest.promoCode = getOrderRequest().id
         return promoCodeOrderRequest
     }
 
@@ -27,57 +26,52 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
         return currentOrderRequest!!
     }
 
-    fun updateOrderRequest(cookId: Long? = null,
-                           cookingSlotId: Long? = null,
-                           deliveryAt: String? = eaterDataManager.getLastOrderTimeParam(),
-                           deliveryAddress: Address? = getLastOrderAddressParam(),
-                           orderItemRequests: ArrayList<OrderItemRequest>? = null,
-                           tipPercentage: Float? = null,
-                           tip: Int? = null,
-                           tipAmount: String? = null,
-                           promoCode: String? = null,
-                           addUtensils: Boolean? = null,
-                           recurringOrder: Boolean? = null){
-        if(currentOrderRequest == null) {
+    fun updateOrderRequest(
+        cookId: Long? = null,
+        cookingSlotId: Long? = null,
+        deliveryAt: String? = eaterDataManager.getLastOrderTimeParam(),
+        deliveryAddress: Address? = getLastOrderAddressParam(),
+        orderItemRequests: ArrayList<OrderItemRequest>? = null,
+        tipPercentage: Float? = null,
+        tip: Int? = null,
+        tipAmount: String? = null,
+        promoCode: String? = null,
+        addUtensils: Boolean? = null
+    ) {
+        if (currentOrderRequest == null) {
             initNewOrder()
         }
-            currentOrderRequest!!.deliveryAt = deliveryAt
-            if(cookId != null) currentOrderRequest!!.cookId = cookId
-            if(cookingSlotId != null) currentOrderRequest!!.cookingSlotId = cookingSlotId
-            if(deliveryAddress != null) currentOrderRequest!!.deliveryAddressId = deliveryAddress.id
-            if(orderItemRequests != null) currentOrderRequest!!.orderItemRequests = orderItemRequests
-            if(tipPercentage != null) currentOrderRequest!!.tipPercentage = tipPercentage
-            if(tip != null) currentOrderRequest!!.tip = tip
-            if(tipAmount != null) currentOrderRequest!!.tipAmount = tipAmount
-            if(promoCode != null) currentOrderRequest!!.promoCode = promoCode
-            if(addUtensils != null) currentOrderRequest!!.addUtensils = addUtensils
-//            if(recurringOrder != null) currentOrderRequest!!.recurringOrder = recurringOrder
-
+        currentOrderRequest!!.deliveryAt = deliveryAt
+        if (cookId != null) currentOrderRequest!!.cookId = cookId
+        if (cookingSlotId != null) currentOrderRequest!!.cookingSlotId = cookingSlotId
+        if (deliveryAddress != null) currentOrderRequest!!.deliveryAddressId = deliveryAddress.id
+        if (orderItemRequests != null) currentOrderRequest!!.orderItemRequests = orderItemRequests
+        if (tipPercentage != null) currentOrderRequest!!.tipPercentage = tipPercentage
+        if (tip != null) currentOrderRequest!!.tip = tip
+        if (tipAmount != null) currentOrderRequest!!.tipAmount = tipAmount
+        if (promoCode != null) currentOrderRequest!!.promoCode = promoCode
+        if (addUtensils != null) currentOrderRequest!!.addUtensils = addUtensils
     }
 
     private fun getLastOrderAddressParam(): Address? {
         return eaterDataManager.getLastChosenAddress()
     }
 
-    fun addOrderItem(orderItemRequest: OrderItemRequest){
-        if(currentOrderRequest != null){
-            if(currentOrderRequest!!.orderItemRequests == null){
-                currentOrderRequest!!.orderItemRequests = arrayListOf()
+    fun addOrderItem(orderItemRequest: OrderItemRequest) {
+        currentOrderRequest?.let {
+            if (it.orderItemRequests == null) {
+                it.orderItemRequests = arrayListOf()
             }
-            currentOrderRequest!!.orderItemRequests?.add(orderItemRequest)
+            it.orderItemRequests?.add(orderItemRequest)
         }
     }
 
-    fun updateOrderItems(orderItemRequests: ArrayList<OrderItemRequest>){
-        currentOrderRequest!!.orderItemRequests?.clear()
-        currentOrderRequest!!.orderItemRequests?.addAll(orderItemRequests)
-    }
 
     fun setOrderResponse(order: Order?) {
         this.curOrderResponse = order
     }
 
-    fun haveCurrentActiveOrder(): Boolean{
+    fun haveCurrentActiveOrder(): Boolean {
         return curOrderResponse != null
     }
 
@@ -89,15 +83,9 @@ class OrderManager(val api: ApiService, val appSettings: AppSettings, val eaterD
     fun getTotalCost(): String {
         val total = curOrderResponse?.total?.cents ?: 0
         val tip = curOrderResponse?.tip?.cents ?: 0
-        val sum = total+tip
+        val sum = total + tip
         return "$sum"
     }
-
-
-    var tempTipPercentage: Int = 0
-    var tempTipInDollars: Int = 0
-
-
 
 
 }

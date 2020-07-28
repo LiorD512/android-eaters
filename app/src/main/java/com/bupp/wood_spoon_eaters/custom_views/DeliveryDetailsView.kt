@@ -19,6 +19,7 @@ class DeliveryDetailsView : LinearLayout {
         fun onChangeLocationClick() {}
         fun onChangeTimeClick() {}
         fun onChangePaymentClick() {}
+        fun onNationwideShippingChange() {}
     }
 
     fun setDeliveryDetailsViewListener(listener: DeliveryDetailsViewListener) {
@@ -76,6 +77,11 @@ class DeliveryDetailsView : LinearLayout {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_location)
                 deliveryDetailsViewTitle.text = "Manage Addresses"
             }
+            Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
+                deliveryDetailsViewIcon.setImageResource(R.drawable.icons_location)
+                deliveryDetailsViewTitle.text = "Nationwide Delivery Time"
+                deliveryDetailsViewInput.text = "Select Delivery Method"
+            }
             Constants.DELIVERY_DETAILS_TIME -> {
                 deliveryDetailsViewIcon.setImageResource(R.drawable.icons_time)
                 deliveryDetailsViewTitle.text = "Delivery Time"
@@ -103,7 +109,14 @@ class DeliveryDetailsView : LinearLayout {
             Constants.DELIVERY_DETAILS_PAYMENT -> {
                 listener?.onChangePaymentClick()
             }
+            Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
+                listener?.onNationwideShippingChange()
+            }
         }
+    }
+
+    fun updateNationwideShippingDetails(input: String){
+        deliveryDetailsViewInput.text = input
     }
 
     fun updateDeliveryDetails(input: String) {

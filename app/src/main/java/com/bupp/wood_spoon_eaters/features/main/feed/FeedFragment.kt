@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.dialogs.NoDishesAvailableDialog
-import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
+import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.model.Cook
@@ -122,7 +122,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     override fun onWorldwideInfoClick() {
-        WorldwideShippmentDialog().show(childFragmentManager, Constants.WORLD_WIDE_SHIPPMENT_DIALOG)
+        NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
     }
 
     fun silentRefresh() {

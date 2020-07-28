@@ -54,7 +54,12 @@ class NationwideShippingChooserAdapter(val context: Context, val listener: Natio
 
         holder as ViewHolder
         holder.title.text = shippingMethod.name
-        holder.eta.text = "${shippingMethod.days_in_transit} business days (deliver by ${shippingMethod.deliver_by})"
+        if(shippingMethod.description != null){
+            holder.eta.text = "${shippingMethod.description}"
+            holder.eta.visibility = View.VISIBLE
+        }else{
+            holder.eta.visibility = View.GONE
+        }
         holder.price.text = shippingMethod.fee.formatedValue
         holder.bkg.setOnClickListener {
             selectedmenuItem = shippingMethod

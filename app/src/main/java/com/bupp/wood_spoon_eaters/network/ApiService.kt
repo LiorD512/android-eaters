@@ -91,8 +91,8 @@ interface ApiService {
 
     //Single Dish
     @GET("menu_items/{menu_item_id}/dish")
-    fun getMenuItemsDetails(@Path(value = "menu_item_id", encoded = true) menuItemId: Long, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-                            @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<FullDish>>
+    fun getSingleDish(@Path(value = "menu_item_id", encoded = true) menuItemId: Long, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+                      @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<FullDish>>
 
 
 
@@ -112,8 +112,11 @@ interface ApiService {
     @DELETE("eaters/me/orders/{order_id}/")
     fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
 
+    @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
+    fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<ArrayList<ShippingMethod>>>
 
-    //Active Order
+
+//Active Order
     @GET("eaters/me/orders/trackable")
     fun getTrackableOrders(): Call<ServerResponse<ArrayList<Order>>>
 

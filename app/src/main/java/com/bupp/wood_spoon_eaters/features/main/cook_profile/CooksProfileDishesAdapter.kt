@@ -6,15 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.RoundedCornersTransformation
-import com.bupp.wood_spoon_eaters.dialogs.WorldwideShippmentDialog
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.cooks_profile_dish_item.view.*
-import kotlinx.android.synthetic.main.feed_dish_item.view.*
 
 
 class CooksProfileDishesAdapter(

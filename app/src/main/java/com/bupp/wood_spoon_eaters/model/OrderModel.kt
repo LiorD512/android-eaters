@@ -16,6 +16,7 @@ data class OrderRequest(
     @SerializedName("tip_percentage") var tipPercentage: Float? = null,
     @SerializedName("tip") var tip: Int? = null,
     @SerializedName("disposable_tableware") var addUtensils: Boolean? = null,
+    @SerializedName("shipping_service") var shippingService: String? = null,
 //    @SerializedName("recurring_order") var recurringOrder: Boolean? = null,
     @SerializedName("tip_amount") var tipAmount: String? = null,
     @SerializedName("promo_code") var promoCode: String? = null
@@ -73,13 +74,13 @@ data class OrderItem(
     @SerializedName("notes") var notes: String?
 ): Parcelable
 
+@Parcelize
 data class ShippingMethod(
     val code: String,
     val name: String,
     val fee: Price,
-    val days_in_transit: Int,
-    val deliver_by: String
-)
+    val description: String
+): Parcelable
 
 @Parcelize
 data class Courier(

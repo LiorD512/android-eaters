@@ -37,6 +37,7 @@ class Constants {
         const val DELIVERY_DETAILS_PAYMENT = 2
         const val DELIVERY_DETAILS_CHECKOUT_DELIVERY = 3
         const val DELIVERY_DETAILS_LOCATION_PROFILE = 4
+        const val DELIVERY_DETAILS_NATIONWIDE_SHIPPING = 5
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0
@@ -157,7 +158,8 @@ class Constants {
         const val NO_LOCATION_DIALOG = "no_location_dialog"
         const val ERROR_DIALOG = "error_dialog"
         const val SHARE_CAMPAIGN_DIALOG = "campaign_dialog"
-        const val WORLD_WIDE_SHIPPMENT_DIALOG = "WORLD_WIDE_DIALOG"
+        const val NATIONWIDE_SHIPPING_INFO_DIALOG = "nationwide_shipping_info_dialog"
+        const val NATIONWIDE_SHIPPING_SELECT_DIALOG = "nationwide_shipping_select_dialog"
 
 
 

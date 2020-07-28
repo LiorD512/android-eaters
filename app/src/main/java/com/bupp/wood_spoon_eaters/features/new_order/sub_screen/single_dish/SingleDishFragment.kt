@@ -46,12 +46,12 @@ import java.util.*
 
 
 class SingleDishFragment() : Fragment(),
-    NationwideShippingChooserDialog.OrderDateChooserDialogListener, //DishCounterView.DishCounterViewListener,
+    OrderDateChooserDialog.OrderDateChooserDialogListener, //DishCounterView.DishCounterViewListener,
     SingleFeedAdapter.SearchAdapterListener,
     StartNewCartDialog.StartNewCartDialogListener, SingleDishHeader.SingleDishHeaderListener,
     UserImageView.UserImageViewListener, AddressMissingDialog.AddressMissingDialogListener,
     DishMediaAdapter.DishMediaAdapterListener, AdditionalDishesDialog.AdditionalDishesDialogListener, OrdersBottomBar.OrderBottomBatListener,
-    PlusMinusView.PlusMinusInterface, CooksProfileDishesAdapter.CooksProfileDishesListener, OrderDateChooserDialog.OrderDateChooserDialogListener {
+    PlusMinusView.PlusMinusInterface, CooksProfileDishesAdapter.CooksProfileDishesListener {
 
 
     var listener: SingleDishDialogListener? = null
@@ -129,9 +129,10 @@ class SingleDishFragment() : Fragment(),
         })
 
         viewModel.fullDish.observe(this, Observer { fullDish ->
-            if (fullDish != null) {
-                initUi(fullDish)
-                checkForOpenOrder(fullDish)
+            fullDish?.let{
+                initUi(it)
+                checkForOpenOrder(it)
+                ordersViewModel.initAdditionalDishDialog(it)
             }
         })
 
@@ -172,7 +173,11 @@ class SingleDishFragment() : Fragment(),
         ordersViewModel.showDialogEvent.observe(this, Observer { showDialog ->
             if (showDialog) {
                 AdditionalDishesDialog(this).show(childFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
-            } else {
+            }
+        })
+
+        ordersViewModel.procceedToCheckoutEvent.observe(this, Observer { procceedToCheckout ->
+            if(procceedToCheckout){
                 onProceedToCheckout()
             }
         })
@@ -422,6 +427,12 @@ class SingleDishFragment() : Fragment(),
         } else {
             singleDishInstructionsLayout.visibility = View.GONE
         }
+
+        currentDish.menuItem?.cookingSlot?.isNationwide?.let{
+            if(it){
+
+            }
+        }
     }
 
     override fun onPlayClick(url: String) {
@@ -435,12 +446,13 @@ class SingleDishFragment() : Fragment(),
 
     private fun initOrderDate(currentDish: FullDish) {
         if(currentDish.isNationwide){
-            singleDishInfoNationwideLayout.visibility = View.VISIBLE
+            //todo : add this ui after design is ready
+//            singleDishInfoNationwideLayout.visibility = View.VISIBLE
             singleDishInfoDeliveryTimeLayout.visibility = View.GONE
 
 //            singleDishNationwideBtn.setOnClickListener { viewModel.onShippingMethodSelectClick() }
         }else {
-            singleDishInfoNationwideLayout.visibility = View.GONE
+//            singleDishInfoNationwideLayout.visibility = View.GONE
             singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
 
             val orderAtDate = currentDish.menuItem?.orderAt

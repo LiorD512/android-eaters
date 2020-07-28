@@ -81,7 +81,6 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
         order?.let {
             it.orderItems.let {
                 mainAdapter?.refreshOrderItems(it)
-
             }
 
             val priceStr = DecimalFormat("##.##").format(sharedViewModel.calcTotalDishesPrice())

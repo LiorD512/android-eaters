@@ -17,15 +17,17 @@
                 android:layout_height="wrap_content" android:orientation="vertical">
 
             <TextView
+                    android:id="@+id/updateDialogTitle"
                     android:layout_marginTop="38dp"
                     style="@style/Bold15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center_horizontal"
-                    android:text="Update Required"/>
+                    tools:text="Update Required"/>
 
             <TextView
+                    android:id="@+id/updateDialogBody"
                     android:gravity="center"
                     style="@style/SemiBold13Grey"
                     android:layout_marginStart="30.5dp"
@@ -34,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="24dp"
-                    android:text="New version is available in the app store.
+                    tools:text="New version is available in the app store.
 Please update to the new version
 before continuing."/>
 

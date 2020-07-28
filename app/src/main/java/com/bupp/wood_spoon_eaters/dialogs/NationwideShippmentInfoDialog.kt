@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.R
 import kotlinx.android.synthetic.main.error_dialog.*
 import kotlinx.android.synthetic.main.worldwide_shippment_dialog.*
 
-class WorldwideShippmentDialog: DialogFragment(){
+class NationwideShippmentInfoDialog: DialogFragment(){
 
 
 

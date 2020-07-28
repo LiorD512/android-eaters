@@ -5,6 +5,8 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:alpha="0.5"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:id="@+id/nationwideShippingBkg"
         android:background="@color/white_95"
         android:layout_width="match_parent"
@@ -43,7 +45,6 @@
 
     <TextView
             android:id="@+id/nationwideShippingPrice"
-            android:layout_marginEnd="16dp"
             style="@style/SemiBold13Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
