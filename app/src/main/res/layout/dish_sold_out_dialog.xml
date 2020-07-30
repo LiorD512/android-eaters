@@ -38,7 +38,7 @@
                 android:layout_marginTop="7.7dp"
                 android:layout_marginBottom="23.8dp"
                 android:gravity="center"
-                android:text="Oh No, The dish you selected is sold out for today"/>
+                android:text="Oh no, The dish you selected is sold out for today"/>
 
 
 

@@ -185,6 +185,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 //        ordersViewModel.getStripeCustomerCards()
 //        viewModel.getCurrentCustomer()
         ordersViewModel.resetTip()
+
     }
 
     private fun setEmptyPaymentMethod() {
@@ -244,8 +245,12 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                     if(ordersViewModel.selectedShippingMethod == null){
                         checkoutFragStatusBar.isEnabled = false
                     }
+                }else{
+                    checkoutFragDeliveryTime.visibility = View.VISIBLE
+                    checkoutFragNationwideSelect.visibility = View.GONE
                 }
             }
+            checkoutFragSmallOrderFee.isNationWide(order.cookingSlot.isNationwide)
 
         }
     }

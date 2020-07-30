@@ -32,6 +32,7 @@
         </attr>
         <attr name="changeable" format="boolean" />
         <attr name="isSelectionGray" format="boolean" />
+        <attr name="btnTitle" format="string" />
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">

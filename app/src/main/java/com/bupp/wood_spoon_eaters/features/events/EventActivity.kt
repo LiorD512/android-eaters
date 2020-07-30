@@ -208,7 +208,7 @@ class EventActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
-        ActiveOrderTrackerDialog(orders, this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+        ActiveOrderTrackerDialog.newInstance(orders).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
     override fun onContactUsClick() {

@@ -48,7 +48,7 @@ before continuing."/>
             <TextView
                     style="@style/SemiBold15Blue"
                     android:gravity="center"
-                    android:text="Go To GooglePlay"
+                    android:text="Go to GooglePlay"
                     android:id="@+id/updateDialogBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

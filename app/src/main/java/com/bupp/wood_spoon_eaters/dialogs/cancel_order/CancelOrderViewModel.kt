@@ -18,23 +18,25 @@ class CancelOrderViewModel(val api: ApiService) : ViewModel() {
     val cancelOrder: SingleLiveEvent<CancelOrderEvent> = SingleLiveEvent()
     data class CancelOrderEvent(val isSuccess: Boolean)
 
-    fun cancelOrder(orderId: Long, note: String? = null){
-        api.cancelOrder(orderId, note).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-                if(response.isSuccessful){
-                    Log.d("wowCancelOrderVM","cancelOrder success")
-                    cancelOrder.postValue(CancelOrderEvent(true))
-                }else{
-                    Log.d("wowCancelOrderVM","cancelOrder fail")
+    fun cancelOrder(orderId: Long?, note: String? = null){
+        orderId?.let{
+            api.cancelOrder(orderId, note).enqueue(object: Callback<ServerResponse<Void>>{
+                override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+                    if(response.isSuccessful){
+                        Log.d("wowCancelOrderVM","cancelOrder success")
+                        cancelOrder.postValue(CancelOrderEvent(true))
+                    }else{
+                        Log.d("wowCancelOrderVM","cancelOrder fail")
+                        cancelOrder.postValue(CancelOrderEvent(false))
+                    }
+                }
+
+                override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+                    Log.d("wowCancelOrderVM","cancelOrder big fail: ${t.message}")
                     cancelOrder.postValue(CancelOrderEvent(false))
                 }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-                Log.d("wowCancelOrderVM","cancelOrder big fail: ${t.message}")
-                cancelOrder.postValue(CancelOrderEvent(false))
-            }
-        })
+            })
+        }
     }
 
 }

@@ -98,7 +98,7 @@ class TrackOrderMapBinder(val fragManager: FragmentManager): ItemBinder<OrderTra
                         }
                     }
                     val bounds = builder.build()
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
                 }
 
 

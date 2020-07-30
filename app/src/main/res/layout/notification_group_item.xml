@@ -24,7 +24,7 @@
                     android:id="@+id/NotificationGroupName"
                     style="@style/SemiBold13Dark"
                     android:layout_marginBottom="4.1dp"
-                    android:text="Order Status"
+                    android:text="Order status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

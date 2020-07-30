@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
-        ActiveOrderTrackerDialog(orders, this).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+        ActiveOrderTrackerDialog.newInstance(orders).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
     override fun onContactUsClick() {
@@ -599,6 +599,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             checkCartStatus()
             data?.let{
                 if(it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)){
+                    (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
                     checkForSharingCampaign()
                     refreshUser()
                 }

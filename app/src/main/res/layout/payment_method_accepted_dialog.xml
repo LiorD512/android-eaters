@@ -40,7 +40,7 @@
             android:layout_marginBottom="25.4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Payment Method Accepted"/>
+            android:text="Payment method accepted"/>
 
         <View
             android:layout_width="match_parent"

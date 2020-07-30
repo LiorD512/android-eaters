@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
@@ -108,7 +109,7 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
 
 
-    val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
+    val getActiveOrders: MutableLiveData<GetActiveOrdersEvent> = MutableLiveData()
     data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?, val userInfo: OrderUserInfo? = null)
 
 }

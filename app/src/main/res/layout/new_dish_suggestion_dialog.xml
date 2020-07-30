@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Offer A New Dish To Woodspoon"/>
+                    android:text="Offer a new dish to woodspoon"/>
         </LinearLayout>
 
 

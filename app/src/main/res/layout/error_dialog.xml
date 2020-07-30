@@ -41,7 +41,7 @@
             android:layout_marginBottom="63dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Error, Please Try Again"/>
+            android:text="Error, please try again"/>
 
     </LinearLayout>
 

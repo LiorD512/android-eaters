@@ -152,4 +152,8 @@ class ToolTipView : FrameLayout {
         location.bottom = location.top + v.height
         return location
     }
+
+    fun isNationWide(nationwide: Boolean) {
+        viewModel.isNationwide = nationwide
+    }
 }

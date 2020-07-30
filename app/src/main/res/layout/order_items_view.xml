@@ -11,7 +11,7 @@
             android:paddingBottom="15.4dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Order Items"/>
+            android:text="Order items"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/orderItemsViewRecyclerView"

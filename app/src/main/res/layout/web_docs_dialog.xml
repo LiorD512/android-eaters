@@ -34,7 +34,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="7.7dp"
                 android:layout_weight="1"
-                android:text="Privacy Policy"
+                android:text="Privacy policy"
                 android:gravity="center"
                 android:background="@drawable/web_docs_title_selector"
                 android:textColor="@color/blue_alpha_selector"

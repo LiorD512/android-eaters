@@ -2,17 +2,21 @@ package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.bin
 
 import android.util.Log
 import android.view.View
-import mva2.adapter.ItemViewHolder
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.RotateAnimation
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetailsHeader
+import com.facebook.FacebookSdk.getApplicationContext
 import kotlinx.android.synthetic.main.track_order_details_header_section.view.*
 import mva2.adapter.ItemBinder
+import mva2.adapter.ItemViewHolder
 
 
 class TrackOrderDetailsHeaderBinder(val listener: TrackOrderHeaderListener) : ItemBinder<OrderTrackDetailsHeader, TrackOrderDetailsHeaderBinder.TrackOrderDetailsViewHolder>() {
 
-    private var isExpended = true
+    private var isExpended = false
     interface TrackOrderHeaderListener{
         fun onHeaderClick(isExpanded: Boolean)
     }
@@ -37,7 +41,24 @@ class TrackOrderDetailsHeaderBinder(val listener: TrackOrderHeaderListener) : It
                 isExpended = !isExpended
                 Log.d("wowTrackOrderHeader","on Title Click: $isExpended")
                 listener.onHeaderClick(isExpended)
+                if(isExpended){
+                    val rotateClock = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+//                    val aniRotate: Animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise)
+                    rotateClock.fillAfter = true
+                    rotateClock.repeatCount = 0
+                    rotateClock.duration = 500
+                    itemView.trackOrderDetailsHeaderArrow.startAnimation(rotateClock)
+                }else{
+                    val rotateAntiClock = RotateAnimation(180f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+//                    val aniRotate: Animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anti_clockwise)
+                    rotateAntiClock.fillAfter = true
+                    rotateAntiClock.repeatCount = 0
+                    rotateAntiClock.duration = 500
+                    itemView.trackOrderDetailsHeaderArrow.startAnimation(rotateAntiClock)
+                }
             }
+
+
 
         }
     }

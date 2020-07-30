@@ -5,7 +5,7 @@
         android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <me.relex.circleindicator.CircleIndicator
+    <me.relex.circleindicator.CircleIndicator3
             android:layout_marginTop="14dp"
             android:layout_marginBottom="14dp"
             app:ci_height="10dp"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="11dp"/>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/ordersTrackerPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

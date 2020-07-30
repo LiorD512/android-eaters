@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,13 +7,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+    <View
+            android:id="@+id/feedDishItemWorldwideLayoutRect"
+            android:layout_marginTop="3dp"
+            android:layout_toStartOf="@+id/feedDishItemWorldwideLayout"
+            android:rotation="-180"
+            android:background="@drawable/nationwide_rect"
+            android:layout_width="5dp"
+            android:layout_height="15dp"/>
+
     <androidx.cardview.widget.CardView
             android:id="@+id/feedDishItemCardLayout"
-            app:cardElevation="5dp"
+            app:cardElevation="3dp"
+            android:layout_marginTop="5dp"
             app:cardUseCompatPadding="true"
             android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:layout_marginTop="0.5dp"
@@ -62,20 +72,10 @@
                             android:id="@+id/feedDishUnAvailable"
                             android:gravity="center"
                             style="@style/SemiBold17White"
-                            android:text="Currently Not Available"
+                            android:text="Currently not available"
                             android:background="@color/dark_50"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
-
-<!--                    <com.bupp.wood_spoon_eaters.custom_views.UserImageView-->
-<!--                            app:imageSize="SMALL"-->
-<!--                            app:isWithStroke="true"-->
-<!--                            android:id="@+id/feedDishItemUserImg"-->
-<!--                            android:layout_marginTop="7.7dp"-->
-<!--                            android:layout_marginLeft="7.7dp"-->
-<!--                            android:layout_gravity="top|left"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"/>-->
 
                     <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
                             android:id="@+id/feedDishItemFavorite"
@@ -184,7 +184,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"/>
 
-                <!--android:gravity="center"-->
                 <RelativeLayout
                         android:id="@+id/feedDishItemBottomLayout"
                         android:layout_marginTop="11dp"
@@ -224,8 +223,6 @@
                             android:layout_height="wrap_content"
                             tools:text="Mon, 24, 4PM"/>
 
-                    <!--<View android:layout_weight="1" android:layout_width="0dp" android:layout_height="1dp"/>-->
-
                     <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
                             android:layout_centerInParent="true"
                             android:layout_alignParentEnd="true"
@@ -242,6 +239,7 @@
 
                     <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
                             android:layout_centerInParent="true"
+                            android:visibility="gone"
                             android:layout_toEndOf="@+id/feedDishItemRating"
                             android:gravity="center|start"
                             app:minTextSize="7sp"
@@ -250,7 +248,7 @@
                             android:id="@+id/feedDishItemNationwideDate"
                             android:drawableStart="@drawable/icons_time"
                             android:drawablePadding="7dp"
-                            style="@style/Bold13Dark"
+                            style="@style/Bold13Dark_40"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Variable will set at checkout"/>
@@ -262,7 +260,8 @@
     </androidx.cardview.widget.CardView>
     
     <LinearLayout
-            android:elevation="5dp"
+            android:layout_alignParentEnd="true"
+            android:elevation="3dp"
             android:layout_marginTop="3dp"
             android:visibility="gone"
             tools:visibility="visible"
@@ -272,12 +271,8 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        
-        <View
-                android:rotation="-180"
-                android:background="@drawable/nationwide_rect"
-                android:layout_width="5dp"
-                android:layout_height="15dp"/>
+
+
 
         <TextView
                 android:elevation="8dp"
@@ -291,10 +286,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
-                android:text="Ships Nationwide"/>
+                android:text="Ships nationwide"/>
         
     </LinearLayout>
 
     
 
-</FrameLayout>
+</RelativeLayout>

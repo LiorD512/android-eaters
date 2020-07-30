@@ -47,6 +47,7 @@
                 <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
                         android:id="@+id/checkoutFragNationwideSelect"
                         app:changeable="true"
+                        app:btnTitle="Select"
                         app:detailsType="DELIVERY_DETAILS_NATIONWIDE_SHIPPING"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -102,7 +103,7 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Utensils,Straws, etc."/>
+                            android:text="Utensils, straws, etc."/>
 
                     <androidx.appcompat.widget.SwitchCompat
                             android:layout_marginEnd="15.4dp"
@@ -182,7 +183,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="Promo Code"/>
+                            android:text="Promo code"/>
 
                     <TextView
                             android:id="@+id/checkoutFragPromoCodeText"
@@ -216,9 +217,10 @@
                             android:layout_width="wrap_content"
                             android:gravity="center"
                             android:layout_height="match_parent"
-                            android:text="Small Order Fee"/>
+                            android:text="Small order fee"/>
 
                     <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+                            android:id="@+id/checkoutFragSmallOrderFee"
                             app:tip_type="CHECKOUT_MINIMUM_FEE"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -385,7 +387,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="Total Before Tip"/>
+                            android:text="Total before tip"/>
 
                     <TextView
                             android:id="@+id/checkoutFragTotalPriceText"
@@ -404,7 +406,7 @@
                         android:layout_marginBottom="15.6dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Tip Your Courier Now"/>
+                        android:text="Tip your courier now"/>
 
                 <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
                         android:id="@+id/checkoutFragTipPercntView"
@@ -428,7 +430,7 @@
                         android:layout_marginBottom="13.6dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Payment Method"/>
+                        android:text="Payment method"/>
 
                 <LinearLayout
                         android:paddingTop="17dp"
@@ -477,7 +479,7 @@
                         android:drawablePadding="6.7dp"
                         android:paddingStart="16.3dp"
                         style="@style/SemiBold13Blue"
-                        android:text="Promo Code - "
+                        android:text="Promo code - "
                         android:gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>

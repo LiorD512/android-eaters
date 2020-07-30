@@ -428,10 +428,13 @@ class SingleDishFragment() : Fragment(),
             singleDishInstructionsLayout.visibility = View.GONE
         }
 
-        currentDish.menuItem?.cookingSlot?.isNationwide?.let{
-            if(it){
-
-            }
+        val isNationwide = currentDish.menuItem?.cookingSlot?.isNationwide
+        if(isNationwide != null && isNationwide){
+            singleDishInfoDeliveryNationwide.visibility = View.VISIBLE
+            singleDishInfoDeliveryTimeLayout.visibility = View.GONE
+        }else{
+            singleDishInfoDeliveryNationwide.visibility = View.GONE
+            singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
         }
     }
 

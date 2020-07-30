@@ -150,6 +150,7 @@ class NewOrderSharedViewModel(
         tipAmount: String? = null,
         promoCode: String? = null
     ) {
+        Log.d("wowNewOrderVM", "addToCart START")
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
         val hasPendingOrderFromDifferentCook = checkForDifferentOpenOrder(fullDish?.menuItem?.cookingSlot?.id)
         if (hasPendingOrder) {
@@ -195,7 +196,7 @@ class NewOrderSharedViewModel(
                         curCookingSlotId = order?.cookingSlot?.id
                         orderManager.setOrderResponse(order)
                         orderData.postValue(order)
-                        Log.d("wowFeedVM", "postOrder success: ${order.toString()}")
+                        Log.d("wowNewOrderVM", "postOrder success: ${order.toString()}")
                         showAdditionalDialogOrProcceedToCheckout()
                         //update additional dishes
 //                        fullDish?.let {
@@ -213,18 +214,18 @@ class NewOrderSharedViewModel(
 
 
                     } else {
-                        Log.d("wowFeedVM", "postOrder fail")
+                        Log.d("wowNewOrderVM", "postOrder fail")
                         postOrderEvent.postValue(PostOrderEvent(false, null))
                     }
                 }
 
                 override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                    Log.d("wowFeedVM", "postOrder big fail")
+                    Log.d("wowNewOrderVM", "postOrder big fail")
                     progressData.endProgress()
                     postOrderEvent.postValue(PostOrderEvent(false, null))
                 }
             })
-            Log.d("wowSingleDishVM", "addToCart finish")
+            Log.d("wowNewOrderVM", "addToCart finish")
         }
 
     }
@@ -259,6 +260,7 @@ class NewOrderSharedViewModel(
 
 
     fun addNewDishToCart(dishId: Long = -1, quantity: Int? = 1) {
+        Log.d("wowNewOrderVM", "addNewDishToCart START")
         progressData.startProgress()
 
         val newOrderItem = OrderItemRequest(dishId = dishId, quantity = quantity)
@@ -278,16 +280,16 @@ class NewOrderSharedViewModel(
                         orderData.postValue(updatedOrder)
                         showAdditionalDialogIfFirst()
                     } else {
-                        Log.d("wowCheckoutVm", "updateOrder FAILED")
+                        Log.d("wowNewOrderVM", "updateOrder FAILED")
                     }
                 }
 
                 override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
                     progressData.endProgress()
-                    Log.d("wowCheckoutVm", "updateOrder big FAILED")
+                    Log.d("wowNewOrderVM", "updateOrder big FAILED")
                 }
             })
-        Log.d("wowSingleDishVM", "addNewDishToCart finish")
+        Log.d("wowNewOrderVM", "addNewDishToCart finish")
     }
 
     //update order - items quantity

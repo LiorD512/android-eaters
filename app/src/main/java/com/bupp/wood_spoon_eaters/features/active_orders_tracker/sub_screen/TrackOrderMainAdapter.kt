@@ -11,42 +11,36 @@ import mva2.adapter.util.Mode
 class TrackOrderMainAdapter(
     val context: Context,
     fragManager: FragmentManager,
-    bottomSectionListener: TrackOrderBottomBinder.TrackOrderBottomListener
+    progressSectionListener: TrackOrderProgressBinder.TrackOrderProgressListener
 ) : MultiViewAdapter(), TrackOrderDetailsHeaderBinder.TrackOrderHeaderListener {
 
 
     private val TAG: String = "wowAdditionalMainAdApter"
-    var isDetailsExpanded = true
+    var isDetailsExpanded = false
 
-    val mapSection = ItemSection<OrderTrackMapData>()
+//    val mapSection = ItemSection<OrderTrackMapData>()
     val orderDetailHeadersSection = ItemSection<OrderTrackDetailsHeader>()
     val orderDetailsSection = ItemSection<OrderTrackDetails>()
     val progressSection = ItemSection<OrderTrackProgress>()
-    val bottomSection = ItemSection<OrderTrackBottom>()
 
     init {
-        this.registerItemBinders(TrackOrderMapBinder(fragManager), TrackOrderDetailsHeaderBinder(this), TrackOrderDetailsBinder(), TrackOrderProgressBinder(), TrackOrderBottomBinder(bottomSectionListener))
+        this.registerItemBinders(TrackOrderMapBinder(fragManager), TrackOrderDetailsHeaderBinder(this), TrackOrderDetailsBinder(), TrackOrderProgressBinder(progressSectionListener))
 
-        this.addSection(mapSection)
+//        this.addSection(mapSection)
         this.addSection(orderDetailHeadersSection)
         this.addSection(orderDetailsSection)
         this.addSection(progressSection)
-        this.addSection(bottomSection)
 
 //        hideAllSections()
         this.setSectionExpansionMode(Mode.SINGLE)
         orderDetailsSection.setSectionExpansionMode(Mode.MULTIPLE)
-
-        bottomSection.setItem(OrderTrackBottom(arrayListOf()))
-        bottomSection.showSection()
+        orderDetailsSection.hideSection()
 
     }
 
     private fun hideAllSections() {
-        mapSection.hideSection()
-        orderDetailsSection.hideSection()
+//        mapSection.hideSection()
         progressSection.hideSection()
-        bottomSection.hideSection()
     }
 
     override fun onHeaderClick(isExpanded: Boolean) {
@@ -58,13 +52,9 @@ class TrackOrderMainAdapter(
     }
 
     fun updateUi(order: Order, userInfo: OrderUserInfo?) {
-        //update map
-//        if(order.courier == null){
-//            mapSection.hideSection()
-//        }else{
-        mapSection.setItem(OrderTrackMapData(order, userInfo))
-        mapSection.showSection()
-//        }
+        //map section
+//        mapSection.setItem(OrderTrackMapData(order, userInfo))
+//        mapSection.showSection()
 
         //details Header
         orderDetailHeadersSection.setItem(OrderTrackDetailsHeader(order.orderNumber))

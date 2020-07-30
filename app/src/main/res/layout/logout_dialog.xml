@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Sign Out"/>
+                android:text="Sign out"/>
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Are you sure you want to Sign Out?"/>
+                android:text="Are you sure you want to sign out?"/>
 
 
             <View
@@ -51,7 +51,7 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
-                android:text="Sign Out"/>
+                android:text="Sign out"/>
 
             <View
                 android:layout_height="1dp"

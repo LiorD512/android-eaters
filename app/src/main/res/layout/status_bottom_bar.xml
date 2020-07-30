@@ -14,7 +14,7 @@
             style="@style/Bold17White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add 1 To Cart"/>
+            android:text="Add 1 to cart"/>
 
     <TextView
             android:layout_marginRight="16.8dp"

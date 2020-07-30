@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.cancel_order_dialog_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CancelOrderDialog(val type: Int, val orderId: Long, val listener: CancelOrderDialogListener) : DialogFragment() {
+class CancelOrderDialog(val type: Int, val orderId: Long?, val listener: CancelOrderDialogListener) : DialogFragment() {
 
     interface CancelOrderDialogListener{
         fun onOrderCanceled()

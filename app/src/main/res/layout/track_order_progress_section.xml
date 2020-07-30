@@ -26,7 +26,7 @@
                 android:button="@drawable/circle_checkbox_selector"
                 android:checked="true"
                 android:paddingStart="7.3dp"
-                android:text="We got your order" />
+                android:text="We received your order" />
 
         <View
                 android:layout_width="1.9dp"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:button="@drawable/circle_checkbox_selector"
                 android:paddingStart="7.3dp"
-                android:text="The cook started working on it" />
+                android:text="Food is being prepared" />
 
         <View
                 android:layout_width="1.9dp"
@@ -111,4 +111,48 @@
         </LinearLayout>
 
     </LinearLayout>
+
+
+    <View
+            android:background="@color/light_periwinkle"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+    <LinearLayout
+            android:id="@+id/trackOrderBottomContactUsBtn"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                style="@style/Reg15Dark"
+                android:layout_gravity="center"
+                android:layout_marginTop="22.6dp"
+                android:layout_marginBottom="22.2dp"
+                android:drawablePadding="7.7dp"
+                android:drawableStart="@drawable/ic_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact us"/>
+
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/trackOrderBottomShareImageBtn"
+            android:src="@drawable/refferal_banner_pic"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="144dp"/>
+
+    <TextView
+            android:id="@+id/trackOrderBottomCancelBtn"
+            style="@style/SemiBold15Dark"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="23.2dp"
+            android:textColor="@color/red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel order"/>
 </LinearLayout>

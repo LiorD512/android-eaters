@@ -134,10 +134,17 @@ class MetaDataManager {
 //    }
 //
 
-    fun getMinOrderFeeStr(): String {
-        for (settings in getSettings()){
-            if(settings.key == "min_order")
-                return (settings.value!! as Price).formatedValue as String
+    fun getMinOrderFeeStr(nationwide: Boolean): String {
+        if(nationwide){
+            for (settings in getSettings()){
+                if(settings.key == "nationwide_min_order")
+                    return (settings.value!! as Price).formatedValue as String
+            }
+        }else{
+            for (settings in getSettings()){
+                if(settings.key == "min_order")
+                    return (settings.value!! as Price).formatedValue as String
+            }
         }
         return ""
     }

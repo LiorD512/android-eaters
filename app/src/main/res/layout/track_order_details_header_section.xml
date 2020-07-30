@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
         android:id="@+id/trackOrderDetailsHeaderLayout"
+        tools:background="@color/white"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -11,18 +12,31 @@
             android:layout_height="1dp"
             android:background="@color/dark" />
 
-    <TextView
-            android:id="@+id/trackOrderDetailsHeaderTitle"
-            style="@style/SemiBold15Dark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableEnd="@drawable/icons_down"
-            android:drawablePadding="7dp"
-            android:letterSpacing="0.03"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            tools:text="Order #12345678" />
+    <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+        <TextView
+                android:id="@+id/trackOrderDetailsHeaderTitle"
+                style="@style/SemiBold15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:letterSpacing="0.03"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                tools:text="Order #12345678" />
+
+        <ImageView
+                android:id="@+id/trackOrderDetailsHeaderArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:src="@drawable/icons_down" />
+
+    </LinearLayout>
 
 </LinearLayout>

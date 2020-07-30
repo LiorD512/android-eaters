@@ -88,7 +88,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
             it.name?.let{
                 country = ", ${it}"
             }
-            Glide.with(context!!).load(it.flagUrl).circleCrop().into(cookProfileFragFlag)
+            Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
         }
         cookProfileFragProfession.text = "$profession"// $country"
         cookProfileFragRating.text = cook.rating.toString()

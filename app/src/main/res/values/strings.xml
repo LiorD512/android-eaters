@@ -5,7 +5,7 @@
     <string name="appsee_api_key">ab7af46b578c4e219e42646c0e9f4db6</string>
 
 
-    <string name="tool_tip_service_fee_title">Service Fee</string>
+    <string name="tool_tip_service_fee_title">Service fee</string>
     <string name="tool_tip_service_fee_body">
         <![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
 
@@ -24,53 +24,53 @@
 
     <string name="default_bupp_phone_number">+16179096185</string>
 
-    <string name="welcome_fragment_login_btn">Get Started</string>
-    <string name="welcome_fragment_sign_up_btn">I Already Have An Account</string>
+    <string name="welcome_fragment_login_btn">Get started</string>
+    <string name="welcome_fragment_sign_up_btn">I already have an account</string>
 
     <string name="phone_verification_fragment_next_btn">Next</string>
-    <string name="phone_verification_fragment_title">Enter Your Mobile Number</string>
+    <string name="phone_verification_fragment_title">Enter Your mobile number</string>
     <string name="phone_verification_fragment_phone_hint">+1 (201) 555 - 0123</string>
 
     <string name="details_setup_fragment_address">Address</string>
     <string name="details_setup_fragment_address_hint">Street address and building number</string>
-    <string name="details_setup_fragment_apt_hint">Apt./ Suite/ Floor</string>
-    <string name="details_setup_fragment_delivery_hint">Add Delivery Note</string>
+    <string name="details_setup_fragment_apt_hint">Apt./ suite/ floor</string>
+    <string name="details_setup_fragment_delivery_hint">Add delivery note</string>
 
-    <string name="create_account_fragment_title">Create Your Account</string>
-    <string name="create_account_fragment_full_name_title">Full Name</string>
-    <string name="create_account_fragment_full_name_hint">Your Full Name</string>
+    <string name="create_account_fragment_title">Create your account</string>
+    <string name="create_account_fragment_full_name_title">Full name</string>
+    <string name="create_account_fragment_full_name_hint">Your full name</string>
     <string name="create_account_fragment_email">Email</string>
     <string name="create_account_fragment_email_hint">Name@example.com</string>
     <string name="create_account_fragment_next_btn">Next</string>
 
-    <string name="code_fragment_title">Enter The 4-Digit Code</string>
+    <string name="code_fragment_title">Enter The 4-dgit code</string>
     <string name="code_fragment_sub_title">Sent to you at</string>
     <string name="code_fragment_help">Haven’t received the code?</string>
     <string name="code_fragment_resend_btn">Resend</string>
     <string name="code_fragment_next_btn">Next</string>
     <string name="support_dialog_popular_qa_button"><![CDATA[Popular Q&A]]></string>
-    <string name="support_dialog_contuct_us_button">Contact Us</string>
-    <string name="support_dialog_title">Support Center</string>
+    <string name="support_dialog_contuct_us_button">Contact us</string>
+    <string name="support_dialog_title">Support center</string>
     <string name="support_frag_sms_sentence"></string>
     <string name="common_string_address">Address</string>
     <string name="common_string_address_hint">Street address and building number</string>
-    <string name="common_string_apartment">Apt./ Suite/ Floor</string>
+    <string name="common_string_apartment">Apt./ suite/ floor</string>
     <string name="add_address_frag_delivery_to_door">Delivery to door</string>
     <string name="add_address_frag_pick_up_outside">Pick up outside</string>
     <string name="later_time">
-        <u>Later Time</u>
+        <u>Later time</u>
     </string>
     <string name="start_new_cart_dialog_your_cart_already_contains">Your cart already contains a dish from cook %1$s.
         Would you like to clear the cart and add this dish from cook %2$s instead?
     </string>
-    <string name="share_dialog_share_text">Share Woodspoon With Your Friends, and you all can get a 30% off your next
+    <string name="share_dialog_share_text">Share woodspoon with your friends, and you all can get a 30% off your next
         order
     </string>
-    <string name="tool_tip_delivery_fee_title">Delivery Fee</string>
+    <string name="tool_tip_delivery_fee_title">Delivery fee</string>
     <string name="tool_tip_delivery_fee_body">Delivery fees are typically based on the distance between you and your
         food.
     </string>
-    <string name="tool_tip_min_order_fee_title">Small Order Fee</string>
+    <string name="tool_tip_min_order_fee_title">Small order fee</string>
     <string name="tool_tip_min_order_fee_body">This fee only applies to orders less than</string>
     <string name="tool_tip_min_order_fee_body2">Add items to remove the fee.</string>
     <string name="title_activity_new_order">NewOrderActivity</string>
@@ -79,23 +79,23 @@
     <string name="common_string_order_number">Order no.</string>
 
     <string name="order_history_item_reorder">
-        <u>Rate Order</u>
+        <u>Rate order</u>
     </string>
     <string name="order_history_item_report">
         <u>Report issue</u>
     </string>
-    <string name="order_history_item_by_cook">Your Order by cook</string>
-    <string name="cancel_dialog_stage_1_title">No Cancellation Fee</string>
+    <string name="order_history_item_by_cook">Your order by cook</string>
+    <string name="cancel_dialog_stage_1_title">No cancellation fee</string>
     <string name="cancel_dialog_stage_1_body">We are sorry to see you have to cancel your order. Because our cook still didn\'t
         start preparing your dish,
         per our cancellation policy, there is no cancellation fee. \n We hope you consider ordering again with us soon
     </string>
-    <string name="cancel_dialog_stage_2_title">50%% Cancellation Fee</string>
+    <string name="cancel_dialog_stage_2_title">50%% cancellation fee</string>
     <string name="cancel_dialog_stage_2_body">We are sorry to see you have to cancel your order. Per our cancellation policy,
         because our cook already started to prepare your order, you will be charged for 50% of the order cost.
         \n We hope you can understand and wishing to see you ordering again soon
     </string>
-    <string name="cancel_dialog_stage_3_title">100%% Cancellation Fee</string>
+    <string name="cancel_dialog_stage_3_title">100%% cancellation fee</string>
     <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancellation policy,
         because your order is already on its way, you will be charged for 100% of the order cost.
         \n We hope you can understand and wishing to see you ordering again soon

@@ -51,8 +51,6 @@ class TrackOrderDetailsBinder() : ItemBinder<OrderTrackDetails, TrackOrderDetail
             itemView.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
             itemView.trackOrderDetailsSectionLocation.text = userInfo?.userLocation?.getUserLocationStr()
             itemView.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
-
-
         }
     }
 

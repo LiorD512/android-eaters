@@ -37,5 +37,11 @@
             tools:text="160 Edgemont street"/>
             <!--app:minTextSize="11sp"-->
 
+    <ImageView
+            android:layout_gravity="center|start"
+            android:src="@drawable/icons_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

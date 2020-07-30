@@ -224,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Woodspoon’s Community Comments"/>
+                        android:text="Woodspoon’s community comments"/>
 
                 <androidx.appcompat.widget.Toolbar
                         android:id="@+id/calendarFragToolBar"

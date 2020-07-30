@@ -32,7 +32,7 @@
                     android:layout_gravity="center"
                     android:paddingTop="24dp"
                     android:paddingBottom="22.7dp"
-                    android:text="Nationwide Shipping"/>
+                    android:text="Nationwide shipping"/>
 
             <ImageView
                     android:id="@+id/nationwideShippingChooserDialogClose"

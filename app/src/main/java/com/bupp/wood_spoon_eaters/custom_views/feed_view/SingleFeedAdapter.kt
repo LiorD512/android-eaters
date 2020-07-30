@@ -55,6 +55,7 @@ class SingleFeedAdapter(
         dish.menuItem?.cookingSlot?.isNationwide?.let{
             if(it){
                 holder.worldwideLayout.visibility = View.VISIBLE
+                holder.worldwideLayoutRect.visibility = View.VISIBLE
                 val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
                 param.setMargins(Utils.toPx(9), Utils.toPx(9), Utils.toPx(9),0)
                 holder.cardLayout.layoutParams = param
@@ -63,12 +64,14 @@ class SingleFeedAdapter(
                     listener.onWorldwideInfoClick()
                 }
 
-                holder.bottomLayout.alpha = 0.3f
+//                holder.bottomLayout.alpha = 0.3f
                 holder.nationwideDate.visibility = View.VISIBLE
                 holder.date.visibility = View.GONE
                 holder.freeDelivery.visibility = View.GONE
             }else{
                 holder.worldwideLayout.visibility = View.GONE
+                holder.worldwideLayoutRect.visibility = View.GONE
+
                 val param = holder.cardLayout.layoutParams as ViewGroup.MarginLayoutParams
                 param.setMargins(Utils.toPx(9), 0,Utils.toPx(9),0)
                 holder.cardLayout.layoutParams = param
@@ -156,6 +159,7 @@ class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val nationwideDate = view.feedDishItemNationwideDate
     val cardLayout = view.feedDishItemCardLayout
     val worldwideLayout = view.feedDishItemWorldwideLayout
+    val worldwideLayoutRect = view.feedDishItemWorldwideLayoutRect
     val soldOutLayout = view.feedDishItemSoldOutLayout
     val unAvailableLayout = view.feedDishUnAvailable
     val bkgImg = view.feedDishItemBkg

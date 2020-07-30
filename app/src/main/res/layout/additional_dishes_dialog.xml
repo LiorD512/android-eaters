@@ -44,7 +44,7 @@
                         style="@style/SemiBold15Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your Order"/>
+                        android:text="Your order"/>
 
             </FrameLayout>
 
@@ -68,7 +68,7 @@
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Proceed To Cart"/>
+                        android:text="Proceed to cart"/>
 
                 <TextView
                         android:id="@+id/dishAddonPrice"

@@ -51,104 +51,29 @@
 
         </LinearLayout>
 
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="154dp"
+                        android:id="@+id/trackOrderMap"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:background="@color/white"
                 android:id="@+id/trackOrderDialogList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-<!--        <View-->
-<!--                android:background="@color/dark"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"/>-->
+            </LinearLayout>
 
-<!--        <ScrollView-->
-<!--                android:fillViewport="true"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
-
-<!--            <LinearLayout-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
-
-
-<!--                <LinearLayout-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:gravity="center_vertical"-->
-<!--                        android:layout_marginTop="15.4dp"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content">-->
-
-<!--                    <TextView-->
-<!--                            style="@style/SemiBold13Dark"-->
-<!--                            android:layout_marginStart="15.4dp"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Estimated arrival:"/>-->
-
-<!--                    <TextView-->
-<!--                            android:id="@+id/trackOrderDialogArrivalTime"-->
-<!--                            style="@style/SemiBold19Blue"-->
-<!--                            android:layout_gravity="start"-->
-<!--                            android:layout_marginStart="3.8dp"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="16:20 PM"/>-->
-
-<!--                </LinearLayout>-->
-
-
-<!--                <View-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:layout_width="1dp" android:layout_height="0dp"/>-->
-
-<!--                <View-->
-<!--                        android:layout_marginStart="15.4dp"-->
-<!--                        android:layout_marginEnd="15.4dp"-->
-<!--                        android:background="@color/light_periwinkle"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="1dp"/>-->
-
-<!--                <LinearLayout-->
-<!--                        android:id="@+id/trackOrderDialogContactUsBtn"-->
-<!--                        android:gravity="center"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content">-->
-
-<!--                    <TextView-->
-<!--                            style="@style/Reg15Dark"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginTop="22.6dp"-->
-<!--                            android:layout_marginBottom="22.2dp"-->
-<!--                            android:drawablePadding="7.7dp"-->
-<!--                            android:drawableStart="@drawable/ic_call"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Contact Us"/>-->
-
-<!--                </LinearLayout>-->
-
-<!--                <ImageView-->
-<!--                        android:id="@+id/trackOrderDialogShareImageBtn"-->
-<!--                        android:src="@drawable/refferal_banner_pic"-->
-<!--                        android:scaleType="centerCrop"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="144dp"/>-->
-
-<!--                <TextView-->
-<!--                        android:id="@+id/trackOrderDialogCancelBtn"-->
-<!--                        style="@style/SemiBold15Dark"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:gravity="center"-->
-<!--                        android:paddingTop="22.6dp"-->
-<!--                        android:paddingBottom="23.2dp"-->
-<!--                        android:textColor="@color/red"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Cancel Order"/>-->
-<!--            </LinearLayout>-->
-<!--        </ScrollView>-->
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 

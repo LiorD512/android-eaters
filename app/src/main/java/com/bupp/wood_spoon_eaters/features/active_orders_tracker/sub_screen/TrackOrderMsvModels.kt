@@ -14,5 +14,4 @@ data class OrderUserInfo(val paymentMethod: String? = null, val userInfo: String
 data class OrderTrackDetails(val order: Order, val orderUserInfo: OrderUserInfo?)
 
 data class OrderTrackProgress(val order: Order?)
-data class OrderTrackBottom(val dishes: ArrayList<Dish>)
 

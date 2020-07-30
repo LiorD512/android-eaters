@@ -55,7 +55,7 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
-                android:text="Go To Settings"/>
+                android:text="Go to settings"/>
 
     </LinearLayout>
 

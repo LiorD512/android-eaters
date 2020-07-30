@@ -19,7 +19,7 @@
             style="@style/SemiBold15Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hungry For More?"/>
+            android:text="Hungry for more?"/>
 
 
     <TextView

@@ -190,6 +190,11 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="Bold13Dark_40">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_40</item>
+    </style>
 
     <style name="Bold13White">
         <item name="android:fontFamily">@font/open_sans_bold</item>

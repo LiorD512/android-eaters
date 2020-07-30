@@ -39,7 +39,7 @@
                         android:id="@+id/searchDishUnAvailable"
                         android:gravity="center"
                         style="@style/SemiBold17White"
-                        android:text="Currently Not Available"
+                        android:text="Currently not available"
                         android:background="@color/dark_50"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="13.4sp"
                             android:gravity="right"
-                            android:text="Free Delivery"/>
+                            android:text="Free delivery"/>
 
                 </LinearLayout>
 

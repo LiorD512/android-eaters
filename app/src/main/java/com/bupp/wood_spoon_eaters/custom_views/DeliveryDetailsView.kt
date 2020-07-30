@@ -41,7 +41,7 @@ class DeliveryDetailsView : LinearLayout {
                 type = a.getInt(R.styleable.DeliveryDetailsAttrs_detailsType, Constants.DELIVERY_DETAILS_LOCATION)
                 initUi(type)
             }
-            if (a.hasValue(R.styleable.DeliveryDetailsAttrs_detailsType)) {
+            if (a.hasValue(R.styleable.DeliveryDetailsAttrs_changeable)) {
                 changeable = a.getBoolean(R.styleable.DeliveryDetailsAttrs_changeable, true)
                 setChangeable(changeable)
             }
@@ -49,6 +49,12 @@ class DeliveryDetailsView : LinearLayout {
                 isGrey = a.getBoolean(R.styleable.DeliveryDetailsAttrs_isSelectionGray, false)
                 if(isGrey){
                     deliveryDetailsViewInput.setTextColor(ContextCompat.getColor(context, R.color.dark_50))
+                }
+            }
+            if (a.hasValue(R.styleable.DeliveryDetailsAttrs_btnTitle)) {
+                val btnText = a.getString(R.styleable.DeliveryDetailsAttrs_btnTitle)
+                btnText?.let{
+                    deliveryDetailsViewChangeBtn.text = btnText
                 }
             }
         }
