@@ -28,6 +28,7 @@ class NewOrderSharedViewModel(
 ) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
+    private var fullDishData: FullDish? = null
     private var curCookingSlotId: Long? = null
     var selectedShippingMethod: ShippingMethod? = null
     var menuItemId: Long = -1
@@ -136,7 +137,7 @@ class NewOrderSharedViewModel(
         orderRequestData.postValue(orderManager.initNewOrder())
     }
 
-    var isFirst: Boolean = true
+    var isFirstPurchase: Boolean = true
     val showDialogEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
     val procceedToCheckoutEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
@@ -194,6 +195,7 @@ class NewOrderSharedViewModel(
                     if (response.isSuccessful) {
                         val order = response.body()?.data
                         curCookingSlotId = order?.cookingSlot?.id
+                        initAdditionalDishDialog() //it will be more alegant if server will return the right list of additional dishes instead of client do that. todo - incase of major refactor
                         orderManager.setOrderResponse(order)
                         orderData.postValue(order)
                         Log.d("wowNewOrderVM", "postOrder success: ${order.toString()}")
@@ -230,17 +232,21 @@ class NewOrderSharedViewModel(
 
     }
 
-    fun initAdditionalDishDialog(fullDish: FullDish) {
-        fullDish.let {
-            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+    fun initAdditionalDishDialog() {
+        if(isFirstPurchase) {
+            curCookingSlotId?.let {
+                fullDishData?.let {
+                    setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+                }
+            }
         }
     }
 
     fun showAdditionalDialogOrProcceedToCheckout() {
-        if (additionalDishes.value != null) {
-            if (additionalDishes.value!!.size > 1 && isFirst) {
-                showDialogEvent.postValue(isFirst)
-                isFirst = false
+        if (fullDishData?.cook?.dishes != null) {
+            if (fullDishData?.cook?.dishes!!.size > 1 && isFirstPurchase) {
+                showDialogEvent.postValue(isFirstPurchase)
+                isFirstPurchase = false
             } else {
                 procceedToCheckoutEvent.postValue(true)
             }
@@ -250,10 +256,10 @@ class NewOrderSharedViewModel(
     }
 
     fun showAdditionalDialogIfFirst() {
-        if (additionalDishes.value != null) {
-            if (additionalDishes.value!!.size > 1 && isFirst) {
-                showDialogEvent.postValue(isFirst)
-                isFirst = false
+        if (fullDishData?.cook?.dishes != null) {
+            if (fullDishData?.cook?.dishes!!.size > 1 && isFirstPurchase) {
+                showDialogEvent.postValue(isFirstPurchase)
+                isFirstPurchase = false
             }
         }
     }
@@ -276,6 +282,8 @@ class NewOrderSharedViewModel(
                     progressData.endProgress()
                     if (response.isSuccessful) {
                         val updatedOrder = response.body()?.data
+                        curCookingSlotId = updatedOrder?.cookingSlot?.id
+                        initAdditionalDishDialog()
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
                         showAdditionalDialogIfFirst()
@@ -476,6 +484,7 @@ class NewOrderSharedViewModel(
 
     fun setAdditionalDishes(dishes: ArrayList<Dish>) {
         //get only available dishes
+        Log.d("wowAdditionalMainAdptr", "setAdditionalDishes $dishes")
         additionalDishes.postValue(dishes)
     }
 
@@ -529,6 +538,10 @@ class NewOrderSharedViewModel(
                 }
             })
         }
+    }
+
+    fun setFullDishParam(fullDish: FullDish) {
+        this.fullDishData = fullDish
     }
 
 

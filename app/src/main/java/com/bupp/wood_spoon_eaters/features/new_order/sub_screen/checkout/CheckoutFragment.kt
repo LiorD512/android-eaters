@@ -242,9 +242,9 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                     checkoutFragDeliveryTime.visibility = View.GONE
                     checkoutFragNationwideSelect.visibility = View.VISIBLE
                     checkoutFragNationwideSelect.setDeliveryDetailsViewListener(this)
-                    if(ordersViewModel.selectedShippingMethod == null){
-                        checkoutFragStatusBar.isEnabled = false
-                    }
+//                    if(ordersViewModel.selectedShippingMethod == null){
+//                        checkoutFragStatusBar.isEnabled = false
+//                    }
                 }else{
                     checkoutFragDeliveryTime.visibility = View.VISIBLE
                     checkoutFragNationwideSelect.visibility = View.GONE
@@ -350,10 +350,15 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onStatusBarClicked(type: Int?) {
+        if(ordersViewModel.selectedShippingMethod == null){
+            ordersViewModel.onNationwideShippingSelectClick()
+            return
+        }
         if(hasPaymentMethod){
             checkoutFragPb.show()
             ordersViewModel.checkoutOrder(curOrder.id)
         }else{
+            //start ups and then payment
             (activity as NewOrderActivity).startPaymentMethodActivity()
         }
     }
@@ -364,7 +369,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         } else {
             ordersViewModel.updateTip(tipPercentage = tipSelection)
 //            ordersViewModel.updateTipPercentage(tipSelection)
-            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
             }
     }
 

@@ -155,7 +155,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
 //            ordersViewModel.updateTip(tipPercentage = tipSelection)
-            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+        android:background="@color/white"
         android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
+            tools:visibility="visible"
             android:visibility="gone"
             android:id="@+id/ordersBottomBarOrder"
             android:layout_gravity="center"
@@ -33,11 +35,12 @@
     </FrameLayout>
 
     <View
-            android:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/bottomBarSeparator"
             android:layout_width="match_parent" android:layout_height="15.4dp"/>
 
     <FrameLayout
+            tools:visibility="visible"
             android:visibility="gone"
             android:id="@+id/ordersBottomBarCheckout"
             android:layout_gravity="center"
@@ -65,21 +68,5 @@
                 tools:text="$7"/>
 
     </FrameLayout>
-
-
-
-
-    <!--<TextView-->
-            <!--android:visibility="gone"-->
-            <!--android:id="@+id/bottomBarActiveOrders"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--style="@style/Bold17White"-->
-            <!--android:gravity="center"-->
-            <!--android:background="@color/teal_blue"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/status_bottom_bar_height"-->
-            <!--android:text="Track Your Order"/>-->
-
-
 
 </LinearLayout>

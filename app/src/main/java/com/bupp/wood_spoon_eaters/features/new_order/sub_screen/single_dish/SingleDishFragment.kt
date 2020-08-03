@@ -2,21 +2,17 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
 
 //import com.tapadoo.alerter.Alerter
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.androidadvance.topsnackbar.TSnackbar
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
@@ -27,7 +23,6 @@ import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.AdditionalDishesDialog
-import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CooksProfileDishesAdapter
@@ -130,9 +125,9 @@ class SingleDishFragment() : Fragment(),
 
         viewModel.fullDish.observe(this, Observer { fullDish ->
             fullDish?.let{
-                initUi(it)
-                checkForOpenOrder(it)
-                ordersViewModel.initAdditionalDishDialog(it)
+                initUi(it.fullDish, it.newSelectedDate)
+                checkForOpenOrder(it.fullDish)
+                ordersViewModel.setFullDishParam(it.fullDish)
             }
         })
 
@@ -210,7 +205,7 @@ class SingleDishFragment() : Fragment(),
     private fun handleOrderData(orderDataEvent: Order?) {
         if (orderDataEvent != null) {
             updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = ordersViewModel.calcTotalDishesPrice())
-            singleDishHeader.updateUi(SingleDishHeader.COOK)
+//            singleDishHeader.updateUi(SingleDishHeader.COOK)
             singleDishScrollView.fullScroll(View.FOCUS_DOWN)
             singleDishStatusBar.handleBottomBar(false)
         } else {
@@ -264,9 +259,9 @@ class SingleDishFragment() : Fragment(),
         ordersViewModel.checkCartStatus()
     }
 
-    private fun initUi(fullDish: FullDish) {
+    private fun initUi(fullDish: FullDish, newSelectedDate: Date?) {
         initHeader()
-        initInfo(fullDish)
+        initInfo(fullDish, newSelectedDate)
         initIngredient(fullDish)
         initCook(fullDish)
         initCartBottomBar(fullDish)
@@ -366,7 +361,7 @@ class SingleDishFragment() : Fragment(),
         val removedIngredients = ingredientsAdapter?.ingredientsRemoved
         val note = singleDishIngredientInstructions.getText()
         ordersViewModel.addToCart(
-            fullDish = viewModel.fullDish.value,
+            fullDish = viewModel.fullDish.value?.fullDish,
             quantity = quantity,
             removedIngredients = removedIngredients,
             note = note
@@ -374,7 +369,7 @@ class SingleDishFragment() : Fragment(),
     }
 
 
-    private fun initInfo(currentDish: FullDish) {
+    private fun initInfo(currentDish: FullDish, newSelectedDate: Date? = null) {
         singleDishPlusMinus.setViewEnabled(true)
         singleDishInfoCook.setUser(currentDish.cook)
         singleDishInfoCook.setUserImageViewListener(this)
@@ -417,7 +412,7 @@ class SingleDishFragment() : Fragment(),
             singleDishPlusMinus.setPlusMinusListener(this, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft)
         }
 
-        initOrderDate(currentDish)
+        initOrderDate(currentDish, newSelectedDate)
         singleDishInfoRatingVal.text = currentDish.rating.toString()
         singleDishInfoRating.setOnClickListener { onRatingClick() }
 
@@ -430,10 +425,11 @@ class SingleDishFragment() : Fragment(),
 
         val isNationwide = currentDish.menuItem?.cookingSlot?.isNationwide
         if(isNationwide != null && isNationwide){
-            singleDishInfoDeliveryNationwide.visibility = View.VISIBLE
+//            singleDishInfoDeliveryNationwide.visibility = View.VISIBLE
             singleDishInfoDeliveryTimeLayout.visibility = View.GONE
-        }else{
-            singleDishInfoDeliveryNationwide.visibility = View.GONE
+        }
+        else{
+//            singleDishInfoDeliveryNationwide.visibility = View.GONE
             singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
         }
     }
@@ -447,25 +443,23 @@ class SingleDishFragment() : Fragment(),
         viewModel.getDishReview()
     }
 
-    private fun initOrderDate(currentDish: FullDish) {
+    private fun initOrderDate(currentDish: FullDish, newSelectedDate: Date?) {
         if(currentDish.isNationwide){
-            //todo : add this ui after design is ready
-//            singleDishInfoNationwideLayout.visibility = View.VISIBLE
             singleDishInfoDeliveryTimeLayout.visibility = View.GONE
-
-//            singleDishNationwideBtn.setOnClickListener { viewModel.onShippingMethodSelectClick() }
         }else {
-//            singleDishInfoNationwideLayout.visibility = View.GONE
             singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
 
-            val orderAtDate = currentDish.menuItem?.orderAt
-            if (orderAtDate != null) {
-                currentDish.menuItem?.cookingSlot?.orderFrom?.let {
-                    singleDishInfoDate.text = Utils.parseDateToDayDateHour(it)
+            if(newSelectedDate != null){
+                singleDishInfoDate.text = Utils.parseDateToDayDateHour(newSelectedDate)
+            }else{
+                val orderAtDate = currentDish.menuItem?.orderAt
+                if (orderAtDate != null) {
+                    currentDish.menuItem?.cookingSlot?.orderFrom?.let {
+                        singleDishInfoDate.text = Utils.parseDateToDayDateHour(it)
+                    }
+                } else if (currentDish.doorToDoorTime != null) {
+                    singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
                 }
-
-            } else if (currentDish.doorToDoorTime != null) {
-                singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
             }
             if (viewModel.isEvent) {
 //            singleDishInfoDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -475,10 +469,6 @@ class SingleDishFragment() : Fragment(),
             }
             singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
         }
-    }
-
-    private fun openNationWideChooser() {
-
     }
 
 
@@ -506,7 +496,8 @@ class SingleDishFragment() : Fragment(),
 //            currentDish.menuItem = selectedMenuItem // update menuItem to update ui in the next visit in openOrderTimeDialog()
             viewModel.updateChosenDeliveryDate(selectedMenuItem, newChosenDate)
             singleDishInfoDate.text = "${Utils.parseDateToDayDateHour(newChosenDate)}"
-            viewModel.fetchDishForNewDate(selectedMenuItem.id)
+            viewModel.fetchDishForNewDate(selectedMenuItem.id, newChosenDate)
+//            singleDishInfoDate.text = Utils.parseDateToDayDateHour(newChosenDate)
 //            singleDishInfoDate.text = "${currentDish.menuItem?.eta}"
         }
     }
@@ -519,7 +510,6 @@ class SingleDishFragment() : Fragment(),
         if (currentDish.cookingMethods.size > 0) {
             singleDishIngredientSauteing.text = currentDish.cookingMethods[0].name
         }
-
 
         singleDishIngredientList.setLayoutManager(LinearLayoutManager(context))
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)

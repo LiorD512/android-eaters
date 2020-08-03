@@ -302,7 +302,7 @@
 
                                 <LinearLayout
                                         android:layout_marginTop="16dp"
-                                        tools:visibility="gone"
+                                        tools:visibility="visible"
                                         android:id="@+id/singleDishInfoDeliveryTimeLayout"
                                         android:gravity="center"
                                         android:orientation="horizontal"
@@ -352,25 +352,25 @@
 
                                 </LinearLayout>
 
-                                <TextView
-                                        android:layout_marginTop="10dp"
-                                        android:visibility="gone"
-                                        tools:visibility="visible"
-                                        android:id="@+id/singleDishInfoDeliveryNationwide"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        style="@style/Reg13Dark"
-                                        android:letterSpacing="0.04"
-                                        android:text="Delivered Time and Fee will be set at checkout"/>
+<!--                                <TextView-->
+<!--                                        android:layout_marginTop="10dp"-->
+<!--                                        android:visibility="gone"-->
+<!--                                        tools:visibility="visible"-->
+<!--                                        android:id="@+id/singleDishInfoDeliveryNationwide"-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        style="@style/Reg13Dark"-->
+<!--                                        android:letterSpacing="0.04"-->
+<!--                                        android:text="Delivered Time and Fee will be set at checkout"/>-->
 
 
 
-                                <View
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginBottom="22dp"
-                                        android:background="@color/silver"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"/>
+<!--                                <View-->
+<!--                                        android:layout_marginTop="10dp"-->
+<!--                                        android:layout_marginBottom="22dp"-->
+<!--                                        android:background="@color/silver"-->
+<!--                                        android:layout_width="match_parent"-->
+<!--                                        android:layout_height="1dp"/>-->
 
                                 <LinearLayout
                                         tools:visibility="visible"

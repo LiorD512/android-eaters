@@ -65,9 +65,7 @@
                     android:letterSpacing="0.03"
                     android:lineSpacingExtra="6.7sp"
                     android:gravity="center_horizontal"
-                    android:text="This dish is not close to you, but is shipped all over the US.
-\n\n
-Please note that the shipping time will be longer than usual, so its price will also be higher."/>
+                    android:text="You can now have this dish shipped right to your doorstep in a matter of days! WoodSpoon shipped items are available across the US. UPS delivery times vary based on your location and where the item is coming from. Shipping options are available at checkout."/>
         </LinearLayout>
 
     </FrameLayout>

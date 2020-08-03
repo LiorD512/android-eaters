@@ -54,7 +54,7 @@ class AdditionalDishMainAdapter(
 
     @SuppressLint("LongLogTag")
     fun refreshAdditionalDishes(dishes: ArrayList<Dish>) {
-        Log.d(TAG, "refreshAdditionalDishes")
+        Log.d(TAG, "refreshAdditionalDishes $dishes")
         val orderItems = orderItemsSection.item?.orderItems
         //remove order items from additional dish list
         val sum = mutableSetOf<Dish>()

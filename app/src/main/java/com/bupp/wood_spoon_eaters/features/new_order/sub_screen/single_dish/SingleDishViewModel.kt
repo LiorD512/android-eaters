@@ -34,21 +34,20 @@ class SingleDishViewModel(
 
     fun getCurrentDish(): FullDish? {
         fullDish.value?.let {
-            return it
+            return it.fullDish
         }
         return null
     }
 
-    data class DishDetailsEvent(val isSuccess: Boolean = false, val dish: FullDish?, val isAvailable: Boolean = false)
 
-    val dishDetailsEvent: SingleLiveEvent<DishDetailsEvent> = SingleLiveEvent()
-    val fullDish = MutableLiveData<FullDish>()
+    data class DishDetailsEvent(val fullDish: FullDish, val newSelectedDate: Date? = null)
+    val fullDish = MutableLiveData<DishDetailsEvent>()
 
     data class DishAvailability(val isAvailable: Boolean, val startingTime: Date?, val isSoldOut: Boolean = false)
 
     val availability = MutableLiveData<DishAvailability>()
 
-    fun getFullDish() {
+    fun getFullDish(newChosenDate: Date? = null) {
         progressData.startProgress()
         val feedRequest = getFeedRequest()
         api.getSingleDish(
@@ -64,7 +63,7 @@ class SingleDishViewModel(
                     Log.d("wowSingleDishVM", "getMenuItemsDetails success")
                     val dish = response.body()?.data
                     dish?.let {
-                        fullDish.postValue(it)
+                        fullDish.postValue(DishDetailsEvent(it, newChosenDate))
                         availability.postValue(
                             DishAvailability(
                                 isAvailable = checkCookingSlotAvailability(it),
@@ -87,49 +86,6 @@ class SingleDishViewModel(
         })
     }
 
-//    fun getFullDish() {
-//        progressData.startProgress()
-//        val feedRequest = getFeedRequest()
-//        api.getSingleDish(
-//            menuItemId = menuItemId,
-//            lat = feedRequest.lat,
-//            lng = feedRequest.lng,
-//            addressId = feedRequest.addressId,
-//            timestamp = feedRequest.timestamp
-//        ).enqueue(object : Callback<ServerResponse<FullDish>> {
-//            override fun onResponse(call: Call<ServerResponse<FullDish>>, response: Response<ServerResponse<FullDish>>) {
-//                progressData.endProgress()
-//                if (response.isSuccessful) {
-//                    Log.d("wowSingleDishVM", "getMenuItemsDetails success")
-//                    val dish = response.body()?.data
-//                    dish?.let {
-//                        fullDish.postValue(it)
-////                            availability.postValue(DishAvailability(checkCookingSlotAvailability(it), getStartingDate(it.menuItem?.cookingSlot?.startsAt), checkDishSoldout(it)))
-//                        availability.postValue(
-//                            DishAvailability(
-//                                checkCookingSlotAvailability(it),
-//                                getStartingDate(it.menuItem?.cookingSlot?.orderFrom),
-//                                checkDishSoldout(it)
-//                            )
-//                        )
-//                    }
-////                    val isCookingSlotAvailabilty = checkCookingSlotAvailability(dish)
-////                    dishDetailsEvent.postValue(DishDetailsEvent(true, dish, isCookingSlotAvailabilty))
-////                    val shouldClearCart = checkForDifferentCook(dish)
-//
-//                } else {
-//                    Log.d("wowSingleDishVM", "getMenuItemsDetails fail")
-//                    dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<FullDish>>, t: Throwable) {
-//                progressData.endProgress()
-//                Log.d("wowSingleDishVM", "getMenuItemsDetails big fail: ${t.message}")
-//                dishDetailsEvent.postValue(DishDetailsEvent(false, null))
-//            }
-//        })
-//    }
 
     private fun checkDishSoldout(dish: FullDish): Boolean {
         val quantity = dish.menuItem?.quantity
@@ -222,7 +178,7 @@ class SingleDishViewModel(
     fun getDishReview() {
         progressData.startProgress()
         fullDish.value?.let {
-            api.getDishReview(it.cook.id).enqueue(object : Callback<ServerResponse<Review>> {
+            api.getDishReview(it.fullDish.cook.id).enqueue(object : Callback<ServerResponse<Review>> {
                 override fun onResponse(
                     call: Call<ServerResponse<Review>>,
                     response: Response<ServerResponse<Review>>
@@ -257,9 +213,9 @@ class SingleDishViewModel(
     }
 
 
-    fun fetchDishForNewDate(menuItemId: Long) {
+    fun fetchDishForNewDate(menuItemId: Long, newChosenDate: Date) {
         this.menuItemId = menuItemId
-        getFullDish()
+        getFullDish(newChosenDate)
     }
 
 

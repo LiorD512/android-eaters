@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -14,7 +15,6 @@ import java.text.DecimalFormat
 class OrdersBottomBar : FrameLayout{
 
     private var curType: Int = -1
-    var showSep = 0
     var ordersVisible = false
     var checkoutVisible = false
 
@@ -67,6 +67,7 @@ class OrdersBottomBar : FrameLayout{
    }
 
     private fun checkSepEnable() {
+        Log.d("wowOrderBottomBar","ordersVisible $ordersVisible, checkoutVisible: $checkoutVisible")
         if(ordersVisible && checkoutVisible){
             bottomBarSeparator.visibility = View.VISIBLE
         }else{
