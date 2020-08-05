@@ -62,12 +62,15 @@ class AdditionalDishMainAdapter(
         orderItems?.forEach {
             orderItemDishes.add(it.dish)
         }
-        val additioanlDishes = dishes.mapNotNull {
-            dish ->
+        val additioanlDishes = dishes.mapNotNull { dish ->
             if (orderItemDishes.find { it.id == dish.id} != null){
                 null
             }else{
-                dish
+                if(dish.isSoldOut()) {
+                    null
+                }else{
+                    dish
+                }
             }
         }
 
@@ -78,10 +81,6 @@ class AdditionalDishMainAdapter(
             additionalDishesSection.showSection()
             additionalDishesHeaderAndSection.showSection()
         }
-    }
-
-    fun updateHeaderText(firstName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun removeDish(currentAddedDish: Dish) {

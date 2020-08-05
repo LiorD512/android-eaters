@@ -31,7 +31,6 @@ class FavoritesView : FrameLayout, FavoritesViewViewModel.FavoritesViewListener,
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.favorite_view, this, true)
-//        initFavorites()
     }
 
     fun initFavorites() {

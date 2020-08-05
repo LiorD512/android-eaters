@@ -220,25 +220,25 @@
 
                 </LinearLayout>
 
-                <TextView
-                        android:layout_marginTop="30.8dp"
-                        style="@style/SemiBold13Dark"
-                        android:layout_marginStart="7.7dp"
-                        android:layout_marginEnd="7.7dp"
-                        android:layout_marginBottom="15.4dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Tip Your Home Chef"/>
-
-                <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
-                        android:id="@+id/rateLastOrderTipPercentView"
-                        android:layout_marginBottom="15.4dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                <View
-                        android:layout_weight="1"
-                        android:layout_width="1dp" android:layout_height="0dp"/>
+<!--                <TextView-->
+<!--                        android:layout_marginTop="30.8dp"-->
+<!--                        style="@style/SemiBold13Dark"-->
+<!--                        android:layout_marginStart="7.7dp"-->
+<!--                        android:layout_marginEnd="7.7dp"-->
+<!--                        android:layout_marginBottom="15.4dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:text="Tip Your Home Chef"/>-->
+<!---->
+<!--                <com.bupp.wood_spoon_eaters.custom_views.TipPercentView-->
+<!--                        android:id="@+id/rateLastOrderTipPercentView"-->
+<!--                        android:layout_marginBottom="15.4dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"/>-->
+<!---->
+<!--                <View-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_width="1dp" android:layout_height="0dp"/>-->
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
                         app:title="Done"

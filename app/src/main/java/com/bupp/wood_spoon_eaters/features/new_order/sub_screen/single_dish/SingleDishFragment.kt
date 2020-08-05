@@ -332,21 +332,6 @@ class SingleDishFragment() : Fragment(),
         singleDishStatusBar.updateStatusBottomBar(type = type, price = price, checkoutPrice = checkoutPrice, itemCount = itemCount)
     }
 
-//    override fun onStatusBarClicked(type: Int?) {
-//        when (type) {
-//            Constants.STATUS_BAR_TYPE_CART -> {
-//                if (viewModel.hasValidDeliveryAddress()) {
-//                    addToCart()
-//                } else {
-//                    openAddressMissingDialog()
-//                }
-//            }
-//            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
-//                (activity as NewOrderActivity).onCheckout()
-//            }
-//        }
-//    }
-
     private fun openAddressMissingDialog() {
         AddressMissingDialog(this).show(childFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
     }

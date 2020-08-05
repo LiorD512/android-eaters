@@ -364,20 +364,19 @@
 <!--                                        android:text="Delivered Time and Fee will be set at checkout"/>-->
 
 
-
-<!--                                <View-->
-<!--                                        android:layout_marginTop="10dp"-->
-<!--                                        android:layout_marginBottom="22dp"-->
-<!--                                        android:background="@color/silver"-->
-<!--                                        android:layout_width="match_parent"-->
-<!--                                        android:layout_height="1dp"/>-->
-
                                 <LinearLayout
                                         tools:visibility="visible"
                                         android:visibility="gone"
                                         android:id="@+id/singleDishInstructionsLayout"
                                         android:orientation="vertical"
                                         android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                                    <View
+                                                android:layout_marginTop="10dp"
+                                                android:layout_marginBottom="22dp"
+                                                android:background="@color/silver"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"/>
 
                                     <TextView
                                             style="@style/SemiBold15Dark"
@@ -602,8 +601,6 @@
 
             </FrameLayout>
 
-
-
         </LinearLayout>
 
         <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
@@ -612,8 +609,5 @@
                 android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
-
-
 
 </FrameLayout>

@@ -55,7 +55,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?, val listener: CancelO
 //                cancelOrderDialogReason.visibility = View.GONE
             }
             Constants.CANCEL_ORDER_STAGE_3 -> {
-                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
+                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
                 cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_3_body)
 //                cancelOrderDialogReason.visibility = View.GONE
             }

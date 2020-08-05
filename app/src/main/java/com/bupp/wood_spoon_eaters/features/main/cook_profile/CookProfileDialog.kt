@@ -133,6 +133,8 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         cookProfileFragDishList.addItemDecoration(divider)
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }
+
+        cookProfileFragReviews.text = "${cook.reviewCount} Reviews"
     }
 
 //    private fun openCertificatesDialog(certificates: ArrayList<String>) {

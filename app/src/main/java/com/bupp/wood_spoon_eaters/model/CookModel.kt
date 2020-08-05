@@ -24,6 +24,7 @@ data class Cook(
     @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>,
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>,
     @SerializedName("avg_rating") val rating: Double,
+    @SerializedName("reviews_count") var reviewCount: Int = 0,
     @SerializedName("dishes") val dishes: ArrayList<Dish>
 ): Parcelable {
     fun getFullName(): String{

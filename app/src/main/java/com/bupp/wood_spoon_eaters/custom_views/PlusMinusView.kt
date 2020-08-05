@@ -17,6 +17,7 @@ class PlusMinusView : FrameLayout {
     private var quantityLeft: Int = -1
 
     fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initialCounter: Int = 0, quantityLeft: Int? = 1) {
+        Log.d("wowPlusMinus","initialCounter $initialCounter, quantityLeft: $quantityLeft")
         this.listener = listener
         this.position = position
         this.counter = initialCounter

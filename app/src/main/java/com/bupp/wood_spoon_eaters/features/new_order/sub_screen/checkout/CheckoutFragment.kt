@@ -350,7 +350,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onStatusBarClicked(type: Int?) {
-        if(ordersViewModel.selectedShippingMethod == null){
+        if(ordersViewModel.isNationwideOrder() && ordersViewModel.selectedShippingMethod == null){
             ordersViewModel.onNationwideShippingSelectClick()
             return
         }

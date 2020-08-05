@@ -34,7 +34,7 @@ class RatingsAdapter(val context: Context, private var comments: ArrayList<Comme
         val review: Comment = comments[position]
 
         review.eater.thumbnail?.let {
-            Glide.with(context).load(review.eater.thumbnail).apply(RequestOptions.circleCropTransform()).into(holder.image)
+            Glide.with(context).load(review.eater.thumbnail).placeholder(R.drawable.profile_pic_placeholder).apply(RequestOptions.circleCropTransform()).into(holder.image)
         }
 
         holder.name.text = review.eater.getFullName()

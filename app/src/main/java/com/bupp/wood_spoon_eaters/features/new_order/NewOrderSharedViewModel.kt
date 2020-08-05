@@ -544,5 +544,12 @@ class NewOrderSharedViewModel(
         this.fullDishData = fullDish
     }
 
+    fun isNationwideOrder(): Boolean {
+        orderData.value?.let{
+            return it.cookingSlot.isNationwide
+        }
+        return false
+    }
+
 
 }

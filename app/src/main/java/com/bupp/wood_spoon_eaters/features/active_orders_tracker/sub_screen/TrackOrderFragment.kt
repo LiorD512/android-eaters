@@ -36,7 +36,6 @@ class TrackOrderFragment() : Fragment(),
     var listener: TrackOrderDialogListener? = null
 
     private lateinit var mainAdapter: TrackOrderMainAdapter
-    private var curOrderStage: Int = 0
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
     private lateinit var progressList: ArrayList<CheckBox>
@@ -180,13 +179,13 @@ class TrackOrderFragment() : Fragment(),
     }
 
     override fun onOrderCanceled(orderState: Int, orderId: Long) {
-        if(curOrderStage <= 1){
+        if(orderState <= 1){
             CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrderId, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
         }
-        if(curOrderStage == 2){
+        if(orderState == 2){
             CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_2, curOrderId, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
         }
-        if(curOrderStage == 3){
+        if(orderState == 3){
             CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_3, curOrderId, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
         }
     }

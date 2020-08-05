@@ -29,6 +29,11 @@ data class Dish(
             price
         }
     }
+
+    fun isSoldOut(): Boolean {
+        val quantityLeft = (menuItem?.quantity ?: 0) - (menuItem?.unitsSold ?: 0)
+        return quantityLeft <= 0
+    }
 }
 
 @Parcelize

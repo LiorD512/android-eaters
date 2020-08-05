@@ -47,7 +47,7 @@
                     android:layout_marginLeft="25.4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="We Now offer \n Nationwide Shipping! "/>
+                    android:text="We now offer \nnationwide shipping!"/>
 
             <View
                     android:layout_marginTop="15dp"
