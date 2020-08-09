@@ -551,5 +551,13 @@ class NewOrderSharedViewModel(
         return false
     }
 
+    fun pulItemBackToAdditionalList(curOrderItem: OrderItem) {
+        curCookingSlotId?.let {
+            fullDishData?.let {
+                setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
+            }
+        }
+    }
+
 
 }

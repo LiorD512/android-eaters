@@ -126,6 +126,9 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     override fun onDishCountChange(orderItemsCount: Int, curOrderItem: OrderItem) {
+        if(orderItemsCount == 0){
+            sharedViewModel.pulItemBackToAdditionalList(curOrderItem)
+        }
         sharedViewModel.updateOrder(curOrderItem)
     }
 

@@ -201,6 +201,14 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
         for (i in 0 until addrComponents!!.size) {
             if (addrComponents[i].types!![0] == "locality") {
                 return addrComponents[i].longName!!
+            }else{
+                addrComponents[i].types?.let{
+                    if(it.size > 1){
+                        if (addrComponents[i].types!![1] == "sublocality") {
+                            return addrComponents[i].longName!!
+                        }
+                    }
+                }
             }
         }
         return null

@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        android:id="@+id/singleDishMainLayout"
-        android:background="@color/white"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/singleDishMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".features.new_order.sub_screen.single_dish.SingleDishFragment">
 
     <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
                 android:id="@+id/singleDishHeader"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         <LinearLayout
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
             <FrameLayout
                     android:layout_width="match_parent"
@@ -38,365 +37,376 @@
                         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                     <LinearLayout
-                            android:background="@color/white"
                             android:id="@+id/singleDishContentLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@color/white"
                             android:orientation="vertical"
                             android:visibility="visible">
 
                         <LinearLayout
                                 android:id="@+id/singleDishInfoLayout"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                  android:layout_height="match_parent">
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
                             <FrameLayout
-                                    tools:visibility="gone"
                                     android:layout_width="match_parent"
                                     android:layout_height="268dp"
-                                    android:background="@color/white">
+                                    android:background="@color/white"
+                                    tools:visibility="gone">
 
                                 <FrameLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent">
 
                                     <androidx.viewpager2.widget.ViewPager2
-                                            android:background="@color/white"
                                             android:id="@+id/singleDishInfoImagePager"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent" />
+                                            android:layout_height="match_parent"
+                                            android:background="@color/white" />
 
                                     <me.relex.circleindicator.CircleIndicator3
+                                            android:id="@+id/singleDishInfoCircleIndicator"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="11dp"
                                             android:layout_gravity="bottom"
                                             android:layout_marginBottom="22dp"
-                                            app:ci_height="10dp"
-                                            app:ci_width="10dp"
                                             app:ci_animator="@anim/circle_indicator_anim"
                                             app:ci_drawable="@drawable/vp_indicator_selected"
                                             app:ci_drawable_unselected="@drawable/vp_indicator_unselected"
                                             app:ci_gravity="center"
-                                            android:id="@+id/singleDishInfoCircleIndicator"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="11dp"/>
+                                            app:ci_height="10dp"
+                                            app:ci_width="10dp" />
 
                                 </FrameLayout>
                                 <!--<ImageView-->
-                                        <!--android:scaleType="centerCrop"-->
-                                        <!--android:id="@+id/singleDishInfoImg"-->
-                                        <!--android:layout_width="match_parent"-->
-                                        <!--android:layout_height="match_parent"/>-->
+                                <!--android:scaleType="centerCrop"-->
+                                <!--android:id="@+id/singleDishInfoImg"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="match_parent"/>-->
 
                                 <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                                         android:id="@+id/singleDishInfoCook"
-                                        app:imageSize="SMALL"
-                                        android:layout_margin="10.6dp"
                                         android:layout_width="57.6dp"
-                                        android:layout_height="57.6dp"/>
+                                        android:layout_height="57.6dp"
+                                        android:layout_margin="10.6dp"
+                                        app:imageSize="SMALL" />
 
                                 <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
                                         android:id="@+id/singleDishInfoFavorite"
-                                        android:layout_marginRight="7.7dp"
-                                        android:layout_marginBottom="7.7dp"
-                                        android:layout_gravity="bottom|right"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"/>
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom|right"
+                                        android:layout_marginRight="7.7dp"
+                                        android:layout_marginBottom="7.7dp" />
 
                             </FrameLayout>
 
                             <LinearLayout
-                                    android:paddingTop="7.7dp"
-                                    android:paddingRight="15.4dp"
-                                    android:paddingLeft="15.4dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:background="@color/white"
                                     android:orientation="vertical"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:paddingLeft="15.4dp"
+                                    android:paddingTop="7.7dp"
+                                    android:paddingRight="15.4dp">
 
                                 <TextView
-                                        style="@style/SemiBold15Dark"
                                         android:id="@+id/singleDishInfoName"
+                                        style="@style/SemiBold15Dark"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:gravity="center_horizontal"
-                                        tools:text="Tomato Soup"/>
+                                        tools:text="Tomato Soup" />
 
                                 <LinearLayout
-                                        android:gravity="center|left"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:gravity="center|left"
+                                        android:orientation="horizontal">
 
                                     <TextView
-                                            style="@style/Reg13Dark_50"
                                             android:id="@+id/singleDishInfoCookName"
+                                            style="@style/Reg13Dark_50"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            tools:text="By Oded Shoshan"/>
+                                            tools:text="By Oded Shoshan" />
 
                                     <ImageView
-                                            android:layout_marginLeft="7.7dp"
                                             android:id="@+id/singleDishInfoCookFlag"
                                             android:layout_width="23dp"
-                                            android:layout_height="23dp"/>
+                                            android:layout_height="23dp"
+                                            android:layout_marginLeft="7.7dp" />
 
                                 </LinearLayout>
 
                                 <TextView
-                                        style="@style/Reg13Dark"
                                         android:id="@+id/singleDishInfoDescription"
-                                        android:layout_marginTop="4dp"
+                                        style="@style/Reg13Dark"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        tools:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers"/>
+                                        android:layout_marginTop="4dp"
+                                        tools:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers" />
 
                                 <LinearLayout
-                                        android:gravity="center"
-                                        android:weightSum="3"
-                                        android:layout_marginTop="16.8dp"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="16.8dp"
+                                        android:gravity="center"
+                                        android:weightSum="3">
 
                                     <LinearLayout
-                                            android:gravity="center"
-                                            android:layout_weight="1"
                                             android:layout_width="0dp"
-                                            android:layout_height="wrap_content">
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="center">
 
                                         <ImageView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:src="@drawable/icons_price_black"/>
+                                                android:src="@drawable/icons_price_black" />
 
                                         <TextView
                                                 android:id="@+id/singleDishInfoPrice"
                                                 style="@style/Reg13Dark"
-                                                android:paddingLeft="7.8dp"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:gravity="center"
-                                                tools:text="$7"/>
+                                                android:paddingLeft="7.8dp"
+                                                tools:text="$7" />
 
                                     </LinearLayout>
 
                                     <com.bupp.wood_spoon_eaters.custom_views.QuantityView
                                             android:id="@+id/singleDishQuantityView"
-                                            android:layout_weight="1"
-                                            app:views_gravity="CENTER"
                                             android:layout_width="0dp"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            app:views_gravity="CENTER" />
 
                                     <LinearLayout
                                             android:id="@+id/singleDishInfoRating"
-                                            android:gravity="center"
-                                            android:layout_weight="1"
                                             android:layout_width="0dp"
-                                            android:layout_height="wrap_content">
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="center">
 
                                         <ImageView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:src="@drawable/icons_raitings"/>
+                                                android:src="@drawable/icons_raitings" />
 
                                         <TextView
                                                 android:id="@+id/singleDishInfoRatingVal"
                                                 style="@style/Reg13Dark"
-                                                android:paddingLeft="7.8dp"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:gravity="center"
-                                                tools:text="4.8"/>
+                                                android:paddingLeft="7.8dp"
+                                                tools:text="4.8" />
 
                                     </LinearLayout>
 
                                 </LinearLayout>
-                                
+
                                 <!--<LinearLayout-->
-                                        <!--android:visibility="gone"-->
-                                        <!--android:orientation="vertical"-->
-                                        <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
-                                    <!--<RadioGroup-->
-                                        <!--android:layout_marginTop="40dp"-->
-                                            <!--android:orientation="horizontal"-->
-                                            <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
+                                <!--android:visibility="gone"-->
+                                <!--android:orientation="vertical"-->
+                                <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
+                                <!--<RadioGroup-->
+                                <!--android:layout_marginTop="40dp"-->
+                                <!--android:orientation="horizontal"-->
+                                <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
 
-                                        <!--<RadioButton-->
-                                                <!--android:checked="true"-->
-                                                <!--android:layout_marginRight="7.7dp"-->
-                                                <!--android:id="@+id/singleDishSingleDishCb"-->
-                                                <!--android:fontFamily="@font/open_sans_reg"-->
-                                                <!--android:textSize="13.4sp"-->
-                                                <!--android:text="Single Dish"-->
-                                                <!--android:paddingLeft="7.2dp"-->
-                                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
-                                                <!--android:button="@drawable/checkbox_selector"-->
-                                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
+                                <!--<RadioButton-->
+                                <!--android:checked="true"-->
+                                <!--android:layout_marginRight="7.7dp"-->
+                                <!--android:id="@+id/singleDishSingleDishCb"-->
+                                <!--android:fontFamily="@font/open_sans_reg"-->
+                                <!--android:textSize="13.4sp"-->
+                                <!--android:text="Single Dish"-->
+                                <!--android:paddingLeft="7.2dp"-->
+                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
+                                <!--android:button="@drawable/checkbox_selector"-->
+                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
 
-                                        <!--<RadioButton-->
-                                                <!--android:layout_marginRight="7.7dp"-->
-                                                <!--android:id="@+id/singleDishWholeBatchCb"-->
-                                                <!--android:text="The Whole Batch (10 dishes)"-->
-                                                <!--android:paddingLeft="7.2dp"-->
-                                                <!--android:layout_marginLeft="8.6dp"-->
-                                                <!--android:fontFamily="@font/open_sans_reg"-->
-                                                <!--android:textSize="13.4sp"-->
-                                                <!--android:button="@drawable/checkbox_selector"-->
-                                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
-                                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
+                                <!--<RadioButton-->
+                                <!--android:layout_marginRight="7.7dp"-->
+                                <!--android:id="@+id/singleDishWholeBatchCb"-->
+                                <!--android:text="The Whole Batch (10 dishes)"-->
+                                <!--android:paddingLeft="7.2dp"-->
+                                <!--android:layout_marginLeft="8.6dp"-->
+                                <!--android:fontFamily="@font/open_sans_reg"-->
+                                <!--android:textSize="13.4sp"-->
+                                <!--android:button="@drawable/checkbox_selector"-->
+                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
+                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
 
-                                    <!--</RadioGroup>-->
+                                <!--</RadioGroup>-->
 
                                 <!--<TextView-->
-                                        <!--android:layout_marginTop="9dp"-->
-                                        <!--style="@style/Reg11PurpleyGrey"-->
-                                        <!--android:layout_width="wrap_content"-->
-                                        <!--android:layout_height="wrap_content"-->
-                                        <!--android:text="Buy the whole batch for a 20% discount"/>-->
+                                <!--android:layout_marginTop="9dp"-->
+                                <!--style="@style/Reg11PurpleyGrey"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text="Buy the whole batch for a 20% discount"/>-->
 
                                 <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
                                         android:layout_marginTop="18dp"
                                         android:layout_marginBottom="10dp"
-                                        android:background="@color/silver"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"/>
+                                        android:background="@color/silver" />
                                 <!---->
-                            <!--</LinearLayout>-->
+                                <!--</LinearLayout>-->
 
                                 <LinearLayout
-                                        android:gravity="start|center_vertical"
-                                        android:orientation="horizontal"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
+                                        android:layout_height="match_parent"
+                                        android:gravity="start|center_vertical"
+                                        android:orientation="horizontal">
 
                                     <TextView
                                             style="@style/SemiBold13Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Count:"/>
+                                            android:text="Count:" />
 
                                     <TextView
-                                            android:layout_marginStart="4dp"
                                             android:id="@+id/singleDishCount"
                                             style="@style/SemiBold13Blue"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="1"/>
+                                            android:layout_marginStart="4dp"
+                                            android:text="1" />
 
                                     <View
-                                            android:layout_weight="1"
-                                            android:layout_width="1dp" android:layout_height="0dp"/>
+                                            android:layout_width="1dp"
+                                            android:layout_height="0dp"
+                                            android:layout_weight="1" />
 
                                     <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
                                             android:id="@+id/singleDishPlusMinus"
                                             android:layout_width="wrap_content"
-                                            android:layout_height="80dp"/>
+                                            android:layout_height="80dp" />
 
                                 </LinearLayout>
 
-                                <View
-                                        android:layout_marginTop="10dp"
-                                        android:background="@color/silver"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"/>
-
                                 <LinearLayout
-                                        android:layout_marginTop="16dp"
-                                        tools:visibility="visible"
                                         android:id="@+id/singleDishInfoDeliveryTimeLayout"
-                                        android:gravity="center"
-                                        android:orientation="horizontal"
-                                        android:layout_width="match_parent" android:layout_height="wrap_content">
-
-                                    <LinearLayout
-                                            android:orientation="vertical"
-                                            android:layout_weight="1"
-                                            android:layout_width="0dp" android:layout_height="wrap_content">
-
-                                        <TextView
-                                                android:id="@+id/singleDishInfoDate"
-                                                style="@style/SemiBold13Dark"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="match_parent"
-                                                tools:text="ASAP, 37-49 min"/>
-
-                                        <TextView
-                                                android:layout_marginTop="7.9dp"
-                                                android:id="@+id/singleDishInfoDelivery"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                style="@style/Reg13Dark"
-                                                android:letterSpacing="0.04"
-                                                tools:text="Delivered To Your Door"/>
-
-                                    </LinearLayout>
-                                    
-                                    <androidx.cardview.widget.CardView
-                                            android:id="@+id/singleDishChangeTimeBtn"
-                                            app:cardUseCompatPadding="true"
-                                            app:cardCornerRadius="2.9dp"
-                                            app:cardElevation="8dp"
-                                            app:cardBackgroundColor="@color/white"
-                                            android:layout_width="117dp"
-                                           android:layout_height="79dp">
-
-                                        <TextView
-                                                style="@style/SemiBold15Blue"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:gravity="center"
-                                                android:text="Change"/>
-
-
-                                    </androidx.cardview.widget.CardView>
-
-                                </LinearLayout>
-
-<!--                                <TextView-->
-<!--                                        android:layout_marginTop="10dp"-->
-<!--                                        android:visibility="gone"-->
-<!--                                        tools:visibility="visible"-->
-<!--                                        android:id="@+id/singleDishInfoDeliveryNationwide"-->
-<!--                                        android:layout_width="wrap_content"-->
-<!--                                        android:layout_height="wrap_content"-->
-<!--                                        style="@style/Reg13Dark"-->
-<!--                                        android:letterSpacing="0.04"-->
-<!--                                        android:text="Delivered Time and Fee will be set at checkout"/>-->
-
-
-                                <LinearLayout
-                                        tools:visibility="visible"
-                                        android:visibility="gone"
-                                        android:id="@+id/singleDishInstructionsLayout"
-                                        android:orientation="vertical"
-                                        android:layout_width="match_parent" android:layout_height="wrap_content">
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
 
                                     <View
-                                                android:layout_marginTop="10dp"
-                                                android:layout_marginBottom="22dp"
-                                                android:background="@color/silver"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="1dp"/>
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:layout_marginTop="10dp"
+                                            android:background="@color/silver" />
+
+                                    <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="16dp"
+                                            android:gravity="center"
+                                            android:orientation="horizontal"
+                                            tools:visibility="visible">
+
+                                        <LinearLayout
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:orientation="vertical">
+
+                                            <TextView
+                                                    android:id="@+id/singleDishInfoDate"
+                                                    style="@style/SemiBold13Dark"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="match_parent"
+                                                    tools:text="ASAP, 37-49 min" />
+
+                                            <TextView
+                                                    android:id="@+id/singleDishInfoDelivery"
+                                                    style="@style/Reg13Dark"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginTop="7.9dp"
+                                                    android:letterSpacing="0.04"
+                                                    tools:text="Delivered To Your Door" />
+
+                                        </LinearLayout>
+
+                                        <androidx.cardview.widget.CardView
+                                                android:id="@+id/singleDishChangeTimeBtn"
+                                                android:layout_width="117dp"
+                                                android:layout_height="79dp"
+                                                app:cardBackgroundColor="@color/white"
+                                                app:cardCornerRadius="2.9dp"
+                                                app:cardElevation="8dp"
+                                                app:cardUseCompatPadding="true">
+
+                                            <TextView
+                                                    style="@style/SemiBold15Blue"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    android:gravity="center"
+                                                    android:text="Change" />
+
+
+                                        </androidx.cardview.widget.CardView>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <!--                                <TextView-->
+                                <!--                                        android:layout_marginTop="10dp"-->
+                                <!--                                        android:visibility="gone"-->
+                                <!--                                        tools:visibility="visible"-->
+                                <!--                                        android:id="@+id/singleDishInfoDeliveryNationwide"-->
+                                <!--                                        android:layout_width="wrap_content"-->
+                                <!--                                        android:layout_height="wrap_content"-->
+                                <!--                                        style="@style/Reg13Dark"-->
+                                <!--                                        android:letterSpacing="0.04"-->
+                                <!--                                        android:text="Delivered Time and Fee will be set at checkout"/>-->
+
+
+                                <LinearLayout
+                                        android:id="@+id/singleDishInstructionsLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:visibility="gone"
+                                        tools:visibility="visible">
+
+                                    <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginBottom="22dp"
+                                            android:background="@color/silver" />
 
                                     <TextView
                                             style="@style/SemiBold15Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Home Chef's Instructions"/>
+                                            android:text="Home Chef's Instructions" />
 
                                     <TextView
+                                            android:id="@+id/singleDishInstructionsBody"
                                             style="@style/Reg13Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:id="@+id/singleDishInstructionsBody"
-                                            tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness."/>
+                                            tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness." />
 
                                     <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
                                             android:layout_marginTop="10dp"
                                             android:layout_marginBottom="16dp"
-                                            android:background="@color/silver"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="1dp"/>
+                                            android:background="@color/silver" />
 
                                 </LinearLayout>
 
@@ -404,157 +414,157 @@
                                         style="@style/SemiBold15Dark"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Special Requests"/>
+                                        android:text="Special Requests" />
 
                                 <TextView
                                         style="@style/Reg13Dark_50"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="The home chef will try to take your request into consideration"/>
+                                        android:text="The home chef will try to take your request into consideration" />
 
                                 <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-                                        android:layout_marginTop="15.4dp"
-                                        app:inputType="INPUT_TYPE_DONE_BTN"
-                                        app:hint="Add your request here..."
-                                        app:lines="3"
-                                        android:layout_marginBottom="23dp"
                                         android:id="@+id/singleDishIngredientInstructions"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"/>
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15.4dp"
+                                        android:layout_marginBottom="23dp"
+                                        app:hint="Add your request here..."
+                                        app:inputType="INPUT_TYPE_DONE_BTN"
+                                        app:lines="3" />
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
-                                tools:visibility="visible"
-                                android:visibility="gone"
-                                android:paddingRight="15.4dp"
-                                android:paddingLeft="15.4dp"
-                                android:paddingBottom="38dp"
-                                android:background="@color/white"
-                                android:orientation="vertical"
                                 android:id="@+id/singleDishIngredientLayout"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="15.4dp"
+                                android:paddingRight="15.4dp"
+                                android:paddingBottom="38dp"
+                                android:visibility="gone"
+                                tools:visibility="visible">
 
                             <androidx.recyclerview.widget.RecyclerView
-                                    tools:visibility="gone"
-                                    android:layout_marginTop="15.4dp"
                                     android:id="@+id/singleDishInfoDietryList"
-                                    android:layout_gravity="center"
                                     android:layout_width="match_parent"
-                                    android:layout_height="84dp"/>
+                                    android:layout_height="84dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="15.4dp"
+                                    tools:visibility="gone" />
 
                             <View
-                                    android:layout_marginTop="8.4dp"
-                                    android:background="@color/silver"
                                     android:layout_width="match_parent"
-                                    android:layout_height="1dp"/>
+                                    android:layout_height="1dp"
+                                    android:layout_marginTop="8.4dp"
+                                    android:background="@color/silver" />
 
                             <LinearLayout
-                                    android:weightSum="2"
-                                    android:layout_marginTop="15dp"
-                                    android:layout_marginStart="15dp"
-                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
 
                                 <LinearLayout
-                                        android:gravity="start|center"
-                                        android:layout_weight="1"
                                         android:layout_width="0dp"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="start|center">
 
                                     <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:src="@drawable/icons_calories"/>
+                                            android:src="@drawable/icons_calories" />
 
                                     <TextView
-                                            style="@style/SemiBold13Dark"
                                             android:id="@+id/singleDishIngredientCalories"
+                                            style="@style/SemiBold13Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="7.7dp"
                                             android:gravity="center"
-                                            tools:text="522 Calories"/>
+                                            tools:text="522 Calories" />
 
                                 </LinearLayout>
 
                                 <LinearLayout
-                                        android:gravity="left|center"
-                                        android:layout_weight="1"
                                         android:layout_width="0dp"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="left|center">
 
                                     <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:src="@drawable/icons_cooking_method"/>
+                                            android:src="@drawable/icons_cooking_method" />
 
                                     <TextView
-                                            style="@style/SemiBold13Dark"
                                             android:id="@+id/singleDishIngredientSauteing"
+                                            style="@style/SemiBold13Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="7.7dp"
                                             android:gravity="center"
-                                            tools:text="Sauteing"/>
+                                            tools:text="Sauteing" />
 
                                 </LinearLayout>
 
                             </LinearLayout>
 
                             <LinearLayout
-                                    android:weightSum="2"
-                                    android:layout_marginTop="28dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="28dp"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
 
                                 <LinearLayout
-                                        android:gravity="left|center"
-                                        android:layout_weight="1"
                                         android:layout_width="0dp"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="left|center">
 
                                     <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:src="@drawable/icons_protein"/>
+                                            android:src="@drawable/icons_protein" />
 
                                     <TextView
-                                            style="@style/SemiBold13Dark"
                                             android:id="@+id/singleDishIngredientProtein"
+                                            style="@style/SemiBold13Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="7.7dp"
                                             android:gravity="center"
-                                            tools:text="5g Protein"/>
+                                            tools:text="5g Protein" />
 
                                 </LinearLayout>
 
                                 <LinearLayout
-                                        android:gravity="left|center"
-                                        android:layout_weight="1"
                                         android:layout_width="0dp"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="left|center">
 
                                     <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:src="@drawable/icons_carbohydrates"/>
+                                            android:src="@drawable/icons_carbohydrates" />
 
                                     <TextView
-                                            style="@style/SemiBold13Dark"
                                             android:id="@+id/singleDishIngredientCarbohydrate"
+                                            style="@style/SemiBold13Dark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="7.7dp"
                                             android:gravity="center"
-                                            tools:text="3g Carbohydrate"/>
+                                            tools:text="3g Carbohydrate" />
 
                                 </LinearLayout>
 
@@ -562,30 +572,29 @@
 
                             <TextView
                                     style="@style/SemiBold15Dark"
-                                    android:layout_marginTop="31dp"
-                                    android:layout_marginBottom="23dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="31dp"
+                                    android:layout_marginBottom="23dp"
                                     android:gravity="center_horizontal"
-                                    android:text="Ingredients"/>
+                                    android:text="Ingredients" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                     android:id="@+id/singleDishIngredientList"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
+                                    android:layout_height="wrap_content" />
 
 
                         </LinearLayout>
 
                         <FrameLayout
-                                android:visibility="gone"
                                 android:id="@+id/singleDishCookLayout"
-                                android:background="@color/white"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:visibility="gone">
 
-                            <include layout="@layout/cook_profile_fragment"/>
+                            <include layout="@layout/cook_profile_fragment" />
 
                         </FrameLayout>
 
@@ -597,7 +606,7 @@
                         android:id="@+id/singleDishPb"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:visibility="gone"/>
+                        tools:visibility="gone" />
 
             </FrameLayout>
 
@@ -606,7 +615,7 @@
         <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
                 android:id="@+id/singleDishStatusBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
     </LinearLayout>
 

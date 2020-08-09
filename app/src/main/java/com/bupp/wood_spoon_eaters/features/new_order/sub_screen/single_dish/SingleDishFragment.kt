@@ -559,6 +559,8 @@ class SingleDishFragment() : Fragment(),
         cookProfileFragDishList.addItemDecoration(divider)
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }
+
+        cookProfileFragReviews.text = "${cook.reviewCount} Reviews"
     }
 
     override fun onDishClick(dish: Dish) {

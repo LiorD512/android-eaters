@@ -60,7 +60,9 @@ class AdditionalDishMainAdapter(
         val sum = mutableSetOf<Dish>()
         val orderItemDishes = mutableListOf<Dish>()
         orderItems?.forEach {
-            orderItemDishes.add(it.dish)
+            if(it.quantity > 0){
+                orderItemDishes.add(it.dish)
+            }
         }
         val additioanlDishes = dishes.mapNotNull { dish ->
             if (orderItemDishes.find { it.id == dish.id} != null){
