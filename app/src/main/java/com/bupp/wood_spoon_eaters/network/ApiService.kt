@@ -26,7 +26,6 @@ interface ApiService {
     fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Address>>
 
 
-
     //General
     @GET("eaters/utils/meta")
     fun getMetaData(): Observable<ServerResponse<MetaDataModel>>
@@ -61,8 +60,6 @@ interface ApiService {
     fun postEaterPreSignedUrl(@Field("type") type: String): Call<ServerResponse<PreSignedUrl>>
 
 
-
-
     //Eater
     @GET("eaters/me")
     fun getMe(): Observable<ServerResponse<Eater>>
@@ -87,13 +84,23 @@ interface ApiService {
     fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
 
     @GET("cooks/{cook_id}")
-    fun getCook(@Path(value = "cook_id", encoded = true) cookId: Long, @Query("timestamp") timestamp: String? = null, @Query("event_id") eventId: Long? = null): Call<ServerResponse<Cook>>
+    fun getCook(
+        @Path(value = "cook_id", encoded = true) cookId: Long,
+        @Query("lat") lat: Double? = null,
+        @Query("lng") lng: Double? = null,
+        @Query("timestamp") timestamp: String? = null,
+        @Query("event_id") eventId: Long? = null
+    ): Call<ServerResponse<Cook>>
 
     //Single Dish
     @GET("menu_items/{menu_item_id}/dish")
-    fun getSingleDish(@Path(value = "menu_item_id", encoded = true) menuItemId: Long, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-                      @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<FullDish>>
-
+    fun getSingleDish(
+        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
+        @Query("lat") lat: Double? = null,
+        @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null,
+        @Query("timestamp") timestamp: String? = null
+    ): Call<ServerResponse<FullDish>>
 
 
     //New Order calls
@@ -104,7 +111,7 @@ interface ApiService {
     fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
 
     @POST("eaters/me/orders/{order_id}/checkout")
-        fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>
+    fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>
 
     @POST("eaters/me/orders/{order_id}/finalize")
     fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
@@ -116,7 +123,7 @@ interface ApiService {
     fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<ArrayList<ShippingMethod>>>
 
 
-//Active Order
+    //Active Order
     @GET("eaters/me/orders/trackable")
     fun getTrackableOrders(): Call<ServerResponse<ArrayList<Order>>>
 
@@ -132,18 +139,24 @@ interface ApiService {
 
     //Profile data
     @GET("eaters/me/dishes/ordered")
-    fun getEaterOrdered(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<Search>>
+    fun getEaterOrdered(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): Call<ServerResponse<Search>>
 
     @GET("eaters/me/favorites")
-    fun getEaterFavorites(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<Search>>
+    fun getEaterFavorites(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): Call<ServerResponse<Search>>
 
 
     //Feed
     @GET("eaters/me/feed")
-    fun getFeed(@Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-                @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null): Call<ServerResponse<ArrayList<Feed>>>
+    fun getFeed(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): Call<ServerResponse<ArrayList<Feed>>>
 
 
     //dish likes
@@ -167,7 +180,6 @@ interface ApiService {
 
     @GET("eaters/me/events/{event_id}")
     fun getEventById(@Path(value = "event_id", encoded = true) eventId: String): Call<ServerResponse<Event>>
-
 
 
 }

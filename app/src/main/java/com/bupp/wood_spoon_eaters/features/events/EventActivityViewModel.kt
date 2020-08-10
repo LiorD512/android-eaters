@@ -80,7 +80,8 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
     fun getCurrentCook(id: Long) {
         val timestamp = eaterDataManager.getLastOrderTimeParam()
         val eventId = liveEventObj.value?.id
-        apiService.getCook(id, timestamp, eventId).enqueue(object: Callback<ServerResponse<Cook>> {
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        apiService.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng, timestamp = timestamp, eventId = eventId).enqueue(object: Callback<ServerResponse<Cook>> {
             override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
                 if(response.isSuccessful){
                     val cook = response.body()?.data

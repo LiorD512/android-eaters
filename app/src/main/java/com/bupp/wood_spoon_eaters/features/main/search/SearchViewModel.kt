@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.search
 import android.util.Log
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.SearchManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -11,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager, val searchManager: SearchManager) : ViewModel() {
+class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager, val searchManager: SearchManager, val eaterDataManager: EaterDataManager) : ViewModel() {
 
     data class LikeEvent(val isSuccess: Boolean = false)
     val likeEvent: SingleLiveEvent<LikeEvent> = SingleLiveEvent()
@@ -116,7 +117,8 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
     data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
     fun getCurrentCook(id: Long) {
-        api.getCook(id).enqueue(object: Callback<ServerResponse<Cook>>{
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object: Callback<ServerResponse<Cook>>{
             override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
                 if(response.isSuccessful){
                     val cook = response.body()?.data

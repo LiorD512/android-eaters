@@ -204,7 +204,8 @@ class MainViewModel(
     data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
 
     fun getCurrentCook(id: Long) {
-        api.getCook(id).enqueue(object : Callback<ServerResponse<Cook>> {
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object : Callback<ServerResponse<Cook>> {
             override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
                 if (response.isSuccessful) {
                     val cook = response.body()?.data

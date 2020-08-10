@@ -79,7 +79,7 @@ val appModule = module {
     viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get(), get()) }
 
     viewModel { FeedViewModel(get(), get(), get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { SingleDishViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AddressChooserViewModel(get(), get(), get()) }
     viewModel { AddAddressViewModel(get(), get(), get()) }
