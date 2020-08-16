@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, val permissionManager: PermissionManager, val orderManager: OrderManager,
-    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager
+    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager, val eventsManager: EventsManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
@@ -156,6 +156,9 @@ class MainViewModel(
                     } else {
                         hasActiveOrder = false
                         getActiveOrders.postValue(GetActiveOrdersEvent(false, null, showDialog))
+                    }
+                    if(showDialog){
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_TRACK_ORDER_CLICK)
                     }
                 } else {
                     hasActiveOrder = false

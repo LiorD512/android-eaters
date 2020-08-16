@@ -4,15 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.SearchManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager, val searchManager: SearchManager, val eaterDataManager: EaterDataManager) : ViewModel() {
+class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager, val searchManager: SearchManager, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager) : ViewModel() {
 
     data class LikeEvent(val isSuccess: Boolean = false)
     val likeEvent: SingleLiveEvent<LikeEvent> = SingleLiveEvent()
@@ -66,6 +68,7 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
                     Log.d("wowSearchVM","search success")
                     val searchResult: ArrayList<Search>? = response.body()?.data
                     arrangeData(searchResult)
+                    eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_SEARCHED_ITEM)
                 }else{
                     Log.d("wowSearchVM","search fail")
                     searchEvent.postValue(SearchEvent(false, null, null))

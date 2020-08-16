@@ -8,6 +8,7 @@
         android:layout_height="wrap_content">
 
     <View
+            android:visibility="gone"
             android:id="@+id/feedDishItemWorldwideLayoutRect"
             android:layout_marginTop="3dp"
             android:layout_toStartOf="@+id/feedDishItemWorldwideLayout"

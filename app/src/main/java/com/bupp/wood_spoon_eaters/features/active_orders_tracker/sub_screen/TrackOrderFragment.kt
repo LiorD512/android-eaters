@@ -26,7 +26,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.track_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import kotlin.collections.ArrayList
+
 
 class TrackOrderFragment() : Fragment(),
     CancelOrderDialog.CancelOrderDialogListener, TrackOrderProgressBinder.TrackOrderProgressListener, OnMapReadyCallback {
@@ -141,7 +141,12 @@ class TrackOrderFragment() : Fragment(),
                 }
             }
             val bounds = builder.build()
-            mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
+
+            try{
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150),1000, null)
+            }catch (ex: Exception){
+                Log.d("wowTrackOrder","map ex: $ex")
+            }
         }
     }
 

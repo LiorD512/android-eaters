@@ -75,11 +75,11 @@ val appModule = module {
     viewModel { CreateAccountViewModel(get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get(), get()) }
 
     viewModel { FeedViewModel(get(), get(), get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { SingleDishViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AddressChooserViewModel(get(), get(), get()) }
     viewModel { AddAddressViewModel(get(), get(), get()) }
@@ -113,7 +113,7 @@ val appModule = module {
 
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }
-    viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
+    viewModel { DeliveryDetailsViewModel(get(), get(), get(), get()) }
 
     viewModel { EventActivityViewModel(get(), get(), get(), get()) }
 //    viewModel { GetEventByIdViewModel(get()) }

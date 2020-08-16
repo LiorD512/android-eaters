@@ -9,6 +9,8 @@ import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.uxcam.UXCam
+import org.json.JSONObject
 
 class EventsManager(val context: Context, val sharedPreferences: SharedPreferences){
 
@@ -61,6 +63,15 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
 
         val logger = AppEventsLogger.newLogger(context)
         logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, bundle)
+    }
+
+    fun logUxCamEvent(eventName: String, params: Map<String, String>? = null){
+        Log.d("wowEventsManager", "logUxCamEvent: $eventName PARAMS: $params")
+        if(params != null ){
+            UXCam.logEvent(eventName, params)
+        }else{
+            UXCam.logEvent(eventName)
+        }
     }
 
 }

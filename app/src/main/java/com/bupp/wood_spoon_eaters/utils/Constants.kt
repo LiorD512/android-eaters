@@ -232,6 +232,14 @@ class Constants {
         const val EVENT_ACTIVITY_REQUEST_CODE = 112
         const val ANDROID_SETTINGS_REQUEST_CODE = 113
 
+        //UXCAM Events
+        const val UXCAM_EVENT_ORDER_PLACED = "order_placed"
+        const val UXCAM_EVENT_ADD_DISH = "add_dish_to_cart"
+        const val UXCAM_EVENT_ADD_ADDITIONAL_DISH = "add_additional_dish_to_cart"
+        const val UXCAM_EVENT_TRACK_ORDER_CLICK = "clicked_track_your_order"
+        const val UXCAM_EVENT_SEARCHED_ITEM = "searched_an_item"
+        const val UXCAM_EVENT_FUTURE_DELIVERY = "scheduled_future_delivery"
+
 
 
         const val MINIMUM_LOCATION_DISTANCE = 100

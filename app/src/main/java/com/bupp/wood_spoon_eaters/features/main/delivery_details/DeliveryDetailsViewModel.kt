@@ -3,12 +3,14 @@ package com.bupp.wood_spoon_eaters.features.main.delivery_details
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.utils.Constants
 import java.util.*
 
-class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(){//}, LocationManager.LocationManagerListener {
+class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManager: OrderManager, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager) : ViewModel(){//}, LocationManager.LocationManagerListener {
 
     //    data class CurrentDataEvent(val address: Address?, val isDelivery: Boolean?)
     data class LastDataEvent(val address: Address?, val time: Date?)
@@ -23,6 +25,7 @@ class DeliveryDetailsViewModel(val settings: AppSettings, private val orderManag
     fun setDeliveryTime(time: Date) {
         eaterDataManager.setUserChooseSpecificTime(true)
         eaterDataManager.orderTime = time
+        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_FUTURE_DELIVERY)
     }
 
     fun setDeliveryTimeAsap() {

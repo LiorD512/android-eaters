@@ -87,5 +87,20 @@ class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager) 
         return "$sum"
     }
 
+    fun getTotalCostValue(): String{
+        val total = curOrderResponse?.total?.cents ?: 0
+        val tip = curOrderResponse?.tip?.cents ?: 0
+        val sum = total + tip
+         if(sum <= 1500){
+             return "\$0-\$15"
+        }else if(sum > 1500 && sum <= 3000){
+             return "\$15-\$30"
+         }else if(sum > 3000 && sum <= 6000){
+             return "\$30 - \$60"
+         }else{
+             return "\$60+"
+         }
+    }
+
 
 }

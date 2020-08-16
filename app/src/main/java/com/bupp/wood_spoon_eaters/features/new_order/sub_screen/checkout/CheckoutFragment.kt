@@ -136,7 +136,11 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         })
         ordersViewModel.shippingMethodsEvent.observe(viewLifecycleOwner, Observer{
             it?.let{
-                NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
+                if(it.size > 0){
+                    NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
+                }else{
+                    Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
@@ -456,8 +460,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         val dpd = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance(this, calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), false)
 
         dpd.show(childFragmentManager, "Datepickerdialog")
-        dpd.setMinTime(calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), 0)
-        dpd.setMaxTime(calEnd.get(Calendar.HOUR_OF_DAY), calEnd.get(Calendar.MINUTE), 0)
+        if(calStart.before(calEnd)){
+            dpd.setMinTime(calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), 0)
+            dpd.setMaxTime(calEnd.get(Calendar.HOUR_OF_DAY), calEnd.get(Calendar.MINUTE), 0)
+        }
     }
 
     override fun onTimeSet(view: com.wdullaer.materialdatetimepicker.time.TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {

@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.BaseCallback
+import com.bupp.wood_spoon_eaters.utils.Constants
 import com.stripe.android.model.PaymentMethod
 import retrofit2.Call
 import retrofit2.Callback
@@ -161,6 +162,7 @@ class NewOrderSharedViewModel(
                 }
             }else{
                 addNewDishToCart(fullDish!!.id, quantity)
+                eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH)
             }
         } else {
             var cookId: Long = -1
@@ -213,7 +215,7 @@ class NewOrderSharedViewModel(
                         postOrderEvent.postValue(PostOrderEvent(true, order))
 
                         eventsManager.sendAddToCart(order?.id)
-
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_DISH)
 
                     } else {
                         Log.d("wowNewOrderVM", "postOrder fail")
@@ -287,6 +289,7 @@ class NewOrderSharedViewModel(
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
                         showAdditionalDialogIfFirst()
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH)
                     } else {
                         Log.d("wowNewOrderVM", "updateOrder FAILED")
                     }
@@ -434,7 +437,9 @@ class NewOrderSharedViewModel(
                     //todo - check this ! that it send purchase cost
                     val totalCost = orderManager.getTotalCost()
                     eventsManager.sendPurchaseEvent(orderId, "")
+                    eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ORDER_PLACED, getOrderValue())
                     orderManager.clearCurrentOrder()
+
                 }
 
                 override fun onError(errors: List<WSError>) {
@@ -442,6 +447,11 @@ class NewOrderSharedViewModel(
                     errorEvent.postValue(errors)
                 }
             })
+    }
+
+    private fun getOrderValue(): Map<String, String>? {
+        val totalCostStr = orderManager.getTotalCostValue()
+        return mapOf("order_value" to totalCostStr)
     }
 
 
