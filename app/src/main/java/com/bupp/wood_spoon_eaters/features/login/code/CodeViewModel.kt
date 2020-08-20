@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import retrofit2.Call
@@ -14,7 +15,7 @@ import retrofit2.Response
 
 
 class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager
-                    , val deviceDetailsManager: FcmManager
+                    , val deviceDetailsManager: FcmManager, val paymentManager: PaymentManager
 ) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
@@ -30,7 +31,7 @@ class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager,
                     Log.d("wowCodeVM", "send code success: ");
                     val eater: Eater? = response.body()!!.data
                     eaterDataManager.currentEater = eater!!
-
+                    paymentManager.initPaymentManager()
                     deviceDetailsManager.refreshPushNotificationToken()
 
                     navigationEvent.postValue(NavigationEvent(true, eaterDataManager.isAfterLogin()))
@@ -46,7 +47,6 @@ class CodeViewModel(val api: ApiService, val eaterDataManager: EaterDataManager,
             }
         })
     }
-
 
 
 

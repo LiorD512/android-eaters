@@ -68,7 +68,7 @@ val appModule = module {
 
     //login
     viewModel { WelcomeViewModel(get()) }
-    viewModel { CodeViewModel(get(), get(), get(), get()) }
+    viewModel { CodeViewModel(get(), get(), get(), get(), get()) }
     viewModel { PhoneVerificationViewModel(get()) }
 
     //sign up
@@ -99,7 +99,7 @@ val appModule = module {
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
-    viewModel { MyProfileViewModel(get(), get(), get(), get()) }
+    viewModel { MyProfileViewModel(get(), get(), get(), get(), get()) }
     viewModel { EditMyProfileViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get()) }
 

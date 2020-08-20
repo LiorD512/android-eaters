@@ -81,7 +81,7 @@ class PaymentManager (val context: Context, val metaDataManager: MetaDataManager
     }
 
     fun getStripeCurrentPaymentMethod(): PaymentMethod? {
-        if(payments.value != null){
+        if(payments.value != null && payments.value!!.size > 0){
             return payments.value!!.get(0)
         }else{
             return null

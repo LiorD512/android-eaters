@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountV
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
@@ -31,7 +32,8 @@ import retrofit2.Response
 import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 
-class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager) :
+class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager
+                         , val paymentManager: PaymentManager) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
 
@@ -126,18 +128,19 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
     val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
     data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
     fun getStripeCustomerCards(){
-        CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,
-            object : CustomerSession.PaymentMethodsRetrievalListener {
-                override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                    Log.d("wowProfileVM","getStripeCustomerCards $paymentMethods")
-                    getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethods))
-                }
-
-                override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-                    Log.d("wowProfileVM","getStripeCustomerCards ERROR $errorMessage")
-                    getStripeCustomerCards.postValue(StripeCustomerCardsEvent(false))
-                }
-            })
+        val paymentMethod = paymentManager.getStripeCustomerCards()
+        getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethod.value))
+//        CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,
+//            object : CustomerSession.PaymentMethodsRetrievalListener {
+//                override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
+//                    Log.d("wowProfileVM","getStripeCustomerCards $paymentMethods")
+//                }
+//
+//                override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
+//                    Log.d("wowProfileVM","getStripeCustomerCards ERROR $errorMessage")
+//                    getStripeCustomerCards.postValue(StripeCustomerCardsEvent(false))
+//                }
+//            })
     }
 
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {

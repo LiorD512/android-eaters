@@ -161,14 +161,16 @@ class TrackOrderFragment() : Fragment(),
 
     private fun initUpdateObserver() {
         viewModel.getActiveOrders.observe(this, Observer { result ->
-            if(result.isSuccess && result.orders?.size!! > 0){
-                Log.d("wowTrackOrderFragment","updating orders")
-                for(order in result.orders){
-                    Log.d("wowTrackOrderFragment","curOrderId: $curOrderId, order: ${order.id}")
-                    if(order.id == curOrderId){
-                        Log.d("wowTrackOrderFragment","found Id: ${order.id}")
-                        updateOrderUi(order, result.userInfo)
-                        updateMap(order)
+            result.orders?.size?.let{
+                if(result.isSuccess && result.orders.size > 0){
+                    Log.d("wowTrackOrderFragment","updating orders")
+                    for(order in result.orders){
+                        Log.d("wowTrackOrderFragment","curOrderId: $curOrderId, order: ${order.id}")
+                        if(order.id == curOrderId){
+                            Log.d("wowTrackOrderFragment","found Id: ${order.id}")
+                            updateOrderUi(order, result.userInfo)
+                            updateMap(order)
+                        }
                     }
                 }
             }
