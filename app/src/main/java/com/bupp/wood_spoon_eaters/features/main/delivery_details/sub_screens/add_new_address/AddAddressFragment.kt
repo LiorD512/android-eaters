@@ -21,9 +21,29 @@ import kotlinx.android.synthetic.main.fragment_add_address.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView.ActionTitleViewListener,
+class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener,
     InputTitleView.InputTitleViewListener, View.OnClickListener {
 
+    var curAddress: Address? = null
+    companion object{
+        const val VAR_ARGS = "addressObj"
+        fun newInstance(curAddress: Address? = null): AddAddressFragment{
+            val fragment = AddAddressFragment()
+            curAddress?.let{
+                val bundle = Bundle()
+                bundle.putParcelable(VAR_ARGS, curAddress)
+                fragment.arguments = bundle
+            }
+            return fragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireArguments().let{
+            curAddress = it.getParcelable<Address?>(VAR_ARGS)
+        }
+    }
 
     private var hasApt: Boolean = false
     private var hasAddress: Boolean = false
@@ -65,8 +85,10 @@ class AddAddressFragment(val curAddress: Address?) : Fragment(), ActionTitleView
     }
 
     private fun initEditAddress() {
-        (activity as AddressChooserActivity).loadLocationChooser(curAddress!!.streetLine1)
-        addAddressFragDeliveryNote.setText(curAddress.notes)
+        curAddress?.let{
+            (activity as AddressChooserActivity).loadLocationChooser(it.streetLine1)
+            addAddressFragDeliveryNote.setText(it.notes)
+        }
 
         (activity as AddressChooserActivity).setHeaderViewSaveBtnClickable(true)
 

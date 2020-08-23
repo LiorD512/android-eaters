@@ -63,6 +63,10 @@ class LottieAnimationView : FrameLayout {
         lottieAnimationView.playAnimation()
     }
 
+    fun isAnimating(): Boolean{
+        return lottieAnimationView.isAnimating
+    }
+
 //    fun setCustomAnimation(animation: String?) {
 //        if(animation != null){
 //            lottieAnimationView.setAnimationFromJson(animation, "${Date().time}")

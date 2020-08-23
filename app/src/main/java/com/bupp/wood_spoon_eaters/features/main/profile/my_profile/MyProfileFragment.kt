@@ -187,7 +187,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
-        if(paymentMethods?.size!! > 0){
+        if(paymentMethods != null && paymentMethods.size!! > 0){
             val defaultPayment = paymentMethods[0]
             updateCustomerPaymentMethod(defaultPayment)
 //            viewModel.attachCardToCustomer(defaultPayment.id!!)

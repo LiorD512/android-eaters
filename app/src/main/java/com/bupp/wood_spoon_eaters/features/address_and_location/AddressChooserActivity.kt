@@ -79,7 +79,7 @@ class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.Addres
     }
 
     override fun onAddAddressClick() {
-        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
+        loadFragment(AddAddressFragment.newInstance(), Constants.ADD_NEW_ADDRESS_TAG)
         mainAddressChooserActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
         setHeaderViewSaveBtnClickable(false)
     }
@@ -89,7 +89,7 @@ class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.Addres
     }
 
     override fun onEditAddress(address: Address) {
-        loadFragment(AddAddressFragment(address), Constants.ADD_NEW_ADDRESS_TAG)
+        loadFragment(AddAddressFragment.newInstance(address), Constants.ADD_NEW_ADDRESS_TAG)
         mainAddressChooserActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
         setHeaderViewSaveBtnClickable(false)
     }

@@ -54,8 +54,10 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
 
     override fun onAnimationEnd() {
-        if(!isFinishLoading){
-            splashLottie.rollAnimation()
+        if(!isFinishLoading) {
+            if (!splashLottie.isAnimating()) {
+                splashLottie.rollAnimation()
+            }
         }else{
             redirectToMain()
         }

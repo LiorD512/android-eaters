@@ -599,9 +599,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             checkCartStatus()
             data?.let{
                 if(it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)){
-                    (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
-                    checkForSharingCampaign()
-                    refreshUser()
+                    if(getFragmentByTag(Constants.FEED_TAG) is FeedFragment){
+                        (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
+                        checkForSharingCampaign()
+                        refreshUser()
+                    }
                 }
             }
         }

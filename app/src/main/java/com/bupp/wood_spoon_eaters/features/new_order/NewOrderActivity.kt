@@ -241,7 +241,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     override fun onEditAddress(address: Address) {
-        loadFragment(AddAddressFragment(address), Constants.ADD_NEW_ADDRESS_TAG)
+        loadFragment(AddAddressFragment.newInstance(address), Constants.ADD_NEW_ADDRESS_TAG)
         if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
             (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
         }
@@ -253,7 +253,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     fun loadAddNewAddress() {
-        loadFragment(AddAddressFragment(null), Constants.ADD_NEW_ADDRESS_TAG)
+        loadFragment(AddAddressFragment.newInstance(), Constants.ADD_NEW_ADDRESS_TAG)
 //        newOrderHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Select Your Delivery Address")
     }
 
