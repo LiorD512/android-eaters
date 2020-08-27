@@ -343,6 +343,13 @@ class MainViewModel(
         }
     }
 
+    val refreshAppDataEvent = SingleLiveEvent<Boolean>()
+    fun checkIfMemoryCleaned() {
+        if(eaterDataManager.currentEater == null){
+            refreshAppDataEvent.postValue(true)
+        }
+    }
+
 
 //    fun disableEventData() {
 //        eaterDataManager.disableEventDate()

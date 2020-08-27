@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.custom_views
 
 import android.animation.Animator
 import android.content.Context
+import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import java.util.*
 
 
 class LottieAnimationView : FrameLayout {
+
+    private lateinit var listener: LottieAnimListener
 
     interface LottieAnimListener{
         fun onAnimationEnd()
@@ -35,32 +38,47 @@ class LottieAnimationView : FrameLayout {
     }
 
     fun showDefaultAnimation(listener: LottieAnimListener) {
+        this.listener = listener
         lottieAnimationView.setAnimation("splash_anim.json")
         lottieAnimationView.playAnimation()
 
-        lottieAnimationView.addAnimatorListener(object: Animator.AnimatorListener{
-            override fun onAnimationRepeat(p0: Animator?) {
-                Log.d("wowLottie","onAnimationRepeat")
-            }
+        Handler().postDelayed({
+            Log.d("wowLottie","onAnimationEnd")
+            lottieAnimationView.pauseAnimation()
+            listener.onAnimationEnd()
+        }, 3200)
 
-            override fun onAnimationEnd(p0: Animator?) {
-                Log.d("wowLottie","onAnimationEnd")
-                listener.onAnimationEnd()
-            }
-
-            override fun onAnimationCancel(p0: Animator?) {
-                Log.d("wowLottie","onAnimationCancel")
-            }
-
-            override fun onAnimationStart(p0: Animator?) {
-                Log.d("wowLottie","onAnimationStart")
-            }
-
-        })
+//        lottieAnimationView.addAnimatorListener(object: Animator.AnimatorListener{
+//            override fun onAnimationRepeat(p0: Animator?) {
+//                Log.d("wowLottie","onAnimationRepeat")
+//            }
+//
+//            override fun onAnimationEnd(p0: Animator?) {
+//                Log.d("wowLottie","onAnimationEnd")
+//            }
+//
+//            override fun onAnimationCancel(p0: Animator?) {
+//                Log.d("wowLottie","onAnimationCancel")
+//            }
+//
+//            override fun onAnimationStart(p0: Animator?) {
+//                Log.d("wowLottie","onAnimationStart")
+//            }
+//
+//        })
     }
 
     fun rollAnimation(){
-        lottieAnimationView.playAnimation()
+        Log.d("wowLottie","rollAnimation: isAnimationg: ${lottieAnimationView.isAnimating}")
+        if(!lottieAnimationView.isAnimating){
+            lottieAnimationView.playAnimation()
+
+            Handler().postDelayed({
+                Log.d("wowLottie","onAnimationEnd")
+                lottieAnimationView.pauseAnimation()
+                listener.onAnimationEnd()
+            }, 3200)
+        }
     }
 
     fun isAnimating(): Boolean{

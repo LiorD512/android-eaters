@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.ad
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,11 +26,12 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
     InputTitleView.InputTitleViewListener, View.OnClickListener {
 
     var curAddress: Address? = null
-    companion object{
+
+    companion object {
         const val VAR_ARGS = "addressObj"
-        fun newInstance(curAddress: Address? = null): AddAddressFragment{
+        fun newInstance(curAddress: Address? = null): AddAddressFragment {
             val fragment = AddAddressFragment()
-            curAddress?.let{
+            curAddress?.let {
                 val bundle = Bundle()
                 bundle.putParcelable(VAR_ARGS, curAddress)
                 fragment.arguments = bundle
@@ -40,8 +42,13 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireArguments().let{
-            curAddress = it.getParcelable<Address?>(VAR_ARGS)
+        try {
+            curAddress = arguments?.getParcelable<Address?>(VAR_ARGS)
+//            requireArguments()?.let {
+//                curAddress = it.getParcelable<Address?>(VAR_ARGS)
+//            }
+        } catch (ex: Exception) {
+            Log.d("wowAddAddresFrag", "exception: ${ex.message}")
         }
     }
 
@@ -71,7 +78,7 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
         addAddressFragAddress2ndLine.setInputTitleViewListener(this)
         addAddressFragDeliveryNote.setInputTitleViewListener(this)
 
-        if(curAddress != null){
+        if (curAddress != null) {
             initEditAddress()
         }
 
@@ -85,7 +92,7 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
     }
 
     private fun initEditAddress() {
-        curAddress?.let{
+        curAddress?.let {
             (activity as AddressChooserActivity).loadLocationChooser(it.streetLine1)
             addAddressFragDeliveryNote.setText(it.notes)
         }
@@ -140,9 +147,9 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
     override fun onActionViewClick(type: Int) {
         when (type) {
             Constants.LOCATION_CHOOSER_ACTION -> {
-                if(activity is AddressChooserActivity){
+                if (activity is AddressChooserActivity) {
                     (activity as AddressChooserActivity).loadLocationChooser(null)
-                }else if(activity is NewOrderActivity){
+                } else if (activity is NewOrderActivity) {
                     (activity as NewOrderActivity).loadLocationChooser(null)
                 }
             }
@@ -166,11 +173,11 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
         }
     }
 
-    fun validateFields(){
-        if(hasAddress && hasApt){
-            if(activity is AddressChooserActivity) {
+    fun validateFields() {
+        if (hasAddress && hasApt) {
+            if (activity is AddressChooserActivity) {
                 (activity as AddressChooserActivity).setHeaderViewSaveBtnClickable(true)
-            }else if(activity is NewOrderActivity){
+            } else if (activity is NewOrderActivity) {
 //                (activity as NewOrderActivity).setHeaderViewSaveBtnClickable(true)
             }
         }
@@ -189,7 +196,7 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
                 isDelivery,
                 curAddress?.id
             )
-        }else{
+        } else {
             addAddressFragPb.hide()
             Toast.makeText(context, "error sending address", Toast.LENGTH_SHORT)
         }

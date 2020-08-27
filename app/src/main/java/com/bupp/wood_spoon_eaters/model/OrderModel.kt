@@ -60,7 +60,8 @@ data class Order (
     @SerializedName("delivery_fee") val deliveryFee: Price,
     @SerializedName("tip") val tip: Price,
     @SerializedName("discount") val discount: Price,
-    @SerializedName("was_rated") val wasRated: Boolean
+    @SerializedName("was_rated") val wasRated: Boolean,
+    @SerializedName("nationwide_shipping") val isNationwide: Boolean
 ): Parcelable
 
 @Parcelize

@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.splash
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit
 class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterDataManager, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager,
 val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
+    private var loginTries: Int = 0
     var serverCallMap = mutableMapOf<Int, Observable<*>>()
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
 
@@ -39,6 +41,7 @@ val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.Ephemera
         val shouldUpdateVersion: Boolean = false
     )
 
+    val errorEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     //todo - add getFeed call. save feed object in FeedHelper (singleton)- update feed saved object on new getFeed Call.
 
@@ -97,10 +100,13 @@ val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.Ephemera
             //parse metaData
             val metaDataResponse = objects[1] as ServerResponse<MetaDataModel>
             metaDataManager.setMetaDataObject(metaDataResponse.data!!)
+            Log.d("wowSplash", "metaData success")
             val shouldUpdateVersion = metaDataManager.checkMinVersionFail()
             if (eater == null) {
+                Log.d("wowSplash", "eater null")
                 navigationEvent.postValue(NavigationEvent(false, false, shouldUpdateVersion))
             } else {
+                Log.d("wowSplash", "eater: $eater")
                 eaterDataManager.currentEater = eater
                 if (eaterDataManager.isAfterLogin()) {
                     initRelevantRepositories()
@@ -119,8 +125,19 @@ val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.Ephemera
                         Log.d("wowSplash", "Observable accept success")
                     }
                 }
-            }, { result -> Log.d("wowSplash", "wowException $result") })
-
+            }, { result ->
+                run {
+                    Log.d("wowSplash", "wowException $result")
+                    loginTries++
+                    if (loginTries <= 3) {
+                        Log.d("wowSplash", "tring to initSplash again #$loginTries")
+                        initServerCall()
+                    } else {
+                        Log.d("wowSplash", "init tries reached limit")
+                        errorEvent.postValue(true)
+                    }
+                }
+            })
     }
 
     private fun initRelevantRepositories() {

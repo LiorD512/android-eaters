@@ -37,6 +37,7 @@ import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
@@ -94,7 +95,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         initFcm()
     }
-
 
 
     private fun checkForCampaignReferrals() {
@@ -193,55 +193,62 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             }
         })
         viewModel.noUserLocationEvent.observe(this, Observer {
-            when(it){
+            when (it) {
                 MainViewModel.NoLocationUiEvent.DEVICE_LOCATION_OFF -> {
                     handleDeviceLocationOff()
                 }
                 MainViewModel.NoLocationUiEvent.NO_LOCATIONS_SAVED -> {
                     loadFragment(NoLocationsAvailableFragment(), Constants.NO_LOCATIONS_AVAILABLE_TAG)
                 }
-                else -> {}
+                else -> {
+                }
             }
         })
         viewModel.locationSettingsEvent.observe(this, Observer {
             startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), Constants.ANDROID_SETTINGS_REQUEST_CODE)
         })
-        viewModel.getShareCampaignEvent.observe(this, Observer{
-            it?.let{
+        viewModel.getShareCampaignEvent.observe(this, Observer {
+            it?.let {
                 SharingCampaignDialog.newInstance(it).show(supportFragmentManager, Constants.SHARE_CAMPAIGN_DIALOG)
             }
         })
-        viewModel.activeCampaignEvent.observe(this, Observer{
+        viewModel.activeCampaignEvent.observe(this, Observer {
             val activeCampaign = it
-            if(activeCampaign != null){
+            if (activeCampaign != null) {
                 mainActCampaignHeader.visibility = View.VISIBLE
                 mainActCampaignTitle.text = it.title
                 mainActCampaignSubTitle.text = it.terms
-                it.image?.let{
+                it.image?.let {
                     Glide.with(this).load(it).into(mainActCampaignImg)
                 }
 
-                it.color?.let{
+                it.color?.let {
                     mainActCampaignHeader.setBackgroundColor(Color.parseColor(it))
                 }
 
                 mainActCampaignHeader.setOnClickListener {
-                    if(mainActCampaignImg.visibility == View.VISIBLE){
+                    if (mainActCampaignImg.visibility == View.VISIBLE) {
                         mainActCampaignImg.visibility = View.GONE
                         mainActCampaignSubTitle.visibility = View.GONE
-                    }else{
+                    } else {
                         mainActCampaignImg.visibility = View.VISIBLE
                         mainActCampaignSubTitle.visibility = View.VISIBLE
                     }
                 }
-            }else{
+            } else {
                 mainActCampaignHeader.visibility = View.GONE
             }
+        })
+
+        viewModel.refreshAppDataEvent.observe(this, Observer{
+            Log.d("wowMainAct","refreshAppDataEvent !!!!!")
+            startActivity(Intent(this, SplashActivity::class.java))
+            finishAffinity()
         })
     }
 
     private fun refreshFeedIfNecessary() {
-        if(currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG){
+        if (currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
             loadFeed()
         }
     }
@@ -250,7 +257,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActLocationDisabledText.visibility = View.VISIBLE
         mainActLocationDisabledText.setOnClickListener {
             mainActLocationDisabledText.visibility = View.GONE
-            openDeviceLocationSettings() }
+            openDeviceLocationSettings()
+        }
 
     }
 
@@ -448,7 +456,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     viewModel.startLocationUpdates(this)
-                }else{
+                } else {
                     viewModel.initLocationFalse()
                 }
             }
@@ -505,6 +513,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
+
+
     override fun onHeaderTextChange(str: String) {
         if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
             (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged(str)
@@ -558,7 +568,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 loadOrderHistoryFragment()
             }
             Constants.DELIVERY_DETAILS_TAG -> {
-                when(lastFragmentTag){
+                when (lastFragmentTag) {
                     Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
                         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
                         startLocationUpdates()
@@ -578,7 +588,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             else -> {
                 loadFeed()
             }
-
         }
     }
 
@@ -597,9 +606,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             loadOrRefreshFeed()
             checkForActiveOrder()
             checkCartStatus()
-            data?.let{
-                if(it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)){
-                    if(getFragmentByTag(Constants.FEED_TAG) is FeedFragment){
+            data?.let {
+                if (it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)) {
+                    if (getFragmentByTag(Constants.FEED_TAG) is FeedFragment) {
                         (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
                         checkForSharingCampaign()
                         refreshUser()
@@ -635,7 +644,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     result?.let {
                         Log.d("wowNewOrder", "payment method success")
                         if (getFragmentByTag(Constants.MY_PROFILE_TAG) != null) {
-                            result.paymentMethod?.let{
+                            result.paymentMethod?.let {
                                 (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(it)
                             }
                         }
@@ -665,9 +674,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun loadOrRefreshFeed() {
-        if(!currentFragmentTag.equals(Constants.FEED_TAG)){
+        if (!currentFragmentTag.equals(Constants.FEED_TAG)) {
             loadFeed()
-        }else{
+        } else {
             //change feeditemlist adapter to ListAdapter (singleItemSetChanged) and then remove comment from below
 //            (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
         }
@@ -687,11 +696,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         viewModel.checkForShareCampaign()
     }
 
-
     fun updateFilterUi(isFiltered: Boolean) {
         mainActHeaderView.updateFilterUi(isFiltered)
     }
-
 
     fun loadNewOrderActivity(id: Long) {
         startActivityForResult(
@@ -717,8 +724,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onResume() {
         super.onResume()
         checkForActiveOrder()
+        checkIfMemoryCleaned()
     }
 
+    private fun checkIfMemoryCleaned() {
+        //this method belongs to Android 7 and below.. when garbadge collector cleaned the apps memory
+        Log.d("wowMainAct","checkIfMemoryCleaned()")
+        viewModel.checkIfMemoryCleaned()
+    }
 
     override fun onStart() {
         super.onStart()
@@ -728,11 +741,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         mainActLottieView.showDefaultAnimation(this)
     }
 
-
     override fun onAnimationEnd() {
-        if(!isFeedReady){
+        if (!isFeedReady) {
             mainActLottieView.rollAnimation()
-        }else{
+        } else {
             mainActLottieView.visibility = View.GONE
         }
     }
@@ -743,12 +755,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onGPSChanged(isEnabled: Boolean) {
-        if(isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG){
+        if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
             startLocationUpdates()
             loadFeed()
         }
     }
-
 
 
 }

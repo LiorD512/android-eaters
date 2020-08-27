@@ -82,9 +82,10 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
         //time
         feedRequest.timestamp = eaterDataManager.getFeedSearchTimeStringParam()
 
-
         return feedRequest
     }
+
+
 
     fun hasFavorites(): Boolean {
         return settings.hasFavoriets()

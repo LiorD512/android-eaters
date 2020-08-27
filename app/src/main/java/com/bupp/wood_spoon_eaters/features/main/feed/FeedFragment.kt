@@ -77,7 +77,6 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         (activity as MainActivity).loadNewOrderActivity(menuItemId)
     }
 
-
     private fun initFeed(feedArr: ArrayList<Feed>) {
         feedFragEmptyLayout.visibility = View.GONE
         feedFragListLayout.visibility = View.VISIBLE
@@ -96,7 +95,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     private fun showEmptyLayout() {
         feedFragEmptyLayout.visibility = View.VISIBLE
-        feedFragEmptyFeedTitle.text =  String.format("Hey %s", viewModel.getEaterFirstName()?: "nullStr")
+        feedFragEmptyFeedTitle.text =  String.format("Hey %s", viewModel.getEaterFirstName() ?: "Guest")
         feedFragEmptyLayout.setOnClickListener { startDeliveryDetails() }
     }
 

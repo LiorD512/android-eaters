@@ -160,6 +160,7 @@ class Constants {
         const val SHARE_CAMPAIGN_DIALOG = "campaign_dialog"
         const val NATIONWIDE_SHIPPING_INFO_DIALOG = "nationwide_shipping_info_dialog"
         const val NATIONWIDE_SHIPPING_SELECT_DIALOG = "nationwide_shipping_select_dialog"
+        const val WS_ERROR_DIALOG = "ws_error_dialog"
 
 
 

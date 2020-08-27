@@ -11,8 +11,11 @@ import com.bupp.wood_spoon_eaters.R
 import kotlinx.android.synthetic.main.logout_dialog.*
 import kotlinx.android.synthetic.main.ws_error_dialog.*
 
-class WSErrorDialog(val body: String?) : DialogFragment(){
+class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogFragment(){
 
+    interface WSErrorListener{
+        fun onWSErrorDone()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,9 @@ class WSErrorDialog(val body: String?) : DialogFragment(){
             errorDialogBody.text = it
         }
         errorDialogClose.setOnClickListener{
-            dismiss()}
+            dismiss()
+            listener?.onWSErrorDone()
+        }
     }
 
 }

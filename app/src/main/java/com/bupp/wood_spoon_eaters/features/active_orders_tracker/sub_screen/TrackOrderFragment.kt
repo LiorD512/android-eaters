@@ -35,6 +35,9 @@ class TrackOrderFragment() : Fragment(),
     var curOrderId: Long? = null
     var listener: TrackOrderDialogListener? = null
 
+    var currentBoundSize = 150
+
+
     private lateinit var mainAdapter: TrackOrderMainAdapter
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
@@ -141,11 +144,26 @@ class TrackOrderFragment() : Fragment(),
                 }
             }
             val bounds = builder.build()
+            //change mechnic to monig map by scroll and target bound on the courer or chef location
+            animateCamera(bounds)
 
+        }
+    }
+
+    private fun animateCamera(bounds: LatLngBounds?) {
+        bounds?.let{
             try{
-                mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150),1000, null)
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, currentBoundSize),1000, null)
+                Log.d("wowTrackOrder","bound size: $currentBoundSize")
             }catch (ex: Exception){
-                Log.d("wowTrackOrder","map ex: $ex")
+                if(currentBoundSize > 100){
+                    currentBoundSize -= 50
+                    Log.d("wowTrackOrder","changing bound size: $currentBoundSize")
+                    animateCamera(bounds)
+                }else{
+                    Log.d("wowTrackOrder","map ex: $ex")
+
+                }
             }
         }
     }

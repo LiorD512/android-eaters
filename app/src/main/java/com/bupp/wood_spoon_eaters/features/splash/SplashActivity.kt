@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -21,7 +22,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_splash.*
 
 
-class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, LottieAnimationView.LottieAnimListener {
+class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, LottieAnimationView.LottieAnimListener,
+    WSErrorDialog.WSErrorListener {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -51,13 +53,9 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         viewModel.initServerCall() //init all data
     }
 
-
-
     override fun onAnimationEnd() {
         if(!isFinishLoading) {
-            if (!splashLottie.isAnimating()) {
-                splashLottie.rollAnimation()
-            }
+            splashLottie.rollAnimation()
         }else{
             redirectToMain()
         }
@@ -87,6 +85,16 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                 //server fail
             }
         })
+        viewModel.errorEvent.observe(this, Observer{
+            if(it){
+                WSErrorDialog("Server error, please try again later", this).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+            }
+        })
+    }
+
+
+    override fun onWSErrorDone() {
+        finishAffinity()
     }
 
     override fun onUpdate(redirectUrl: String) {

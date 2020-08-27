@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:background="@color/dark_43"
         android:id="@+id/trackOrderDialogLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/dark_43">
 
     <LinearLayout
-            android:background="@drawable/rounded_white_bkg"
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="7.7dp"
+            android:background="@drawable/rounded_white_bkg"
             android:focusableInTouchMode="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
         <LinearLayout
-                android:orientation="horizontal"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
             <ImageView
                     android:id="@+id/trackOrderDialogCloseBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:src="@drawable/icons_close"
                     android:paddingLeft="15.4dp"
                     android:paddingTop="22.1dp"
-                    android:paddingBottom="21.6dp"
                     android:paddingRight="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:paddingBottom="21.6dp"
+                    android:src="@drawable/icons_close" />
 
             <TextView
                     style="@style/SemiBold15Dark"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Track Your Order"/>
+                    android:text="Track Your Order" />
 
             <ImageView
-                    android:visibility="invisible"
                     android:id="@+id/trackOrderDialogMessageBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/messages_image_selector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:visibility="invisible" />
 
         </LinearLayout>
 
@@ -56,20 +56,20 @@
                 android:layout_height="match_parent">
 
             <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                 <FrameLayout
+                        android:id="@+id/trackOrderMap"
                         android:layout_width="match_parent"
-                        android:layout_height="154dp"
-                        android:id="@+id/trackOrderMap"/>
+                        android:layout_height="154dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:background="@color/white"
-                android:id="@+id/trackOrderDialogList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/trackOrderDialogList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
 
             </LinearLayout>
 
