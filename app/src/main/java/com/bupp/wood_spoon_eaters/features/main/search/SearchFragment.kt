@@ -57,11 +57,11 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
                 if(event.isSuccess){
                     var haveCooks = false
                     var haveDishes = false
-                    if(event.cooks != null && event.cooks.size > 0){
+                    if(event.cooks != null && event.cooks?.size > 0){
                         adapter.updateCooks(event.cooks)
                         haveCooks = true
                     }
-                    if(event.dishes != null && event.dishes.size > 0){
+                    if(event.dishes != null && event.dishes?.size > 0){
                         adapter.updateDishes(event.dishes)
                         haveDishes = true
                     }

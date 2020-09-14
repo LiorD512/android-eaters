@@ -79,13 +79,17 @@ class TrackOrderProgressBinder(val listener: TrackOrderProgressBinder.TrackOrder
                 val today = Calendar.getInstance()
                 today.time = Date()
 
-                val deliveryTime = Calendar.getInstance()
-                deliveryTime.time = order.estDeliveryTime
+                if(order.estDeliveryTime != null){
+                    val deliveryTime = Calendar.getInstance()
+                    deliveryTime.time = order.estDeliveryTime
 
-                if (Utils.isSameDay(today, deliveryTime)) {
-                    itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${Utils.parseDateToTime(order.estDeliveryTime)}"
-                } else {
-                    itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${Utils.parseDateToFullDate(order.estDeliveryTime)}"
+                    if (Utils.isSameDay(today, deliveryTime)) {
+                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${Utils.parseDateToTime(order.estDeliveryTime)}"
+                    } else {
+                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${Utils.parseDateToFullDate(order.estDeliveryTime)}"
+                    }
+                }else{
+                    itemView.trackOrderProgressArrivalTime.text = "${order.estDeliveryTimeText}"
                 }
 
                 itemView.trackOrderBottomContactUsBtn.setOnClickListener {

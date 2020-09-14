@@ -77,7 +77,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         }else{
             listener.onEmptyhDishList()
         }
-        if(cooksArr.size > 0){
+        if(cooksArr?.size > 0){
             initCooksList(cooksArr, cooksTitle)
         }
 

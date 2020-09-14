@@ -135,7 +135,7 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
 //                    Log.d("wow", "phoneNumber sent: $phoneNumber")
                     Log.d("wowMainVM", "getTrackableOrders success")
                     val activeOrders = response.body()!!.data
-                    if(activeOrders != null && activeOrders.size > 0){
+                    if(activeOrders != null && activeOrders?.size > 0){
                         getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, showDialog))
                     }else{
 //                        hasActiveOrder = false

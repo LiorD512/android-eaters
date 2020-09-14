@@ -377,7 +377,7 @@ class SingleDishFragment() : Fragment(),
             Glide.with(context!!).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
 
-        if (currentDish.cook.diets.size > 0) {
+        if (currentDish.cook?.diets?.size > 0) {
             singleDishInfoDietryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             val dietaryAdapter = CooksDietaryAdapter(context!!, currentDish.cook.diets)
             singleDishInfoDietryList.adapter = dietaryAdapter

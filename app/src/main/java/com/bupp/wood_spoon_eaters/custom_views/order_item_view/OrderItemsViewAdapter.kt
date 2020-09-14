@@ -47,7 +47,7 @@ class OrderItemsViewAdapter(val listener: OrderItemsViewAdapterListener, val con
     }
 
     override fun getItemCount(): Int {
-        return orders.size
+        return orders?.size
     }
 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {

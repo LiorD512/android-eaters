@@ -69,8 +69,12 @@ class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun initItem(context: Context, order: Order) {
         Glide.with(context).load(order.cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(img)
         title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook.firstName}"
-        date.text = Utils.parseDateToDateAndTime(order.estDeliveryTime)
         price.text = "Total: ${order.total.formatedValue}"
+        if(order.estDeliveryTime != null){
+            date.text = Utils.parseDateToDateAndTime(order.estDeliveryTime)
+        }else{
+            date.text = "${order.estDeliveryTimeText}"
+        }
 
     }
 

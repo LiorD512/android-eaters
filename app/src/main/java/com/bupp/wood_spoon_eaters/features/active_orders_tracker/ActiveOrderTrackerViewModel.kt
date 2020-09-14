@@ -43,7 +43,7 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
                 if (response.isSuccessful) {
                     Log.d("wowActiveOrderTrackerVM", "getTrackableOrders success")
                     val activeOrders = response.body()!!.data
-                    if(activeOrders != null && activeOrders.size > 0){
+                    if(activeOrders != null && activeOrders?.size > 0){
                         val userInfo = getOrderUserInfo()
                         getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, userInfo))
                     }else{

@@ -180,7 +180,7 @@ class TrackOrderFragment() : Fragment(),
     private fun initUpdateObserver() {
         viewModel.getActiveOrders.observe(this, Observer { result ->
             result.orders?.size?.let{
-                if(result.isSuccess && result.orders.size > 0){
+                if(result.isSuccess && result.orders?.size > 0){
                     Log.d("wowTrackOrderFragment","updating orders")
                     for(order in result.orders){
                         Log.d("wowTrackOrderFragment","curOrderId: $curOrderId, order: ${order.id}")

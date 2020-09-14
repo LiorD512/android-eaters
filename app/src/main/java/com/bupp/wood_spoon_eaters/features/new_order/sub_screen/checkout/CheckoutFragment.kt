@@ -136,7 +136,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         })
         ordersViewModel.shippingMethodsEvent.observe(viewLifecycleOwner, Observer{
             it?.let{
-                if(it.size > 0){
+                if(it?.size > 0){
                     NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
                 }else{
                     Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
@@ -224,7 +224,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         if (order != null) {
             this.curOrder = order
 
-            if(order.orderItems.size > 0){
+            if(order.orderItems?.size > 0){
                 checkoutFragStatusBar.isEnabled = true
                 var cook = order.cook
 
@@ -232,9 +232,13 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                     checkoutFragDeliveryAddress.updateDeliveryFullDetails(order.deliveryAddress)
                 }
 
-                val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
-                if(time != null){
-                    checkoutFragDeliveryTime.updateDeliveryDetails(time)
+                if(order.estDeliveryTime != null){
+                    val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
+                    if(time != null){
+                        checkoutFragDeliveryTime.updateDeliveryDetails(time)
+                    }
+                }else if(order.estDeliveryTimeText != null){
+                    checkoutFragDeliveryTime.updateDeliveryDetails(order.estDeliveryTimeText)
                 }
 
                 checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"

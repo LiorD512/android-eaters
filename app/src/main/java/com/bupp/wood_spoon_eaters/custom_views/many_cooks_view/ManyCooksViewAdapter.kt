@@ -34,7 +34,7 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
     }
 
     override fun getItemCount(): Int {
-        return cooksList.size
+        return cooksList?.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

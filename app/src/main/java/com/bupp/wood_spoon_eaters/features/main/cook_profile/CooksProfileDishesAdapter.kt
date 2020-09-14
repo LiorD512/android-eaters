@@ -60,7 +60,7 @@ class CooksProfileDishesAdapter(
     }
 
     override fun getItemCount(): Int {
-        return dishes.size
+        return dishes?.size
     }
 }
 

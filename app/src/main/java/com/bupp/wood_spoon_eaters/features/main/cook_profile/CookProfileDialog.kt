@@ -94,7 +94,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         cookProfileFragRating.text = cook.rating.toString()
 
         //cuisine
-        if(cook.cuisines != null && cook.cuisines.size > 0){
+        if(cook.cuisines != null && cook?.cuisines?.size > 0){
             cookProfileFragCuisineLayout.visibility = View.VISIBLE
             cookProfileFragCuisineGrid.clear()
             cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
@@ -103,7 +103,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         }
 
         //dietry
-        if(cook.diets != null && cook.diets.size > 0){
+        if(cook.diets != null && cook?.diets?.size > 0){
             cookProfileFragDietaryLayout.visibility = View.VISIBLE
             cookProfileFragDietryGrid.clear()
             cookProfileFragDietryGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
@@ -114,7 +114,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         //Certificates
         val certificates = cook.certificates
 //        cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }
-        if (certificates != null && certificates.size > 0) {
+        if (certificates != null && certificates?.size > 0) {
             cookProfileFragCertificateLayout.visibility = View.VISIBLE
             cookProfileFragCertificateGrid.clear()
             cookProfileFragCertificateGrid.initStackableViewWith(certificates)

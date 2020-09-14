@@ -113,7 +113,7 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                 count =+ 1
             }
             if(hasDishes){
-                count += dishes!!.size
+                count += dishes?.size
             }
             return count
         }else{

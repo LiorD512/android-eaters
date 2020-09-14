@@ -99,9 +99,14 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragOrderId.text = "${curOrder.orderNumber}"
 
         orderDetailsFragCookName.text = "By cook ${curOrder.cook.getFullName()}"
-        val date = Utils.parseDDateToUsDate(curOrder.estDeliveryTime)
-        val time = Utils.parseDDateToUsTime(curOrder.estDeliveryTime)
-        orderDetailsFragOrderDate.text = "$date at $time"
+
+        if(curOrder.estDeliveryTime != null){
+            val date = Utils.parseDDateToUsDate(curOrder.estDeliveryTime)
+            val time = Utils.parseDDateToUsTime(curOrder.estDeliveryTime)
+            orderDetailsFragOrderDate.text = "$date at $time"
+        }else{
+            orderDetailsFragOrderDate.text = "${curOrder.estDeliveryTimeText}"
+        }
 
         orderDetailsFragTotalPrice.text = curOrder.total.formatedValue
 

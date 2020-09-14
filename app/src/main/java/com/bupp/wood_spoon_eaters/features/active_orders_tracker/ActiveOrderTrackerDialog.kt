@@ -76,7 +76,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
             adapter = OrdersPagerAdapter(this, it, this)
             ordersTrackerPager.adapter = adapter
 
-            if(it.size > 1){
+            if(it?.size > 1){
                 ordersTrackerIndicator.visibility = View.VISIBLE
                 ordersTrackerIndicator.setViewPager(ordersTrackerPager)
             }else{
@@ -93,7 +93,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
 
 
         override fun getItemCount(): Int {
-            return orders.size
+            return orders?.size
         }
 
         override fun createFragment(position: Int): Fragment {

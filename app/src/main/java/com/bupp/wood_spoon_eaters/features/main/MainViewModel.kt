@@ -150,7 +150,7 @@ class MainViewModel(
 //                    Log.d("wow", "phoneNumber sent: $phoneNumber")
                     Log.d("wowMainVM", "getTrackableOrders success")
                     val activeOrders = response.body()!!.data
-                    if (activeOrders != null && activeOrders.size > 0) {
+                    if (activeOrders != null && activeOrders?.size > 0) {
                         hasActiveOrder = true
                         getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, showDialog))
                     } else {
