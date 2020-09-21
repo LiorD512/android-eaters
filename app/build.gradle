@@ -7,7 +7,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     signingConfigs {
         signing_config {
-            storeFile file('D:\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
+            storeFile file('D:\\Monkeytech\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
             storePassword 'kofkof12'
             keyPassword 'kofkof12'
             keyAlias = 'woodSpoonEaters'
