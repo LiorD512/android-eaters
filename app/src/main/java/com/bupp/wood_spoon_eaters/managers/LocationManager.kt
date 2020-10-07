@@ -228,7 +228,9 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
 //            Log.d(TAG, "my location object: ${addresses[0]}")
 //            Toast.makeText(context, "my location object: ${addresses[0]}", Toast.LENGTH_SHORT).show()
-            streetLine = getStreetStr(addresses[0])
+            if(addresses.isNotEmpty()){
+                streetLine = getStreetStr(addresses[0])
+            }
 //            streetLine = addresses[0].getAddressLine(0)
         }catch (e: IOException){
             Log.d(TAG, "location manager error: " + e.message)
