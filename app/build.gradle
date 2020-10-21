@@ -20,8 +20,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 30
-        versionName "1.4.0"
+        versionCode 32
+        versionName "1.4.1"
 //        multiDexEnabled true
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -148,16 +148,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     //di
-//    implementation "org.koin:koin-android-viewmodel:$koin_version"
-//    androidTestImplementation "org.koin:koin-test:$koin_version"
-//    testImplementation "org.koin:koin-test:$koin_version"
-//    implementation "org.koin:koin-java:$koin_version"
-
-//    implementation "org.koin:koin-android:$koin_version"
-//    implementation "org.koin:koin-android-scope:$koin_version"
-//    implementation "org.koin:koin-android-viewmodel:$koin_version"
-//    implementation "org.koin:koin-android-ext:$koin_version"
-
     implementation "org.koin:koin-androidx-scope:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     implementation "org.koin:koin-androidx-ext:$koin_version"
