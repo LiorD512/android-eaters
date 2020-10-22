@@ -185,7 +185,7 @@ class AddAddressFragment() : Fragment(), ActionTitleView.ActionTitleViewListener
 
     fun saveAddressDetails() {
         addAddressFragPb.show()
-
+        Log.d("wowAddressBug","saveAddressDetails -> selectedGoogleAddress: $selectedGoogleAddress")
         if (selectedGoogleAddress != null || myLocationAddress != null || curAddress != null) {
             viewModel.postNewAddress(
                 selectedGoogleAddress,

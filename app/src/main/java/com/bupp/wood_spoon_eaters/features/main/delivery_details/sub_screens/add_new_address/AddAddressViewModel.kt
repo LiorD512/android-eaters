@@ -8,16 +8,19 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 const val DELIVERY_TO_DOOR_STRING = "Delivery to door"
 const val PICK_UP_OUTSIDE_STRING = "Pick up outside"
 
 
-class AddAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings) : ViewModel(), EaterDataManager.EaterDataMangerListener {
-
+class AddAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings) :
+    ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     data class MyLocationEvent(val myLocation: Address)
@@ -38,15 +41,17 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     }
 
     override fun onAddressChanged(currentAddress: Address?) {
-        if(currentAddress != null){
+        if (currentAddress != null) {
             myLocationEvent.postValue(MyLocationEvent(currentAddress))
         }
     }
 
-    fun postNewAddress(googleAddressResponse: GoogleAddressResponse? = null, myLocationAddress: Address? = null, address1stLine: String,
-                       address2ndLine: String, deliveryNote: String, isDelivery: Boolean, currentAddressId: Long? = null) {
+    fun postNewAddress(
+        googleAddressResponse: GoogleAddressResponse? = null, myLocationAddress: Address? = null, address1stLine: String,
+        address2ndLine: String, deliveryNote: String, isDelivery: Boolean, currentAddressId: Long? = null
+    ) {
         val currentEater = eaterDataManager.currentEater
-
+        Log.d("wowAddressBug", "googleAddresRes: ${googleAddressResponse?.status} ")
         currentEater?.let {
             val notes = deliveryNote
 
@@ -55,19 +60,24 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
             addressRequest.dropoffLocation = isDelivery.getDropoffLocationStr()
 
             if (googleAddressResponse != null) {
+                Log.d("wowAddressBug", "googleAddresRes1")
+
                 addressRequest = parseGoogleResponse(googleAddressResponse, address1stLine, address2ndLine, notes)
-            } else if (myLocationAddress != null){
+            } else if (myLocationAddress != null) {
+                Log.d("wowAddressBug", "googleAddresRes2")
                 addressRequest = parseMyLocation(myLocationAddress)
             }
 
             val adresses = arrayListOf(addressRequest)
+            Log.d("wowAddressBug", "googleAddresRes3 ${adresses}")
 
 
-
-            if(currentAddressId != null){
+            if (currentAddressId != null) {
                 //update Address
+                Log.d("wowAddressBug", "googleAddresRes 4")
                 updateAddress(currentAddressId, addressRequest)
-            }else{
+            } else {
+                Log.d("wowAddressBug", "googleAddresRes 5")
                 //post EaterRequest
                 var eaterRequest =
                     EaterRequest(
@@ -84,9 +94,9 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     }
 
     //weird example of kotlin structure. behold.
-    private fun Boolean.getDropoffLocationStr(): String? = if(this){
+    private fun Boolean.getDropoffLocationStr(): String? = if (this) {
         "delivery_to_door"
-    }else{
+    } else {
         "pickup_outside"
     }
 
@@ -152,22 +162,63 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
 
         var addressComponents: List<GoogleAddressResponse.AddressComponentsItem>?
         if (googleAddress.results?.addressComponents != null) {
+            Log.d("wowAddressBug", "googleAddresRes 1.1")
             addressComponents = googleAddress.results!!.addressComponents
         } else {
+            Log.d("wowAddressBug", "googleAddresRes 1.2")
             addressComponents = googleAddress.ResultsItem().addressComponents
         }
 
         if (!addressComponents.isNullOrEmpty()) {
+            Log.d("wowAddressBug", "googleAddresRes 1.3")
             var lat: Double? = 0.0
             var lng: Double? = 0.0
 
+            Log.d("wowAddressBug", "googleAddresRes 1.3.1 - ")
+            Log.d("wowAddressBug", "googleAddress.Location().lat - ${googleAddress.Location().lat} ")
+            Log.d("wowAddressBug", "googleAddress.Location().lng - ${googleAddress.Location().lng} ")
+            val gson = Gson()
+            val jsonString = gson.toJson(googleAddress.results)
+            Log.d("wowAddressBug", "googleAddress.results - ${jsonString} ")
+            val locationString = gson.toJson(googleAddress.Location())
+            Log.d("wowAddressBug", "googleAddress.Location - ${locationString} ")
+//            Log.d("wowAddressBug","googleAddress.results?.geometry?.location?.lat - ${googleAddress.results?.geometry?.location?.lat} ")
+//            Log.d("wowAddressBug","googleAddress.results?.geometry?.location?.lng - ${googleAddress.results?.geometry?.location?.lng} ")
             if (googleAddress.Location().lat != 0.0 && googleAddress.Location().lng != 0.0) {
+                Log.d("wowAddressBug", "googleAddresRes 1.4")
                 lat = googleAddress.Location().lat
                 lng = googleAddress.Location().lng
             } else {
-                lat = googleAddress.results?.geometry?.location?.lat
-                lng = googleAddress.results?.geometry?.location?.lng
+                Log.d("wowAddressBug", "googleAddresRes 1.5")
+                googleAddress.results?.let {
+                    val geometry = it.geometry
+                    val geometryStr = gson.toJson(geometry).toString()
+                    Log.d("wowAddressBug", "geometry ${geometryStr}")
+                    val convertedObject: GoogleAddressResponse.Geometry = gson.fromJson(geometryStr, GoogleAddressResponse.Geometry::class.java)
+                    Log.d("wowAddressBug", "geometry ${convertedObject}")
+                    convertedObject.location?.let {
+                        Log.d("wowAddressBug", "googleAddresRes 1.5.1")
+                        it.let {
+                            Log.d("wowAddressBug", "googleAddresRes 1.5.2")
+                            lat = it.lat
+                            lng = it.lng
+                        }
+                    }
+                    Log.d("wowAddressBug", "googleAddresRes 1.5.3")
+                }
             }
+
+//            var lat: Double? = 0.0
+//            var lng: Double? = 0.0
+//
+//            if (googleAddress.Location().lat != 0.0 && googleAddress.Location().lng != 0.0) {
+//                lat = googleAddress.Location().lat
+//                lng = googleAddress.Location().lng
+//            } else {
+//                lat = googleAddress.results?.geometry?.location?.lat
+//                lng = googleAddress.results?.geometry?.location?.lng
+//            }
+
 
             var countryNames = getCountry(addressComponents)
             var countryName = countryNames.first
@@ -191,6 +242,7 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
             userAddress.lat = lat
             userAddress.lng = lng
         } else {
+            Log.d("wowAddressBug", "googleAddresRes 1.6")
 
         }
         userAddress.notes = notes
@@ -201,9 +253,9 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
         for (i in 0 until addrComponents!!.size) {
             if (addrComponents[i].types!![0] == "locality") {
                 return addrComponents[i].longName!!
-            }else{
-                addrComponents[i].types?.let{
-                    if(it.size > 1){
+            } else {
+                addrComponents[i].types?.let {
+                    if (it.size > 1) {
                         if (addrComponents[i].types!![1] == "sublocality") {
                             return addrComponents[i].longName!!
                         }
@@ -245,12 +297,20 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
         var country = ""
         for (i in 0 until addrComponents!!.size) {
             val component = addrComponents[i]
-            if(component != null){
-                when(component.types!![0]){
-                    "street_number" -> {streetNumber = component.longName!!}
-                    "route" -> {route = component.longName!!}
-                    "locality" -> {locality = component.longName!!}
-                    "country" -> {country = component.longName!!}
+            if (component != null) {
+                when (component.types!![0]) {
+                    "street_number" -> {
+                        streetNumber = component.longName!!
+                    }
+                    "route" -> {
+                        route = component.longName!!
+                    }
+                    "locality" -> {
+                        locality = component.longName!!
+                    }
+                    "country" -> {
+                        country = component.longName!!
+                    }
                 }
             }
         }

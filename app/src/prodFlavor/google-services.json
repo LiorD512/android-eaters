@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "237950317903-gpk1udous8j9gp05funulfodidbq1mrb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bupp.wood_spoon_eaters",
+            "certificate_hash": "91bc09c6da714fa270cf4cc862761b5d6e68e74f"
+          }
+        },
+        {
           "client_id": "237950317903-08dquqekmkcn2i34o1devcvkv66lbil0.apps.googleusercontent.com",
           "client_type": 3
         }
