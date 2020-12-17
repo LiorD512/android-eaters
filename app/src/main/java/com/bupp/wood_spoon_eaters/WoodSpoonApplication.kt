@@ -11,6 +11,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.segment.analytics.Analytics
 import com.uxcam.UXCam
 import io.branch.referral.Branch
 
@@ -65,6 +66,13 @@ class WoodSpoonApplication : Application() {
         if(BuildConfig.BUILD_TYPE.equals("release", true)) {
             Log.d("wowApplication","uxcam is on!")
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
+
+            val analytics: Analytics = Analytics.Builder(this@WoodSpoonApplication, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
+                .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
+                .recordScreenViews()
+                .build()
+
+            Analytics.setSingletonInstance(analytics)
         }
 
     }

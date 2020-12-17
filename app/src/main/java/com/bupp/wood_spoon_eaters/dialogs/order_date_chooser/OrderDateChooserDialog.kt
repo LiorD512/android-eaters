@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -89,10 +90,18 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
                     calStart.time = now
                 }
             }
-            openTimePicker(calStart, calEnd)
+            if(calStart.before(calEnd)){
+                openTimePicker(calStart, calEnd)
+            }else{
+                Toast.makeText(requireContext(), "Invalid Date selected", Toast.LENGTH_SHORT).show()
+            }
 //            dismiss()
         }else{
-            openDatePicker(calStart, calEnd)
+            if(calStart.before(calEnd)){
+                openTimePicker(calStart, calEnd)
+            }else{
+                Toast.makeText(requireContext(), "Invalid Date selected", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

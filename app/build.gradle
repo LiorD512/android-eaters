@@ -20,8 +20,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 35
-        versionName "1.4.3"
+        versionCode 36
+        versionName "1.4.4"
 //        multiDexEnabled true
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,7 +32,7 @@ android {
 
     buildTypes {
         release {
-//            debuggable false
+            debuggable false
             shrinkResources true
             minifyEnabled true
             useProguard true
@@ -132,6 +132,8 @@ dependencies {
     implementation 'com.facebook.android:facebook-core:5.15.3'
     implementation 'com.facebook.android:facebook-applinks:5.15.3'
     implementation 'com.android.installreferrer:installreferrer:2.1'
+
+    implementation 'com.segment.analytics.android:analytics:4.+'
 
     //location
     implementation 'com.google.android.gms:play-services-location:17.1.0'
