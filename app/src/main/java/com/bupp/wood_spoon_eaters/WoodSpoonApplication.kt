@@ -6,14 +6,14 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
+import com.segment.analytics.Analytics
+import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
+import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration
+import com.uxcam.UXCam
+import io.branch.referral.Branch
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.segment.analytics.Analytics
-import com.uxcam.UXCam
-import io.branch.referral.Branch
 
 
 class WoodSpoonApplication : Application() {
@@ -37,16 +37,13 @@ class WoodSpoonApplication : Application() {
 
 
         val conversionDataListener  = object : AppsFlyerConversionListener{
-            override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {
-                data?.let { cvData ->
-                    cvData.map {
-//                        Log.i("wowApplication", "conversion_attribute:  ${it.key} = ${it.value}")
-                    }
-                }
+
+            override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
+
             }
 
-            override fun onInstallConversionFailure(error: String?) {
-//                Log.e("wowApplication", "error onAttributionFailure :  $error")
+            override fun onConversionDataFail(p0: String?) {
+
             }
 
             override fun onAppOpenAttribution(data: MutableMap<String, String>?) {
@@ -61,15 +58,24 @@ class WoodSpoonApplication : Application() {
         }
 
         AppsFlyerLib.getInstance().init(devKey, conversionDataListener, applicationContext)
-        AppsFlyerLib.getInstance().startTracking(this)
+        AppsFlyerLib.getInstance().start(this)
 
         if(BuildConfig.BUILD_TYPE.equals("release", true)) {
-            Log.d("wowApplication","uxcam is on!")
+            Log.d("wowApplication", "uxcam is on!")
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
-
-            val analytics: Analytics = Analytics.Builder(this@WoodSpoonApplication, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
+            val analytics = Analytics.Builder(this@WoodSpoonApplication, "ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg") // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
                 .recordScreenViews()
+                .use(MixpanelIntegration.FACTORY)
+                .use(AppsflyerIntegration.FACTORY)
+                .build()
+            Analytics.setSingletonInstance(analytics)
+        }else{
+            val analytics = Analytics.Builder(this@WoodSpoonApplication, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
+                .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
+                .recordScreenViews()
+                .use(MixpanelIntegration.FACTORY)
+                .use(AppsflyerIntegration.FACTORY)
                 .build()
 
             Analytics.setSingletonInstance(analytics)

@@ -62,7 +62,7 @@ class MainViewModel(
         }
     }
 
-    fun requestLocationPermission(activity: Activity){
+    private fun requestLocationPermission(activity: Activity){
         permissionManager.requestPermission(
             activity,
             arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION),
@@ -82,7 +82,7 @@ class MainViewModel(
         return currentAddress
     }
 
-    fun getListOfAddresses(): ArrayList<Address>? {
+    private fun getListOfAddresses(): ArrayList<Address>? {
         if (eaterDataManager.currentEater != null) {
             return eaterDataManager.currentEater!!.addresses
         }
