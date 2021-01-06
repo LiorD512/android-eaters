@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:orientation="vertical">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/inputTitleViewMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
     <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <TextView
-                android:visibility="gone"
-                style="@style/SemiBold13Blue"
                 android:id="@+id/inputTitleViewSuffix"
+                style="@style/SemiBold13Blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="3.5dp"
                 android:layout_gravity="start"
-                android:text="*" />
+                android:layout_marginEnd="3.5dp"
+                android:text="*"
+                android:visibility="gone" />
 
         <TextView
-                style="@style/SemiBold13Dark"
                 android:id="@+id/inputTitleViewTitle"
+                style="@style/SemiBold13Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -32,46 +33,47 @@
                 tools:text="title" />
 
         <View
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
         <TextView
-                android:visibility="gone"
                 android:id="@+id/inputTitleViewCounter"
                 style="@style/SemiBold13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                tools:text="0/40"/>
+                android:visibility="gone"
+                tools:text="0/40" />
 
     </LinearLayout>
 
-    <FrameLayout
+    <EditText
+            android:id="@+id/inputTitleViewInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_input_view_input_bkg"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="0.2dp"
+            android:paddingHorizontal="15.4dp"
+            android:paddingVertical="13dp"
+            android:textColor="@color/dark"
+            android:textColorHint="@color/dark_50"
+            android:textCursorDrawable="@drawable/edit_text_cursor"
+            android:textSize="@dimen/input_title_defualt_text_size"
+            tools:hint="hint" />
 
-        <EditText
-                android:background="@drawable/title_input_view_input_bkg"
-                android:gravity="start"
-                android:textCursorDrawable="@drawable/edit_text_cursor"
-                android:id="@+id/inputTitleViewInput"
-                android:textColor="@color/dark"
-                android:textSize="13.4sp"
-                android:lineSpacingExtra="0.2dp"
-                android:paddingTop="13dp"
-                android:paddingBottom="13dp"
-                android:paddingLeft="15.4dp"
-                android:paddingRight="15.4dp"
-                tools:hint="hint"
-                android:textColorHint="@color/dark_50"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"/>
-
-
-    </FrameLayout>
-
+    <TextView
+            android:id="@+id/inputTitleViewInputError"
+            style="@style/Reg11Red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_code_error"
+            android:drawablePadding="5.4dp"
+            android:paddingTop="5.4dp"
+            android:visibility="invisible"
+            tools:text="custom error message" />
 
 
 </LinearLayout>

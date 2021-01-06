@@ -1,22 +1,16 @@
 package com.bupp.wood_spoon_eaters.dialogs
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
-import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
-import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RateLastOrderViewModel(private val api: ApiService,private val metaDataManager: MetaDataManager) : ViewModel() {
+class RateLastOrderViewModel(private val api: ApiService,private val metaDataRepository: MetaDataRepository) : ViewModel() {
 
     val getLastOrder: SingleLiveEvent<LastOrderEvent> = SingleLiveEvent()
     data class LastOrderEvent(val isSuccess: Boolean = false, val order: Order? = null)

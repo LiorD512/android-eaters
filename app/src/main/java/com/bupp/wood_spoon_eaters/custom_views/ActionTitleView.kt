@@ -53,8 +53,8 @@ class ActionTitleView : FrameLayout {
                 }
             }
 
-            if (a.hasValue(R.styleable.ActionTitleView_action)) {
-                type = a.getInt(R.styleable.ActionTitleView_action, -1)
+            if (a.hasValue(R.styleable.ActionTitleView_titleAction)) {
+                type = a.getInt(R.styleable.ActionTitleView_titleAction, -1)
             }
 
             val isWithLocation = a.getBoolean(R.styleable.ActionTitleView_isWithLocation, false)

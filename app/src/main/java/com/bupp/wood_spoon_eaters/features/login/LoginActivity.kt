@@ -3,59 +3,88 @@ package com.bupp.wood_spoon_eaters.features.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.features.login.code.CodeFragment
-import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationFragment
-import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeFragment
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
+
+    private val viewModel: LoginViewModel by viewModel<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         loginActHeaderView.setHeaderViewListener(this)
-        loadWelcomeFragment()
+
+        initObservers()
     }
 
-    private fun loadFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.beginTransaction()
-            .addToBackStack(tag)
-            .replace(R.id.loginActContainer, fragment)
-            .commit()
+    private fun initObservers() {
+        viewModel.navigationEvent.observe(this, Observer {
+            it?.let{
+                when(it.type){
+                    LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
+                        setHeaderView(getString(R.string.phone_verification_fragment_title))
+                        setTitleVisibility(View.VISIBLE)
+                        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+                    }
+                    LoginViewModel.NavigationEventType.OPEN_CODE_SCREEN -> {
+                        Utils.hideKeyBoard(this)
+                        setHeaderView(getString(R.string.code_fragment_title))
+                        setTitleVisibility(View.VISIBLE)
+                        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+                    }
+                    LoginViewModel.NavigationEventType.OPEN_SIGNUP_SCREEN -> {
+                        setHeaderView(getString(R.string.create_account_fragment_title))
+                        setTitleVisibility(View.VISIBLE)
+                        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+                    }
+                    LoginViewModel.NavigationEventType.CODE_RESENT -> {
+                        Toast.makeText(this, "Code sent!", Toast.LENGTH_SHORT).show()
+                    }
+                    LoginViewModel.NavigationEventType.OPEN_MAIN_ACT -> {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                }
+            }
+        })
+
+        viewModel.errorEvents.observe(this, Observer{
+            when(it){
+                LoginViewModel.ErrorEventType.INVALID_PHONE -> {
+                    WSErrorDialog(getString(R.string.login_error_wrong_phone), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+                LoginViewModel.ErrorEventType.WRONG_PASSWORD -> {
+                    WSErrorDialog(getString(R.string.login_error_wrong_code), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+                LoginViewModel.ErrorEventType.SERVER_ERROR -> {
+                    WSErrorDialog(getString(R.string.default_server_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+                LoginViewModel.ErrorEventType.SOMETHING_WENT_WRONG -> {
+                    WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+            }
+        })
+        viewModel.progressData.observe(this, Observer{
+            handlePb(it)
+        })
     }
 
-    fun loadWelcomeFragment() {
-        setTitleVisibility(View.GONE)
-        loadFragment(WelcomeFragment(), Constants.WELCOME_TAG)
-    }
-
-    fun loadCodeFragment(phoneNumber: String) {
-        setHeaderView(getString(R.string.code_fragment_title))
-        setTitleVisibility(View.VISIBLE)
-        loadFragment(CodeFragment(phoneNumber), Constants.CODE_TAG)
-    }
-
-    fun loadPhoneVerificationFragment() {
-        setHeaderView(getString(R.string.phone_verification_fragment_title))
-        setTitleVisibility(View.VISIBLE)
-        loadFragment(PhoneVerificationFragment(), Constants.PHONE_VERIFICATION_TAG)
-    }
-
-    private fun loadSignUpActivity() {
-        startActivity(Intent(this, SignUpActivity::class.java))
-        finish()
-    }
-
-    private fun setTitleVisibility(visibility: Int) {
+    fun setTitleVisibility(visibility: Int) {
         loginActHeaderView.visibility = visibility
     }
 
@@ -64,28 +93,12 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
         loginActHeaderView.isSkipable(false)
     }
 
-    fun loadMain() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
-
-    fun handlePb(shouldShow: Boolean) {
+    private fun handlePb(shouldShow: Boolean) {
         if (shouldShow) {
             loginActPb.show()
         } else {
             loginActPb.hide()
         }
-    }
-
-    fun onCodeSuccess() {
-        handlePb(false)
-        loadSignUpActivity()
-    }
-
-    fun onRegisteredUser() {
-        //return here after code verification and current user is after login
-        handlePb(false)
-        loadMain()
     }
 
     override fun onHeaderBackClick() {

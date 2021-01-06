@@ -3,19 +3,30 @@ package com.bupp.wood_spoon_eaters.managers
 import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.network.ApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MetaDataManager {
+class MetaDataRepository(private val apiService: ApiService) {
 
     private var metaDataObject: MetaDataModel = MetaDataModel(null, null)
 
 
+    suspend fun initMetaData() {
+        val result = withContext(Dispatchers.IO){
+            apiService.getMetaData().data
+        }
+        result?.let{
+            setMetaDataObject(it)
+        }
+    }
 
     fun setMetaDataObject(metaDataObject: MetaDataModel) {
         Log.d("wowMetaData","setMetaDataObject $metaDataObject")
         this.metaDataObject = metaDataObject
     }
 
-    fun getMetaDataObject(): MetaDataModel? {
+    private fun getMetaDataObject(): MetaDataModel? {
         return this.metaDataObject
     }
 
@@ -32,7 +43,7 @@ class MetaDataManager {
         }
         return arrayListOf()
     }
-//
+
     fun getDietaryList(): ArrayList<SelectableIcon> {
         if (getMetaDataObject()?.diets != null) {
             return metaDataObject?.diets as ArrayList<SelectableIcon>
@@ -125,15 +136,6 @@ class MetaDataManager {
         return ""
     }
 
-//    fun getDeliveryFeeStr(): String {
-//        for (settings in getSettings()){
-//            if(settings.key == "delivery_fee")
-//                return (settings.value!! as Price).formatedValue as String
-//        }
-//        return ""
-//    }
-//
-
     fun getMinOrderFeeStr(nationwide: Boolean): String {
         if(nationwide){
             for (settings in getSettings()){
@@ -149,7 +151,7 @@ class MetaDataManager {
         return ""
     }
 
-    fun getMinAndroidVersion():String?{
+    private fun getMinAndroidVersion():String?{
         for (settings in getSettings()){
             if(settings.key == "eaters_min_android_version")
                 return (settings.value!!) as String
@@ -171,7 +173,7 @@ class MetaDataManager {
         return true
     }
 
-    fun getNumberFromStr(str: String): Int {
+    private fun getNumberFromStr(str: String): Int {
         var versionNumber = 0
         val numParts = str.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (numParts.size > 0 && numParts.size <= 3) {
@@ -183,6 +185,7 @@ class MetaDataManager {
         }
         return versionNumber
     }
+
 
 
 }

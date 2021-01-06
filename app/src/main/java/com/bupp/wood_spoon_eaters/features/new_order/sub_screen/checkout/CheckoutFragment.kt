@@ -74,7 +74,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
          })
 
 
-        ordersViewModel.getStripeCustomerCards().observe(this, Observer { cardsEvent ->
+        ordersViewModel.getStripeCustomerCards(requireContext()).observe(this, Observer { cardsEvent ->
             Log.d("wowCheckoutFrag","getStripeCustomerCards()")
             if(cardsEvent != null){
                 handleCustomerCards(cardsEvent)
@@ -83,21 +83,21 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             }
         })
 
-        ordersViewModel.orderData.observe(this, Observer { orderData ->
+        ordersViewModel.orderData.observe(viewLifecycleOwner, Observer { orderData ->
             handleOrderDetails(orderData)
             checkoutFragTipPercntView.updateCurrentTip(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
             updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
         })
 
-        ordersViewModel.tipInDollars.observe(this, Observer { orderData ->
+        ordersViewModel.tipInDollars.observe(viewLifecycleOwner, Observer { orderData ->
             updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
         })
 
-        ordersViewModel.tipPercentage.observe(this, Observer { orderData ->
+        ordersViewModel.tipPercentage.observe(viewLifecycleOwner, Observer { orderData ->
             updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
         })
 
-        ordersViewModel.progressData.observe(this, Observer { shouldShow ->
+        ordersViewModel.progressData.observe(viewLifecycleOwner, Observer { shouldShow ->
             if(shouldShow){
                 checkoutFragPb.show()
             }else{

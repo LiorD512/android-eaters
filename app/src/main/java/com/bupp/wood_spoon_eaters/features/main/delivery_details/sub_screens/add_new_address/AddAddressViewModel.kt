@@ -134,27 +134,28 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     }
 
     private fun postEater(eater: EaterRequest) {
-        apiService.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
-            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-                if (response.isSuccessful) {
-                    Log.d("wowAddNewAddressVM", "on success! ")
-                    var eater = response.body()?.data!!
-                    eaterDataManager.currentEater = eater
-                    eaterDataManager.setLastChosenAddress(eater.addresses.last())
-//                    orderManager.updateOrder(orderAddress = eater.addresses[0])
-                    val address = eater.addresses.last()
-                    updateAddressEvent.postValue(NavigationEvent(true, address.streetLine1))
-                } else {
-                    Log.d("wowAddNewAddressVM", "on Failure! ")
-                    updateAddressEvent.postValue(NavigationEvent(false, null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-                Log.d("wowAddNewAddressVM", "on big Failure! " + t.message)
-                updateAddressEvent.postValue(NavigationEvent(false, null))
-            }
-        })
+        //todo - nyc change
+//        apiService.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
+//            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
+//                if (response.isSuccessful) {
+//                    Log.d("wowAddNewAddressVM", "on success! ")
+//                    var eater = response.body()?.data!!
+//                    eaterDataManager.currentEater = eater
+//                    eaterDataManager.setLastChosenAddress(eater.addresses.last())
+////                    orderManager.updateOrder(orderAddress = eater.addresses[0])
+//                    val address = eater.addresses.last()
+//                    updateAddressEvent.postValue(NavigationEvent(true, address.streetLine1))
+//                } else {
+//                    Log.d("wowAddNewAddressVM", "on Failure! ")
+//                    updateAddressEvent.postValue(NavigationEvent(false, null))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
+//                Log.d("wowAddNewAddressVM", "on big Failure! " + t.message)
+//                updateAddressEvent.postValue(NavigationEvent(false, null))
+//            }
+//        })
     }
 
     private fun parseGoogleResponse(googleAddress: GoogleAddressResponse, streetLine1: String, streetLine2: String, notes: String): AddressRequest {

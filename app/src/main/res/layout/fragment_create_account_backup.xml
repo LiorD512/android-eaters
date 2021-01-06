@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             android:background="@color/white"
+             tools:context=".features.login.create_account.CreateAccountFragment">
+
+    <ScrollView
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:layout_width="match_parent" android:layout_height="0dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                    android:paddingStart="15.4dp"
+                    android:paddingEnd="15.4dp"
+                    android:id="@+id/createAccountFragmentFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isMandatory="true"
+                    app:inputType="TEXT"
+                    app:hint="@string/create_account_fragment_full_name_hint"
+                    app:title="@string/create_account_fragment_full_name_title"
+                    app:error="Please enter your full name"
+                    android:layout_marginTop="22dp"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                    android:paddingStart="15.4dp"
+                    android:paddingEnd="15.4dp"
+                    android:id="@+id/createAccountFragmentEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:inputType="MAIL"
+                    app:isMandatory="true"
+                    app:hint="@string/create_account_fragment_email_hint"
+                    app:title="@string/create_account_fragment_email"
+                    app:error="Please enter your email"
+                    android:layout_marginTop="15.4dp"/>
+
+            <TextView
+                    style="@style/Reg13Dark_50"
+                    android:paddingStart="15.4dp"
+                    android:paddingEnd="15.4dp"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Let us know what your diet preferances are and we will make sure to show you dishes that suit your own taste"/>
+
+
+            <com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
+                    android:id="@+id/createAccountFragmentCookingGridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23.4dp"
+                    app:subTitle="Add one or more"
+                    app:title="Prefered Cooking Cuisines" />
+
+
+            <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
+                    android:id="@+id/createAccountFragmentDietaryGridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15.4dp"
+                    app:subTitle="Pick one or more"
+                    app:title="My Dietary" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+            android:id="@+id/createAccountFragmentNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:title="@string/create_account_fragment_next_btn"/>
+
+</LinearLayout>

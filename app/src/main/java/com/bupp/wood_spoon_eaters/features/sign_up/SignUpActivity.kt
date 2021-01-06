@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountFragment
+import com.bupp.wood_spoon_eaters.features.login.create_account.CreateAccountFragment
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.activity_sign_up.*
 

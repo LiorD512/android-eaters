@@ -25,11 +25,9 @@ import kotlinx.android.synthetic.main.activity_splash.*
 class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, LottieAnimationView.LottieAnimListener,
     WSErrorDialog.WSErrorListener {
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     private var cookId: String? = null
     private var menuItemId: String? = null
-    val viewModel: SplashViewModel by viewModel<SplashViewModel>()
+    val viewModel: SplashViewModel by viewModel()
 
     var isFinishLoading = false
 
@@ -37,20 +35,16 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        FirebaseAnalytics.getInstance(this)
 
         splashLottie.showDefaultAnimation(this)
 
         initObservers()
-//        initCampaignCallback()
-
-        Timer("SettingUp", false).schedule(1000) {
-            init()
-        }
+        init()
     }
 
     private fun init() {
-        viewModel.initServerCall() //init all data
+        viewModel.initAppSplashData(this)
     }
 
     override fun onAnimationEnd() {
@@ -62,29 +56,25 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, Observer { event ->
+        viewModel.splashEvent.observe(this, Observer { splashEvent ->
+            val event = splashEvent.getContentIfNotHandled()
             if (event != null) {
-                if (event.isSuccess) {
-                    // all data received
-                    if (event.shouldUpdateVersion) {
-                        openVersionUpdateDialog()
-                    } else if (event.isRegistered) {
+                if (event.shouldUpdateVersion) {
+                    openVersionUpdateDialog()
+                }else if(event.isUserExist){
+                    if(event.isUserRegistered){
                         isFinishLoading = true
-                    } else {
+                    }else{
                         redirectToCreateAccount()
                     }
-                } else {
-                    if (event.shouldUpdateVersion) {
-                        openVersionUpdateDialog()
-                    } else {
-                        redirectToWelcome()
-                    }
+                }else{
+                    redirectToWelcome()
                 }
-            } else {
+            }else {
                 redirectToWelcome()
-                //server fail
             }
         })
+
         viewModel.errorEvent.observe(this, Observer{
             if(it){
                 WSErrorDialog("Server error, please try again later", this).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
@@ -92,12 +82,11 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         })
     }
 
-
     override fun onWSErrorDone() {
         finishAffinity()
     }
 
-    override fun onUpdate(redirectUrl: String) {
+    override fun onUpdateApp(redirectUrl: String) {
         val appPackageName = packageName // getPackageName() from Context or Activity object
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl)))
@@ -117,9 +106,10 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
 
     private fun redirectToCreateAccount() {
-        Log.d("wowSplash", "redirectToCreateAccount")
-        startActivity(Intent(this, SignUpActivity::class.java))
-        finish()
+        //todo : di this agin
+//        Log.d("wowSplash", "redirectToCreateAccount")
+//        startActivity(Intent(this, SignUpActivity::class.java))
+//        finish()
     }
 
     private fun redirectToMain() {
@@ -141,8 +131,6 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
-
-
 
     public override fun onStart() {
         super.onStart()

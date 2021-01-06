@@ -1,7 +1,5 @@
-package com.bupp.wood_spoon_eaters.di.abs
+package com.bupp.wood_spoon_eaters.network.abs
 
-import android.os.Parcelable
-import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Pagination

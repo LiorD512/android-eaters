@@ -1,19 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.new_order
 
-import android.app.Activity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
-import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.OrderManager
-import com.bupp.wood_spoon_eaters.model.*
-import com.stripe.android.CustomerSession
-import com.stripe.android.PaymentConfiguration
 
-class NewOrderViewModel(val metaDataManager: MetaDataManager, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),
+class NewOrderViewModel(val metaDataRepository: MetaDataRepository, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
 
 //    var menuItemId: Long = -1

@@ -1,13 +1,12 @@
 package com.example.matthias.mvvmcustomviewexample.custom
 
 import android.util.Log
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +18,7 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
 
     val api: ApiService by inject()
     val eaterDataManager: EaterDataManager by inject()
-    val metaDataManager: MetaDataManager by inject()
+    val metaDataRepository: MetaDataRepository by inject()
     private var listener: FavoritesViewListener? = null
 
     interface FavoritesViewListener{

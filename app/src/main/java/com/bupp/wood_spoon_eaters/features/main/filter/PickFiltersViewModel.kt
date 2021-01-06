@@ -2,11 +2,11 @@ package com.bupp.wood_spoon_eaters.features.main.filter
 
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.SearchManager
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
-class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManager: SearchManager) : ViewModel(){
+class PickFiltersViewModel(val metaDataRepository: MetaDataRepository, val searchManager: SearchManager) : ViewModel(){
 
     data class RestoreDetailsEvent(val hasParmas: Boolean,
                                    val currentDiets: ArrayList<SelectableIcon>,
@@ -21,7 +21,7 @@ class PickFiltersViewModel(val metaDataManager: MetaDataManager, val searchManag
     }
 
     fun getDietaryList(): ArrayList<SelectableIcon>{
-        return metaDataManager.getDietaryList()
+        return metaDataRepository.getDietaryList()
     }
 
     fun updateSearchParams(

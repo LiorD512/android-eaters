@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.dialogs.web_docs
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.Review
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CookProfileViewModel(val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
+class CookProfileViewModel(val api: ApiService, val metaDataRepository: MetaDataRepository) : ViewModel() {
 
     data class GetReviewsEvent(val isSuccess: Boolean = false, val reviews: Review? = null)
     val getReviewsEvent: SingleLiveEvent<GetReviewsEvent> = SingleLiveEvent()

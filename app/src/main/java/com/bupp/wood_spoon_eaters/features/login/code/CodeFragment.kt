@@ -12,82 +12,59 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
+import com.bupp.wood_spoon_eaters.utils.text_watcher.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_code.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CodeFragment(val phoneNumber: String) : Fragment() {
+class CodeFragment() : Fragment(R.layout.fragment_code) {
 
-    private val viewModel: CodeViewModel by viewModel<CodeViewModel>()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_code, container, false)
-    }
+    private val viewModel: LoginViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initObservers()
         initUi()
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, Observer { navigationEvent ->
-            if (navigationEvent != null) {
-                (activity as LoginActivity).handlePb(false)
-                if (navigationEvent.isCodeLegit) {
-                    Log.d("wow", "code success")
-                    viewModel.updateMetaData()
-                    if(navigationEvent.isAfterLogin){
-                        (activity as LoginActivity).onRegisteredUser()
-                    }else{
-                        (activity as LoginActivity).onCodeSuccess()
-                    }
-                } else {
-                    Log.d("wow", "code fail")
-                    Toast.makeText(context, "Invalid code entered", Toast.LENGTH_LONG).show()
-                    codeFragNumPad.clearInput()
+        viewModel.errorEvents.observe(viewLifecycleOwner, Observer{
+            when(it){
+                LoginViewModel.ErrorEventType.CODE_EMPTY -> {
+                    codeFragInputError.visibility = View.VISIBLE
                 }
             }
         })
-
-        viewModel.resendCodeEvent.observe(this, Observer { resendCodeEvent: CodeViewModel.ResendCodeEvent ->
-            if (resendCodeEvent != null) {
-                (activity as LoginActivity).handlePb(false)
-                if (resendCodeEvent.hasSent) {
-                    Log.d("wowCode", "resend code success")
-                    Toast.makeText(context, "Code sent!", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.d("wowCode", "resend code fail")
-                }
-            }
-        })
-    }
-
-    private fun getCode(): String {
-        return codeFragNumPad.getInputText().text.toString()
+//        viewModel.resendCodeEvent.observe(viewLifecycleOwner, Observer { resendCodeEvent ->
+//            val event = resendCodeEvent.getContentIfNotHandled()
+//            event?.let{
+//                if (event.hasSent) {
+//                    Log.d("wowCode", "resend code success")
+//                    Toast.makeText(context, "Code sent!", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Log.d("wowCode", "resend code fail")
+//                }
+//            }
+//        })
     }
 
     private fun initUi() {
         val subtitle = resources.getString(R.string.code_fragment_sub_title)
-        codeFragSendNumber.text = "$subtitle $phoneNumber"
+        codeFragSendNumber.text = "$subtitle ${viewModel.phone}"
         codeFragInput.isEnabled = false
-        codeFragNext.setBtnEnabled(false)
         codeFragNext.setOnClickListener {
             if (codeFragNext.isEnabled) {
-                sendCode(getCode())
+                sendCode()
             }
         }
 
-        codeFragNumPad.inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
+        codeFragNumPad.inputEditText.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable) {
                 val codeString: String = s.toString()
+                codeFragInputError.visibility = View.INVISIBLE
+                viewModel.setUserCode(codeString)
                 if (codeString.length > 4) {
                     codeFragNumPad.getInputText().setText(codeString.substring(0, 4))
                     return
@@ -116,15 +93,12 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
                 if (codeString.length >= 4) {
                     codeFragInput4.text = codeString.substring(3, 4)
                     codeFragInput4Bkg.elevation = 18f
-                    codeFragNext.setBtnEnabled(true)
-                    sendCode(getCode())
+                    sendCode()
                 } else {
                     codeFragInput4.text = ""
-                    codeFragNext.setBtnEnabled(false)
                     codeFragInput4Bkg.elevation = 0f
                 }
             }
-
         })
 
         codeFragResendCode.setOnClickListener {
@@ -133,24 +107,11 @@ class CodeFragment(val phoneNumber: String) : Fragment() {
     }
 
     private fun resendCode() {
-        (activity as LoginActivity).handlePb(true)
-        viewModel.sendPhoneNumber(phoneNumber)
+        viewModel.resendCode()
     }
 
-    private fun sendCode(codeString: String) {
-        (activity as LoginActivity).handlePb(true)
-        viewModel.sendCode(phoneNumber, codeString)
+    private fun sendCode() {
+        viewModel.sendPhoneAndCodeNumber()
     }
-
-
-//        codeFragmentHelp.setOnClickListener { v ->
-//            Log.d("wow", "what is code dialog")
-////        var welcomeDialog : WelcomeDialog = WelcomeDialog()
-////            welcomeDialog.show(fragmentManager, "welcomeDialog")
-//            var businessDialog : BusinessCodeDialog = BusinessCodeDialog()
-//            businessDialog.show(fragmentManager, Constants.TAG_BUSINESS_DIALOG)
-//        }
-//    }
-
 
 }

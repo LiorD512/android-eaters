@@ -3,11 +3,13 @@ package com.bupp.wood_spoon_eaters.network
 import android.content.SharedPreferences
 import com.bupp.wood_spoon_eaters.FlavorConfig
 
-class ApiSettings(val sharedPreferences: SharedPreferences) {
+class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
-    val TOKEN_KEY = "token_key"
-    val REFRESH_TOKEN_KEY = "refresh_token_key"
-    val DEFAULT_TOKEN = FlavorConfig.CONSTANTS.DEFAULT_TOKEN
+    companion object{
+        const val TOKEN_KEY = "token_key"
+        const val REFRESH_TOKEN_KEY = "refresh_token_key"
+        const val DEFAULT_TOKEN = FlavorConfig.CONSTANTS.DEFAULT_TOKEN
+    }
 
     var token: String?
         get() = sharedPreferences.getString(TOKEN_KEY, DEFAULT_TOKEN)

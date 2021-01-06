@@ -4,8 +4,8 @@ import android.util.Log
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

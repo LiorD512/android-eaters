@@ -1,40 +1,31 @@
 package com.bupp.wood_spoon_eaters.features.login.verification
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
-import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.CompoundButton
-import android.widget.Toast
+import android.widget.RadioGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
-import com.bupp.wood_spoon_eaters.features.login.LoginActivity
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.utils.Constants
-import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_phone_verification.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class PhoneVerificationFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
+class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification), CompoundButton.OnCheckedChangeListener,
+    InputTitleView.InputTitleViewListener {
 
-    private var phoneEntered: Boolean = false
-    private var privacyPolicyCb: Boolean = false
-    private val viewModel: PhoneVerificationViewModel by viewModel<PhoneVerificationViewModel>()
-    private var phoneNumber: String = ""
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_phone_verification, container, false)
-    }
+    private val viewModel: LoginViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,7 +64,6 @@ class PhoneVerificationFragment : Fragment(), CompoundButton.OnCheckedChangeList
         ss.setSpan(clickableSpan, 42, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         ss.setSpan(clickableSpan2, 75, 89, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-
         verificationFragCbText.text = ss
         verificationFragCbText.movementMethod = LinkMovementMethod.getInstance()
         verificationFragCbText.highlightColor = Color.TRANSPARENT
@@ -84,74 +74,47 @@ class PhoneVerificationFragment : Fragment(), CompoundButton.OnCheckedChangeList
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        privacyPolicyCb = isChecked
-        verifyFields()
-    }
-
-    fun verifyFields(){
-        if(privacyPolicyCb && phoneEntered){
-            verificationFragmentNext.setBtnEnabled(true)
-        }else{
-            verificationFragmentNext.setBtnEnabled(false)
+        viewModel.setPhoneCb(isChecked)
+        if (isChecked) {
+            verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark))
         }
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, Observer { event ->
-            if (event.isSuccess) {
-                Utils.hideKeyBoard(activity!!)
-                Log.d("wow", "phoneVerification success")
-                verificationFragmentPb.hide()
-                (activity as LoginActivity).loadCodeFragment(phoneNumber)
-            } else {
-                Log.d("wow", "phoneVerification fail")
-                Toast.makeText(context, "Invalid phone number", Toast.LENGTH_LONG).show()
-                verificationFragmentPb.hide()
+        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer{
+            when(it){
+                LoginViewModel.ErrorEventType.PHONE_EMPTY -> {
+                    verificationFragmentInput.showError()
+                }
+            }
+        })
+        viewModel.phoneCbFieldErrorEvent.observe(viewLifecycleOwner, Observer{
+            when(it){
+                LoginViewModel.ErrorEventType.CB_REQUIRED -> {
+                    verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
+                }
             }
         })
     }
 
     private fun initUi() {
-        verificationFragmentNext.setBtnEnabled(false)
-
-        verificationFragmentInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val str: String = s.toString()
-                if (str.length > 0) {
-                    phoneEntered = true
-                    verifyFields()
-                } else {
-                    phoneEntered = false
-                }
-            }
-
-        })
-        verificationFragmentInput.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        verificationFragmentInput.setInputTitleViewListener(this)
 
         verificationFragmentNext.setOnClickListener {
             sendCode()
         }
-
-        verificationFragmentInput.onFocusChangeListener = OnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                verificationFragmentInputLayout.elevation = 18f
-            } else {
-                verificationFragmentInputLayout.elevation = 8f
-            }
-        }
     }
 
     private fun sendCode() {
-        phoneNumber = verificationFragmentInput.text.toString()
-        verificationFragmentPb.show()
-        viewModel.sendPhoneNumber(phoneNumber)
+        viewModel.sendPhoneNumber()
     }
+
+    override fun onInputTitleChange(str: String?) {
+        str?.let{
+            viewModel.setUserPhone(str)
+        }
+    }
+
 
 
 }

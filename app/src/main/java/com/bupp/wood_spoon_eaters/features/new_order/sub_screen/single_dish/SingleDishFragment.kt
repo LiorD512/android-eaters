@@ -113,7 +113,7 @@ class SingleDishFragment() : Fragment(),
     }
 
     private fun initObservers() {
-        ordersViewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
+        ordersViewModel.checkCartStatus.observe(viewLifecycleOwner, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
 //                updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = ordersViewModel.calcTotalDishesPrice())
                 ordersViewModel.getLastOrderDetails()
@@ -123,7 +123,7 @@ class SingleDishFragment() : Fragment(),
             }
         })
 
-        viewModel.fullDish.observe(this, Observer { fullDish ->
+        viewModel.fullDish.observe(viewLifecycleOwner, Observer { fullDish ->
             fullDish?.let{
                 initUi(it.fullDish, it.newSelectedDate)
                 checkForOpenOrder(it.fullDish)
@@ -131,7 +131,7 @@ class SingleDishFragment() : Fragment(),
             }
         })
 
-        viewModel.availability.observe(this, Observer { availabilityEvent ->
+        viewModel.availability.observe(viewLifecycleOwner, Observer { availabilityEvent ->
             availabilityEvent.startingTime?.let {
                 if (!availabilityEvent.isAvailable) {
                     handleUnAvailableCookingSlot(it)
@@ -143,15 +143,15 @@ class SingleDishFragment() : Fragment(),
 
         })
 
-        ordersViewModel.orderData.observe(this, Observer { orderDataEvent ->
+        ordersViewModel.orderData.observe(viewLifecycleOwner, Observer { orderDataEvent ->
             handleOrderData(orderDataEvent)
         })
 
-        ordersViewModel.orderRequestData.observe(this, Observer { orderRequestData ->
+        ordersViewModel.orderRequestData.observe(viewLifecycleOwner, Observer { orderRequestData ->
             handlerRequestOrderData(orderRequestData)
         })
 
-        viewModel.progressData.observe(this, Observer { shouldShow ->
+        viewModel.progressData.observe(viewLifecycleOwner, Observer { shouldShow ->
             if (shouldShow) {
                 singleDishPb.show()
             } else {
@@ -236,13 +236,13 @@ class SingleDishFragment() : Fragment(),
 //            TSnackbar.LENGTH_LONG
 //        )
 //        val snackBarView = snackbar.view
-//        snackBarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.teal_blue))
+//        snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
 //        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
 //        textView.setGravity(Gravity.CENTER_HORIZONTAL)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            textView.setTextAppearance(R.style.SemiBold13Dark)
 //        }
-//        textView.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+//        textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 //        snackbar.show()
 //    }
 
@@ -358,7 +358,7 @@ class SingleDishFragment() : Fragment(),
         singleDishPlusMinus.setViewEnabled(true)
         singleDishInfoCook.setUser(currentDish.cook)
         singleDishInfoCook.setUserImageViewListener(this)
-//        Glide.with(context!!).load(currentDish.thumbnail).into(singleDishInfoImg)
+//        Glide.with(requireContext()).load(currentDish.thumbnail).into(singleDishInfoImg)
         singleDishInfoFavorite.setIsFav(currentDish.isFavorite)
         singleDishInfoFavorite.setDishId(currentDish.id)
 
@@ -374,12 +374,12 @@ class SingleDishFragment() : Fragment(),
         singleDishInfoName.text = currentDish.name
         singleDishInfoCookName.text = "By ${currentDish.cook.getFullName()}"
         if (currentDish.cook.country != null) {
-            Glide.with(context!!).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
+            Glide.with(requireContext()).load(currentDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
 
         if (currentDish.cook?.diets?.size > 0) {
             singleDishInfoDietryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            val dietaryAdapter = CooksDietaryAdapter(context!!, currentDish.cook.diets)
+            val dietaryAdapter = CooksDietaryAdapter(requireContext(), currentDish.cook.diets)
             singleDishInfoDietryList.adapter = dietaryAdapter
         } else {
             singleDishInfoDietryList.visibility = View.GONE
@@ -500,7 +500,7 @@ class SingleDishFragment() : Fragment(),
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
         singleDishIngredientList.addItemDecoration(divider)
-        ingredientsAdapter = DishIngredientsAdapter(context!!, currentDish.dishIngredients)
+        ingredientsAdapter = DishIngredientsAdapter(requireContext(), currentDish.dishIngredients)
         singleDishIngredientList.adapter = ingredientsAdapter
     }
 
@@ -515,7 +515,7 @@ class SingleDishFragment() : Fragment(),
         var country = ""
         cook.country?.let {
             country = ", ${it.name}"
-            Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
+            Glide.with(requireContext()).load(it.flagUrl).into(cookProfileFragFlag)
         }
         cookProfileFragProfession.text = "$profession"// $country"
         cookProfileFragRating.text = cook.rating.toString()
@@ -553,9 +553,9 @@ class SingleDishFragment() : Fragment(),
         cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
 
         cookProfileFragDishList.layoutManager = LinearLayoutManager(context)
-        dishAdapter = CooksProfileDishesAdapter(context!!, cook.dishes, this)
+        dishAdapter = CooksProfileDishesAdapter(requireContext(), cook.dishes, this)
         cookProfileFragDishList.adapter = dishAdapter
-        val divider = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        val divider = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
         cookProfileFragDishList.addItemDecoration(divider)
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }

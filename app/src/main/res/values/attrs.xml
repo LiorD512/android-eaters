@@ -4,6 +4,19 @@
     <attr name="isMandatory" format="boolean"/>
     <attr name="hint" format="string"/>
     <attr name="subTitle" format="string"/>
+    <attr name="error" format="string"/>
+    <attr name="inputType" format="enum">
+        <enum name="TEXT" value="0"/>
+        <enum name="NUMBER" value="1"/>
+        <enum name="MAIL" value="2"/>
+        <enum name="LONG_TEXT" value="3"/>
+        <enum name="INPUT_TYPE_FULL_NAME" value="4"/>
+        <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
+        <enum name="INPUT_TYPE_DONE_BTN" value="6"/>
+        <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7"/>
+        <enum name="PHONE" value="8"/>
+
+    </attr>
 
     <declare-styleable name="HeaderViewAttrs">
         <attr name="type" format="enum">
@@ -39,18 +52,12 @@
         <attr name="title"/>
         <attr name="isMandatory"/>
         <attr name="hint"/>
+        <attr name="error"/>
         <attr name="lines" format="integer"/>
         <attr name="maxChar" format="integer"/>
-        <attr name="inputType" format="enum">
-            <enum name="TEXT" value="0"/>
-            <enum name="NUMBER" value="1"/>
-            <enum name="MAIL" value="2"/>
-            <enum name="LONG_TEXT" value="3"/>
-            <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
-            <enum name="INPUT_TYPE_DONE_BTN" value="6"/>
-            <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7"/>
-"
-        </attr>
+        <attr name="inputType"/>
+        <attr name="android:gravity" />
+        <attr name="android:textSize" />
     </declare-styleable>
 
     <declare-styleable name="IconsGridView">
@@ -67,8 +74,9 @@
         <attr name="title"/>
         <attr name="isMandatory"/>
         <attr name="hint"/>
+        <attr name="error"/>
         <attr name="isWithLocation" format="boolean"/>
-        <attr name="action" format="enum">
+        <attr name="titleAction" format="enum">
             <enum name="CALENDER" value="0"/>
             <enum name="NEW_INGREDIENT" value="1"/>
             <enum name="COUNTRY_CHOOSER" value="2"/>

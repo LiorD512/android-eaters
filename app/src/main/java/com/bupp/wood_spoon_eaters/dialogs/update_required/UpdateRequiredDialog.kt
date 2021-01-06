@@ -18,7 +18,7 @@ class UpdateRequiredDialog : DialogFragment() {
 
     val viewModel by viewModel<UpdateRequiredViewModel>()
     interface UpdateRequiredDialogListener {
-        fun onUpdate(url: String)
+        fun onUpdateApp(url: String)
     }
 
     private var listener: UpdateRequiredDialogListener? = null
@@ -51,7 +51,7 @@ class UpdateRequiredDialog : DialogFragment() {
             updateDialogBody.text = event.body
 
             updateDialogBtn.setOnClickListener {
-                listener?.onUpdate(event.redirectUrl)
+                listener?.onUpdateApp(event.redirectUrl)
             }
         })
     }

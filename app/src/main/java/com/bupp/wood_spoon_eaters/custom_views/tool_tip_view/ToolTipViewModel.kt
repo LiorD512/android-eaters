@@ -1,17 +1,17 @@
 package com.example.matthias.mvvmcustomviewexample.custom
 
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class ToolTipViewModel: KoinComponent{
 
     var isNationwide: Boolean = false
     val TAG = "ToolTipViewModelVM"
-    val metaDataManager: MetaDataManager by inject()
+    val metaDataRepository: MetaDataRepository by inject()
 
     fun getMinOrderFeeString(): String {
-        return metaDataManager.getMinOrderFeeStr(isNationwide)
+        return metaDataRepository.getMinOrderFeeStr(isNationwide)
     }
 
 }

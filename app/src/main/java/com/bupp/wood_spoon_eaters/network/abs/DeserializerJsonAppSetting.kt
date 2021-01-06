@@ -1,7 +1,6 @@
-package com.bupp.wood_spoon_eaters.di.abs
+package com.bupp.wood_spoon_eaters.network.abs
 
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.Constants
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

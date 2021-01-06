@@ -1,58 +1,55 @@
 package com.bupp.wood_spoon_eaters.managers
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.stripe.android.CustomerSession
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.StripeError
 import com.stripe.android.model.PaymentMethod
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class PaymentManager (val context: Context, val metaDataManager: MetaDataManager) : EphemeralKeyProvider.EphemeralKeyProviderListener {
+class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     var hasStripeInitialized: Boolean = false
 
-    fun initPaymentManager(){
-        initStripe()
+    suspend fun initPaymentManager(context: Context) {
+        withContext(Dispatchers.IO){
+            initStripe(context)
+        }
     }
 
-    fun initStripe() {
-        val key = metaDataManager.getStripePublishableKey()
-        Log.d("wowPaymentManager","initStripe key: $key")
-        key?.let{
+    private fun initStripe(context: Context) {
+        val key = metaDataRepository.getStripePublishableKey()
+        Log.d("wowPaymentManager", "initStripe key: $key")
+        key?.let {
             PaymentConfiguration.init(context, key)
             CustomerSession.initCustomerSession(context, EphemeralKeyProvider(this), false)
             hasStripeInitialized = true
-            getStripeCustomerCards()
+            getStripeCustomerCards(context)
         }
     }
 
     override fun onEphemeralKeyProviderError() {
         super.onEphemeralKeyProviderError()
-        Log.d("wowPaymentManager","initStripe failed")
+        Log.d("wowPaymentManager", "initStripe failed")
         hasStripeInitialized = false
     }
 
-//    override fun onEphemeralKeyProviderSuccess() {
-//        Log.d("wowPaymentManager","initStripe success")
-//
-//    }
 
     val payments = MutableLiveData<List<PaymentMethod>>()
-//    var paymentMethods: List<PaymentMethod>? = null
 
-    fun getStripeCustomerCards(): SingleLiveEvent<List<PaymentMethod>> {
+    fun getStripeCustomerCards(context: Context): SingleLiveEvent<List<PaymentMethod>> {
         val paymentsLiveData = SingleLiveEvent<List<PaymentMethod>>()
-        if(hasStripeInitialized){
-            if(payments.value != null){
+        if (hasStripeInitialized) {
+            if (payments.value != null) {
                 paymentsLiveData.postValue(payments.value)
-            }else{
+            } else {
                 CustomerSession.getInstance().getPaymentMethods(
                     PaymentMethod.Type.Card,
                     object : CustomerSession.PaymentMethodsRetrievalListener {
@@ -64,26 +61,19 @@ class PaymentManager (val context: Context, val metaDataManager: MetaDataManager
 
                         override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
                             Log.d("wowPaymentManager", "getStripeCustomerCards ERROR $errorMessage")
-
                         }
-
                     })
             }
-        }else{
-            initStripe()
+        } else {
+            initStripe(context)
         }
         return paymentsLiveData
-//        if (paymentMethods != null) {
-//            return paymentMethods!!
-//        } else {
-//
-//        }
     }
 
     fun getStripeCurrentPaymentMethod(): PaymentMethod? {
-        if(payments.value != null && payments.value!!.size > 0){
+        if (payments.value != null && payments.value!!.size > 0) {
             return payments.value!!.get(0)
-        }else{
+        } else {
             return null
         }
     }

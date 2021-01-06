@@ -62,6 +62,8 @@ class Constants {
         const val INPUT_TYPE_FULL_NAME = 4
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
         const val INPUT_TYPE_DONE_BTN = 6
+        const val INPUT_TYPE_PHONE = 8
+
 
 
         //Price Range View

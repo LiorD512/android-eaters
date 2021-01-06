@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.SearchManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager, val searchManager: SearchManager, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager) : ViewModel() {
+class SearchViewModel(val api: ApiService, val metaDataRepository: MetaDataRepository, val searchManager: SearchManager, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager) : ViewModel() {
 
     data class LikeEvent(val isSuccess: Boolean = false)
     val likeEvent: SingleLiveEvent<LikeEvent> = SingleLiveEvent()
@@ -42,7 +42,7 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
 
 
     fun getCuisineLabels(): ArrayList<CuisineLabel> {
-        return metaDataManager.getCuisineList()
+        return metaDataRepository.getCuisineList()
     }
 
     fun search(str: String) {

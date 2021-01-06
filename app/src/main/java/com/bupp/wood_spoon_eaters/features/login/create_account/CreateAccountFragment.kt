@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.sign_up.create_account
+package com.bupp.wood_spoon_eaters.features.login.create_account
 
 import android.os.Bundle
 import android.util.Log
@@ -11,37 +11,39 @@ import com.bupp.wood_spoon.dialogs.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.fragment_create_account.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener, EmptyIconsGridView.OnItemSelectedListener,
+class CreateAccountFragment : Fragment(R.layout.fragment_create_account), EmptyIconsGridView.OnItemSelectedListener,
     CuisinesChooserDialog.CuisinesChooserListener {
 
 
-    val viewModel by viewModel<CreateAccountViewModel>()
+    val viewModel by sharedViewModel<LoginViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_create_account, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        createAccountFragmentNext.setOnClickListener {updateEater()}
+        initUi()
+        initObservers()
 
-        createAccountFragmentEmail.setInputTitleViewListener(this)
-        createAccountFragmentFullName.setInputTitleViewListener(this)
+    }
+
+    private fun initUi() {
+        createAccountFragmentNext.setOnClickListener {updateEater()}
 
         createAccountFragmentCookingGridView.setListener(this)
         createAccountFragmentDietaryGridView.initIconsGrid(viewModel.getDietaryList(), Constants.MULTI_SELECTION)
+    }
 
-        createAccountFragmentNext.setBtnEnabled(false)
-
-        viewModel.navigationEvent.observe(this, Observer { navigationEvent ->
+    private fun initObservers() {
+        /*viewModel.navigationEvent.observe(this, Observer { navigationEvent ->
             if (navigationEvent != null) {
                 (activity as SignUpActivity).hidePb()
                 if(navigationEvent.isSuccess){
@@ -50,26 +52,22 @@ class CreateAccountFragment : Fragment(), InputTitleView.InputTitleViewListener,
                     Log.d("wowAccount","failed api")
                 }
             }
-        })
+        })*/
     }
 
     private fun updateEater() {
-        (activity as SignUpActivity).showPb()
-        viewModel.updateClientAccount(createAccountFragmentFullName.getText(), createAccountFragmentEmail.getText(),
-            createAccountFragmentCookingGridView.getSelectedCuisines(), createAccountFragmentDietaryGridView.getSelectedItems())
-    }
-
-    private fun checkValidation() {
-        if (createAccountFragmentFullName.isValid() && createAccountFragmentEmail.isValid()) {
-            createAccountFragmentNext.setBtnEnabled(true)
-        } else {
-            createAccountFragmentNext.setBtnEnabled(false)
+        val fullName = createAccountFragmentFullName.getText()
+        val email = createAccountFragmentEmail.getText()
+        if(fullName.isEmpty()){
+            createAccountFragmentFullName.showError()
         }
-
-    }
-
-    override fun onInputTitleChange(str: String?) {
-        checkValidation()
+        if(email.isEmpty()){
+            createAccountFragmentEmail.showError()
+        }
+        if(fullName.isNotEmpty() && email.isNotEmpty()){
+            viewModel.updateClientAccount(requireContext(), fullName, email, createAccountFragmentCookingGridView.getSelectedCuisines(),
+                createAccountFragmentDietaryGridView.getSelectedItems())
+        }
     }
 
     override fun OnEmptyItemSelected() {

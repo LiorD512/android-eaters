@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/on_boarding_nav"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome">
+        <action
+                android:id="@+id/action_welcomeFragment_to_phoneVerificationFragment"
+                app:destination="@id/phoneVerificationFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/welcomeFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/codeFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.login.code.CodeFragment"
+            tools:layout="@layout/fragment_code"
+            android:label="CodeFragment">
+        <action
+                android:id="@+id/action_codeFragment_to_createAccountFragment"
+                app:destination="@id/createAccountFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/codeFragment"/>
+    </fragment>
+    <fragment
+            tools:layout="@layout/fragment_phone_verification"
+            android:id="@+id/phoneVerificationFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationFragment"
+            android:label="PhoneVerificationFragment">
+        <action
+                android:id="@+id/action_phoneVerificationFragment_to_codeFragment"
+                app:destination="@id/codeFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/phoneVerificationFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/createAccountFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.login.create_account.CreateAccountFragment"
+            tools:layout="@layout/fragment_create_account"
+            android:label="CreateAccountFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/CodeFragment"/>
+
+
+</navigation>

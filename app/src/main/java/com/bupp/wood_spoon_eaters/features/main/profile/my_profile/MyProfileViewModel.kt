@@ -3,36 +3,22 @@ package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.lifecycle.ViewModel;
-import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
-import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
-import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Utils
-import com.stripe.android.CustomerSession
-import com.stripe.android.PaymentConfiguration
-import com.stripe.android.StripeError
 import com.stripe.android.model.PaymentMethod
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
-import java.util.concurrent.TimeUnit
 
-class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager
+class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
                          , val paymentManager: PaymentManager) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -89,21 +75,22 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
     }
 
     private fun postClient(eater: EaterRequest) {
-        api.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
-            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-                if (response.isSuccessful) {
-                    Log.d("wowCreateAccountVM", "on success! ")
-                    eaterDataManager.currentEater = response.body()?.data!!
-                } else {
-                    Log.d("wowCreateAccountVM", "on Failure! ")
-                }
-
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-                Log.d("wowCreateAccountVM", "on big Failure! " + t.message)
-            }
-        })
+        //todo - nyc change
+//        api.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
+//            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
+//                if (response.isSuccessful) {
+//                    Log.d("wowCreateAccountVM", "on success! ")
+//                    eaterDataManager.currentEater = response.body()?.data!!
+//                } else {
+//                    Log.d("wowCreateAccountVM", "on Failure! ")
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
+//                Log.d("wowCreateAccountVM", "on big Failure! " + t.message)
+//            }
+//        })
     }
 
     fun getDeliveryAddress(): String {
@@ -127,20 +114,9 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
 
     val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
     data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
-    fun getStripeCustomerCards(){
-        val paymentMethod = paymentManager.getStripeCustomerCards()
+    fun getStripeCustomerCards(context: Context){
+        val paymentMethod = paymentManager.getStripeCustomerCards(context)
         getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethod.value))
-//        CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,
-//            object : CustomerSession.PaymentMethodsRetrievalListener {
-//                override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-//                    Log.d("wowProfileVM","getStripeCustomerCards $paymentMethods")
-//                }
-//
-//                override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-//                    Log.d("wowProfileVM","getStripeCustomerCards ERROR $errorMessage")
-//                    getStripeCustomerCards.postValue(StripeCustomerCardsEvent(false))
-//                }
-//            })
     }
 
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
@@ -154,11 +130,11 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
     }
 
     fun getCuisineList(): ArrayList<SelectableIcon> {
-        return metaDataManager.getCuisineListSelectableIcons()
+        return metaDataRepository.getCuisineListSelectableIcons()
     }
 
     fun getDietaryList(): ArrayList<SelectableIcon> {
-        return metaDataManager.getDietaryList()
+        return metaDataRepository.getDietaryList()
     }
 
 

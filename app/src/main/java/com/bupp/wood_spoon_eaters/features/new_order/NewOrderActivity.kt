@@ -92,7 +92,7 @@ class NewOrderActivity : AppCompatActivity(), SingleDishFragment.SingleDishDialo
     }
 
     fun startPaymentMethodActivity() {
-        PaymentMethodsActivityStarter(this).startForResult()
+        PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

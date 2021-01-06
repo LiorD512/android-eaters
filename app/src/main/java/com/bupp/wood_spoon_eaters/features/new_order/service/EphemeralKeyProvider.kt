@@ -10,8 +10,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import java.io.IOException
 
 class EphemeralKeyProvider(val listener: EphemeralKeyProviderListener) : EphemeralKeyProvider, KoinComponent {

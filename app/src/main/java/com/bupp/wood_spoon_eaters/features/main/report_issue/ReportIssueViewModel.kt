@@ -3,8 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.report_issue
 import android.util.Log
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
-import com.bupp.wood_spoon_eaters.model.ReportRequest
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.ReportTopic
 import com.bupp.wood_spoon_eaters.model.Reports
 import com.bupp.wood_spoon_eaters.model.ServerResponse
@@ -13,10 +12,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ReportIssueViewModel(val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
+class ReportIssueViewModel(val api: ApiService, val metaDataRepository: MetaDataRepository) : ViewModel() {
 
     fun getReportTopics(): ArrayList<ReportTopic> {
-        return metaDataManager.getReportTopics()
+        return metaDataRepository.getReportTopics()
     }
 
     val postReport: SingleLiveEvent<PostReport> = SingleLiveEvent()

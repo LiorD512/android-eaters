@@ -8,4 +8,5 @@
     <dimen name="dish_padding">15.4dp</dimen>
     <dimen name="shadow_elevation">8dp</dimen>
     <dimen name="default_corner_radius">6.9dp</dimen>
+    <dimen name="input_title_defualt_text_size">13.4sp</dimen>
 </resources>

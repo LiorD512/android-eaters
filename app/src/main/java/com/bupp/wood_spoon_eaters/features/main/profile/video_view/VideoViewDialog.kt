@@ -52,9 +52,9 @@ class VideoViewDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderViewL
         videoViewHeaderView.setTitle("Story by ${cook.getFullName()}")
 
         Log.d("wowVideoView","video url: ${cook.video}")
-        player = ExoPlayerFactory.newSimpleInstance(context)
+        player = ExoPlayerFactory.newSimpleInstance(requireContext())
         videoView.setPlayer(player)
-        val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "WoodSpoonEaters"))
+        val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(requireContext(), "WoodSpoonEaters"))
         val uri = Uri.parse(cook.video)
         val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
         player?.prepare(videoSource)

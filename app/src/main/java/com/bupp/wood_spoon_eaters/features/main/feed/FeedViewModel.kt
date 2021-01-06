@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataManager: MetaDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
+class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
     private val TAG = "wowFeedVM"

@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -49,6 +50,7 @@ import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
+import com.stripe.android.view.AddPaymentMethodActivityStarter
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -75,6 +77,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Log.d("wowMain","wowMainnnn")
 
         AppCenter.start(
             application, "1995d4eb-7e59-44b8-8832-6550bd7752ff",
@@ -598,8 +602,15 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun startPaymentMethodActivity() {
-        PaymentMethodsActivityStarter(this).startForResult()
+        PaymentMethodsActivityStarter(this).startForResult(
+            PaymentMethodsActivityStarter.Args.Builder()
+                .build()
+        )
     }
+
+//    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -726,13 +737,15 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onResume() {
         super.onResume()
         checkForActiveOrder()
-        checkIfMemoryCleaned()
+//        checkIfMemoryCleaned() //check if this is nesseracy. ny code
     }
 
     private fun checkIfMemoryCleaned() {
         //this method belongs to Android 7 and below.. when garbadge collector cleaned the apps memory
-        Log.d("wowMainAct","checkIfMemoryCleaned()")
-        viewModel.checkIfMemoryCleaned()
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP){
+            Log.d("wowMainAct","checkIfMemoryCleaned()")
+            viewModel.checkIfMemoryCleaned()
+        }
     }
 
     override fun onStart() {

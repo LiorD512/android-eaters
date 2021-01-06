@@ -278,7 +278,7 @@ class MainViewModel(
             Log.d("wowMainVM", "init start")
             var serverCallMap = mutableMapOf<Int, Observable<*>>()
             serverCallMap.put(0, api.postCampaignReferrals(sid, cid))
-            serverCallMap.put(1, api.getMe())
+//            serverCallMap.put(1, api.getMe()) //restore this ny.
             val requests = ArrayList<Observable<*>>()
             for (call in serverCallMap) {
                 requests.add(call.value)

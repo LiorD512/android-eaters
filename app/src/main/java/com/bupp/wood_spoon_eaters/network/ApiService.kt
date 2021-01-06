@@ -4,6 +4,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -12,11 +13,11 @@ interface ApiService {
     //Login end-points
     @FormUrlEncoded
     @POST("eaters/auth/get_code")
-    fun getCode(@Field("phone_number") phone: String): Call<Void>
+    suspend fun getCode(@Field("phone_number") phone: String): ServerResponse<Void>
 
     @FormUrlEncoded
     @POST("eaters/auth/validate_code")
-    fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): Call<ServerResponse<Eater>>
+    suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
@@ -27,11 +28,14 @@ interface ApiService {
 
 
     //General
-    @GET("eaters/utils/meta")
-    fun getMetaData(): Observable<ServerResponse<MetaDataModel>>
+//    @GET("eaters/utils/meta")
+//    fun getMetaData(): Observable<ServerResponse<MetaDataModel>>
 
     @GET("eaters/utils/meta")
     fun getMetaDataCall(): Call<ServerResponse<MetaDataModel>>
+
+    @GET("eaters/utils/meta")
+    suspend fun getMetaData(): ServerResponse<MetaDataModel>
 
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
@@ -62,13 +66,13 @@ interface ApiService {
 
     //Eater
     @GET("eaters/me")
-    fun getMe(): Observable<ServerResponse<Eater>>
+    suspend fun getMe(): ServerResponse<Eater>
 
     @GET("eaters/me")
     fun getMeCall(): Call<ServerResponse<Eater>>
 
     @POST("eaters/me")
-    fun postMe(@Body eater: EaterRequest): Call<ServerResponse<Eater>>
+    fun postMe(@Body eater: EaterRequest): ServerResponse<Eater>
 
     @POST("eaters/me")
     fun postDeviceDetails(@Body device: DeviceDetails): Call<ServerResponse<Void>>

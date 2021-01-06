@@ -34,7 +34,6 @@ class LottieAnimationView : FrameLayout {
                 }
             a.recycle()
         }
-//        showDefaultAnimation()
     }
 
     fun showDefaultAnimation(listener: LottieAnimListener) {
@@ -43,7 +42,7 @@ class LottieAnimationView : FrameLayout {
         lottieAnimationView.playAnimation()
 
         Handler().postDelayed({
-            Log.d("wowLottie","onAnimationEnd")
+//            Log.d("wowLottie","onAnimationEnd")
             lottieAnimationView.pauseAnimation()
             listener.onAnimationEnd()
         }, 3200)
@@ -69,12 +68,12 @@ class LottieAnimationView : FrameLayout {
     }
 
     fun rollAnimation(){
-        Log.d("wowLottie","rollAnimation: isAnimationg: ${lottieAnimationView.isAnimating}")
+//        Log.d("wowLottie","rollAnimation: isAnimationg: ${lottieAnimationView.isAnimating}")
         if(!lottieAnimationView.isAnimating){
             lottieAnimationView.playAnimation()
 
             Handler().postDelayed({
-                Log.d("wowLottie","onAnimationEnd")
+//                Log.d("wowLottie","onAnimationEnd")
                 lottieAnimationView.pauseAnimation()
                 listener.onAnimationEnd()
             }, 3200)

@@ -1,12 +1,16 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +20,10 @@ import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.text_watcher.SimpleTextWatcher
 import kotlinx.android.synthetic.main.input_title_view.view.*
+import render.animations.Attention
+import render.animations.Render
 
 
 class InputTitleView : FrameLayout {
@@ -40,8 +47,8 @@ class InputTitleView : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.input_title_view, this, true)
 
-        if (attrs != null) {
-            val a = context.obtainStyledAttributes(attrs, R.styleable.InputTitleView)
+        attrs?.let{
+            val a = context.obtainStyledAttributes(it, R.styleable.InputTitleView)
             if (a.hasValue(R.styleable.InputTitleView_title)) {
                 isMandatory = a.getBoolean(R.styleable.InputTitleView_isMandatory, false)
                 val title = a.getString(R.styleable.InputTitleView_title)
@@ -71,6 +78,14 @@ class InputTitleView : FrameLayout {
                 }
             }
 
+            val textGravity = a.getInteger(R.styleable.InputTitleView_android_gravity, Gravity.START)
+            inputTitleViewInput.gravity = textGravity
+
+            val textSize = a.getDimension(R.styleable.InputTitleView_android_textSize, -1f)
+            if(textSize > -1){
+                inputTitleViewInput.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.toSp(textSize.toInt()).toFloat())
+            }
+
             val maxChar = a.getInt(R.styleable.InputTitleView_maxChar, -1)
             //limit edit text length
             if (maxChar != -1) {
@@ -91,9 +106,18 @@ class InputTitleView : FrameLayout {
                 }
             }
 
+            if (a.hasValue(R.styleable.InputTitleView_error)) {
+                val error = a.getString(R.styleable.InputTitleView_error)
+                inputTitleViewInputError.text = error
+            }
+
             if (a.hasValue(R.styleable.InputTitleView_inputType)) {
                 inputType = a.getInt(R.styleable.InputTitleView_inputType, Constants.INPUT_TYPE_TEXT)
                 when (inputType) {
+                    Constants.INPUT_TYPE_FULL_NAME -> {
+                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+                        inputTitleViewTitle.visibility = VISIBLE
+                    }
                     Constants.INPUT_TYPE_TEXT -> {
                         inputTitleViewInput.inputType = InputType.TYPE_CLASS_TEXT
                         inputTitleViewTitle.visibility = VISIBLE
@@ -120,32 +144,27 @@ class InputTitleView : FrameLayout {
                     }
                     Constants.INPUT_TYPE_DONE_BTN -> {
                         inputTitleViewInput.imeOptions = EditorInfo.IME_ACTION_DONE
-                        inputTitleViewInput.setSingleLine(true)
+                        inputTitleViewInput.isSingleLine = true
                     }
-
+                    Constants.INPUT_TYPE_PHONE -> {
+                        inputTitleViewInput.inputType = InputType.TYPE_CLASS_PHONE
+                        inputTitleViewInput.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+                    }
                 }
             }
 
-            inputTitleViewInput.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
+            inputTitleViewInput.addTextChangedListener(object : SimpleTextWatcher() {
+                @SuppressLint("SetTextI18n")
+                override fun afterTextChanged(s: Editable) {
                     if (maxChar != -1) {
-                        inputTitleViewCounter.text = (s!!.length.toString()) + "/" + maxChar
+                        inputTitleViewCounter.text = (s.length.toString()) + "/" + maxChar
                     }
-
                     listener?.onInputTitleChange(s.toString())
+                    hideError()
                 }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-
             })
 
             a.recycle()
-
-//            Log.d("wowInputTitle", "lines: $lines, size: $size")
         }
     }
 
@@ -171,6 +190,19 @@ class InputTitleView : FrameLayout {
         } else {
             getText().isNotEmpty()
         }
+    }
+
+    fun showError() {
+        inputTitleViewInputError.visibility = View.VISIBLE
+
+        val render = Render(context)
+        render.setDuration(450)
+        render.setAnimation(Attention().Swing(inputTitleViewInput))
+        render.start()
+    }
+
+    fun hideError() {
+        inputTitleViewInputError.visibility = View.GONE
     }
 
 }

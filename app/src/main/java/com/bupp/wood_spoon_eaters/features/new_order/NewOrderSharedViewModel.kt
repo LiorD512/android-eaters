@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.new_order
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
@@ -21,7 +22,7 @@ import kotlin.collections.ArrayList
 
 class NewOrderSharedViewModel(
     val apiService: ApiService,
-    val metaDataManager: MetaDataManager,
+    val metaDataRepository: MetaDataRepository,
     val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager,
     val eventsManager: EventsManager,
@@ -524,8 +525,8 @@ class NewOrderSharedViewModel(
 
     data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
 
-    fun getStripeCustomerCards(): SingleLiveEvent<List<PaymentMethod>> {
-        return paymentManager.getStripeCustomerCards()
+    fun getStripeCustomerCards(context: Context): SingleLiveEvent<List<PaymentMethod>> {
+        return paymentManager.getStripeCustomerCards(context)
     }
 
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {

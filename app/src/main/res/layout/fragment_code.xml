@@ -157,6 +157,18 @@
 
         </FrameLayout>
 
+        <TextView
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:paddingTop="5.4dp"
+                android:text="We still need the code we sent you"
+                style="@style/Reg11Red"
+                android:drawablePadding="5.4dp"
+                android:id="@+id/codeFragInputError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableStartCompat="@drawable/ic_code_error" />
+
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

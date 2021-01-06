@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.di
 
+import com.bupp.wood_spoon_eaters.data.UserRepository
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserViewModel
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
@@ -11,9 +12,7 @@ import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserViewModel
 import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
-import com.bupp.wood_spoon_eaters.features.login.code.CodeViewModel
-import com.bupp.wood_spoon_eaters.features.login.verification.PhoneVerificationViewModel
-import com.bupp.wood_spoon_eaters.features.login.welcome.WelcomeViewModel
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsViewModel
@@ -32,12 +31,11 @@ import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
-import com.bupp.wood_spoon_eaters.features.sign_up.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
+import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
 import com.bupp.wood_spoon_eaters.repositories.SingleDishRepository
 import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.example.matthias.mvvmcustomviewexample.custom.ToolTipViewModel
 //import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 
@@ -46,15 +44,19 @@ import org.koin.dsl.module
 
 val appModule = module {
 
+    //repos
+    single { RepositoryImpl(get()) }
+    single { UserRepository(get(), get()) }
+
     single { AppSettings(get()) }
     single { OrderManager(get(), get()) }
     single { LocationManager(get(), get()) }
-    single { MetaDataManager() }
+    single { MetaDataRepository(get()) }
     single { EventsManager(get(), get()) }
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }
-    single { PaymentManager(get(), get()) }
+    single { PaymentManager(get()) }
 
     single { SingleDishRepository(get(), get()) }
 
@@ -67,12 +69,7 @@ val appModule = module {
     viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
 
     //login
-    viewModel { WelcomeViewModel(get()) }
-    viewModel { CodeViewModel(get(), get(), get(), get(), get()) }
-    viewModel { PhoneVerificationViewModel(get()) }
-
-    //sign up
-    viewModel { CreateAccountViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }

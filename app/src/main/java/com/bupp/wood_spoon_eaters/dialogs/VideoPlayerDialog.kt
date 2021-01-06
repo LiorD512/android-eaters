@@ -37,7 +37,7 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.video_player_dialog, null)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -46,10 +46,10 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
 
         videoPlayerHeaderView.setHeaderViewListener(this)
 
-        player = ExoPlayerFactory.newSimpleInstance(context)
+        player = ExoPlayerFactory.newSimpleInstance(requireContext())
         videoPlayer.setPlayer(player)
 
-        val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "XRHealth"))
+        val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(requireContext(), "XRHealth"))
         val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
         player?.prepare(videoSource)
         player?.playWhenReady = true

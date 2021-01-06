@@ -62,7 +62,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
         myProfileFragPb.show()
         viewModel.initStripe((activity as MainActivity))
         viewModel.getUserDetails()
-        viewModel.getStripeCustomerCards()
+        viewModel.getStripeCustomerCards(requireContext())
         myProfileFragFavorites.initFavorites()
 
         myProfileFragCuisineIcons.setListener(this)

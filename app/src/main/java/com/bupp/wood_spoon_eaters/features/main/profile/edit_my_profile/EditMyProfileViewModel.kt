@@ -74,24 +74,25 @@ class EditMyProfileViewModel(val apiService: ApiService, val eaterDataManager: E
     }
 
     private fun postMe() {
-        apiService.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
-            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-                if (response.isSuccessful) {
-                    Log.d(TAG, "on success! ")
-                    var eater = response.body()?.data!!
-                    eaterDataManager.currentEater = eater
-                    navigationEvent.postValue(NavigationEvent(true))
-                } else {
-                    Log.d(TAG, "on Failure! ")
-                    navigationEvent.postValue(NavigationEvent(false))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-                Log.d(TAG, "on big Failure! " + t.message)
-                navigationEvent.postValue(NavigationEvent(false))
-            }
-        })
+        //todo - nyc change
+//        apiService.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
+//            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
+//                if (response.isSuccessful) {
+//                    Log.d(TAG, "on success! ")
+//                    var eater = response.body()?.data!!
+//                    eaterDataManager.currentEater = eater
+//                    navigationEvent.postValue(NavigationEvent(true))
+//                } else {
+//                    Log.d(TAG, "on Failure! ")
+//                    navigationEvent.postValue(NavigationEvent(false))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
+//                Log.d(TAG, "on big Failure! " + t.message)
+//                navigationEvent.postValue(NavigationEvent(false))
+//            }
+//        })
     }
 
     private fun startPictureUploading(){

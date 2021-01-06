@@ -1,84 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            android:id="@+id/verificationFragmentInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:paddingHorizontal="15.4dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="15.4sp"
+            app:error="@string/phone_verification_fragment_phone_error"
+            app:hint="@string/phone_verification_fragment_phone_hint"
+            app:inputType="PHONE" />
+
+    <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65.3dp"
+            android:layout_marginRight="7.7dp"
+            android:layout_marginBottom="23dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
-                android:elevation="8dp"
-                android:id="@+id/verificationFragmentInputLayout"
-                android:layout_marginTop="40dp"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginEnd="15.4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <EditText
-                    android:background="@drawable/title_input_view_input_bkg"
-                    android:id="@+id/verificationFragmentInput"
-                    android:inputType="phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/phone_verification_fragment_phone_hint"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:gravity="center"/>
-
-        </androidx.cardview.widget.CardView>
-
-        <View
-                android:layout_weight="1"
-                android:layout_width="1dp"
-                android:layout_height="0dp"/>
-
-        <LinearLayout
-                android:gravity="center"
+        <CheckBox
+                android:id="@+id/verificationFragPrivacyPolicyCb"
+                style="@style/Reg13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8.6dp"
                 android:layout_marginRight="7.7dp"
-                android:layout_marginTop="65.3dp"
-                android:layout_marginBottom="23dp"
-                android:orientation="horizontal"
+                android:button="@drawable/checkbox_selector"
+                android:paddingLeft="7.2dp"
+                android:text="" />
+
+        <TextView
+                android:id="@+id/verificationFragCbText"
+                style="@style/Reg13Dark"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <CheckBox
-                    android:layout_marginRight="7.7dp"
-                    android:id="@+id/verificationFragPrivacyPolicyCb"
-                    style="@style/Reg13Dark"
-                    android:text=""
-                    android:paddingLeft="7.2dp"
-                    android:layout_marginLeft="8.6dp"
-                    android:button="@drawable/checkbox_selector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            <TextView
-                    style="@style/Reg13Dark"
-                    android:gravity="left"
-                    android:id="@+id/verificationFragCbText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
-                app:title="@string/phone_verification_fragment_next_btn"
-                android:layout_gravity="center"
-                android:id="@+id/verificationFragmentNext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:gravity="left" />
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-            android:id="@+id/verificationFragmentPb"
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+            android:id="@+id/verificationFragmentNext"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:title="@string/phone_verification_fragment_next_btn" />
 
-</FrameLayout>
+</LinearLayout>
+

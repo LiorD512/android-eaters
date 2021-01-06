@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -17,7 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
 
-class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiService: ApiService, val metaDataManager: MetaDataManager, val orderManager: OrderManager): ViewModel() {
+class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiService: ApiService, val metaDataRepository: MetaDataRepository, val orderManager: OrderManager): ViewModel() {
 
     private var hasActiveOrder: Boolean = false
     private var hasPendingOrder: Boolean = false

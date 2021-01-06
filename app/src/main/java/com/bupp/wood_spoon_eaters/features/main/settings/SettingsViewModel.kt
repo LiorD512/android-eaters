@@ -3,11 +3,9 @@ package com.bupp.wood_spoon_eaters.features.main.settings
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataManager
+import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.model.MetaDataModel
 import com.bupp.wood_spoon_eaters.model.NotificationGroup
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -15,10 +13,9 @@ import com.bupp.wood_spoon_eaters.utils.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import kotlin.collections.ArrayList
 
-class SettingsViewModel(private val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager, val eaterDataManager: EaterDataManager) : ViewModel() {
+class SettingsViewModel(private val appSettings: AppSettings, val api: ApiService, val metaDataRepository: MetaDataRepository, val eaterDataManager: EaterDataManager) : ViewModel() {
 
     data class SettingsDetails(
         val enableUserLocation: Boolean = false,
@@ -49,7 +46,7 @@ class SettingsViewModel(private val appSettings: AppSettings, val api: ApiServic
     }
 
     fun getNotificationsGroup(): ArrayList<NotificationGroup> {
-        return metaDataManager.getNotificationsGroup()
+        return metaDataRepository.getNotificationsGroup()
     }
 
     data class PostNotificationGroupEvent(val isSuccessful: Boolean = false)
