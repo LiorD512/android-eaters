@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.managers
+package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
@@ -17,13 +17,8 @@ class MetaDataRepository(private val apiService: ApiService) {
             apiService.getMetaData().data
         }
         result?.let{
-            setMetaDataObject(it)
+            this.metaDataObject = metaDataObject
         }
-    }
-
-    fun setMetaDataObject(metaDataObject: MetaDataModel) {
-        Log.d("wowMetaData","setMetaDataObject $metaDataObject")
-        this.metaDataObject = metaDataObject
     }
 
     private fun getMetaDataObject(): MetaDataModel? {

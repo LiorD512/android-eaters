@@ -7,9 +7,8 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

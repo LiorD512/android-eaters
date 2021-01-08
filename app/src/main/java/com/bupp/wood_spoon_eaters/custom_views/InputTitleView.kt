@@ -6,10 +6,8 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -18,9 +16,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.bupp.wood_spoon_eaters.utils.text_watcher.SimpleTextWatcher
 import kotlinx.android.synthetic.main.input_title_view.view.*
 import render.animations.Attention
 import render.animations.Render
@@ -115,7 +112,7 @@ class InputTitleView : FrameLayout {
                 inputType = a.getInt(R.styleable.InputTitleView_inputType, Constants.INPUT_TYPE_TEXT)
                 when (inputType) {
                     Constants.INPUT_TYPE_FULL_NAME -> {
-                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+                        inputTitleViewInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
                         inputTitleViewTitle.visibility = VISIBLE
                     }
                     Constants.INPUT_TYPE_TEXT -> {

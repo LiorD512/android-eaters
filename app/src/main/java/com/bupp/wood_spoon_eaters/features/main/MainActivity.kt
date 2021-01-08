@@ -11,14 +11,12 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
@@ -43,14 +41,10 @@ import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.managers.PermissionManager
 import com.bupp.wood_spoon_eaters.utils.GPSBroadcastReceiver
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.crashes.Crashes
-import com.microsoft.appcenter.distribute.Distribute
-import com.stripe.android.view.AddPaymentMethodActivityStarter
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,46 +57,82 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, GPSBroadcastReceiver.GPSBroadcastListener,
-    LottieAnimationView.LottieAnimListener {
+    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, GPSBroadcastReceiver.GPSBroadcastListener {
 
     private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
-    var isFeedReady = false
-
-    private lateinit var selectedGoogleAddress: GoogleAddressResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("wowMain","wowMainnnn")
-
-        AppCenter.start(
-            application, "1995d4eb-7e59-44b8-8832-6550bd7752ff",
-            Analytics::class.java, Crashes::class.java, Distribute::class.java
-        )
-
-        mainActHeaderView.setHeaderViewListener(this, viewModel.getCurrentEater())
-        mainActOrdersBB.setOrdersBottomBarListener(this)
-
         initObservers()
-        startLocationUpdates()
-        updateAddressTimeView()
+        initBackgroundTasks()
+        initUi()
+
+        initUiRelatedProcesses()
+
         loadFeed()
-
-        checkForTriggers()
-        checkForBranchIntent()
-        checkForCampaignReferrals()
-
-        initFcm()
     }
 
 
-    private fun checkForCampaignReferrals() {
+    ////////////////////////////////////////////////
+    ///////   Background processes - start   ///////
+    ////////////////////////////////////////////////
+
+    private fun initBackgroundTasks() {
+        registerGpsBroadcastReceiver()
+        startLocationUpdates()
+    }
+
+    private fun registerGpsBroadcastReceiver() {
+        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
+        registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+    }
+
+    override fun onGPSChanged(isEnabled: Boolean) {
+        if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
+            startLocationUpdates()
+            loadFeed()
+        }
+    }
+
+    private fun startLocationUpdates() {
+        if (PermissionManager().hasPermission(this, Constants.FINE_LOCATION_PERMISSION) || !PermissionManager().hasPermission(
+                this, Constants.COARSE_LOCATION_PERMISSION)) {
+            Log.d("wowMainAct", "location setting success")
+            viewModel.startLocationUpdates()
+        } else {
+            Log.d("wowMainAct", "request permission")
+            requestLocationPermission()
+        }
+    }
+
+    private fun requestLocationPermission(){
+        PermissionManager().requestPermission(this, arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION),
+            Constants.LOCATION_PERMISSION_REQUEST_CODE)
+    }
+
+    ////////////////////////////////////////////////
+    ///////    Background processes - end    ///////
+    ////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////
+    ///////       Ui processes - start       ///////
+    ////////////////////////////////////////////////
+
+    private fun initUi() {
+        mainActHeaderView.setHeaderViewListener(this, viewModel.getCurrentEater())
+        mainActOrdersBB.setOrdersBottomBarListener(this)
+    }
+
+    private fun initUiRelatedProcesses() {
+        checkForBranchIntent()
         viewModel.checkForCampaignReferrals()
+        viewModel.checkForTriggers()
     }
 
     private fun checkForBranchIntent() {
@@ -131,31 +161,41 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    override fun onDishClick(menuItemId: Long) {
-        loadNewOrderActivity(menuItemId)
+    ////////////////////////////////////////////////
+    ///////        Ui processes - end        ///////
+    ////////////////////////////////////////////////
+
+
+
+    private fun checkForCampaignReferrals() {
     }
 
-    fun initFcm() {
-        viewModel.initFcmListener()
+
+
+    override fun onDishClick(menuItemId: Long) {
+        loadNewOrderActivity(menuItemId)
     }
 
     fun checkForActiveOrder() {
         viewModel.checkForActiveOrder()
     }
 
-    fun checkForTriggers() {
-        viewModel.checkForTriggers()
+    private fun checkForTriggers() {
     }
 
-    fun checkCartStatus() {
+    private fun checkCartStatus() {
         viewModel.checkCartStatus()
     }
 
     private fun initObservers() {
+        //header event
+        viewModel.mainActHeaderEvent.observe(this, Observer{
+            setHeaderViewLocationDetails(it.time, it.address)
+        })
+
         viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
             if (newAddressEvent != null) {
                 if (newAddressEvent.currentAddress != null) {
-                    updateAddressTimeView()
                     refreshFeedIfNecessary()
                 }
             }
@@ -289,9 +329,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         Utils.callPhone(this)
     }
 
-    fun startLocationUpdates() {
-        viewModel.startLocationUpdates(this)
-    }
+
 
     override fun onPause() {
         super.onPause()
@@ -399,10 +437,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onLocationSelected(selected: GoogleAddressResponse?) {
         //on LocationChoosertFragment result
         if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-            this.selectedGoogleAddress = selected
+//            this.selectedGoogleAddress = selected
             (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).onLocationSelected(selected)
         } else if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-            this.selectedGoogleAddress = selected
+//            this.selectedGoogleAddress = selected
 //            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
             Toast.makeText(this, "What should we do here", Toast.LENGTH_SHORT).show()
         }
@@ -433,12 +471,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         Toast.makeText(this, "onShareClick", Toast.LENGTH_SHORT).show()
     }
 
-
     //load dialogs
     fun openAddressChooser() {
         startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
     }
-
 
     fun loadDishOfferedDialog() {
         NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
@@ -447,20 +483,35 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-
-    fun setHeaderViewLocationDetails(time: String? = null, location: Address? = null) {
+    private fun setHeaderViewLocationDetails(time: String? = null, location: Address? = null) {
         mainActHeaderView.setLocationTitle(time, location?.streetLine1)
     }
 
-
-    override
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
+//    // Request multiple permissions contract
+//    private val requestMultiplePermissions =
+//        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions : Map<String, Boolean> ->
+//            // Do something if some permissions granted or denied
+//            permissions.entries.forEach {
+//                // Do checking here
+//            }
+//        }
+//
+//    request_multiple_permission.setOnClickListener {
+//        requestMultiplePermissions.launch(
+//            arrayOf(
+//                permission.BLUETOOTH,
+//                permission.ACCESS_FINE_LOCATION
+//            )
+//        )
+//    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    when (requestCode) {
             Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
                 Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if(grantResults.isNotEmpty()){
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        viewModel.startLocationUpdates(this)
+                        viewModel.startLocationUpdates()
                     } else {
                         viewModel.initLocationFalse()
                     }
@@ -546,9 +597,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadMyProfile()
     }
 
-    private fun updateAddressTimeView() {
-        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getCurrentAddress())
-    }
+
 
     override fun onHeaderAddressAndTimeClick() {
         loadDeliveryDetails()
@@ -580,7 +629,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                         startLocationUpdates()
                     }
                     else -> {
-                        updateAddressTimeView()
+//                        updateAddressTimeView()
                         loadFeed()
                     }
                 }
@@ -666,7 +715,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
                     Log.d("wowMianActivity", "result ADDRESS_CHOOSER_REQUEST_CODE success")
                     handlePb(false)
-                    updateAddressTimeView()
+//                    updateAddressTimeView()
 
                     when (currentFragmentTag) {
                         Constants.DELIVERY_DETAILS_TAG -> {
@@ -683,7 +732,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
         }
-        updateAddressTimeView()
+//        updateAddressTimeView()
     }
 
     private fun loadOrRefreshFeed() {
@@ -750,31 +799,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onStart() {
         super.onStart()
-        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
-        registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
 
-        mainActLottieView.showDefaultAnimation(this)
     }
 
-    override fun onAnimationEnd() {
-        if (!isFeedReady) {
-            mainActLottieView.rollAnimation()
-        } else {
-            mainActLottieView.visibility = View.GONE
-        }
-    }
 
     override fun onStop() {
         super.onStop()
         unregisterReceiver(gpsBroadcastReceiver)
     }
 
-    override fun onGPSChanged(isEnabled: Boolean) {
-        if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
-            startLocationUpdates()
-            loadFeed()
-        }
-    }
+
 
 
 }

@@ -7,8 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.blue_btn.view.*
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.status_bottom_bar.view.*
 import java.text.DecimalFormat
 

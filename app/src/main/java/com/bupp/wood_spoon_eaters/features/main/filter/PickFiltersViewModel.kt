@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main.filter
 
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.SearchManager
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 

@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.delivery_details_view.view.*
 
 class DeliveryDetailsView : LinearLayout {

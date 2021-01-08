@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.network
 
 import com.bupp.wood_spoon_eaters.model.*
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -72,7 +73,7 @@ interface ApiService {
     fun getMeCall(): Call<ServerResponse<Eater>>
 
     @POST("eaters/me")
-    fun postMe(@Body eater: EaterRequest): ServerResponse<Eater>
+    suspend fun postMe(@Body eater: EaterRequest): ServerResponse<Eater>
 
     @POST("eaters/me")
     fun postDeviceDetails(@Body device: DeviceDetails): Call<ServerResponse<Void>>
@@ -185,5 +186,7 @@ interface ApiService {
     @GET("eaters/me/events/{event_id}")
     fun getEventById(@Path(value = "event_id", encoded = true) eventId: String): Call<ServerResponse<Event>>
 
+    @PUT
+    suspend fun uploadAsset(@Url uploadUrl: String, @Body photo: RequestBody): ResponseBody
 
 }

@@ -21,11 +21,8 @@ import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.Promo
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.Constants
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivity
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.stripe.android.view.PaymentMethodsActivityStarter
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.ArrayList
 

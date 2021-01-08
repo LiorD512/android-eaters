@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.utils
+package com.bupp.wood_spoon_eaters.common
 
 import android.Manifest
 
@@ -16,6 +16,12 @@ class Constants {
         const val MULTI_SELECTION = 5
         const val ENDLESS_SELECTION = 500
 
+        //login activity state
+        const val LOGIN_STATE = "login_state"
+        const val LOGIN_STATE_WELCOME = 0
+        const val LOGIN_STATE_VERIFICATION = 1
+        const val LOGIN_STATE_CREATE_ACCOUNT = 2
+
         //prefs
         const val PREFS_KEY_TOKEN = "key_token"
         const val PREFS_KEY_IS_FIRST_TIME = "is_first_time"
@@ -23,6 +29,7 @@ class Constants {
         const val ENABLE_USER_LOCATION = "enable_user_location"
         const val ENABLE_STATUS_ALERTS = "enable_status_alerts"
         const val ENABLE_COMMERCIAL_EMAILS = "enable_commercial_emails"
+        const val IS_FIRST_PURCHASE = "is_first_purchase"
 
 
         //action title view actionType:

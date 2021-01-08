@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
-import com.bupp.wood_spoon_eaters.utils.PutActionManager
+import com.bupp.wood_spoon_eaters.managers.PutActionManager
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

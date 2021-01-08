@@ -1,11 +1,9 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
-import java.util.*
 import kotlin.collections.ArrayList
 
 

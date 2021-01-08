@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.utils
+package com.bupp.wood_spoon_eaters.managers
 
 import android.content.ContentUris
 import android.content.Context
@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
+import com.bupp.wood_spoon_eaters.common.Constants
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.ProtocolException

@@ -4,14 +4,8 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.action_title_view.view.*
-import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import kotlinx.android.synthetic.main.single_dish_header_view.view.*
 
 

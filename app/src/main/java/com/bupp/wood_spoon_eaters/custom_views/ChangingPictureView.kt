@@ -93,7 +93,7 @@ class ChangingPictureView : FrameLayout {
     }
 
     fun stopAnimation() {
-        Log.d("wowChangingImages", "stopAnimation")
+//        Log.d("wowChangingImages", "stopAnimation")
         mHandler.removeCallbacks(runnableCode)
     }
 

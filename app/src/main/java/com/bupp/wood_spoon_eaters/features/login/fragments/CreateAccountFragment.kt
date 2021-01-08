@@ -1,23 +1,16 @@
-package com.bupp.wood_spoon_eaters.features.login.create_account
+package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.bupp.wood_spoon.dialogs.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
-import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.fragment_create_account.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CreateAccountFragment : Fragment(R.layout.fragment_create_account), EmptyIconsGridView.OnItemSelectedListener,

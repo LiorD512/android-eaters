@@ -72,8 +72,8 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         this.listener = null
     }
 
-    val lastLatLng: LatLng?
-        get() = if (mCurrentLocation != null) LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude) else LatLng(0.0, 0.0)
+//    val lastLatLng: LatLng?
+//        get() = if (mCurrentLocation != null) LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude) else LatLng(0.0, 0.0)
 
     fun start() {
         if (!isStarted) {
@@ -115,6 +115,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
     }
 
     private fun createLocationCallback() {
+        Log.d(TAG, "createLocationCallback")
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 mLastLocation = mCurrentLocation
@@ -142,17 +143,17 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         // Begin by checking if the device has the necessary location settings.
         val task: Task<LocationSettingsResponse> = mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
         task.addOnSuccessListener {
+            Log.d(TAG, "location update success")
             // All location settings are satisfied. The client can initialize
             // location requests here.
             mFusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
-
         }
 
         task.addOnFailureListener { exception ->
             if (exception is ResolvableApiException){
                 Log.d(TAG, "location setting failed")
 //                Toast.makeText(context, "location setting failed", Toast.LENGTH_SHORT).show()
-                val statusCode = (exception as ApiException).getStatusCode()
+                val statusCode = (exception as ApiException).statusCode
                 when (statusCode) {
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
 //                        Toast.makeText(context, "location setting failed - RESOLUTION_REQUIRED", Toast.LENGTH_SHORT).show()
@@ -175,25 +176,19 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         }
     }
 
-    fun isLocationEnabled(context: Context): Boolean {
+    private fun isLocationEnabled(context: Context): Boolean {
         var locationMode = 0
         val locationProviders: String
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            try {
-                locationMode = Settings.Secure.getInt(context.contentResolver, Settings.Secure.LOCATION_MODE)
+        try {
+            locationMode = Settings.Secure.getInt(context.contentResolver, Settings.Secure.LOCATION_MODE)
 
-            } catch (e: Settings.SettingNotFoundException) {
-                e.printStackTrace()
-                return false
-            }
-
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF
-
-        } else {
-            locationProviders = Settings.Secure.getString(context.contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
-            return !TextUtils.isEmpty(locationProviders)
+        } catch (e: Settings.SettingNotFoundException) {
+            e.printStackTrace()
+            return false
         }
+
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF
 
 
     }
@@ -219,9 +214,8 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
 
     fun getAddressFromLocation(location: Location): Address{
-        val geocoder: Geocoder
         var addresses: List<android.location.Address> = arrayListOf()
-        geocoder = Geocoder(context, Locale.getDefault())
+        val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
 
         var streetLine = ""
         try {

@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.cancel_order_dialog_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

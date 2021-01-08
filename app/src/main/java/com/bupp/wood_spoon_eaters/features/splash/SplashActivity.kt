@@ -12,11 +12,8 @@ import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
-import kotlin.concurrent.schedule
 import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -37,13 +34,12 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
         FirebaseAnalytics.getInstance(this)
 
-        splashLottie.showDefaultAnimation(this)
-
-        initObservers()
         init()
+        initObservers()
     }
 
     private fun init() {
+        splashLottie.showDefaultAnimation(this)
         viewModel.initAppSplashData(this)
     }
 
@@ -58,21 +54,26 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     private fun initObservers() {
         viewModel.splashEvent.observe(this, Observer { splashEvent ->
             val event = splashEvent.getContentIfNotHandled()
-            if (event != null) {
-                if (event.shouldUpdateVersion) {
-                    openVersionUpdateDialog()
-                }else if(event.isUserExist){
-                    if(event.isUserRegistered){
-                        isFinishLoading = true
-                    }else{
-                        redirectToCreateAccount()
+            event?.let{
+                when(it){
+                    SplashViewModel.SplashEventType.SHOULD_UPDATE_VERSION -> {
+                        openVersionUpdateDialog()
                     }
-                }else{
-                    redirectToWelcome()
+                    SplashViewModel.SplashEventType.GO_TO_WELCOME -> {
+                        redirectToLogin(Constants.LOGIN_STATE_WELCOME)
+                    }
+                    SplashViewModel.SplashEventType.GO_TO_PHONE_VERIFICATION -> {
+                        redirectToLogin(Constants.LOGIN_STATE_VERIFICATION)
+                    }
+                    SplashViewModel.SplashEventType.GO_TO_CREATE_ACCOUNT -> {
+                        redirectToLogin(Constants.LOGIN_STATE_CREATE_ACCOUNT)
+                    }
+                    SplashViewModel.SplashEventType.GOT_TO_MAIN -> {
+                        isFinishLoading = true
+                    }
                 }
-            }else {
-                redirectToWelcome()
             }
+            
         })
 
         viewModel.errorEvent.observe(this, Observer{
@@ -82,12 +83,16 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         })
     }
 
+    private fun redirectToLogin(loginScreenState: Int) {
+        startActivity(Intent(this, LoginActivity::class.java).putExtra(Constants.LOGIN_STATE, loginScreenState))
+        finish()
+    }
+
     override fun onWSErrorDone() {
         finishAffinity()
     }
 
     override fun onUpdateApp(redirectUrl: String) {
-        val appPackageName = packageName // getPackageName() from Context or Activity object
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl)))
         } catch (anfe: android.content.ActivityNotFoundException) {
@@ -104,14 +109,6 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         UpdateRequiredDialog().show(supportFragmentManager, Constants.UPDATE_REQUIRED_DIALOG)
     }
 
-
-    private fun redirectToCreateAccount() {
-        //todo : di this agin
-//        Log.d("wowSplash", "redirectToCreateAccount")
-//        startActivity(Intent(this, SignUpActivity::class.java))
-//        finish()
-    }
-
     private fun redirectToMain() {
         Log.d("wowSplash", "redirectToMain")
         val intent = Intent(this, MainActivity::class.java)
@@ -123,12 +120,6 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         }
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        finish()
-    }
-
-    private fun redirectToWelcome() {
-        Log.d("wowSplash", "redirectToWelcome")
-        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 
@@ -161,39 +152,9 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                 Log.d("wowSplash", "sid: $sid cid: $cid")
                 viewModel.setUserCampaignParam(sid, cid)
             }
-//            if(it.has("+non_branch_link")){
-//                val link = it.get("+non_branch_link") as String
-//                val sidIndex = link.indexOf("sid=")
-//                val cidIndex = link.indexOf("cid=")
-//
-//                val sid: String? = if (sidIndex == -1) null else link.substring(sidIndex+4, cidIndex-1)
-//                val cid: String? = if (cidIndex == -1) null else link.substring(cidIndex+4)
-//                Log.d("wowSplash", "sid: $sid cid: $cid")
-//                viewModel.setUserCampaignParam(sid, cid)
-//            }
         }
     }
 
 
-
-//    private fun initCampaignCallback() {
-//        AppsFlyerLib.getInstance().registerConversionListener(this, object: AppsFlyerConversionListener{
-//            override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {
-//                Log.d("wowSplash", "onAppOpenAttribution")
-//            }
-//
-//            override fun onAttributionFailure(err: String?) {
-//                Log.d("wowSplash", "onAttributionFailure $err")
-//            }
-//
-//            override fun onInstallConversionDataLoaded(data: MutableMap<String, String>?) {
-//                Log.d("wowSplash", "onInstallConversionDataLoaded $data")
-//            }
-//
-//            override fun onInstallConversionFailure(p0: String?) {
-//                Log.d("wowSplash", "onInstallConversionFailure")
-//            }
-//        })
-//    }
 
 }

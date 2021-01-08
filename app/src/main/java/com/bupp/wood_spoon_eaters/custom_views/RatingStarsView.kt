@@ -7,8 +7,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.price_range_view.view.*
 import kotlinx.android.synthetic.main.rating_stars_view.view.*
 
 

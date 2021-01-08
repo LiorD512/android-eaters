@@ -6,21 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.data.UserRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
-import com.bupp.wood_spoon_eaters.network.test.ResultHandler
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 
 class LoginViewModel(val apiService: RepositoryImpl,
-    val userRepository: UserRepository, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
+                     val userRepository: UserRepository, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
                      , val deviceDetailsManager: FcmManager, val paymentManager: PaymentManager
 ) : ViewModel() {
 

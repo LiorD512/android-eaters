@@ -2,26 +2,32 @@ package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
 
-class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
+class MyProfileViewModel(val api: ApiService, val userRepository: UserRepository, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
                          , val paymentManager: PaymentManager) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
+
+    val myProfileActionEvent = MutableLiveData<MyProfileActionEvent>()
+    data class MyProfileActionEvent(val type: MyProfileActionType)
+    enum class MyProfileActionType {
+        LOGOUT
+    }
 
     val TAG = "wowMyProfileVM"
     data class GetUserDetails(val isSuccess: Boolean, val eater: Eater? = null)
@@ -102,8 +108,11 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
         }
     }
 
-    fun logout(context: Context) {
-        appSettings.logout(context)
+    fun logout() {
+        val logoutResult = userRepository.logout()
+        if(logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT){
+            myProfileActionEvent.postValue(MyProfileActionEvent(MyProfileActionType.LOGOUT))
+        }
     }
 
     fun initStripe(activity: Activity) {
@@ -140,3 +149,4 @@ class MyProfileViewModel(val api: ApiService, val appSettings: AppSettings, val 
 
 
 }
+

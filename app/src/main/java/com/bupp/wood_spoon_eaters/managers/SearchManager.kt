@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.managers
 
 import com.bupp.wood_spoon_eaters.model.SearchRequest
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.common.AppSettings
 
 class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager, val settings: AppSettings) {
 

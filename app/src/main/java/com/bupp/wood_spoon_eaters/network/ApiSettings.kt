@@ -7,7 +7,6 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
     companion object{
         const val TOKEN_KEY = "token_key"
-        const val REFRESH_TOKEN_KEY = "refresh_token_key"
         const val DEFAULT_TOKEN = FlavorConfig.CONSTANTS.DEFAULT_TOKEN
     }
 
@@ -15,11 +14,11 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
         get() = sharedPreferences.getString(TOKEN_KEY, DEFAULT_TOKEN)
         set(token) = sharedPreferences.edit().putString(TOKEN_KEY, token).apply()
 
-    var refreshToken: String?
-        get() = sharedPreferences.getString(REFRESH_TOKEN_KEY, null)
-        set(token) = sharedPreferences.edit().putString(REFRESH_TOKEN_KEY, token).apply()
-
     fun isRegistered(): Boolean {
         return token != DEFAULT_TOKEN
+    }
+
+    fun clearSharedPrefs() {
+        sharedPreferences.edit().clear().apply()
     }
 }

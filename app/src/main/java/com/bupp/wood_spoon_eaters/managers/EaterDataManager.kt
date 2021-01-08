@@ -6,21 +6,11 @@ import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.Event
-import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import java.util.*
-import android.provider.Settings.Secure
-import android.provider.Settings.Secure.LOCATION_MODE_OFF
-import android.provider.Settings.Secure.LOCATION_MODE
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
-import android.os.Build
-import android.provider.Settings
-import android.text.TextUtils
-import android.provider.Settings.SettingNotFoundException
-
-
 
 
 class EaterDataManager(val context: Context, val appSettings: AppSettings, val locationManager: LocationManager) :
@@ -54,6 +44,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         listeners.add(listener)
     }
 
+    //location manager
     override fun onLocationChanged(mLocation: Address) {
         val myAddress: Address? = getClosestAddressToLocation(mLocation)
         if (myAddress != null) {
@@ -78,6 +69,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         return null
     }
 
+    //location manager
     override fun onLocationEmpty() {
         if (getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()) {
             //if user never saved a location -> will show dialog
@@ -98,7 +90,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
 
 
-
+    //address utils
     private fun getClosestAddressToLocation(mLocation: Address): Address? {
         val myAddresses = currentEater?.addresses
         if (myAddresses != null && myAddresses.size > 0) {
@@ -112,15 +104,15 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return mLocation
         }
     }
-
-    fun isLocationsNear(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Boolean {
+    //address utils
+    private fun isLocationsNear(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Boolean {
         val loc1 = Location("")
-        loc1.setLatitude(lat1)
-        loc1.setLongitude(lng1)
+        loc1.latitude = lat1
+        loc1.longitude = lng1
 
         val loc2 = Location("")
-        loc2.setLatitude(lat2)
-        loc2.setLongitude(lng2)
+        loc2.latitude = lat2
+        loc2.longitude = lng2
 
         return loc1.distanceTo(loc2) < Constants.MINIMUM_LOCATION_DISTANCE
     }
@@ -135,9 +127,9 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     private var previousChosenAddress: Address? = null
 
     fun getLastChosenAddress(): Address? {
-        when (isInEvent) {
-            true -> return eventChosenAddress ?: null
-            false -> return lastChosenAddress ?: getCurrentAddress()
+        return when (isInEvent) {
+            true -> eventChosenAddress
+            false -> lastChosenAddress ?: getCurrentAddress()
         }
     }
 
@@ -158,6 +150,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
     }
 
+    // user repo
     fun removeAddressById(deletedAddressId: Long) {
         if (currentEater != null) {
             val addresess = currentEater!!.addresses
@@ -172,6 +165,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
     }
 
+    // user repo
     fun updateAddressById(currentAddressId: Long, newAddress: Address?) {
         if (currentEater != null) {
             val addresess = currentEater!!.addresses
@@ -213,6 +207,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     var orderTime: Date? = null
     var eventOrderTime: Date? = null
 
+    //feed repo
     fun getFeedSearchTime(): Date? {
         if (hasSpecificTime) {
             return getLastOrderTime()
@@ -220,7 +215,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return null
         }
     }
-
+    //feed repo
     fun getFeedSearchTimeString(): String? {
         if (hasSpecificTime) {
             return getLastOrderTimeString()
@@ -228,7 +223,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return null
         }
     }
-
+    //feed repo
     fun getFeedSearchTimeStringParam(): String? {
         if (hasSpecificTime) {
             return getLastOrderTimeParam()

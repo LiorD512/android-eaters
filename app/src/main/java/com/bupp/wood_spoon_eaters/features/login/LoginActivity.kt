@@ -11,11 +11,9 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.sign_up.SignUpActivity
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -29,7 +27,25 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
         loginActHeaderView.setHeaderViewListener(this)
 
+        initUi()
         initObservers()
+    }
+
+    private fun initUi() {
+        intent?.let{
+            val status = it.getIntExtra(Constants.LOGIN_STATE, Constants.LOGIN_STATE_WELCOME)
+            when(status){
+                Constants.LOGIN_STATE_WELCOME -> {
+                    //do nothing this is default state
+                }
+                Constants.LOGIN_STATE_VERIFICATION -> {
+                    redirectToPhoneVerification()
+                }
+                Constants.LOGIN_STATE_CREATE_ACCOUNT -> {
+                    redirectToCreateAccountFromWelcome()
+                }
+            }
+        }
     }
 
     private fun initObservers() {
@@ -37,20 +53,13 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
             it?.let{
                 when(it.type){
                     LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
-                        setHeaderView(getString(R.string.phone_verification_fragment_title))
-                        setTitleVisibility(View.VISIBLE)
-                        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+                        redirectToPhoneVerification()
                     }
                     LoginViewModel.NavigationEventType.OPEN_CODE_SCREEN -> {
-                        Utils.hideKeyBoard(this)
-                        setHeaderView(getString(R.string.code_fragment_title))
-                        setTitleVisibility(View.VISIBLE)
-                        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+                        redirectToCodeVerification()
                     }
                     LoginViewModel.NavigationEventType.OPEN_SIGNUP_SCREEN -> {
-                        setHeaderView(getString(R.string.create_account_fragment_title))
-                        setTitleVisibility(View.VISIBLE)
-                        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+                        redirectToCreateAccountFromVerification()
                     }
                     LoginViewModel.NavigationEventType.CODE_RESENT -> {
                         Toast.makeText(this, "Code sent!", Toast.LENGTH_SHORT).show()
@@ -82,6 +91,31 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
         viewModel.progressData.observe(this, Observer{
             handlePb(it)
         })
+    }
+
+    private fun redirectToCreateAccountFromWelcome() {
+        setHeaderView(getString(R.string.create_account_fragment_title))
+        setTitleVisibility(View.VISIBLE)
+        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+    }
+
+    private fun redirectToCreateAccountFromVerification() {
+        setHeaderView(getString(R.string.create_account_fragment_title))
+        setTitleVisibility(View.VISIBLE)
+        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+    }
+
+    private fun redirectToPhoneVerification() {
+        setHeaderView(getString(R.string.phone_verification_fragment_title))
+        setTitleVisibility(View.VISIBLE)
+        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+    }
+
+    private fun redirectToCodeVerification() {
+        Utils.hideKeyBoard(this)
+        setHeaderView(getString(R.string.code_fragment_title))
+        setTitleVisibility(View.VISIBLE)
+        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
     }
 
     fun setTitleVisibility(visibility: Int) {

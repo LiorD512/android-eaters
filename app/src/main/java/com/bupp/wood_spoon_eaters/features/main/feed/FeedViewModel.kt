@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.common.AppSettings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,12 +83,6 @@ class FeedViewModel(val api: ApiService, val settings: AppSettings, val eaterDat
         feedRequest.timestamp = eaterDataManager.getFeedSearchTimeStringParam()
 
         return feedRequest
-    }
-
-
-
-    fun hasFavorites(): Boolean {
-        return settings.hasFavoriets()
     }
 
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()

@@ -10,16 +10,14 @@ import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.PreSignedUrl
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Constants
-import com.bupp.wood_spoon_eaters.utils.PutActionManager
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.managers.PutActionManager
 import com.bupp.wood_spoon_eaters.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
-class EditMyProfileViewModel(val apiService: ApiService, val eaterDataManager: EaterDataManager, val putActionManager:PutActionManager) : ViewModel(),
+class EditMyProfileViewModel(val apiService: ApiService, val eaterDataManager: EaterDataManager, val putActionManager: PutActionManager) : ViewModel(),
     PutActionManager.PutActionListener {
 
 

@@ -1,12 +1,11 @@
-package com.bupp.wood_spoon_eaters.data
+package com.bupp.wood_spoon_eaters.repositories
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
+import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
-import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
 import com.bupp.wood_spoon_eaters.network.test.ResultHandler
@@ -23,6 +22,7 @@ class UserRepository(
     data class UserRepoResult(val type: UserRepoStatus, val eater: Eater? = null)
     enum class UserRepoStatus {
         SUCCESS,
+        LOGGED_OUT,
         INVALID_PHONE,
         WRONG_PASSWORD,
         SOMETHING_WENT_WRONG,
@@ -30,18 +30,25 @@ class UserRepository(
     }
 
     suspend fun initUserRepo() {
-//        if(apiSettings.isRegistered()){
-//            val result = withContext(Dispatchers.IO){
-//                apiService.getMe().data
-//            }
-//            result?.let{
-//                setCurrentUser(it)
-//            }
-//        }
-    }
-
-    private fun setCurrentUser(user: Eater) {
-        this.currentUser = user.copy()
+        val result = withContext(Dispatchers.IO){
+            apiService.getMe()
+        }
+        result.let{
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    this.currentUser = null
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    this.currentUser = null
+                }
+                is ResultHandler.Success -> {
+                    Log.d("wowUserRepository","initUserRepo - Success")
+                    this.currentUser = result.value.data?.copy()
+                }
+            }
+        }
     }
 
     fun isUserValid(): Boolean {
@@ -124,7 +131,19 @@ class UserRepository(
                 }
             }
         }
-
     }
+
+    //General
+
+    fun logout(): UserRepoResult{
+        apiSettings.clearSharedPrefs()
+        this.currentUser = null
+        return UserRepoResult(UserRepoStatus.LOGGED_OUT)
+    }
+
+    fun getUser(): Eater? {
+        return this.currentUser
+    }
+
 
 }

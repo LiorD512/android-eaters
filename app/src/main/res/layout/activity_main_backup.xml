@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mainActMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:id="@+id/mainActCampaignHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:background="@color/teal_blue"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            <ImageView
+                    android:id="@+id/mainActCampaignImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+            <TextView
+                    android:id="@+id/mainActCampaignTitle"
+                    style="@style/Bold15White"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    tools:text="this is a campaign coupon that gives yoi 20% off" />
+
+            <TextView
+                    android:id="@+id/mainActCampaignSubTitle"
+                    style="@style/Reg13White"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    tools:text="this is a campaign coupon that gives yoi 20% off" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+                android:id="@+id/mainActHeaderView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:type="HEADER_VIEW_TYPE_FEED" />
+
+        <LinearLayout
+                android:id="@+id/mainActContainerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/mainActLocationDisabledText"
+                    style="@style/SemiBold13White"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/teal_blue"
+                    android:gravity="center"
+                    android:paddingStart="15.4dp"
+                    android:paddingEnd="15.4dp"
+                    android:text="@string/device_location_off_alerter_body"
+                    android:visibility="gone" />
+
+            <FrameLayout
+                    android:id="@+id/mainActContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+                    android:id="@+id/mainActOrdersBB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+                android:id="@+id/mainActPb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:isBlueStyle="false" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
+            android:id="@+id/mainActLottieView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</FrameLayout>

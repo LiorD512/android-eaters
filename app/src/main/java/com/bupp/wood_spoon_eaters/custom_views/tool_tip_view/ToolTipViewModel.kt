@@ -1,6 +1,6 @@
 package com.example.matthias.mvvmcustomviewexample.custom
 
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

@@ -16,7 +16,6 @@ class AddressAndTimeView : LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.address_and_time_view, this, true)
     }
 
-
     fun setLocation(text: String?) {
         locationDetailsViewLocation.text = text ?: "Address"
     }

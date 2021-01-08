@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.login.verification
+package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -7,9 +7,7 @@ import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
-import android.widget.CheckBox
 import android.widget.CompoundButton
-import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,7 +15,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.fragment_phone_verification.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

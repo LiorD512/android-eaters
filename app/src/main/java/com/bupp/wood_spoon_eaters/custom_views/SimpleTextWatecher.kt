@@ -1,10 +1,9 @@
-package com.bupp.wood_spoon_eaters.utils.text_watcher
+package com.bupp.wood_spoon_eaters.custom_views
 
 import android.text.Editable
 import android.text.TextWatcher
 
 abstract class SimpleTextWatcher : TextWatcher {
-
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 

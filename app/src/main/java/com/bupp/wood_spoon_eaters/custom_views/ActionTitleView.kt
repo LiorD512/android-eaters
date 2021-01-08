@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.utils.Constants
 import kotlinx.android.synthetic.main.action_title_view.view.*
 
 

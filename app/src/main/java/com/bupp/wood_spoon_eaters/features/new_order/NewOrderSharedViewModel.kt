@@ -12,7 +12,8 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.BaseCallback
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.stripe.android.model.PaymentMethod
 import retrofit2.Call
 import retrofit2.Callback
@@ -163,7 +164,7 @@ class NewOrderSharedViewModel(
                 }
             }else{
                 addNewDishToCart(fullDish!!.id, quantity)
-                eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH)
+                eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH, getAddDishData())
             }
         } else {
             var cookId: Long = -1
@@ -203,20 +204,11 @@ class NewOrderSharedViewModel(
                         orderData.postValue(order)
                         Log.d("wowNewOrderVM", "postOrder success: ${order.toString()}")
                         showAdditionalDialogOrProcceedToCheckout()
-                        //update additional dishes
-//                        fullDish?.let {
-//                            setAdditionalDishes(it.getAdditionalDishes(curCookingSlotId))
-//                            if (it.getAdditionalDishes().size > 1) {
-//                                showDialogEvent.postValue(isFirst)
-//                                isFirst = false
-//                            } else {
-//                                showDialogEvent.postValue(false)
-//                            }
-//                        }
+
                         postOrderEvent.postValue(PostOrderEvent(true, order))
 
                         eventsManager.sendAddToCart(order?.id)
-                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_DISH)
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_DISH, getAddDishData())
 
                     } else {
                         Log.d("wowNewOrderVM", "postOrder fail")
@@ -290,7 +282,7 @@ class NewOrderSharedViewModel(
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
                         showAdditionalDialogIfFirst()
-                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH)
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH, getAddDishData())
                     } else {
                         Log.d("wowNewOrderVM", "updateOrder FAILED")
                     }
@@ -569,6 +561,37 @@ class NewOrderSharedViewModel(
             }
         }
     }
+
+    private fun getAddDishData(): Map<String, String>? {
+        val chefsName = getCurrentOrderChefName()
+        val dishesName = orderManager.getCurrentOrderDishNames()
+        val cuisine = getCurrentOrderChefCuisine()
+        val data = mutableMapOf<String, String>("Chefs name" to chefsName)
+        dishesName.forEachIndexed {index, it ->
+            data["Dish name_${index}"] = it
+        }
+        cuisine.forEachIndexed {index, it ->
+            data["Cuisine_${index}"] = it
+        }
+        return data
+    }
+
+    private fun getCurrentOrderChefCuisine(): List<String> {
+        val cuisine = mutableListOf<String>()
+        fullDishData?.cook?.let{
+            it.cuisines.forEach {
+                cuisine.add(it.name)
+            }
+        }
+        return cuisine
+    }
+
+    private fun getCurrentOrderChefName(): String {
+        fullDishData.let{
+            return it?.cook?.getFullName() ?: "no_name"
+        }
+    }
+
 
 
 }

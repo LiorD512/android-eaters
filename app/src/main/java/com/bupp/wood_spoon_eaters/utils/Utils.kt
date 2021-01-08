@@ -8,11 +8,7 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import androidx.core.content.res.ResourcesCompat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.Calendar.*
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,9 +17,9 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 
 
 object Utils {

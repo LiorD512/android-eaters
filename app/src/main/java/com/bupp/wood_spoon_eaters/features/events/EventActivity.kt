@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.events
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
@@ -11,7 +10,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.features.events.event_feed.EventFeedFragment
 import com.bupp.wood_spoon_eaters.features.events.event_validation.GetEventByIdFragment
 import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog

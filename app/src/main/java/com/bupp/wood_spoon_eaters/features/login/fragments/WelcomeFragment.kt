@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.login.welcome
+package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
 import android.util.Log

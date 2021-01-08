@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.report_issue
 import android.util.Log
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.ReportTopic
 import com.bupp.wood_spoon_eaters.model.Reports
 import com.bupp.wood_spoon_eaters.model.ServerResponse

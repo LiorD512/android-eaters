@@ -1,101 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/mainActMainLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
     <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/mainActCampaignHeader"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@color/teal_blue"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
-        <LinearLayout
-                android:id="@+id/mainActCampaignHeader"
+        <ImageView
+                android:id="@+id/mainActCampaignImg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:background="@color/teal_blue"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-            <ImageView
-                    android:id="@+id/mainActCampaignImg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-            <TextView
-                    android:id="@+id/mainActCampaignTitle"
-                    style="@style/Bold15White"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    tools:text="this is a campaign coupon that gives yoi 20% off" />
-
-            <TextView
-                    android:id="@+id/mainActCampaignSubTitle"
-                    style="@style/Reg13White"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:visibility="gone"
-                    tools:text="this is a campaign coupon that gives yoi 20% off" />
-
-        </LinearLayout>
-
-        <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-                android:id="@+id/mainActHeaderView"
+        <TextView
+                android:id="@+id/mainActCampaignTitle"
+                style="@style/Bold15White"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:type="HEADER_VIEW_TYPE_FEED" />
+                android:gravity="center"
+                android:padding="5dp"
+                tools:text="this is a campaign coupon that gives yoi 20% off" />
 
-        <LinearLayout
-                android:id="@+id/mainActContainerLayout"
+        <TextView
+                android:id="@+id/mainActCampaignSubTitle"
+                style="@style/Reg13White"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
-                android:orientation="vertical">
-
-            <TextView
-                    android:id="@+id/mainActLocationDisabledText"
-                    style="@style/SemiBold13White"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/teal_blue"
-                    android:gravity="center"
-                    android:paddingStart="15.4dp"
-                    android:paddingEnd="15.4dp"
-                    android:text="@string/device_location_off_alerter_body"
-                    android:visibility="gone" />
-
-            <FrameLayout
-                    android:id="@+id/mainActContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-            <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
-                    android:id="@+id/mainActOrdersBB"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-                android:id="@+id/mainActPb"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:isBlueStyle="false" />
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:visibility="gone"
+                tools:text="this is a campaign coupon that gives yoi 20% off" />
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
-            android:id="@+id/mainActLottieView"
+    <TextView
+            android:id="@+id/mainActLocationDisabledText"
+            style="@style/SemiBold13White"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="60dp"
+            android:background="@color/teal_blue"
+            android:gravity="center"
+            android:paddingStart="15.4dp"
+            android:paddingEnd="15.4dp"
+            android:text="@string/device_location_off_alerter_body"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/mainActCampaignHeader"
+            tools:visibility="visible" />
 
-</FrameLayout>
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/mainActHeaderView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/mainActLocationDisabledText"
+            app:type="HEADER_VIEW_TYPE_FEED" />
+
+    <fragment
+            android:id="@+id/mainActContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
+            app:defaultNavHost="true"
+            app:layout_constraintTop_toBottomOf="@+id/mainActHeaderView"
+            app:layout_constraintBottom_toTopOf="@+id/mainActOrdersBB"
+            app:navGraph="@navigation/main_nav" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+            android:id="@+id/mainActOrdersBB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/mainActPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:isBlueStyle="false"
+            tools:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

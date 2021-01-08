@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.features.new_order
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 
 class NewOrderViewModel(val metaDataRepository: MetaDataRepository, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) : ViewModel(),

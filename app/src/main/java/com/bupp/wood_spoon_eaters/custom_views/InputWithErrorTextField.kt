@@ -9,8 +9,8 @@
 //import android.view.View
 //import android.widget.FrameLayout
 //import com.bupp.wood_spoon_eaters.R
-//import com.bupp.wood_spoon_eaters.utils.Constants
-//import com.bupp.wood_spoon_eaters.utils.text_watcher.SimpleTextWatcher
+//import com.bupp.wood_spoon_eaters.common.Constants
+//import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 //import kotlinx.android.synthetic.main.input_with_error_text_field_view.view.*
 //
 //class InputWithErrorTextField @JvmOverloads

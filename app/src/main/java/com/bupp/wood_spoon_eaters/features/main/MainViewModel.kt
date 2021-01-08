@@ -3,14 +3,15 @@ package com.bupp.wood_spoon_eaters.features.main
 import android.app.Activity
 import android.util.Log
 import androidx.core.util.Consumer
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.Constants
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -20,9 +21,36 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
-    val api: ApiService, val settings: AppSettings, val permissionManager: PermissionManager, val orderManager: OrderManager,
-    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager, val eventsManager: EventsManager
+    val api: ApiService, val settings: AppSettings, private val permissionManager: PermissionManager, val orderManager: OrderManager,
+    val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
+
+    val mainActHeaderEvent = MutableLiveData<MainActActionEvent>()
+    data class MainActActionEvent(val time: String?, val address: Address?)
+
+    init {
+        eventsManager.initSegment()
+        fcmManager.initFcmListener()
+        initHeaderUi()
+    }
+
+    private fun initHeaderUi() {
+        val lastSelectedTime = eaterDataManager.getFeedSearchTimeString()
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        mainActHeaderEvent.postValue(MainActActionEvent(lastSelectedTime, currentAddress))
+    }
+
+//    fun getLastOrderTime(): String? {
+//        return eaterDataManager.getFeedSearchTimeString()
+//    }
+//
+//    fun getCurrentAddress(): Address? {
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        if (currentAddress == null) {
+//            eaterDataManager.setLocationListener(this)
+//        }
+//        return currentAddress
+//    }
 
 
     var waitingForAddressAction: Boolean = false
@@ -36,33 +64,26 @@ class MainViewModel(
 
     private val TAG = "wowMainVM"
 
-    fun initFcmListener() {
-        fcmManager.initFcmListener()
-    }
 
     fun getUserName(): String {
         return eaterDataManager.currentEater?.firstName!!
     }
 
-    fun getLastOrderTime(): String? {
-        return eaterDataManager.getFeedSearchTimeString()
+
+
+    fun startLocationUpdates() {
+        eaterDataManager.startLocationUpdates()
+//
+//        if (permissionManager.hasPermission(activity, Constants.FINE_LOCATION_PERMISSION) || !permissionManager.hasPermission(
+//                activity, Constants.COARSE_LOCATION_PERMISSION)) {
+//            Log.d(TAG, "location setting success")
+//        } else {
+//            Log.d(TAG, "request permission")
+//            requestLocationPermission(activity)
+//        }
     }
 
-    fun startLocationUpdates(activity: Activity) {
-        if (!permissionManager.hasPermission(activity, Constants.FINE_LOCATION_PERMISSION) || !permissionManager.hasPermission(
-                activity,
-                Constants.COARSE_LOCATION_PERMISSION
-            )
-        ) {
-            Log.d(TAG, "request permission")
-            requestLocationPermission(activity)
-        } else {
-            Log.d(TAG, "location setting success")
-            eaterDataManager.startLocationUpdates()
-        }
-    }
-
-    fun requestLocationPermission(activity: Activity){
+    private fun requestLocationPermission(activity: Activity){
         permissionManager.requestPermission(
             activity,
             arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION),
@@ -74,15 +95,9 @@ class MainViewModel(
         eaterDataManager.stopLocationUpdates()
     }
 
-    fun getCurrentAddress(): Address? {
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        if (currentAddress == null) {
-            eaterDataManager.setLocationListener(this)
-        }
-        return currentAddress
-    }
 
-    fun getListOfAddresses(): ArrayList<Address>? {
+
+    private fun getListOfAddresses(): ArrayList<Address>? {
         if (eaterDataManager.currentEater != null) {
             return eaterDataManager.currentEater!!.addresses
         }

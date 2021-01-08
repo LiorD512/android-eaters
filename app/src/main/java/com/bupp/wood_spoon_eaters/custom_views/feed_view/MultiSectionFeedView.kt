@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.multi_section_feed_view.view.*
 
 

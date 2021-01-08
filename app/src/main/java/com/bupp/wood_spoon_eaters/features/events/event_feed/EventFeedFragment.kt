@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.features.events.EventActivity
 import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_event_feed.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

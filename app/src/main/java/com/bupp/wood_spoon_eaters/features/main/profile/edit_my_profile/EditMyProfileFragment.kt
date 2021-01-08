@@ -70,7 +70,9 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
                 editMyProfileFragFullName.setText(eater.getFullName())
             }
 
-            editMyProfileFragEmail.setText(eater.email)
+            eater.email?.let{
+                editMyProfileFragEmail.setText(it)
+            }
             editMyProfileFragMobileNum.setText(eater.phoneNumber)
         }
         hasUpdated = false

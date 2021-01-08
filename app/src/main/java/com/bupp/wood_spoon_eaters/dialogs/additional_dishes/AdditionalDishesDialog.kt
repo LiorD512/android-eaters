@@ -17,7 +17,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.additional_dishes_dialog.*
 import kotlinx.android.synthetic.main.additional_dishes_dialog.dishAddonPrice
 import kotlinx.android.synthetic.main.dish_addon_view.*

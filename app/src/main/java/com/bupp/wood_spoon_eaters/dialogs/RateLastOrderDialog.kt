@@ -2,25 +2,20 @@ package com.bupp.wood_spoon_eaters.dialogs
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
 import com.bupp.wood_spoon_eaters.custom_views.metrics_view.MetricsViewAdapter
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ReviewRequest
-import com.bupp.wood_spoon_eaters.utils.Constants
-import kotlinx.android.synthetic.main.checkout_fragment.*
 import kotlinx.android.synthetic.main.rate_last_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

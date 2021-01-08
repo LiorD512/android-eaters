@@ -1,23 +1,11 @@
 package com.bupp.wood_spoon_eaters.features.address_and_location
 
-import android.app.Activity
-import android.content.Context
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.LocationManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
-import com.bupp.wood_spoon_eaters.managers.PermissionManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
-import com.bupp.wood_spoon_eaters.utils.Constants
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.bupp.wood_spoon_eaters.common.AppSettings
 
 class AddressChooserViewModel(val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 

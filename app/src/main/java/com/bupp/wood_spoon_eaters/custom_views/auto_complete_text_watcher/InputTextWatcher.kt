@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.utils.text_watcher
+package com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher
 
 import android.os.Handler
 import android.text.Editable

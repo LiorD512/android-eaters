@@ -4,35 +4,34 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.data.UserRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.network.ApiSettings
-import com.bupp.wood_spoon_eaters.utils.AppSettings
 import kotlinx.coroutines.launch
 
 
 class SplashViewModel(
-    private val apiSettings: ApiSettings, val eaterDataManager: EaterDataManager, val appSettings: AppSettings,
-    private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, private val paymentManager: PaymentManager)
+    val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, private val paymentManager: PaymentManager)
     : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
-    private var loginTries: Int = 0
-    val splashEvent: LiveEventData<SplashEvent> = LiveEventData()
+    val splashEvent: LiveEventData<SplashEventType> = LiveEventData()
 
-    data class SplashEvent(
-        val isUserExist: Boolean = false,
-        val isUserRegistered: Boolean = false,
-        val shouldUpdateVersion: Boolean = false
-    )
+    enum class SplashEventType{
+        SHOULD_UPDATE_VERSION,
+        GO_TO_WELCOME,
+        GO_TO_PHONE_VERIFICATION,
+        GO_TO_CREATE_ACCOUNT,
+        GOT_TO_MAIN
+    }
 
     val errorEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    private var isUserExist = false
-    private var isUserRegistered = false
+    private var isUserExist = false // true if this is the user's first time in the app
+    private var isUserSigned = false // true if users created his account
+    private var isUserRegistered = false // true if user had only phone verification
     private var shouldUpdateVersion = false
 
     fun initAppSplashData(context: Context) {
@@ -43,20 +42,30 @@ class SplashViewModel(
             paymentManager.initPaymentManager(context)
 
             isUserExist = userRepository.isUserValid()
+            isUserSigned = userRepository.isUserSignedUp()
             isUserRegistered = userRepository.isUserRegistered()
             shouldUpdateVersion = metaDataRepository.checkMinVersionFail()
 
-            splashEvent.postRawValue(SplashEvent(isUserExist, isUserRegistered, shouldUpdateVersion))
+            if(shouldUpdateVersion){
+                //go to update
+                splashEvent.postRawValue(SplashEventType.SHOULD_UPDATE_VERSION)
+            }else if(isUserExist && isUserRegistered && isUserSigned){
+                //go to main
+                splashEvent.postRawValue(SplashEventType.GOT_TO_MAIN)
+            }else if(isUserExist && isUserRegistered){
+                //go to create account
+                splashEvent.postRawValue(SplashEventType.GO_TO_CREATE_ACCOUNT)
+            }else if(isUserExist){
+                //go to phone verification
+                splashEvent.postRawValue(SplashEventType.GO_TO_PHONE_VERIFICATION)
+            }else{
+                //go to welcome
+                splashEvent.postRawValue(SplashEventType.GO_TO_WELCOME)
+            }
         }
     }
 
     fun setUserCampaignParam(sid: String?, cid: String?) {
-        sid?.let{
-           eaterDataManager.setUserCampaignParam(sid = it)
-        }
-        cid?.let{
-            eaterDataManager.setUserCampaignParam(cid = it)
-        }
-
+       eaterDataManager.setUserCampaignParam(sid = sid, cid = cid)
     }
 }

@@ -13,7 +13,7 @@ import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.daasuu.bl.ArrowDirection
 import com.daasuu.bl.BubbleLayout
 import com.daasuu.bl.BubblePopupHelper

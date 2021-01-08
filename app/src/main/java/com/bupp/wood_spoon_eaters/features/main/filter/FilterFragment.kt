@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
 import com.bupp.wood_spoon_eaters.custom_views.PriceRangeView
 import com.bupp.wood_spoon_eaters.custom_views.RatingStarsView
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.filters_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

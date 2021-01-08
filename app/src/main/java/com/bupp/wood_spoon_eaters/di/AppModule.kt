@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_eaters.di
 
-import com.bupp.wood_spoon_eaters.data.UserRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserViewModel
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
@@ -34,8 +34,9 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.SingleDishRepository
-import com.bupp.wood_spoon_eaters.utils.AppSettings
+import com.bupp.wood_spoon_eaters.common.AppSettings
 //import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 
@@ -52,7 +53,7 @@ val appModule = module {
     single { OrderManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { MetaDataRepository(get()) }
-    single { EventsManager(get(), get()) }
+    single { EventsManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }
@@ -66,7 +67,7 @@ val appModule = module {
 
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get()) }
 
     //login
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }

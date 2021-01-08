@@ -1,22 +1,15 @@
-package com.bupp.wood_spoon_eaters.features.login.code
+package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
-import com.bupp.wood_spoon_eaters.utils.text_watcher.SimpleTextWatcher
+import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_code.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CodeFragment() : Fragment(R.layout.fragment_code) {

@@ -7,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.utils.Constants
-import com.bupp.wood_spoon_eaters.utils.text_watcher.AutoCompleteTextWatcher
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import kotlinx.android.synthetic.main.header_view.view.*
-import kotlinx.android.synthetic.main.input_title_view.view.*
 
 
 class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
@@ -133,7 +131,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         headerViewSearchInput.addTextChangedListener(watcher)
     }
 
-    private fun getAutoCompleteTextWatecher(): AutoCompleteTextWatcher{
+    private fun getAutoCompleteTextWatecher(): AutoCompleteTextWatcher {
         return object : AutoCompleteTextWatcher() {
             override fun handleInputString(input: String) {
                 Log.d("wowHeaderView", "afterTextChanged: $input")

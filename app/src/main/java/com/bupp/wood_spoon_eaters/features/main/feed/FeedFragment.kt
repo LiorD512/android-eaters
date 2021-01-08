@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,7 +58,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     private fun initObservers() {
         viewModel.feedEvent.observe(this, Observer { event ->
-            (activity as MainActivity).isFeedReady = true
+//            (activity as MainActivity).isFeedReady = true
             feedFragPb.hide()
             if(event.isSuccess){
                 initFeed(event.feedArr!!)

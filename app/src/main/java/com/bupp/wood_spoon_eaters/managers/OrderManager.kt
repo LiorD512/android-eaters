@@ -1,9 +1,7 @@
 package com.bupp.wood_spoon_eaters.managers
 
-import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.utils.AppSettings
 import java.util.*
 
 class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager) {
@@ -91,15 +89,28 @@ class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager) 
         val total = curOrderResponse?.total?.cents ?: 0
         val tip = curOrderResponse?.tip?.cents ?: 0
         val sum = total + tip
-         if(sum <= 1500){
-             return "\$0-\$15"
-        }else if(sum > 1500 && sum <= 3000){
-             return "\$15-\$30"
-         }else if(sum > 3000 && sum <= 6000){
-             return "\$30 - \$60"
-         }else{
-             return "\$60+"
-         }
+        return when {
+            sum <= 1500 -> {
+                "\$0-\$15"
+            }
+            sum in 1501..3000 -> {
+                "\$15-\$30"
+            }
+            sum in 3001..6000 -> {
+                "\$30 - \$60"
+            }
+            else -> {
+                "\$60+"
+            }
+        }
+    }
+
+    fun getCurrentOrderDishNames(): List<String> {
+        val dishNames = mutableListOf<String>()
+        curOrderResponse?.orderItems?.forEach {
+            dishNames.add(it.dish.name)
+        }
+        return dishNames
     }
 
 

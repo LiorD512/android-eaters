@@ -1,8 +1,8 @@
 package com.bupp.wood_spoon_eaters.dialogs.web_docs
 
 import androidx.lifecycle.ViewModel
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.common.Constants
 
 class WebDocsViewModel(val metaDataRepository: MetaDataRepository) : ViewModel() {
 

@@ -17,7 +17,7 @@ import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserAc
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.fragment_add_address.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

@@ -2,122 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/FeedFragment"
     android:id="@+id/main_navigation">
 
-<!--    <fragment-->
-<!--        android:id="@+id/mainScreen"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.main_feed.MainFragment"-->
-<!--        android:label="MainFragment"-->
-<!--        tools:layout="@layout/fragment_main_screen">-->
+    <fragment
+            android:id="@+id/FeedFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment"
+            android:label="fragment_feed"
+            tools:layout="@layout/fragment_feed">
 
-<!--        <action-->
-<!--            android:id="@+id/action_mainScreen_to_profileFragment"-->
-<!--            app:destination="@id/profileFragment"-->
-<!--            app:enterAnim="@anim/slide_bottom_in"-->
-<!--            app:exitAnim="@anim/slide_bottom_out"-->
-<!--            app:popEnterAnim="@anim/slide_top_in"-->
-<!--            app:popExitAnim="@anim/slide_top_out"-->
-<!--            app:popUpTo="@+id/mainScreen" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_mainScreen_to_myExpertsFragment"-->
-<!--            app:destination="@id/myExpertsFragment"-->
-<!--            app:enterAnim="@anim/slide_bottom_in"-->
-<!--            app:exitAnim="@anim/slide_bottom_out"-->
-<!--            app:popEnterAnim="@anim/slide_top_in"-->
-<!--            app:popExitAnim="@anim/slide_top_out"-->
-<!--            app:popUpTo="@+id/mainScreen" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_mainScreen_to_tutorialDialog"-->
-<!--            app:destination="@id/tutorialDialog" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_mainScreen_to_favoritesFragment"-->
-<!--            app:destination="@id/favoritesFragment"-->
-<!--            app:enterAnim="@anim/slide_bottom_in"-->
-<!--            app:exitAnim="@anim/slide_bottom_out"-->
-<!--            app:popEnterAnim="@anim/slide_top_in"-->
-<!--            app:popExitAnim="@anim/slide_top_out"/>-->
-<!--    </fragment>-->
-
-<!--    <dialog-->
-<!--        android:id="@+id/tutorialDialog"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.dialogs.TutorialDialog"-->
-<!--        android:label="TutorialDialog"-->
-<!--        tools:layout="@layout/layout_tutorial"/>-->
-
-
-<!--    <fragment-->
-<!--        android:id="@+id/profileFragment"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.profile.ProfileFragment"-->
-<!--        android:label="ProfileFragment"-->
-<!--        tools:layout="@layout/fragment_for_you">-->
-<!--        <action-->
-<!--            android:id="@+id/action_profileFragment_to_editProfileFragment"-->
-<!--            app:destination="@id/editProfileFragment"-->
-<!--            app:enterAnim="@anim/slide_right_enter"-->
-<!--            app:exitAnim="@anim/slide_right_exit"-->
-<!--            app:popEnterAnim="@anim/slide_left_enter"-->
-<!--            app:popExitAnim="@anim/slide_left_exit"-->
-<!--            app:popUpTo="@+id/profileFragment" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_profileFragment_to_paymentsFragment"-->
-<!--            app:destination="@id/paymentsFragment"-->
-<!--            app:enterAnim="@anim/slide_right_enter"-->
-<!--            app:exitAnim="@anim/slide_right_exit"-->
-<!--            app:popEnterAnim="@anim/slide_left_enter"-->
-<!--            app:popExitAnim="@anim/slide_left_exit"-->
-<!--            app:popUpTo="@+id/profileFragment" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_profileFragment_to_manageNotificationsFragment"-->
-<!--            app:destination="@id/manageNotificationsFragment"-->
-<!--            app:enterAnim="@anim/slide_right_enter"-->
-<!--            app:exitAnim="@anim/slide_right_exit"-->
-<!--            app:popEnterAnim="@anim/slide_left_enter"-->
-<!--            app:popExitAnim="@anim/slide_left_exit"-->
-<!--            app:popUpTo="@+id/profileFragment"/>-->
-<!--        <action-->
-<!--            android:id="@+id/action_profileFragment_to_logOutDialog"-->
-<!--            app:destination="@id/logOutDialog"-->
-<!--            app:enterAnim="@anim/slide_right_enter"-->
-<!--            app:exitAnim="@anim/slide_right_exit"-->
-<!--            app:popEnterAnim="@anim/slide_left_enter"-->
-<!--            app:popExitAnim="@anim/slide_left_exit"-->
-<!--            app:popUpTo="@+id/profileFragment"/>-->
-<!--    </fragment>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/favoritesFragment"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.for_you.ForYouFragment"-->
-<!--        android:label="FavoriteFragemnt"-->
-<!--        tools:layout="@layout/fragment_for_you"/>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/myExpertsFragment"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.my_experts.MyExpertsFragment"-->
-<!--        android:label="MyExpertsFragment"-->
-<!--        tools:layout="@layout/fragment_my_experts"/>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/editProfileFragment"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.profile.fragments.sub_screens.edit_profile.EditProfileFragment"-->
-<!--        android:label="EditProfileFragment"-->
-<!--        tools:layout="@layout/fragment_edit_profile"/>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/paymentsFragment"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.profile.fragments.sub_screens.payments.PaymentsFragment"-->
-<!--        android:label="PaymentsFragment"-->
-<!--        tools:layout="@layout/fragment_payments"/>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/manageNotificationsFragment"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.profile.fragments.sub_screens.manage_notifications.ManageNotificationsFragment"-->
-<!--        android:label="ManageNotificationsFragment"-->
-<!--        tools:layout="@layout/layout_manage_notifications"/>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/logOutDialog"-->
-<!--        android:name="com.monkeytech.hey_experts.features.main.dialogs.LogOutDialog"-->
-<!--        android:label="LogOutDialog"-->
-<!--        tools:layout="@layout/dialog_logout"/>-->
-
+    </fragment>
 </navigation>

@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.support_center
 
 import androidx.lifecycle.ViewModel
-import com.bupp.wood_spoon_eaters.managers.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 
 class SupportViewModel(val metaDataRepository: MetaDataRepository) : ViewModel() {
 

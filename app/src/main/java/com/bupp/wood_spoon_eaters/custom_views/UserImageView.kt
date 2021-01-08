@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.utils.Constants
+import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.trading212.stickyheader.dpToPx
