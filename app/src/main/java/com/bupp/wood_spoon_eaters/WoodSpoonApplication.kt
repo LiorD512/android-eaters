@@ -6,17 +6,26 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
+<<<<<<< HEAD
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
 import com.segment.analytics.Analytics
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
+=======
+import com.segment.analytics.Analytics
+import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
+import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
 import com.uxcam.UXCam
 import io.branch.referral.Branch
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+<<<<<<< HEAD
 import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration;
+=======
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
 
 
 class WoodSpoonApplication : Application() {
@@ -45,6 +54,10 @@ class WoodSpoonApplication : Application() {
 
 
         val conversionDataListener  = object : AppsFlyerConversionListener{
+<<<<<<< HEAD
+=======
+
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
             override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
 
             }
@@ -71,19 +84,29 @@ class WoodSpoonApplication : Application() {
             Log.d("wowApplication", "uxcam is on!")
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
             val analytics = Analytics.Builder(this@WoodSpoonApplication, "ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg") // Enable this to record certain application events automatically!
+<<<<<<< HEAD
                 .trackDeepLinks()
                 .recordScreenViews()
                 .use(MixpanelIntegration.FACTORY)
                 .use(AppsflyerIntegration.FACTORY)
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
+=======
+                .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
+                .recordScreenViews()
+                .use(MixpanelIntegration.FACTORY)
+                .use(AppsflyerIntegration.FACTORY)
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
                 .build()
             Analytics.setSingletonInstance(analytics)
         }else{
             val analytics = Analytics.Builder(this@WoodSpoonApplication, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
                 .recordScreenViews()
+<<<<<<< HEAD
                 .trackDeepLinks()
                 .logLevel(Analytics.LogLevel.VERBOSE)
+=======
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
                 .use(MixpanelIntegration.FACTORY)
                 .use(AppsflyerIntegration.FACTORY)
                 .build()

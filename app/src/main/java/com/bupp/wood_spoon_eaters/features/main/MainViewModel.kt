@@ -114,14 +114,52 @@ class MainViewModel(
         return eaterDataManager.currentEater?.firstName!!
     }
 
+<<<<<<< HEAD
     fun startLocationUpdates() {
         eaterDataManager.startLocationUpdates()
+=======
+    fun getLastOrderTime(): String? {
+        return eaterDataManager.getFeedSearchTimeString()
+    }
+
+    fun startLocationUpdates(activity: Activity) {
+        if (!permissionManager.hasPermission(activity, Constants.FINE_LOCATION_PERMISSION) || !permissionManager.hasPermission(
+                activity,
+                Constants.COARSE_LOCATION_PERMISSION
+            )
+        ) {
+            Log.d(TAG, "request permission")
+            requestLocationPermission(activity)
+        } else {
+            Log.d(TAG, "location setting success")
+            eaterDataManager.startLocationUpdates()
+        }
+    }
+
+    private fun requestLocationPermission(activity: Activity){
+        permissionManager.requestPermission(
+            activity,
+            arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION),
+            Constants.LOCATION_PERMISSION_REQUEST_CODE
+        )
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
     }
 
     fun stopLocationUpdates() {
         eaterDataManager.stopLocationUpdates()
     }
 
+<<<<<<< HEAD
+=======
+    fun getCurrentAddress(): Address? {
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        if (currentAddress == null) {
+            eaterDataManager.setLocationListener(this)
+        }
+        return currentAddress
+    }
+
+>>>>>>> 06049fc2674b841c1bbcd3b1c09611531f8f11ff
     private fun getListOfAddresses(): ArrayList<Address>? {
         if (eaterDataManager.currentEater != null) {
             return eaterDataManager.currentEater!!.addresses
