@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Client
@@ -29,7 +30,7 @@ import java.util.concurrent.TimeUnit
 
 
 class SplashViewModel(val apiSettings: ApiSettings, val eaterDataManager: EaterDataManager, val appSettings: AppSettings, val api: ApiService, val metaDataManager: MetaDataManager,
-val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
+val paymentManager: PaymentManager, val eventsManager: EventsManager) : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     private var loginTries: Int = 0
     var serverCallMap = mutableMapOf<Int, Observable<*>>()
@@ -108,6 +109,7 @@ val paymentManager: PaymentManager) : ViewModel(), EphemeralKeyProvider.Ephemera
             } else {
                 Log.d("wowSplash", "eater: $eater")
                 eaterDataManager.currentEater = eater
+                eventsManager.initSegment()
                 if (eaterDataManager.isAfterLogin()) {
                     initRelevantRepositories()
                     navigationEvent.postValue(NavigationEvent(true, true, shouldUpdateVersion))

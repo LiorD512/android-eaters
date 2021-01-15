@@ -153,6 +153,7 @@ class NewOrderSharedViewModel(
         promoCode: String? = null
     ) {
         Log.d("wowNewOrderVM", "addToCart START")
+        var currentDishName = ""
         val hasPendingOrder = orderManager.haveCurrentActiveOrder()
         val hasPendingOrderFromDifferentCook = checkForDifferentOpenOrder(fullDish?.menuItem?.cookingSlot?.id)
         if (hasPendingOrder) {
@@ -161,8 +162,11 @@ class NewOrderSharedViewModel(
                     checkForOpenOrderAndShowClearCartDialog(fullDish.menuItem?.cookingSlot?.id, fullDish.cook.getFullName())
                 }
             }else{
-                addNewDishToCart(fullDish!!.id, quantity)
-                eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH)
+                fullDish?.let{
+                    currentDishName = it.name
+                }
+                addNewDishToCart(fullDish!!.id, quantity, currentDishName)
+                eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH, getAddDishData(currentDishName))
             }
         } else {
             var cookId: Long = -1
@@ -175,6 +179,7 @@ class NewOrderSharedViewModel(
                 it.menuItem?.let {
                     cookingSlotId = it.cookingSlot.id
                 }
+                currentDishName = it.name
             }
 
             val deliveryAddress = eaterDataManager.getLastChosenAddress()
@@ -215,7 +220,7 @@ class NewOrderSharedViewModel(
                         postOrderEvent.postValue(PostOrderEvent(true, order))
 
                         eventsManager.sendAddToCart(order?.id)
-                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_DISH)
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_DISH, getAddDishData(currentDishName))
 
                     } else {
                         Log.d("wowNewOrderVM", "postOrder fail")
@@ -233,6 +238,7 @@ class NewOrderSharedViewModel(
         }
 
     }
+
 
     fun initAdditionalDishDialog() {
         if(isFirstPurchase) {
@@ -267,7 +273,7 @@ class NewOrderSharedViewModel(
     }
 
 
-    fun addNewDishToCart(dishId: Long = -1, quantity: Int? = 1) {
+    fun addNewDishToCart(dishId: Long = -1, quantity: Int? = 1, currentDishName: String) {
         Log.d("wowNewOrderVM", "addNewDishToCart START")
         progressData.startProgress()
 
@@ -289,7 +295,7 @@ class NewOrderSharedViewModel(
                         orderManager.setOrderResponse(updatedOrder)
                         orderData.postValue(updatedOrder)
                         showAdditionalDialogIfFirst()
-                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH)
+                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH, getAddDishData(currentDishName))
                     } else {
                         Log.d("wowNewOrderVM", "updateOrder FAILED")
                     }
@@ -450,8 +456,74 @@ class NewOrderSharedViewModel(
     }
 
     private fun getOrderValue(): Map<String, String>? {
+        val chefsName = getCurrentOrderChefName()
+        val chefsId = getCurrentOrderChefId()
         val totalCostStr = orderManager.getTotalCostValue()
-        return mapOf("order_value" to totalCostStr)
+        val dishesName = orderManager.getCurrentOrderDishNames()
+        val cuisine = getCurrentOrderChefCuisine()
+        val data = mutableMapOf<String, String>("revenue" to totalCostStr, "currency" to "USD", "cook_name" to chefsName)
+        data["cook_id"] = chefsId
+        dishesName.forEachIndexed {index, it ->
+            data["dish_name_${index}"] = it
+        }
+        if(cuisine.isNotEmpty()){
+            data["cuisine"] = cuisine[0]
+        }
+        return data
+    }
+
+    private fun getAddDishData(currentDishName: String): Map<String, String>? {
+        val chefsName = getCurrentOrderChefName()
+        val chefsId = getCurrentOrderChefId()
+        val cuisine = getCurrentOrderChefCuisine()
+        val dishId = getCurrentDishId()
+        val dishPrice = getCurrentDishPrice()
+        val data = mutableMapOf<String, String>("cook_name" to chefsName)
+
+        data["cook_id"] = chefsId
+        data["dish_id"] = "$dishId"
+        data["dish_price"] = dishPrice
+        data["dish_name"] = currentDishName
+        if(cuisine.isNotEmpty()){
+            data["cuisine"] = cuisine[0]
+        }
+        return data
+    }
+
+    private fun getCurrentOrderChefId(): String {
+        fullDishData.let{
+            return it?.cook?.id.toString()
+        }
+    }
+
+    private fun getCurrentDishPrice(): String {
+        fullDishData?.let{
+            return it.price.formatedValue
+        }
+        return ""
+    }
+
+    private fun getCurrentDishId(): Long {
+        fullDishData?.let{
+            return it.id
+        }
+        return 0
+    }
+
+    private fun getCurrentOrderChefCuisine(): List<String> {
+        val cuisine = mutableListOf<String>()
+        fullDishData?.cuisines?.let{
+            it.forEach {
+                cuisine.add(it.name)
+            }
+        }
+        return cuisine
+    }
+
+    private fun getCurrentOrderChefName(): String {
+        fullDishData.let{
+            return it?.cook?.getFullName() ?: "no_name"
+        }
     }
 
 

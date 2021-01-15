@@ -116,7 +116,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     override fun onAddBtnClick(dish: Dish) {
-        sharedViewModel.addNewDishToCart(dish.id, 1)
+        sharedViewModel.addNewDishToCart(dish.id, 1, dish.name)
 
         mainAdapter?.removeDish(dish)
     }

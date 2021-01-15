@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.SearchRequest
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.utils.AppSettings
@@ -31,7 +32,7 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         return curSearch
     }
 
-    fun getSearchRequest(str: String, cuisineIds: ArrayList<Long>?): SearchRequest {
+    fun getSearchRequest(str: String, cuisine: CuisineLabel?): SearchRequest {
         val currentAddress = eaterDataManager.getLastChosenAddress()
         if(eaterDataManager.isUserChooseSpecificAddress()){
             curSearch.addressId = currentAddress?.id
@@ -48,9 +49,9 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
             curSearch.q = ""
         }
 
-        if(cuisineIds != null && cuisineIds.size!! > 0){
+        if(cuisine != null){
             curSearch.cuisineIds = arrayListOf()
-            curSearch.cuisineIds?.addAll(cuisineIds)
+            curSearch.cuisineIds?.add(cuisine.id)
         }else{
             curSearch.cuisineIds?.clear()
         }

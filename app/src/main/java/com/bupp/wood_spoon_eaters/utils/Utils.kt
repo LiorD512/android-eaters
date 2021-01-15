@@ -8,11 +8,7 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import androidx.core.content.res.ResourcesCompat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.Calendar.*
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,7 +17,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.bupp.wood_spoon_eaters.R
 
@@ -36,7 +31,7 @@ object Utils {
         take(index) to substring(index)
     }
 
-    fun callPhone(activity: FragmentActivity){
+    fun callPhone(activity: FragmentActivity, phone: String){
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -46,7 +41,7 @@ object Utils {
                 ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CALL_PHONE), Constants.PHONE_CALL_PERMISSION_REQUEST_CODE)
             }
         } else {
-            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + activity.getString(R.string.default_bupp_phone_number)))
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
             activity.startActivity(intent)
         }
     }

@@ -282,7 +282,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onContactUsClick() {
-        Utils.callPhone(this)
+        val phone = viewModel.getContactUsPhoneNumber()
+        Utils.callPhone(this, phone)
     }
 
     fun startLocationUpdates() {
@@ -402,6 +403,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
             Toast.makeText(this, "What should we do here", Toast.LENGTH_SHORT).show()
         }
+        viewModel.refreshSegment()
     }
 
     override fun onChangeAddressClick() {
@@ -466,7 +468,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     // permission was granted, yay!
-                    Utils.callPhone(this)
+                    val phone = viewModel.getContactUsPhoneNumber()
+                    Utils.callPhone(this, phone)
                 } else {
                     // permission denied, boo! Disable the
                     // functionality
@@ -656,7 +659,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                     Log.d("wowMianActivity", "result ADDRESS_CHOOSER_REQUEST_CODE success")
                     handlePb(false)
                     updateAddressTimeView()
-
+                    viewModel.refreshSegment()
                     when (currentFragmentTag) {
                         Constants.DELIVERY_DETAILS_TAG -> {
                             if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {

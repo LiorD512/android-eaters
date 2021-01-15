@@ -184,5 +184,13 @@ class MetaDataManager {
         return versionNumber
     }
 
+    fun getContactUsPhoneNumber(): String {
+        for (settings in getSettings()){
+            if(settings.key == "contact_us_number")
+                return (settings.value!!) as String
+        }
+        return ""
+    }
+
 
 }

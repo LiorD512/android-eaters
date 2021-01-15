@@ -50,7 +50,7 @@ val appModule = module {
     single { OrderManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { MetaDataManager() }
-    single { EventsManager(get(), get()) }
+    single { EventsManager(get(), get(), get()) }
     single { SearchManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get()) }
     single { FcmManager(get()) }
@@ -64,7 +64,7 @@ val appModule = module {
 
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get(), get()) }
 
     //login
     viewModel { WelcomeViewModel(get()) }
@@ -75,7 +75,7 @@ val appModule = module {
     viewModel { CreateAccountViewModel(get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get(), get()) }
 
     viewModel { FeedViewModel(get(), get(), get(), get()) }

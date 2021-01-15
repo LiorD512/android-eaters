@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, val permissionManager: PermissionManager, val orderManager: OrderManager,
-    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager, val eventsManager: EventsManager
+    val eaterDataManager: EaterDataManager, val fcmManager: FcmManager, val eventsManager: EventsManager, val metaDataManager: MetaDataManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
 
 
@@ -348,6 +348,14 @@ class MainViewModel(
         if(eaterDataManager.currentEater == null){
             refreshAppDataEvent.postValue(true)
         }
+    }
+
+    fun getContactUsPhoneNumber(): String {
+        return metaDataManager.getContactUsPhoneNumber()
+    }
+
+    fun refreshSegment() {
+        eventsManager.initSegment()
     }
 
 

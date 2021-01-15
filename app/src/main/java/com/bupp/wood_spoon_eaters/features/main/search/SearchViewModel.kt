@@ -50,25 +50,25 @@ class SearchViewModel(val api: ApiService, val metaDataManager: MetaDataManager,
         doSearch(curSearchObj)
     }
 
-    fun getDishesByCusineId(id: Long) {
-        val cuisineId: ArrayList<Long> = arrayListOf<Long>()
-        cuisineId.add(id)
-        val curSearchObj = searchManager.getSearchRequest("", cuisineIds = cuisineId)
-        doSearch(curSearchObj)
+    fun getDishesByCusineId(cuisine: CuisineLabel) {
+//        val cuisineId: ArrayList<Long> = arrayListOf<Long>()
+//        cuisineId.add(cuisine.id)
+        val curSearchObj = searchManager.getSearchRequest("", cuisine = cuisine)
+        doSearch(curSearchObj, cuisine)
     }
 
     fun clearSearchQuery(){
         searchManager.updateCurSearch(q = null, cuisineIds = null)
     }
 
-    private fun doSearch(curOrderObj: SearchRequest) {
+    private fun doSearch(curOrderObj: SearchRequest, cuisine: CuisineLabel? = null) {
         api.search(curOrderObj).enqueue(object: Callback<ServerResponse<ArrayList<Search>>> {
             override fun onResponse(call: Call<ServerResponse<ArrayList<Search>>>, response: Response<ServerResponse<ArrayList<Search>>>) {
                 if(response.isSuccessful){
                     Log.d("wowSearchVM","search success")
                     val searchResult: ArrayList<Search>? = response.body()?.data
                     arrangeData(searchResult)
-                    eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_SEARCHED_ITEM)
+                    eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_SEARCHED_ITEM, mapOf(Pair("query", curOrderObj.q ?: ""), Pair("cuisine", cuisine?.name ?: "null")))
                 }else{
                     Log.d("wowSearchVM","search fail")
                     searchEvent.postValue(SearchEvent(false, null, null))

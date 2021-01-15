@@ -195,5 +195,9 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
         eaterDataManager.disableEventDate()
     }
 
+    fun getContactUsPhoneNumber(): String {
+        return metaDataManager.getContactUsPhoneNumber()
+    }
+
 
 }

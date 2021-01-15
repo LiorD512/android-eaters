@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.events
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
@@ -212,7 +211,8 @@ class EventActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onContactUsClick() {
-        Utils.callPhone(this)
+        val phone = viewModel.getContactUsPhoneNumber()
+        Utils.callPhone(this, phone)
     }
 
     override fun onDestroy() {
