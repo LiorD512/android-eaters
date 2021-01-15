@@ -6,7 +6,7 @@
         android:orientation="vertical"
         android:background="@color/white"
         android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context="com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment">
+        tools:context="com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment">
 
     <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
             android:layout_marginTop="30dp"

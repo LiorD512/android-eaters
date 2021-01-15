@@ -37,7 +37,7 @@ class EditMyProfileViewModel(val apiService: ApiService, val eaterDataManager: E
                 if (response.isSuccessful) {
                     Log.d(TAG, "on success! ")
                     var eater = response.body()?.data!!
-                    eaterDataManager.currentEater = eater
+//                    eaterDataManager.currentEater = eater - // ny delete
                     userDetails.postValue(eater)
                 } else {
                     Log.d(TAG, "on Failure! ")

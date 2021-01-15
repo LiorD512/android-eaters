@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/location_and_address_navigation"
+        app:startDestination="@id/deliveryDetailsFragment">
+
+    <fragment
+            android:id="@+id/deliveryDetailsFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment"
+            android:label="delivery_details"
+            tools:layout="@layout/delivery_details_fragment">
+        <action
+                android:id="@+id/action_deliveryDetailsFragment_to_addressListChooserFragment"
+                app:destination="@id/addressListChooserFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/deliveryDetailsFragment" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/addressListChooserFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressListChooserFragment"
+            android:label="address_list_chooser"
+            tools:layout="@layout/fragment_address_list_chooser">
+        <action
+                android:id="@+id/action_addressListChooserFragment_to_addOrEditAddressFragment"
+                app:destination="@id/addOrEditAddressFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/addressListChooserFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/addOrEditAddressFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressFragment"
+            android:label="add_or_edot_address_fragment"
+            tools:layout="@layout/fragment_add_or_edit_address"></fragment>
+
+
+</navigation>

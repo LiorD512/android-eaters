@@ -62,9 +62,9 @@ data class Search(
 
 @Parcelize
 data class Pagination(
-    @SerializedName("total") val total: Int = -1,
-    @SerializedName("per_page") val perPage: Int = -1,
-    @SerializedName("next_page") val nextPage: String = "",
-    @SerializedName("total_pages") val totalPages: Int = -1,
-    @SerializedName("current_page") val currentPage: String = ""
+    @SerializedName("total_items") val totalItems: Int? = null,
+    @SerializedName("item_count") val itemCount: Int? = null,
+    @SerializedName("items_per_page") val itemsPerPage: Int? = null,
+    @SerializedName("total_pages") val totalPages: Int? = null,
+    @SerializedName("current_page") val currentPage: Int? = null
 ):Parcelable

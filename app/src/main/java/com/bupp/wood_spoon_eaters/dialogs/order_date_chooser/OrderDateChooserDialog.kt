@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.order_date_chooser_dialog.*
@@ -40,7 +41,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.order_date_chooser_dialog, null)
-        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -54,9 +55,9 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
             dismiss()
         }
 
-        addressAdapter = OrderDateChooserAdapter(context!!, allMenuItems, this)
+        addressAdapter = OrderDateChooserAdapter(requireContext(), allMenuItems, this)
         orderDateChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
-        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
         orderDateChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
         orderDateChooserDialogRecycler.adapter = addressAdapter
 
@@ -83,7 +84,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         val calEnd = Calendar.getInstance()
         calEnd.time = endDate
 
-        if(Utils.isSameDay(calStart, calEnd)){
+        if(DateUtils.isSameDay(calStart, calEnd)){
             val now = Date()
             calStart?.let{
                 if(now.time > it.time.time){
@@ -112,10 +113,10 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         val month = calStart.get(Calendar.MONTH)
         val day = calStart.get(Calendar.DAY_OF_MONTH)
 
-        val dpd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year, monthOfYear, dayOfMonth)
-            if(Utils.isSameDay(selectedDate, calStart)){
+            if(DateUtils.isSameDay(selectedDate, calStart)){
                 selectedDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59)
                 openTimePicker(calStart, selectedDate)
             }else{

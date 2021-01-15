@@ -1,10 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.login
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
@@ -12,6 +18,8 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.managers.PermissionManager
+import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,6 +28,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
     private val viewModel: LoginViewModel by viewModel<LoginViewModel>()
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        viewModel.onLocationPermissionDone()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +63,7 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
     private fun initObservers() {
         viewModel.navigationEvent.observe(this, Observer {
             it?.let{
-                when(it.type){
+                when(it){
                     LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
                         redirectToPhoneVerification()
                     }
@@ -63,6 +75,12 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
                     }
                     LoginViewModel.NavigationEventType.CODE_RESENT -> {
                         Toast.makeText(this, "Code sent!", Toast.LENGTH_SHORT).show()
+                    }
+                    LoginViewModel.NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_CODE -> {
+                        redirectToLocationPermission(true)
+                    }
+                    LoginViewModel.NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_SIGNUP -> {
+                        redirectToLocationPermission(false)
                     }
                     LoginViewModel.NavigationEventType.OPEN_MAIN_ACT -> {
                         startActivity(Intent(this, MainActivity::class.java))
@@ -88,6 +106,11 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
                 }
             }
         })
+
+        viewModel.locationPermissionActionEvent.observe(this, Observer{
+            askLocationPermission()
+        })
+
         viewModel.progressData.observe(this, Observer{
             handlePb(it)
         })
@@ -118,6 +141,16 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
         findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
     }
 
+    private fun redirectToLocationPermission(isFromCodeScreen: Boolean) {
+        setHeaderView(getString(R.string.location_permission_title))
+        setTitleVisibility(View.VISIBLE)
+        if(isFromCodeScreen){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_locationPermissionFragment)
+        }else{
+            findNavController(R.id.loginActContainer).navigate(R.id.action_createAccountFragment_to_locationPermissionFragment)
+        }
+    }
+
     fun setTitleVisibility(visibility: Int) {
         loginActHeaderView.visibility = visibility
     }
@@ -138,6 +171,36 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
     override fun onHeaderBackClick() {
         onBackPressed()
     }
+
+    //Location
+    private fun askLocationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED -> {
+                Log.d("wowLoginAct","location grated")
+                viewModel.onLocationPermissionDone()
+            }
+            shouldShowRequestPermissionRationale() -> {
+                Log.d("wowLoginAct","shouldShowRequestPermissionRationale")
+                // In an educational UI, explain to the user why your app requires this
+                // permission for a specific feature to behave as expected.
+            }
+            else -> {
+                Log.d("wowLoginAct","asking for permission")
+                requestPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+            }
+        }
+
+    }
+
+    private fun shouldShowRequestPermissionRationale() =
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) && ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
 
 
 }

@@ -16,23 +16,24 @@ class CookProfileViewModel(val api: ApiService, val metaDataRepository: MetaData
     data class GetReviewsEvent(val isSuccess: Boolean = false, val reviews: Review? = null)
     val getReviewsEvent: SingleLiveEvent<GetReviewsEvent> = SingleLiveEvent()
     fun getDishReview(cookId: Long) {
-        api.getDishReview(cookId).enqueue(object: Callback<ServerResponse<Review>> {
-            override fun onResponse(call: Call<ServerResponse<Review>>, response: Response<ServerResponse<Review>>) {
-                if(response.isSuccessful){
-                    val reviews = response.body()?.data
-                    Log.d("wowFeedVM","getDishReview success")
-                    getReviewsEvent.postValue(GetReviewsEvent(true, reviews))
-                }else{
-                    Log.d("wowFeedVM","getDishReview fail")
-                    getReviewsEvent.postValue(GetReviewsEvent(false))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Review>>, t: Throwable) {
-                Log.d("wowFeedVM","getDishReview big fail: ${t.message}")
-                getReviewsEvent.postValue(GetReviewsEvent(false))
-            }
-        })
+        //nynynynyn
+//        api.getDishReview(cookId).enqueue(object: Callback<ServerResponse<Review>> {
+//            override fun onResponse(call: Call<ServerResponse<Review>>, response: Response<ServerResponse<Review>>) {
+//                if(response.isSuccessful){
+//                    val reviews = response.body()?.data
+//                    Log.d("wowFeedVM","getDishReview success")
+//                    getReviewsEvent.postValue(GetReviewsEvent(true, reviews))
+//                }else{
+//                    Log.d("wowFeedVM","getDishReview fail")
+//                    getReviewsEvent.postValue(GetReviewsEvent(false))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Review>>, t: Throwable) {
+//                Log.d("wowFeedVM","getDishReview big fail: ${t.message}")
+//                getReviewsEvent.postValue(GetReviewsEvent(false))
+//            }
+//        })
     }
 
 //    fun getDeliveryFeeString(): String {

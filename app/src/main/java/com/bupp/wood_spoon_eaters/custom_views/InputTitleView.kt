@@ -13,7 +13,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -23,7 +23,7 @@ import render.animations.Attention
 import render.animations.Render
 
 
-class InputTitleView : FrameLayout {
+class InputTitleView : LinearLayout {
 
     private var inputType: Int = 0
     private var listener: InputTitleViewListener? = null

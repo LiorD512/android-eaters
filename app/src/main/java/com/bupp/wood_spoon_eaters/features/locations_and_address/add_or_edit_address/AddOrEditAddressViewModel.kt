@@ -1,6 +1,7 @@
-package com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address
+package com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
@@ -18,26 +19,56 @@ const val DELIVERY_TO_DOOR_STRING = "Delivery to door"
 const val PICK_UP_OUTSIDE_STRING = "Pick up outside"
 
 
-class AddAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings) :
+class AddOrEditAddressViewModel(private val apiService: ApiService, private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings) :
     ViewModel(), EaterDataManager.EaterDataMangerListener {
 
+    companion object{
+        const val TAG = "wowAddOrEditAddressVM"
+    }
+
+    val editAddressEvent = MutableLiveData<Address>()
+    fun initAddOrEdit(address: Address?) {
+        address?.let{
+            editAddressEvent.postValue(it)
+        }
+    }
+
+    fun getLocationLiveData() = eaterDataManager.getLocationData()
 
     data class MyLocationEvent(val myLocation: Address)
-    data class NavigationEvent(val isSuccessful: Boolean = false, val addressStreetStr: String?)
-
-    val updateAddressEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
     val myLocationEvent: SingleLiveEvent<MyLocationEvent> = SingleLiveEvent()
 
     fun fetchMyLocation() {
-        val myLocation = eaterDataManager.getCurrentAddress()
+        val myLocation = eaterDataManager.getLocationData().value
         if (myLocation != null) {
             eaterDataManager.setUserChooseSpecificAddress(false)
             myLocationEvent.postValue(MyLocationEvent(myLocation))
         } else {
-            eaterDataManager.setLocationListener(this)
-            eaterDataManager.startLocationUpdates()
+            Log.d(TAG, "no location found")
         }
     }
+
+    fun saveNewAddress() {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    data class NavigationEvent(val isSuccessful: Boolean = false, val addressStreetStr: String?)
+    val updateAddressEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
 
     override fun onAddressChanged(currentAddress: Address?) {
         if (currentAddress != null) {
@@ -364,6 +395,7 @@ class AddAddressViewModel(private val apiService: ApiService, private val eaterD
     fun isLocationEnabled(): Boolean {
         return appSettings.shouldEnabledUserLocation
     }
+
 
 
 //    fun getDeliveryTime(): String? {

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.delivery_details
+package com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -11,13 +11,16 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.TimeDeliveryDetailsView
+import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.delivery_details_fragment.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
+class DeliveryDetailsFragment : Fragment(R.layout.delivery_details_fragment), DeliveryDetailsView.DeliveryDetailsViewListener,
     TimeDeliveryDetailsView.TimeDeliveryDetailsViewListener {
 
     companion object {
@@ -25,55 +28,46 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
     }
 
     private lateinit var selectedTime: Date
+    private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
     val viewModel by viewModel<DeliveryDetailsViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.delivery_details_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         deliveryDetailsFragLocation.setDeliveryDetailsViewListener(this)
         deliveryDetailsFragTime.setTimeDeliveryDetailsViewListener(this)
-
-//        viewModel.initLocationListener()
 
         viewModel.lastDeliveryDetails.observe(this, Observer { details -> setDeliveryDetails(details) })
         viewModel.getLastDeliveryDetails()
     }
 
     private fun setDeliveryDetails(details: DeliveryDetailsViewModel.LastDataEvent) {
-        if (details.address != null && details.address.id != null) {
+        deliveryDetailsFragLocation.updateDeliveryDetails("")
+        details.address?.let{
             deliveryDetailsFragLocation.updateDeliveryDetails(details.address.streetLine1)
-        }else{
-            deliveryDetailsFragLocation.updateDeliveryDetails("")
         }
-        if (details.time != null && details.time.toString().isNotEmpty()) {
-            val time = Utils.parseDateToDayDateHour(details.time)
+
+        details.time?.let{
+            val time = DateUtils.parseDateToDayDateHour(it)
             deliveryDetailsFragTime.updateDeliveryDetails(time)
         }
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).openAddressChooser()
+        mainViewModel.onChangeLocationClick()
     }
 
     override fun onChangeTimeClick() {
         openDatePicker()
     }
 
-    fun openDatePicker(){
+    private fun openDatePicker(){
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        val dpd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             openTimePicker(year, monthOfYear, dayOfMonth)
         }, year, month, day)
 
@@ -89,7 +83,7 @@ class DeliveryDetailsFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsV
             cal.set(Calendar.HOUR_OF_DAY, hour)
             cal.set(Calendar.MINUTE, minute)
 
-            deliveryDetailsFragTime.updateDeliveryDetails(Utils.parseDateToDayDateHour(cal.time))
+            deliveryDetailsFragTime.updateDeliveryDetails(DateUtils.parseDateToDayDateHour(cal.time))
             this.selectedTime = cal.time
 
             viewModel.setDeliveryTime(cal.time)

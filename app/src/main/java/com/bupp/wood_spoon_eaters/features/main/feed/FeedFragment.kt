@@ -17,8 +17,10 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_feed.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -37,8 +39,10 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
 
+
     private val TAG = "wowFeedFragment"
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_feed, container, false)
@@ -46,7 +50,10 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initUi()
+
+
         FetchLocationAndFeed()
         showEmptyLayout()
         initObservers()
@@ -57,7 +64,10 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     private fun initObservers() {
-        viewModel.feedEvent.observe(this, Observer { event ->
+        viewModel.updateMainHeaderUiEvent.observe(viewLifecycleOwner, Observer{
+            mainViewModel.refreshMainHeaderUi()
+        })
+        viewModel.oldfeedEventOld.observe(this, Observer { event ->
 //            (activity as MainActivity).isFeedReady = true
             feedFragPb.hide()
             if(event.isSuccess){
@@ -70,11 +80,22 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
                 CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
+        viewModel.locationErrorEvent.observe(viewLifecycleOwner, Observer{
+            Log.d("wowFeedFrag","feed error: ${it.name}")
+//            when(it){
+//                FeedViewModel.LocationErrorType
+//            }
+        })
+        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, Observer {
+            Log.d("wowFeedFrag","getLocationLiveData observer called ")
+            viewModel.checkLocationStatus()
+        })
     }
 
     //CookProfileDialog interface
     override fun onDishClick(menuItemId: Long) {
-        (activity as MainActivity).loadNewOrderActivity(menuItemId)
+        mainViewModel.onDishClick(menuItemId)
+//        (activity as MainActivity).loadNewOrderActivity(menuItemId)
     }
 
     private fun initFeed(feedArr: ArrayList<Feed>) {
@@ -84,9 +105,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     private fun FetchLocationAndFeed() {
-        Log.d(TAG, "feed fragment started")
-        feedFragPb.show()
-        viewModel.getFeed()
+//        Log.d(TAG, "feed fragment started")
+//        feedFragPb.show()
+//        viewModel.getFeed()
     }
 
     override fun refreshList() {
@@ -117,7 +138,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     override fun onShareClick() {
         val text = viewModel.getShareText()
-        Utils.shareText(activity!!, text)
+        activity?.let { Utils.shareText(it, text) }
     }
 
     override fun onWorldwideInfoClick() {

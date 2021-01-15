@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.features.main
 
 import android.app.Activity
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
@@ -11,11 +10,14 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
@@ -23,15 +25,15 @@ import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFr
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.events.EventActivity
+import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
+import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
-import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
-import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
-import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.no_locations.NoLocationsAvailableFragment
-import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
+import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
+import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
@@ -41,15 +43,12 @@ import com.bupp.wood_spoon_eaters.features.support.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.managers.PermissionManager
-import com.bupp.wood_spoon_eaters.utils.GPSBroadcastReceiver
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     LocationChooserFragment.LocationChooserFragmentListener,
@@ -57,12 +56,27 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, GPSBroadcastReceiver.GPSBroadcastListener {
+    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
 
-    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
+//    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
+
+    private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+        Log.d("wowMain","Activity For Result")
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            //check if location changed and refresh ui
+        }
+    }
+    private val afterOrderResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+        Log.d("wowMain","Activity For Result")
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            //check if has order and refresh ui
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,36 +97,38 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     ////////////////////////////////////////////////
 
     private fun initBackgroundTasks() {
-        registerGpsBroadcastReceiver()
-        startLocationUpdates()
+        //init location and gps status
+        viewModel.initGpsStatus(this)
+//        viewModel.getLocationLiveData().observe(this, Observer{
+//            Log.d("wowMainAct","getLocationLiveData: $it")
+//            //do nothing. - observer starts location updates.
+//        })
+
+
+//        viewModel.startLocationUpdates()
     }
 
-    private fun registerGpsBroadcastReceiver() {
-        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
-        registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+//    private fun registerGpsBroadcastReceiver() {
+//        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
+//        registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+//    }
+
+
+
+    private fun startLocationUpdates() {
+//        GpsUtils(this).turnGPSOn(object : GpsUtils.OnGpsListener {
+//            override fun gpsStatus(isGPSEnable: Boolean) {
+//
+//            }
+//        })
     }
 
-    override fun onGPSChanged(isEnabled: Boolean) {
+    private fun onGPSChanged(isEnabled: Boolean) {
+        Log.d("wowMainAct", "onGPSChanged - isEnabled: $isEnabled")
         if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
             startLocationUpdates()
             loadFeed()
         }
-    }
-
-    private fun startLocationUpdates() {
-        if (PermissionManager().hasPermission(this, Constants.FINE_LOCATION_PERMISSION) || !PermissionManager().hasPermission(
-                this, Constants.COARSE_LOCATION_PERMISSION)) {
-            Log.d("wowMainAct", "location setting success")
-            viewModel.startLocationUpdates()
-        } else {
-            Log.d("wowMainAct", "request permission")
-            requestLocationPermission()
-        }
-    }
-
-    private fun requestLocationPermission(){
-        PermissionManager().requestPermission(this, arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION),
-            Constants.LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     ////////////////////////////////////////////////
@@ -189,9 +205,27 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     private fun initObservers() {
         //header event
-        viewModel.mainActHeaderEvent.observe(this, Observer{
+        viewModel.mainActHeaderEvent.observe(this, Observer {
             setHeaderViewLocationDetails(it.time, it.address)
         })
+
+        viewModel.getGpsLiveData().observe(this, Observer { it ->
+            val isGpsEnabled = it.getContentIfNotHandled()
+            isGpsEnabled?.let {
+                onGPSChanged(it)
+            }
+        })
+
+        viewModel.dishClickEvent.observe(this, Observer{
+            val event = it.getContentIfNotHandled()
+            event?.let{
+                afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_MENU_ITEM_ID, event))
+            }
+        })
+
+
+
+
 
         viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
             if (newAddressEvent != null) {
@@ -231,7 +265,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             }
         })
         viewModel.getCookEvent.observe(this, Observer { event ->
-            feedFragPb.hide()
+//            feedFragPb.hide()
             if (event.isSuccess) {
                 CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
@@ -284,8 +318,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             }
         })
 
-        viewModel.refreshAppDataEvent.observe(this, Observer{
-            Log.d("wowMainAct","refreshAppDataEvent !!!!!")
+        viewModel.refreshAppDataEvent.observe(this, Observer {
+            Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
             startActivity(Intent(this, SplashActivity::class.java))
             finishAffinity()
         })
@@ -417,9 +451,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     //delivery details methods
+
+
+
     fun loadDeliveryDetails() {
-        loadFragment(DeliveryDetailsFragment.newInstance(), Constants.DELIVERY_DETAILS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Delivery Details")
+//        loadFragment(DeliveryDetailsFragment.newInstance(), Constants.DELIVERY_DETAILS_TAG)
+//        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Delivery Details")
     }
 
 
@@ -438,7 +475,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         //on LocationChoosertFragment result
         if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
 //            this.selectedGoogleAddress = selected
-            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).onLocationSelected(selected)
+//            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddOrEditAddressFragment).onLocationSelected(selected) //todo - ny !
         } else if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
 //            this.selectedGoogleAddress = selected
 //            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
@@ -507,27 +544,33 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     when (requestCode) {
-            Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
-                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
-                if(grantResults.isNotEmpty()){
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        viewModel.startLocationUpdates()
-                    } else {
-                        viewModel.initLocationFalse()
-                    }
-                }
+
+    }
+    when (requestCode) {
+        Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
+//            invokeLocationAction()
+        }
+//            Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
+//                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
+//                if(grantResults.isNotEmpty()){
+//                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                        viewModel.startLocationUpdates()
+//                    } else {
+//                        viewModel.initLocationFalse()
+//                    }
+//                }
+//            }
+        Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {
+            Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                // permission was granted, yay!
+                Utils.callPhone(this)
+            } else {
+                // permission denied, boo! Disable the
+                // functionality
             }
-            Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {
-                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // permission was granted, yay!
-                    Utils.callPhone(this)
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality
-                }
-                return
-            }
+            return
+        }
         }
     }
 
@@ -600,7 +643,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
 
     override fun onHeaderAddressAndTimeClick() {
-        loadDeliveryDetails()
+        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
     }
 
     override fun onBackPressed() {
@@ -792,7 +835,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     private fun checkIfMemoryCleaned() {
         //this method belongs to Android 7 and below.. when garbadge collector cleaned the apps memory
         if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP){
-            Log.d("wowMainAct","checkIfMemoryCleaned()")
+            Log.d("wowMainAct", "checkIfMemoryCleaned()")
             viewModel.checkIfMemoryCleaned()
         }
     }
@@ -805,7 +848,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(gpsBroadcastReceiver)
+//        unregisterReceiver(gpsBroadcastReceiver)
     }
 
 

@@ -62,7 +62,7 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
                 })
         }else{
             Log.d(TAG,"getFeed setLocationListener")
-            eaterDataManager.setLocationListener(this)
+//            eaterDataManager.setLocationListener(this)
         }
     }
 

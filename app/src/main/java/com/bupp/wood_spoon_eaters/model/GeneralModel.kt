@@ -10,7 +10,9 @@ data class ServerResponse<T> (
     @SerializedName("code") var code: Int = 0,
     @SerializedName("message") var message: String? = null,
     @SerializedName("data") var data: T? = null,
-    @SerializedName("errors") var errors: List<WSError>? = null
+    @SerializedName("errors") var errors: List<WSError>? = null,
+    @SerializedName("meta") val meta: Pagination,
+
 )
 
 //data class WSServerError(

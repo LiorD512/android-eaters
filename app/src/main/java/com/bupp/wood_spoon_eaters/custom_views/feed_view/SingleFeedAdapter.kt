@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.feed_dish_item.view.*
 
@@ -96,15 +97,15 @@ class SingleFeedAdapter(
             }else{
                 if(isEvent){
 //                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
-                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
+                    holder.date.text = DateUtils.parseDDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
                 }else{
-                    if(Utils.isTodayOrTomorrow(dish.menuItem.orderAt)){
+                    if(DateUtils.isTodayOrTomorrow(dish.menuItem.orderAt)){
                         //Dish is offered today or tomorrow.
 //                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
-                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.orderFrom, dish.menuItem.cookingSlot.endsAt)
+                        holder.date.text = DateUtils.parseDateToStartToEnd(dish.menuItem.cookingSlot.orderFrom, dish.menuItem.cookingSlot.endsAt)
                     }else{
                         //Dish is offered later this week and beyond
-                        holder.date.text = Utils.parseDateToFromStartingDate(dish.menuItem.cookingSlot.orderFrom)
+                        holder.date.text = DateUtils.parseDateToFromStartingDate(dish.menuItem.cookingSlot.orderFrom)
                     }
                 }
             }

@@ -57,7 +57,7 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
             promoCodeFragPb.hide()
             if(event.isSuccess){
 //                listener.onPromoCodeDone()
-                (activity as NewOrderActivity).onCheckout()
+//                (activity as NewOrderActivity).onCheckout()//ny !!!
             }
         })
         viewModel.errorEvent.observe(this, Observer {
@@ -81,19 +81,19 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
             "The promo code seems to be invalid. \nplease check again",
             TSnackbar.LENGTH_LONG)
         val snackBarView = snackbar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.teal_blue))
+        snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
         val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             textView.setTextAppearance(R.style.SemiBold13Dark)
         }
         textView.setGravity(Gravity.CENTER_HORIZONTAL)
-        textView.setTextColor(ContextCompat.getColor(context!!, R.color.white))
+        textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         snackbar.show()
     }
 
     private fun openKeyboard(view: View) {
         if(view.requestFocus()){
-            val inputMethodManager = context!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
     }
@@ -104,6 +104,6 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
     }
 
     override fun onHeaderBackClick() {
-        (activity as NewOrderActivity).onCheckout()
+//        (activity as NewOrderActivity).onCheckout() // nyyy
     }
 }

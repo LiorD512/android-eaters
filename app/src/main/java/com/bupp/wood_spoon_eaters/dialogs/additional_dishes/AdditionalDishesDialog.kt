@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.*
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -34,7 +34,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     //    private val dishSharedViewModel by sharedViewModel<SingleDishViewModel>()
-    private val sharedViewModel by sharedViewModel<NewOrderSharedViewModel>()
+    private val sharedViewModel by sharedViewModel<NewOrderMainViewModel>()
 //    private val viewModel by viewModel<AdditionalDishesViewModel>()
 
     private var mainAdapter: AdditionalDishMainAdapter? = null
@@ -83,13 +83,13 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
                 mainAdapter?.refreshOrderItems(it)
             }
 
-            val priceStr = DecimalFormat("##.##").format(sharedViewModel.calcTotalDishesPrice())
-            dishAddonPrice.text = "$$priceStr"
+//            val priceStr = DecimalFormat("##.##").format(sharedViewModel.calcTotalDishesPrice())
+//            dishAddonPrice.text = "$$priceStr"
         }
     }
 
     override fun onClearCart() {
-        sharedViewModel.clearCart()
+//        sharedViewModel.clearCart()
         dismiss()
     }
 
@@ -105,7 +105,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
 
 
     private fun initUi() {
-        mainAdapter = AdditionalDishMainAdapter(context!!, this, this)
+        mainAdapter = AdditionalDishMainAdapter(requireContext(), this, this)
         additionalDishDialogList.layoutManager = LinearLayoutManager(context)
         additionalDishDialogList.adapter = mainAdapter
 
@@ -116,7 +116,7 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     override fun onAddBtnClick(dish: Dish) {
-        sharedViewModel.addNewDishToCart(dish.id, 1)
+//        sharedViewModel.addNewDishToCart(dish.id, 1)
 
         mainAdapter?.removeDish(dish)
     }
@@ -126,10 +126,10 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     override fun onDishCountChange(orderItemsCount: Int, curOrderItem: OrderItem) {
-        if(orderItemsCount == 0){
-            sharedViewModel.pulItemBackToAdditionalList(curOrderItem)
-        }
-        sharedViewModel.updateOrder(curOrderItem)
+//        if(orderItemsCount == 0){
+//            sharedViewModel.pulItemBackToAdditionalList(curOrderItem)
+//        }
+//        sharedViewModel.updateOrder(curOrderItem)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

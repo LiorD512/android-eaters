@@ -184,7 +184,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
                 headerViewTitle.visibility = VISIBLE
                 headerViewBackBtn.visibility = View.VISIBLE
                 headerViewSaveBtn.visibility = View.VISIBLE
-                headerViewSaveBtn.isEnabled = false
+//                headerViewSaveBtn.isEnabled = false
             }
             Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE -> {
                 headerViewTitle.visibility = VISIBLE

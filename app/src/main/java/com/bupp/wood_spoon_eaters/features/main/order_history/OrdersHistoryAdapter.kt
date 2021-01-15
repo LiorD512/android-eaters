@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.orders_history_item.view.*
 
@@ -71,7 +72,7 @@ class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook.firstName}"
         price.text = "Total: ${order.total.formatedValue}"
         if(order.estDeliveryTime != null){
-            date.text = Utils.parseDateToDateAndTime(order.estDeliveryTime)
+            date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
         }else{
             date.text = "${order.estDeliveryTimeText}"
         }

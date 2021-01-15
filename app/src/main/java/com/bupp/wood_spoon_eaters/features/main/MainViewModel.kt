@@ -1,7 +1,11 @@
 package com.bupp.wood_spoon_eaters.features.main
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +16,8 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -21,6 +27,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
+    private val locationManager: LocationManager,
     val api: ApiService, val settings: AppSettings, private val permissionManager: PermissionManager, val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
@@ -39,6 +46,44 @@ class MainViewModel(
         val currentAddress = eaterDataManager.getLastChosenAddress()
         mainActHeaderEvent.postValue(MainActActionEvent(lastSelectedTime, currentAddress))
     }
+
+    fun refreshMainHeaderUi() {
+        initHeaderUi()
+    }
+
+    fun getGpsLiveData() = locationManager.getGpsData()
+    fun getLocationLiveData() = locationManager.getLocationData()
+
+    val navigationEvent = MutableLiveData<NavigationEventType>()
+    enum class NavigationEventType{
+
+    }
+
+    val dishClickEvent = LiveEventData<Long>()
+    fun onDishClick(menuItemId: Long) {
+        dishClickEvent.postRawValue(menuItemId)
+    }
+
+//    fun checkLocationStatus() {
+//        when(eaterDataManager.getLocationStatus().type){
+//            EaterDataManager.LocationStatusType.CURRENT_LOCATION -> {
+//
+//            }
+//            EaterDataManager.LocationStatusType.KNOWN_LOCATION -> {
+//
+//            }
+//            EaterDataManager.LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
+//
+//            }
+//            EaterDataManager.LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
+//
+//            }
+//            EaterDataManager.LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
+//
+//            }
+//        }
+//    }
+
 
 //    fun getLastOrderTime(): String? {
 //        return eaterDataManager.getFeedSearchTimeString()
@@ -69,33 +114,13 @@ class MainViewModel(
         return eaterDataManager.currentEater?.firstName!!
     }
 
-
-
     fun startLocationUpdates() {
         eaterDataManager.startLocationUpdates()
-//
-//        if (permissionManager.hasPermission(activity, Constants.FINE_LOCATION_PERMISSION) || !permissionManager.hasPermission(
-//                activity, Constants.COARSE_LOCATION_PERMISSION)) {
-//            Log.d(TAG, "location setting success")
-//        } else {
-//            Log.d(TAG, "request permission")
-//            requestLocationPermission(activity)
-//        }
-    }
-
-    private fun requestLocationPermission(activity: Activity){
-        permissionManager.requestPermission(
-            activity,
-            arrayOf(Constants.FINE_LOCATION_PERMISSION, Constants.COARSE_LOCATION_PERMISSION),
-            Constants.LOCATION_PERMISSION_REQUEST_CODE
-        )
     }
 
     fun stopLocationUpdates() {
         eaterDataManager.stopLocationUpdates()
     }
-
-
 
     private fun getListOfAddresses(): ArrayList<Address>? {
         if (eaterDataManager.currentEater != null) {
@@ -305,7 +330,7 @@ class MainViewModel(
                 //parse client
                 val eaterServerResponse = objects[1] as ServerResponse<Eater>
                 val eater: Eater? = eaterServerResponse.data
-                eaterDataManager.currentEater = eater
+//                eaterDataManager.currentEater = eater // ny delete
                 eater?.activeCampaign?.let{
                     activeCampaignEvent.postValue(it)
                     eaterDataManager.sid = null
@@ -339,7 +364,7 @@ class MainViewModel(
                 if (response.isSuccessful) {
                     Log.d(TAG, "on success! ")
                     var eater = response.body()?.data!!
-                    eaterDataManager.currentEater = eater
+//                    eaterDataManager.currentEater = eater //ny delete
                     checkForCampaignReferrals()
                 } else {
                     Log.d(TAG, "on Failure! ")
@@ -365,10 +390,11 @@ class MainViewModel(
         }
     }
 
+    fun initGpsStatus(activity: Activity) {
+        eaterDataManager.initGpsStatus(activity)
+    }
 
-//    fun disableEventData() {
-//        eaterDataManager.disableEventDate()
-//    }
+
 
 
 }

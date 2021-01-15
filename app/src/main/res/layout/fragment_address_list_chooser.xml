@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".features.locations_and_address.address_list_chooser.AddressListChooserFragment">
+
+    <TextView
+            android:id="@+id/addressChooserAddBtn"
+            style="@style/Reg13Dark"
+            android:paddingStart="15.4dp"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="22.6dp"
+            android:drawablePadding="7.7dp"
+            android:gravity="center_vertical"
+            android:text="Add new address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:drawableStartCompat="@drawable/icons_add" />
+
+    <View
+            android:layout_marginStart="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="@color/silver"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/addressChooserList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

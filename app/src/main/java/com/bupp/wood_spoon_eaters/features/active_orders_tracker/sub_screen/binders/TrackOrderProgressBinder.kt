@@ -8,6 +8,7 @@ import androidx.appcompat.view.menu.MenuView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackProgress
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.track_order_progress_section.view.*
 import kotlinx.android.synthetic.main.track_order_progress_section.view.trackOrderBottomCancelBtn
@@ -83,10 +84,10 @@ class TrackOrderProgressBinder(val listener: TrackOrderProgressBinder.TrackOrder
                     val deliveryTime = Calendar.getInstance()
                     deliveryTime.time = order.estDeliveryTime
 
-                    if (Utils.isSameDay(today, deliveryTime)) {
-                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${Utils.parseDateToTime(order.estDeliveryTime)}"
+                    if (DateUtils.isSameDay(today, deliveryTime)) {
+                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateToTime(order.estDeliveryTime)}"
                     } else {
-                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${Utils.parseDateToFullDate(order.estDeliveryTime)}"
+                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateToFullDate(order.estDeliveryTime)}"
                     }
                 }else{
                     itemView.trackOrderProgressArrivalTime.text = "${order.estDeliveryTimeText}"

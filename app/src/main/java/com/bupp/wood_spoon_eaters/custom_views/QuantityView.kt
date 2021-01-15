@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import kotlinx.android.synthetic.main.quantity_view.view.*
-import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 
 class QuantityView : LinearLayout{
 

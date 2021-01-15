@@ -44,6 +44,7 @@
     <string name="create_account_fragment_next_btn">Next</string>
 
     <string name="code_fragment_title">Enter The 4-digit code</string>
+    <string name="location_permission_title">Allow location permission</string>
     <string name="code_fragment_sub_title">Sent to you at</string>
     <string name="code_fragment_help">Haven’t received the code?</string>
     <string name="code_fragment_resend_btn">Resend</string>

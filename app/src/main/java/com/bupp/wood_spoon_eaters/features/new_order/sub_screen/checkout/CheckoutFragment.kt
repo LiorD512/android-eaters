@@ -19,13 +19,13 @@ import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.checkout_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -51,7 +51,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
 //    val viewModel by viewModel<CheckoutViewModel>()
-    val ordersViewModel by sharedViewModel<NewOrderSharedViewModel>()
+    val ordersViewModel by sharedViewModel<NewOrderMainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.checkout_fragment, container, false)
@@ -64,88 +64,88 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     private fun initObservers() {
-        ordersViewModel.checkoutOrderEvent.observe(this, Observer { checkoutEvent ->
-            if(checkoutEvent != null && checkoutEvent.isSuccess){
-                listener.onCheckoutDone()
-            }else{
-                Toast.makeText(context, "checkoutEvent failed", Toast.LENGTH_SHORT).show()
-            }
-         })
-
-
-        ordersViewModel.getStripeCustomerCards(requireContext()).observe(this, Observer { cardsEvent ->
-            Log.d("wowCheckoutFrag","getStripeCustomerCards()")
-            if(cardsEvent != null){
-                handleCustomerCards(cardsEvent)
-            }else {
-                setEmptyPaymentMethod()
-            }
-        })
-
-        ordersViewModel.orderData.observe(viewLifecycleOwner, Observer { orderData ->
-            handleOrderDetails(orderData)
-            checkoutFragTipPercntView.updateCurrentTip(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
-            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
-        })
-
-        ordersViewModel.tipInDollars.observe(viewLifecycleOwner, Observer { orderData ->
-            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
-        })
-
-        ordersViewModel.tipPercentage.observe(viewLifecycleOwner, Observer { orderData ->
-            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
-        })
-
-        ordersViewModel.progressData.observe(viewLifecycleOwner, Observer { shouldShow ->
-            if(shouldShow){
-                checkoutFragPb.show()
-            }else{
-                checkoutFragPb.hide()
-            }
-        })
-        ordersViewModel.editDeliveryTime.observe(this, Observer { editTimeEvent ->
-            editTimeEvent.endsAt?.let{
-                editTimeEvent.startAt?.let{
-                    onEditDateClick(editTimeEvent.startAt, editTimeEvent.endsAt)
-                }
-            }
-        })
-        ordersViewModel.emptyCartEvent.observe(this, Observer { emptyCartEvent ->
-            if(emptyCartEvent.shouldShow) {
-                ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-            }
-        })
-
-        ordersViewModel.updateOrderError.observe(this, Observer { errorEvent ->
-            when(errorEvent){
-                400 -> {
-                    OrderUpdateErrorDialog(this).show(childFragmentManager, Constants.ORDER_UPDATE_ERROR_DIALOG)
-                }
-                else -> {}
-            }
-        })
-        ordersViewModel.errorEvent.observe(this, Observer{
-            it?.let{
-                var errorStr = ""
-                it.forEach {
-                    errorStr += "${it.msg} \n"
-                }
-                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
-            }
-        })
-        ordersViewModel.shippingMethodsEvent.observe(viewLifecycleOwner, Observer{
-            it?.let{
-                if(it?.size > 0){
-                    NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
-                }else{
-                    Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+//        ordersViewModel.checkoutOrderEvent.observe(this, Observer { checkoutEvent ->
+//            if(checkoutEvent != null && checkoutEvent.isSuccess){
+//                listener.onCheckoutDone()
+//            }else{
+//                Toast.makeText(context, "checkoutEvent failed", Toast.LENGTH_SHORT).show()
+//            }
+//         })
+//
+//
+//        ordersViewModel.getStripeCustomerCards(requireContext()).observe(this, Observer { cardsEvent ->
+//            Log.d("wowCheckoutFrag","getStripeCustomerCards()")
+//            if(cardsEvent != null){
+//                handleCustomerCards(cardsEvent)
+//            }else {
+//                setEmptyPaymentMethod()
+//            }
+//        })
+//
+//        ordersViewModel.orderData.observe(viewLifecycleOwner, Observer { orderData ->
+//            handleOrderDetails(orderData)
+//            checkoutFragTipPercntView.updateCurrentTip(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
+//            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
+//        })
+//
+//        ordersViewModel.tipInDollars.observe(viewLifecycleOwner, Observer { orderData ->
+//            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
+//        })
+//
+//        ordersViewModel.tipPercentage.observe(viewLifecycleOwner, Observer { orderData ->
+//            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
+//        })
+//
+//        ordersViewModel.progressData.observe(viewLifecycleOwner, Observer { shouldShow ->
+//            if(shouldShow){
+//                checkoutFragPb.show()
+//            }else{
+//                checkoutFragPb.hide()
+//            }
+//        })
+//        ordersViewModel.editDeliveryTime.observe(this, Observer { editTimeEvent ->
+//            editTimeEvent.endsAt?.let{
+//                editTimeEvent.startAt?.let{
+//                    onEditDateClick(editTimeEvent.startAt, editTimeEvent.endsAt)
+//                }
+//            }
+//        })
+//        ordersViewModel.emptyCartEvent.observe(this, Observer { emptyCartEvent ->
+//            if(emptyCartEvent.shouldShow) {
+//                ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+//            }
+//        })
+//
+//        ordersViewModel.updateOrderError.observe(this, Observer { errorEvent ->
+//            when(errorEvent){
+//                400 -> {
+//                    OrderUpdateErrorDialog(this).show(childFragmentManager, Constants.ORDER_UPDATE_ERROR_DIALOG)
+//                }
+//                else -> {}
+//            }
+//        })
+//        ordersViewModel.errorEvent.observe(this, Observer{
+//            it?.let{
+//                var errorStr = ""
+//                it.forEach {
+//                    errorStr += "${it.msg} \n"
+//                }
+//                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
+//            }
+//        })
+//        ordersViewModel.shippingMethodsEvent.observe(viewLifecycleOwner, Observer{
+//            it?.let{
+//                if(it?.size > 0){
+//                    NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
+//                }else{
+//                    Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        })
     }
 
     override fun onCancelUpdateOrderError() {
-        ordersViewModel.rollBackToPreviousAddress()
+//        ordersViewModel.rollBackToPreviousAddress()
     }
 
 
@@ -168,26 +168,21 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             (activity as NewOrderActivity).startPaymentMethodActivity()
         }
 
-        checkoutFragUtensilsSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            ordersViewModel.updateAddUtensils(isChecked)
-            when(isChecked){
-                true -> {
-                    checkoutFragUtensilsText.text = "These items will be added to your order"
-                }
-                false -> {
-                    checkoutFragUtensilsText.text = "These items won’t be included unless you ask"
-                }
-            }
-        }
-
-//        checkoutFragRecurringSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-//            ordersViewModel.updateRecurringOrder(isChecked)
+//        checkoutFragUtensilsSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+//            ordersViewModel.updateAddUtensils(isChecked)
+//            when(isChecked){
+//                true -> {
+//                    checkoutFragUtensilsText.text = "These items will be added to your order"
+//                }
+//                false -> {
+//                    checkoutFragUtensilsText.text = "These items won’t be included unless you ask"
+//                }
+//            }
 //        }
 
+
         ordersViewModel.getLastOrderDetails()
-//        ordersViewModel.getStripeCustomerCards()
-//        viewModel.getCurrentCustomer()
-        ordersViewModel.resetTip()
+//        ordersViewModel.resetTip()
 
     }
 
@@ -214,7 +209,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
             checkoutFragStatusBar.setEnabled(true)
             checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
             checkoutFragChangePaymentChangeBtn.alpha = 0.3f
-            ordersViewModel.updateUserCustomerCard(paymentMethod)
+//            ordersViewModel.updateUserCustomerCard(paymentMethod)
         }
     }
 
@@ -232,7 +227,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 }
 
                 if(order.estDeliveryTime != null){
-                    val time = Utils.parseDateToDayDateHour(order.estDeliveryTime)
+                    val time = DateUtils.parseDateToDayDateHour(order.estDeliveryTime)
                     if(time != null){
                         checkoutFragDeliveryTime.updateDeliveryDetails(time)
                     }
@@ -241,7 +236,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
                 }
 
                 checkoutFragTitle.text = "Your Order From Cook ${cook.getFullName()}"
-                checkoutFragOrderItemsView.setOrderItems(context!!, order.orderItems as ArrayList<OrderItem>, this)
+                checkoutFragOrderItemsView.setOrderItems(requireContext(), order.orderItems as ArrayList<OrderItem>, this)
             }
 
             order.cookingSlot.isNationwide?.let{
@@ -263,7 +258,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onDishCountChange(orderItemsCount: Int, updatedOrderItem: OrderItem) {
-            ordersViewModel.updateOrder(updatedOrderItem)
+//            ordersViewModel.updateOrder(updatedOrderItem)
     }
 
     private fun updatePriceUi(tipPercent: Int?, tipInDollars: Int?) {
@@ -346,45 +341,41 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onShippingMethodChoose(choosenShippingMethod: ShippingMethod) {
-        checkoutFragStatusBar.isEnabled = true
-        checkoutFragNationwideSelect.updateNationwideShippingDetails("${choosenShippingMethod.name}")
-        ordersViewModel.updateShppingMethod(choosenShippingMethod)
+//        checkoutFragStatusBar.isEnabled = true
+//        checkoutFragNationwideSelect.updateNationwideShippingDetails("${choosenShippingMethod.name}")
+//        ordersViewModel.updateShppingMethod(choosenShippingMethod)
     }
 
     override fun onClearCart() {
-        ordersViewModel.clearCart()
-        (activity as NewOrderActivity).finish()
+//        ordersViewModel.clearCart()
+//        (activity as NewOrderActivity).finish()
     }
 
     override fun onStatusBarClicked(type: Int?) {
-        if(ordersViewModel.isNationwideOrder() && ordersViewModel.selectedShippingMethod == null){
-            ordersViewModel.onNationwideShippingSelectClick()
-            return
-        }
-        if(hasPaymentMethod){
-            checkoutFragPb.show()
-            ordersViewModel.checkoutOrder(curOrder.id)
-        }else{
-            //start ups and then payment
-            (activity as NewOrderActivity).startPaymentMethodActivity()
-        }
+//        if(ordersViewModel.isNationwideOrder() && ordersViewModel.selectedShippingMethod == null){
+//            ordersViewModel.onNationwideShippingSelectClick()
+//            return
+//        }
+//        if(hasPaymentMethod){
+//            checkoutFragPb.show()
+//            ordersViewModel.checkoutOrder(curOrder.id)
+//        }else{
+//            //start ups and then payment
+//            (activity as NewOrderActivity).startPaymentMethodActivity()
+//        }
     }
 
     override fun onTipIconClick(tipSelection: Int) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            ordersViewModel.updateTip(tipPercentage = tipSelection)
-//            ordersViewModel.updateTipPercentage(tipSelection)
-//            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
+//            ordersViewModel.updateTip(tipPercentage = tipSelection)
             }
     }
 
     override fun onTipDone(tipAmount: Int) {
         checkoutFragTipPercntView.setCustomTipValue(tipAmount)
-        ordersViewModel.updateTip(tipInCents = tipAmount)
-//        ordersViewModel.updateTipPercentage(0)
-//        ordersViewModel.updateTipInDollars(tipAmount)
+//        ordersViewModel.updateTip(tipInCents = tipAmount)
     }
 
     override fun onChangeLocationClick() {
@@ -396,11 +387,11 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onNationwideShippingChange() {
-        ordersViewModel.onNationwideShippingSelectClick()
+//        ordersViewModel.onNationwideShippingSelectClick()
     }
 
     private fun openOrderTimeDialog() {
-        ordersViewModel.editDeliveryTime()
+//        ordersViewModel.editDeliveryTime()
     }
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
@@ -427,7 +418,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         val calEnd = Calendar.getInstance()
         calEnd.time = endsAt
 
-        if(Utils.isSameDay(calStart, calEnd)){
+        if(DateUtils.isSameDay(calStart, calEnd)){
             openTimePicker(calStart, calEnd)
         }else{
             openDatePicker(calStart, calEnd)
@@ -441,10 +432,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         val month = calStart.get(Calendar.MONTH)
         val day = calStart.get(Calendar.DAY_OF_MONTH)
 
-        val dpd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(year, monthOfYear, dayOfMonth)
-            if(Utils.isSameDay(selectedDate, calStart)){
+            if(DateUtils.isSameDay(selectedDate, calStart)){
                 selectedDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59)
                 openTimePicker(calStart, selectedDate)
             }else{

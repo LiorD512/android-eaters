@@ -17,7 +17,7 @@ class MetaDataRepository(private val apiService: ApiService) {
             apiService.getMetaData().data
         }
         result?.let{
-            this.metaDataObject = metaDataObject
+            this.metaDataObject = it.copy()
         }
     }
 
@@ -27,7 +27,7 @@ class MetaDataRepository(private val apiService: ApiService) {
 
     fun getCuisineList(): ArrayList<CuisineLabel> {
         if (getMetaDataObject()?.cuisines != null) {
-            return metaDataObject?.cuisines as ArrayList<CuisineLabel>
+            return metaDataObject.cuisines as ArrayList<CuisineLabel>
         }
         return arrayListOf()
     }
@@ -41,7 +41,7 @@ class MetaDataRepository(private val apiService: ApiService) {
 
     fun getDietaryList(): ArrayList<SelectableIcon> {
         if (getMetaDataObject()?.diets != null) {
-            return metaDataObject?.diets as ArrayList<SelectableIcon>
+            return metaDataObject.diets as ArrayList<SelectableIcon>
         }
         return arrayListOf()
     }

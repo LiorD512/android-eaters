@@ -10,34 +10,34 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
-import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressChooserViewModel
 import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
-import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsViewModel
-import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderSharedViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.repositories.SingleDishRepository
+import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
 import com.bupp.wood_spoon_eaters.common.AppSettings
-//import org.koin.android.viewmodel.dsl.viewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 
 import org.koin.dsl.module
@@ -45,23 +45,27 @@ import org.koin.dsl.module
 
 val appModule = module {
 
+    //global
+    single { AppSettings(get(), get()) }
+    single { LocationManager(get()) }
+    single { MetaDataRepository(get()) }
+    single { FcmManager(get()) }
+    single { PaymentManager(get()) }
+    factory { PermissionManager() }
+
     //repos
     single { RepositoryImpl(get()) }
     single { UserRepository(get(), get()) }
+    single { NewOrderRepository(get(), get()) }
 
-    single { AppSettings(get()) }
+    //managers
+    single { CartManager(get(), get(), get()) }
     single { OrderManager(get(), get()) }
-    single { LocationManager(get(), get()) }
-    single { MetaDataRepository(get()) }
     single { EventsManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get()) }
-    single { EaterDataManager(get(), get(), get()) }
-    single { FcmManager(get()) }
-    single { PaymentManager(get()) }
+    single { EaterDataManager(get(), get(), get(), get()) }
 
-    single { SingleDishRepository(get(), get()) }
 
-    factory { PermissionManager() }
 
     //VIEW MODELS
 
@@ -70,17 +74,21 @@ val appModule = module {
     viewModel { SplashViewModel(get(), get(), get(), get()) }
 
     //login
-    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { NewOrderSharedViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 
-    viewModel { FeedViewModel(get(), get(), get(), get()) }
+    //New Order
+    viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SingleDishInfoViewModel(get(), get(), get(), get(), get(), get()) }
+
+    viewModel { LocationAndAddressViewModel() }
+
+    viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
-    viewModel { SingleDishViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { AddressChooserViewModel(get(), get(), get()) }
-    viewModel { AddAddressViewModel(get(), get(), get()) }
+    viewModel { AddOrEditAddressViewModel(get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(),get())}
@@ -111,7 +119,7 @@ val appModule = module {
 
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }
-    viewModel { DeliveryDetailsViewModel(get(), get(), get(), get()) }
+    viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
 
     viewModel { EventActivityViewModel(get(), get(), get(), get()) }
 //    viewModel { GetEventByIdViewModel(get()) }

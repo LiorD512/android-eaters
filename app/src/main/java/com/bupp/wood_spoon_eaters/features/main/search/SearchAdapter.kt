@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.search_cuisine_item.view.*
 import kotlinx.android.synthetic.main.search_dish_cooks_item.view.*
@@ -66,7 +67,7 @@ class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLa
                     holder.dishCount.initQuantityView(dish.menuItem)
                     val upcomingSlot = dish.menuItem.cookingSlot
                     if (dish.menuItem.orderAt != null) {
-                        holder.date.text = Utils.parseDateToDayDateHour(dish.menuItem.orderAt)
+                        holder.date.text = DateUtils.parseDateToDayDateHour(dish.menuItem.orderAt)
                     }else if(dish.doorToDoorTime != null){
                         holder.date.text = "ASAP, ${dish.doorToDoorTime}"
                     }

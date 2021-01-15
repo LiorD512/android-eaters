@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/singleDishIngredientLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="15.4dp"
+        android:paddingRight="15.4dp"
+        android:paddingBottom="38dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+<!--    <androidx.recyclerview.widget.RecyclerView-todo--><!--todo>-->
+<!--            android:id="@+id/singleDishIngredientDietryList"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="84dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:visibility="gone"-->
+<!--            tools:visibility="gone" />-->
+
+<!--    <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:layout_marginTop="8.4dp"-->
+<!--            android:background="@color/silver" />-->
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start|center">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icons_calories" />
+
+            <TextView
+                    android:id="@+id/singleDishIngredientCalories"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7.7dp"
+                    android:gravity="center"
+                    tools:text="522 Calories" />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icons_cooking_method" />
+
+            <TextView
+                    android:id="@+id/singleDishIngredientSauteing"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7.7dp"
+                    android:gravity="center"
+                    tools:text="Sauteing" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icons_protein" />
+
+            <TextView
+                    android:id="@+id/singleDishIngredientProtein"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7.7dp"
+                    android:gravity="center"
+                    tools:text="5g Protein" />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icons_carbohydrates" />
+
+            <TextView
+                    android:id="@+id/singleDishIngredientCarbohydrate"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7.7dp"
+                    android:gravity="center"
+                    tools:text="3g Carbohydrate" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+            style="@style/SemiBold15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:layout_marginBottom="23dp"
+            android:gravity="center_horizontal"
+            android:text="Ingredients" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/singleDishIngredientList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+</LinearLayout>

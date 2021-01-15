@@ -56,9 +56,15 @@
     </style>
 
     <style name="SemiBold19Blue">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">23sp</item>
         <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
+    <style name="Bold19Black">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Bold23Blue">
@@ -141,6 +147,11 @@
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
+    </style>
+    <style name="Reg15Black">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 

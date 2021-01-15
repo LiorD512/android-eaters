@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
@@ -181,7 +182,7 @@ class EventActivityViewModel(val eaterDataManager: EaterDataManager, val apiServ
 
     fun getEventOrderTime(): String? {
         return liveEventObj.value?.let {
-            return Utils.parseDateToDayDateHour(it.startsAt)
+            return DateUtils.parseDateToDayDateHour(it.startsAt)
         }
     }
 

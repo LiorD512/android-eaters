@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -18,16 +19,22 @@ import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 
-class LoginViewModel(val apiService: RepositoryImpl,
-                     val userRepository: UserRepository, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
-                     , val deviceDetailsManager: FcmManager, val paymentManager: PaymentManager
+class LoginViewModel(
+    private val applicationContext: Context,
+    val apiService: RepositoryImpl,
+    val userRepository: UserRepository,
+    val eaterDataManager: EaterDataManager,
+    val metaDataRepository: MetaDataRepository,
+    val deviceDetailsManager: FcmManager,
+    val paymentManager: PaymentManager
 ) : ViewModel() {
 
     var phone: String? = null
     var code: String? = null
     var privacyPolicyCb: Boolean = false
 
-    val navigationEvent: MutableLiveData<NavigationEvent> = MutableLiveData()
+    val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
+    val locationPermissionActionEvent: MutableLiveData<Void> = MutableLiveData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
     val progressData = ProgressData()
 
@@ -38,9 +45,12 @@ class LoginViewModel(val apiService: RepositoryImpl,
         OPEN_PHONE_SCREEN,
         OPEN_CODE_SCREEN,
         OPEN_MAIN_ACT,
+        OPEN_LOCATION_PERMISSION_FROM_CODE,
+        OPEN_LOCATION_PERMISSION_FROM_SIGNUP,
         OPEN_SIGNUP_SCREEN,
-        CODE_RESENT
+        CODE_RESENT,
     }
+
     enum class ErrorEventType {
         PHONE_EMPTY,
         CODE_EMPTY,
@@ -51,11 +61,10 @@ class LoginViewModel(val apiService: RepositoryImpl,
         SOMETHING_WENT_WRONG
     }
 
-    data class NavigationEvent(val type: NavigationEventType)
-
     fun setUserPhone(phone: String) {
         this.phone = phone
     }
+
     fun setUserCode(code: String) {
         this.code = code
     }
@@ -65,21 +74,21 @@ class LoginViewModel(val apiService: RepositoryImpl,
     }
 
     fun directToPhoneFrag() {
-        navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_PHONE_SCREEN))
+        navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 
     private fun directToCodeFrag() {
-        navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_CODE_SCREEN))
+        navigationEvent.postValue(NavigationEventType.OPEN_CODE_SCREEN)
     }
 
     //phone verification methods
     private fun validatePhoneData(): Boolean {
         var isValid = true
-        if(phone.isNullOrEmpty()) {
+        if (phone.isNullOrEmpty()) {
             phoneFieldErrorEvent.postValue(ErrorEventType.PHONE_EMPTY)
             isValid = false
         }
-        if(!privacyPolicyCb) {
+        if (!privacyPolicyCb) {
             phoneCbFieldErrorEvent.postValue(ErrorEventType.CB_REQUIRED)
             isValid = false
         }
@@ -87,25 +96,25 @@ class LoginViewModel(val apiService: RepositoryImpl,
     }
 
     fun sendPhoneNumber() {
-        if(validatePhoneData()){
+        if (validatePhoneData()) {
             progressData.startProgress()
             viewModelScope.launch {
                 val userRepoResult = userRepository.sendPhoneVerification(phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                        Log.d("wowLoginVM","NetworkError")
+                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                     UserRepository.UserRepoStatus.INVALID_PHONE -> {
-                        Log.d("wowLoginVM","GenericError")
+                        Log.d("wowLoginVM", "GenericError")
                         errorEvents.postValue(ErrorEventType.INVALID_PHONE)
                     }
-                    UserRepository.UserRepoStatus.SUCCESS-> {
-                        Log.d("wowLoginVM","Success")
+                    UserRepository.UserRepoStatus.SUCCESS -> {
+                        Log.d("wowLoginVM", "Success")
                         directToCodeFrag()
                     }
                     else -> {
-                        Log.d("wowLoginVM","NetworkError")
+                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                 }
@@ -114,26 +123,26 @@ class LoginViewModel(val apiService: RepositoryImpl,
         }
     }
 
-    fun resendCode(){
-        if(validatePhoneData()){
+    fun resendCode() {
+        if (validatePhoneData()) {
             progressData.startProgress()
             viewModelScope.launch {
                 val userRepoResult = userRepository.sendPhoneVerification(phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                        Log.d("wowLoginVM","NetworkError")
+                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                     UserRepository.UserRepoStatus.INVALID_PHONE -> {
-                        Log.d("wowLoginVM","GenericError")
+                        Log.d("wowLoginVM", "GenericError")
                         errorEvents.postValue(ErrorEventType.INVALID_PHONE)
                     }
-                    UserRepository.UserRepoStatus.SUCCESS-> {
-                        Log.d("wowLoginVM","Success")
-                        navigationEvent.postValue(NavigationEvent(NavigationEventType.CODE_RESENT))
+                    UserRepository.UserRepoStatus.SUCCESS -> {
+                        Log.d("wowLoginVM", "Success")
+                        navigationEvent.postValue(NavigationEventType.CODE_RESENT)
                     }
                     else -> {
-                        Log.d("wowLoginVM","NetworkError")
+                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                 }
@@ -145,43 +154,49 @@ class LoginViewModel(val apiService: RepositoryImpl,
     //code verification methods
 
     fun sendPhoneAndCodeNumber() {
-        if(!code.isNullOrEmpty()){
+        if (!code.isNullOrEmpty()) {
             phone?.let { phone ->
                 progressData.startProgress()
                 viewModelScope.launch {
                     val userRepoResult = userRepository.sendCodeAndPhoneVerification(phone, code!!)
                     when (userRepoResult.type) {
                         UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                            Log.d("wowLoginVM","NetworkError")
+                            Log.d("wowLoginVM", "sendPhoneAndCodeNumber - NetworkError")
                             errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                         }
                         UserRepository.UserRepoStatus.WRONG_PASSWORD -> {
-                            Log.d("wowLoginVM","GenericError")
+                            Log.d("wowLoginVM", "sendPhoneAndCodeNumber - GenericError")
                             errorEvents.postValue(ErrorEventType.WRONG_PASSWORD)
                         }
-                        UserRepository.UserRepoStatus.SUCCESS-> {
-                            Log.d("wowLoginVM","Success")
+                        UserRepository.UserRepoStatus.SUCCESS -> {
+                            Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
-                            if(userRepository.isUserSignedUp()){
-                                navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_MAIN_ACT))
-                            }else{
-                                navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_SIGNUP_SCREEN))
+                            if (userRepository.isUserSignedUp()) {
+                                navigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_CODE)
+                            } else {
+                                navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
                         }
                         else -> {
-                            Log.d("wowLoginVM","NetworkError")
+                            Log.d("wowLoginVM", "NetworkError")
                             errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                         }
                     }
                     progressData.endProgress()
                 }
             }
-        }else{
+        } else {
             errorEvents.postValue(ErrorEventType.CODE_EMPTY)
         }
     }
 
-    fun updateClientAccount(context: Context, fullName: String, email: String, cuisineIcons: ArrayList<SelectableIcon>?, dietaryIcons: ArrayList<SelectableIcon>?) {
+    fun updateClientAccount(
+        context: Context,
+        fullName: String,
+        email: String,
+        cuisineIcons: ArrayList<SelectableIcon>?,
+        dietaryIcons: ArrayList<SelectableIcon>?
+    ) {
         progressData.startProgress()
         val firstAndLast: Pair<String, String> = Utils.getFirstAndLastNames(fullName)
         val firstName = firstAndLast.first
@@ -214,25 +229,24 @@ class LoginViewModel(val apiService: RepositoryImpl,
 
     private fun postClient(context: Context, eater: EaterRequest) {
         viewModelScope.launch {
-            progressData.startProgress()
             val userRepoResult = userRepository.updateEater(eater)
             when (userRepoResult.type) {
                 UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                    Log.d("wowLoginVM","NetworkError")
+                    Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                 }
                 UserRepository.UserRepoStatus.SOMETHING_WENT_WRONG -> {
-                    Log.d("wowLoginVM","GenericError")
+                    Log.d("wowLoginVM", "GenericError")
                     errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
                 }
-                UserRepository.UserRepoStatus.SUCCESS-> {
-                    Log.d("wowLoginVM","Success")
+                UserRepository.UserRepoStatus.SUCCESS -> {
+                    Log.d("wowLoginVM", "Success")
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
-                    navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_MAIN_ACT))
+                    navigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_SIGNUP)
                 }
                 else -> {
-                    Log.d("wowLoginVM","NetworkError")
+                    Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                 }
             }
@@ -247,5 +261,19 @@ class LoginViewModel(val apiService: RepositoryImpl,
     fun getDietaryList(): ArrayList<SelectableIcon> {
         return metaDataRepository.getDietaryList()
     }
+
+    //Location Permission methods
+    private val locationData = LocationLiveData(applicationContext)
+    fun getLocationData() = locationData
+
+    fun onLocationPermissionDone() {
+        progressData.endProgress()
+        navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+    }
+
+    fun askLocationPermission() {
+        locationPermissionActionEvent.postValue(null)
+    }
+
 
 }

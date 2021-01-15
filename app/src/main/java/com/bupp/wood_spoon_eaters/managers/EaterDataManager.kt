@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import android.app.Activity
 import android.content.Context
 import android.location.Location
 import android.util.Log
@@ -8,16 +9,118 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.Event
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
+import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
+import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
+import com.bupp.wood_spoon_eaters.model.FeedRequest
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import java.util.*
 
 
-class EaterDataManager(val context: Context, val appSettings: AppSettings, val locationManager: LocationManager) :
+class EaterDataManager(val context: Context, val appSettings: AppSettings, val locationManager: LocationManager, val userRepository: UserRepository) :
     LocationManager.LocationManagerListener {
 
-
     private val TAG = "wowEaterAddressManager"
+
+    val currentEater: Eater?
+    get() = userRepository.getUser()
+
+    /////////////////////////////////////////
+    ///////////    LOCATION       ///////////
+    /////////////////////////////////////////
+
+    fun initGpsStatus(activity: Activity) {
+        locationManager.checkGpsStatus(activity)
+    }
+
+    data class LocationStatus(val type: LocationStatusType, val address: Address? = null)
+    enum class LocationStatusType{
+        CURRENT_LOCATION,
+        CURRENT_LOCATION_WITH_BANNER,
+        KNOWN_LOCATION,
+        KNOWN_LOCATION_WITH_BANNER,
+        NO_GPS_ENABLED_AND_NO_LOCATION,
+        HAS_GPS_ENABLED_BUT_NO_LOCATION,
+        NO_GPS_PERMISSION,
+
+    }
+
+    fun getLocationStatus(): LocationStatus {
+        val knownAddresses = getListOfAddresses()
+        val myLocation = locationManager.getLocationData().value
+        val hasGpsPermission = appSettings.hasGPSPermission
+        val isGpsEnabled = locationManager.isGpsEnabled
+        Log.d("wowEatersDataManager","getLocationStatus: hasGpsPermission: $hasGpsPermission, isGpsEnabled: $isGpsEnabled, knownAddresses: $knownAddresses, myLocation: $myLocation ")
+        return if(hasGpsPermission && isGpsEnabled){
+            Log.d("wowEatersDataManager", "has gpsPermission")
+            if(knownAddresses.isNullOrEmpty()){
+                Log.d("wowEatersDataManager", "don't have known address")
+                if(myLocation != null){
+                    LocationStatus(LocationStatusType.CURRENT_LOCATION, myLocation)
+                }else{
+                    LocationStatus(LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION)
+                }
+            }else{
+                Log.d("wowEatersDataManager", "has known address")
+                if(myLocation != null){
+                    val closestAddress = GpsUtils().getClosestAddressToLocation(myLocation, knownAddresses)
+                    if(closestAddress != null){
+                        Log.d("wowEatersDataManager", "using closest address: $closestAddress")
+                        LocationStatus(LocationStatusType.KNOWN_LOCATION, closestAddress)
+                    }else{
+                        Log.d("wowEatersDataManager", "using current location: $myLocation")
+                        LocationStatus(LocationStatusType.CURRENT_LOCATION, myLocation)
+                    }
+                }else{
+                    LocationStatus(LocationStatusType.KNOWN_LOCATION_WITH_BANNER, knownAddresses[0])
+                }
+            }
+        }else{ // GPS permission denied
+            Log.d("wowEatersDataManager", "don't have gpsPermission")
+            if(knownAddresses.isNullOrEmpty()){
+                LocationStatus(LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION)
+            }else{
+                LocationStatus(LocationStatusType.KNOWN_LOCATION_WITH_BANNER, knownAddresses[0])
+            }
+        }
+    }
+
+    fun getLocationData(): LocationLiveData {
+        return locationManager.getLocationData()
+    }
+
+
+    fun getFinalTimeAndLocationParam(): FeedRequest {
+        var feedRequest = FeedRequest()
+        //address
+        val currentAddress = getLastChosenAddress()
+        if (isUserChooseSpecificAddress()) {
+            feedRequest.addressId = currentAddress?.id
+        } else {
+            feedRequest.lat = currentAddress?.lat
+            feedRequest.lng = currentAddress?.lng
+        }
+
+        //time
+        feedRequest.timestamp = getLastOrderTimeParam()
+
+        return feedRequest
+    }
+
+
+
+
+
+
+
+
+//    fun getLocationLiveEvent(): LocationLiveData {
+//        return locationManager.locationData
+//    }
     private var currentPaymentMethod: PaymentMethod? = null
 
     interface EaterDataMangerListener {
@@ -62,7 +165,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
     }
 
-    fun getListOfAddresses(): ArrayList<Address>? {
+    private fun getListOfAddresses(): List<Address>? {
         currentEater?.let {
             return it.addresses
         }
@@ -129,7 +232,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     fun getLastChosenAddress(): Address? {
         return when (isInEvent) {
             true -> eventChosenAddress
-            false -> lastChosenAddress ?: getCurrentAddress()
+            false -> lastChosenAddress ?: getLocationStatus().address
         }
     }
 
@@ -255,7 +358,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     fun getLastOrderTimeParam(): String? {
         //returns unix timestamp
         return if (getLastOrderTime() != null) {
-            Utils.parseUnixTimestamp(getLastOrderTime()!!)
+            DateUtils.parseUnixTimestamp(getLastOrderTime()!!)
         } else {
             null
         }
@@ -263,7 +366,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
     fun getLastOrderTimeString(): String {
         return if (getLastOrderTime() != null) {
-            Utils.parseDateToDayDateHour(getLastOrderTime()!!)
+            DateUtils.parseDateToDayDateHour(getLastOrderTime()!!)
         } else {
             "ASAP"
         }
@@ -271,7 +374,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
 
     //eater params and data
-    var currentEater: Eater? = null
+
     private var isUserChooseSpecificAddress: Boolean = false
 
     fun isAfterLogin(): Boolean {
@@ -328,6 +431,8 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             this.cid = it
         }
     }
+
+
 
 
 }

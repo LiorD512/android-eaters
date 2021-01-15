@@ -1,0 +1,29 @@
+New Order Activity Flow Helper
+
+open new order activity ->
+
+0. load single dish fragment (with current dish)
+
+1. check if dish is sold out
+    1.1 - dish is sold out -> show sold out dialog *
+    1.2 - dish is available -> show dish.
+
+2. on Add dish to cart click -> check cart
+    2.1 - cart is currently empty - step 3.
+    2.2 - cart is not empty -> step 4.
+
+3. add dish to cart
+    3.1 - is first dish in cart -> step 5.
+    3.2 - is additional dish in cart ->
+
+4. check if current dish is from the same cooking slot as the current cart
+    4.1 - same cooking slot -> step 3. *
+    4.2 - different cooking slot -> clear cart and go to step 3. *
+
+5. show additional dishes screen
+    5.1 - on x click -> show chefs page. *
+    5.2 - add dish click -> update cart with new dish. *
+    5.3 - on dish click -> step 0.
+    5.4 - on proceed click -> step 6.
+
+6. checkout scree. *

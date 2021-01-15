@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetails
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.track_order_details_section.view.*
 import mva2.adapter.ItemBinder
@@ -46,7 +47,7 @@ class TrackOrderDetailsBinder() : ItemBinder<OrderTrackDetails, TrackOrderDetail
             itemView.trackOrderDetailsSectionTax.text = order.tax.formatedValue
             itemView.trackOrderDetailsSectionTotal.text = order.total.formatedValue
 //
-            itemView.trackOrderDetailsSectionDate.text = Utils.parseDateToFullDate(order.created_at)
+            itemView.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
             itemView.trackOrderDetailsSectionPayment.text = userInfo?.paymentMethod
             itemView.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
             itemView.trackOrderDetailsSectionLocation.text = userInfo?.userLocation?.getUserLocationStr()

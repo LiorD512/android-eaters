@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.order_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -101,8 +102,8 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragCookName.text = "By cook ${curOrder.cook.getFullName()}"
 
         if(curOrder.estDeliveryTime != null){
-            val date = Utils.parseDDateToUsDate(curOrder.estDeliveryTime)
-            val time = Utils.parseDDateToUsTime(curOrder.estDeliveryTime)
+            val date = DateUtils.parseDDateToUsDate(curOrder.estDeliveryTime)
+            val time = DateUtils.parseDDateToUsTime(curOrder.estDeliveryTime)
             orderDetailsFragOrderDate.text = "$date at $time"
         }else{
             orderDetailsFragOrderDate.text = "${curOrder.estDeliveryTimeText}"
@@ -112,7 +113,7 @@ class OrderDetailsFragment() : Fragment() {
 
         if(curOrder.status.equals("cancelled")){
             orderDetailsStatus.text = "Order Cancelled"
-            orderDetailsStatus.setTextColor(ContextCompat.getColor(context!!, R.color.red))
+            orderDetailsStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
 

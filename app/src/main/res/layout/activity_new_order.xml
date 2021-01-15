@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        android:id="@+id/newOrderContainer"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"/>
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+    <com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
+            android:id="@+id/newOrderHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <androidx.core.widget.NestedScrollView
+            android:background="@color/white"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <fragment
+                android:id="@+id/newOrderContainer"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/new_order_nav" />
+
+    </androidx.core.widget.NestedScrollView>
+
+
+        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+                android:id="@+id/singleDishPb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:visibility="gone" />
+
+    </LinearLayout>
+
+</FrameLayout>
 

@@ -1,21 +1,12 @@
 package com.bupp.wood_spoon_eaters.dialogs.additional_dishes
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.FullDish
-import com.bupp.wood_spoon_eaters.model.ServerResponse
-import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
-import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
-import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.ArrayList
 
 class AdditionalDishesViewModel(val orderManager: OrderManager) : ViewModel() {
@@ -46,11 +37,11 @@ class AdditionalDishesViewModel(val orderManager: OrderManager) : ViewModel() {
         }
     }
 
-    val additionalDishesEvent: SingleLiveEvent<SingleDishViewModel.AdditionalDishesEvent> = SingleLiveEvent()
+    val additionalDishesEvent: SingleLiveEvent<SingleDishInfoViewModel.AdditionalDishesEvent> = SingleLiveEvent()
     fun initAdditionalDishesList() {
         fullDish.value?.let {
             additionalDishesEvent.postValue(
-                SingleDishViewModel.AdditionalDishesEvent(
+                SingleDishInfoViewModel.AdditionalDishesEvent(
                     orderManager.curOrderResponse?.orderItems,
                     it.cook.dishes
                 )

@@ -1,0 +1,30 @@
+main activity - checkLocationStatus -
+
+1. check if user granted GPS permission
+    1.1 -> if no  -> step 2
+    1.2 -> if yes -> step 3
+
+2. check for user known address (an address the user selected before)
+    2.1 -> don't have -> show location dialog #1 *
+    2.2 -> have location -> show feed with banner *
+
+3. check for user known address (an address the user selected before)
+    3.1 -> don't have -> step 4
+    3.2 -> have location -> step 5
+
+4. start location updates and receive user location
+    4.1 -> found location -> show feed with current location
+    4.2 -> couldn't find location -> show location dialog #2 *
+
+5. start location updates and receive user location
+    5.1 -> found location -> step 6
+    5.2 -> couldn't find location -> show feed with known location + banner *
+
+6. check if current location is near known location
+    6.1 -> is near -> show feed with known location *
+    6.2 -> isn't near -> show feed with current location *
+
+
+location dialog 1 -> NoLocationAvailableFragment
+location dialog 2 -> NoLocationAvailableFragment2
+banner - You disabled your location services. WoodSpoon is using your last saved address for now.

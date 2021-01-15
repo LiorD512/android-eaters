@@ -26,8 +26,8 @@
 //import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 //import com.bupp.wood_spoon_eaters.features.events.EventActivity
 //import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
-//import com.bupp.wood_spoon_eaters.features.main.delivery_details.DeliveryDetailsFragment
-//import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add_new_address.AddAddressFragment
+//import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment
+//import com.bupp.wood_spoon_eaters.features.locations_and_address.add_address.AddAddressFragment
 //import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
 //import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 //import com.bupp.wood_spoon_eaters.features.main.no_locations.NoLocationsAvailableFragment
@@ -44,7 +44,7 @@
 //import com.bupp.wood_spoon_eaters.model.Order
 //import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 //import com.bupp.wood_spoon_eaters.common.Constants
-//import com.bupp.wood_spoon_eaters.utils.GPSBroadcastReceiver
+//import com.bupp.wood_spoon_eaters.managers.location.GPSBroadcastReceiver
 //import com.bupp.wood_spoon_eaters.utils.Utils
 //import com.microsoft.appcenter.AppCenter
 //import com.microsoft.appcenter.analytics.Analytics

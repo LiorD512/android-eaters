@@ -72,7 +72,7 @@ class SettingsViewModel(private val appSettings: AppSettings, val api: ApiServic
                     if (response.isSuccessful) {
                         Log.d("wowSettingsVM", "postEaterNotificationGroup on success! ")
                         val eater = response.body()?.data!!
-                        eaterDataManager.currentEater = eater
+//                        eaterDataManager.currentEater = eater // ny delete
                         Log.d("wowSettings","current ids: ${eater.notificationsGroup}")
                         postNotificationGroup.postValue(PostNotificationGroupEvent(true))
                     } else {

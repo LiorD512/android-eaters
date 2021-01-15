@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/singleDishInfoFragment"
+    android:id="@+id/main_navigation">
+
+    <fragment
+            android:id="@+id/singleDishInfoFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment"
+            android:label="fragment_single_dish_info"
+            tools:layout="@layout/fragment_single_dish_info">
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/singleDishIngredientsFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientsFragment"
+            android:label="fragment_single_dish_ingredients"
+            tools:layout="@layout/fragment_single_dish_ingredients">
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/singleDishCookFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_cook.SingleDishCookFragment"
+            android:label="fragment_single_dish_cook"
+            tools:layout="@layout/cook_profile_fragment">
+
+    </fragment>
+
+</navigation>

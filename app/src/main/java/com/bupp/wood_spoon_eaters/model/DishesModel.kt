@@ -75,6 +75,7 @@ data class FullDish(
     @SerializedName("proteins") val proteins: Double,
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("video") val video: String? = null,
+    @SerializedName("cuisines") val cuisines: List<CuisineLabel>,
     @SerializedName("is_favorite") val isFavorite: Boolean,
     @SerializedName("nationwide_shipping") val isNationwide: Boolean,
     @SerializedName("description") val description: String,

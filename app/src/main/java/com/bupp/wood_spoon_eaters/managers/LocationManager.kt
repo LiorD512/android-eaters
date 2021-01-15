@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.managers
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.IntentFilter
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -12,6 +13,11 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.NonNull
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.managers.location.GPSBroadcastReceiver
+import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
+import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
 import com.bupp.wood_spoon_eaters.model.Address
 
 import com.google.android.gms.common.api.ApiException
@@ -37,9 +43,75 @@ import kotlin.collections.ArrayList
  * Created by MonkeyFather on 15/05/2018.
  */
 
-class LocationManager(val context: Context, val permissionManager: PermissionManager) {
+class LocationManager(val context: Context) : GPSBroadcastReceiver.GPSBroadcastListener {
 
-//    private lateinit var activity: Activity
+    /////////////////////////////////////////
+    /////////////    LOCATION    ////////////
+    /////////////////////////////////////////
+
+    fun getLocationData() = locationLiveData
+    private val locationLiveData = LocationLiveData(context)
+
+    /////////////////////////////////////////
+    ////////////       GPS       ////////////
+    /////////////////////////////////////////
+
+    fun getGpsData() = gpsLiveData
+    private val gpsLiveData = LiveEventData<Boolean>()
+
+    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
+    var isGpsEnabled: Boolean = true
+
+    init {
+        registerGpsBroadcastReceiver()
+    }
+
+    private fun registerGpsBroadcastReceiver() {
+        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
+        context.registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+    }
+
+    override fun onGPSChanged(isEnabled: Boolean) {
+        Log.d("wowLocationManager", "onGPSChanged: $isEnabled")
+        isGpsEnabled = isEnabled
+        gpsLiveData.postRawValue(isEnabled)
+    }
+
+    fun checkGpsStatus(context: Context) {
+        GpsUtils(context).turnGPSOn(object : GpsUtils.OnGpsListener {
+            override fun gpsStatus(isGPSEnable: Boolean) {
+                Log.d("wowLocationManager","gpsStatus: $isGPSEnable")
+                isGpsEnabled = isGPSEnable
+            }
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //    private lateinit var activity: Activity
     private lateinit var mLocationRequest: LocationRequest
     private lateinit var mSettingsClient: SettingsClient
 
@@ -56,7 +128,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
     private var isStarted = false
 
-    interface LocationManagerListener{
+    interface LocationManagerListener {
         fun onLocationChanged(mLocation: Address)
         fun onLocationEmpty()
     }
@@ -115,18 +187,18 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
     }
 
     private fun createLocationCallback() {
-        Log.d(TAG, "createLocationCallback")
-        mLocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                mLastLocation = mCurrentLocation
-                mCurrentLocation = locationResult.lastLocation
-                if(listener != null){
-//                    Toast.makeText(context, "onLocationResult:" + locationResult.lastLocation, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, "onLocationResult:" + locationResult.lastLocation)
-                    listener?.onLocationChanged(getAddressFromLocation(mCurrentLocation!!))
-                }
-            }
-        }
+//        Log.d(TAG, "createLocationCallback")
+//        mLocationCallback = object : LocationCallback() {
+//            override fun onLocationResult(locationResult: LocationResult) {
+//                mLastLocation = mCurrentLocation
+//                mCurrentLocation = locationResult.lastLocation
+//                if (listener != null) {
+////                    Toast.makeText(context, "onLocationResult:" + locationResult.lastLocation, Toast.LENGTH_SHORT).show()
+//                    Log.d(TAG, "onLocationResult:" + locationResult.lastLocation)
+//                    listener?.onLocationChanged(getAddressFromLocation(mCurrentLocation!!))
+//                }
+//            }
+//        }
     }
 
     private fun buildLocationSettingsRequest() {
@@ -150,7 +222,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
         }
 
         task.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException){
+            if (exception is ResolvableApiException) {
                 Log.d(TAG, "location setting failed")
 //                Toast.makeText(context, "location setting failed", Toast.LENGTH_SHORT).show()
                 val statusCode = (exception as ApiException).statusCode
@@ -158,7 +230,7 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
 //                        Toast.makeText(context, "location setting failed - RESOLUTION_REQUIRED", Toast.LENGTH_SHORT).show()
                         Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings")
-                        if(!isLocationEnabled(context)){
+                        if (!isLocationEnabled(context)) {
                             listener?.onLocationEmpty()
                         }
                         val rae = exception as ResolvableApiException
@@ -213,61 +285,15 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
     }
 
 
-    fun getAddressFromLocation(location: Location): Address{
-        var addresses: List<android.location.Address> = arrayListOf()
-        val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
 
-        var streetLine = ""
-        try {
-            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//            Log.d(TAG, "my location object: ${addresses[0]}")
-//            Toast.makeText(context, "my location object: ${addresses[0]}", Toast.LENGTH_SHORT).show()
-            if(addresses.isNotEmpty()){
-                streetLine = getStreetStr(addresses[0])
-            }
-//            streetLine = addresses[0].getAddressLine(0)
-        }catch (e: IOException){
-            Log.d(TAG, "location manager error: " + e.message)
-//            Toast.makeText(context, "location manager error: " + e.message, Toast.LENGTH_SHORT).show()
-        }
-//        val city = addresses[0].locality
-//        val state = addresses[0].adminArea
-//        val country = addresses[0].countryName
-//        val postalCode = addresses[0].postalCode
-//        val knownName = addresses[0].featureName
-        Log.d(TAG, "latlng to address success")
-
-        var address = Address()
-        address.streetLine1 = streetLine
-        address.lat = mCurrentLocation!!.latitude
-        address.lng = mCurrentLocation!!.longitude
-        return address
-    }
-
-    private fun getStreetStr(address: android.location.Address): String {
-        var number = ""
-        var street = ""
-        var city = ""
-        if(address.featureName != null){
-            number = address.featureName
-        }
-        if(address.thoroughfare != null){
-            street = address.thoroughfare
-        }
-        if(address.locality != null){
-            city = address.locality
-        }
-        return "$number $street"//, $city"
-    }
 
     fun getCurrentAddress(): Address? {
-        if(mCurrentLocation != null){
-            return getAddressFromLocation(mCurrentLocation!!)
-        }
+//        if (mCurrentLocation != null) {
+//            return getAddressFromLocation(mCurrentLocation!!)
+//        }
         return null
     }
 
-    
 
     companion object {
 
@@ -276,8 +302,6 @@ class LocationManager(val context: Context, val permissionManager: PermissionMan
 
         private val UPDATE_INTERVAL_IN_MILLISECONDS = 10000.toLong()
         private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000.toLong()
-
-
 
 
     }

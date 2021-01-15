@@ -11,6 +11,10 @@ import retrofit2.http.*
 interface ApiService {
 
 
+    //General
+    @GET("eaters/utils/meta")
+    suspend fun getMetaData(): ServerResponse<MetaDataModel>
+
     //Login end-points
     @FormUrlEncoded
     @POST("eaters/auth/get_code")
@@ -20,6 +24,19 @@ interface ApiService {
     @POST("eaters/auth/validate_code")
     suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
+    //New Order
+    @GET("menu_items/{menu_item_id}/dish")
+    suspend fun getSingleDish(
+        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
+        @Query("lat") lat: Double? = null,
+        @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null,
+        @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<FullDish>
+
+    @GET("cooks/{cook_id}/reviews")
+    suspend fun getDishReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
+
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
     fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
@@ -27,16 +44,14 @@ interface ApiService {
     @POST("eaters/me/addresses/{address_id}")
     fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Address>>
 
-
-    //General
-//    @GET("eaters/utils/meta")
-//    fun getMetaData(): Observable<ServerResponse<MetaDataModel>>
-
-    @GET("eaters/utils/meta")
-    fun getMetaDataCall(): Call<ServerResponse<MetaDataModel>>
-
-    @GET("eaters/utils/meta")
-    suspend fun getMetaData(): ServerResponse<MetaDataModel>
+    //Feed
+    @GET("eaters/me/feed")
+    suspend fun getFeedFlow(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<List<FeedFlow>>
 
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
@@ -98,14 +113,14 @@ interface ApiService {
     ): Call<ServerResponse<Cook>>
 
     //Single Dish
-    @GET("menu_items/{menu_item_id}/dish")
-    fun getSingleDish(
-        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
-        @Query("lat") lat: Double? = null,
-        @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null,
-        @Query("timestamp") timestamp: String? = null
-    ): Call<ServerResponse<FullDish>>
+//    @GET("menu_items/{menu_item_id}/dish")
+//    fun getSingleDish(
+//        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
+//        @Query("lat") lat: Double? = null,
+//        @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null,
+//        @Query("timestamp") timestamp: String? = null
+//    ): Call<ServerResponse<FullDish>>
 
 
     //New Order calls
@@ -156,7 +171,7 @@ interface ApiService {
     ): Call<ServerResponse<Search>>
 
 
-    //Feed
+//    //Feed
     @GET("eaters/me/feed")
     fun getFeed(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
@@ -172,8 +187,6 @@ interface ApiService {
     fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Void>>
 
     //Reports
-    @GET("cooks/{cook_id}/reviews")
-    fun getDishReview(@Path(value = "cook_id", encoded = true) cookId: Long): Call<ServerResponse<Review>>
 
     //Post Report
     @POST("eaters/me/orders/{order_id}/reports")

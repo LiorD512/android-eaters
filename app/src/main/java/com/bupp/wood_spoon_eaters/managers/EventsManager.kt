@@ -23,23 +23,31 @@ class EventsManager(val context: Context, private val appSetting: AppSettings, p
 
 
     fun initSegment(){
-        val user = userRepository.getUser()
+        val user = eaterDataManager.currentEater
         Log.d("wowEventsManager", "user: $user")
-        user?.let{
-            Analytics.with(context).identify(it.id.toString(), Traits()
-                .putName(it.getFullName())
-                .putEmail(it.email),null)
-        }
-        val address = eaterDataManager.getLastChosenAddress()
-        Log.d("wowEventsManager", "address: $address")
-        address?.let{
-            Analytics.with(context).identify(it.id.toString(), Traits()
-                .putAddress(Traits.Address()
-                    .putCity(it.city?.name)
-                    .putCountry(it.country?.name)
-                    .putState(it.state?.name)
-                    .putStreet(it.streetLine1)
-                    .putPostalCode(it.zipCode)),null)
+        user?.let{ user ->
+            Analytics.with(context).identify(
+                user.id.toString(), Traits()
+                    .putName(user.getFullName())
+                    .putEmail(user.email)
+                    .putPhone(user.phoneNumber), null
+            )
+
+            val address = eaterDataManager.getLastChosenAddress()
+            Log.d("wowEventsManager", "address: $address")
+            address?.let{
+                Analytics.with(context).identify(
+                    user.id.toString(), Traits()
+                        .putAddress(
+                            Traits.Address()
+                                .putCity(it.city?.name)
+                                .putCountry(it.country?.name)
+                                .putState(it.state?.name)
+                                .putStreet(it.streetLine1)
+                                .putPostalCode(it.zipCode)
+                        ), null
+                )
+            }
         }
     }
 
@@ -106,7 +114,7 @@ class EventsManager(val context: Context, private val appSetting: AppSettings, p
                 Analytics.with(context).track("Order placed", eventData)
             }
             Constants.UXCAM_EVENT_ADD_DISH -> {
-                Analytics.with(context).track("Add Dish To Cart", eventData)
+                Analytics.with(context).track(Constants.UXCAM_EVENT_ADD_DISH, eventData)
             }
             Constants.UXCAM_EVENT_ADD_ADDITIONAL_DISH -> {
                 Analytics.with(context).track("Add Additional Dish To Cart", eventData)
