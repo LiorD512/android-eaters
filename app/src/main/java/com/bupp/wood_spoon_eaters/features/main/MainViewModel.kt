@@ -1,11 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main
 
-import android.Manifest
 import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +13,7 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -32,12 +28,14 @@ class MainViewModel(
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
 
+    val progressData = ProgressData()
     val mainActHeaderEvent = MutableLiveData<MainActActionEvent>()
     data class MainActActionEvent(val time: String?, val address: Address?)
 
     init {
         eventsManager.initSegment()
         fcmManager.initFcmListener()
+        locationManager.updateFinalAddress()
         initHeaderUi()
     }
 
@@ -52,7 +50,8 @@ class MainViewModel(
     }
 
     fun getGpsLiveData() = locationManager.getGpsData()
-    fun getLocationLiveData() = locationManager.getLocationData()
+//    fun getLocationLiveData() = locationManager.getLocationData()
+    fun getFinalAddressLiveData() = locationManager.getFinalAddressLiveData()
 
     val navigationEvent = MutableLiveData<NavigationEventType>()
     enum class NavigationEventType{

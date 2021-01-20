@@ -13,11 +13,9 @@ import com.bupp.wood_spoon_eaters.dialogs.NoDishesAvailableDialog
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
-import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -54,7 +52,8 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         initUi()
 
 
-        FetchLocationAndFeed()
+//        viewModel.updateLocationStatus()
+
         showEmptyLayout()
         initObservers()
     }
@@ -64,32 +63,55 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     private fun initObservers() {
+        viewModel.getFinalAddressLiveData.observe(viewLifecycleOwner, Observer{
+            handleAddress(it)
+        })
+
         viewModel.updateMainHeaderUiEvent.observe(viewLifecycleOwner, Observer{
             mainViewModel.refreshMainHeaderUi()
         })
         viewModel.oldfeedEventOld.observe(this, Observer { event ->
 //            (activity as MainActivity).isFeedReady = true
-            feedFragPb.hide()
             if(event.isSuccess){
                 initFeed(event.feedArr!!)
             }
         })
         viewModel.getCookEvent.observe(this, Observer { event ->
-            feedFragPb.hide()
             if(event.isSuccess){
                 CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
-        viewModel.locationErrorEvent.observe(viewLifecycleOwner, Observer{
-            Log.d("wowFeedFrag","feed error: ${it.name}")
-//            when(it){
-//                FeedViewModel.LocationErrorType
-//            }
+        viewModel.locationStatusEvent.observe(viewLifecycleOwner, Observer{
+            Log.d("wowFeedFrag","feed location status: ${it.type}")
+            handleLocationStatus(it)
         })
-        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, Observer {
-            Log.d("wowFeedFrag","getLocationLiveData observer called ")
-            viewModel.checkLocationStatus()
-        })
+//        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, Observer {
+//            Log.d("wowFeedFrag","getLocationLiveData observer called ")
+//            doSomething(0)
+////            viewModel.initAddressBasedUi(it)
+////            viewModel.updateLocationStatus()
+//        })
+    }
+
+    private fun doSomething(i: Int) {
+
+    }
+
+    private fun handleLocationStatus(status: LocationStatus){
+        when(status.type){
+            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
+                handleAddress(status.address)
+            }
+            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {}
+            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {}
+        }
+    }
+
+    private fun handleAddress(address: Address?) {
+        Log.d(TAG, "handleAddress $address")
+        address?.let{
+            viewModel.initAddressBasedUi(it)
+        }
     }
 
     //CookProfileDialog interface
@@ -132,7 +154,6 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     override fun onCookClick(cook: Cook) {
-        feedFragPb.show()
         viewModel.getCurrentCook(cook.id)
     }
 

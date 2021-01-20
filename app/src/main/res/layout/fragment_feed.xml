@@ -67,9 +67,4 @@
 
     </FrameLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-        android:id="@+id/feedFragPb"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
 </FrameLayout>

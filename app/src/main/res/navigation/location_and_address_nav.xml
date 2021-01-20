@@ -38,8 +38,23 @@
     <fragment
             android:id="@+id/addOrEditAddressFragment"
             android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressFragment"
-            android:label="add_or_edot_address_fragment"
-            tools:layout="@layout/fragment_add_or_edit_address"></fragment>
+            android:label="add_or_edit_address_fragment"
+            tools:layout="@layout/fragment_add_or_edit_address">
+        <action
+                android:id="@+id/action_addOrEditAddressFragment_to_addressAutoCompleteFragment"
+                app:destination="@id/addressAutoCompleteFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/addOrEditAddressFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/addressAutoCompleteFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.search_address_auto_complete.AddressAutoCompleteSearchFragment"
+            android:label="address_autocomplete_search_fragment"
+            tools:layout="@layout/fragment_address_auto_complete_search" />
 
 
 </navigation>

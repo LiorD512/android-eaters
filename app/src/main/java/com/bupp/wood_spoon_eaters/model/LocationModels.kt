@@ -1,15 +1,21 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-data class NewAddress(
-    val googleAddressResponse: GoogleAddressResponse?,
-    val address: Address?,
-    val isDelivery: Boolean?
-)
+
+data class LocationStatus(val type: LocationStatusType, val address: Address? = null)
+enum class LocationStatusType{
+    CURRENT_LOCATION,
+    KNOWN_LOCATION,
+    HAS_LOCATION,
+    KNOWN_LOCATION_WITH_BANNER,
+    NO_GPS_ENABLED_AND_NO_LOCATION,
+    HAS_GPS_ENABLED_BUT_NO_LOCATION,
+    NO_GPS_PERMISSION,
+
+}
 
 @Parcelize
 data class AddressRequest(
@@ -24,6 +30,7 @@ data class AddressRequest(
     @SerializedName("zipcode") var zipCode: String? = "",
     @SerializedName("notes") var notes: String? = ""
 ) : Parcelable
+
 
 @Parcelize
 data class Address(
@@ -50,11 +57,6 @@ data class Address(
         }
     }
 }
-//
-//enum class DropOffLocation(str: String) {
-//    DELIVERY_TO_DOOR("Delivery to Door"),
-//    PICK_OUTSIDE("Pick outside")
-//}
 
 
 @Parcelize

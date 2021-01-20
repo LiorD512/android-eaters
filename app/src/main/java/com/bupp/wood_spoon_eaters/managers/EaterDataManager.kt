@@ -4,16 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.location.Location
 import android.util.Log
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.model.Event
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
 import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
-import com.bupp.wood_spoon_eaters.model.FeedRequest
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -24,10 +22,15 @@ import java.util.*
 class EaterDataManager(val context: Context, val appSettings: AppSettings, val locationManager: LocationManager, val userRepository: UserRepository) :
     LocationManager.LocationManagerListener {
 
-    private val TAG = "wowEaterAddressManager"
+    companion object {
+        const val TAG = "wowEaterAddressManager"
+    }
 
     val currentEater: Eater?
     get() = userRepository.getUser()
+
+    fun getFinalAddressLiveData() = locationManager.getFinalAddressLiveData()
+
 
     /////////////////////////////////////////
     ///////////    LOCATION       ///////////
@@ -37,61 +40,54 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         locationManager.checkGpsStatus(activity)
     }
 
-    data class LocationStatus(val type: LocationStatusType, val address: Address? = null)
-    enum class LocationStatusType{
-        CURRENT_LOCATION,
-        CURRENT_LOCATION_WITH_BANNER,
-        KNOWN_LOCATION,
-        KNOWN_LOCATION_WITH_BANNER,
-        NO_GPS_ENABLED_AND_NO_LOCATION,
-        HAS_GPS_ENABLED_BUT_NO_LOCATION,
-        NO_GPS_PERMISSION,
-
-    }
-
     fun getLocationStatus(): LocationStatus {
+        val finalAddress = locationManager.getFinalAddressLiveData().value //todo - ny
         val knownAddresses = getListOfAddresses()
-        val myLocation = locationManager.getLocationData().value
+        val myLocation = locationManager.getFinalAddressLiveData().value
         val hasGpsPermission = appSettings.hasGPSPermission
         val isGpsEnabled = locationManager.isGpsEnabled
-        Log.d("wowEatersDataManager","getLocationStatus: hasGpsPermission: $hasGpsPermission, isGpsEnabled: $isGpsEnabled, knownAddresses: $knownAddresses, myLocation: $myLocation ")
-        return if(hasGpsPermission && isGpsEnabled){
+        Log.d(
+            "wowEatersDataManager",
+            "getLocationStatus: finalAddress: $finalAddress, hasGpsPermission: $hasGpsPermission, isGpsEnabled: $isGpsEnabled, knownAddresses: $knownAddresses, myLocation: $myLocation "
+        )
+        return if (hasGpsPermission && isGpsEnabled) {
             Log.d("wowEatersDataManager", "has gpsPermission")
-            if(knownAddresses.isNullOrEmpty()){
+            if (knownAddresses.isNullOrEmpty()) {
                 Log.d("wowEatersDataManager", "don't have known address")
-                if(myLocation != null){
+                if (myLocation != null) {
                     LocationStatus(LocationStatusType.CURRENT_LOCATION, myLocation)
-                }else{
+                } else {
                     LocationStatus(LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION)
                 }
-            }else{
+            } else {
                 Log.d("wowEatersDataManager", "has known address")
-                if(myLocation != null){
+                if (myLocation != null) {
                     val closestAddress = GpsUtils().getClosestAddressToLocation(myLocation, knownAddresses)
-                    if(closestAddress != null){
+                    if (closestAddress != null) {
                         Log.d("wowEatersDataManager", "using closest address: $closestAddress")
                         LocationStatus(LocationStatusType.KNOWN_LOCATION, closestAddress)
-                    }else{
+                    } else {
                         Log.d("wowEatersDataManager", "using current location: $myLocation")
                         LocationStatus(LocationStatusType.CURRENT_LOCATION, myLocation)
                     }
-                }else{
+                } else {
                     LocationStatus(LocationStatusType.KNOWN_LOCATION_WITH_BANNER, knownAddresses[0])
                 }
             }
-        }else{ // GPS permission denied
-            Log.d("wowEatersDataManager", "don't have gpsPermission")
-            if(knownAddresses.isNullOrEmpty()){
+        } else { // GPS permission denied
+            Log.d("wowEatersDataManager", "don't have gpsPermission or Gps disabled")
+            if (knownAddresses.isNullOrEmpty()) {
                 LocationStatus(LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION)
-            }else{
+            } else {
                 LocationStatus(LocationStatusType.KNOWN_LOCATION_WITH_BANNER, knownAddresses[0])
             }
         }
     }
 
-    fun getLocationData(): LocationLiveData {
-        return locationManager.getLocationData()
-    }
+//    fun getLocationData(): LocationLiveData {
+//        return locationManager.getLocationData()
+////        return locationManager.getFinalAddressLiveData()
+//    }
 
 
     fun getFinalTimeAndLocationParam(): FeedRequest {
@@ -112,13 +108,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     }
 
 
-
-
-
-
-
-
-//    fun getLocationLiveEvent(): LocationLiveData {
+    //    fun getLocationLiveEvent(): LocationLiveData {
 //        return locationManager.locationData
 //    }
     private var currentPaymentMethod: PaymentMethod? = null
@@ -192,7 +182,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     }
 
 
-
     //address utils
     private fun getClosestAddressToLocation(mLocation: Address): Address? {
         val myAddresses = currentEater?.addresses
@@ -207,6 +196,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return mLocation
         }
     }
+
     //address utils
     private fun isLocationsNear(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Boolean {
         val loc1 = Location("")
@@ -290,7 +280,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         this.currentPaymentMethod = paymentMethod
     }
 
-    fun getCurrentPaymentMethod(): PaymentMethod?{
+    fun getCurrentPaymentMethod(): PaymentMethod? {
         return currentPaymentMethod
     }
 
@@ -318,6 +308,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return null
         }
     }
+
     //feed repo
     fun getFeedSearchTimeString(): String? {
         if (hasSpecificTime) {
@@ -326,6 +317,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             return null
         }
     }
+
     //feed repo
     fun getFeedSearchTimeStringParam(): String? {
         if (hasSpecificTime) {
@@ -424,15 +416,13 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     var sid: String? = null
     var cid: String? = null
     fun setUserCampaignParam(sid: String? = null, cid: String? = null) {
-        sid?.let{
+        sid?.let {
             this.sid = it
         }
-        cid?.let{
+        cid?.let {
             this.cid = it
         }
     }
-
-
 
 
 }

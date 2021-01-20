@@ -2,31 +2,31 @@ package com.bupp.wood_spoon_eaters.features.locations_and_address
 
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
-import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.Address
 import androidx.lifecycle.ViewModel
-import java.util.*
+import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
+import com.google.android.libraries.places.api.model.Place
 
 class LocationAndAddressViewModel : ViewModel() {
 
+    private lateinit var currentPlaceFound: Place
     val actionEvent = MutableLiveData<ActionEvent>()
-
     enum class ActionEvent {
         SAVE_NEW_ADDRESS,
     }
 
     data class NavigationEvent(val type: NavigationEventType, val address: Address? = null)
-
     val navigationEvent = MutableLiveData<NavigationEvent>()
+
+//    data class AddressFoundEvent(val address: Address? = null)
+    val addressFoundEvent = MutableLiveData<String>()
 
     enum class NavigationEventType {
         OPEN_EDIT_ADDRESS_SCREEN,
         OPEN_ADDRESS_LIST_CHOOSER,
         OPEN_ADD_NEW_ADDRESS_SCREEN,
+        OPEN_ADDRESS_AUTO_COMPLETE,
         DONE_WITH_LOCATION_AND_ADDRESS
     }
 
@@ -46,6 +46,10 @@ class LocationAndAddressViewModel : ViewModel() {
         navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_ADD_NEW_ADDRESS_SCREEN))
     }
 
+    fun onSearchAddressAutoCompleteClick() {
+        navigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE))
+    }
+
     fun onSaveNewAddressClick() {
         actionEvent.postValue(ActionEvent.SAVE_NEW_ADDRESS)
     }
@@ -60,6 +64,18 @@ class LocationAndAddressViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun updateAutoCompleteAddressFound(place: Place) {
+        //called when user select address via auto complete
+        val address = GoogleAddressParserUtil.parseLocationToAddressRequest(place)
+
+        addressFoundEvent.postValue(place.name)
+//        addressFoundEvent.postValue()
+    }
+
+    fun saveNewAddress(){
+
     }
 
 

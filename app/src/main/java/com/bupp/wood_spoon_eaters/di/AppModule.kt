@@ -47,7 +47,7 @@ val appModule = module {
 
     //global
     single { AppSettings(get(), get()) }
-    single { LocationManager(get()) }
+    single { LocationManager(get(), get()) }
     single { MetaDataRepository(get()) }
     single { FcmManager(get()) }
     single { PaymentManager(get()) }

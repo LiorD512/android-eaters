@@ -4,53 +4,85 @@ package com.bupp.wood_spoon_eaters.managers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.IntentFilter
-import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import android.os.Looper
 import android.provider.Settings
-import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.NonNull
-import com.bupp.wood_spoon_eaters.common.Constants
+import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.location.GPSBroadcastReceiver
 import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
 import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.SettingsClient
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import java.io.IOException
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
  * Created by MonkeyFather on 15/05/2018.
  */
 
-class LocationManager(val context: Context) : GPSBroadcastReceiver.GPSBroadcastListener {
+class LocationManager(val context: Context, val userRepository: UserRepository) : GPSBroadcastReceiver.GPSBroadcastListener {
+
 
     /////////////////////////////////////////
     /////////////    LOCATION    ////////////
     /////////////////////////////////////////
 
-    fun getLocationData() = locationLiveData
+    private fun getLocationData() = locationLiveData
     private val locationLiveData = LocationLiveData(context)
+
+    fun getFinalAddressLiveData() = finalAddressLiveData
+    private val finalAddressLiveData = MutableLiveData<Address?>()
+//    private val getFinalAddress = updateFinalAddress()
+
+    fun updateFinalAddress() {
+        // return nearest known address to users current location
+        // if not, return user current location
+        // if not, return user last known location saved by user
+        // if not, return null.
+        Log.d(TAG, "updateFinalAddress")
+        var finalAddress: Address? = null
+        val knownAddresses = getListOfAddresses()
+        val myLocation = getLocationData().value
+        if (knownAddresses.isNullOrEmpty()) {
+            Log.d("LocationManager", "don't have known address")
+            myLocation?.let {
+                Log.d(TAG, "updateFinalAddress = user current location")
+                finalAddress = it
+            }
+        } else {
+            val closestAddress = GpsUtils().getClosestAddressToLocation(myLocation, knownAddresses)
+            closestAddress?.let {
+                Log.d(TAG, "updateFinalAddress - closest location")
+                finalAddress = it
+            }
+            finalAddress = knownAddresses[0]
+            Log.d(TAG, "updateFinalAddress - known location")
+        }
+        Log.d(TAG, "updateFinalAddress - postValue")
+        finalAddressLiveData.postValue(finalAddress)
+    }
+
+    private fun getListOfAddresses(): List<Address>? {
+        userRepository.getUser()?.let {
+            return it.addresses
+        }
+        return null
+    }
 
     /////////////////////////////////////////
     ////////////       GPS       ////////////
@@ -80,35 +112,11 @@ class LocationManager(val context: Context) : GPSBroadcastReceiver.GPSBroadcastL
     fun checkGpsStatus(context: Context) {
         GpsUtils(context).turnGPSOn(object : GpsUtils.OnGpsListener {
             override fun gpsStatus(isGPSEnable: Boolean) {
-                Log.d("wowLocationManager","gpsStatus: $isGPSEnable")
+                Log.d("wowLocationManager", "gpsStatus: $isGPSEnable")
                 isGpsEnabled = isGPSEnable
             }
         })
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //    private lateinit var activity: Activity
@@ -283,8 +291,6 @@ class LocationManager(val context: Context) : GPSBroadcastReceiver.GPSBroadcastL
 
         }
     }
-
-
 
 
     fun getCurrentAddress(): Address? {

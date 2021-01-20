@@ -43,7 +43,8 @@
                 android:gravity="start"
                 android:padding="5dp"
                 android:visibility="gone"
-                tools:text="this is a campaign coupon that gives yoi 20% off" />
+                tools:visibility="visible"
+                tools:text="this is a campaign coupon subtitle that gives you 20% off" />
 
     </LinearLayout>
 

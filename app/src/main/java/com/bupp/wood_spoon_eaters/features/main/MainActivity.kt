@@ -44,8 +44,8 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.canhub.cropper.CropImage
 import com.stripe.android.view.PaymentMethodsActivityStarter
-import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     private fun initBackgroundTasks() {
         //init location and gps status
-        viewModel.initGpsStatus(this)
+//        viewModel.initGpsStatus(this)
 //        viewModel.getLocationLiveData().observe(this, Observer{
 //            Log.d("wowMainAct","getLocationLiveData: $it")
 //            //do nothing. - observer starts location updates.
@@ -162,13 +162,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 if (viewModel.hasAddress()) {
                     loadNewOrderActivity(menuItemId)
                 } else {
-                    handlePb(true)
+//                    handlePb(true)
                     Log.d("wowMain", "brnach intent observing address change")
                     viewModel.waitingForAddressAction = true
                     viewModel.addressUpdateActionEvent.observe(this, Observer { newAddressEvent ->
                         Log.d("wowMain", "brnach intent observing address - ON CHANGE")
                         if (newAddressEvent != null) {
-                            handlePb(false)
+//                            handlePb(false)
                             loadNewOrderActivity(menuItemId)
                         }
                     })
@@ -204,6 +204,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun initObservers() {
+        viewModel.progressData.observe(this, Observer{
+            handlePb(it)
+        })
         //header event
         viewModel.mainActHeaderEvent.observe(this, Observer {
             setHeaderViewLocationDetails(it.time, it.address)
@@ -631,7 +634,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddAddressFragment).saveAddressDetails()
 //        } else
         if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
-            handlePb(true)
+//            handlePb(true)
             (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
         }
     }
@@ -733,7 +736,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             when (requestCode) {
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                     val result = CropImage.getActivityResult(data)
-                    val resultUri = result.uri
+                    val resultUri = result?.uri
 
                     if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment? != null) {
                         (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onMediaCaptureResult(
@@ -757,7 +760,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
                 Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
                     Log.d("wowMianActivity", "result ADDRESS_CHOOSER_REQUEST_CODE success")
-                    handlePb(false)
+//                    handlePb(false)
 //                    updateAddressTimeView()
 
                     when (currentFragmentTag) {

@@ -69,11 +69,11 @@
             style="@style/Reg11Red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_code_error"
             android:drawablePadding="5.4dp"
             android:paddingTop="5.4dp"
             android:visibility="invisible"
-            tools:text="custom error message" />
+            tools:text="custom error message"
+            app:drawableStartCompat="@drawable/ic_code_error" />
 
 
 </LinearLayout>

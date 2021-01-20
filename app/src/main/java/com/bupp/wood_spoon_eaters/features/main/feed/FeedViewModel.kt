@@ -1,14 +1,8 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -17,9 +11,6 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.LocationManager
-import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
-import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,36 +23,44 @@ class FeedViewModel(
         const val TAG = "wowFeedVM"
     }
 
-    val updateMainHeaderUiEvent = MutableLiveData<Address>()
-    val locationErrorEvent = MutableLiveData<LocationErrorType>()
-    enum class LocationErrorType{
-        SHOW_LOCATION_ERROR_BANNER,
-        SHOW_LOCATION_ERROR_NO_GPS_NO_LOCATION,
-        SHOW_LOCATION_ERROR_HAS_GPS_NO_LOCATION,
-    }
+    private var locationResult: LocationStatus = eaterDataManager.getLocationStatus()
+//    var locationResult2: LiveEventData<Address?> = eaterDataManager.getFinalAddressData()
 
-    fun checkLocationStatus() {
-        val locationResult = eaterDataManager.getLocationStatus()
+
+    val getFinalAddressLiveData = eaterDataManager.getFinalAddressLiveData()
+
+
+    val updateFinalAddressUi = MutableLiveData<Address>()
+    val updateMainHeaderUiEvent = MutableLiveData<Address>()
+    val locationStatusEvent = MutableLiveData<LocationStatus>()
+
+    fun updateLocationStatus() {
         when(locationResult.type){
-            EaterDataManager.LocationStatusType.CURRENT_LOCATION, EaterDataManager.LocationStatusType.KNOWN_LOCATION -> {
-                getFeedWith(locationResult.address!!)
+            LocationStatusType.CURRENT_LOCATION, LocationStatusType.KNOWN_LOCATION -> {
+                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.HAS_LOCATION, address = locationResult.address!!))
             }
-            EaterDataManager.LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
-                getFeedWith(locationResult.address!!)
-                locationErrorEvent.postValue(LocationErrorType.SHOW_LOCATION_ERROR_BANNER)
+            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
+                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.KNOWN_LOCATION_WITH_BANNER, address = locationResult.address!!))
             }
-            EaterDataManager.LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
-                locationErrorEvent.postValue(LocationErrorType.SHOW_LOCATION_ERROR_NO_GPS_NO_LOCATION)
+            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
+                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION))
             }
-            EaterDataManager.LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
-                locationErrorEvent.postValue(LocationErrorType.SHOW_LOCATION_ERROR_HAS_GPS_NO_LOCATION)
+            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
+                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION))
             }
+            else -> {}
         }
         val location = locationResult.address
         location?.let{
             updateMainHeaderUiEvent.postValue(it)
         }
     }
+
+    fun initAddressBasedUi(address: Address){
+        getFeedWith(address)
+    }
+
+
 
 
     private fun getFeedWith(address: Address) {
