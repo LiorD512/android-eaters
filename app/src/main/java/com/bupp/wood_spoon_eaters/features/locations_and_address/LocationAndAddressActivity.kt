@@ -21,6 +21,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.activity_location_and_address.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -57,6 +58,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_and_address)
 
+        Analytics.with(this).screen("Manage addresses")
         viewModel.checkIntentParam(intent)
 
         initUi()

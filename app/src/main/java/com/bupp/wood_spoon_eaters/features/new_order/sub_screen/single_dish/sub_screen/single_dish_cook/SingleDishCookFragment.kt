@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDial
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -28,6 +29,8 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Dish page (home chef)")
 
         initUi()
         initObservers()

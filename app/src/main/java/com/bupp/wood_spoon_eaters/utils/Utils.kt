@@ -32,7 +32,7 @@ object Utils {
         take(index) to substring(index)
     }
 
-    fun callPhone(activity: FragmentActivity){
+    fun callPhone(activity: FragmentActivity, phone: String){
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -42,23 +42,10 @@ object Utils {
                 ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CALL_PHONE), Constants.PHONE_CALL_PERMISSION_REQUEST_CODE)
             }
         } else {
-            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + activity.getString(R.string.default_bupp_phone_number)))
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
             activity.startActivity(intent)
         }
     }
-
-    fun parseDate(date: Date?): String {
-        val sdf = SimpleDateFormat("MMMM dd, yyyy")
-        return sdf.format(date?.time)
-    }
-
-    fun parseDateToMonthYear(date: Date): String {
-        val sdf = SimpleDateFormat("MMMM yyyy")
-        return sdf.format(date.time)
-    }
-
-
-
 
     fun setCustomFontTypeSpan(
         context: Context,
@@ -88,11 +75,6 @@ object Utils {
         return m.matches()
     }
 
-    fun parseDateForServer(date: Date): String {
-        val sdf = SimpleDateFormat("dd/MM/YYYY")
-        return sdf.format(date.time)
-    }
-
     fun getFirstAndLastNames(fullName: String): Pair<String, String> {
         var firstNameEndIndex = fullName.indexOf(" ")
 
@@ -120,21 +102,6 @@ object Utils {
         }
     }
 
-//    fun getDiffYears(date: Date): Int {
-//        val a = getCalendar(date)
-//        val b = getCalendar(Date())
-//        var diff = b.get(YEAR) - a.get(YEAR)
-//        if (a.get(MONTH) > b.get(MONTH) || a.get(MONTH) === b.get(MONTH) && a.get(DATE) > b.get(DATE)) {
-//            diff--
-//        }
-//        return diff
-//    }
-
-    fun getCalendar(date: Date): Calendar {
-        val cal = Calendar.getInstance(Locale.US)
-        cal.time = date
-        return cal
-    }
 
     fun hideKeyBoard(activity: FragmentActivity) {
         val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

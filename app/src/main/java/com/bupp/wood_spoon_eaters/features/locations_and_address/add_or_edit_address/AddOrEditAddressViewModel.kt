@@ -33,13 +33,13 @@ class AddOrEditAddressViewModel(private val apiService: ApiService, private val 
         }
     }
 
-    fun getLocationLiveData() = eaterDataManager.getFinalAddressLiveData()
+    fun getLocationLiveData() = eaterDataManager.getLocationData()
 
     data class MyLocationEvent(val myLocation: Address)
     val myLocationEvent: SingleLiveEvent<MyLocationEvent> = SingleLiveEvent()
 
     fun fetchMyLocation() {
-        val myLocation = eaterDataManager.getFinalAddressLiveData().value
+        val myLocation = eaterDataManager.getLocationData().value
         if (myLocation != null) {
             eaterDataManager.setUserChooseSpecificAddress(false)
             myLocationEvent.postValue( MyLocationEvent(myLocation) )
@@ -47,6 +47,16 @@ class AddOrEditAddressViewModel(private val apiService: ApiService, private val 
             Log.d(TAG, "no location found")
         }
     }
+
+//    fun getFinalAddressLiveData() {
+//        val myLocation = eaterDataManager.getFinalAddressLiveData().value
+//        if (myLocation != null) {
+//            eaterDataManager.setUserChooseSpecificAddress(false)
+//            myLocationEvent.postValue( MyLocationEvent(myLocation) )
+//        } else {
+//            Log.d(TAG, "no location found")
+//        }
+//    }
 
     fun saveNewAddress() {
 

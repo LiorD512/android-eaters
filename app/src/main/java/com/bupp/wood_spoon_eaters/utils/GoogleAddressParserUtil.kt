@@ -1,46 +1,111 @@
 package com.bupp.wood_spoon_eaters.utils
 
-import android.annotation.SuppressLint
-import android.location.Location
 import android.util.Log
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.google.android.libraries.places.api.model.AddressComponent
-import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
-import java.lang.Exception
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+
 
 object GoogleAddressParserUtil {
 
     const val TAG = "wowGgleAddressParseUtil"
 
-    fun parseLocationToAddressRequest(place: Place){
+    private val allowed_types = setOf(
+        "route", //street
+        "country", //country
+        "locality", //city
+        "postal_code",
+        "street_number",
+        "sublocality_level_1", //district
+        "administrative_area_level_1" //state
+    )
+
+
+
+    fun parseLocationToAddress(place: Place): AddressRequest {
+//        val placeJson = Gson().newBuilder().create().toJson(place.addressComponents)
+//        val placeJsonObj = Gson().toJsonTree(placeJson)
+//        Log.d(TAG, "placeJsonObj: $placeJsonObj")
+//        (placeJsonObj as JsonObject).array<JsonObject>("results")!!
+//            .first { it.array<String>("types")!!.toSet().intersect(this.allowedTyps).isNotEmpty() }
+//        val gson = GsonBuilder().create()
+//        val element = gson.toJsonTree(place.addressComponents, AddressComponent::class.java)
+//        Log.d(TAG, "element: $element")
+
+
         val addressComponents = place.addressComponents?.asList()
-        addressComponents?.let{
-            var streetLine1 = getStreet(addressComponents)
-            var stateName = getStateName(addressComponents)
-            var cityName = getCityName(addressComponents)
-            Log.d(TAG, "stateName: $stateName")
-            Log.d(TAG, "streetLine1: $streetLine1")
-            Log.d(TAG, "cityName: $cityName")
+        var address: AddressRequest = AddressRequest()
+        addressComponents?.forEach {
+
+            val data = it.types.intersect(this.allowed_types)
+            Log.d(TAG, "parseLocationToAddress: $data")
+            if(data.isNotEmpty()){
+                Log.d(TAG, "parseLocationToAddress: ${it.name}")
+                when(data.toString().replace("[", "").replace("]", "")){
+                    "route" -> {
+                        address.streetLine1 = it.name
+                    }
+                    "country" -> {
+                        address.countryIso = it.shortName
+                    }
+                    "locality" -> {
+                        address.cityName = it.name
+                    }
+                    "postal_code" -> {
+                        address.zipCode = it.name
+                    }
+                    "street_number" -> {
+                        address.streetLine1 = "${it.name} ${address.streetLine1}"
+                    }
+                    "sublocality_level_1" -> {
+                    }
+                    "administrative_area_level_1" -> {
+                        address.stateIso = it.shortName
+                    }
+                }
+            }
         }
+        return address
+//            var streetLine1 = getStreet(addressComponents)
+//            var stateName = getStateName(addressComponents)
+//            var cityName = getCityName(addressComponents)
+//            Log.d(TAG, "stateName: $stateName")
+//            Log.d(TAG, "streetLine1: $streetLine1")
+//            Log.d(TAG, "cityName: $cityName")
+//        parse(place)
+        }
+
+    private fun parseMyLocation(myLocationAddress: Address): AddressRequest {
+        var addressRequest = AddressRequest()
+
+        addressRequest.lat = myLocationAddress.lat
+        addressRequest.lng = myLocationAddress.lng
+        addressRequest.streetLine1 = myLocationAddress.streetLine1
+        addressRequest.streetLine2 = myLocationAddress.streetLine2
+
+        return addressRequest
     }
 
     fun parseLocationToAddressRequest(place: Place, streetLine1: String, streetLine2: String, notes: String): AddressRequest? {
         val addressComponents = place.addressComponents?.asList()
         val latLng = place.latLng
 
-       addressComponents?.let{
-           it.forEach {
-               Log.d(TAG, "updateCookAccount addressComponents for each: ${it.shortName}")
-           }
-       }
+        addressComponents?.let {
+            it.forEach {
+                Log.d(TAG, "updateCookAccount addressComponents for each: ${it.shortName}")
+            }
+        }
 
         if (addressComponents.isNullOrEmpty()) {
             Log.d(TAG, "updateCookAccount address failed")
             return null
-        } else{
+        } else {
 //            Log.d(TAG, "updateCookAccount start")
-//
+
 //            Log.d(TAG, "updateCookAccount address 2")
 //            var countryNames = getCountry(addressComponents)
 //            var countryName = countryNames.first
@@ -97,7 +162,7 @@ object GoogleAddressParserUtil {
     }
 
 
-private fun getCityName(addrComponents: List<AddressComponent>): String? {
+    private fun getCityName(addrComponents: List<AddressComponent>): String? {
         try {
             for (i in addrComponents.indices) {
                 if (!addrComponents[i].types.isNullOrEmpty()) {
@@ -136,7 +201,7 @@ private fun getCityName(addrComponents: List<AddressComponent>): String? {
     }
 
     private fun getCountry(addrComponents: List<AddressComponent>): Pair<String, String>? {
-        try{
+        try {
             for (i in addrComponents.indices) {
                 if (!addrComponents[i].types.isNullOrEmpty()) {
                     if (addrComponents[i].types[0] == "country") {
@@ -155,7 +220,7 @@ private fun getCityName(addrComponents: List<AddressComponent>): String? {
     }
 
     private fun getStreet(addrComponents: List<AddressComponent>): String? {
-        try{
+        try {
             for (i in addrComponents.indices) {
                 if (!addrComponents[i].types.isNullOrEmpty()) {
                     if (addrComponents[i].types[0] == "route") {
@@ -166,14 +231,14 @@ private fun getCityName(addrComponents: List<AddressComponent>): String? {
                     }
                 }
             }
-        }catch (ex: Exception) {
+        } catch (ex: Exception) {
             Log.d(TAG, "ex: $ex")
         }
         return null
     }
 
     private fun getZipCode(addrComponents: List<AddressComponent>): String? {
-        try{
+        try {
             for (i in addrComponents.indices) {
                 if (!addrComponents[i].types.isNullOrEmpty()) {
                     if (addrComponents[i].types[0] == "postal_code") {
@@ -184,7 +249,7 @@ private fun getCityName(addrComponents: List<AddressComponent>): String? {
                     }
                 }
             }
-        }catch (ex: Exception) {
+        } catch (ex: Exception) {
             Log.d(TAG, "ex: $ex")
         }
         return null

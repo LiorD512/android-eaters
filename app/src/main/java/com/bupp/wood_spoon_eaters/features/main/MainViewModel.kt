@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     private val locationManager: LocationManager,
-    val api: ApiService, val settings: AppSettings, private val permissionManager: PermissionManager, val orderManager: OrderManager,
+    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
 
@@ -392,6 +393,15 @@ class MainViewModel(
     fun initGpsStatus(activity: Activity) {
         eaterDataManager.initGpsStatus(activity)
     }
+
+    fun getContactUsPhoneNumber(): String {
+        return metaDataRepository.getContactUsPhoneNumber()
+    }
+
+    fun getContactUsTextNumber(): String {
+        return metaDataRepository.getContactUsTextNumber()
+    }
+
 
 
 

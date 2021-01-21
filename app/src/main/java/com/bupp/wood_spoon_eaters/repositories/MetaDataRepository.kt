@@ -181,6 +181,30 @@ class MetaDataRepository(private val apiService: ApiService) {
         return versionNumber
     }
 
+    fun getContactUsPhoneNumber(): String {
+        for (settings in getSettings()){
+            if(settings.key == "contact_us_number")
+                return (settings.value!!) as String
+        }
+        return ""
+    }
+
+    fun getContactUsTextNumber(): String {
+        for (settings in getSettings()){
+            if(settings.key == "text_message_num")
+                return (settings.value!!) as String
+        }
+        return ""
+    }
+
+    fun getQaUrl(): String {
+        for (settings in getSettings()){
+            if(settings.key == "qa_url")
+                return (settings.value!!) as String
+        }
+        return ""
+    }
+
 
 
 }

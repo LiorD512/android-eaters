@@ -26,6 +26,7 @@ import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
 import kotlinx.android.synthetic.main.checkout_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -59,6 +60,9 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Checkout page")
+
         initUi()
         initObservers()
     }

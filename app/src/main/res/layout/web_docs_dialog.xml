@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"/>
 
     <LinearLayout
+            android:id="@+id/webDocsBtnsHeader"
             android:layout_marginTop="10dp"
             android:weightSum="2"
             android:orientation="horizontal"

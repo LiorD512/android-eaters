@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,6 +33,8 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Dish page (info)")
 
         initUi()
         initObserver()

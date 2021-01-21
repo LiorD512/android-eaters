@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_orders_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -33,7 +34,7 @@ class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Analytics.with(requireContext()).screen("Order history")
         initUi()
     }
 

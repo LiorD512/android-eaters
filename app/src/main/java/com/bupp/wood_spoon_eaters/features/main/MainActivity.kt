@@ -39,7 +39,7 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
-import com.bupp.wood_spoon_eaters.features.support.SupportFragment
+import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
@@ -363,7 +363,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onContactUsClick() {
-        Utils.callPhone(this)
+        val phone = viewModel.getContactUsPhoneNumber()
+        Utils.callPhone(this, phone)
     }
 
 
@@ -500,7 +501,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onCallSupportClick() {
-        callPhoneNumber()
+        onContactUsClick()
     }
 
     override fun onSmsSupportClick() {
@@ -567,7 +568,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 // permission was granted, yay!
-                Utils.callPhone(this)
+                val phone = viewModel.getContactUsPhoneNumber()
+                Utils.callPhone(this, phone)
             } else {
                 // permission denied, boo! Disable the
                 // functionality
@@ -578,18 +580,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun sendSmsText() {
+        val phone = viewModel.getContactUsTextNumber()
         val smsIntent =
-            Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + getString(R.string.default_bupp_phone_number)))
+            Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phone))
         smsIntent.putExtra("sms_body", getString(R.string.support_frag_sms_sentence))
         startActivity(smsIntent)
     }
 
-    fun callPhoneNumber() {
-        val phone = "+16179096185"
-        val dialIntent = Intent(Intent.ACTION_DIAL)
-        dialIntent.data = Uri.parse("tel:" + getString(R.string.default_bupp_phone_number))
-        startActivity(dialIntent)
-    }
+//
 
 
     //HeaderView Listener interface

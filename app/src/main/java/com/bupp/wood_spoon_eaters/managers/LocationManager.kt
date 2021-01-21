@@ -42,7 +42,7 @@ class LocationManager(val context: Context, val userRepository: UserRepository) 
     /////////////    LOCATION    ////////////
     /////////////////////////////////////////
 
-    private fun getLocationData() = locationLiveData
+    fun getLocationData() = locationLiveData
     private val locationLiveData = LocationLiveData(context)
 
     fun getFinalAddressLiveData() = finalAddressLiveData

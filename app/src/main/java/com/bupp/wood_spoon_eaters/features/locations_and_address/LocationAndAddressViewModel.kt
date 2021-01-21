@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.Address
 import androidx.lifecycle.ViewModel
+import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
 import com.google.android.libraries.places.api.model.Place
 
 class LocationAndAddressViewModel : ViewModel() {
 
+    private var unsavedNewAddress: AddressRequest? = null
     private lateinit var currentPlaceFound: Place
     val actionEvent = MutableLiveData<ActionEvent>()
     enum class ActionEvent {
@@ -20,7 +22,7 @@ class LocationAndAddressViewModel : ViewModel() {
     val navigationEvent = MutableLiveData<NavigationEvent>()
 
 //    data class AddressFoundEvent(val address: Address? = null)
-    val addressFoundEvent = MutableLiveData<String>()
+    val addressFoundEvent = MutableLiveData<AddressRequest>()
 
     enum class NavigationEventType {
         OPEN_EDIT_ADDRESS_SCREEN,
@@ -68,10 +70,11 @@ class LocationAndAddressViewModel : ViewModel() {
 
     fun updateAutoCompleteAddressFound(place: Place) {
         //called when user select address via auto complete
-        val address = GoogleAddressParserUtil.parseLocationToAddressRequest(place)
-
-        addressFoundEvent.postValue(place.name)
-//        addressFoundEvent.postValue()
+        val address = GoogleAddressParserUtil.parseLocationToAddress(place)
+        address?.let{
+            unsavedNewAddress = address
+            addressFoundEvent.postValue(it)
+        }
     }
 
     fun saveNewAddress(){

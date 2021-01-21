@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.new_order.service
 import android.util.Log
 import androidx.annotation.Size
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.google.firebase.events.Subscriber
 import com.stripe.android.EphemeralKeyProvider
 import com.stripe.android.EphemeralKeyUpdateListener
 import io.reactivex.android.schedulers.AndroidSchedulers

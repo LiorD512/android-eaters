@@ -24,7 +24,7 @@ class UpdateRequiredDialog : DialogFragment() {
     private var listener: UpdateRequiredDialogListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return inflater.inflate(R.layout.update_required_dialog, container, false)
     }
 

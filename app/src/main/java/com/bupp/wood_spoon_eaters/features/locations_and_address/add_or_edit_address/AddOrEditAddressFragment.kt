@@ -68,7 +68,7 @@ class AddOrEditAddressFragment : Fragment(R.layout.fragment_add_or_edit_address)
         })
 
         mainViewModel.addressFoundEvent.observe(viewLifecycleOwner, Observer{
-            addAddressFragAddress.setText(it)
+//            addAddressFragAddress.setText(it)
         })
 
     }

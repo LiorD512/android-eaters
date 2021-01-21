@@ -39,7 +39,7 @@
 //import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 //import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 //import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
-//import com.bupp.wood_spoon_eaters.features.support.SupportFragment
+//import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 //import com.bupp.wood_spoon_eaters.model.Address
 //import com.bupp.wood_spoon_eaters.model.Order
 //import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse

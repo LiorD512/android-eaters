@@ -30,6 +30,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     get() = userRepository.getUser()
 
     fun getFinalAddressLiveData() = locationManager.getFinalAddressLiveData()
+    fun getLocationData() = locationManager.getLocationData()
 
 
     /////////////////////////////////////////

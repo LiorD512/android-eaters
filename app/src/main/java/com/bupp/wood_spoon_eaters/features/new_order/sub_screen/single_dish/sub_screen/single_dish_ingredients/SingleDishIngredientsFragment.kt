@@ -14,6 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlinx.android.synthetic.main.fragment_single_dish_ingredients.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.DishIngredientsAdapter
+import com.segment.analytics.Analytics
 
 class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ingredients) {
 
@@ -21,6 +22,8 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Dishe page (ingredients)")
 
         initObservers()
     }

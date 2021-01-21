@@ -1,18 +1,21 @@
 package com.bupp.wood_spoon_eaters.dialogs.web_docs
 
 import androidx.lifecycle.ViewModel
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 
-class WebDocsViewModel(val metaDataRepository: MetaDataRepository) : ViewModel() {
+class WebDocsViewModel(val metaDataManager: MetaDataRepository) : ViewModel() {
 
     fun getUrl(type: Int): String {
         when(type){
             Constants.WEB_DOCS_TERMS ->{
-                return metaDataRepository.getTermsOfServiceUrl()
+                return metaDataManager.getTermsOfServiceUrl()
             }
             Constants.WEB_DOCS_PRIVACY ->{
-                return metaDataRepository.getPrivacyPolicyUrl()
+                return metaDataManager.getPrivacyPolicyUrl()
+            }
+            Constants.WEB_DOCS_QA ->{
+                return metaDataManager.getQaUrl()
             }
             else -> return ""
         }
