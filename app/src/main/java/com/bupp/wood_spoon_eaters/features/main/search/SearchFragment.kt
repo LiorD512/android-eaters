@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import kotlinx.android.synthetic.main.search_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.segment.analytics.Analytics
 
 
 class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
@@ -45,6 +46,8 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Search")
 
         initUi()
         initObservers()

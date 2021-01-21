@@ -212,6 +212,7 @@ class Constants {
         //WEBDOCS TYPE
         const val WEB_DOCS_PRIVACY = 0
         const val WEB_DOCS_TERMS = 1
+        const val WEB_DOCS_QA = 2
 
 
         //permission const

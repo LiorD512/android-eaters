@@ -354,6 +354,10 @@ class MainViewModel(
         return metaDataManager.getContactUsPhoneNumber()
     }
 
+    fun getContactUsTextNumber(): String {
+        return metaDataManager.getContactUsTextNumber()
+    }
+
     fun refreshSegment() {
         eventsManager.initSegment()
     }

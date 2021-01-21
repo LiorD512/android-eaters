@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.CameraUtils
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.edit_my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,6 +35,8 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Profile edit")
 
         editMyProfileFragUserImageView.setUserImageViewListener(this)
 

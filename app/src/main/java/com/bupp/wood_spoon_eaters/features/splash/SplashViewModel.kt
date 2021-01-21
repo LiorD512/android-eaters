@@ -109,7 +109,7 @@ val paymentManager: PaymentManager, val eventsManager: EventsManager) : ViewMode
             } else {
                 Log.d("wowSplash", "eater: $eater")
                 eaterDataManager.currentEater = eater
-                eventsManager.initSegment()
+//                eventsManager.initSegment()
                 if (eaterDataManager.isAfterLogin()) {
                     initRelevantRepositories()
                     navigationEvent.postValue(NavigationEvent(true, true, shouldUpdateVersion))

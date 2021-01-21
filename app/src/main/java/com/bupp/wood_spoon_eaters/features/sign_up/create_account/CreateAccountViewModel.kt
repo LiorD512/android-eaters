@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.MetaDataManager
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
@@ -18,7 +19,7 @@ import retrofit2.Response
 import java.util.*
 
 
-class CreateAccountViewModel(val eaterDataManager: EaterDataManager, val api: ApiService, val metaDataManager: MetaDataManager) : ViewModel() {
+class CreateAccountViewModel(val eaterDataManager: EaterDataManager, val api: ApiService, val metaDataManager: MetaDataManager, val eventsManager: EventsManager) : ViewModel() {
 
     val navigationEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
 

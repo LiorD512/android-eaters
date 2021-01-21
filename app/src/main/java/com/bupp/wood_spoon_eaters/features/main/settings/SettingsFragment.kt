@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,6 +32,8 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Communication settings")
 
         settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationSetting(isChecked)

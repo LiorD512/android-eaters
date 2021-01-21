@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -46,6 +47,8 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Analytics.with(requireContext()).screen("Feed")
         initUi()
         FetchLocationAndFeed()
         showEmptyLayout()
@@ -67,6 +70,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.getCookEvent.observe(this, Observer { event ->
             feedFragPb.hide()
             if(event.isSuccess){
+                Analytics.with(requireContext()).screen("Home chef page (from feed)")
                 CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })

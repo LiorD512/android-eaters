@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.dialogs.web_docs
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.web_docs_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,7 +27,7 @@ class WebDocsDialog(val type: Int) : DialogFragment(), HeaderView.HeaderViewList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.web_docs_dialog, null)
+        val view = inflater.inflate(R.layout.web_docs_dialog, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
         return view
     }
@@ -39,9 +41,18 @@ class WebDocsDialog(val type: Int) : DialogFragment(), HeaderView.HeaderViewList
             when(type){
                 Constants.WEB_DOCS_PRIVACY -> {
                     webDocsPrivacy.performClick()
+                    Analytics.with(requireContext()).screen("Privacy policy")
                 }
                 Constants.WEB_DOCS_TERMS -> {
                     webDocsTerms.performClick()
+                    Analytics.with(requireContext()).screen("Terms of use")
+                }
+                Constants.WEB_DOCS_QA -> {
+                    Analytics.with(requireContext()).screen("QA")
+                    webDocsBtnsHeader.visibility = View.GONE
+                    openUrl(type)
+                    webDocsHeaderView.setTitle("Popular Q&A")
+
                 }
             }
         }else{
@@ -65,8 +76,11 @@ class WebDocsDialog(val type: Int) : DialogFragment(), HeaderView.HeaderViewList
         webDocsHeaderView.setHeaderViewListener(this)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     fun openUrl(type: Int){
         val link = viewModel.getUrl(type)
+
+        webDocsWebView.settings.javaScriptEnabled = true
 
         webDocsWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {

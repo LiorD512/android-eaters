@@ -14,6 +14,9 @@ class WebDocsViewModel(val metaDataManager: MetaDataManager) : ViewModel() {
             Constants.WEB_DOCS_PRIVACY ->{
                 return metaDataManager.getPrivacyPolicyUrl()
             }
+            Constants.WEB_DOCS_QA ->{
+                return metaDataManager.getQaUrl()
+            }
             else -> return ""
         }
     }

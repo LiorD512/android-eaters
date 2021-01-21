@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.features.main.delivery_details.sub_screens.add
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.utils.Constants
+import com.segment.analytics.Analytics
 
 import kotlinx.android.synthetic.main.activity_address_chooser.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,6 +38,8 @@ class AddressChooserActivity : AppCompatActivity(), AddressChooserAdapter.Addres
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address_chooser)
+
+        Analytics.with(this).screen("Manage addresses")
 
         initUi()
     }

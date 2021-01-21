@@ -72,7 +72,7 @@ val appModule = module {
     viewModel { PhoneVerificationViewModel(get()) }
 
     //sign up
-    viewModel { CreateAccountViewModel(get(), get(), get()) }
+    viewModel { CreateAccountViewModel(get(), get(), get(), get()) }
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }

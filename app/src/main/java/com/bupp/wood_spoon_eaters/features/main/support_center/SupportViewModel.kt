@@ -10,4 +10,8 @@ class SupportViewModel(val metaDataManager: MetaDataManager) : ViewModel() {
     fun getAdminMailAddress(): String? {
         return metaDataManager.getReportsEmailAddress()
     }
+
+    fun openQAPage(): String {
+        return metaDataManager.getQaUrl()
+    }
 }

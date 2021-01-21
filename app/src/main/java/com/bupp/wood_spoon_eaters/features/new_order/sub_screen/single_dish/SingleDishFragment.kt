@@ -33,6 +33,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import kotlinx.android.synthetic.main.single_dish_fragment_dialog_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -281,15 +282,18 @@ class SingleDishFragment() : Fragment(),
         hidePages()
         when (page) {
             SingleDishHeader.INFO -> {
+                Analytics.with(requireContext()).screen("Dish page (info)")
                 singleDishStatusBar.handleBottomBar(true)
                 singleDishScrollView.smoothScrollTo(0, singleDishInfoLayout.top)
                 singleDishInfoLayout.visibility = View.VISIBLE
             }
             SingleDishHeader.COOK -> {
+                Analytics.with(requireContext()).screen("Dishe page (ingredients)")
                 singleDishScrollView.smoothScrollTo(0, singleDishCookLayout.top)
                 singleDishCookLayout.visibility = View.VISIBLE
             }
             SingleDishHeader.INGREDIENT -> {
+                Analytics.with(requireContext()).screen("Dish page (home chef)")
                 singleDishScrollView.smoothScrollTo(0, singleDishIngredientLayout.top)
                 singleDishIngredientLayout.visibility = View.VISIBLE
             }

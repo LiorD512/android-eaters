@@ -29,6 +29,7 @@ import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.segment.analytics.Analytics
 
 
 class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewListener,
@@ -48,7 +49,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        Analytics.with(requireContext()).screen("Profile page")
 //        myProfileFragEditLocation.setDeliveryDetailsViewListener(this)
         myProfileFragEditPayment.setDeliveryDetailsViewListener(this)
 

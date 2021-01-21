@@ -21,6 +21,7 @@ import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,6 +43,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
         arguments?.let {
             orders = it.getParcelableArrayList(DIALOG_ARGS)
         }
+
     }
 
     companion object {

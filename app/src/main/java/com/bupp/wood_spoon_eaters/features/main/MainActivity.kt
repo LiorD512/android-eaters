@@ -76,6 +76,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel.refreshSegment()
+
         AppCenter.start(
             application, "1995d4eb-7e59-44b8-8832-6550bd7752ff",
             Analytics::class.java, Crashes::class.java, Distribute::class.java
@@ -420,7 +422,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onCallSupportClick() {
-        callPhoneNumber()
+        onContactUsClick()
+//        callPhoneNumber()
     }
 
     override fun onSmsSupportClick() {
@@ -480,18 +483,19 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun sendSmsText() {
+        val phone = viewModel.getContactUsTextNumber()
         val smsIntent =
-            Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + getString(R.string.default_bupp_phone_number)))
+            Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phone))
         smsIntent.putExtra("sms_body", getString(R.string.support_frag_sms_sentence))
         startActivity(smsIntent)
     }
 
-    fun callPhoneNumber() {
-        val phone = "+16179096185"
-        val dialIntent = Intent(Intent.ACTION_DIAL)
-        dialIntent.data = Uri.parse("tel:" + getString(R.string.default_bupp_phone_number))
-        startActivity(dialIntent)
-    }
+//    fun callPhoneNumber() {
+//        val phone = viewModel.getContactUsPhoneNumber()
+//        val dialIntent = Intent(Intent.ACTION_DIAL)
+//        dialIntent.data = Uri.parse(phone)
+//        startActivity(dialIntent)
+//    }
 
 
     //HeaderView Listener interface
