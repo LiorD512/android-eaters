@@ -111,6 +111,8 @@ class TrackOrderFragment() : Fragment(),
             val curCourierData  = curOrderData.courier
             val builder = LatLngBounds.Builder()
 
+            mMap?.clear()
+
             val chefLat = curOrderData.cook.pickupAddress?.lat
             val chefLng = curOrderData.cook.pickupAddress?.lng
             chefLat?.let{

@@ -27,7 +27,10 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
                 user.id.toString(), Traits()
                     .putName(user.getFullName())
                     .putEmail(user.email)
-                    .putPhone(user.phoneNumber), null
+                    .putPhone(user.phoneNumber)
+                    .putValue("shipped Order Count", user.ordersCount)
+//                    .putValue("Last order made at", user.)
+                , null
             )
 
             val address = eaterDataManager.getLastChosenAddress()
@@ -78,7 +81,7 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
         val bundle = Bundle()
         bundle.putString("OrderId", orderId.toString())
 
-        bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "$")
+        bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
         bundle.putString(AppEventsConstants.EVENT_PARAM_VALUE_TO_SUM, purchaseCost)
 
         val logger = AppEventsLogger.newLogger(context)
@@ -89,6 +92,9 @@ class EventsManager(val context: Context, val sharedPreferences: SharedPreferenc
         Log.d("wowEventsManager", "sendOtherPurchaseEvent")
         val bundle = Bundle()
         bundle.putString("OrderId", orderId.toString())
+
+        bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
+        bundle.putString(AppEventsConstants.EVENT_PARAM_VALUE_TO_SUM, purchaseCost)
 
         val logger = AppEventsLogger.newLogger(context)
         logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, bundle)

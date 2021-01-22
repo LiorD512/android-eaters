@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -36,9 +37,10 @@ class DishAddonView : FrameLayout, PlusMinusView.PlusMinusInterface {
     fun<T> setDish(dish: T, position: Int) {
         val currentDish: Dish
         var shouldExpend: Boolean = false
-
+        Log.d("wowDishAddonView","setDish $dish")
         when(dish){
             is OrderItem -> {
+                Log.d("wowDishAddonView","order item type")
                 currentDish = dish.dish
                 shouldExpend = currentDish.isRecurring
 
@@ -52,9 +54,11 @@ class DishAddonView : FrameLayout, PlusMinusView.PlusMinusInterface {
                 }
             }
             else -> {
+                Log.d("wowDishAddonView","dish type")
                 currentDish = dish as Dish
                 dishAddonAddBtn.visibility = View.VISIBLE
                 dishAddonPlusMinus.visibility = View.GONE
+                dishAddonCount.text = "${currentDish.menuItem?.quantity ?: 0}"
                 dishAddonAddBtn.setOnClickListener { listener?.onAddBtnClick(position) }
 //                dishAddonAddBtn.setOnClickListener { listener?.onAddBtnClick(currentDish) }
                 dishAddonImg.setOnClickListener { listener?.onDishClick(position) }

@@ -15,6 +15,7 @@ data class Eater(
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("invite_url") val inviteUrl: String? = "",
     @SerializedName("email") val email: String,
+    @SerializedName("orders_count") val ordersCount: Int = 0,
     @SerializedName("addresses") val addresses: ArrayList<Address>,
     @SerializedName("cuisines") var cuisines: ArrayList<CuisineLabel>? = null,
     @SerializedName("diets") var diets: ArrayList<DietaryIcon>? = null,
