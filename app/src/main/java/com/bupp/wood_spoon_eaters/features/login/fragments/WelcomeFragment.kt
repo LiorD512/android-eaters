@@ -22,7 +22,6 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         super.onViewCreated(view, savedInstanceState)
 
         welcomeFragmentLogin.setOnClickListener { onLoginClick() }
-        welcomeFragmentSignup.setOnClickListener { onLoginClick() }
     }
 
     private fun onLoginClick() {
@@ -31,6 +30,7 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     }
 
     override fun onPause() {
+        Log.d("wowWelcomeFrag","onPause")
         welcomeFragSliderImages.stopAnimation()
         super.onPause()
     }

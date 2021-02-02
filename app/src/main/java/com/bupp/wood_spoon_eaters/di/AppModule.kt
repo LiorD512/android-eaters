@@ -11,7 +11,6 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressChooserViewModel
-import com.bupp.wood_spoon_eaters.features.events.EventActivityViewModel
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
@@ -38,6 +37,11 @@ import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressViewModel
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountrySelectorViewModel
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressViewModel
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import org.koin.androidx.viewmodel.dsl.viewModel
 
 import org.koin.dsl.module
@@ -48,6 +52,7 @@ val appModule = module {
     //global
     single { AppSettings(get(), get()) }
     single { LocationManager(get(), get()) }
+    single { DeliveryTimeManager() }
     single { MetaDataRepository(get()) }
     single { FcmManager(get()) }
     single { PaymentManager(get()) }
@@ -59,16 +64,19 @@ val appModule = module {
     single { NewOrderRepository(get(), get()) }
 
     //managers
-    single { CartManager(get(), get(), get()) }
-    single { OrderManager(get(), get()) }
+    single { CartManager(get(), get(), get(), get()) }
+    single { OrderManager(get(), get(), get()) }
     single { EventsManager(get(), get(), get(), get()) }
-    single { SearchManager(get(), get(), get()) }
-    single { EaterDataManager(get(), get(), get(), get()) }
+    single { SearchManager(get(), get(), get(), get()) }
+    single { EaterDataManager(get(), get(), get(), get(), get()) }
 
 
 
     //VIEW MODELS
 
+    //bottom sheet
+    viewModel { CountrySelectorViewModel(get()) }
+    viewModel { AddressMenuViewModel(get()) }
 
     //splash
     viewModel { SplashViewModel(get(), get(), get(), get()) }
@@ -77,15 +85,18 @@ val appModule = module {
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+
+    //location
+    viewModel { LocationAndAddressViewModel(get(), get()) }
+    viewModel { SelectAddressViewModel(get(), get(), get(), get()) }
 
     //New Order
-    viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SingleDishInfoViewModel(get(), get(), get(), get(), get(), get()) }
 
-    viewModel { LocationAndAddressViewModel() }
 
-    viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { AddressChooserViewModel(get(), get(), get()) }
     viewModel { AddOrEditAddressViewModel(get(), get(), get()) }
@@ -119,9 +130,9 @@ val appModule = module {
 
     //chooser fragment
     viewModel { LocationChooserViewModel(get()) }
-    viewModel { DeliveryDetailsViewModel(get(), get(), get()) }
+    viewModel { DeliveryDetailsViewModel(get(), get(), get(), get()) }
 
-    viewModel { EventActivityViewModel(get(), get(), get(), get()) }
+//    viewModel { EventActivityViewModel(get(), get(), get(), get()) }
 //    viewModel { GetEventByIdViewModel(get()) }
 //    viewModel { EventFeedViewModel(get(), get(), get()) }
     

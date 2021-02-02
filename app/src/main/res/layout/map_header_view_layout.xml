@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/mapHeaderView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            app:cardCornerRadius="7.7dp"
+            app:cardElevation="7dp">
+
+        <TextView
+                style="@style/Reg13PurpleyGreyTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="6.7sp"
+                android:paddingHorizontal="18.6dp"
+                android:paddingVertical="16dp"
+                android:text="Drag the map to mark the building entrance" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/mapHeaderView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            app:cardCornerRadius="7.7dp"
+            app:cardElevation="7dp">
+
+        <LinearLayout
+                android:paddingHorizontal="18.6dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:layout_gravity="center"
+                    android:paddingEnd="8.6dp"
+                    android:src="@drawable/ic_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    style="@style/Reg13Coral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="3.8sp"
+                    android:paddingVertical="16dp"
+                    android:text="This seems a bit far from your address.\n are you sure?" />
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

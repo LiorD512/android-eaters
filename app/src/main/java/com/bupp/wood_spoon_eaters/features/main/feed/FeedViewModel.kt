@@ -9,15 +9,15 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
-import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.LocationManager
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class FeedViewModel(
     private val locationManager: LocationManager,
-    val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository): ViewModel(), EaterDataManager.EaterDataMangerListener {
+    val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository, val deliveryTimeManager: DeliveryTimeManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
 
     companion object{
         const val TAG = "wowFeedVM"
@@ -31,30 +31,30 @@ class FeedViewModel(
 
 
     val updateFinalAddressUi = MutableLiveData<Address>()
-    val updateMainHeaderUiEvent = MutableLiveData<Address>()
+//    val updateMainHeaderUiEvent = MutableLiveData<Address>()
     val locationStatusEvent = MutableLiveData<LocationStatus>()
 
-    fun updateLocationStatus() {
-        when(locationResult.type){
-            LocationStatusType.CURRENT_LOCATION, LocationStatusType.KNOWN_LOCATION -> {
-                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.HAS_LOCATION, address = locationResult.address!!))
-            }
-            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
-                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.KNOWN_LOCATION_WITH_BANNER, address = locationResult.address!!))
-            }
-            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
-                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION))
-            }
-            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
-                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION))
-            }
-            else -> {}
-        }
-        val location = locationResult.address
-        location?.let{
-            updateMainHeaderUiEvent.postValue(it)
-        }
-    }
+//    fun updateLocationStatus() {
+//        when(locationResult.type){
+//            LocationStatusType.CURRENT_LOCATION, LocationStatusType.KNOWN_LOCATION -> {
+//                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.HAS_LOCATION, address = locationResult.address!!))
+//            }
+//            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
+//                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.KNOWN_LOCATION_WITH_BANNER, address = locationResult.address!!))
+//            }
+//            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
+//                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION))
+//            }
+//            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
+//                locationStatusEvent.postValue(LocationStatus(type = LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION))
+//            }
+//            else -> {}
+//        }
+//        val location = locationResult.address
+//        location?.let{
+//            updateMainHeaderUiEvent.postValue(it)
+//        }
+//    }
 
     fun initAddressBasedUi(address: Address){
         getFeedWith(address)
@@ -175,7 +175,7 @@ class FeedViewModel(
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getFeedSearchTimeStringParam()
+        feedRequest.timestamp = deliveryTimeManager.getDeliveryTimestamp()
 
         return feedRequest
     }
@@ -192,7 +192,7 @@ class FeedViewModel(
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getFeedSearchTimeStringParam()
+        feedRequest.timestamp = deliveryTimeManager.getDeliveryTimestamp()
 
         return feedRequest
     }

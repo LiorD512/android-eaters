@@ -59,7 +59,7 @@ class AddOrEditAddressFragment : Fragment(R.layout.fragment_add_or_edit_address)
             Log.d("wowAddOrEditAddress'","getLocationLiveData observer called ")
         })
 
-        viewModel.myLocationEvent.observe(viewLifecycleOwner, Observer { myLocation -> handleMyLocationEvent(myLocation.myLocation) })
+//        viewModel.myLocationEvent.observe(viewLifecycleOwner, Observer { myLocation -> handleMyLocationEvent(myLocation.myLocation) })
 
         mainViewModel.actionEvent.observe(viewLifecycleOwner, Observer {
             if(validateAddressData()){

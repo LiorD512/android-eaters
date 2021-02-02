@@ -19,17 +19,24 @@ enum class LocationStatusType{
 
 @Parcelize
 data class AddressRequest(
-    @SerializedName("street_line_1") var streetLine1: String = "",
-    @SerializedName("street_line_2") var streetLine2: String = "",
+    @SerializedName("street_number") var streetNumber: String? = null,
+    @SerializedName("street_line_1") var streetLine1: String? = null,
+    @SerializedName("street_line_2") var streetLine2: String? = null,
     @SerializedName("lat") var lat: Double? = null,
     @SerializedName("lng") var lng: Double? = null,
     @SerializedName("country_iso") var countryIso: String? = null,
     @SerializedName("state_iso") var stateIso: String? = null,
     @SerializedName("city_name") var cityName: String? = null,
     @SerializedName("dropoff_location") var dropoffLocation: String? = null, //Available values : delivery_to_door, pickup_outside
-    @SerializedName("zipcode") var zipCode: String? = "",
-    @SerializedName("notes") var notes: String? = ""
-) : Parcelable
+    @SerializedName("zipcode") var zipCode: String? = null,
+    @SerializedName("notes") var notes: String? = null
+) : Parcelable{
+
+    fun getUserLocationStr(): String{
+        return "$streetNumber $streetLine1, ${"$cityName," ?: ""} ${stateIso ?: ""}"
+    }
+
+}
 
 
 @Parcelize
@@ -51,9 +58,9 @@ data class Address(
         return "$streetLine1, ${city?.name ?: ""} ${state?.name ?: ""}"
     }
     fun getDropoffLocationStr(): String {
-        when (dropOfLocationStr) {
-            "delivery_to_door" -> return "Delivered To Your Door"
-            else -> return "Pick up outside"
+        return when (dropOfLocationStr) {
+            "delivery_to_door" -> "Delivered To Your Door"
+            else -> "Pick up outside"
         }
     }
 }

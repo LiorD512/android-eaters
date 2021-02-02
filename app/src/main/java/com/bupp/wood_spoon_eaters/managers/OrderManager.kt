@@ -1,10 +1,11 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import java.util.*
 
-class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager) {
+class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager, val deliveryTimeManager: DeliveryTimeManager) {
 
     var curOrderResponse: Order? = null
     var currentOrderRequest: OrderRequest? = null
@@ -27,7 +28,7 @@ class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager) 
     fun updateOrderRequest(
         cookId: Long? = null,
         cookingSlotId: Long? = null,
-        deliveryAt: String? = eaterDataManager.getLastOrderTimeParam(),
+        deliveryAt: String? = deliveryTimeManager.getDeliveryTimestamp(),
         deliveryAddress: Address? = getLastOrderAddressParam(),
         orderItemRequests: ArrayList<OrderItemRequest>? = null,
         tipPercentage: Float? = null,

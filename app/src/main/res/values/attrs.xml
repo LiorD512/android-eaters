@@ -15,8 +15,15 @@
         <enum name="INPUT_TYPE_DONE_BTN" value="6"/>
         <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7"/>
         <enum name="PHONE" value="8"/>
-
     </attr>
+
+    <declare-styleable name="FloatingLabelEditText">
+        <attr name="inputType"/>
+        <attr name="isEditable" format="boolean" />
+        <attr name="hint"/>
+        <attr name="error"/>
+        <attr name="floatingIcon" format="integer" />
+    </declare-styleable>
 
     <declare-styleable name="HeaderViewAttrs">
         <attr name="type" format="enum">
@@ -29,6 +36,7 @@
             <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE" value="6"/>
             <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS" value="7"/>
             <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_DONE" value="8"/>
+            <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE" value="11"/>
         </attr>
         <attr name="title"/>
         <attr name="isWithSep" format="boolean"/>

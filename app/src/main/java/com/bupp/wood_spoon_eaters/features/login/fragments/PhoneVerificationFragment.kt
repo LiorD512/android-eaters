@@ -16,12 +16,13 @@ import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.views.FloatingLabelEditText
 import kotlinx.android.synthetic.main.fragment_phone_verification.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification), CompoundButton.OnCheckedChangeListener,
-    InputTitleView.InputTitleViewListener {
+    InputTitleView.InputTitleViewListener, FloatingLabelEditText.FloatingLabelEventListener {
 
     private val viewModel: LoginViewModel by sharedViewModel()
 
@@ -30,12 +31,13 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         initUi()
         initCb()
         initObservers()
+
     }
 
     private fun initCb() {
-        verificationFragPrivacyPolicyCb.setOnCheckedChangeListener(this)
+//        verificationFragPrivacyPolicyCb.setOnCheckedChangeListener(this)
 
-        val ss = SpannableString("Please indicate that you accept WoodSpoon Terms and that you have read our Privacy policy")
+        val ss = SpannableString("By continuing you confirm our Terms of use & Privacy Policy")
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
                 WebDocsDialog(Constants.WEB_DOCS_TERMS).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
@@ -59,44 +61,40 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
             }
         }
 
-        ss.setSpan(clickableSpan, 42, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss.setSpan(clickableSpan2, 75, 89, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpan, 30, 42, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpan2, 45, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        verificationFragCbText.text = ss
-        verificationFragCbText.movementMethod = LinkMovementMethod.getInstance()
-        verificationFragCbText.highlightColor = Color.TRANSPARENT
-
-        verificationFragCbText.setOnClickListener {
-            verificationFragPrivacyPolicyCb.performClick()
-        }
+        verificationFragTermsText.text = ss
+        verificationFragTermsText.movementMethod = LinkMovementMethod.getInstance()
+        verificationFragTermsText.highlightColor = Color.TRANSPARENT
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        viewModel.setPhoneCb(isChecked)
-        if (isChecked) {
-            verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark))
-        }
+//        viewModel.setPhoneCb(isChecked)
+//        if (isChecked) {
+//            verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark))
+//        }
     }
 
     private fun initObservers() {
-        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer{
-            when(it){
+        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer {
+            when (it) {
                 LoginViewModel.ErrorEventType.PHONE_EMPTY -> {
                     verificationFragmentInput.showError()
                 }
             }
         })
-        viewModel.phoneCbFieldErrorEvent.observe(viewLifecycleOwner, Observer{
-            when(it){
-                LoginViewModel.ErrorEventType.CB_REQUIRED -> {
-                    verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
-                }
-            }
-        })
+//        viewModel.phoneCbFieldErrorEvent.observe(viewLifecycleOwner, Observer{
+//            when(it){
+//                LoginViewModel.ErrorEventType.CB_REQUIRED -> {
+//                    verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
+//                }
+//            }
+//        })
     }
 
     private fun initUi() {
-        verificationFragmentInput.setInputTitleViewListener(this)
+        verificationFragmentInput.setEventListener(this)
 
         verificationFragmentNext.setOnClickListener {
             sendCode()
@@ -107,12 +105,12 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         viewModel.sendPhoneNumber()
     }
 
-    override fun onInputTitleChange(str: String?) {
-        str?.let{
-            viewModel.setUserPhone(str)
+
+    override fun onFieldInputChange(curView: FloatingLabelEditText) {
+        curView.getText().let {
+            viewModel.setUserPhone(it)
         }
     }
-
 
 
 }

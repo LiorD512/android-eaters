@@ -2,6 +2,7 @@ package com.example.matthias.mvvmcustomviewexample.custom
 
 import android.util.Log
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -19,6 +20,7 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
     val api: ApiService by inject()
     val eaterDataManager: EaterDataManager by inject()
     val metaDataRepository: MetaDataRepository by inject()
+    val deliveryTimeManager: DeliveryTimeManager by inject()
     private var listener: FavoritesViewListener? = null
 
     interface FavoritesViewListener{
@@ -78,7 +80,7 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getLastOrderTimeParam()
+        feedRequest.timestamp = deliveryTimeManager.getDeliveryTimestamp()
         return feedRequest
     }
 

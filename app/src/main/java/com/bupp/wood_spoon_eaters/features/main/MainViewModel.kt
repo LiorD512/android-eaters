@@ -14,6 +14,8 @@ import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,7 +28,7 @@ import java.util.concurrent.TimeUnit
 class MainViewModel(
     private val locationManager: LocationManager,
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val orderManager: OrderManager,
-    val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager
+    val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel(), EaterDataManager.EaterDataMangerListener {
 
     val progressData = ProgressData()
@@ -37,22 +39,23 @@ class MainViewModel(
         eventsManager.initSegment()
         fcmManager.initFcmListener()
         locationManager.updateFinalAddress()
-        initHeaderUi()
+//        initHeaderUi()
     }
 
     private fun initHeaderUi() {
-        val lastSelectedTime = eaterDataManager.getFeedSearchTimeString()
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        mainActHeaderEvent.postValue(MainActActionEvent(lastSelectedTime, currentAddress))
+//        val lastSelectedTime = deliveryTimeManager.getDeliveryTimeUiString()
+//        val lastSelectedTime = eaterDataManager.getDeliveryTimeLiveData().value?.
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        mainActHeaderEvent.postValue(MainActActionEvent(lastSelectedTime, currentAddress))
     }
 
-    fun refreshMainHeaderUi() {
-        initHeaderUi()
-    }
+//    fun refreshMainHeaderUi() {
+//        initHeaderUi()
+//    }
 
-    fun getGpsLiveData() = locationManager.getGpsData()
-//    fun getLocationLiveData() = locationManager.getLocationData()
-    fun getFinalAddressLiveData() = locationManager.getFinalAddressLiveData()
+//    fun getGpsLiveData() = locationManager.getGpsData()
+    fun getFinalAddressLiveData() = eaterDataManager.getFinalAddressLiveData()
+    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
     val navigationEvent = MutableLiveData<NavigationEventType>()
     enum class NavigationEventType{
@@ -378,9 +381,7 @@ class MainViewModel(
     }
 
     fun resetOrderTimeIfNeeded() {
-        if(!eaterDataManager.hasSpecificTime){
-            eaterDataManager.orderTime = null
-        }
+        deliveryTimeManager.setNewDeliveryTime(null)
     }
 
     val refreshAppDataEvent = SingleLiveEvent<Boolean>()
@@ -390,9 +391,9 @@ class MainViewModel(
         }
     }
 
-    fun initGpsStatus(activity: Activity) {
-        eaterDataManager.initGpsStatus(activity)
-    }
+//    fun initGpsStatus(activity: Activity) {
+//        eaterDataManager.initGpsStatus(activity)
+//    }
 
     fun getContactUsPhoneNumber(): String {
         return metaDataRepository.getContactUsPhoneNumber()

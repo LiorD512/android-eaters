@@ -97,7 +97,7 @@ class SingleFeedAdapter(
             }else{
                 if(isEvent){
 //                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
-                    holder.date.text = DateUtils.parseDDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
+                    holder.date.text = DateUtils.parseDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
                 }else{
                     if(DateUtils.isTodayOrTomorrow(dish.menuItem.orderAt)){
                         //Dish is offered today or tomorrow.

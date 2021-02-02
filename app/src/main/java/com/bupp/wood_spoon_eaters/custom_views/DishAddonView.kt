@@ -55,6 +55,7 @@ class DishAddonView : FrameLayout, PlusMinusView.PlusMinusInterface {
                 currentDish = dish as Dish
                 dishAddonAddBtn.visibility = View.VISIBLE
                 dishAddonPlusMinus.visibility = View.GONE
+                dishAddonCount.text = "${currentDish.menuItem?.quantity ?: 0}"
                 dishAddonAddBtn.setOnClickListener { listener?.onAddBtnClick(position) }
 //                dishAddonAddBtn.setOnClickListener { listener?.onAddBtnClick(currentDish) }
                 dishAddonImg.setOnClickListener { listener?.onDishClick(position) }

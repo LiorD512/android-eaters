@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.model
 import android.os.Parcelable
 import android.util.Log
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
@@ -40,6 +41,10 @@ class FeedPagingSource(
         } catch (e: Exception) {
             return LoadResult.Error(e)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, FeedFlow>): Int? {
+        return 0
     }
 
 }

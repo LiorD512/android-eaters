@@ -51,18 +51,28 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
-    fun parseDDateToUsTime(date: Date): String {
+    fun parseDateToUsTime(date: Date): String {
         //4:30 PM
         val sdf = SimpleDateFormat("h:mma")
         return sdf.format(date.time)
     }
 
+    fun parseDateToUsDayTime(date: Date?): String{
+        date?.let{
+            if(isToday(it))
+                return parseDateToUsTime(it)
+            else
+                return parseDateToDayDateHour(it)
+        }
+        return ""
+    }
 
     fun parseDateToDateAndTime(date: Date?): String {
         //05.04.19, 6:10PM
         val sdf = SimpleDateFormat("dd.MM.yy, h:mma")
-        if (date != null)
-            return sdf.format(date?.time)
+        date?.let{
+            return sdf.format(date.time)
+        }
         return ""
     }
 
@@ -116,5 +126,12 @@ object DateUtils {
         val tomorrow = GregorianCalendar()
         tomorrow.add(Calendar.DATE, 1)
         return isSameDay(orderDate, today) || isSameDay(orderDate, tomorrow)
+    }
+
+    fun isToday(orderTime: Date): Boolean {
+        val orderDate = Calendar.getInstance()
+        orderDate.time = orderTime
+        val today = Calendar.getInstance()
+        return isSameDay(orderDate, today)
     }
 }

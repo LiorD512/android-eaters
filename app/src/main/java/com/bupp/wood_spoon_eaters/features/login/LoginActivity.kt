@@ -18,8 +18,6 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.managers.PermissionManager
-import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,10 +26,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
     private val viewModel: LoginViewModel by viewModel<LoginViewModel>()
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        viewModel.onLocationPermissionDone()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,10 +101,6 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
             }
         })
 
-        viewModel.locationPermissionActionEvent.observe(this, Observer{
-            askLocationPermission()
-        })
-
         viewModel.progressData.observe(this, Observer{
             handlePb(it)
         })
@@ -171,35 +161,6 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
     override fun onHeaderBackClick() {
         onBackPressed()
     }
-
-    //Location
-    private fun askLocationPermission() {
-        when {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED -> {
-                Log.d("wowLoginAct","location grated")
-                viewModel.onLocationPermissionDone()
-            }
-            shouldShowRequestPermissionRationale() -> {
-                Log.d("wowLoginAct","shouldShowRequestPermissionRationale")
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected.
-            }
-            else -> {
-                Log.d("wowLoginAct","asking for permission")
-                requestPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
-            }
-        }
-
-    }
-
-    private fun shouldShowRequestPermissionRationale() =
-        ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) && ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
 
 
 

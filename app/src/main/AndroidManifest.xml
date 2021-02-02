@@ -17,6 +17,7 @@
     <application
             android:name=".WoodSpoonApplication"
             android:allowBackup="false"
+            android:hardwareAccelerated="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -24,17 +25,12 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning"
             tools:replace="android:allowBackup,android:supportsRtl">
-        <activity android:name=".features.locations_and_address.LocationAndAddressActivity"></activity>
+        <activity android:name=".delete_me.TestActivity"></activity>
+        <activity android:name=".features.locations_and_address.LocationAndAddressActivity" />
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU" />
-
-        <activity
-                android:name=".features.events.EventActivity"
-                android:label="@string/title_activity_event"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar"></activity> <!-- android:usesCleartextTraffic="true" -->
         <meta-data
                 android:name="com.appsee.ApiKey"
                 android:value="@string/appsee_api_key" />
@@ -75,12 +71,12 @@
                 android:name=".features.address_and_location.AddressChooserActivity"
                 android:label="@string/title_activity_address_chooser"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar"></activity>
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".features.new_order.NewOrderActivity"
                 android:label="@string/title_activity_new_order"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar"></activity>
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".features.splash.SplashActivity"
                 android:screenOrientation="portrait">
@@ -128,14 +124,14 @@
         <activity
                 android:name=".features.login.LoginActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="adjustResize"></activity>
+                android:windowSoftInputMode="adjustResize" />
         <activity
                 android:name=".features.main.MainActivity"
-                android:screenOrientation="portrait"></activity>
-
-        <activity android:name="com.canhub.cropper.CropImageActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name="com.canhub.cropper.CropImageActivity"
                 android:screenOrientation="portrait"
-                android:theme="@style/Base.Theme.AppCompat"/>
+                android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

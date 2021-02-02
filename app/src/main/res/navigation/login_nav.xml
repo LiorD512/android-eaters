@@ -78,7 +78,7 @@
     </fragment>
     <fragment
             android:id="@+id/locationPermissionFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.login.fragments.LocationPermissionFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.LocationPermissionFragment"
             tools:layout="@layout/fragment_location_permission"
             android:label="LocationPermissionFragment"
             app:enterAnim="@anim/slide_right_enter"

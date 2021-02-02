@@ -6,7 +6,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.bupp.wood_spoon_eaters.managers.LocationManager
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.Address
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -26,6 +26,7 @@ class LocationLiveData(val context: Context) : LiveData<Address>() {
         super.onInactive()
         Log.d(TAG,"onInactive")
         fusedLocationClient.removeLocationUpdates(locationCallback)
+        isStarted = false
     }
 
     @SuppressLint("MissingPermission")
@@ -56,22 +57,11 @@ class LocationLiveData(val context: Context) : LiveData<Address>() {
         )
     }
 
-    private fun stopLocationUpdates() {
-        if (isStarted) {
-            isStarted = false
-            if ((!requestingLocationUpdates)) {
-//                Toast.makeText(context, "stopLocationUpdates: updates never requested", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "stopLocationUpdates: updates never requested, no-op.")
-                return
-            }
-            fusedLocationClient!!.removeLocationUpdates(locationCallback).addOnCompleteListener {
-                //                    Toast.makeText(context, "stopLocationUpdates", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "stopLocationUpdates")
-                requestingLocationUpdates = false
-            }
-
-        }
-    }
+//    private fun stopLocationUpdates() {
+//        if (isStarted) {
+//            fusedLocationClient.removeLocationUpdates(locationCallback)
+//        }
+//    }
 
 
     private val locationCallback = object : LocationCallback() {
@@ -79,15 +69,21 @@ class LocationLiveData(val context: Context) : LiveData<Address>() {
             Log.d(TAG,"onLocationResult")
             locationResult ?: return
             for (location in locationResult.locations) {
-                setLocationData(location)
+                setLocationData(location, true)
             }
         }
     }
 
-    private fun setLocationData(location: Location) {
-        Log.d(TAG,"setLocationData")
+    private fun setLocationData(location: Location, isFinalResult: Boolean = false) {
+        Log.d(TAG,"setLocationData:")
+        val accuracy = location.accuracy
+        Log.d(TAG,"onLocationResult accuracy: $accuracy")
         value = getAddressFromLocation(location)
-        stopLocationUpdates()
+//        if(isFinalResult && accuracy > Constants.MY_LOCATION_ACCURACY_THRESHOLD){
+//            stopLocationUpdates()
+//        }else{
+//            value = getAddressFromLocation(location)
+//        }
     }
 
     fun getAddressFromLocation(location: Location): Address {
@@ -101,6 +97,7 @@ class LocationLiveData(val context: Context) : LiveData<Address>() {
 //            Toast.makeText(context, "my location object: ${addresses[0]}", Toast.LENGTH_SHORT).show()
             if (addresses.isNotEmpty()) {
                 streetLine = getStreetStr(addresses[0])
+                Log.d(TAG,"streetLine: $streetLine")
             }
 //            streetLine = addresses[0].getAddressLine(0)
         } catch (e: IOException) {

@@ -4,24 +4,40 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.address_and_time_view.view.*
-
-class AddressAndTimeView : LinearLayout {
+import com.bupp.wood_spoon_eaters.databinding.AddressAndTimeViewBinding
 
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.address_and_time_view, this, true)
+class AddressAndTimeView @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr) {
+
+    private var binding: AddressAndTimeViewBinding = AddressAndTimeViewBinding.inflate(LayoutInflater.from(context), this, true)
+
+    private var listener: AddressAndTimeViewListener? = null
+    interface AddressAndTimeViewListener{
+        fun onAddressClick()
+        fun onTimeClick()
     }
 
+    fun setAddressAndTimeViewListener(listener: AddressAndTimeViewListener){
+        this.listener = listener
+
+        binding.locationDetailsViewLocation.setOnClickListener {
+            this.listener?.onAddressClick()
+        }
+
+        binding.locationDetailsViewTime.setOnClickListener {
+            this.listener?.onTimeClick()
+        }
+    }
+
+
     fun setLocation(text: String?) {
-        locationDetailsViewLocation.text = text ?: "Address"
+        binding.locationDetailsViewLocation.text = text ?: "Address"
     }
 
     fun setTime(text: String?) {
-        locationDetailsViewTime.text = text ?: "ASAP"
+        binding.locationDetailsViewTime.text = text ?: "Now"
     }
 
 

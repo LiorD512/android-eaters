@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/teal_blue">
 
     <ImageView
-            android:visibility="gone"
             android:layout_marginTop="120dp"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
-            android:src="@drawable/woodspoon_logo"
+            android:src="@drawable/ic_woodspoon_logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
-            android:id="@+id/splashLottie"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
-</LinearLayout>
+</FrameLayout>

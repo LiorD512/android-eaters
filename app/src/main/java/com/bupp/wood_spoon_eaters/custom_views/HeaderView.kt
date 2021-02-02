@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCo
 import kotlinx.android.synthetic.main.header_view.view.*
 
 
-class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
+class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndTimeView.AddressAndTimeViewListener {
 
     protected var watcher: AutoCompleteTextWatcher? = getAutoCompleteTextWatecher()
 
@@ -51,6 +51,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
             headerViewProfileBtn.setUser(eater)
         }
         listener = listenerInstance
+        headerViewAddressAndTime.setAddressAndTimeViewListener(this)
     }
 
     fun refreshUserUi(eater: Eater? = null){
@@ -70,7 +71,8 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         fun onHeaderFilterClick() {}
         fun onHeaderProfileClick() {}
         fun onHeaderTextChange(str: String) {}
-        fun onHeaderAddressAndTimeClick() {}
+        fun onHeaderAddressClick() {}
+        fun onHeaderTimeClick() {}
         fun onHeaderSettingsClick() {}
     }
 
@@ -118,10 +120,6 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
 
         headerViewSettingsBtn.setOnClickListener {
             listener?.onHeaderSettingsClick()
-        }
-
-        headerViewAddressAndTime.setOnClickListener {
-            listener?.onHeaderAddressAndTimeClick()
         }
 
         setTitleInputListener()
@@ -186,6 +184,10 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
                 headerViewSaveBtn.visibility = View.VISIBLE
 //                headerViewSaveBtn.isEnabled = false
             }
+            Constants.HEADER_VIEW_TYPE_CLOSE_TITLE -> {
+                headerViewTitle.visibility = VISIBLE
+                headerViewCloseBtn.visibility = View.VISIBLE
+            }
             Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE -> {
                 headerViewTitle.visibility = VISIBLE
                 headerViewSaveBtn.visibility = View.VISIBLE
@@ -230,9 +232,11 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
         headerViewSearchLayout.visibility = View.GONE
     }
 
-    fun setLocationTitle(time: String? = null, location: String? = null) {
-            headerViewAddressAndTime.setTime(time)
+    fun setLocationTitle(location: String? = null) {
             headerViewAddressAndTime.setLocation(location)
+    }
+    fun setDeliveryTime(time: String?) {
+            headerViewAddressAndTime.setTime(time)
     }
 
     fun isSkipable(isSkipable: Boolean) {
@@ -263,5 +267,13 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener {
 
     fun setTitle(title: String) {
         headerViewTitle.text = title
+    }
+
+    override fun onAddressClick() {
+        listener?.onHeaderAddressClick()
+    }
+
+    override fun onTimeClick() {
+        listener?.onHeaderTimeClick()
     }
 }

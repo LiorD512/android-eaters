@@ -205,6 +205,9 @@ class MetaDataRepository(private val apiService: ApiService) {
         return ""
     }
 
+    fun getStates(): List<State>? {
+        return metaDataObject.states
+    }
 
 
 }

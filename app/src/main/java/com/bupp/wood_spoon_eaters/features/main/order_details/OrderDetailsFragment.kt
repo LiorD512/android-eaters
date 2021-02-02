@@ -15,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.order_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -103,7 +102,7 @@ class OrderDetailsFragment() : Fragment() {
 
         if(curOrder.estDeliveryTime != null){
             val date = DateUtils.parseDDateToUsDate(curOrder.estDeliveryTime)
-            val time = DateUtils.parseDDateToUsTime(curOrder.estDeliveryTime)
+            val time = DateUtils.parseDateToUsTime(curOrder.estDeliveryTime)
             orderDetailsFragOrderDate.text = "$date at $time"
         }else{
             orderDetailsFragOrderDate.text = "${curOrder.estDeliveryTimeText}"

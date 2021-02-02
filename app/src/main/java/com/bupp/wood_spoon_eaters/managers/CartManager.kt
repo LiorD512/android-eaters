@@ -1,11 +1,12 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
 import java.util.*
 
-class CartManager(val apiService: ApiService, val eaterDataManager: EaterDataManager, val newOrderRepository: NewOrderRepository) {
+class CartManager(val apiService: ApiService, val eaterDataManager: EaterDataManager, val newOrderRepository: NewOrderRepository, val deliveryTimeManager: DeliveryTimeManager) {
 
     var currentShowingDish: FullDish? = null
 
@@ -17,7 +18,7 @@ class CartManager(val apiService: ApiService, val eaterDataManager: EaterDataMan
     )
 
     suspend fun getFullDish(menuItemId: Long): GetFullDishResult? {
-        val feedRequest = eaterDataManager.getFinalTimeAndLocationParam()
+        val feedRequest = eaterDataManager.getFeedRequest()
         val result = newOrderRepository.getFullDish(menuItemId, feedRequest)
         result?.let {
             this.currentShowingDish = it
@@ -36,7 +37,7 @@ class CartManager(val apiService: ApiService, val eaterDataManager: EaterDataMan
             val orderFrom: Date? = it.menuItem?.cookingSlot?.orderFrom
             val start: Date? = it.menuItem?.cookingSlot?.startsAt
             val end: Date? = it.menuItem?.cookingSlot?.endsAt
-            var userSelection: Date? = eaterDataManager.getLastOrderTime()
+            var userSelection: Date? = deliveryTimeManager.getDeliveryTimeDate()
 
             if (start == null || end == null) {
                 return false

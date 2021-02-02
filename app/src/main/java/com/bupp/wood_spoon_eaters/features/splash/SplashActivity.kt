@@ -19,14 +19,12 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_splash.*
 
 
-class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, LottieAnimationView.LottieAnimListener,
-    WSErrorDialog.WSErrorListener {
+class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, WSErrorDialog.WSErrorListener {
 
     private var cookId: String? = null
     private var menuItemId: String? = null
     val viewModel: SplashViewModel by viewModel()
 
-    var isFinishLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +37,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun init() {
-        splashLottie.showDefaultAnimation(this)
         viewModel.initAppSplashData(this)
-    }
-
-    override fun onAnimationEnd() {
-        if(!isFinishLoading) {
-            splashLottie.rollAnimation()
-        }else{
-            redirectToMain()
-        }
     }
 
     private fun initObservers() {
@@ -69,7 +58,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                         redirectToLogin(Constants.LOGIN_STATE_CREATE_ACCOUNT)
                     }
                     SplashViewModel.SplashEventType.GOT_TO_MAIN -> {
-                        isFinishLoading = true
+                        redirectToMain()
                     }
                 }
             }
@@ -136,7 +125,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         Branch.sessionBuilder(this).withCallback(callback).reInit()
     }
 
-    private val callback = Branch.BranchReferralInitListener { linkProperties, error ->
+    private val callback = Branch.BranchReferralInitListener { linkProperties, _ ->
         linkProperties?.let {
             Log.d("wowSplash", "Branch.io intent $linkProperties")
             if (it.has("cook_id")) {

@@ -8,8 +8,8 @@
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
             app:layout_constraintTop_toTopOf="parent"
-            app:title="Delivery Details"
-            app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+            app:title="Delivery address"
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE"
             android:id="@+id/locationActHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

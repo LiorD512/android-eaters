@@ -12,6 +12,7 @@
         <item name="android:navigationBarColor" tools:targetApi="27">@color/white</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
         <item name="android:windowBackground">@drawable/splash_bkg</item>
+
     </style>
 
 
@@ -28,6 +29,39 @@
         <item name="android:windowEnterAnimation">@anim/popup_show</item>
         <item name="android:windowExitAnimation">@anim/popup_hide</item>
     </style>
+
+    <style name="ErrorText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/coral</item>
+        <item name="android:textSize">11.5sp</item>
+    </style>
+
+    <style name="HintText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/purpley_grey</item>
+        <item name="android:textSize">15.4sp</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="android:textSize">15.4sp</item>
+        <item name="fontFamily">@font/open_sans_semi_bold</item>
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="errorTextAppearance">@style/ErrorText</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/purpley_grey</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/teal_blue</item>
+        <item name="colorControlHighlight">@color/teal_blue</item>
+<!--        <item name="android:paddingBottom">4dp</item>-->
+    </style>
+
+
+    <style name="TextInputEditTextAppearance" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="android:paddingTop">1.2dp</item>
+        <item name="android:paddingBottom">6dp</item>
+    </style>
+
+
 
     //fonts and colors
 
@@ -66,6 +100,11 @@
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="Bold19Dark">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
 
     <style name="Bold23Blue">
         <item name="android:fontFamily">@font/open_sans_bold</item>
@@ -102,6 +141,11 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+    <style name="Bold11TealBlue">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
     <style name="Bold11Dark">
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">11.5sp</item>
@@ -126,10 +170,20 @@
         <item name="android:textColor">@color/dark</item>
     </style>
 
+    <style name="Reg11Black">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="Reg11Red">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/red</item>
+    </style>
+    <style name="Reg11Coral">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/coral</item>
     </style>
 
     <style name="Reg15Dark_50">
@@ -219,6 +273,11 @@
         <item name="android:textColor">@color/teal_blue</item>
     </style>
 
+    <style name="SemiBold11Dark">
+        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
     <style name="SemiBold13Dark">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">13.4sp</item>
@@ -242,10 +301,20 @@
         <item name="android:textColor">@color/dark_50</item>
     </style>
 
+    <style name="Reg13Black">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="Reg13Dark">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="Reg13Coral">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/coral</item>
     </style>
     <style name="Reg13White">
         <item name="android:fontFamily">@font/open_sans_reg</item>
@@ -259,6 +328,11 @@
         <item name="android:textColor">@color/dark_50</item>
     </style>
 
+    <style name="Reg13PurpleyGreyTwo">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/purpley_grey_two</item>
+    </style>
     <style name="Reg13PurpleyGrey">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
@@ -421,4 +495,5 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <color name="purpley_grey_two">#918f91</color>
 </resources>

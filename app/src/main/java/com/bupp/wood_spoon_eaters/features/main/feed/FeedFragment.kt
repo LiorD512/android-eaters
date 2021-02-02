@@ -69,9 +69,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
             handleAddress(it)
         })
 
-        viewModel.updateMainHeaderUiEvent.observe(viewLifecycleOwner, Observer{
-            mainViewModel.refreshMainHeaderUi()
-        })
+//        viewModel.updateMainHeaderUiEvent.observe(viewLifecycleOwner, Observer{
+//            mainViewModel.refreshMainHeaderUi()
+//        })
         viewModel.oldfeedEventOld.observe(this, Observer { event ->
 //            (activity as MainActivity).isFeedReady = true
             if(event.isSuccess){

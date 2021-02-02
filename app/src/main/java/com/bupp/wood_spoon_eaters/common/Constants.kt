@@ -55,6 +55,7 @@ class Constants {
         const val HEADER_VIEW_TYPE_SEARCH = 1
         const val HEADER_VIEW_TYPE_SIGNUP = 2
         const val HEADER_VIEW_TYPE_BACK_TITLE = 3
+        const val HEADER_VIEW_TYPE_CLOSE_TITLE = 11
         const val HEADER_VIEW_TYPE_BACK_TITLE_DONE = 4
         const val HEADER_VIEW_TYPE_BACK_TITLE_SAVE = 5
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE = 6
@@ -175,6 +176,9 @@ class Constants {
         const val NATIONWIDE_SHIPPING_SELECT_DIALOG = "nationwide_shipping_select_dialog"
         const val WS_ERROR_DIALOG = "ws_error_dialog"
 
+        //bottom sheet
+        const val TIME_PICKER_BOTTOM_SHEET = "time_picker_bottom_sheet"
+        const val ADDRESS_MENU_BOTTOM_SHEET = "address_menu_bottom_sheet"
 
 
         //cancel order dialog stage
@@ -258,7 +262,10 @@ class Constants {
 
 
         const val MINIMUM_LOCATION_DISTANCE = 100
+        const val MY_LOCATION_ACCURACY_THRESHOLD = 20
+        const val MAP_ANIMATION_SPEED = 500 // milliseconds
     }
+
 }
 
 

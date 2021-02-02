@@ -18,29 +18,40 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/woodspoon_logo"
+                android:src="@drawable/ic_woodspoon_logo"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="120dp"/>
+                android:layout_marginTop="169dp"/>
 
         <View
                 android:layout_width="1dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                android:id="@+id/welcomeFragmentLogin"
-                android:layout_height="wrap_content"
+        <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/white"
                 android:layout_width="match_parent"
-                app:title="@string/welcome_fragment_login_btn"/>
+                android:layout_height="172dp">
 
-        <com.bupp.wood_spoon_eaters.custom_views.BlueStrokeBtn
-                android:id="@+id/welcomeFragmentSignup"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                app:title="@string/welcome_fragment_sign_up_btn"
-                app:textColor="@color/white"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="23dp"/>
+            <TextView
+                    style="@style/Reg15Black"
+                    android:padding="23dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="7.7sp"
+                    android:gravity="center_horizontal"
+                    android:text="Delicious homemade food, from local home chefs, delivered to your door!"/>
+
+            <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                    android:paddingHorizontal="7dp"
+                    android:id="@+id/welcomeFragmentLogin"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    app:title="@string/welcome_fragment_login_btn"/>
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

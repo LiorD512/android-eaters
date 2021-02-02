@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.managers
+package com.bupp.wood_spoon_eaters.managers.location
 
 
 import android.annotation.SuppressLint
@@ -11,9 +11,6 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.location.GPSBroadcastReceiver
-import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
-import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 
@@ -35,7 +32,7 @@ import com.google.android.gms.tasks.Task
  * Created by MonkeyFather on 15/05/2018.
  */
 
-class LocationManager(val context: Context, val userRepository: UserRepository) : GPSBroadcastReceiver.GPSBroadcastListener {
+class LocationManager(val context: Context, private val userRepository: UserRepository){//} : GPSBroadcastReceiver.GPSBroadcastListener {
 
 
     /////////////////////////////////////////
@@ -49,7 +46,7 @@ class LocationManager(val context: Context, val userRepository: UserRepository) 
     private val finalAddressLiveData = MutableLiveData<Address?>()
 //    private val getFinalAddress = updateFinalAddress()
 
-    fun updateFinalAddress() {
+    fun updateFinalAddress() {//todo - check this - ny -
         // return nearest known address to users current location
         // if not, return user current location
         // if not, return user last known location saved by user
@@ -88,35 +85,35 @@ class LocationManager(val context: Context, val userRepository: UserRepository) 
     ////////////       GPS       ////////////
     /////////////////////////////////////////
 
-    fun getGpsData() = gpsLiveData
-    private val gpsLiveData = LiveEventData<Boolean>()
+//    fun getGpsData() = gpsLiveData
+//    private val gpsLiveData = LiveEventData<Boolean>()
+//
+//    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
+//    var isGpsEnabled: Boolean = true
+//
+//    init {
+//        registerGpsBroadcastReceiver()
+//    }
+//
+//    private fun registerGpsBroadcastReceiver() {
+//        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
+//        context.registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
+//    }
+//
+//    override fun onGPSChanged(isEnabled: Boolean) {
+//        Log.d("wowLocationManager", "onGPSChanged: $isEnabled")
+//        isGpsEnabled = isEnabled
+//        gpsLiveData.postRawValue(isEnabled)
+//    }
 
-    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
-    var isGpsEnabled: Boolean = true
-
-    init {
-        registerGpsBroadcastReceiver()
-    }
-
-    private fun registerGpsBroadcastReceiver() {
-        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
-        context.registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
-    }
-
-    override fun onGPSChanged(isEnabled: Boolean) {
-        Log.d("wowLocationManager", "onGPSChanged: $isEnabled")
-        isGpsEnabled = isEnabled
-        gpsLiveData.postRawValue(isEnabled)
-    }
-
-    fun checkGpsStatus(context: Context) {
-        GpsUtils(context).turnGPSOn(object : GpsUtils.OnGpsListener {
-            override fun gpsStatus(isGPSEnable: Boolean) {
-                Log.d("wowLocationManager", "gpsStatus: $isGPSEnable")
-                isGpsEnabled = isGPSEnable
-            }
-        })
-    }
+//    fun checkGpsStatus(context: Context) {
+//        GpsUtils(context).turnGPSOn(object : GpsUtils.OnGpsListener {
+//            override fun gpsStatus(isGPSEnable: Boolean) {
+//                Log.d("wowLocationManager", "gpsStatus: $isGPSEnable")
+//                isGpsEnabled = isGPSEnable
+//            }
+//        })
+//    }
 
 
     //    private lateinit var activity: Activity

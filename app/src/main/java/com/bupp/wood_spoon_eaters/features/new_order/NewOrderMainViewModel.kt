@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.network.BaseCallback
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class NewOrderMainViewModel(
     val metaDataRepository: MetaDataRepository,
     val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager,
+    val deliveryTimeManager: DeliveryTimeManager,
     private val newOrderRepository: NewOrderRepository,
     val paymentManager: PaymentManager
 ) : ViewModel(),
@@ -116,12 +118,12 @@ class NewOrderMainViewModel(
 
     fun updateDeliveryTime(time: Date) {
 //        progressData.startProgress()
-        eaterDataManager.orderTime = time
+        deliveryTimeManager.setNewDeliveryTime(time)
 
 //        orderManager.updateOrderRequest(deliveryAt = eaterDataManager.getLastOrderTimeParam())
         orderData.postValue(orderData.value)
         val orderRequest = OrderRequest()
-        orderRequest.deliveryAt = eaterDataManager.getLastOrderTimeParam()
+        orderRequest.deliveryAt = deliveryTimeManager.getDeliveryTimestamp()
 //        postUpdateOrder(orderRequest)
     }
 

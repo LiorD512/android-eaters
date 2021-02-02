@@ -170,19 +170,19 @@ class SingleDishInfoViewModel(
 //    }
 
 
-    fun updateChosenDeliveryDate(selectedMenuItem: MenuItem? = null, newChosenDate: Date?) {
-        getCurrentDish()?.let {
-            //if new chosen time is approximently now - set null
-            var newDate = newChosenDate
-            if (DateUtils.isNow(newChosenDate)) {
-                newDate = null
-            }
-            eaterDataManager.orderTime = newDate
-            selectedMenuItem?.let {
-                getCurrentDish()!!.menuItem = it
-            }
-        }
-    }
+//    fun updateChosenDeliveryDate(selectedMenuItem: MenuItem? = null, newChosenDate: Date?) {
+//        getCurrentDish()?.let {
+//            //if new chosen time is approximently now - set null
+//            var newDate = newChosenDate
+//            if (DateUtils.isNow(newChosenDate)) {
+//                newDate = null
+//            }
+//            eaterDataManager.orderTime = newDate
+//            selectedMenuItem?.let {
+//                getCurrentDish()!!.menuItem = it
+//            }
+//        }
+//    }
 
 
 //    fun getUserChosenDeliveryDate(): Date? {

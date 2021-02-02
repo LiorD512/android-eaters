@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:background="@color/white"
+        android:id="@+id/selectAddressItemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15.4dp"
+        android:paddingVertical="15.4dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+            android:id="@+id/selectAddressItemMenu"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_options" />
+
+    <LinearLayout
+            android:animateLayoutChanges="true"
+            android:paddingStart="14.6dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/selectAddressItemStreet"
+                style="@style/SemiBold13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current location" />
+
+        <TextView
+                android:id="@+id/selectAddressItemState"
+                style="@style/Reg13PurpleyGreyTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                tools:text="Mannhattan, NY"/>
+
+        <TextView
+                android:id="@+id/selectAddressItemDropOff"
+                style="@style/Reg13PurpleyGreyTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                tools:text="Deliver to door"/>
+
+    </LinearLayout>
+
+    <ImageView
+            android:visibility="gone"
+            android:id="@+id/selectAddressItemCheck"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/check_icon" />
+
+</LinearLayout>

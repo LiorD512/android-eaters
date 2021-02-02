@@ -1,65 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
         android:background="@color/white"
         android:orientation="vertical">
 
-    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-            android:id="@+id/verificationFragmentInput"
-            android:layout_width="match_parent"
+    <TextView
+            android:paddingStart="15.4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/title"
+            android:layout_marginTop="15.4dp"
+            style="@style/Bold19Dark"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:paddingHorizontal="15.4dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textSize="15.4sp"
-            app:error="@string/phone_verification_fragment_phone_error"
-            app:hint="@string/phone_verification_fragment_phone_hint"
-            app:inputType="PHONE" />
+            android:letterSpacing="0.03"
+            android:text="Enter Your Mobile Number"/>
 
-    <View
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <TextView
+            android:paddingStart="15.4dp"
+            android:id="@+id/subtitle"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/Reg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:layout_marginTop="13dp"
+            android:lineSpacingExtra="6.7sp"
+            android:text="You will receive an SMS to confirm your phone number"/>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="65.3dp"
-            android:layout_marginRight="7.7dp"
-            android:layout_marginBottom="23dp"
+            android:layout_marginTop="23dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15.4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle">
+
+        <LinearLayout
+                android:id="@+id/verificationFragIsoLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7.7dp"
+                android:background="@color/grey_white"
+                android:orientation="horizontal"
+                android:paddingVertical="14.2dp"
+                android:paddingStart="23dp"
+                android:paddingEnd="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                    android:id="@+id/verificationFragFlag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15.4dp" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/triangle_string"
+                    android:textColor="@color/black" />
+
+            <TextView
+                    android:id="@+id/verificationFragIso"
+                    style="@style/Reg15Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/grey_white"
+                    android:gravity="center"
+                    android:text="+1" />
+
+        </LinearLayout>
+
+
+        <com.bupp.wood_spoon_eaters.views.FloatingLabelEditText
+                android:id="@+id/verificationFragmentInput"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                app:error="@string/phone_verification_fragment_phone_error"
+                app:hint="Mobile number"
+                app:inputType="PHONE"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            app:layout_constraintBottom_toTopOf="@+id/verificationFragmentNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10.7dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-        <CheckBox
-                android:id="@+id/verificationFragPrivacyPolicyCb"
-                style="@style/Reg13Dark"
+        <TextView
+                android:id="@+id/verificationFragTermsText"
+                style="@style/Reg11Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8.6dp"
-                android:layout_marginRight="7.7dp"
-                android:button="@drawable/checkbox_selector"
-                android:paddingLeft="7.2dp"
-                android:text="" />
-
-        <TextView
-                android:id="@+id/verificationFragCbText"
-                style="@style/Reg13Dark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left" />
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="8.6sp"
+                android:gravity="center_horizontal"
+                tools:text="By continuing you confirm our"/>
 
     </LinearLayout>
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/verificationFragmentNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:title="@string/phone_verification_fragment_next_btn" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 

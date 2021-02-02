@@ -7,7 +7,7 @@
         android:orientation="vertical"
         android:background="@color/white"
         android:gravity="center"
-        tools:context=".features.login.fragments.LocationPermissionFragment">
+        tools:context=".features.locations_and_address.LocationPermissionFragment">
 
     <TextView
             style="@style/Bold19Black"
@@ -47,8 +47,9 @@
     <TextView
             style="@style/Bold15Blue"
             android:layout_gravity="center"
-            android:layout_marginTop="26.5dp"
-            android:layout_width="wrap_content"
+            android:paddingTop="26.5dp"
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/teal_blue"
             android:letterSpacing="0.03"

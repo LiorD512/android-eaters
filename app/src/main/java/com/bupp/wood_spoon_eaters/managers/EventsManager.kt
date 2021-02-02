@@ -30,7 +30,9 @@ class EventsManager(val context: Context, private val appSetting: AppSettings, p
                 user.id.toString(), Traits()
                     .putName(user.getFullName())
                     .putEmail(user.email)
-                    .putPhone(user.phoneNumber), null
+                    .putPhone(user.phoneNumber)
+                    .putCreatedAt(user.createdAt.toString())
+                    .putValue("shipped Order Count", user.ordersCount), null
             )
 
             val address = eaterDataManager.getLastChosenAddress()

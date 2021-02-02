@@ -34,7 +34,6 @@ class LoginViewModel(
     var privacyPolicyCb: Boolean = false
 
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
-    val locationPermissionActionEvent: MutableLiveData<Void> = MutableLiveData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
     val progressData = ProgressData()
 
@@ -86,10 +85,6 @@ class LoginViewModel(
         var isValid = true
         if (phone.isNullOrEmpty()) {
             phoneFieldErrorEvent.postValue(ErrorEventType.PHONE_EMPTY)
-            isValid = false
-        }
-        if (!privacyPolicyCb) {
-            phoneCbFieldErrorEvent.postValue(ErrorEventType.CB_REQUIRED)
             isValid = false
         }
         return isValid
@@ -263,17 +258,10 @@ class LoginViewModel(
     }
 
     //Location Permission methods
-    private val locationData = LocationLiveData(applicationContext)
-    fun getLocationData() = locationData
+//    private val locationData = LocationLiveData(applicationContext)
+//    fun getLocationData() = locationData
 
-    fun onLocationPermissionDone() {
-        progressData.endProgress()
-        navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
-    }
 
-    fun askLocationPermission() {
-        locationPermissionActionEvent.postValue(null)
-    }
 
 
 }

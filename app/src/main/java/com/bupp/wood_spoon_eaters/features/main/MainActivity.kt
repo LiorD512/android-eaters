@@ -24,7 +24,7 @@ import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
-import com.bupp.wood_spoon_eaters.features.events.EventActivity
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
@@ -123,13 +123,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //        })
     }
 
-    private fun onGPSChanged(isEnabled: Boolean) {
-        Log.d("wowMainAct", "onGPSChanged - isEnabled: $isEnabled")
-        if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
-            startLocationUpdates()
-            loadFeed()
-        }
-    }
+//    private fun onGPSChanged(isEnabled: Boolean) {
+//        Log.d("wowMainAct", "onGPSChanged - isEnabled: $isEnabled")
+//        if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
+//            startLocationUpdates()
+//            loadFeed()
+//        }
+//    }
 
     ////////////////////////////////////////////////
     ///////    Background processes - end    ///////
@@ -208,16 +208,22 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             handlePb(it)
         })
         //header event
+        viewModel.getFinalAddressLiveData().observe(this, {
+            mainActHeaderView.setLocationTitle(it?.getUserLocationStr())
+        })
+        viewModel.getDeliveryTimeLiveData().observe(this, {
+            mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
+        })
         viewModel.mainActHeaderEvent.observe(this, Observer {
             setHeaderViewLocationDetails(it.time, it.address)
         })
 
-        viewModel.getGpsLiveData().observe(this, Observer { it ->
-            val isGpsEnabled = it.getContentIfNotHandled()
-            isGpsEnabled?.let {
-                onGPSChanged(it)
-            }
-        })
+//        viewModel.getGpsLiveData().observe(this, Observer { it ->
+//            val isGpsEnabled = it.getContentIfNotHandled()
+//            isGpsEnabled?.let {
+//                onGPSChanged(it)
+//            }
+//        })
 
         viewModel.dishClickEvent.observe(this, Observer{
             val event = it.getContentIfNotHandled()
@@ -525,7 +531,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun setHeaderViewLocationDetails(time: String? = null, location: Address? = null) {
-        mainActHeaderView.setLocationTitle(time, location?.streetLine1)
+//        mainActHeaderView.setLocationTitle(time, location?.streetLine1)
     }
 
 //    // Request multiple permissions contract
@@ -609,12 +615,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    override fun onHeaderDoneClick() {
-
+    override fun onHeaderTimeClick() {
+        val timePickerBottomSheet = AddressMenuBottomSheet()
+        timePickerBottomSheet.show(supportFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
-
-
+    override fun onHeaderAddressClick() {
+        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+    }
 
     override fun onHeaderTextChange(str: String) {
         if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
@@ -641,11 +649,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadMyProfile()
     }
 
-
-
-    override fun onHeaderAddressAndTimeClick() {
-        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
-    }
 
     override fun onBackPressed() {
         when (currentFragmentTag) {
@@ -824,7 +827,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     fun startEventActivity() {
 //        startActivityForResult(Intent(this, EventActivity::class.java), Constants.EVENT_ACTIVITY_REQUEST_CODE)
-        startActivity(Intent(this, EventActivity::class.java))
+//        startActivity(Intent(this, EventActivity::class.java))
     }
 
     override fun onResume() {

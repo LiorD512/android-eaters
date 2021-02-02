@@ -6,39 +6,38 @@ import android.location.Location
 import android.util.Log
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
-import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
-import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import java.util.*
 
 
-class EaterDataManager(val context: Context, val appSettings: AppSettings, val locationManager: LocationManager, val userRepository: UserRepository) :
+class EaterDataManager(val context: Context, private val appSettings: AppSettings, private val locationManager: LocationManager,
+                       val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository) :
     LocationManager.LocationManagerListener {
-
-    companion object {
-        const val TAG = "wowEaterAddressManager"
-    }
 
     val currentEater: Eater?
     get() = userRepository.getUser()
 
-    fun getFinalAddressLiveData() = locationManager.getFinalAddressLiveData()
-    fun getLocationData() = locationManager.getLocationData()
+    /////////////////////////////////////////
+    ////////    DELIVERY_TIME       /////////
+    /////////////////////////////////////////
 
+    fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
 
     /////////////////////////////////////////
     ///////////    LOCATION       ///////////
     /////////////////////////////////////////
 
+    fun getFinalAddressLiveData() = locationManager.getFinalAddressLiveData() // used for feed !
+    fun getLocationData() = locationManager.getLocationData()
+//    fun getGpsData() = locationManager.getGpsData()
     fun initGpsStatus(activity: Activity) {
-        locationManager.checkGpsStatus(activity)
+//        locationManager.checkGpsStatus(activity)
     }
 
     fun getLocationStatus(): LocationStatus {
@@ -46,7 +45,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         val knownAddresses = getListOfAddresses()
         val myLocation = locationManager.getFinalAddressLiveData().value
         val hasGpsPermission = appSettings.hasGPSPermission
-        val isGpsEnabled = locationManager.isGpsEnabled
+        val isGpsEnabled = true//locationManager.isGpsEnabled
         Log.d(
             "wowEatersDataManager",
             "getLocationStatus: finalAddress: $finalAddress, hasGpsPermission: $hasGpsPermission, isGpsEnabled: $isGpsEnabled, knownAddresses: $knownAddresses, myLocation: $myLocation "
@@ -91,7 +90,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 //    }
 
 
-    fun getFinalTimeAndLocationParam(): FeedRequest {
+    fun getFeedRequest(): FeedRequest {
         var feedRequest = FeedRequest()
         //address
         val currentAddress = getLastChosenAddress()
@@ -103,7 +102,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
 
         //time
-        feedRequest.timestamp = getLastOrderTimeParam()
+        feedRequest.timestamp = deliveryTimeManager.getDeliveryTimestamp()
 
         return feedRequest
     }
@@ -221,17 +220,11 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     private var previousChosenAddress: Address? = null
 
     fun getLastChosenAddress(): Address? {
-        return when (isInEvent) {
-            true -> eventChosenAddress
-            false -> lastChosenAddress ?: getLocationStatus().address
-        }
+        return lastChosenAddress ?: getLocationStatus().address
     }
 
     fun setLastChosenAddress(address: Address?) {
-        when (isInEvent) {
-            true -> this.eventChosenAddress = address
-            false -> this.lastChosenAddress = address
-        }
+            this.lastChosenAddress = address
     }
 
     fun setPreviousChosenAddress(previousChosenAddress: Address?) {
@@ -293,79 +286,6 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
     }
 
 
-    var isInEvent: Boolean = false
-
-    var hasSpecificTime: Boolean = false //this param indicates whether a user specified a time for search
-
-    //order date and time !!
-    var orderTime: Date? = null
-    var eventOrderTime: Date? = null
-
-    //feed repo
-    fun getFeedSearchTime(): Date? {
-        if (hasSpecificTime) {
-            return getLastOrderTime()
-        } else {
-            return null
-        }
-    }
-
-    //feed repo
-    fun getFeedSearchTimeString(): String? {
-        if (hasSpecificTime) {
-            return getLastOrderTimeString()
-        } else {
-            return null
-        }
-    }
-
-    //feed repo
-    fun getFeedSearchTimeStringParam(): String? {
-        if (hasSpecificTime) {
-            return getLastOrderTimeParam()
-        } else {
-            return null
-        }
-    }
-
-
-    fun getLastOrderTime(): Date? {
-        return when (isInEvent) {
-            true -> {
-                if (eventOrderTime != null) {
-                    eventOrderTime
-                } else {
-                    null
-                }
-            }
-            false -> {
-                if (orderTime != null) {
-                    orderTime
-                } else {
-                    null
-                }
-            }
-        }
-    }
-
-    fun getLastOrderTimeParam(): String? {
-        //returns unix timestamp
-        return if (getLastOrderTime() != null) {
-            DateUtils.parseUnixTimestamp(getLastOrderTime()!!)
-        } else {
-            null
-        }
-    }
-
-    fun getLastOrderTimeString(): String {
-        return if (getLastOrderTime() != null) {
-            DateUtils.parseDateToDayDateHour(getLastOrderTime()!!)
-        } else {
-            "ASAP"
-        }
-    }
-
-
     //eater params and data
 
     private var isUserChooseSpecificAddress: Boolean = false
@@ -380,10 +300,7 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
 
     fun isUserChooseSpecificAddress(): Boolean {
         //is user didn't chose my location
-        return when (isInEvent) {
-            true -> false
-            false -> isUserChooseSpecificAddress
-        }
+        return isUserChooseSpecificAddress
 
     }
 
@@ -395,23 +312,9 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
         }
     }
 
-    fun setEventTimeAndPlace(event: Event?) {
-        event?.let {
-            isInEvent = true
-            setLastChosenAddress(event.location)
-            eventOrderTime = event.startsAt
-        }
-    }
-
-    fun disableEventDate() {
-        Log.d(TAG, "disableEventDate")
-        isInEvent = false
-        eventChosenAddress = null
-        eventOrderTime = null
-    }
 
     fun setUserChooseSpecificTime(hasSpecificTime: Boolean) {
-        this.hasSpecificTime = hasSpecificTime
+//        this.hasSpecificTime = hasSpecificTime
     }
 
     var sid: String? = null
@@ -424,6 +327,12 @@ class EaterDataManager(val context: Context, val appSettings: AppSettings, val l
             this.cid = it
         }
     }
+
+
+    companion object {
+        const val TAG = "wowEaterAddressManager"
+    }
+
 
 
 }

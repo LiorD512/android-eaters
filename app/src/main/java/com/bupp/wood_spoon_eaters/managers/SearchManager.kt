@@ -3,8 +3,9 @@ package com.bupp.wood_spoon_eaters.managers
 import com.bupp.wood_spoon_eaters.model.SearchRequest
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 
-class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager, val settings: AppSettings) {
+class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager, val settings: AppSettings, val deliveryTimeManager: DeliveryTimeManager) {
 
     var curSearch: SearchRequest = SearchRequest()
 
@@ -56,7 +57,7 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         }
 
         //time
-        curSearch.timestamp = eaterDataManager.getLastOrderTimeParam()
+        curSearch.timestamp = deliveryTimeManager.getDeliveryTimestamp()
 
         return curSearch
     }

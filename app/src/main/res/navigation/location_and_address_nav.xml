@@ -3,58 +3,113 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/location_and_address_navigation"
-        app:startDestination="@id/deliveryDetailsFragment">
+        app:startDestination="@id/selectAddressFragment">
 
     <fragment
-            android:id="@+id/deliveryDetailsFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment"
-            android:label="delivery_details"
-            tools:layout="@layout/delivery_details_fragment">
+            android:id="@+id/selectAddressFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressFragment"
+            android:label="select_address"
+            tools:layout="@layout/fragment_select_address">
+
         <action
-                android:id="@+id/action_deliveryDetailsFragment_to_addressListChooserFragment"
-                app:destination="@id/addressListChooserFragment"
+                android:id="@+id/action_selectAddressFragment_to_locationPermissionFragment"
+                app:destination="@id/locationPermissionFragment"
+                app:enterAnim="@anim/slide_left_enter"
+                app:exitAnim="@anim/slide_left_exit"
+                app:popEnterAnim="@anim/slide_right_enter"
+                app:popExitAnim="@anim/slide_right_exit"
+                app:popUpTo="@+id/selectAddressFragment" />
+        <action
+                android:id="@+id/action_selectAddressFragment_to_addressVerificationMapFragment"
+                app:destination="@id/addressVerificationMapFragment"
                 app:enterAnim="@anim/slide_right_enter"
                 app:exitAnim="@anim/slide_right_exit"
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/deliveryDetailsFragment" />
+                app:popUpTo="@+id/selectAddressFragment"/>
     </fragment>
 
     <fragment
-            android:id="@+id/addressListChooserFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressListChooserFragment"
-            android:label="address_list_chooser"
-            tools:layout="@layout/fragment_address_list_chooser">
+            android:id="@+id/locationPermissionFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.LocationPermissionFragment"
+            android:label="location_permission"
+            tools:layout="@layout/fragment_location_permission">
+
         <action
-                android:id="@+id/action_addressListChooserFragment_to_addOrEditAddressFragment"
-                app:destination="@id/addOrEditAddressFragment"
+                android:id="@+id/action_locationPermissionFragment_to_selectAddressFragment"
+                app:destination="@id/selectAddressFragment"
+                app:enterAnim="@anim/slide_left_enter"
+                app:exitAnim="@anim/slide_left_exit"
+                app:popEnterAnim="@anim/slide_right_enter"
+                app:popExitAnim="@anim/slide_right_exit"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/addressVerificationMapFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment"
+            android:label="address_verification_map"
+            tools:layout="@layout/fragment_address_verification_map">
+
+        <action
+                android:id="@+id/action_addressVerificationMapFragment_to_selectAddressFragment"
+                app:destination="@id/selectAddressFragment"
                 app:enterAnim="@anim/slide_right_enter"
                 app:exitAnim="@anim/slide_right_exit"
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/addressListChooserFragment"/>
+                app:popUpTo="@+id/addressVerificationMapFragment"/>
     </fragment>
 
-    <fragment
-            android:id="@+id/addOrEditAddressFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressFragment"
-            android:label="add_or_edit_address_fragment"
-            tools:layout="@layout/fragment_add_or_edit_address">
-        <action
-                android:id="@+id/action_addOrEditAddressFragment_to_addressAutoCompleteFragment"
-                app:destination="@id/addressAutoCompleteFragment"
-                app:enterAnim="@anim/slide_right_enter"
-                app:exitAnim="@anim/slide_right_exit"
-                app:popEnterAnim="@anim/slide_left_enter"
-                app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/addOrEditAddressFragment"/>
-    </fragment>
+    <!--    <fragment-->
+    <!--            android:id="@+id/deliveryDetailsFragment"-->
+    <!--            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment"-->
+    <!--            android:label="delivery_details"-->
+    <!--            tools:layout="@layout/delivery_details_fragment">-->
+    <!--        <action-->
+    <!--                android:id="@+id/action_deliveryDetailsFragment_to_addressListChooserFragment"-->
+    <!--                app:destination="@id/addressListChooserFragment"-->
+    <!--                app:enterAnim="@anim/slide_right_enter"-->
+    <!--                app:exitAnim="@anim/slide_right_exit"-->
+    <!--                app:popEnterAnim="@anim/slide_left_enter"-->
+    <!--                app:popExitAnim="@anim/slide_left_exit"-->
+    <!--                app:popUpTo="@+id/deliveryDetailsFragment" />-->
+    <!--    </fragment>-->
 
-    <fragment
-            android:id="@+id/addressAutoCompleteFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.search_address_auto_complete.AddressAutoCompleteSearchFragment"
-            android:label="address_autocomplete_search_fragment"
-            tools:layout="@layout/fragment_address_auto_complete_search" />
+    <!--    <fragment-->
+    <!--            android:id="@+id/addressListChooserFragment"-->
+    <!--            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressListChooserFragment"-->
+    <!--            android:label="address_list_chooser"-->
+    <!--            tools:layout="@layout/fragment_address_list_chooser">-->
+    <!--        <action-->
+    <!--                android:id="@+id/action_addressListChooserFragment_to_addOrEditAddressFragment"-->
+    <!--                app:destination="@id/addOrEditAddressFragment"-->
+    <!--                app:enterAnim="@anim/slide_right_enter"-->
+    <!--                app:exitAnim="@anim/slide_right_exit"-->
+    <!--                app:popEnterAnim="@anim/slide_left_enter"-->
+    <!--                app:popExitAnim="@anim/slide_left_exit"-->
+    <!--                app:popUpTo="@+id/addressListChooserFragment"/>-->
+    <!--    </fragment>-->
+
+    <!--    <fragment-->
+    <!--            android:id="@+id/addOrEditAddressFragment"-->
+    <!--            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressFragment"-->
+    <!--            android:label="add_or_edit_address_fragment"-->
+    <!--            tools:layout="@layout/fragment_add_or_edit_address">-->
+    <!--        <action-->
+    <!--                android:id="@+id/action_addOrEditAddressFragment_to_addressAutoCompleteFragment"-->
+    <!--                app:destination="@id/addressAutoCompleteFragment"-->
+    <!--                app:enterAnim="@anim/slide_right_enter"-->
+    <!--                app:exitAnim="@anim/slide_right_exit"-->
+    <!--                app:popEnterAnim="@anim/slide_left_enter"-->
+    <!--                app:popExitAnim="@anim/slide_left_exit"-->
+    <!--                app:popUpTo="@+id/addOrEditAddressFragment"/>-->
+    <!--    </fragment>-->
+
+    <!--    <fragment-->
+    <!--            android:id="@+id/addressAutoCompleteFragment"-->
+    <!--            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.search_address_auto_complete.AddressAutoCompleteSearchFragment"-->
+    <!--            android:label="address_autocomplete_search_fragment"-->
+    <!--            tools:layout="@layout/fragment_address_auto_complete_search" />-->
 
 
 </navigation>

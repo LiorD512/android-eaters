@@ -26,12 +26,13 @@ data class WSError(
 )
 
 data class MetaDataModel(
-    @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>? = arrayListOf(),
-    @SerializedName("diets") val diets: ArrayList<DietaryIcon>? = arrayListOf(),
-    @SerializedName("metrics") val metrics: ArrayList<Metrics>? = arrayListOf(),
-    @SerializedName("report_topics") val reportTopic: ArrayList<ReportTopic>? = arrayListOf(),
-    @SerializedName("settings") val settings: ArrayList<AppSetting>? = arrayListOf(),
-    @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>? = arrayListOf()
+    @SerializedName("cuisines") val cuisines: List<CuisineLabel>? = listOf(),
+    @SerializedName("diets") val diets: List<DietaryIcon>? = listOf(),
+    @SerializedName("metrics") val metrics: List<Metrics>? = listOf(),
+    @SerializedName("report_topics") val reportTopic: List<ReportTopic>? = listOf(),
+    @SerializedName("settings") val settings: List<AppSetting>? = listOf(),
+    @SerializedName("notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
+    @SerializedName("states") val states: List<State>? = listOf()
 )
 
 data class ReportTopic(
