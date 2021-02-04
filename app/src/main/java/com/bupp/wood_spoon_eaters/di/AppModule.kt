@@ -39,6 +39,7 @@ import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddr
 import com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressViewModel
 import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountrySelectorViewModel
 import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressViewModel
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
@@ -90,6 +91,7 @@ val appModule = module {
     //location
     viewModel { LocationAndAddressViewModel(get(), get()) }
     viewModel { SelectAddressViewModel(get(), get(), get(), get()) }
+    viewModel { AddressMapVerificationViewModel(get(), get()) }
 
     //New Order
     viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get()) }

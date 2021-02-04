@@ -1,38 +1,47 @@
 package com.bupp.wood_spoon_eaters.views
 
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.databinding.MapHeaderViewLayoutBinding
-import render.animations.Flip
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
 import render.animations.Render
 import render.animations.Slide
-import java.util.logging.Handler
 
 class MapHeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
 
-    private var isMarkerGood: Boolean = true
+    enum class MapHeaderViewType {
+        CORRECT,
+        WRONG,
+        SHAKE,
+    }
+    private var currentVerificationStatus: MapHeaderViewType = MapHeaderViewType.CORRECT
     private var binding: MapHeaderViewLayoutBinding = MapHeaderViewLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-init {
-    binding.mapHeaderView2.alpha = 0f
-}
+    init {
+        binding.mapHeaderView2.alpha = 0f
+    }
 
-    fun updateMapHeaderView(isMarkerGood: Boolean) {
-//        Log.d(TAG, "updateMapHeaderView: $isMarkerGood")
-        if(this.isMarkerGood != isMarkerGood){
-            Log.d(TAG, "changing to: $isMarkerGood")
-            this.isMarkerGood = isMarkerGood
-            if (isMarkerGood) {
-                animate2OutAnd1In()
-            } else {
-                animate1OutAnd2In()
+    fun updateMapHeaderView(verificationStatus: MapHeaderViewType) {
+        if (verificationStatus != currentVerificationStatus) {
+            when (verificationStatus) {
+                MapHeaderViewType.CORRECT -> {
+                    currentVerificationStatus = verificationStatus
+                    animate2OutAnd1In()
+                }
+                MapHeaderViewType.WRONG -> {
+                    currentVerificationStatus = verificationStatus
+                    animate1OutAnd2In()
+                }
+                MapHeaderViewType.SHAKE -> {
+                    shake2()
+                }
             }
         }
     }
@@ -65,18 +74,21 @@ init {
             render.setDuration(350)
             render.start()
         }, 250)
-
-//        val outX = Flip().OutX(binding.mapHeaderView2)
-//        val inX = Flip().InX(binding.mapHeaderView1)
-//
-//        val animatorSet = AnimatorSet()
-//        animatorSet.play(outX).before(inX)
-//
-//        animatorSet.start()
-
     }
 
-    companion object{
+    private fun shake2() {
+        ObjectAnimator.ofFloat(
+            binding.mapHeaderView2, "translationX",
+            0f, -30f, 30.0f, -15.0f, 15.0f, -5.0f, 5.0f, 0f,
+        ).apply {
+            duration = 500
+            interpolator = AccelerateDecelerateInterpolator()
+            repeatCount = 0
+            start()
+        }
+    }
+
+    companion object {
         const val TAG = "wowMapHeaderView"
     }
 }

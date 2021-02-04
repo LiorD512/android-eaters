@@ -13,6 +13,7 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
         <item name="android:windowBackground">@drawable/splash_bkg</item>
 
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 
 
@@ -65,6 +66,36 @@
 
     //fonts and colors
 
+    <style name="LatoBold11Teal">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+    <style name="LatoBold13Dark">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg13Dark">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg13PurpelyGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/purpley_grey</item>
+    </style>
+    <style name="LatoBold13Teal">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+    <style name="LatoBlack17Dark">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
     <style name="Reg32Dark">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">32.6sp</item>

@@ -10,9 +10,6 @@ import com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.model.Address
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.fragment_add_or_edit_address.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -67,7 +64,7 @@ class AddOrEditAddressFragment : Fragment(R.layout.fragment_add_or_edit_address)
             }
         })
 
-        mainViewModel.addressFoundEvent.observe(viewLifecycleOwner, Observer{
+        mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, Observer{
 //            addAddressFragAddress.setText(it)
         })
 

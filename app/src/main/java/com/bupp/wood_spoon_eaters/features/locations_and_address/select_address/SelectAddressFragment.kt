@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
-import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -17,11 +16,9 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.FragmentSelectAddressBinding
 import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressChooserAdapter
 import com.bupp.wood_spoon_eaters.managers.location.GPSBroadcastReceiver
 import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
 import com.bupp.wood_spoon_eaters.model.Address
-import kotlinx.android.synthetic.main.fragment_address_list_chooser.*
 import kotlinx.android.synthetic.main.fragment_select_address.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -116,7 +113,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.myAddressEvent.observe(viewLifecycleOwner, {
             addressAdapter.submitList(it)
         })
-        mainViewModel.addressFoundEvent.observe(viewLifecycleOwner, {
+        mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, {
             selectAddressFragAutoComplete.text = it.getUserLocationStr()
         })
     }

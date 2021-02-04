@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/locationActMainLayout"
         tools:context=".features.locations_and_address.LocationAndAddressActivity">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView

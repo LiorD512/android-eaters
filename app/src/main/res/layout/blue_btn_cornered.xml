@@ -6,8 +6,6 @@
         android:orientation="horizontal"
         android:id="@+id/blueBtnBackground"
         android:background="@drawable/rectangle_blue_btn_cornered"
-        android:layout_marginRight="15.4dp"
-        android:layout_marginLeft="15.4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

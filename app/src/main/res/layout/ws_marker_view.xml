@@ -10,6 +10,8 @@
         android:layout_height="wrap_content">
 
     <ImageView
+            android:visibility="invisible"
+            android:id="@+id/wsMarkerCircle"
             tools:background="@color/white_95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -20,6 +22,7 @@
             android:layout_height="wrap_content"/>
 
     <ImageView
+            android:visibility="invisible"
             tools:background="@color/white_80"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

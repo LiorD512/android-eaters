@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/final_address_details_navigation"
+        app:startDestination="@id/addressVerificationMapFragment">
+
+    <fragment
+            android:tag="final_address_details"
+            android:id="@+id/addressVerificationMapFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment"
+            android:label="address_verification_map"
+            tools:layout="@layout/fragment_address_verification_map">
+        <argument
+                android:name="showBtns"
+                app:argType="boolean"
+                android:defaultValue="false" />
+    </fragment>
+
+</navigation>

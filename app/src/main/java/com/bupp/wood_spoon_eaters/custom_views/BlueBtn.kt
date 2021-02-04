@@ -22,6 +22,8 @@ class BlueBtn : FrameLayout {
                 var title = a.getString(R.styleable.BlueBtnAttrs_title)
                 blueBtnText.text = title
             }
+
+
             a.recycle()
         }
     }

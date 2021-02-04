@@ -117,6 +117,8 @@
     <string name="something_went_wrong_error">Something went wrong, Try again</string>
     <string name="term_of_use"><u>Term of use</u></string>
     <string name="triangle_string">▼</string>
+    <string name="delivery_method_deliver_to_door">delivery_to_door</string>
+    <string name="delivery_method_pickup_outside">pickup_outside</string>
     <!--    <string name="google_api_key">AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU</string>-->
 
 

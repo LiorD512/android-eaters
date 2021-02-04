@@ -4,18 +4,17 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
-import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressFragment
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -32,6 +31,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     }
     
     private lateinit var binding: ActivityLocationAndAddressBinding
+    private lateinit var finalAddressDetailsBinding: ActivityLocationAndAddressBinding
 
     @SuppressLint("LongLogTag")
     private val autoCompleteAddressSearchForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -81,6 +81,15 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE -> {
                     redirectToAutoCompleteSearch()
                 }
+                LocationAndAddressViewModel.NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN -> {
+                    redirectToAddressVerificationMap()
+                }
+                LocationAndAddressViewModel.NavigationEventType.OPEN_FINAL_ADDRESS_DETAILS_SCREEN -> {
+                    redirectToFinalAddressDetails()
+                }
+                LocationAndAddressViewModel.NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS -> {
+                    redirectToAddressVerificationMapFromFinalDetails()
+                }
 //                LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
 ////                    redirectToAddressListChooser()
 //                }
@@ -101,14 +110,15 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         viewModel.locationPermissionActionEvent.observe(this, {
             askLocationPermission()
         })
-        viewModel.addressFoundEvent.observe(this, {
-            redirectToAddressVerificationMap(it)
+        viewModel.addressFoundUiEvent.observe(this, {
+            updateAddressHeaderUi(it)
         })
-//        viewModel.getLocationLiveData().observe(this, {
-//            Log.d(TAG,"getLocationLiveData observer called ")
-////            handleMyLocationEvent(it)
-//            viewModel.onMyLocationUpdate(it)
-//        })
+    }
+
+    private fun updateAddressHeaderUi(address: AddressRequest?) {
+        address?.let{
+            binding.locationActHeader.setTitle(address.getUserLocationStr())
+        }
     }
 
     private fun redirectToAutoCompleteSearch() {
@@ -122,10 +132,19 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         findNavController(R.id.locationActContainer).navigate(R.id.action_selectAddressFragment_to_locationPermissionFragment)
     }
 
-    private fun redirectToAddressVerificationMap(address: AddressRequest) {
-        binding.locationActHeader.setTitle(address.getUserLocationStr())
+    private fun redirectToAddressVerificationMap() {
         findNavController(R.id.locationActContainer).navigate(R.id.action_selectAddressFragment_to_addressVerificationMapFragment)
     }
+
+    private fun redirectToFinalAddressDetails() {
+        findNavController(R.id.locationActContainer).navigate(R.id.action_addressVerificationMapFragment_to_finalAddressDetailsFragment)
+    }
+
+    private fun redirectToAddressVerificationMapFromFinalDetails() {
+        onBackPressed()
+//        findNavController(R.id.locationActContainer).navigate(R.id.action_finalAddressDetailsFragment_to_addressVerificationMapFragment)
+    }
+
 
 //    private fun redirectToAddressListChooser() {
 //        locationActHeader.setTitle("My Address")

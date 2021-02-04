@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".features.locations_and_address.final_address_details.FinalAddressDetailsFragment">
+
+    <ScrollView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/addressMapFragMapLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="101dp"
+                    android:layout_margin="15.4dp"
+                    android:transitionName="mapTransition"
+                    app:cardCornerRadius="7.7dp"
+                    app:cardElevation="11dp">
+
+                <fragment
+                        android:id="@+id/mainNavFragment"
+                        android:name="androidx.navigation.fragment.NavHostFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:defaultNavHost="true"
+                        app:navGraph="@navigation/final_address_nav" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/addressMapFragMapLayout"
+                    android:id="@+id/addressDetailsEditBtn"
+                    style="@style/LatoBold11Teal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginTop="15.4dp"
+                    android:background="@drawable/pale_grey_cornered_rect"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="8.6sp"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="10dp"
+                    android:text="Edit delivery location" />
+
+            <View
+                    android:id="@+id/sep1"
+                    app:layout_constraintTop_toBottomOf="@+id/addressDetailsEditBtn"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="7.7dp"
+                    android:background="@color/grey_white" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint1"
+                    app:layout_constraintTop_toBottomOf="@+id/sep1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="15.4dp">
+
+                <TextView
+                        android:id="@+id/title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        style="@style/LatoBlack17Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        android:textColor="@color/dark"
+                        android:text="Address" />
+
+                <com.bupp.wood_spoon_eaters.views.WSEditText
+                        app:layout_constraintTop_toBottomOf="@+id/title"
+                        android:id="@+id/addressDetailsStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        app:isEditable="false" />
+
+                <com.bupp.wood_spoon_eaters.views.WSEditText
+                        app:layout_constraintTop_toBottomOf="@+id/addressDetailsStreet"
+                        android:id="@+id/addressDetailsApt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        app:error="Please enter your details"
+                        app:hint="Details (Apt./ Suite/ Floor)"
+                        app:isEditable="true" />
+
+                <com.bupp.wood_spoon_eaters.views.WSEditText
+                        app:layout_constraintTop_toBottomOf="@+id/addressDetailsApt"
+                        android:id="@+id/addressDetailsCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        app:isEditable="false" />
+
+                <LinearLayout
+                        android:id="@+id/constraint2"
+                        app:layout_constraintTop_toBottomOf="@+id/addressDetailsCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                    <com.bupp.wood_spoon_eaters.views.WSEditText
+                            android:id="@+id/addressDetailsState"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20dp"
+                            android:layout_weight="1"
+                            app:isEditable="false" />
+
+                    <com.bupp.wood_spoon_eaters.views.WSEditText
+                            app:hint="Zip Code"
+                            android:id="@+id/addressDetailsZipcode"
+                            android:layout_width="0dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:inputType="NUMBER"
+                            app:isEditable="true" />
+
+                </LinearLayout>
+
+
+                <com.bupp.wood_spoon_eaters.views.WSEditText
+                        app:layout_constraintTop_toBottomOf="@+id/constraint1"
+                        android:id="@+id/addressDetailsNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        app:hint="Additional instructions for the courier"
+                        app:isEditable="true" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:id="@+id/sep2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraint1"
+                    android:layout_width="match_parent"
+                    android:layout_height="7.7dp"
+                    android:layout_marginVertical="22dp"
+                    android:background="@color/grey_white" />
+
+            <TextView
+                    android:id="@+id/title2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sep2"
+                    android:layout_marginTop="15.4dp"
+                    android:paddingStart="15.4dp"
+                    style="@style/LatoBlack17Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:text="Delivery options" />
+
+            <LinearLayout
+                    android:id="@+id/deliveryOptions"
+                    app:layout_constraintTop_toBottomOf="@+id/title2"
+                    android:gravity="center"
+                    android:paddingVertical="15.4dp"
+                    android:paddingHorizontal="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                <com.bupp.wood_spoon_eaters.views.WSSelectableBtn
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title2"
+                        android:gravity="center"
+                        android:paddingEnd="10dp"
+                        android:id="@+id/addressDetailsDeliverToDoor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:WSicon="@drawable/delivery_to_door_selector"
+                        app:title="Delivery to door" />
+
+                <com.bupp.wood_spoon_eaters.views.WSSelectableBtn
+                        app:layout_constraintStart_toEndOf="@+id/addressDetailsDeliverToDoor"
+                        app:layout_constraintTop_toBottomOf="@+id/title2"
+                        android:gravity="center"
+                        android:id="@+id/addressDetailsPickOutside"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:WSicon="@drawable/delivery_to_door_selector"
+                        app:title="Pick up outside" />
+
+            </LinearLayout>
+
+            <View
+                    android:id="@+id/sep3"
+                    app:layout_constraintTop_toBottomOf="@+id/deliveryOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="7.7dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:background="@color/grey_white" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                    app:layout_constraintTop_toBottomOf="@+id/sep3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/addressDetailsSaveBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15.4dp"
+                    app:title="Save address" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

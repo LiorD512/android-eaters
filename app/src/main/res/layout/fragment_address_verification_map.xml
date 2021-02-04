@@ -4,6 +4,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
+        android:id="@+id/addressMapFragLayout"
+        android:transitionName="mapTransition"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".features.locations_and_address.address_verification_map.AddressVerificationMapFragment">
 
@@ -15,18 +17,22 @@
             tools:context=".features.locations_and_address.LocationAndAddressActivity" />
 
     <com.bupp.wood_spoon_eaters.views.MapHeaderView
+            android:visibility="gone"
             android:id="@+id/addressMapFragHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
 
     <com.bupp.wood_spoon_eaters.views.ws_marker.WSMarkerView
+            android:visibility= "gone"
             android:id="@+id/addressMapFragPin"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:id="@+id/addressMapDoneBtn"
             app:cardElevation="7dp"
             android:layout_marginBottom="14.8dp"
             android:layout_marginHorizontal="15.4dp"
@@ -36,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                 app:title="Next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.locations_and_address
+package com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map
 
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
@@ -7,16 +7,67 @@ import com.bupp.wood_spoon_eaters.model.Address
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.AddressRequest
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
+import com.bupp.wood_spoon_eaters.utils.LocationUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 
-class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val settings: AppSettings) : ViewModel() {
+class AddressMapVerificationViewModel(val metaDataRepository: MetaDataRepository, val settings: AppSettings) : ViewModel() {
+
+
+
+    var anchorLatLng: LatLng? = null
+    fun setAnchorLocation(address: AddressRequest) {
+        //this is the LatLng of the google autocomplete result
+        address.lat?.let { lat ->
+            address.lng?.let { lng ->
+                anchorLatLng = LatLng(lat, lng)
+            }
+        }
+    }
+
+    enum class AddressMapVerificationStatus {
+        CORRECT,
+        WRONG,
+        SHAKE,
+    }
+
+    val addressMapVerificationDoneEvent = LiveEventData<Boolean>()
+    val addressMapVerificationStatus = MutableLiveData<AddressMapVerificationStatus>()
+    fun checkCenterLatLngPosition(currentLatLng: LatLng) {
+        anchorLatLng?.let { anchorLatLng ->
+            val isInRadius = LocationUtils.isLocationsNear(anchorLatLng.latitude, anchorLatLng.longitude,
+                currentLatLng.latitude, currentLatLng.longitude, metaDataRepository.getLocationDistanceThreshold())
+            if (isInRadius) {
+                addressMapVerificationStatus.postValue(AddressMapVerificationStatus.CORRECT)
+            } else {
+                addressMapVerificationStatus.postValue(AddressMapVerificationStatus.WRONG)
+            }
+        }
+    }
+
+    fun onMapVerificationDoneClick() {
+        if (addressMapVerificationStatus.value == AddressMapVerificationStatus.CORRECT) {
+            addressMapVerificationDoneEvent.postRawValue(true)
+        } else {
+            addressMapVerificationStatus.postValue(AddressMapVerificationStatus.SHAKE)
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     val locationPermissionActionEvent: MutableLiveData<Boolean> = MutableLiveData()
     val mainNavigationEvent = MutableLiveData<NavigationEventType>()
+
     enum class NavigationEventType {
         OPEN_EDIT_ADDRESS_SCREEN,
         OPEN_ADDRESS_LIST_CHOOSER,
@@ -24,9 +75,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val se
         OPEN_ADDRESS_AUTO_COMPLETE,
         DONE_WITH_LOCATION_AND_ADDRESS,
         OPEN_LOCATION_PERMISSION_SCREEN,
-        OPEN_MAP_VERIFICATION_SCREEN,
         OPEN_FINAL_ADDRESS_DETAILS_SCREEN,
-        OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS,
         LOCATION_PERMISSION_DONE,
         LOCATION_AND_ADDRESS_DONE
     }
@@ -35,19 +84,12 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val se
         locationPermissionActionEvent.postValue(true)
     }
 
-    fun getLocationLiveData() = eaterDataManager.getLocationData()
 
     fun onDoneClick() {
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
     }
 
-//    fun onMapVerificationDoneClick(){
-//        if(markerDistanceEvent.value == MapHeaderNotificationType.CORRECT){
-//            mainNavigationEvent.postValue(NavigationEventType.OPEN_FINAL_ADDRESS_DETAILS_SCREEN)
-//        }else{
-//            markerDistanceEvent.postValue(MapHeaderNotificationType.SHAKE)
-//        }
-//    }
+
 //    val myLocationUpdateEvent: MutableLiveData<>
 //    fun onMyLocationUpdate(locationDataWrapper: LocationLiveData.LocationDataWrapper?) {
 //
@@ -87,15 +129,14 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val se
     private var unsavedNewAddress: AddressRequest? = null
     private lateinit var currentPlaceFound: Place
     val actionEvent = MutableLiveData<ActionEvent>()
+
     enum class ActionEvent {
         SAVE_NEW_ADDRESS,
     }
 
-//    data class NavigationEvent(val type: NavigationEventType, val address: Address? = null)
+    //    data class NavigationEvent(val type: NavigationEventType, val address: Address? = null)
 //    data class AddressFoundEvent(val address: Address? = null)
-    val addressFoundUiEvent = MutableLiveData<AddressRequest>()
-
-
+    val addressFoundEvent = MutableLiveData<AddressRequest>()
 
 
     fun showLocationPermissionScreen() {
@@ -126,10 +167,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val se
         actionEvent.postValue(ActionEvent.SAVE_NEW_ADDRESS)
     }
 
-    fun redirectFinalDetailsToMap() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS)
-    }
-
     fun checkIntentParam(intent: Intent?) {
         intent?.let {
             if (it.hasExtra(Constants.START_WITH)) {
@@ -146,42 +183,21 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val se
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_PERMISSION_DONE)
     }
 
-    fun onAddressMapVerificationDone() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_FINAL_ADDRESS_DETAILS_SCREEN)
-    }
-
 
     fun updateAutoCompleteAddressFound(place: Place) {
         //called when user select address via auto complete
         val address = GoogleAddressParserUtil.parseLocationToAddress(place)
-        address.let{
+        address?.let {
             unsavedNewAddress = address
-            mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN)
-            addressFoundUiEvent.postValue(it)
+            addressFoundEvent.postValue(it)
         }
     }
 
-    fun updateUnsavedAddressLatLng(currentLatLng: LatLng) {
-        unsavedNewAddress?.let{
-            it.lat = currentLatLng.latitude
-            it.lng = currentLatLng.longitude
-            unsavedNewAddress = it
-        }
-    }
 
-    val newAddressLiveData = MutableLiveData<AddressRequest>()
-    fun initMapLocation(){
-        unsavedNewAddress?.let{
-            newAddressLiveData.postValue(it)
-        }
+    private fun updateUnsavedAddressLatLng(currentLatLng: LatLng) {
+        unsavedNewAddress?.lat = currentLatLng.latitude
+        unsavedNewAddress?.lng = currentLatLng.longitude
     }
-
-    fun updateDeliveryMethod(deliveryMethod: String) {
-        unsavedNewAddress?.let{
-            it.dropoffLocation = deliveryMethod
-        }
-    }
-
 
 
 }

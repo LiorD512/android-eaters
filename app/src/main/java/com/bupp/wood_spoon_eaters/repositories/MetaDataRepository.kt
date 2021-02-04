@@ -209,5 +209,13 @@ class MetaDataRepository(private val apiService: ApiService) {
         return metaDataObject.states
     }
 
+    fun getLocationDistanceThreshold(): Int {
+        for (settings in getSettings()){
+            if(settings.key == "location_distance_threshold")
+                return (settings.value!!) as Int
+        }
+        return 20
+    }
+
 
 }
