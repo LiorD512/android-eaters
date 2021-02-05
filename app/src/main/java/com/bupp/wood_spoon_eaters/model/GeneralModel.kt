@@ -15,6 +15,16 @@ data class ServerResponse<T> (
 
 )
 
+enum class ErrorEventType {
+    PHONE_EMPTY,
+    CODE_EMPTY,
+    CB_REQUIRED,
+    INVALID_PHONE,
+    WRONG_PASSWORD,
+    SERVER_ERROR,
+    SOMETHING_WENT_WRONG
+}
+
 //data class WSServerError(
 //    @SerializedName("code") val resultCode: Int? = null,
 //    @SerializedName("message") val msg: String? = null,

@@ -22,19 +22,19 @@ class AddressMenuViewModel: KoinComponent {
 
     fun removeAddress(id: Long, listener: EditAddressVMListener?) {
         this.listener = listener
-        api.deleteAddress(id).enqueue(object: Callback<ServerResponse<Void>> {
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
-                Log.d("wowEditAddressVM","deleteAddress success: ${response.isSuccessful}")
-                eaterDataManager.removeAddressById(id)
-                listener?.onRemoveAddressDone(response.isSuccessful)
-
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
-                Log.d("wowEditAddressVM","deleteAddress failed: ${t.message}")
-                listener?.onRemoveAddressDone(false)
-            }
-        })
+//        api.deleteAddress(id).enqueue(object: Callback<ServerResponse<Void>> {
+//            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+//                Log.d("wowEditAddressVM","deleteAddress success: ${response.isSuccessful}")
+//                eaterDataManager.removeAddressById(id)
+//                listener?.onRemoveAddressDone(response.isSuccessful)
+//
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+//                Log.d("wowEditAddressVM","deleteAddress failed: ${t.message}")
+//                listener?.onRemoveAddressDone(false)
+//            }
+//        })
     }
 
 

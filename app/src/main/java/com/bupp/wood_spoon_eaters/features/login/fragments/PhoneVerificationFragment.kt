@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.views.FloatingLabelEditText
 import kotlinx.android.synthetic.main.fragment_phone_verification.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -79,7 +80,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
     private fun initObservers() {
         viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer {
             when (it) {
-                LoginViewModel.ErrorEventType.PHONE_EMPTY -> {
+                ErrorEventType.PHONE_EMPTY -> {
                     verificationFragmentInput.showError()
                 }
             }

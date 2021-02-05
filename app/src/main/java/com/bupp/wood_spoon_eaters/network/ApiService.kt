@@ -38,8 +38,8 @@ interface ApiService {
     suspend fun getDishReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
     //Address
-    @DELETE("eaters/me/addresses/{address_id}")
-    fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
+//    @DELETE("eaters/me/addresses/{address_id}")
+//    fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
 
     @POST("eaters/me/addresses/{address_id}")
     fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Address>>
@@ -89,6 +89,15 @@ interface ApiService {
 
     @POST("eaters/me")
     suspend fun postMe(@Body eater: EaterRequest): ServerResponse<Eater>
+
+    @POST("eaters/me/addresses")
+    suspend fun postNewAddress(@Body addressRequest: AddressRequest): ServerResponse<Address>
+
+    @DELETE("eaters/me/addresses/{address_id}")
+    suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Void>
+
+
+
 
     @POST("eaters/me")
     fun postDeviceDetails(@Body device: DeviceDetails): Call<ServerResponse<Void>>

@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -86,16 +87,16 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
         viewModel.errorEvents.observe(this, Observer{
             when(it){
-                LoginViewModel.ErrorEventType.INVALID_PHONE -> {
+                ErrorEventType.INVALID_PHONE -> {
                     WSErrorDialog(getString(R.string.login_error_wrong_phone), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
-                LoginViewModel.ErrorEventType.WRONG_PASSWORD -> {
+                ErrorEventType.WRONG_PASSWORD -> {
                     WSErrorDialog(getString(R.string.login_error_wrong_code), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
-                LoginViewModel.ErrorEventType.SERVER_ERROR -> {
+                ErrorEventType.SERVER_ERROR -> {
                     WSErrorDialog(getString(R.string.default_server_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
-                LoginViewModel.ErrorEventType.SOMETHING_WENT_WRONG -> {
+                ErrorEventType.SOMETHING_WENT_WRONG -> {
                     WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
             }

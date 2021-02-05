@@ -1,12 +1,14 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address.select_address
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.IntentFilter
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,26 +64,44 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun initUi() {
-        binding!!.selectAddressFragMyLocationLayout.setOnClickListener {
-            viewModel.onMyLocationClick()
-        }
-        binding!!.selectAddressFragDone.setOnClickListener {
-            mainViewModel.onDoneClick()
-        }
+        with(binding!!){
+            selectAddressFragMyLocationLayout.setOnClickListener {
+                viewModel.onMyLocationClick()
+            }
+            selectAddressFragDone.setOnClickListener {
+                mainViewModel.onDoneClick()
+            }
 
-        binding!!.selectAddressFragAutoComplete.setOnClickListener {
-            mainViewModel.onSearchAddressAutoCompleteClick()
+            selectAddressFragAutoComplete.setOnClickListener {
+                mainViewModel.onSearchAddressAutoCompleteClick()
+            }
+
+            selectAddressFraList.layoutManager = LinearLayoutManager(requireContext())
+            addressAdapter = SelectAddressAdapter(this@SelectAddressFragment)
+            val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
+            selectAddressFraList.addItemDecoration(dividerItemDecoration)
+            selectAddressFraList.adapter = addressAdapter
         }
-
-        binding!!.selectAddressFraList.layoutManager = LinearLayoutManager(requireContext())
-        addressAdapter = SelectAddressAdapter(this)
-        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
-        binding!!.selectAddressFraList.addItemDecoration(dividerItemDecoration)
-        binding!!.selectAddressFraList.adapter = addressAdapter
-
     }
 
     private fun initObservers() {
+        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, {
+            Log.d(TAG, "getLocationLiveData observer called ")
+            with(binding!!){
+                viewModel.onMyLocationReceived()
+                selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
+                selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
+                selectAddressFragMyLocationPickup.visibility = View.VISIBLE
+            }
+        })
+        mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, {
+            selectAddressFragAutoComplete.text = it.getUserLocationStr()
+        })
+        mainViewModel.actionEvent.observe(viewLifecycleOwner, {
+            viewModel.fetchAddress()
+        })
+
+
         viewModel.navigationEvent.observe(viewLifecycleOwner, {
             val result = it.getContentIfNotHandled()
             result?.let {
@@ -97,43 +117,36 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                             }
                         })
                     }
+                    SelectAddressViewModel.NavigationEventType.OPEN_MAP_VERIFICATION_WITH_MY_LOCATION -> {
+                        mainViewModel.openAddressMapVerificationWithMyLocation()
+                    }
                 }
             }
         })
-
-        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called ")
-            binding!!.selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
-            binding!!.selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
-            binding!!.selectAddressFragMyLocationPickup.visibility = View.VISIBLE
-        })
-
-        viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationEvent(myLocation) })
+        viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
         viewModel.myAddressEvent.observe(viewLifecycleOwner, {
             addressAdapter.submitList(it)
         })
-        mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, {
-            selectAddressFragAutoComplete.text = it.getUserLocationStr()
-        })
     }
 
-    private fun handleMyLocationEvent(myLocation: SelectAddressViewModel.MyLocationEvent) {
-        when (myLocation.status) {
-            SelectAddressViewModel.MyLocationStatus.FETCHING -> {
-                binding!!.selectAddressFragMyLocationAddress.text = "Fetching your location"
-                binding!!.selectAddressFragMyLocationPickup.visibility = View.GONE
-            }
-            SelectAddressViewModel.MyLocationStatus.NO_PERMISSION -> {
-                binding!!.selectAddressFragMyLocationAddress.text = "Need to turn on location permission."
-                binding!!.selectAddressFragMyLocationPickup.text = "Tap here to enable it."
-            }
-            SelectAddressViewModel.MyLocationStatus.NO_GPS_ENABLED -> {
-                binding!!.selectAddressFragMyLocationAddress.text = "Please enable GPS on device"
-                binding!!.selectAddressFragMyLocationPickup.text = "Tap here to enable it."
+    private fun handleMyLocationUiEvent(myLocation: SelectAddressViewModel.MyLocationStatus) {
+        with(binding!!){
+            when (myLocation) {
+                SelectAddressViewModel.MyLocationStatus.FETCHING -> {
+                    selectAddressFragMyLocationAddress.text = "Fetching your location"
+                    selectAddressFragMyLocationPickup.visibility = View.GONE
+                }
+                SelectAddressViewModel.MyLocationStatus.NO_PERMISSION -> {
+                    selectAddressFragMyLocationAddress.text = "Need to turn on location permission."
+                    selectAddressFragMyLocationPickup.text = "Tap here to enable it."
+                }
+                SelectAddressViewModel.MyLocationStatus.NO_GPS_ENABLED -> {
+                    selectAddressFragMyLocationAddress.text = "Please enable GPS on device"
+                    selectAddressFragMyLocationPickup.text = "Tap here to enable it."
+                }
             }
         }
-
     }
 
     override fun onAddressClick(selected: Address) {
@@ -147,6 +160,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         val addressMenu = AddressMenuBottomSheet()
         addressMenu.arguments = bundle
         addressMenu.show(childFragmentManager, Constants.ADDRESS_MENU_BOTTOM_SHEET)
+//        addressMenu.dialog?.setOnDismissListener { viewModel.fetchAddress() }
     }
 
     override fun onDestroyView() {

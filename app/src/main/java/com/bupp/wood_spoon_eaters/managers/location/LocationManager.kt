@@ -51,27 +51,27 @@ class LocationManager(val context: Context, private val userRepository: UserRepo
         // if not, return user current location
         // if not, return user last known location saved by user
         // if not, return null.
-        Log.d(TAG, "updateFinalAddress")
-        var finalAddress: Address? = null
-        val knownAddresses = getListOfAddresses()
-        val myLocation = getLocationData().value
-        if (knownAddresses.isNullOrEmpty()) {
-            Log.d("LocationManager", "don't have known address")
-            myLocation?.let {
-                Log.d(TAG, "updateFinalAddress = user current location")
-                finalAddress = it
-            }
-        } else {
-            val closestAddress = GpsUtils().getClosestAddressToLocation(myLocation, knownAddresses)
-            closestAddress?.let {
-                Log.d(TAG, "updateFinalAddress - closest location")
-                finalAddress = it
-            }
-            finalAddress = knownAddresses[0]
-            Log.d(TAG, "updateFinalAddress - known location")
-        }
-        Log.d(TAG, "updateFinalAddress - postValue")
-        finalAddressLiveData.postValue(finalAddress)
+//        Log.d(TAG, "updateFinalAddress")
+//        var finalAddress: Address? = null
+//        val knownAddresses = getListOfAddresses()
+//        val myLocation = getLocationData().value
+//        if (knownAddresses.isNullOrEmpty()) {
+//            Log.d("LocationManager", "don't have known address")
+//            myLocation?.let {
+//                Log.d(TAG, "updateFinalAddress = user current location")
+//                finalAddress = it
+//            }
+//        } else {
+//            val closestAddress = GpsUtils().getClosestAddressToLocation(myLocation, knownAddresses)
+//            closestAddress?.let {
+//                Log.d(TAG, "updateFinalAddress - closest location")
+//                finalAddress = it
+//            }
+//            finalAddress = knownAddresses[0]
+//            Log.d(TAG, "updateFinalAddress - known location")
+//        }
+//        Log.d(TAG, "updateFinalAddress - postValue")
+//        finalAddressLiveData.postValue(finalAddress)
     }
 
     private fun getListOfAddresses(): List<Address>? {

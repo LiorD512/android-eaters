@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import kotlinx.android.synthetic.main.fragment_code.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -25,7 +26,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     private fun initObservers() {
         viewModel.errorEvents.observe(viewLifecycleOwner, Observer{
             when(it){
-                LoginViewModel.ErrorEventType.CODE_EMPTY -> {
+                ErrorEventType.CODE_EMPTY -> {
                     codeFragInputError.visibility = View.VISIBLE
                 }
             }

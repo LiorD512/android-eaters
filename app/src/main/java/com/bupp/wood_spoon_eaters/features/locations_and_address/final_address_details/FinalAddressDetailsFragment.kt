@@ -38,12 +38,13 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
         }
         binding!!.addressDetailsSaveBtn.setOnClickListener {
             if(validateFields()){
-
+                mainViewModel.saveNewAddress()
             }
         }
         binding!!.addressDetailsEditBtn.setOnClickListener {
             mainViewModel.redirectFinalDetailsToMap()
         }
+        binding!!.addressDetailsDeliverToDoor.performClick()
     }
 
     private fun validateFields(): Boolean {

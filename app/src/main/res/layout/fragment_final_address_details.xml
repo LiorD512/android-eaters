@@ -140,9 +140,8 @@
 
                 </LinearLayout>
 
-
                 <com.bupp.wood_spoon_eaters.views.WSEditText
-                        app:layout_constraintTop_toBottomOf="@+id/constraint1"
+                        app:layout_constraintTop_toBottomOf="@+id/constraint2"
                         android:id="@+id/addressDetailsNote"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

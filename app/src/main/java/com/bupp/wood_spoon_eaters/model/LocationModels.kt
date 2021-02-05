@@ -36,6 +36,13 @@ data class AddressRequest(
         return "$streetNumber $streetLine1, ${"$cityName," ?: ""} ${stateIso ?: ""}"
     }
 
+    fun getDropoffLocationStr(): String {
+        return when (dropoffLocation) {
+            "delivery_to_door" -> "Delivered To Your Door"
+            else -> "Pick up outside"
+        }
+    }
+
 }
 
 

@@ -8,6 +8,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.AddressRequest
+import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -15,7 +17,7 @@ import com.google.android.gms.location.LocationServices
 import java.io.IOException
 import java.util.*
 
-class LocationLiveData(val context: Context) : LiveData<Address>() {
+class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
 
     private var isStarted =  false
     private var requestingLocationUpdates =  false
@@ -78,45 +80,50 @@ class LocationLiveData(val context: Context) : LiveData<Address>() {
         Log.d(TAG,"setLocationData:")
         val accuracy = location.accuracy
         Log.d(TAG,"onLocationResult accuracy: $accuracy")
-        value = getAddressFromLocation(location)
-//        if(isFinalResult && accuracy > Constants.MY_LOCATION_ACCURACY_THRESHOLD){
-//            stopLocationUpdates()
-//        }else{
-//            value = getAddressFromLocation(location)
-//        }
+        value = getAddressRequestFromLocation(location)
     }
 
-    fun getAddressFromLocation(location: Location): Address {
+    fun getAddressRequestFromLocation(location: Location): AddressRequest? {
         var addresses: List<android.location.Address> = arrayListOf()
         val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
 
         var streetLine = ""
         try {
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//            Log.d(TAG, "my location object: ${addresses[0]}")
-//            Toast.makeText(context, "my location object: ${addresses[0]}", Toast.LENGTH_SHORT).show()
             if (addresses.isNotEmpty()) {
-                streetLine = getStreetStr(addresses[0])
-                Log.d(TAG,"streetLine: $streetLine")
+                return GoogleAddressParserUtil.parseMyLocationToAddressRequest(addresses[0])
             }
-//            streetLine = addresses[0].getAddressLine(0)
         } catch (e: IOException) {
             Log.d(TAG, "location manager error: " + e.message)
 //            Toast.makeText(context, "location manager error: " + e.message, Toast.LENGTH_SHORT).show()
         }
-//        val city = addresses[0].locality
-//        val state = addresses[0].adminArea
-//        val country = addresses[0].countryName
-//        val postalCode = addresses[0].postalCode
-//        val knownName = addresses[0].featureName
-        Log.d(TAG, "latlng to address success")
-
-        var address = Address()
-        address.streetLine1 = streetLine
-        address.lat = location.latitude
-        address.lng = location.longitude
-        return address
+        return null
     }
+
+//    fun getAddressFromLocation(location: Location): Address {
+//        var addresses: List<android.location.Address> = arrayListOf()
+//        val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
+//
+//        var streetLine = ""
+//        try {
+//            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+//            if (addresses.isNotEmpty()) {
+//                streetLine = getStreetStr(addresses[0])
+//                Log.d(TAG,"streetLine: $streetLine")
+//            }
+//        } catch (e: IOException) {
+//            Log.d(TAG, "location manager error: " + e.message)
+////            Toast.makeText(context, "location manager error: " + e.message, Toast.LENGTH_SHORT).show()
+//        }
+//
+//        Log.d(TAG, "latlng to address success")
+//
+//        var address = Address()
+//        address.streetLine1 = streetLine
+//        address.lat = location.latitude
+//        address.lng = location.longitude
+//        return address
+//    }
 
     private fun getStreetStr(address: android.location.Address): String {
         var number = ""

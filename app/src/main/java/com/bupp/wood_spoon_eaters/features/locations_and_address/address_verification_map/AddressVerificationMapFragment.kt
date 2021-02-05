@@ -31,8 +31,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
         binding = FragmentAddressVerificationMapBinding.bind(view)
 
-//        ViewCompat.setTransitionName(binding!!.addressMapFragMapLayout, "mapTransition")
-
         initUi(requireArguments().getBoolean("showBtns"))
         initObservers()
 
@@ -42,13 +40,16 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     private fun initUi(shouldShowDefaultUi: Boolean) {
         if(shouldShowDefaultUi){
-            binding!!.addressMapDoneBtn.visibility = View.VISIBLE
-            binding!!.addressMapFragHeader.visibility = View.VISIBLE
-            binding!!.addressMapFragPin.enableAnimation()
+            with(binding!!){
+                addressMapDoneBtn.visibility = View.VISIBLE
+                addressMapFragHeader.visibility = View.VISIBLE
+                addressMapFragPin.enableAnimation()
 
-            binding!!.addressMapDoneBtn.setOnClickListener {
-                viewModel.onMapVerificationDoneClick()
+                addressMapDoneBtn.setOnClickListener {
+                    viewModel.onMapVerificationDoneClick()
+                }
             }
+
         }
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.addressMapFragMap) as? SupportMapFragment
@@ -70,15 +71,18 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             }
         })
         viewModel.addressMapVerificationStatus.observe(viewLifecycleOwner, {
-            when(it){
-                AddressMapVerificationViewModel.AddressMapVerificationStatus.CORRECT -> {
-                    binding!!.addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.CORRECT)
-                }
-                AddressMapVerificationViewModel.AddressMapVerificationStatus.WRONG -> {
-                    binding!!.addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.WRONG)
-                }
-                AddressMapVerificationViewModel.AddressMapVerificationStatus.SHAKE -> {
-                    binding!!.addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.SHAKE)
+            with(binding!!){
+                when(it){
+                    AddressMapVerificationViewModel.AddressMapVerificationStatus.CORRECT -> {
+                        addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.CORRECT)
+                    }
+                    AddressMapVerificationViewModel.AddressMapVerificationStatus.WRONG -> {
+                        addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.WRONG)
+                    }
+                    AddressMapVerificationViewModel.AddressMapVerificationStatus.SHAKE -> {
+                        addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.SHAKE)
+                    }
+                    else -> {}
                 }
             }
         })
@@ -122,10 +126,14 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     override fun onDestroy() {
         googleMap?.clear()
+        binding = null
         super.onDestroy()
     }
 
-
+    override fun onPause() {
+        binding!!.addressMapFragPin.stopAllAnimations()
+        super.onPause()
+    }
 
     companion object {
         const val TAG = "wowAddressVerification"

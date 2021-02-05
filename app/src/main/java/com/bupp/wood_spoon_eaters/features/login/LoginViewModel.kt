@@ -50,15 +50,7 @@ class LoginViewModel(
         CODE_RESENT,
     }
 
-    enum class ErrorEventType {
-        PHONE_EMPTY,
-        CODE_EMPTY,
-        CB_REQUIRED,
-        INVALID_PHONE,
-        WRONG_PASSWORD,
-        SERVER_ERROR,
-        SOMETHING_WENT_WRONG
-    }
+
 
     fun setUserPhone(phone: String) {
         this.phone = phone

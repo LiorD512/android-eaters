@@ -26,4 +26,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:navGraph="@navigation/location_and_address_nav" />
 
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            android:id="@+id/locationActPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

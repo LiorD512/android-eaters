@@ -186,7 +186,7 @@ class AddressMapVerificationViewModel(val metaDataRepository: MetaDataRepository
 
     fun updateAutoCompleteAddressFound(place: Place) {
         //called when user select address via auto complete
-        val address = GoogleAddressParserUtil.parseLocationToAddress(place)
+        val address = GoogleAddressParserUtil.parsePlaceToAddressRequest(place)
         address?.let {
             unsavedNewAddress = address
             addressFoundEvent.postValue(it)

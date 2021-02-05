@@ -59,8 +59,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             interpolator = BounceInterpolator()
             repeatCount = INFINITE
             repeatMode = RESTART
+            target = view
             start()
         }
+
         ObjectAnimator.ofFloat(
             view, "rotationY",
             0f, 90f, 0f, 90f, 0f, 90f, -15f, 15f,-5f, 0f,
@@ -69,6 +71,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             interpolator = DecelerateInterpolator()
             repeatCount = INFINITE
             repeatMode = RESTART
+            target = view
             start()
         }
 
@@ -84,6 +87,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun startAllAnimations() {
         pulse(binding.wsMarkerSmallCircle)
         happyPin(binding.wsMarkerPin)
+    }
+
+    fun stopAllAnimations(){
+        binding.wsMarkerSmallCircle.clearAnimation()
+        binding.wsMarkerPin.clearAnimation()
     }
 
 

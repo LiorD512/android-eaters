@@ -1,10 +1,10 @@
 package com.bupp.wood_spoon_eaters.utils
 
+import android.location.Address
 import android.util.Log
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
-import com.google.android.libraries.places.api.model.AddressComponent
 import com.google.android.libraries.places.api.model.Place
+import java.util.*
 
 
 object GoogleAddressParserUtil {
@@ -21,12 +21,10 @@ object GoogleAddressParserUtil {
         "administrative_area_level_1" //state
     )
 
-
-
-    fun parseLocationToAddress(place: Place): AddressRequest {
+    fun parsePlaceToAddressRequest(place: Place): AddressRequest {
 
         var addressRequest: AddressRequest = AddressRequest()
-        place.latLng?.let{
+        place.latLng?.let {
             addressRequest.lat = it.latitude
             addressRequest.lng = it.longitude
         }
@@ -36,9 +34,9 @@ object GoogleAddressParserUtil {
 
             val data = it.types.intersect(this.allowed_types)
             Log.d(TAG, "parseLocationToAddress: $data")
-            if(data.isNotEmpty()){
+            if (data.isNotEmpty()) {
                 Log.d(TAG, "parseLocationToAddress: ${it.name}")
-                when(data.toString().replace("[", "").replace("]", "")){
+                when (data.toString().replace("[", "").replace("]", "")) {
                     "route" -> {
                         addressRequest.streetLine1 = it.name
                     }
@@ -61,188 +59,127 @@ object GoogleAddressParserUtil {
             }
         }
         return addressRequest
-//            var streetLine1 = getStreet(addressComponents)
-//            var stateName = getStateName(addressComponents)
-//            var cityName = getCityName(addressComponents)
-//            Log.d(TAG, "stateName: $stateName")
-//            Log.d(TAG, "streetLine1: $streetLine1")
-//            Log.d(TAG, "cityName: $cityName")
-//        parse(place)
-        }
+    }
 
-    private fun parseMyLocation(myLocationAddress: Address): AddressRequest {
-        var addressRequest = AddressRequest()
+    fun parseMyLocationToAddressRequest(location: Address): AddressRequest {
+        val addressRequest = AddressRequest()
 
-        addressRequest.lat = myLocationAddress.lat
-        addressRequest.lng = myLocationAddress.lng
-        addressRequest.streetLine1 = myLocationAddress.streetLine1
-        addressRequest.streetLine2 = myLocationAddress.streetLine2
+        addressRequest.lat = location.latitude
+        addressRequest.lng = location.longitude
+        addressRequest.streetNumber = location.featureName
+        addressRequest.streetLine1 = location.thoroughfare
+        addressRequest.cityName = location.subLocality
+        addressRequest.stateIso = State.valueOfState(location.adminArea).iso
+        addressRequest.countryIso = location.countryCode
+        addressRequest.zipCode = location.postalCode
 
         return addressRequest
     }
 
-//    fun parseLocationToAddressRequest(place: Place, streetLine1: String, streetLine2: String, notes: String): AddressRequest? {
-//        val addressComponents = place.addressComponents?.asList()
-//        val latLng = place.latLng
-//
-//        addressComponents?.let {
-//            it.forEach {
-//                Log.d(TAG, "updateCookAccount addressComponents for each: ${it.shortName}")
-//            }
-//        }
-//
-//        if (addressComponents.isNullOrEmpty()) {
-//            Log.d(TAG, "updateCookAccount address failed")
-//            return null
-//        } else {
-////            Log.d(TAG, "updateCookAccount start")
-//
-////            Log.d(TAG, "updateCookAccount address 2")
-////            var countryNames = getCountry(addressComponents)
-////            var countryName = countryNames.first
-////            var countryIso = countryNames.second
-////
-////
-////            Log.d(TAG, "updateCookAccount address 3")
-////            var stateNames = getStateName(addressComponents, countryName, countryIso)
-////            var stateIso = stateNames.second
-////
-////            Log.d(TAG, "updateCookAccount address 4")
-////            var streetLine1 = getStreet(addressComponents, streetLine1)
-////            var cityName = getCityName(addressComponents)
-////            var zipCode = getZipCode(addressComponents)
-////
-////            var lat: Double? = 0.0
-////            var lng: Double? = 0.0
-////
-////            if (address.Location().lat != 0.0 && address.Location().lng != 0.0) {
-////                Log.d(TAG, "updateCookAccount address.Location(): ")
-////                Log.d(TAG, "updateCookAccount address.Location(): ${address.Location()}")
-////                lat = address.Location().lat
-////                lng = address.Location().lng
-////            } else {
-////                Log.d(TAG, "updateCookAccount address.results?.geometry:")
-////                address?.let{
-////                    Log.d(TAG, "updateCookAccount address ok")
-////                    it.results?.let{
-////                        Log.d(TAG, "updateCookAccount results ok")
-////                        it.geometry?.let{
-////                            Log.d(TAG, "updateCookAccount geometry ok ${it}")
-////                            it.location?.let {
-////                                Log.d(TAG, "updateCookAccount location ok")
-////                                lat = it.lat
-////                                lng = it.lng
-////                            }
-////                        }
-////                    }
-////                }
-////            }
-////
-//            var newAddress: AddressRequest = AddressRequest()
-////            newAddress.streetLine1 = streetLine1
-////            newAddress.streetLine2 = streetLine2
-////            newAddress.countryIso = countryIso
-////            newAddress.stateIso = stateIso
-////            newAddress.cityName = cityName
-////            newAddress.zipCode = zipCode
-////            newAddress.notes = notes
-////            newAddress.lat = lat
-////            newAddress.lng = lng
-//            return newAddress
-//        }
-//    }
-//
-//
-//    private fun getCityName(addrComponents: List<AddressComponent>): String? {
-//        try {
-//            for (i in addrComponents.indices) {
-//                if (!addrComponents[i].types.isNullOrEmpty()) {
-//                    if (addrComponents[i].types[0] == "locality") {
-//                        addrComponents[i].shortName.let {
-//                            Log.d(TAG, "updateCookAccount getCityName done $it")
-//                            return it
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (ex: Exception) {
-//            Log.d(TAG, "ex: $ex")
-//        }
-//        return null
-//    }
-//
-//    private fun getStateName(addrComponents: List<AddressComponent>): Pair<String, String>? {
-//        try {
-//            for (i in addrComponents.indices) {
-//                if (!addrComponents[i].types.isNullOrEmpty()) {
-//                    if (addrComponents[i].types[0] == "administrative_area_level_1") {
-//                        addrComponents[i].name.let { name ->
-//                            addrComponents[i].shortName?.let { shortName ->
-//                                Log.d(TAG, "updateCookAccount getStateName done $shortName")
-//                                return Pair(name, shortName)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (ex: Exception) {
-//            Log.d(TAG, "ex: $ex")
-//        }
-//        return null
-//    }
-//
-//    private fun getCountry(addrComponents: List<AddressComponent>): Pair<String, String>? {
-//        try {
-//            for (i in addrComponents.indices) {
-//                if (!addrComponents[i].types.isNullOrEmpty()) {
-//                    if (addrComponents[i].types[0] == "country") {
-//                        addrComponents[i].name.let { name ->
-//                            addrComponents[i].shortName?.let { shortName ->
-//                                return Pair(name, shortName)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (ex: Exception) {
-//            Log.d(TAG, "ex: $ex")
-//        }
-//        return null
-//    }
-//
-//    private fun getStreet(addrComponents: List<AddressComponent>): String? {
-//        try {
-//            for (i in addrComponents.indices) {
-//                if (!addrComponents[i].types.isNullOrEmpty()) {
-//                    if (addrComponents[i].types[0] == "route") {
-//                        addrComponents[i].name.let {
-//                            Log.d(TAG, "updateCookAccount getCityName getStreet $it")
-//                            return it
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (ex: Exception) {
-//            Log.d(TAG, "ex: $ex")
-//        }
-//        return null
-//    }
-//
-//    private fun getZipCode(addrComponents: List<AddressComponent>): String? {
-//        try {
-//            for (i in addrComponents.indices) {
-//                if (!addrComponents[i].types.isNullOrEmpty()) {
-//                    if (addrComponents[i].types[0] == "postal_code") {
-//                        addrComponents[i].name.let {
-//                            Log.d(TAG, "updateCookAccount getCityName getZipCode $it")
-//                            return it
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (ex: Exception) {
-//            Log.d(TAG, "ex: $ex")
-//        }
-//        return null
-//    }
+
+    enum class State(
+        /**
+         * The state's name.
+         */
+        val state: String,
+        /**
+         * The state's abbreviation.
+         */
+        val iso: String
+    ) {
+        ALABAMA("Alabama", "AL"), ALASKA("Alaska", "AK"), AMERICAN_SAMOA("American Samoa", "AS"), ARIZONA("Arizona", "AZ"), ARKANSAS(
+            "Arkansas", "AR"
+        ),
+        CALIFORNIA("California", "CA"), COLORADO("Colorado", "CO"), CONNECTICUT("Connecticut", "CT"), DELAWARE(
+            "Delaware", "DE"
+        ),
+        DISTRICT_OF_COLUMBIA("District of Columbia", "DC"), FEDERATED_STATES_OF_MICRONESIA(
+            "Federated States of Micronesia", "FM"
+        ),
+        FLORIDA("Florida", "FL"), GEORGIA("Georgia", "GA"), GUAM("Guam", "GU"), HAWAII(
+            "Hawaii", "HI"
+        ),
+        IDAHO("Idaho", "ID"), ILLINOIS("Illinois", "IL"), INDIANA("Indiana", "IN"), IOWA("Iowa", "IA"), KANSAS(
+            "Kansas", "KS"
+        ),
+        KENTUCKY("Kentucky", "KY"), LOUISIANA("Louisiana", "LA"), MAINE("Maine", "ME"), MARYLAND("Maryland", "MD"), MARSHALL_ISLANDS(
+            "Marshall Islands", "MH"
+        ),
+        MASSACHUSETTS("Massachusetts", "MA"), MICHIGAN("Michigan", "MI"), MINNESOTA("Minnesota", "MN"), MISSISSIPPI(
+            "Mississippi", "MS"
+        ),
+        MISSOURI("Missouri", "MO"), MONTANA("Montana", "MT"), NEBRASKA("Nebraska", "NE"), NEVADA(
+            "Nevada",
+            "NV"
+        ),
+        NEW_HAMPSHIRE("New Hampshire", "NH"), NEW_JERSEY("New Jersey", "NJ"), NEW_MEXICO("New Mexico", "NM"), NEW_YORK(
+            "New York", "NY"
+        ),
+        NORTH_CAROLINA("North Carolina", "NC"), NORTH_DAKOTA("North Dakota", "ND"), NORTHERN_MARIANA_ISLANDS(
+            "Northern Mariana Islands", "MP"
+        ),
+        OHIO("Ohio", "OH"), OKLAHOMA("Oklahoma", "OK"), OREGON("Oregon", "OR"), PALAU(
+            "Palau",
+            "PW"
+        ),
+        PENNSYLVANIA("Pennsylvania", "PA"), PUERTO_RICO("Puerto Rico", "PR"), RHODE_ISLAND("Rhode Island", "RI"), SOUTH_CAROLINA(
+            "South Carolina", "SC"
+        ),
+        SOUTH_DAKOTA("South Dakota", "SD"), TENNESSEE("Tennessee", "TN"), TEXAS("Texas", "TX"), UTAH(
+            "Utah", "UT"
+        ),
+        VERMONT("Vermont", "VT"), VIRGIN_ISLANDS("Virgin Islands", "VI"), VIRGINIA("Virginia", "VA"), WASHINGTON(
+            "Washington", "WA"
+        ),
+        WEST_VIRGINIA("West Virginia", "WV"), WISCONSIN("Wisconsin", "WI"), WYOMING("Wyoming", "WY"), UNKNOWN(
+            "Unknown", ""
+        );
+
+        /**
+         * Returns the state's abbreviation.
+         *
+         * @return the state's abbreviation.
+         */
+
+        companion object {
+            /**
+             * The set of states addressed by abbreviations.
+             */
+            private val STATES_BY_ABBR: MutableMap<String, State> = HashMap()
+
+            /**
+             * Gets the enum constant with the specified abbreviation.
+             *
+             * @param abbr the state's abbreviation.
+             * @return the enum constant with the specified abbreviation.
+             * @throws SunlightException if the abbreviation is invalid.
+             */
+            fun valueOfIso(abbr: String): State {
+                val state = STATES_BY_ABBR[abbr]
+                return state ?: UNKNOWN
+            }
+
+            fun valueOfState(name: String): State {
+                val enumName = name.toUpperCase().replace(" ".toRegex(), "_")
+                return try {
+                    valueOf(enumName)
+                } catch (e: IllegalArgumentException) {
+                    UNKNOWN
+                }
+            }
+
+            /* static initializer */
+            init {
+                for (state in values()) {
+                    STATES_BY_ABBR[state.iso] = state
+                }
+            }
+        }
+
+        override fun toString(): String {
+            return name
+        }
+
+
+    }
 }

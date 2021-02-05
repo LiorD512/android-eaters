@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
+import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.network.ApiSettings
@@ -11,6 +13,7 @@ import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
 import com.bupp.wood_spoon_eaters.network.test.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class UserRepository(
     private val apiService: RepositoryImpl,
@@ -133,6 +136,63 @@ class UserRepository(
         }
     }
 
+
+    //Address
+    suspend fun addNewAddress(addressRequest: AddressRequest): UserRepoResult {
+        val result = withContext(Dispatchers.IO){
+            apiService.postNewAddress(addressRequest)
+        }
+        result.let{
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d("wowUserRepository","addNewAddress - NetworkError")
+                    UserRepoResult(UserRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d("wowUserRepository","addNewAddress - GenericError")
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d("wowUserRepository","addNewAddress - Success")
+                    initUserRepo()
+                    UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
+                }
+            }
+        }
+    }
+
+    suspend fun deleteAddress(address: Address): UserRepoResult {
+        try {
+            val result = withContext(Dispatchers.IO) {
+                address.id?.let { apiService.deleteAddress(it) }
+            }
+            result.let {
+                return when (result) {
+                    is ResultHandler.NetworkError -> {
+                        Log.d("wowUserRepository", "deleteAddress - NetworkError")
+                        UserRepoResult(UserRepoStatus.SERVER_ERROR)
+                    }
+                    is ResultHandler.GenericError -> {
+                        Log.d("wowUserRepository", "deleteAddress - GenericError")
+                        UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                    }
+                    is ResultHandler.Success -> {
+                        Log.d("wowUserRepository", "deleteAddress - Success")
+                        initUserRepo()
+                        UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
+                    }
+                    else -> {
+                        Log.d("wowUserRepository", "deleteAddress - addressId is null")
+                        UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                    }
+                }
+            }
+        }catch (ex: Exception){
+            Log.d("wowUserRepository", "deleteAddress - addressId is null")
+        }
+        return UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+    }
+
     //General
 
     fun logout(): UserRepoResult{
@@ -144,6 +204,8 @@ class UserRepository(
     fun getUser(): Eater? {
         return this.currentUser
     }
+
+
 
 
 }

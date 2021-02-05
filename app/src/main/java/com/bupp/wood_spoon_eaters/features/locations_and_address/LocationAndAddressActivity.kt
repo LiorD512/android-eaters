@@ -13,9 +13,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.model.AddressRequest
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -31,7 +34,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     }
     
     private lateinit var binding: ActivityLocationAndAddressBinding
-    private lateinit var finalAddressDetailsBinding: ActivityLocationAndAddressBinding
 
     @SuppressLint("LongLogTag")
     private val autoCompleteAddressSearchForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -66,6 +68,9 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
 
     @SuppressLint("LongLogTag")
     private fun initObservers() {
+        viewModel.progressData.observe(this, {
+            handleProgressBar(it)
+        })
         viewModel.mainNavigationEvent.observe(this, {
             Log.d(TAG, it.name)
             when(it){
@@ -90,6 +95,9 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 LocationAndAddressViewModel.NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS -> {
                     redirectToAddressVerificationMapFromFinalDetails()
                 }
+                LocationAndAddressViewModel.NavigationEventType.DONE_WITH_LOCATION_AND_ADDRESS -> {
+                    finish()
+                }
 //                LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
 ////                    redirectToAddressListChooser()
 //                }
@@ -98,9 +106,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
 //                }
 //                LocationAndAddressViewModel.NavigationEventType.OPEN_EDIT_ADDRESS_SCREEN -> {
 ////                    redirectToEditAddress(it.address)
-//                }
-//                LocationAndAddressViewModel.NavigationEventType.DONE_WITH_LOCATION_AND_ADDRESS -> {
-//                    finish()
 //                }
                 else -> {
                     Log.d(TAG, "wow else")
@@ -113,6 +118,32 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         viewModel.addressFoundUiEvent.observe(this, {
             updateAddressHeaderUi(it)
         })
+        viewModel.errorEvents.observe(this, {
+            when(it){
+                ErrorEventType.INVALID_PHONE -> {
+                    WSErrorDialog(getString(R.string.login_error_wrong_phone), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+                ErrorEventType.WRONG_PASSWORD -> {
+                    WSErrorDialog(getString(R.string.login_error_wrong_code), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+                ErrorEventType.SERVER_ERROR -> {
+                    WSErrorDialog(getString(R.string.default_server_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+                ErrorEventType.SOMETHING_WENT_WRONG -> {
+                    WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+            }
+        })
+    }
+
+    private fun handleProgressBar(shouldShow: Boolean?) {
+        shouldShow?.let{
+            if(it){
+                binding.locationActPb.show()
+            }else{
+                binding.locationActPb.hide()
+            }
+        }
     }
 
     private fun updateAddressHeaderUi(address: AddressRequest?) {
@@ -223,6 +254,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         //add new Address - Save header btn
         viewModel.onSaveNewAddressClick()
     }
+
 
 
 
