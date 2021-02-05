@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.views
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
@@ -18,9 +17,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
-import com.bupp.wood_spoon_eaters.utils.AnimationUtil
-import render.animations.Bounce
-import render.animations.Render
 
 class WSEditText @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -80,12 +76,41 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun showError() {
-        animateError()
-        binding.wsEditTextErrorIcon.visibility = View.VISIBLE
-        binding.wsEditTextErrorText.visibility = View.VISIBLE
+        with(binding){
+            if(wsEditTextErrorIcon.alpha > 0){
+                animateErrorIconBounce()
+            }else{
+                animateErrorIconEntrance()
+                animateErrorTextEntrance()
+//                wsEditTextErrorText.visibility = View.VISIBLE
+
+            }
+        }
     }
 
-    private fun animateError() {
+    private fun animateErrorTextEntrance() {
+        ObjectAnimator.ofFloat(
+            binding.wsEditTextErrorText, "translationY",
+            -50f, 0f,
+        ).apply {
+            duration = 1000
+            interpolator = BounceInterpolator()
+            repeatCount = 0
+            start()
+        }
+
+        ObjectAnimator.ofFloat(
+            binding.wsEditTextErrorText, "alpha",
+            0f, 1f,
+        ).apply {
+            duration = 250
+            interpolator = AccelerateInterpolator()
+            repeatCount = 0
+            start()
+        }
+    }
+
+    private fun animateErrorIconEntrance() {
         ObjectAnimator.ofFloat(
             binding.wsEditTextErrorIcon, "translationX",
             50f, 0f,
@@ -107,6 +132,18 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    private fun animateErrorIconBounce() {
+        ObjectAnimator.ofFloat(
+            binding.wsEditTextErrorIcon, "translationY",
+            0f, -5f, -15f, 0f,
+        ).apply {
+            duration = 1000
+            interpolator = BounceInterpolator()
+            repeatCount = 0
+            start()
+        }
+    }
+
     private fun animateVerifiedIcon() {
         val measured_height = binding.wsEditTextCheck.measuredHeight.toFloat()
         ObjectAnimator.ofFloat(
@@ -123,7 +160,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             binding.wsEditTextCheck, "alpha",
             0f, 1f,
         ).apply {
-            duration = 250
+            duration = 500
             interpolator = AccelerateInterpolator()
             repeatCount = 0
             start()
@@ -131,8 +168,27 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun hideError() {
-        binding.wsEditTextErrorIcon.visibility = View.GONE
-        binding.wsEditTextErrorText.visibility = View.GONE
+        if(binding.wsEditTextErrorIcon.alpha > 0){
+            ObjectAnimator.ofFloat(
+                binding.wsEditTextErrorIcon, "alpha",
+                1f, 0f,
+            ).apply {
+                duration = 250
+                interpolator = AccelerateInterpolator()
+                repeatCount = 0
+                start()
+            }
+            ObjectAnimator.ofFloat(
+                binding.wsEditTextErrorText, "alpha",
+                1f, 0f,
+            ).apply {
+                duration = 250
+                interpolator = AccelerateInterpolator()
+                repeatCount = 0
+                start()
+            }
+        }
+
     }
 
     fun setError(error: String) {
@@ -189,5 +245,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    override fun onDetachedFromWindow() {
+
+        super.onDetachedFromWindow()
+    }
 
 }

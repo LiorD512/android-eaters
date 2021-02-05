@@ -15,4 +15,5 @@
     <dimen name="ws_marker_circle_height">83.5dp</dimen>
     <dimen name="ws_marker_small_circle_width">32.2dp</dimen>
     <dimen name="ws_marker_small_circle_height">20.6dp</dimen>
+    <dimen name="bottom_sheet_horizontal_margin">15.4dp</dimen>
 </resources>

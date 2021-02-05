@@ -1,14 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address.select_address
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.IntentFilter
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBroadcastReceiver.GPSBroadcastListener,
     SelectAddressAdapter.SelectAddressAdapterListener {
 
-    private lateinit var addressAdapter: SelectAddressAdapter
+    private var addressAdapter: SelectAddressAdapter? = null
     private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private val viewModel by viewModel<SelectAddressViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
@@ -76,11 +74,11 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                 mainViewModel.onSearchAddressAutoCompleteClick()
             }
 
-            selectAddressFraList.layoutManager = LinearLayoutManager(requireContext())
+            selectAddressFragList.layoutManager = LinearLayoutManager(requireContext())
             addressAdapter = SelectAddressAdapter(this@SelectAddressFragment)
             val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
-            selectAddressFraList.addItemDecoration(dividerItemDecoration)
-            selectAddressFraList.adapter = addressAdapter
+            selectAddressFragList.addItemDecoration(dividerItemDecoration)
+            selectAddressFragList.adapter = addressAdapter
         }
     }
 
@@ -126,7 +124,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
         viewModel.myAddressEvent.observe(viewLifecycleOwner, {
-            addressAdapter.submitList(it)
+            addressAdapter?.submitList(it)
         })
     }
 
@@ -174,8 +172,9 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         requireContext().unregisterReceiver(gpsBroadcastReceiver)
+        addressAdapter = null
+        super.onDestroy()
     }
 
     companion object {

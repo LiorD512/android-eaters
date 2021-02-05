@@ -1,10 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AddressMenuBottomSheetBinding
@@ -33,6 +35,21 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = AddressMenuBottomSheetBinding.bind(view)
+        val resources = resources
+
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            assert(view != null)
+            val parent = view?.parent as View
+            val layoutParams = parent.layoutParams as CoordinatorLayout.LayoutParams
+            layoutParams.setMargins(
+                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT 16dp
+                0,
+                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // RIGHT 16dp
+                0
+            )
+            parent.layoutParams = layoutParams
+            parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
+        }
 
         val address = requireArguments().getParcelable<Address>("address")
         address?.let{

@@ -25,6 +25,7 @@ import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFr
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuBottomSheet
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
@@ -616,7 +617,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onHeaderTimeClick() {
-        val timePickerBottomSheet = AddressMenuBottomSheet()
+        val timePickerBottomSheet = TimePickerBottomSheet()
         timePickerBottomSheet.show(supportFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 

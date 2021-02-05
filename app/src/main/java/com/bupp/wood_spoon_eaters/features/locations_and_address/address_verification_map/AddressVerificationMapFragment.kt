@@ -126,6 +126,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     override fun onDestroy() {
         googleMap?.clear()
+        googleMap = null
         binding = null
         super.onDestroy()
     }

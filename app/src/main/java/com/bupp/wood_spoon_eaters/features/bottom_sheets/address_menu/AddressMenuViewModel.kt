@@ -28,9 +28,6 @@ class AddressMenuViewModel(
         ADDRESS_MENU_DONE
     }
     val currentAddress = MutableLiveData<Address>()
-    fun setDeliveryTime(date: Date?) {
-//        deliveryTimeManager.setNewDeliveryTime(date)
-    }
 
     fun setCurrentAddress(address: Address) {
         currentAddress.postValue(address)

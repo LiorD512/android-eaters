@@ -3,7 +3,14 @@
         android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="15.4dp"
+        android:layout_marginTop="15.4dp"
+        android:background="@drawable/top_cornered_bkg"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="220dp"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -34,9 +41,10 @@
             app:picker_dayCount="31"
             app:picker_mustBeOnFuture="true"
             app:picker_visibleItemCount="5"
+            app:picker_textSize="18.4sp"
             app:fontFamily="@font/open_sans_reg"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             app:title="Schedule"
             android:id="@+id/timePickerScheduleBtn"
             android:layout_marginTop="15dp"

@@ -21,7 +21,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     LinearLayout(context, attrs, defStyleAttr) {
 
     private var binding: WsMarkerViewBinding = WsMarkerViewBinding.inflate(LayoutInflater.from(context), this, true)
-
+    private var happyPinAnimator1: ObjectAnimator? = null
+    private var happyPinAnimator2: ObjectAnimator? = null
+    private var pulseAnimator: ObjectAnimator? = null
 
     @SuppressLint("ObjectAnimatorBinding")
     fun pulse(view: View) {
@@ -39,7 +41,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         )
         textColor.setEvaluator(ArgbEvaluator())
 
-        ObjectAnimator.ofPropertyValuesHolder(view,
+        pulseAnimator = ObjectAnimator.ofPropertyValuesHolder(view,
             scaleX, scaleY, alpha).apply {
             duration = 2000
             interpolator = AccelerateDecelerateInterpolator()
@@ -51,7 +53,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun happyPin(view: View){
-        ObjectAnimator.ofFloat(
+        happyPinAnimator1 = ObjectAnimator.ofFloat(
             view, "translationY",
             0f, -30f, 0f,
         ).apply {
@@ -63,7 +65,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             start()
         }
 
-        ObjectAnimator.ofFloat(
+        happyPinAnimator2 = ObjectAnimator.ofFloat(
             view, "rotationY",
             0f, 90f, 0f, 90f, 0f, 90f, -15f, 15f,-5f, 0f,
         ).apply {
@@ -90,8 +92,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun stopAllAnimations(){
-        binding.wsMarkerSmallCircle.clearAnimation()
-        binding.wsMarkerPin.clearAnimation()
+//        binding.wsMarkerSmallCircle.clearAnimation()
+//        binding.wsMarkerPin.clearAnimation()
+        happyPinAnimator1?.cancel()
+        happyPinAnimator2?.cancel()
+        pulseAnimator?.cancel()
     }
 
 
