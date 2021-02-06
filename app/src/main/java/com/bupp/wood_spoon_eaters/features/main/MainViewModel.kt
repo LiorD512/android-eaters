@@ -29,7 +29,7 @@ class MainViewModel(
     private val locationManager: LocationManager,
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager
-) : ViewModel(), EaterDataManager.EaterDataMangerListener {
+) : ViewModel() {
 
     val progressData = ProgressData()
     val mainActHeaderEvent = MutableLiveData<MainActActionEvent>()
@@ -38,7 +38,7 @@ class MainViewModel(
     init {
         eventsManager.initSegment()
         fcmManager.initFcmListener()
-        locationManager.updateFinalAddress()
+//        locationManager.updateFinalAddress()
 //        initHeaderUi()
     }
 
@@ -54,6 +54,7 @@ class MainViewModel(
 //    }
 
 //    fun getGpsLiveData() = locationManager.getGpsData()
+    fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
     fun getFinalAddressLiveData() = eaterDataManager.getFinalAddressLiveData()
     fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
@@ -117,13 +118,13 @@ class MainViewModel(
         return eaterDataManager.currentEater?.firstName!!
     }
 
-    fun startLocationUpdates() {
-        eaterDataManager.startLocationUpdates()
-    }
-
-    fun stopLocationUpdates() {
-        eaterDataManager.stopLocationUpdates()
-    }
+//    fun startLocationUpdates() {
+//        eaterDataManager.startLocationUpdates()
+//    }
+//
+//    fun stopLocationUpdates() {
+//        eaterDataManager.stopLocationUpdates()
+//    }
 
     private fun getListOfAddresses(): ArrayList<Address>? {
         if (eaterDataManager.currentEater != null) {
@@ -138,31 +139,31 @@ class MainViewModel(
     }
 
     val noUserLocationEvent = SingleLiveEvent<NoLocationUiEvent>()
-    override fun onLocationEmpty() {
-        //this method fires when device location services is off
-        if (getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()) {
-            //if user never saved a location -> will show dialog
-            noUserLocationEvent.postValue(NoLocationUiEvent.NO_LOCATIONS_SAVED)
-        }
-    }
+//    override fun onLocationEmpty() {
+//        //this method fires when device location services is off
+//        if (getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()) {
+//            //if user never saved a location -> will show dialog
+//            noUserLocationEvent.postValue(NoLocationUiEvent.NO_LOCATIONS_SAVED)
+//        }
+//    }
 
     val locationSettingsEvent = SingleLiveEvent<Boolean>()
     fun startAndroidLocationSettings(){
         locationSettingsEvent.postValue(true)
     }
 
-    override fun onUsingPreviousLocation() {
-        noUserLocationEvent.postValue(NoLocationUiEvent.DEVICE_LOCATION_OFF)
-    }
-
-
-    override fun onAddressChanged(updatedAddress: Address?) {
-        Log.d("wowMainVM", "onAddressChanged")
-        addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
-        if (waitingForAddressAction) {
-            addressUpdateActionEvent.postValue(AddressUpdateEvent(updatedAddress))
-        }
-    }
+//    override fun onUsingPreviousLocation() {
+//        noUserLocationEvent.postValue(NoLocationUiEvent.DEVICE_LOCATION_OFF)
+//    }
+//
+//
+//    override fun onAddressChanged(updatedAddress: Address?) {
+//        Log.d("wowMainVM", "onAddressChanged")
+//        addressUpdateEvent.postValue(AddressUpdateEvent(updatedAddress))
+//        if (waitingForAddressAction) {
+//            addressUpdateActionEvent.postValue(AddressUpdateEvent(updatedAddress))
+//        }
+//    }
 
     val checkCartStatus: SingleLiveEvent<CheckCartStatusEvent> = SingleLiveEvent()
 
@@ -249,25 +250,25 @@ class MainViewModel(
 
     data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
 
-    fun getCurrentCook(id: Long) {
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object : Callback<ServerResponse<Cook>> {
-            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
-                if (response.isSuccessful) {
-                    val cook = response.body()?.data
-                    Log.d("wowFeedVM", "getCurrentCook success: ")
-                    getCookEvent.postValue(CookEvent(true, cook))
-                } else {
-                    Log.d("wowFeedVM", "getCurrentCook fail")
-                    getCookEvent.postValue(CookEvent(false, null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
-                Log.d("wowFeedVM", "getCurrentCook big fail")
-                getCookEvent.postValue(CookEvent(false, null))
-            }
-        })
+    fun getCurrentCook(id: Long) {// todo - nycccc
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object : Callback<ServerResponse<Cook>> {
+//            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
+//                if (response.isSuccessful) {
+//                    val cook = response.body()?.data
+//                    Log.d("wowFeedVM", "getCurrentCook success: ")
+//                    getCookEvent.postValue(CookEvent(true, cook))
+//                } else {
+//                    Log.d("wowFeedVM", "getCurrentCook fail")
+//                    getCookEvent.postValue(CookEvent(false, null))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
+//                Log.d("wowFeedVM", "getCurrentCook big fail")
+//                getCookEvent.postValue(CookEvent(false, null))
+//            }
+//        })
     }
 
 
@@ -275,13 +276,14 @@ class MainViewModel(
         return eaterDataManager.currentEater
     }
 
-    fun hasAddress(): Boolean {
-        return eaterDataManager.getLastChosenAddress() != null
+    fun hasAddress(): Boolean {// todo - nyc
+//        return eaterDataManager.getLastChosenAddress() != null
+        return true
     }
 
-    fun initLocationFalse() {
-        eaterDataManager.onLocationEmpty()
-    }
+//    fun initLocationFalse() {
+////        eaterDataManager.onLocationEmpty()
+//    }
 
     val getUserCampaignDataEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
     fun checkForUserCampaignData() {

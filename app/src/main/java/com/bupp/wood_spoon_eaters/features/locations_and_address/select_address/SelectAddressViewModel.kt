@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address.select_address
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
@@ -10,9 +9,10 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.AddressRequest
 
 class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager) : ViewModel(){
+
+    fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
 
     val navigationEvent = LiveEventData<NavigationEventType>()
     enum class NavigationEventType{
@@ -21,14 +21,13 @@ class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: Ea
         OPEN_MAP_VERIFICATION_WITH_MY_LOCATION
     }
 
-//    data class MyLocationEvent(val status: MyLocationStatus)
+    val myLocationEvent: MutableLiveData<MyLocationStatus> = MutableLiveData()
     enum class MyLocationStatus{
         FETCHING,
         NO_GPS_ENABLED,
         NO_PERMISSION,
         READY
     }
-    val myLocationEvent: MutableLiveData<MyLocationStatus> = MutableLiveData()
 
     fun updateMyLocationUiState(locationEnabled: Boolean = true) {
         if(!locationEnabled){
@@ -58,13 +57,25 @@ class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: Ea
 
     }
 
-    val myAddressEvent = SingleLiveEvent<List<Address>?>()
-    fun fetchAddress() {
-        myAddressEvent.postValue(eaterDataManager.currentEater?.addresses)
+    data class AddressAdapterWrapper(val address: Address?, val isSelected: Boolean = false)
+    val myAddressesEvent = SingleLiveEvent<List<AddressAdapterWrapper>?>()
+    fun fetchAddress(selectedId: Long? = -1) {
+        val addresses = eaterDataManager.currentEater?.addresses?.map {
+            AddressAdapterWrapper(it, it.id == selectedId)
+        }
+        myAddressesEvent.postValue(addresses?.toList())
     }
 
     fun onMyLocationReceived() {
         myLocationEvent.postValue(MyLocationStatus.READY)
+    }
+
+    fun onAddressSelected(selectedAddress: Address) {
+        eaterDataManager.updateSelectedAddress(selectedAddress)
+    }
+
+    fun updateSelectedAddressUi(selectedAddressId: Long?) {
+        fetchAddress(selectedAddressId)
     }
 
 

@@ -99,14 +99,14 @@ class MyProfileViewModel(val api: ApiService, val userRepository: UserRepository
 //        })
     }
 
-    fun getDeliveryAddress(): String {
-        val streetLine1 = eaterDataManager.getLastChosenAddress()?.streetLine1
-        return if (streetLine1.isNullOrEmpty()) {
-            ""
-        } else {
-            streetLine1
-        }
-    }
+//    fun getDeliveryAddress(): String {//todo - nyc
+//        val streetLine1 = eaterDataManager.getLastChosenAddress()?.streetLine1
+//        return if (streetLine1.isNullOrEmpty()) {
+//            ""
+//        } else {
+//            streetLine1
+//        }
+//    }
 
     fun logout() {
         val logoutResult = userRepository.logout()

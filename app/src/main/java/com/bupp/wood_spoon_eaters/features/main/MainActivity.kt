@@ -21,13 +21,9 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
-import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
-import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuBottomSheet
 import com.bupp.wood_spoon_eaters.features.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
-import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.no_locations.NoLocationsAvailableFragment
@@ -38,9 +34,9 @@ import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFrag
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
+import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
-import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
@@ -52,7 +48,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
-    LocationChooserFragment.LocationChooserFragmentListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
@@ -209,8 +204,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             handlePb(it)
         })
         //header event
-        viewModel.getFinalAddressLiveData().observe(this, {
-            mainActHeaderView.setLocationTitle(it?.getUserLocationStr())
+        viewModel.getFinalAddressParams().observe(this, {
+            mainActHeaderView.setLocationTitle(it?.locationTitle)
         })
         viewModel.getDeliveryTimeLiveData().observe(this, {
             mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
@@ -378,7 +373,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopLocationUpdates()
+//        viewModel.stopLocationUpdates()
     }
 
     private fun loadFragment(fragment: Fragment, tag: String) {
@@ -482,17 +477,17 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    override fun onLocationSelected(selected: GoogleAddressResponse?) {
-        //on LocationChoosertFragment result
-        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-//            this.selectedGoogleAddress = selected
-//            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddOrEditAddressFragment).onLocationSelected(selected) //todo - ny !
-        } else if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-//            this.selectedGoogleAddress = selected
-//            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
-            Toast.makeText(this, "What should we do here", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    override fun onLocationSelected(selected: GoogleAddressResponse?) {
+//        //on LocationChoosertFragment result
+//        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
+////            this.selectedGoogleAddress = selected
+////            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddOrEditAddressFragment).onLocationSelected(selected) //todo - ny !
+//        } else if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
+////            this.selectedGoogleAddress = selected
+////            (getFragmentByTag(Constants.ADDRESS_DIALOG_TAG) as AddressChooserDialog).addAddress(selected)
+//            Toast.makeText(this, "What should we do here", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     override fun onChangeAddressClick() {
         loadDeliveryDetails()
@@ -520,9 +515,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     //load dialogs
-    fun openAddressChooser() {
-        startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
-    }
+//    fun openAddressChooser() {
+//        startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
+//    }
 
     fun loadDishOfferedDialog() {
         NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
@@ -766,11 +761,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //                    updateAddressTimeView()
 
                     when (currentFragmentTag) {
-                        Constants.DELIVERY_DETAILS_TAG -> {
-                            if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
-                                (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
-                            }
-                        }
+//                        Constants.DELIVERY_DETAILS_TAG -> {
+//                            if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
+//                                (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
+//                            }
+//                        }
                         Constants.MY_PROFILE_TAG -> {
                             if (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment? != null) {
                                 (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()

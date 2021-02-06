@@ -193,7 +193,8 @@ class SingleDishInfoViewModel(
 //    }
 
     fun getDropoffLocation(): String? {
-        return eaterDataManager.getDropoffLocation()
+//        return eaterDataManager.getDropoffLocation()//todo - nyc
+        return ""
     }
 
 
@@ -204,9 +205,9 @@ class SingleDishInfoViewModel(
 //        return metaDataManager.getDeliveryFeeStr()
 //    }
 
-    fun hasValidDeliveryAddress(): Boolean {
-        return eaterDataManager.getLastChosenAddress()?.id != null
-    }
+//    fun hasValidDeliveryAddress(): Boolean {
+//        return eaterDataManager.getLastChosenAddress()?.id != null
+//    }
 
 
     fun fetchDishForNewDate(menuItemId: Long, newChosenDate: Date) {

@@ -123,8 +123,11 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         })
         viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
-        viewModel.myAddressEvent.observe(viewLifecycleOwner, {
+        viewModel.myAddressesEvent.observe(viewLifecycleOwner, {
             addressAdapter?.submitList(it)
+        })
+        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+            viewModel.updateSelectedAddressUi(it.id)
         })
     }
 
@@ -149,6 +152,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
 
     override fun onAddressClick(selected: Address) {
         Log.d(TAG, "onAddressClick")
+        viewModel.onAddressSelected(selected)
     }
 
     override fun onMenuClick(selected: Address) {

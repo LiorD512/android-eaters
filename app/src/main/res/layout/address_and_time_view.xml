@@ -27,7 +27,7 @@
             android:gravity="center"
             android:letterSpacing="0.03"
             android:lines="1"
-            android:paddingStart="7.7dp"
+            android:layout_marginStart="7.7dp"
             android:text="Address"
             tools:text="Mannhattan, NY" />
 
@@ -36,7 +36,7 @@
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:background="@drawable/white_rect"
+            android:background="@drawable/rounded_7_white_bkg"
             android:orientation="horizontal">
 
         <TextView

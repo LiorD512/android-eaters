@@ -128,14 +128,12 @@ class NewOrderMainViewModel(
     }
 
     fun updateAddress() {
-//        orderManager.updateOrderRequest(deliveryAddress = deliveryAddress)
-//        orderData.postValue(orderData.value)
-        val deliveryAddress = eaterDataManager.getLastChosenAddress()
-        deliveryAddress?.let {
-            val orderRequest = OrderRequest()
-            orderRequest.deliveryAddressId = it.id
-//            postUpdateOrder(orderRequest)
-        }
+//        val deliveryAddress = eaterDataManager.getLastChosenAddress()//todo - nyc
+//        deliveryAddress?.let {
+//            val orderRequest = OrderRequest()
+//            orderRequest.deliveryAddressId = it.id
+////            postUpdateOrder(orderRequest)
+//        }
     }
 
     data class EmptyCartEvent(val shouldShow: Boolean = false)
@@ -176,7 +174,7 @@ class NewOrderMainViewModel(
 
     fun setChosenAddress(address: Address) {
         eaterDataManager.setUserChooseSpecificAddress(true)
-        eaterDataManager.setLastChosenAddress(address)
+//        eaterDataManager.setLastChosenAddress(address)//todo - nyc
     }
 
     fun loadPreviousDish() {

@@ -53,7 +53,8 @@ class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager, 
     }
 
     private fun getLastOrderAddressParam(): Address? {
-        return eaterDataManager.getLastChosenAddress()
+//        return eaterDataManager.getLastChosenAddress()
+        return null//todo - nyc
     }
 
     fun addOrderItem(orderItemRequest: OrderItemRequest) {

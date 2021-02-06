@@ -32,32 +32,32 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         return curSearch
     }
 
-    fun getSearchRequest(str: String, cuisineIds: ArrayList<Long>?): SearchRequest {
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        if(eaterDataManager.isUserChooseSpecificAddress()){
-            curSearch.addressId = currentAddress?.id
-            curSearch.lat = null
-            curSearch.lng = null
-        }else{
-            curSearch.addressId = null
-            curSearch.lat = currentAddress?.lat
-            curSearch.lng = currentAddress?.lng
-        }
-        if(!str.isNullOrEmpty()){
-            curSearch.q = str
-        }else{
-            curSearch.q = ""
-        }
-
-        if(cuisineIds != null && cuisineIds.size!! > 0){
-            curSearch.cuisineIds = arrayListOf()
-            curSearch.cuisineIds?.addAll(cuisineIds)
-        }else{
-            curSearch.cuisineIds?.clear()
-        }
-
-        //time
-        curSearch.timestamp = deliveryTimeManager.getDeliveryTimestamp()
+    fun getSearchRequest(str: String, cuisineIds: ArrayList<Long>?): SearchRequest {//todo - nyc
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        if(eaterDataManager.isUserChooseSpecificAddress()){
+//            curSearch.addressId = currentAddress?.id
+//            curSearch.lat = null
+//            curSearch.lng = null
+//        }else{
+//            curSearch.addressId = null
+//            curSearch.lat = currentAddress?.lat
+//            curSearch.lng = currentAddress?.lng
+//        }
+//        if(!str.isNullOrEmpty()){
+//            curSearch.q = str
+//        }else{
+//            curSearch.q = ""
+//        }
+//
+//        if(cuisineIds != null && cuisineIds.size!! > 0){
+//            curSearch.cuisineIds = arrayListOf()
+//            curSearch.cuisineIds?.addAll(cuisineIds)
+//        }else{
+//            curSearch.cuisineIds?.clear()
+//        }
+//
+//        //time
+//        curSearch.timestamp = deliveryTimeManager.getDeliveryTimestamp()
 
         return curSearch
     }

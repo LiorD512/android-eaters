@@ -383,7 +383,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     }
 
     override fun onChangeLocationClick() {
-        (activity as NewOrderActivity).loadAddressesDialog()
+//        (activity as NewOrderActivity).loadAddressesDialog()
     }
 
     override fun onChangeTimeClick() {

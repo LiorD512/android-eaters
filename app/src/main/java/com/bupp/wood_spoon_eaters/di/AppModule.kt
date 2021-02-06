@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.di
 
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
-import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserViewModel
+import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsViewModel
@@ -10,42 +9,38 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.address_list_chooser.AddressChooserViewModel
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuViewModel
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountrySelectorViewModel
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.time_picker.TimePickerViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
+import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressViewModel
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.delivery_details.DeliveryDetailsViewModel
-import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
-import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
-import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
+import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
+import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
+import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
+import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
-import com.bupp.wood_spoon_eaters.common.AppSettings
-import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.add_or_edit_address.AddOrEditAddressViewModel
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountrySelectorViewModel
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuViewModel
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.time_picker.TimePickerViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressViewModel
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
-import com.bupp.wood_spoon_eaters.managers.location.LocationManager
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
-
 import org.koin.dsl.module
 
 
@@ -104,8 +99,6 @@ val appModule = module {
 
     viewModel { FeedViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
-    viewModel { AddressChooserViewModel(get(), get(), get()) }
-    viewModel { AddOrEditAddressViewModel(get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(),get())}
@@ -134,14 +127,7 @@ val appModule = module {
     //settings
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
 
-    //chooser fragment
-    viewModel { LocationChooserViewModel(get()) }
-    viewModel { DeliveryDetailsViewModel(get(), get(), get(), get()) }
 
-//    viewModel { EventActivityViewModel(get(), get(), get(), get()) }
-//    viewModel { GetEventByIdViewModel(get()) }
-//    viewModel { EventFeedViewModel(get(), get(), get()) }
-    
 
 }
 

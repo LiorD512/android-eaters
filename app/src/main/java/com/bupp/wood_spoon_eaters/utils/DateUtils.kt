@@ -45,7 +45,7 @@ object DateUtils {
         return ""
     }
 
-    fun parseDDateToUsDate(date: Date): String {
+    fun parseDateToUsDate(date: Date): String {
         //August 2, 2019
         val sdf = SimpleDateFormat("MMMM dd, yyyy")
         return sdf.format(date.time)

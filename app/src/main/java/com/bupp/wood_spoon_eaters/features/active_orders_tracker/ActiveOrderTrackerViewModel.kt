@@ -75,9 +75,9 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
         val phoneNumber = eaterDataManager.currentEater?.phoneNumber
         val userInfo = "$userName, $phoneNumber"
 
-        val userLocation = eaterDataManager.getLastChosenAddress()
+//        val userLocation = eaterDataManager.getLastChosenAddress()
 
-        return OrderUserInfo(paymentString, userInfo, userLocation)
+        return OrderUserInfo(paymentString, userInfo, null)//userLocation) //todo = nyccccccc
     }
 
 

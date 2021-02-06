@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerListener {
+class FavoritesViewViewModel: KoinComponent{//}, EaterDataManager.EaterDataMangerListener {
 
 
     val TAG = "wowFavoritesViewVM"
@@ -71,13 +71,13 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
     fun getFeedRequest(): FeedRequest {
         var feedRequest = FeedRequest()
         //address
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        if (eaterDataManager.isUserChooseSpecificAddress()) {
-            feedRequest.addressId = currentAddress?.id
-        } else {
-            feedRequest.lat = currentAddress?.lat
-            feedRequest.lng = currentAddress?.lng
-        }
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        if (eaterDataManager.isUserChooseSpecificAddress()) {
+//            feedRequest.addressId = currentAddress?.id
+//        } else {
+//            feedRequest.lat = currentAddress?.lat
+//            feedRequest.lng = currentAddress?.lng
+//        }
 
         //time
         feedRequest.timestamp = deliveryTimeManager.getDeliveryTimestamp()
@@ -89,13 +89,13 @@ class FavoritesViewViewModel: KoinComponent, EaterDataManager.EaterDataMangerLis
     }
 
     //calling this method when tryign to get favorites, but user has no lat\lng.. waiting for addressManager to catch location and try again.
-    override fun onAddressChanged(currentAddress: Address?) {
-        if(currentAddress != null){
-            Log.d(TAG,"getFeed onLocationChanged")
-            eaterDataManager.setLastChosenAddress(currentAddress)
-            fetchFavorites()
-        }
-    }
+//    override fun onAddressChanged(currentAddress: Address?) { todo - nyccccccccc fix
+//        if(currentAddress != null){
+//            Log.d(TAG,"getFeed onLocationChanged")
+//            eaterDataManager.setLastChosenAddress(currentAddress)
+//            fetchFavorites()
+//        }
+//    }
 
 
 }

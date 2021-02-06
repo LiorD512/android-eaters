@@ -119,7 +119,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     private fun handleUserDetails(eater: Eater) {
         myProfileFragUserName.text = eater.getFullName()
-        myProfileFragEditLocation.setOnClickListener { (activity as MainActivity).openAddressChooser() }
+//        myProfileFragEditLocation.setOnClickListener { (activity as MainActivity).openAddressChooser() }
         myProfileFragUserPhoto.setImage(eater.thumbnail)
 
         //load selected cuisines and dietary
@@ -174,7 +174,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
 
     private fun share() {
         val text = myProfileViewModel.getShareText()
-        Utils.shareText(activity!!, text)
+        Utils.shareText(requireActivity(), text)
     }
 
 //    fun loadPromoCodeDialog() {
@@ -190,7 +190,7 @@ class MyProfileFragment : Fragment(), DeliveryDetailsView.DeliveryDetailsViewLis
     }
 
     override fun onChangeLocationClick() {
-        (activity as MainActivity).openAddressChooser()
+//        (activity as MainActivity).openAddressChooser()
     }
 
     override fun onChangePaymentClick() {

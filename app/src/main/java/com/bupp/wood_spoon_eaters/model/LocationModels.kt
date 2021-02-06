@@ -54,11 +54,11 @@ data class Address(
     @SerializedName("country") var country: Country? = null,
     @SerializedName("state") val state: State? = null,
     @SerializedName("city") val city: City? = null,
-    @SerializedName("dropoff_location") var dropOfLocationStr: String = "",
-    @SerializedName("street_line_1") var streetLine1: String = "",
-    @SerializedName("street_line_2") var streetLine2: String = "",
-    @SerializedName("zipcode") val zipCode: String = "",
-    @SerializedName("notes") val notes: String = ""
+    @SerializedName("dropoff_location") var dropOfLocationStr: String? = null,
+    @SerializedName("street_line_1") var streetLine1: String? = null,
+    @SerializedName("street_line_2") var streetLine2: String? = null,
+    @SerializedName("zipcode") val zipCode: String? = null,
+    @SerializedName("notes") val notes: String? = null
 ) : Parcelable {
 
     fun getUserLocationStr(): String{

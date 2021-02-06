@@ -10,11 +10,12 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-            android:id="@+id/selectAddressItemMenu"
+            android:visibility="invisible"
+            android:id="@+id/selectAddressItemCheck"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_options" />
+            android:src="@drawable/check_icon" />
 
     <LinearLayout
             android:animateLayoutChanges="true"
@@ -50,11 +51,11 @@
     </LinearLayout>
 
     <ImageView
-            android:visibility="gone"
-            android:id="@+id/selectAddressItemCheck"
+            android:id="@+id/selectAddressItemMenu"
             android:layout_gravity="center"
+            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/check_icon" />
+            android:src="@drawable/ic_delete" />
 
 </LinearLayout>

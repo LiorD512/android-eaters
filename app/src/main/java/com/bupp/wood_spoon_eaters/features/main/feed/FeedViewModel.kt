@@ -17,7 +17,7 @@ import retrofit2.Response
 
 class FeedViewModel(
     private val locationManager: LocationManager,
-    val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository, val deliveryTimeManager: DeliveryTimeManager): ViewModel(), EaterDataManager.EaterDataMangerListener {
+    val api: ApiService, val settings: AppSettings, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository, val deliveryTimeManager: DeliveryTimeManager): ViewModel() {
 
     companion object{
         const val TAG = "wowFeedVM"
@@ -152,13 +152,13 @@ class FeedViewModel(
     }
 
 
-    override fun onAddressChanged(currentAddress: Address?) {
-        if(currentAddress != null){
-            Log.d("wowFeedVM","getFeed onLocationChanged")
-            eaterDataManager.setLastChosenAddress(currentAddress)
-            getFeed()
-        }
-    }
+//    override fun onAddressChanged(currentAddress: Address?) {
+//        if(currentAddress != null){
+//            Log.d("wowFeedVM","getFeed onLocationChanged")
+//            eaterDataManager.setLastChosenAddress(currentAddress)
+//            getFeed()
+//        }
+//    }
 
     private fun validFeedRequest(feedRequest: FeedRequest): Boolean {
         return (feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null
@@ -180,16 +180,16 @@ class FeedViewModel(
         return feedRequest
     }
 
-    private fun getOldFeedRequest(): FeedRequest {
+    private fun getOldFeedRequest(): FeedRequest { //todo - nyc
         var feedRequest = FeedRequest()
         //address
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        if(eaterDataManager.isUserChooseSpecificAddress()){
-            feedRequest.addressId = currentAddress?.id
-        }else{
-            feedRequest.lat = currentAddress?.lat
-            feedRequest.lng = currentAddress?.lng
-        }
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        if(eaterDataManager.isUserChooseSpecificAddress()){
+//            feedRequest.addressId = currentAddress?.id
+//        }else{
+//            feedRequest.lat = currentAddress?.lat
+//            feedRequest.lng = currentAddress?.lng
+//        }
 
         //time
         feedRequest.timestamp = deliveryTimeManager.getDeliveryTimestamp()
@@ -199,25 +199,25 @@ class FeedViewModel(
 
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
     data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
-    fun getCurrentCook(id: Long) {
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object: Callback<ServerResponse<Cook>>{
-            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
-                if(response.isSuccessful){
-                    val cook = response.body()?.data
-                    Log.d("wowFeedVM","getCurrentCook success: ")
-                    getCookEvent.postValue(CookEvent(true, cook))
-                }else{
-                    Log.d("wowFeedVM","getCurrentCook fail")
-                    getCookEvent.postValue(CookEvent(false,null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
-                Log.d("wowFeedVM","getCurrentCook big fail")
-                getCookEvent.postValue(CookEvent(false,null))
-            }
-        })
+    fun getCurrentCook(id: Long) {//todo - nyc
+//        val currentAddress = eaterDataManager.getLastChosenAddress()
+//        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object: Callback<ServerResponse<Cook>>{
+//            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
+//                if(response.isSuccessful){
+//                    val cook = response.body()?.data
+//                    Log.d("wowFeedVM","getCurrentCook success: ")
+//                    getCookEvent.postValue(CookEvent(true, cook))
+//                }else{
+//                    Log.d("wowFeedVM","getCurrentCook fail")
+//                    getCookEvent.postValue(CookEvent(false,null))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
+//                Log.d("wowFeedVM","getCurrentCook big fail")
+//                getCookEvent.postValue(CookEvent(false,null))
+//            }
+//        })
     }
 
 //    fun getDeliveryFeeString(): String {

@@ -16,8 +16,6 @@ import com.bupp.wood_spoon.dialogs.AddressChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.address_chooser.sub_screen.AddressMenuDialog
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
-import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment
-import com.bupp.wood_spoon_eaters.features.address_and_location.AddressChooserActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
@@ -35,7 +33,7 @@ import java.util.ArrayList
 
 class NewOrderActivity : AppCompatActivity(),
     CheckoutFragment.CheckoutDialogListener, AddressChooserDialog.AddressChooserDialogListener,
-    AddressMenuDialog.EditAddressDialogListener, ClearCartDialog.ClearCartDialogListener, LocationChooserFragment.LocationChooserFragmentListener,
+    AddressMenuDialog.EditAddressDialogListener, ClearCartDialog.ClearCartDialogListener,
     SingleDishHeader.SingleDishHeaderListener {
 
     companion object{
@@ -286,28 +284,28 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
 
-    fun loadAddressesDialog() {
-        startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
-//        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
-//            supportFragmentManager,
-//            Constants.ADDRESS_DIALOG_TAG
-//        )
-    }
+//    fun loadAddressesDialog() {
+//        startActivityForResult(Intent(this, AddressChooserActivity::class.java), Constants.ADDRESS_CHOOSER_REQUEST_CODE)
+////        AddressChooserDialog(this, viewModel.getListOfAddresses(), viewModel.getChosenAddress()).show(
+////            supportFragmentManager,
+////            Constants.ADDRESS_DIALOG_TAG
+////        )
+//    }
 
     override fun onAddressMenuClick(address: Address) {
         AddressMenuDialog(address, this).show(supportFragmentManager, Constants.EDIT_ADDRESS_DIALOG)
     }
 
-    override fun onLocationSelected(selected: GoogleAddressResponse?) {
-        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
-//            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddOrEditAddressFragment).onLocationSelected(selected) //ny
-        }
-    }
-
-    fun loadLocationChooser(input: String?) {
-        LocationChooserFragment(this, input)
-            .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
-    }
+//    override fun onLocationSelected(selected: GoogleAddressResponse?) {
+//        if (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) != null && selected != null) {
+////            (getFragmentByTag(Constants.ADD_NEW_ADDRESS_TAG) as AddOrEditAddressFragment).onLocationSelected(selected) //ny
+//        }
+//    }
+//
+//    fun loadLocationChooser(input: String?) {
+//        LocationChooserFragment(this, input)
+//            .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
+//    }
 
     override fun onAddressChoose(address: Address) {
         viewModel.setChosenAddress(address)

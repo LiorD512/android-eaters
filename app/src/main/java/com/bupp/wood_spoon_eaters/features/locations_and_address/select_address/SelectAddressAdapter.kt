@@ -15,7 +15,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import kotlinx.android.synthetic.main.select_address_item.view.*
 
 class SelectAddressAdapter(private val listener: SelectAddressAdapterListener?) :
-    ListAdapter<Address, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<SelectAddressViewModel.AddressAdapterWrapper, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var selectedAddress: Address? = null
 
@@ -49,23 +49,32 @@ class SelectAddressAdapter(private val listener: SelectAddressAdapterListener?) 
         private val selected: ImageView = view.selectAddressItemCheck
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(listener: SelectAddressAdapterListener?, address: Address) {
-            streetText.text = address.streetLine1
-            stateText.text = "${address.city?.name ?: ""} ${address.state?.name ?: ""}"
-            dropOff.text = address.getDropoffLocationStr()
+        fun bindItem(listener: SelectAddressAdapterListener?, addressWrapper: SelectAddressViewModel.AddressAdapterWrapper) {
+            val address = addressWrapper.address
+            address?.let{
+                streetText.text = it.streetLine1
+                stateText.text = "${it.city?.name ?: ""} ${it.state?.name ?: ""}"
+                dropOff.text = it.getDropoffLocationStr()
 
-            menuBtn.setOnClickListener { listener?.onMenuClick(address) }
-            layout.setOnClickListener { listener?.onAddressClick(address) }
+                menuBtn.setOnClickListener { listener?.onMenuClick(address) }
+                layout.setOnClickListener { listener?.onAddressClick(address) }
+            }
+
+            if(addressWrapper.isSelected){
+                selected.visibility = View.VISIBLE
+            }else{
+                selected.visibility = View.INVISIBLE
+            }
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Address>() {
+    class DiffCallback : DiffUtil.ItemCallback<SelectAddressViewModel.AddressAdapterWrapper>() {
 
-        override fun areItemsTheSame(oldItem: Address, newItem: Address): Boolean {
+        override fun areItemsTheSame(oldItem: SelectAddressViewModel.AddressAdapterWrapper, newItem: SelectAddressViewModel.AddressAdapterWrapper): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: Address, newItem: Address): Boolean {
+        override fun areContentsTheSame(oldItem: SelectAddressViewModel.AddressAdapterWrapper, newItem: SelectAddressViewModel.AddressAdapterWrapper): Boolean {
             return oldItem == newItem
         }
     }
