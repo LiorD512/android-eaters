@@ -2,9 +2,7 @@ package com.bupp.wood_spoon_eaters.features.bottom_sheets.time_picker
 
 import android.app.Dialog
 import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,19 +23,17 @@ class TimePickerBottomSheet: BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.time_picker_bottom_sheet, container, false)
     }
 
-//    private lateinit var behavior: BottomSheetBehavior<View>
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-//        dialog.setOnShowListener {
-//            val d = it as BottomSheetDialog
-//            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-//            behavior = BottomSheetBehavior.from(sheet!!)
-//            behavior.isHideable = false
-//            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            behavior.isDraggable = false
-//        }
-//        return dialog
-//    }
+    private lateinit var behavior: BottomSheetBehavior<View>
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val d = it as BottomSheetDialog
+            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
+            behavior = BottomSheetBehavior.from(sheet!!)
+            behavior.isDraggable = false
+        }
+        return dialog
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,9 +44,9 @@ class TimePickerBottomSheet: BottomSheetDialogFragment() {
             val parent = view.parent as View
             val layoutParams = parent.layoutParams as CoordinatorLayout.LayoutParams
             layoutParams.setMargins(
-                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT 16dp
+                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT
                 0,
-                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // RIGHT 16dp
+                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // RIGHT
                 0
             )
             parent.layoutParams = layoutParams
@@ -69,7 +65,7 @@ class TimePickerBottomSheet: BottomSheetDialogFragment() {
             dismiss()
         }
         binding.timePickerScheduleBtn.setOnClickListener {
-            viewModel.setDeliveryTime(binding.singleDayPicker.date)
+            viewModel.setDeliveryTime(binding.timePickerTimePicker.getChosenDate())
             dismiss()
         }
     }

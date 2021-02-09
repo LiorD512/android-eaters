@@ -14,7 +14,7 @@ class DeliveryTimeManager {
 
     fun setNewDeliveryTime(newDeliveryTime: Date?){
         this.deliveryTime = newDeliveryTime
-        deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryTimeUiString()))
+        deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryDateUiString()))
     }
 
     fun getDeliveryTimeDate(): Date? {
@@ -32,9 +32,9 @@ class DeliveryTimeManager {
         return null
     }
 
-    private fun getDeliveryTimeUiString(): String {
+    private fun getDeliveryDateUiString(): String {
         getDeliveryTimeDate()?.let{
-            return DateUtils.parseDateToUsDayTime(it)
+            return DateUtils.parseDateToDayDate(it)
         }
         return "Now"
     }

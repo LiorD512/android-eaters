@@ -217,5 +217,13 @@ class MetaDataRepository(private val apiService: ApiService) {
         return 20
     }
 
+    fun getMinFutureOrderWindow(): Int {
+        for (settings in getSettings()){
+            if(settings.key == "min_future_order_window")
+                return (settings.value!!) as Int
+        }
+        return 60
+    }
+
 
 }

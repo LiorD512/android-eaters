@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.model
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class Feed(
@@ -16,4 +17,9 @@ data class FeedRequest(
     @SerializedName("lng") var lng: Double? = null,
     @SerializedName("addressId") var addressId: Long? = null,
     @SerializedName("timestamp") var timestamp: String? = null
+)
+
+data class WSRangeTimePickerHours(
+    val date: Date,
+    val hours: List<Date>
 )

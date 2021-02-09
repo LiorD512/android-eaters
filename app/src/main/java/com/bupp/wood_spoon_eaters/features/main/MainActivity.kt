@@ -612,6 +612,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onHeaderTimeClick() {
+//        loadFragment(TimePickerBottomSheet(), "tag")
         val timePickerBottomSheet = TimePickerBottomSheet()
         timePickerBottomSheet.show(supportFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }

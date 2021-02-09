@@ -10,10 +10,13 @@ class WSRangeTimePickerItemDecorator(private val topHeight: Int) : RecyclerView.
 
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        val position = parent.getChildAdapterPosition(view)
+        val position = parent.getChildLayoutPosition(view)
         when (position) {
             0 -> {
                 view.setPadding(0, topHeight, 0, 0)
+            }
+            else -> {
+                view.setPadding(0, 0, 0, 0)
             }
         }
 

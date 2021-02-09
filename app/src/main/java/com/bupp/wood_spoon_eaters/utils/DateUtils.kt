@@ -51,6 +51,24 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
+    fun parseDateToDayDate(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EE, MMM dd")
+        return sdf.format(date.time)
+    }
+
+    fun parseDateOneHourInterval(date: Date): String {
+        //4:30 PM - 5:30 PM
+        val c = Calendar.getInstance()
+        c.time = date
+        c.add(Calendar.MINUTE, 30)
+
+        val sdf = SimpleDateFormat("h:mma")
+        val hour1 = sdf.format(date.time)
+        val hour2 = sdf.format(c.time)
+        return "$hour1 - $hour2"
+    }
+
     fun parseDateToUsTime(date: Date): String {
         //4:30 PM
         val sdf = SimpleDateFormat("h:mma")
@@ -117,6 +135,17 @@ object DateUtils {
         val sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
         return sameDay
+    }
+
+    fun isIn30MinutesRangeFromNow(dateToCheck: Date): Boolean {
+        val now = Calendar.getInstance()
+        val nowPlusHalfHour = Calendar.getInstance()
+        nowPlusHalfHour.add(Calendar.MINUTE, 30)
+
+        val calendarToCheck = Calendar.getInstance()
+        calendarToCheck.time = dateToCheck
+        calendarToCheck.set(Calendar.DAY_OF_YEAR, now.get(Calendar.DAY_OF_YEAR))
+        return calendarToCheck.timeInMillis <= nowPlusHalfHour.timeInMillis && calendarToCheck.timeInMillis >= now.timeInMillis
     }
 
     fun isTodayOrTomorrow(orderTime: Date): Boolean {

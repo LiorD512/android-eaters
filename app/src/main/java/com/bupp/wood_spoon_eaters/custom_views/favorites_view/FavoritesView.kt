@@ -8,7 +8,6 @@ import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.example.matthias.mvvmcustomviewexample.custom.FavoritesViewViewModel
 import kotlinx.android.synthetic.main.favorite_view.view.*
 
 

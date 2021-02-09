@@ -29,25 +29,9 @@
             android:layout_height="1dp"/>
 
     <com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSRangeTimePicker
+            android:id="@+id/timePickerTimePicker"
             android:layout_width="match_parent"
-            android:layout_height="150dp"/>
-
-    <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
-            android:visibility="gone"
-            android:id="@+id/single_day_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:picker_itemSpacing="6dp"
-            app:picker_curvedMaxAngle="45"
-            app:picker_curved="true"
-            app:picker_selectorColor="@android:color/transparent"
-            app:picker_stepSizeMinutes="30"
-            app:picker_cyclic="true"
-            app:picker_dayCount="31"
-            app:picker_mustBeOnFuture="true"
-            app:picker_visibleItemCount="5"
-            app:picker_textSize="18.4sp"
-            app:fontFamily="@font/open_sans_reg"/>
+            android:layout_height="wrap_content"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             app:title="Schedule"

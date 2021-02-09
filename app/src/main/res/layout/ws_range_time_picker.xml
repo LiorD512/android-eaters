@@ -1,53 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/wsRangeTimePickerMainLayout"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
 
-<!--       <androidx.core.widget.NestedScrollView-->
-<!--               android:layout_width="match_parent"-->
-<!--               android:layout_height="wrap_content"></androidx.core.widget.NestedScrollView>-->
+    <LinearLayout
+            android:id="@+id/listLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-       <LinearLayout
-               android:weightSum="2"
-               android:orientation="horizontal"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/wsRangeTimePickerDateList"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
-              <androidx.recyclerview.widget.RecyclerView
-                      android:id="@+id/wsRangeTimePickerDateList"
-                      android:layout_weight="1"
-                      android:layout_width="0dp"
-                      android:layout_height="match_parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/wsRangeTimePickerHoursList"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
-              <androidx.recyclerview.widget.RecyclerView
-                      android:paddingVertical="15.4dp"
-                      android:id="@+id/wsRangeTimePickerHoursList"
-                      android:layout_weight="1"
-                      android:layout_width="0dp"
-                      android:layout_height="match_parent"/>
+    </LinearLayout>
 
-       </LinearLayout>
+    <LinearLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/wsRangeTimePickerUiLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/dark" />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="40dp"
+                android:background="@color/dark" />
+
+    </LinearLayout>
+
+<!--    <ImageView-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/listLayout"-->
+<!--            android:layout_gravity="top"-->
+<!--            android:src="@drawable/white_to_transparent_rect"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"/>-->
+
+<!--    <ImageView-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/listLayout"-->
+<!--            android:rotation="180"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:src="@drawable/white_to_transparent_rect"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"/>-->
 
 
-       <LinearLayout
-               android:id="@+id/wsRangeTimePickerUiLayout"
-               android:layout_gravity="center"
-               android:orientation="vertical"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content">
 
-              <View
-                      android:background="@color/dark"
-                      android:layout_width="match_parent"
-                      android:layout_height="2dp"/>
-              <View
-                      android:layout_marginTop="40dp"
-                      android:background="@color/dark"
-                      android:layout_width="match_parent"
-                      android:layout_height="2dp"/>
-
-       </LinearLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
