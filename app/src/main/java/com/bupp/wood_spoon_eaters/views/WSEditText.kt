@@ -12,6 +12,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -32,39 +33,54 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun initUi(attrs: AttributeSet?) {
         attrs?.let{
 
-            val attr = context.obtainStyledAttributes(attrs, R.styleable.WSEditText)
+            with(binding){
+                val attr = context.obtainStyledAttributes(attrs, R.styleable.WSEditText)
 
-            val hint = attr.getString(R.styleable.WSEditText_hint)
-            binding.wsEditTextInput.setHint(hint)
+                val hint = attr.getString(R.styleable.WSEditText_hint)
+                wsEditTextInput.hint = hint
 
-            val error = attr.getString(R.styleable.WSEditText_error)
-            error?.let { setError(error) }
+                val error = attr.getString(R.styleable.WSEditText_error)
+                error?.let { setError(error) }
 
-            inputType = attr.getInt(R.styleable.WSEditText_inputType, 0)
-            setInputType(inputType)
+                inputType = attr.getInt(R.styleable.WSEditText_inputType, 0)
+                setInputType(inputType)
 
-            val isEditable = attr.getBoolean(R.styleable.WSEditText_isEditable, true)
-            binding.wsEditTextInput.isFocusable = isEditable
-            binding.wsEditTextInput.isClickable = isEditable
-            this.isEditable = isEditable
-
-
-            attr.recycle()
+                val isEditable = attr.getBoolean(R.styleable.WSEditText_isEditable, true)
+                wsEditTextInput.isFocusable = isEditable
+                wsEditTextInput.isClickable = isEditable
+                this@WSEditText.isEditable = isEditable
 
 
-            binding.wsEditTextInput.addTextChangedListener(object : SimpleTextWatcher() {
-                override fun afterTextChanged(s: Editable) {
-                    hideError()
-                    if (s.isEmpty()) {
-                        val face = ResourcesCompat.getFont(context, R.font.lato_reg)
-                        binding.wsEditTextInput.typeface = face
-                    }else{
-                        val face = ResourcesCompat.getFont(context, R.font.lato_bold)
-                        binding.wsEditTextInput.typeface = face
+                attr.recycle()
+
+
+                wsEditTextInput.addTextChangedListener(object : SimpleTextWatcher() {
+                    override fun afterTextChanged(s: Editable) {
+                        hideError()
+                        if (s.isEmpty()) {
+                            val face = ResourcesCompat.getFont(context, R.font.lato_reg)
+                            wsEditTextInput.typeface = face
+                            wsEditTextPrefix.typeface = face
+                        }else{
+                            val face = ResourcesCompat.getFont(context, R.font.lato_bold)
+                            wsEditTextInput.typeface = face
+                            wsEditTextPrefix.typeface = face
+                        }
+                        super.afterTextChanged(s)
                     }
-                    super.afterTextChanged(s)
-                }
-            })
+                })
+                wsEditTextInput.setOnFocusChangeListener(object: OnFocusChangeListener{
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        if(hasFocus){
+                            wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.teal_blue))
+                        }else{
+                            wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.dark))
+                        }
+                    }
+
+                })
+            }
+
 
         }
     }
@@ -245,9 +261,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    override fun onDetachedFromWindow() {
+    fun setPrefix(prefix: String) {
+        binding.wsEditTextPrefix.visibility = View.VISIBLE
+        binding.wsEditTextPrefix.setText(prefix)
+    }
 
-        super.onDetachedFromWindow()
+    fun getPrefix(): String {
+        return binding.wsEditTextPrefix.text.toString()
     }
 
 }

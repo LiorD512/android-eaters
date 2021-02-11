@@ -1,90 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:tools="http://schemas.android.com/tools"
         android:background="@color/white"
         android:orientation="vertical">
 
     <TextView
-            android:paddingStart="15.4dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/title"
-            android:layout_marginTop="15.4dp"
             style="@style/Bold19Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
             android:letterSpacing="0.03"
-            android:text="Enter Your Mobile Number"/>
+            android:paddingStart="15.4dp"
+            android:text="Enter Your Mobile Number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-            android:paddingStart="15.4dp"
             android:id="@+id/subtitle"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintStart_toStartOf="parent"
             style="@style/Reg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:letterSpacing="0.03"
             android:layout_marginTop="13dp"
+            android:letterSpacing="0.03"
             android:lineSpacingExtra="6.7sp"
-            android:text="You will receive an SMS to confirm your phone number"/>
+            android:paddingStart="15.4dp"
+            android:text="You will receive an SMS to confirm your phone number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="36dp"
             android:orientation="horizontal"
             android:paddingHorizontal="15.4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subtitle">
+            app:layout_constraintTop_toBottomOf="@+id/subtitle"
+            app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-                android:id="@+id/verificationFragIsoLayout"
+                android:layout_marginTop="4dp"
+                android:id="@+id/verificationFragFlagLayout"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="7.7dp"
-                android:background="@color/grey_white"
-                android:orientation="horizontal"
-                android:paddingVertical="14.2dp"
-                android:paddingStart="23dp"
-                android:paddingEnd="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
-            <ImageView
-                    android:id="@+id/verificationFragFlag"
+            <LinearLayout
+                    android:id="@+id/verificationFragIsoLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15.4dp" />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/triangle_string"
-                    android:textColor="@color/black" />
-
-            <TextView
-                    android:id="@+id/verificationFragIso"
-                    style="@style/Reg15Black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/grey_white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="3dp"
+                    android:paddingStart="15.4dp"
+                    android:paddingEnd="11dp"
                     android:gravity="center"
-                    android:text="+1" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                        android:id="@+id/verificationFragFlag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="7.7dp"
+                        android:textSize="18sp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/triangle_string"
+                        android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <View
+                    android:layout_marginHorizontal="7.7dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_periwinkle" />
 
         </LinearLayout>
 
-
-        <com.bupp.wood_spoon_eaters.views.FloatingLabelEditText
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:layout_gravity="top"
+                android:layout_marginTop="2.7dp"
+                android:layout_marginStart="25dp"
                 android:id="@+id/verificationFragmentInput"
-                android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 app:error="@string/phone_verification_fragment_phone_error"
                 app:hint="Mobile number"
                 app:inputType="PHONE"/>
@@ -92,31 +101,46 @@
     </LinearLayout>
 
     <LinearLayout
-            app:layout_constraintBottom_toTopOf="@+id/verificationFragmentNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10.7dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/verificationFragmentNext">
 
         <TextView
-                android:id="@+id/verificationFragTermsText"
-                style="@style/Reg11Black"
+                style="@style/LatoReg11Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
                 android:lineSpacingExtra="8.6sp"
                 android:gravity="center_horizontal"
-                tools:text="By continuing you confirm our"/>
+                android:text="By continuing you confirm our"/>
+
+        <TextView
+                android:id="@+id/verificationFragmentTerms"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/pale_grey_cornered_rect"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="9dp"
+                style="@style/LatoBold11Teal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="8.6sp"
+                android:gravity="center_horizontal"
+                android:text="Terms of use"/>
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
-            app:layout_constraintBottom_toBottomOf="parent"
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             android:id="@+id/verificationFragmentNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:paddingHorizontal="15.4dp"
+            android:paddingBottom="7.4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:title="@string/phone_verification_fragment_next_btn" />
 
 

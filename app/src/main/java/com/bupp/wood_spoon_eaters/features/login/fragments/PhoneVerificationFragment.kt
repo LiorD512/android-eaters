@@ -1,116 +1,94 @@
 package com.bupp.wood_spoon_eaters.features.login.fragments
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.text.*
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.View
-import android.widget.CompoundButton
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import android.text.Spanned
+import android.graphics.Color
+import android.text.TextPaint
 import androidx.lifecycle.Observer
+import android.text.SpannableString
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
+import androidx.fragment.app.Fragment
+import android.text.style.ClickableSpan
+import android.text.method.LinkMovementMethod
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
-import com.bupp.wood_spoon_eaters.views.FloatingLabelEditText
-import kotlinx.android.synthetic.main.fragment_phone_verification.*
+import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
+import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
+import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
+import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
+import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 
 
-class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification), CompoundButton.OnCheckedChangeListener,
-    InputTitleView.InputTitleViewListener, FloatingLabelEditText.FloatingLabelEventListener {
+class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification),
+    InputTitleView.InputTitleViewListener{
 
+    var binding: FragmentPhoneVerificationBinding? = null
     private val viewModel: LoginViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentPhoneVerificationBinding.bind(view)
+
         initUi()
-        initCb()
         initObservers()
 
-    }
-
-    private fun initCb() {
-//        verificationFragPrivacyPolicyCb.setOnCheckedChangeListener(this)
-
-        val ss = SpannableString("By continuing you confirm our Terms of use & Privacy Policy")
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(textView: View) {
-                WebDocsDialog(Constants.WEB_DOCS_TERMS).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = true
-                ds.linkColor = Color.BLUE
-            }
-        }
-
-        val clickableSpan2 = object : ClickableSpan() {
-            override fun onClick(textView: View) {
-                WebDocsDialog(Constants.WEB_DOCS_PRIVACY).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = true
-            }
-        }
-
-        ss.setSpan(clickableSpan, 30, 42, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss.setSpan(clickableSpan2, 45, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        verificationFragTermsText.text = ss
-        verificationFragTermsText.movementMethod = LinkMovementMethod.getInstance()
-        verificationFragTermsText.highlightColor = Color.TRANSPARENT
-    }
-
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-//        viewModel.setPhoneCb(isChecked)
-//        if (isChecked) {
-//            verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.dark))
-//        }
     }
 
     private fun initObservers() {
         viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer {
             when (it) {
                 ErrorEventType.PHONE_EMPTY -> {
-                    verificationFragmentInput.showError()
+                    binding!!.verificationFragmentInput.showError()
                 }
+                else -> {}
             }
         })
-//        viewModel.phoneCbFieldErrorEvent.observe(viewLifecycleOwner, Observer{
-//            when(it){
-//                LoginViewModel.ErrorEventType.CB_REQUIRED -> {
-//                    verificationFragPrivacyPolicyCb.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
-//                }
-//            }
-//        })
+        viewModel.countryCodeEvent.observe(viewLifecycleOwner, {
+            binding!!.verificationFragmentInput.setPrefix("+${it.country_code}")
+            binding!!.verificationFragFlag.text = it.flag
+        })
     }
 
     private fun initUi() {
-        verificationFragmentInput.setEventListener(this)
+        with(binding!!){
+            val deviceCountryCode = CountryCodeUtils.getCountryCodeData(requireContext())
+            deviceCountryCode.let{
+                verificationFragmentInput.setPrefix("+${it.countryCodeIso}")
+                verificationFragFlag.text = it.flag
+                viewModel.setUserPhonePrefix("${it.countryCodeIso}")
+            }
 
-        verificationFragmentNext.setOnClickListener {
-            sendCode()
+            verificationFragmentNext.setOnClickListener {
+                sendCode()
+            }
+
+            verificationFragFlagLayout.setOnClickListener {
+                val countryCodePicker = CountryChooserBottomSheet()
+                countryCodePicker.show(childFragmentManager, Constants.COUNTRY_CODE_BOTTOM_SHEET)
+            }
+
+            verificationFragmentTerms.setOnClickListener {
+                WebDocsDialog(Constants.WEB_DOCS_TERMS).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
+            }
         }
     }
 
     private fun sendCode() {
+        val phoneStr = binding!!.verificationFragmentInput.getText()
+        viewModel.setUserPhone(phoneStr)
         viewModel.sendPhoneNumber()
     }
 
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
+    }
 
-    override fun onFieldInputChange(curView: FloatingLabelEditText) {
-        curView.getText().let {
-            viewModel.setUserPhone(it)
-        }
+    companion object{
+        const val TAG = "wowPhoneVerification"
     }
 
 

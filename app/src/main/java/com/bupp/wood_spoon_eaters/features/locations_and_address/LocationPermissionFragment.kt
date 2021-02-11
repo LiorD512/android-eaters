@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentLocationPermissionBinding
+import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LocationPermissionFragment : Fragment() {
@@ -39,7 +40,10 @@ class LocationPermissionFragment : Fragment() {
         }
     }
 
-
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
+    }
 
 
 }

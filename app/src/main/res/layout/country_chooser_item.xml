@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="horizontal"
         android:paddingVertical="23dp"
+        android:id="@+id/countryChooserLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,9 +19,10 @@
             tools:text="Ukraine (+380)"/>
 
     <ImageView
-            android:layout_gravity="end"
+            android:visibility="gone"
+            android:layout_gravity="end|center"
             android:id="@+id/countryChooserSelected"
-            android:src="@drawable/icons_price_selected"
+            android:src="@drawable/ic_check_v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 </FrameLayout>

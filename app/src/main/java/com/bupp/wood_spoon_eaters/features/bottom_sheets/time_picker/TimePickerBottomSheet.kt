@@ -50,7 +50,7 @@ class TimePickerBottomSheet: BottomSheetDialogFragment() {
                 0
             )
             parent.layoutParams = layoutParams
-            parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
+            parent.setBackgroundResource(R.drawable.floating_bottom_sheet_bkg)
         }
 
 

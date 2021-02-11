@@ -179,6 +179,7 @@ class Constants {
         //bottom sheet
         const val TIME_PICKER_BOTTOM_SHEET = "time_picker_bottom_sheet"
         const val ADDRESS_MENU_BOTTOM_SHEET = "address_menu_bottom_sheet"
+        const val COUNTRY_CODE_BOTTOM_SHEET = "country_code_bottom_sheet"
 
 
         //cancel order dialog stage

@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AddressMenuBottomSheetBinding
-import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuViewModel
-import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
@@ -48,7 +44,7 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
                 0
             )
             parent.layoutParams = layoutParams
-            parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
+            parent.setBackgroundResource(R.drawable.floating_bottom_sheet_bkg)
         }
 
         val address = requireArguments().getParcelable<Address>("address")

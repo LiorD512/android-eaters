@@ -12,7 +12,6 @@ data class ServerResponse<T> (
     @SerializedName("data") var data: T? = null,
     @SerializedName("errors") var errors: List<WSError>? = null,
     @SerializedName("meta") val meta: Pagination,
-
 )
 
 enum class ErrorEventType {
@@ -27,6 +26,13 @@ enum class ErrorEventType {
 data class WSError(
     @SerializedName("code") val code: Int?,
     @SerializedName("message") val msg: String?
+)
+
+data class CountriesISO(
+    val name: String?,
+    val value: String,
+    val country_code: String?,
+    val flag: String?
 )
 
 data class MetaDataModel(

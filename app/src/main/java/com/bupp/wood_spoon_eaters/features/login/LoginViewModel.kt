@@ -20,7 +20,6 @@ import java.util.ArrayList
 
 
 class LoginViewModel(
-    private val applicationContext: Context,
     val apiService: RepositoryImpl,
     val userRepository: UserRepository,
     val eaterDataManager: EaterDataManager,
@@ -30,10 +29,12 @@ class LoginViewModel(
 ) : ViewModel() {
 
     var phone: String? = null
+    var phonePrefix: String? = null
     var code: String? = null
     var privacyPolicyCb: Boolean = false
 
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
+    val countryCodeEvent: MutableLiveData<CountriesISO> = MutableLiveData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
     val progressData = ProgressData()
 
@@ -50,19 +51,21 @@ class LoginViewModel(
         CODE_RESENT,
     }
 
-
+    fun onCountryCodeSelected(selected: CountriesISO) {
+        countryCodeEvent.postValue(selected)
+    }
 
     fun setUserPhone(phone: String) {
         this.phone = phone
+    }
+    fun setUserPhonePrefix(prefix: String) {
+        this.phonePrefix = prefix
     }
 
     fun setUserCode(code: String) {
         this.code = code
     }
 
-    fun setPhoneCb(isChecked: Boolean) {
-        privacyPolicyCb = isChecked
-    }
 
     fun directToPhoneFrag() {
         navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
@@ -75,18 +78,20 @@ class LoginViewModel(
     //phone verification methods
     private fun validatePhoneData(): Boolean {
         var isValid = true
-        if (phone.isNullOrEmpty()) {
+        if (phone.isNullOrEmpty() || phonePrefix.isNullOrEmpty()) {
             phoneFieldErrorEvent.postValue(ErrorEventType.PHONE_EMPTY)
             isValid = false
         }
         return isValid
     }
 
+
+
     fun sendPhoneNumber() {
         if (validatePhoneData()) {
             progressData.startProgress()
             viewModelScope.launch {
-                val userRepoResult = userRepository.sendPhoneVerification(phone!!)
+                val userRepoResult = userRepository.sendPhoneVerification(phonePrefix!!+phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
                         Log.d("wowLoginVM", "NetworkError")
@@ -248,6 +253,8 @@ class LoginViewModel(
     fun getDietaryList(): ArrayList<SelectableIcon> {
         return metaDataRepository.getDietaryList()
     }
+
+
 
     //Location Permission methods
 //    private val locationData = LocationLiveData(applicationContext)

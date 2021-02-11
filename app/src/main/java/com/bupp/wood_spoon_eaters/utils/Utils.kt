@@ -1,25 +1,28 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.net.Uri
+import android.os.Build
+import android.telephony.TelephonyManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import androidx.core.content.res.ResourcesCompat
-import java.text.SimpleDateFormat
-import java.util.*
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
+import java.util.*
 
 
 object Utils {
