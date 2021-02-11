@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 
-class WebDocsViewModel(val metaDataManager: MetaDataRepository) : ViewModel() {
+class WebDocsViewModel(private val metaDataManager: MetaDataRepository) : ViewModel() {
 
     fun getUrl(type: Int): String {
         when(type){

@@ -68,11 +68,6 @@
                 android:value="@string/default_notification_channel_id" />
 
         <activity
-                android:name=".features.address_and_location.AddressChooserActivity"
-                android:label="@string/title_activity_address_chooser"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar" />
-        <activity
                 android:name=".features.new_order.NewOrderActivity"
                 android:label="@string/title_activity_new_order"
                 android:screenOrientation="portrait"
@@ -89,9 +84,7 @@
             <!-- Branch URI Scheme -->
             <intent-filter>
                 <data android:scheme="woodspoon" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -99,17 +92,11 @@
             <!-- Branch App Links (optional) -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- <data android:scheme="https" android:host="woodspoon.app.link" /> -->
-                <data
-                        android:host="woodspoon.onelink.me"
-                        android:scheme="https" />
-                <!-- example-alternate domain is required for App Links when the Journeys/Web SDK and Deepviews are used inside your website. -->
-                <data
-                        android:host="woodspoon-alternate.app.link"
-                        android:scheme="https" />
+                <!--<data android:scheme="https" android:host="woodspoon.app.link" />-->
+                <data android:scheme="https" android:host="woodspoon.app.link" />
+                <data android:scheme="https" android:host="woodspoon.test-app.link" />
             </intent-filter>
         </activity> <!-- Branch init -->
         <meta-data

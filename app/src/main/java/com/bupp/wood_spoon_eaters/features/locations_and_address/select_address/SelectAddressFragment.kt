@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.FragmentSelectAddressBinding
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.address_menu.AddressMenuBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.managers.location.GPSBroadcastReceiver
 import com.bupp.wood_spoon_eaters.managers.location.GpsUtils
@@ -27,7 +27,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     SelectAddressAdapter.SelectAddressAdapterListener {
 
     private var addressAdapter: SelectAddressAdapter? = null
-    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
+    private var gpsBroadcastReceiver: GPSBroadcastReceiver? = null
     private val viewModel by viewModel<SelectAddressViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
     private var binding: FragmentSelectAddressBinding? = null
@@ -175,8 +175,13 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         registerGpsBroadcastReceiver()
     }
 
-    override fun onDestroy() {
+    override fun onPause() {
         requireContext().unregisterReceiver(gpsBroadcastReceiver)
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        gpsBroadcastReceiver = null
         addressAdapter = null
         super.onDestroy()
     }

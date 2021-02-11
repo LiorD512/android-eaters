@@ -1,58 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.bupp.wood_spoon_eaters.custom_views.ChangingPictureView
+    <ImageView
+            android:id="@+id/bkg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/welcomeFragSliderImages"/>
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/welcome_bkg_image"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="200dp"
+            android:src="@drawable/ic_woodspoon_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+            android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="172dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
+        <TextView
+                style="@style/Reg15Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_woodspoon_logo"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="169dp"/>
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="7.7sp"
+                android:padding="23dp"
+                android:text="Delicious homemade food, from local home chefs, delivered to your door!" />
 
-        <View
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-        <LinearLayout
-                android:orientation="vertical"
-                android:background="@color/white"
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:id="@+id/welcomeFragmentLogin"
                 android:layout_width="match_parent"
-                android:layout_height="172dp">
-
-            <TextView
-                    style="@style/Reg15Black"
-                    android:padding="23dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:letterSpacing="0.03"
-                    android:lineSpacingExtra="7.7sp"
-                    android:gravity="center_horizontal"
-                    android:text="Delicious homemade food, from local home chefs, delivered to your door!"/>
-
-            <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                    android:paddingHorizontal="7dp"
-                    android:id="@+id/welcomeFragmentLogin"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    app:title="@string/welcome_fragment_login_btn"/>
-
-        </LinearLayout>
-
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="7dp"
+                app:title="@string/welcome_fragment_login_btn" />
 
     </LinearLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

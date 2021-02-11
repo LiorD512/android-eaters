@@ -111,4 +111,9 @@ object CountryCodeUtils {
                 String(charArray)
             }
     }
+
+    fun simplifyNumber(context: Context, phoneStr: String): String? {
+        val phoneNumberKit = PhoneNumberKit(context)
+        return phoneNumberKit.formatPhoneNumber(phoneStr, "us")?.replace("+","")
+    }
 }

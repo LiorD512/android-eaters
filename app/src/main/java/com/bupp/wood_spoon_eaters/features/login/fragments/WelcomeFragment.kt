@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
+class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
     private var binding: FragmentWelcomeBinding? = null
     private val viewModel: LoginViewModel by sharedViewModel()
@@ -23,14 +23,7 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     }
 
     private fun onLoginClick() {
-        binding!!.welcomeFragSliderImages.stopAnimation()
         viewModel.directToPhoneFrag()
-    }
-
-    override fun onPause() {
-        Log.d("wowWelcomeFrag","onPause")
-        binding!!.welcomeFragSliderImages.stopAnimation()
-        super.onPause()
     }
 
     override fun onResume() {

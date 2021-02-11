@@ -180,6 +180,7 @@ class Constants {
         const val TIME_PICKER_BOTTOM_SHEET = "time_picker_bottom_sheet"
         const val ADDRESS_MENU_BOTTOM_SHEET = "address_menu_bottom_sheet"
         const val COUNTRY_CODE_BOTTOM_SHEET = "country_code_bottom_sheet"
+        const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
 
 
         //cancel order dialog stage
@@ -228,6 +229,7 @@ class Constants {
         const val MEDIA_TYPE_VIDEO = 169
 
         //WEBDOCS TYPE
+        const val WEB_DOCS_TYPES = "type"
         const val WEB_DOCS_PRIVACY = 0
         const val WEB_DOCS_TERMS = 1
         const val WEB_DOCS_QA = 2

@@ -9,9 +9,8 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.address_menu.AddressMenuViewModel
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountrySelectorViewModel
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.time_picker.TimePickerViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.address_menu.AddressMenuViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressViewModel
@@ -72,7 +71,6 @@ val appModule = module {
     //VIEW MODELS
 
     //bottom sheet
-    viewModel { CountrySelectorViewModel(get()) }
     viewModel { AddressMenuViewModel(get()) }
 
     //splash
@@ -121,7 +119,7 @@ val appModule = module {
 
     //support
     viewModel { SupportViewModel(get())}
-    viewModel { WebDocsViewModel(get())}
+    viewModel { WebDocsViewModel(get()) }
 
 
     //settings

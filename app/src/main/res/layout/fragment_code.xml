@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
 
     <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingHorizontal="15.4dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="7.4dp">
 
         <TextView
-                android:id="@+id/codeFragSendNumber"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoBlack23Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/code_fragment_sub_title"/>
+                android:letterSpacing="0.03"
+                android:text="Enter the 4-digit code" />
+
+        <TextView
+                style="@style/LatoReg13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.2dp"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="6.7sp"
+                android:text="We just sent a verification code to" />
+
+        <TextView
+                android:layout_marginTop="2.5dp"
+                android:id="@+id/codeFragNumber"
+                style="@style/LatoReg13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="6.7sp"
+                tools:text="+1 (xxx) xxx - 0123 " />
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -30,184 +52,175 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:cursorVisible="false"/>
+                    android:cursorVisible="false" />
 
             <LinearLayout
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginRight="9dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginRight="9dp"
                     android:layout_marginBottom="15dp"
                     android:clickable="false"
                     android:focusable="false"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:orientation="horizontal">
 
-                <FrameLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent">
+                <LinearLayout
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_width="53.8dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <androidx.cardview.widget.CardView
-                            android:id="@+id/codeFragInput1Bkg"
-                            android:layout_width="48dp"
-                            android:layout_gravity="center"
-                            android:layout_height="48dp"
-                            android:layout_margin="15dp"
-                            android:elevation="0dp">
+                    <TextView
+                            android:id="@+id/codeFragInput1"
+                            style="@style/Reg15Dark"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            tools:text="1" />
 
-                        <TextView
-                                android:id="@+id/codeFragInput1"
-                                style="@style/Reg15Dark"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/title_input_view_input_bkg"
-                                android:gravity="center"
-                                tools:text="1"/>
+                    <View
+                            android:id="@+id/codeFragUnderline1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_periwinkle"
+                            android:paddingTop="4.4dp" />
 
+                </LinearLayout>
 
-                    </androidx.cardview.widget.CardView>
+                <LinearLayout
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_width="53.8dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                </FrameLayout>
+                    <TextView
+                            android:id="@+id/codeFragInput2"
+                            style="@style/Reg15Dark"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            tools:text="2" />
 
-                <FrameLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent">
+                    <View
+                            android:id="@+id/codeFragUnderline2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_periwinkle"
+                            android:paddingTop="4.4dp" />
 
-                    <androidx.cardview.widget.CardView
-                            android:id="@+id/codeFragInput2Bkg"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="15dp"
-                            android:elevation="0dp">
+                </LinearLayout>
 
-                        <TextView
-                                android:id="@+id/codeFragInput2"
-                                style="@style/Reg15Dark"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/title_input_view_input_bkg"
-                                android:gravity="center"
-                                tools:text="2"/>
+                <LinearLayout
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_width="53.8dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
+                    <TextView
+                            android:id="@+id/codeFragInput3"
+                            style="@style/Reg15Dark"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            tools:text="3" />
 
-                    </androidx.cardview.widget.CardView>
+                    <View
+                            android:id="@+id/codeFragUnderline3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_periwinkle"
+                            android:paddingTop="4.4dp" />
 
-                </FrameLayout>
+                </LinearLayout>
 
+                <LinearLayout
+                        android:layout_width="53.8dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                <FrameLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent">
+                    <TextView
+                            android:id="@+id/codeFragInput4"
+                            style="@style/Reg15Dark"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            tools:text="4" />
 
-                    <androidx.cardview.widget.CardView
-                            android:id="@+id/codeFragInput3Bkg"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="15dp"
-                            android:elevation="0dp">
+                    <View
+                            android:id="@+id/codeFragUnderline4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/light_periwinkle"
+                            android:paddingTop="4.4dp" />
 
-                        <TextView
-                                android:id="@+id/codeFragInput3"
-                                style="@style/Reg15Dark"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/title_input_view_input_bkg"
-                                android:gravity="center"
-                                tools:text="3"/>
-
-
-                    </androidx.cardview.widget.CardView>
-
-                </FrameLayout>
-
-                <FrameLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent">
-
-                    <androidx.cardview.widget.CardView
-                            android:id="@+id/codeFragInput4Bkg"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="15dp"
-                            android:elevation="0dp">
-
-                        <TextView
-                                android:id="@+id/codeFragInput4"
-                                style="@style/Reg15Dark"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/title_input_view_input_bkg"
-                                android:gravity="center"
-                                tools:text="4"/>
-
-
-                    </androidx.cardview.widget.CardView>
-
-                </FrameLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
         </FrameLayout>
 
         <TextView
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                android:paddingTop="5.4dp"
-                android:text="We still need the code we sent you"
-                style="@style/Reg11Red"
-                android:drawablePadding="5.4dp"
                 android:id="@+id/codeFragInputError"
+                style="@style/Reg11Red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="5.4dp"
+                android:paddingTop="5.4dp"
+                android:text="We still need the code we sent you"
+                android:visibility="invisible"
                 app:drawableStartCompat="@drawable/ic_code_error" />
+
+        <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="22.8dp"
                 android:orientation="horizontal">
 
             <TextView
                     style="@style/Reg13Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/code_fragment_help"/>
+                    android:text="@string/code_fragment_help" />
 
             <TextView
                     android:id="@+id/codeFragResendCode"
-                    style="@style/SemiBold13Blue"
+                    style="@style/LatoBold11Teal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="@string/code_fragment_resend_btn"/>
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/pale_grey_cornered_rect"
+                    android:gravity="center_horizontal"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="8.6sp"
+                    android:paddingHorizontal="9dp"
+                    android:paddingVertical="5dp"
+                    android:text="Press here to resend" />
+
 
         </LinearLayout>
 
-        <View
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                 android:id="@+id/codeFragNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="@string/code_fragment_next_btn"/>
+                app:title="@string/code_fragment_next_btn" />
 
-        <com.bupp.wood_spoon_eaters.custom_views.NumPadView
-                android:id="@+id/codeFragNumPad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-</FrameLayout>
+    <com.bupp.wood_spoon_eaters.custom_views.NumPadView
+            android:id="@+id/codeFragNumPad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
+</LinearLayout>

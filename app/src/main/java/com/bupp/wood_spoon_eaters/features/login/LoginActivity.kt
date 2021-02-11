@@ -71,12 +71,6 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
                     LoginViewModel.NavigationEventType.CODE_RESENT -> {
                         Toast.makeText(this, "Code sent!", Toast.LENGTH_SHORT).show()
                     }
-                    LoginViewModel.NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_CODE -> {
-                        redirectToLocationPermission(true)
-                    }
-                    LoginViewModel.NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_SIGNUP -> {
-                        redirectToLocationPermission(false)
-                    }
                     LoginViewModel.NavigationEventType.OPEN_MAIN_ACT -> {
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
@@ -132,15 +126,15 @@ class LoginActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
         findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
     }
 
-    private fun redirectToLocationPermission(isFromCodeScreen: Boolean) {
-        setHeaderView(getString(R.string.location_permission_title))
-        setTitleVisibility(View.VISIBLE)
-        if(isFromCodeScreen){
-            findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_locationPermissionFragment)
-        }else{
-            findNavController(R.id.loginActContainer).navigate(R.id.action_createAccountFragment_to_locationPermissionFragment)
-        }
-    }
+//    private fun redirectToLocationPermission(isFromCodeScreen: Boolean) {
+//        setHeaderView(getString(R.string.location_permission_title))
+//        setTitleVisibility(View.VISIBLE)
+//        if(isFromCodeScreen){
+//            findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_locationPermissionFragment)
+//        }else{
+//            findNavController(R.id.loginActContainer).navigate(R.id.action_createAccountFragment_to_locationPermissionFragment)
+//        }
+//    }
 
     fun setTitleVisibility(visibility: Int) {
         loginActHeaderView.visibility = visibility

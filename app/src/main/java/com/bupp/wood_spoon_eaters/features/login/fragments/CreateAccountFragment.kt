@@ -9,30 +9,28 @@ import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsG
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.common.Constants
-import kotlinx.android.synthetic.main.fragment_create_account.*
+import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class CreateAccountFragment : Fragment(R.layout.fragment_create_account), EmptyIconsGridView.OnItemSelectedListener,
-    CuisinesChooserDialog.CuisinesChooserListener {
+class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
-
+    var binding: FragmentCreateAccountBinding? = null
     val viewModel by sharedViewModel<LoginViewModel>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentCreateAccountBinding.bind(view)
         initUi()
         initObservers()
 
     }
 
     private fun initUi() {
-        createAccountFragmentNext.setOnClickListener {updateEater()}
+        binding!!.createAccountFragmentNext.setOnClickListener {updateEater()}
 
-        createAccountFragmentCookingGridView.setListener(this)
-        createAccountFragmentDietaryGridView.initIconsGrid(viewModel.getDietaryList(), Constants.MULTI_SELECTION)
     }
 
     private fun initObservers() {
@@ -49,28 +47,44 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account), EmptyI
     }
 
     private fun updateEater() {
-        val fullName = createAccountFragmentFullName.getText()
-        val email = createAccountFragmentEmail.getText()
-        if(fullName.isEmpty()){
-            createAccountFragmentFullName.showError()
-        }
-        if(email.isEmpty()){
-            createAccountFragmentEmail.showError()
-        }
-        if(fullName.isNotEmpty() && email.isNotEmpty()){
-            viewModel.updateClientAccount(requireContext(), fullName, email, createAccountFragmentCookingGridView.getSelectedCuisines(),
-                createAccountFragmentDietaryGridView.getSelectedItems())
+        if(validateFields()){
+            with(binding!!){
+                val firstName = createAccountFragmentFirstName.getText()
+                val lastName = createAccountFragmentLastName.getText()
+                val email = createAccountFragmentEmail.getText()
+
+                viewModel.updateClientAccount(requireContext(), firstName, lastName, email)
+            }
         }
     }
 
-    override fun OnEmptyItemSelected() {
-        var cuisineFragment = CuisinesChooserDialog(this, viewModel.getCuisineList(), Constants.MULTI_SELECTION)
-        cuisineFragment.setSelectedCuisine(createAccountFragmentCookingGridView.getSelectedCuisines())
-        cuisineFragment.show(childFragmentManager, "CookingCuisine")
+    private fun validateFields(): Boolean {
+        var isValid = true
+        with(binding!!){
+            if(createAccountFragmentFirstName.getText().isEmpty()){
+                createAccountFragmentFirstName.showError()
+                isValid = false
+            }
+            if(createAccountFragmentLastName.getText().isEmpty()){
+                createAccountFragmentLastName.showError()
+                isValid = false
+            }
+            if(createAccountFragmentEmail.getText().isEmpty()){
+                createAccountFragmentEmail.showError()
+                isValid = false
+            }
+        }
+        return isValid
     }
 
-    override fun onCuisineChoose(selectedCuisines: ArrayList<SelectableIcon>) {
-        createAccountFragmentCookingGridView.updateItems(selectedCuisines)
-    }
+//    override fun OnEmptyItemSelected() {
+//        var cuisineFragment = CuisinesChooserDialog(this, viewModel.getCuisineList(), Constants.MULTI_SELECTION)
+//        cuisineFragment.setSelectedCuisine(createAccountFragmentCookingGridView.getSelectedCuisines())
+//        cuisineFragment.show(childFragmentManager, "CookingCuisine")
+//    }
+//
+//    override fun onCuisineChoose(selectedCuisines: ArrayList<SelectableIcon>) {
+//        createAccountFragmentCookingGridView.updateItems(selectedCuisines)
+//    }
 
 }

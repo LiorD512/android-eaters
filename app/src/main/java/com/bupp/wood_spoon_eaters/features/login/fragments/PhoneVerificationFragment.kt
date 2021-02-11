@@ -2,24 +2,18 @@ package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.text.Spanned
-import android.graphics.Color
-import android.text.TextPaint
-import androidx.lifecycle.Observer
-import android.text.SpannableString
-import com.bupp.wood_spoon_eaters.R
 import androidx.fragment.app.Fragment
-import android.text.style.ClickableSpan
-import android.text.method.LinkMovementMethod
+import androidx.lifecycle.Observer
+import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
+import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
-import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
-import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
-import com.bupp.wood_spoon_eaters.features.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 
 
 class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification),
@@ -43,10 +37,12 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
                 ErrorEventType.PHONE_EMPTY -> {
                     binding!!.verificationFragmentInput.showError()
                 }
-                else -> {}
+                else -> {
+                }
             }
         })
         viewModel.countryCodeEvent.observe(viewLifecycleOwner, {
+            viewModel.setUserPhonePrefix("${it.country_code}")
             binding!!.verificationFragmentInput.setPrefix("+${it.country_code}")
             binding!!.verificationFragFlag.text = it.flag
         })
@@ -78,8 +74,11 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
 
     private fun sendCode() {
         val phoneStr = binding!!.verificationFragmentInput.getText()
-        viewModel.setUserPhone(phoneStr)
-        viewModel.sendPhoneNumber()
+        val phone = CountryCodeUtils.simplifyNumber(requireContext(), phoneStr)
+        phone?.let{
+            viewModel.setUserPhone(it)
+            viewModel.sendPhoneNumber()
+        }
     }
 
     override fun onDestroy() {

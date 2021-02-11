@@ -45,8 +45,6 @@ class LoginViewModel(
         OPEN_PHONE_SCREEN,
         OPEN_CODE_SCREEN,
         OPEN_MAIN_ACT,
-        OPEN_LOCATION_PERMISSION_FROM_CODE,
-        OPEN_LOCATION_PERMISSION_FROM_SIGNUP,
         OPEN_SIGNUP_SCREEN,
         CODE_RESENT,
     }
@@ -64,6 +62,15 @@ class LoginViewModel(
 
     fun setUserCode(code: String) {
         this.code = code
+    }
+
+    fun getCensoredPhone(): String{
+        phonePrefix?.let{
+            phone?.let{
+                return "$phonePrefix (xxx) xxx - ${it.takeLast(4)}"
+            }
+        }
+        return "error on getting phone"
     }
 
 
@@ -119,7 +126,7 @@ class LoginViewModel(
         if (validatePhoneData()) {
             progressData.startProgress()
             viewModelScope.launch {
-                val userRepoResult = userRepository.sendPhoneVerification(phone!!)
+                val userRepoResult = userRepository.sendPhoneVerification(phonePrefix!!+phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
                         Log.d("wowLoginVM", "NetworkError")
@@ -150,7 +157,7 @@ class LoginViewModel(
             phone?.let { phone ->
                 progressData.startProgress()
                 viewModelScope.launch {
-                    val userRepoResult = userRepository.sendCodeAndPhoneVerification(phone, code!!)
+                    val userRepoResult = userRepository.sendCodeAndPhoneVerification(phonePrefix!!+phone, code!!)
                     when (userRepoResult.type) {
                         UserRepository.UserRepoStatus.SERVER_ERROR -> {
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - NetworkError")
@@ -164,7 +171,7 @@ class LoginViewModel(
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
                             if (userRepository.isUserSignedUp()) {
-                                navigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_CODE)
+                                navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
                             } else {
                                 navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
@@ -184,37 +191,17 @@ class LoginViewModel(
 
     fun updateClientAccount(
         context: Context,
-        fullName: String,
-        email: String,
-        cuisineIcons: ArrayList<SelectableIcon>?,
-        dietaryIcons: ArrayList<SelectableIcon>?
+        firstName: String,
+        lastName: String,
+        email: String
     ) {
         progressData.startProgress()
-        val firstAndLast: Pair<String, String> = Utils.getFirstAndLastNames(fullName)
-        val firstName = firstAndLast.first
-        val lastName = firstAndLast.second
 
         val eater = EaterRequest()
         eater.firstName = firstName
         eater.lastName = lastName
         eater.email = email
 
-        val arrayOfCuisinesIds = arrayListOf<Int>()
-        val arrayOfDietsIds = arrayListOf<Int>()
-
-        if (!cuisineIcons.isNullOrEmpty()) {
-            for (cuisine in cuisineIcons) {
-                arrayOfCuisinesIds.add(cuisine.id.toInt())
-            }
-        }
-        if (!dietaryIcons.isNullOrEmpty()) {
-            for (diet in dietaryIcons) {
-                arrayOfDietsIds.add(diet.id.toInt())
-            }
-        }
-
-        eater.cuisineIds = arrayOfCuisinesIds
-        eater.dietIds = arrayOfDietsIds
         postClient(context, eater)
 
     }
@@ -235,7 +222,7 @@ class LoginViewModel(
                     Log.d("wowLoginVM", "Success")
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
-                    navigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_FROM_SIGNUP)
+                    navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
                 }
                 else -> {
                     Log.d("wowLoginVM", "NetworkError")
@@ -246,13 +233,13 @@ class LoginViewModel(
         }
     }
 
-    fun getCuisineList(): ArrayList<SelectableIcon> {
-        return metaDataRepository.getCuisineListSelectableIcons()
-    }
-
-    fun getDietaryList(): ArrayList<SelectableIcon> {
-        return metaDataRepository.getDietaryList()
-    }
+//    fun getCuisineList(): ArrayList<SelectableIcon> {
+//        return metaDataRepository.getCuisineListSelectableIcons()
+//    }
+//
+//    fun getDietaryList(): ArrayList<SelectableIcon> {
+//        return metaDataRepository.getDietaryList()
+//    }
 
 
 

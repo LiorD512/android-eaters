@@ -32,6 +32,7 @@
     <color name="dark_50">#80252126</color>
     <color name="dark_80">#cc252126</color>
     <color name="purpley_grey">#929092</color>
+    <color name="purpley_grey_two">#918f91</color>
     <color name="silver">#dcdcdf</color>
     <color name="switch_silver">#e5e5e5</color>
     <color name="silver_20">#33dcdcdf</color>
@@ -59,6 +60,7 @@
     <color name="seafoam_blue">#7ccbd2</color>
     <color name="seafoam_blue_20">#337ccbd2</color>
     <color name="pale_grey">#e5f4f5</color>
+    <color name="greyish_brown">#494949</color>
 
 </resources>
 
