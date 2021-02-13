@@ -18,6 +18,8 @@ import com.google.android.gms.location.SettingsClient
 
 class GpsUtils(private val context: Context? = null) {
 
+    //Use to show gps-enable system dialog.
+
     companion object{
         const val TAG = "wowGpsUtil"
     }
@@ -83,26 +85,4 @@ class GpsUtils(private val context: Context? = null) {
         fun gpsStatus(isGPSEnable: Boolean)
     }
 
-    fun getClosestAddressToLocation(mLocation: Address?, userAddresses: List<Address>): Address? {
-        if (mLocation != null && userAddresses.isNotEmpty()) {
-            for (address in userAddresses) {
-                if (isLocationsNear(mLocation.lat!!, mLocation.lng!!, address.lat!!, address.lng!!)) {
-                    return address
-                }
-            }
-        }
-        return null
-    }
-
-    private fun isLocationsNear(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Boolean {
-        val loc1 = Location("")
-        loc1.latitude = lat1
-        loc1.longitude = lng1
-
-        val loc2 = Location("")
-        loc2.latitude = lat2
-        loc2.longitude = lng2
-
-        return loc1.distanceTo(loc2) < Constants.MINIMUM_LOCATION_DISTANCE
-    }
 }

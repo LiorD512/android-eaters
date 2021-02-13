@@ -42,7 +42,7 @@ class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,
         ordersHistoryFragRecyclerView.layoutManager = LinearLayoutManager(context)
 
         val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        ContextCompat.getDrawable(context!!, R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
+        ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
         ordersHistoryFragRecyclerView.addItemDecoration(decoration)
 
         viewModel.getOrdersEvent.observe(this, Observer { event ->
@@ -58,7 +58,7 @@ class OrdersHistoryFragment() : Fragment(), HeaderView.HeaderViewListener,
 
     private fun initList(orderHistory: ArrayList<Order>) {
         if(orderHistory.size > 0){
-            val adapter = OrdersHistoryAdapter(context!!, orderHistory, this)
+            val adapter = OrdersHistoryAdapter(requireContext(), orderHistory, this)
             ordersHistoryFragRecyclerView.adapter = adapter
         }else{
             ordersHistoryFragEmpty.visibility = View.VISIBLE

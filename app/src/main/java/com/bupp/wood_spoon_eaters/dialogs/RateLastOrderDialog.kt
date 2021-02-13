@@ -43,7 +43,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.rate_last_order_dialog, null)
-        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -88,7 +88,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
     private fun handleOrderDetails(order: Order) {
         rateLastOrderDishesRecyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = RateLastOrderAdapter(context!!, order.orderItems, this)
+        adapter = RateLastOrderAdapter(requireContext(), order.orderItems, this)
         rateLastOrderDishesRecyclerView.adapter = adapter
 
 

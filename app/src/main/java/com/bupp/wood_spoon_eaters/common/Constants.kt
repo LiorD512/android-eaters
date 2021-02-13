@@ -5,6 +5,12 @@ import android.Manifest
 class Constants {
     companion object {
 
+        //feed banners
+        const val NO_BANNER = -1
+        const val BANNER_NO_GPS = 0
+        const val BANNER_MY_LOCATION = 1
+        const val BANNER_KNOWN_ADDRESS = 2
+
         //activities intent param
         const val START_WITH = "startWith"
         const val NEW_ORDER_MENU_ITEM_ID = "menuItemId"

@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.ReportTopic
 import kotlinx.android.synthetic.main.report_issue_item.view.*
 
-class ReportIssueAdapter constructor(val context: Context, private var reportTopics: ArrayList<ReportTopic>, val listener: ReportIssueAdapterListener) :
+class ReportIssueAdapter constructor(val context: Context, private var reportTopics: List<ReportTopic>, val listener: ReportIssueAdapterListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), ReportIssueView.ReportIssueViewListener {
 
     var reportsHash: LinkedHashMap<Long, ReportRequest> = linkedMapOf()

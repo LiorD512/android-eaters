@@ -7,10 +7,10 @@ import com.bupp.wood_spoon_eaters.model.Address
 
 object LocationUtils {
 
-    fun getClosestAddressToLocation(mLocation: Address?, userAddresses: List<Address>): Address? {
-        if (mLocation != null && userAddresses.isNotEmpty()) {
+    fun getClosestAddressToLocation(currentLat: Double?, currentLng: Double?, userAddresses: List<Address>): Address? {
+        if (currentLat != null && currentLng != null && userAddresses.isNotEmpty()) {
             for (address in userAddresses) {
-                if (isLocationsNear(mLocation.lat!!, mLocation.lng!!, address.lat!!, address.lng!!)) {
+                if (isLocationsNear(currentLat, currentLng, address.lat!!, address.lng!!)) {
                     return address
                 }
             }

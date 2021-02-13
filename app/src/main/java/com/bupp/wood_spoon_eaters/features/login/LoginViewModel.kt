@@ -11,16 +11,13 @@ import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.managers.location.LocationLiveData
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
-import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 
 class LoginViewModel(
-    val apiService: RepositoryImpl,
+    val apiService: UserRepositoryImpl,
     val userRepository: UserRepository,
     val eaterDataManager: EaterDataManager,
     val metaDataRepository: MetaDataRepository,

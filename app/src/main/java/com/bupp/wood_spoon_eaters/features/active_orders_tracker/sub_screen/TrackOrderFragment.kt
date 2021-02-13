@@ -286,8 +286,8 @@ class TrackOrderFragment() : Fragment(),
 ////    private fun clearProgress() {
 ////        for (cb in progressList){
 ////            cb.isSelected = false
-////            cb.text = Utils.setCustomFontTypeSpan(context!!,cb.text.toString(),0,cb.text.toString().length,R.font.open_sans_reg)
-////            cb.setTextColor(ContextCompat.getColor(context!!,R.color.dark_50))
+////            cb.text = Utils.setCustomFontTypeSpan(requireContext(),cb.text.toString(),0,cb.text.toString().length,R.font.open_sans_reg)
+////            cb.setTextColor(ContextCompat.getColor(requireContext(),R.color.dark_50))
 ////        }
 ////    }
 ////
@@ -299,8 +299,8 @@ class TrackOrderFragment() : Fragment(),
 ////        var cbItem = progressList[stepNum]
 ////
 ////        cbItem.isSelected = true
-////        cbItem.text = Utils.setCustomFontTypeSpan(context!!,cbItem.text.toString(),0,cbItem.text.toString().length,R.font.open_sans_semi_bold)
-////        cbItem.setTextColor(ContextCompat.getColor(context!!,R.color.dark))
+////        cbItem.text = Utils.setCustomFontTypeSpan(requireContext(),cbItem.text.toString(),0,cbItem.text.toString().length,R.font.open_sans_semi_bold)
+////        cbItem.setTextColor(ContextCompat.getColor(requireContext(),R.color.dark))
 ////
 ////        setOrderProgress(stepNum - 1)
 ////    }

@@ -58,8 +58,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         FETCH_MY_ADDRESS
     }
 
-//    data class NavigationEvent(val type: NavigationEventType, val address: Address? = null)
-//    data class AddressFoundEvent(val address: Address? = null)
     val addressFoundUiEvent = MutableLiveData<AddressRequest>()
 
     fun updateMyAddresses(){
@@ -71,21 +69,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         mainNavigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_SCREEN)
     }
 
-    fun onChangeLocationClick() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER)
-    }
-
-    fun onAddressChooserDone() {
-        mainNavigationEvent.postValue(NavigationEventType.DONE_WITH_LOCATION_AND_ADDRESS)
-    }
-
-    fun onEditAddressClick(address: Address) {
-//        mainNavigationEvent.postValue(NavigationEvent(NavigationEventType.OPEN_EDIT_ADDRESS_SCREEN, address))
-    }
-
-    fun onAddNewAddressClick() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADD_NEW_ADDRESS_SCREEN)
-    }
 
     fun onSearchAddressAutoCompleteClick() {
         mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE)
@@ -178,7 +161,10 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
-                        mainNavigationEvent.postValue(NavigationEventType.DONE_WITH_LOCATION_AND_ADDRESS)
+                        mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
+                        userRepoResult.eater?.addresses?.get(0)?.let{ address ->
+                            eaterDataManager.updateSelectedAddress(address)
+                        }
                     }
                     else -> {
                         Log.d(TAG, "NetworkError")

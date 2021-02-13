@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.main
 
-import android.app.Activity
 import android.util.Log
 import androidx.core.util.Consumer
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +14,6 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
-import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,36 +24,34 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
-    private val locationManager: LocationManager,
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val orderManager: OrderManager,
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 
     val progressData = ProgressData()
-    val mainActHeaderEvent = MutableLiveData<MainActActionEvent>()
-    data class MainActActionEvent(val time: String?, val address: Address?)
 
     init {
         eventsManager.initSegment()
         fcmManager.initFcmListener()
-//        locationManager.updateFinalAddress()
-//        initHeaderUi()
     }
 
-    private fun initHeaderUi() {
-//        val lastSelectedTime = deliveryTimeManager.getDeliveryTimeUiString()
-//        val lastSelectedTime = eaterDataManager.getDeliveryTimeLiveData().value?.
-//        val currentAddress = eaterDataManager.getLastChosenAddress()
-//        mainActHeaderEvent.postValue(MainActActionEvent(lastSelectedTime, currentAddress))
+    val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
+    enum class MainNavigationEvent{
+        START_LOCATION_AND_ADDRESS_ACTIVITY,
     }
 
-//    fun refreshMainHeaderUi() {
-//        initHeaderUi()
-//    }
 
-//    fun getGpsLiveData() = locationManager.getGpsData()
+    fun startLocationAndAddressAct(){
+        mainNavigationEvent.postValue(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+    }
+
+    val bannerEvent = MutableLiveData<Int>()
+    fun showBanner(bannerType: Int) {
+        bannerEvent.postValue(bannerType!!)
+    }
+
+
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
-    fun getFinalAddressLiveData() = eaterDataManager.getFinalAddressLiveData()
     fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
     val navigationEvent = MutableLiveData<NavigationEventType>()
@@ -68,41 +64,8 @@ class MainViewModel(
         dishClickEvent.postRawValue(menuItemId)
     }
 
-//    fun checkLocationStatus() {
-//        when(eaterDataManager.getLocationStatus().type){
-//            EaterDataManager.LocationStatusType.CURRENT_LOCATION -> {
-//
-//            }
-//            EaterDataManager.LocationStatusType.KNOWN_LOCATION -> {
-//
-//            }
-//            EaterDataManager.LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
-//
-//            }
-//            EaterDataManager.LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
-//
-//            }
-//            EaterDataManager.LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
-//
-//            }
-//        }
-//    }
 
-
-//    fun getLastOrderTime(): String? {
-//        return eaterDataManager.getFeedSearchTimeString()
-//    }
-//
-//    fun getCurrentAddress(): Address? {
-//        val currentAddress = eaterDataManager.getLastChosenAddress()
-//        if (currentAddress == null) {
-//            eaterDataManager.setLocationListener(this)
-//        }
-//        return currentAddress
-//    }
-
-
-    var waitingForAddressAction: Boolean = false
+//    var waitingForAddressAction: Boolean = false
     private var hasPendingOrder: Boolean = false
     private var hasActiveOrder: Boolean = false
     val addressUpdateActionEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
@@ -404,9 +367,6 @@ class MainViewModel(
     fun getContactUsTextNumber(): String {
         return metaDataRepository.getContactUsTextNumber()
     }
-
-
-
 
 
 }

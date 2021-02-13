@@ -1,22 +1,19 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import android.content.Context
-import android.content.Intent
 import android.util.Log
-import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.network.ApiSettings
-import com.bupp.wood_spoon_eaters.network.test.RepositoryImpl
-import com.bupp.wood_spoon_eaters.network.test.ResultHandler
+import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class UserRepository(
-    private val apiService: RepositoryImpl,
+    private val apiService: UserRepositoryImpl,
     private val apiSettings: ApiSettings
 ) {
 

@@ -53,6 +53,12 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
     ): ServerResponse<List<FeedFlow>>
 
+    @GET("eaters/me/feed")
+    suspend fun getFeed(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<List<Feed>>
+
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
     fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
@@ -181,11 +187,11 @@ interface ApiService {
 
 
 //    //Feed
-    @GET("eaters/me/feed")
-    fun getFeed(
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): Call<ServerResponse<ArrayList<Feed>>>
+//    @GET("eaters/me/feed")
+//    fun getFeed(
+//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): Call<ServerResponse<ArrayList<Feed>>>
 
 
     //dish likes

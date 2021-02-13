@@ -41,7 +41,7 @@ class SearchViewModel(val api: ApiService, val metaDataRepository: MetaDataRepos
     var searchResult: ArrayList<Search>? = null
 
 
-    fun getCuisineLabels(): ArrayList<CuisineLabel> {
+    fun getCuisineLabels(): List<CuisineLabel> {
         return metaDataRepository.getCuisineList()
     }
 

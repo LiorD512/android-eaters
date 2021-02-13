@@ -14,7 +14,7 @@ import retrofit2.Response
 
 class ReportIssueViewModel(val api: ApiService, val metaDataRepository: MetaDataRepository) : ViewModel() {
 
-    fun getReportTopics(): ArrayList<ReportTopic> {
+    fun getReportTopics(): List<ReportTopic> {
         return metaDataRepository.getReportTopics()
     }
 

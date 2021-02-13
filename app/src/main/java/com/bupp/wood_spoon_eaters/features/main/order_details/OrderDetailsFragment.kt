@@ -65,7 +65,7 @@ class OrderDetailsFragment() : Fragment() {
 
     private fun handleOrderItems(curOrder: Order) {
         orderDetailsFragDishesRecycler.layoutManager = LinearLayoutManager(context)
-        adapter = OrderDetailsAdapter(context!!, curOrder.orderItems)
+        adapter = OrderDetailsAdapter(requireContext(), curOrder.orderItems)
 
 
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -75,7 +75,7 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragDishesRecycler.adapter = adapter
 
         val firstOrderItem = curOrder.orderItems.first()
-        Glide.with(context!!).load(firstOrderItem.dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(orderDetailsFragDishImage)
+        Glide.with(requireContext()).load(firstOrderItem.dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(orderDetailsFragDishImage)
 
         val tax: Double = curOrder.tax.value
         val serviceFee = curOrder.serviceFee.value

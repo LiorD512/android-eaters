@@ -26,6 +26,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class NewOrderMainViewModel(
+    val feedDataManager: FeedDataManager,
     val cartManager: CartManager,
     val metaDataRepository: MetaDataRepository,
     val orderManager: OrderManager,
@@ -35,6 +36,8 @@ class NewOrderMainViewModel(
     val paymentManager: PaymentManager
 ) : ViewModel(),
     EphemeralKeyProvider.EphemeralKeyProviderListener {
+
+
 
     var menuItemId: Long? = null
     val progressData = ProgressData()

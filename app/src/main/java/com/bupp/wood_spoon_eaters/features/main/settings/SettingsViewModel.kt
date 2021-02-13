@@ -45,7 +45,7 @@ class SettingsViewModel(private val appSettings: AppSettings, val api: ApiServic
         settingsDetails.postValue(SettingsDetails(useLocation, sendAlerts, sendEmails))
     }
 
-    fun getNotificationsGroup(): ArrayList<NotificationGroup> {
+    fun getNotificationsGroup(): List<NotificationGroup> {
         return metaDataRepository.getNotificationsGroup()
     }
 

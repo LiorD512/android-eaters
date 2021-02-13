@@ -24,7 +24,7 @@ class RatingsDialog(val ratings: Review) : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.ratings_dialog, null)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -43,7 +43,7 @@ class RatingsDialog(val ratings: Review) : DialogFragment() {
         if(ratings.comments != null){
             ratingsDialogDishesRecyclerView.layoutManager = LinearLayoutManager(context)
             ratingsDialogDishesRecyclerView.addItemDecoration(RatingItemDecoration())
-            adapter = RatingsAdapter(context!!, ratings.comments)
+            adapter = RatingsAdapter(requireContext(), ratings.comments)
             ratingsDialogDishesRecyclerView.adapter = adapter
         }
     }

@@ -58,40 +58,11 @@ class NewOrderActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_order)
 
-        viewModel.initNewOrderActivity(intent)
         initUi()
-        checkActivityIntent()
-
         initObservers()
+//        checkActivityIntent()
 
-
-        viewModel.ephemeralKeyProvider.observe(this, Observer { event ->
-            if (!event.isSuccess) {
-                Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        viewModel.orderStatusEvent.observe(this, Observer { event ->
-            if (event.hasActiveOrder) {
-//                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-            } else {
-                viewModel.initNewOrder()
-            }
-        })
-
-        viewModel.navigationEvent.observe(this, Observer { event ->
-            event?.let {
-                if(event.menuItemId != (-1).toLong()) {
-                    viewModel.checkOrderStatus()
-                    loadSingleDish(event.menuItemId)
-                }
-                if (event.isCheckout) {
-//                    onCheckout()
-                } else if (event.menuItemId == (-1).toLong() && !event.isCheckout) {
-                    finish()
-                }
-            }
-        })
+        viewModel.initNewOrderActivity(intent)
 
     }
 
@@ -119,6 +90,42 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
     private fun initObservers() {
+        viewModel.ephemeralKeyProvider.observe(this, { event ->
+            if (!event.isSuccess) {
+                Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.orderStatusEvent.observe(this, Observer { event ->
+            if (event.hasActiveOrder) {
+//                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+            } else {
+                viewModel.initNewOrder()
+            }
+        })
+
+        viewModel.navigationEvent.observe(this, Observer { event ->
+            event?.let {
+                if(event.menuItemId != (-1).toLong()) {
+                    viewModel.checkOrderStatus()
+                    loadSingleDish(event.menuItemId)
+                }
+                if (event.isCheckout) {
+//                    onCheckout()
+                } else if (event.menuItemId == (-1).toLong() && !event.isCheckout) {
+                    finish()
+                }
+            }
+        })
+
+
+
+
+
+
+
+
+
         viewModel.actionEvent.observe(this, Observer{
             when(it){
                 NewOrderMainViewModel.NewOrderActionEvent.OPEN_ADDRESS_CHOOSER -> {

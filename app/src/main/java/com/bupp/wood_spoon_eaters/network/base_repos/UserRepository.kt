@@ -1,11 +1,12 @@
-package com.bupp.wood_spoon_eaters.network.test
+package com.bupp.wood_spoon_eaters.network.base_repos
 
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
+import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
 
-interface Repository {
+
+interface UserRepository {
 
     suspend fun getCode(phone: String): ResultHandler<String>
     suspend fun validateCode(phone: String, code: String): ResultHandler<ServerResponse<Eater>>
@@ -15,9 +16,10 @@ interface Repository {
 
     suspend fun postNewAddress(addressRequest: AddressRequest): ResultHandler<ServerResponse<Address>>
     suspend fun deleteAddress(addressId: Long): ResultHandler<ServerResponse<Void>>
+
 }
 
-class RepositoryImpl(private val service: ApiService) : Repository {
+class UserRepositoryImpl(private val service: ApiService) : UserRepository {
 
     override suspend fun getCode(phone: String): ResultHandler<String> {
         return safeApiCall { service.getCode(phone).toString() }

@@ -27,7 +27,7 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.share_dialog, null)
-        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -48,6 +48,6 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
         val s = shareDialogText.text as Spannable
         val start = 0
         val end = "Share ".length
-        s.setSpan(ForegroundColorSpan(ContextCompat.getColor(context!!,R.color.teal_blue)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.teal_blue)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 }

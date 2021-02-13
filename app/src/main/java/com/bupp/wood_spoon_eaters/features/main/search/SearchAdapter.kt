@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.search_dish_item.view.*
 import kotlin.collections.ArrayList
 
 
-class SearchAdapter(val context: Context, val cuisineLabels: ArrayList<CuisineLabel>, val listener: SearchAdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(),ManyCooksView.ManyCooksViewListener {
+class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>, val listener: SearchAdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(),ManyCooksView.ManyCooksViewListener {
 
     private var hasCooks: Boolean = false
     private var hasDishes: Boolean = false

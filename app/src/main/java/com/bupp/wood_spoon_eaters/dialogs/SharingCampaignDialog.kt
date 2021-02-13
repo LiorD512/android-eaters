@@ -40,7 +40,7 @@ class SharingCampaignDialog() : DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.sharing_campaign_dialog, null)
-        getDialog()!!.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)));
+        getDialog()!!.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
         return view
     }
 
@@ -68,7 +68,7 @@ class SharingCampaignDialog() : DialogFragment(){
                     .setTopLeftCorner(CornerFamily.ROUNDED, radius)
                     .build()
             )
-            Glide.with(context!!).load(it.thumbnail).into(sharingCampaignDialogCover)
+            Glide.with(requireContext()).load(it.thumbnail).into(sharingCampaignDialogCover)
 
             sharingCampaignDialogBody.text = it.description
             it.shareBtnText?.let{

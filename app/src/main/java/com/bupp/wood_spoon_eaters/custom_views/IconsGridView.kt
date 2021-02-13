@@ -60,7 +60,7 @@ class IconsGridView : FrameLayout, IconsGridViewAdapter.IconGridViewAdapterListe
         }
     }
 
-    public fun initIconsGrid(icons: ArrayList<SelectableIcon>, choiceCount: Int) {
+    public fun initIconsGrid(icons: List<SelectableIcon>, choiceCount: Int) {
         iconsGridViewList.layoutManager = GridLayoutManager(context, 5)
 
         //This will for default android divider

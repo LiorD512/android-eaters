@@ -42,7 +42,7 @@ class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment()
         certificatesList.addItemDecoration(divider)
         var adapter =
             CertificatesAdapter(
-                context!!,
+                requireContext(),
                 certificates
             )
         certificatesList.adapter = adapter

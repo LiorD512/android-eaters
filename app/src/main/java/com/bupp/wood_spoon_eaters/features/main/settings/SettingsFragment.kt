@@ -61,7 +61,7 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
         val userSettings = viewModel.getEaterNotificationsGroup()
         Log.d("wowSettings","userSettings ids: $userSettings")
 
-        adapter = NotificationsGroupAdapter(context!!, notificationGroupList, userSettings!!, this)
+        adapter = NotificationsGroupAdapter(requireContext(), notificationGroupList, userSettings!!, this)
         settingsFragNotificationGroupList.adapter = adapter
     }
 

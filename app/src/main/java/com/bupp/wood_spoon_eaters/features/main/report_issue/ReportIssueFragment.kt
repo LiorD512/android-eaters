@@ -41,7 +41,7 @@ class ReportIssueFragment(val orderId: Long) : Fragment(), InputTitleView.InputT
     private fun initUi() {
         val reportTopics = viewModel.getReportTopics()
         reportIssueList.layoutManager = LinearLayoutManager(context)
-        adapter = ReportIssueAdapter(context!!, reportTopics, this)
+        adapter = ReportIssueAdapter(requireContext(), reportTopics, this)
         reportIssueList.adapter = adapter
 
         reportFragReportBtn.setBtnEnabled(false)

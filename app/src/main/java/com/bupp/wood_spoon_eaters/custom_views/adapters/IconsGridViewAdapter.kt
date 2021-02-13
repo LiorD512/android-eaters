@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import kotlinx.android.synthetic.main.icons_grid_view_item.view.*
 
-class IconsGridViewAdapter(val context: Context, val icons: ArrayList<SelectableIcon>, val listener: IconGridViewAdapterListener, val choiceCount: Int) : RecyclerView.Adapter<IconsGridViewAdapter.ViewHolder>() {
+class IconsGridViewAdapter(val context: Context, val icons: List<SelectableIcon>, val listener: IconGridViewAdapterListener, val choiceCount: Int) : RecyclerView.Adapter<IconsGridViewAdapter.ViewHolder>() {
 
     var selectedList: ArrayList<SelectableIcon> = arrayListOf()
 //    var lastSelectedItem: String = ""

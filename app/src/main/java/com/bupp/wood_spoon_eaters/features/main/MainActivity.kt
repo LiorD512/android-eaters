@@ -42,7 +42,10 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.canhub.cropper.CropImage
 import com.stripe.android.view.PaymentMethodsActivityStarter
+import it.sephiroth.android.library.xtooltip.ClosePolicy
+import it.sephiroth.android.library.xtooltip.Tooltip
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -53,7 +56,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
 
-//    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
+    private var tooltip: Tooltip? = null
+
+    //    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
@@ -159,7 +164,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 } else {
 //                    handlePb(true)
                     Log.d("wowMain", "brnach intent observing address change")
-                    viewModel.waitingForAddressAction = true
+//                    viewModel.waitingForAddressAction = true
                     viewModel.addressUpdateActionEvent.observe(this, Observer { newAddressEvent ->
                         Log.d("wowMain", "brnach intent observing address - ON CHANGE")
                         if (newAddressEvent != null) {
@@ -199,18 +204,24 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun initObservers() {
-        viewModel.progressData.observe(this, Observer{
+        viewModel.progressData.observe(this, {
             handlePb(it)
         })
+        viewModel.mainNavigationEvent.observe(this, {
+            startLocationAndAddresAct()
+        })
+
+        viewModel.bannerEvent.observe(this, {
+            handleBannerEvent(it)
+        })
+
+
         //header event
         viewModel.getFinalAddressParams().observe(this, {
             mainActHeaderView.setLocationTitle(it?.locationTitle)
         })
         viewModel.getDeliveryTimeLiveData().observe(this, {
             mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
-        })
-        viewModel.mainActHeaderEvent.observe(this, Observer {
-            setHeaderViewLocationDetails(it.time, it.address)
         })
 
 //        viewModel.getGpsLiveData().observe(this, Observer { it ->
@@ -329,6 +340,56 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         })
     }
 
+    private fun handleBannerEvent(bunnerType: Int) {
+        bunnerType?.let{
+            when(bunnerType){
+                Constants.NO_BANNER -> {
+                    tooltip?.dismiss()
+                }
+                Constants.BANNER_KNOWN_ADDRESS -> {
+                    mainActHeaderView.post {
+                        showBanner(getString(R.string.banner_known_address))
+                    }
+                }
+                Constants.BANNER_MY_LOCATION -> {
+                    mainActHeaderView.post {
+                        showBanner(getString(R.string.banner_my_location))
+                    }
+                }
+                Constants.BANNER_NO_GPS -> {
+                    mainActHeaderView.post {
+                        showBanner(getString(R.string.banner_no_gps))
+                    }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun showBanner(text: String) {
+        tooltip = Tooltip.Builder(this)
+            .anchor(mainActHeaderView, 0, 0, true)
+//            .anchor(150, 150)
+            .text(text)
+//                        .styleId(Int)
+//                        .typeface(Typeface)
+//                        .maxWidth(Int)
+            .arrow(true)
+            .floatingAnimation(Tooltip.Animation.SLOW)
+            .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
+//            .showDuration(1500)
+//            .fadeDuration(5000)
+            .overlay(false)
+            .maxWidth(750)
+            .create()
+
+        tooltip!!
+            .doOnHidden { }
+            .doOnFailure { }
+            .doOnShown { }
+            .show(mainActHeaderView, Tooltip.Gravity.BOTTOM, false)
+    }
+
     private fun refreshFeedIfNecessary() {
         if (currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
             loadFeed()
@@ -405,6 +466,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
 
     //fragment and sub features
+
+    private fun startLocationAndAddresAct() {
+        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+    }
 
     private fun loadFeed() {
         loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
@@ -617,8 +682,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onHeaderAddressClick() {
-        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+        startLocationAndAddresAct()
     }
+
 
     override fun onHeaderTextChange(str: String) {
         if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
@@ -806,10 +872,10 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadNewOrderActivity(id: Long) {
-        startActivityForResult(
-            Intent(this, NewOrderActivity::class.java).putExtra("menuItemId", id),
-            Constants.NEW_ORDER_REQUEST_CODE
-        )
+//        startActivityForResult(
+//            Intent(this, NewOrderActivity::class.java).putExtra("menuItemId", id),
+//            Constants.NEW_ORDER_REQUEST_CODE
+//        )
     }
 
     fun onReportIssueDone() {

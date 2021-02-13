@@ -138,11 +138,11 @@ class MyProfileViewModel(val api: ApiService, val userRepository: UserRepository
         return "$text \n $inviteUrl"
     }
 
-    fun getCuisineList(): ArrayList<SelectableIcon> {
+    fun getCuisineList(): List<SelectableIcon> {
         return metaDataRepository.getCuisineListSelectableIcons()
     }
 
-    fun getDietaryList(): ArrayList<SelectableIcon> {
+    fun getDietaryList(): List<SelectableIcon> {
         return metaDataRepository.getDietaryList()
     }
 

@@ -18,7 +18,7 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.notification_group_item.view.*
 import kotlinx.android.synthetic.main.orders_history_item.view.*
 
-class NotificationsGroupAdapter(val context: Context, private var notificationsGroup: ArrayList<NotificationGroup>, private var eaterPrefs: ArrayList<Long>, val listener: NotificationsGroupAdapterListener) :
+class NotificationsGroupAdapter(val context: Context, private var notificationsGroup: List<NotificationGroup>, private var eaterPrefs: MutableList<Long>, val listener: NotificationsGroupAdapterListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface NotificationsGroupAdapterListener{
@@ -73,7 +73,7 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
         notifyDataSetChanged()
     }
 
-    fun getSelectedIds(): ArrayList<Long>{
+    fun getSelectedIds(): List<Long>{
         return eaterPrefs
     }
 }

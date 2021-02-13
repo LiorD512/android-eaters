@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class MetaDataRepository(private val apiService: ApiService) {
 
@@ -25,53 +26,53 @@ class MetaDataRepository(private val apiService: ApiService) {
         return this.metaDataObject
     }
 
-    fun getCuisineList(): ArrayList<CuisineLabel> {
+    fun getCuisineList(): List<CuisineLabel> {
         if (getMetaDataObject()?.cuisines != null) {
-            return metaDataObject.cuisines as ArrayList<CuisineLabel>
+            return metaDataObject.cuisines as List<CuisineLabel>
         }
-        return arrayListOf()
+        return listOf()
     }
 
-    fun getCuisineListSelectableIcons(): ArrayList<SelectableIcon>{
+    fun getCuisineListSelectableIcons(): List<SelectableIcon>{
         if(getMetaDataObject()?.cuisines != null) {
-            return metaDataObject.cuisines as ArrayList<SelectableIcon>
+            return metaDataObject.cuisines as List<SelectableIcon>
         }
-        return arrayListOf()
+        return listOf()
     }
 
-    fun getDietaryList(): ArrayList<SelectableIcon> {
+    fun getDietaryList(): List<SelectableIcon> {
         if (getMetaDataObject()?.diets != null) {
-            return metaDataObject.diets as ArrayList<SelectableIcon>
+            return metaDataObject.diets as List<SelectableIcon>
         }
-        return arrayListOf()
+        return listOf()
     }
 
-    fun getMetricsList(): ArrayList<Metrics> {
+    fun getMetricsList(): List<Metrics> {
         if (getMetaDataObject()?.metrics != null) {
-            return metaDataObject.metrics as ArrayList<Metrics>
+            return metaDataObject.metrics as List<Metrics>
         }
-        return arrayListOf()
+        return listOf()
     }
 
-    fun getReportTopics(): ArrayList<ReportTopic> {
+    fun getReportTopics(): List<ReportTopic> {
         if (getMetaDataObject()?.reportTopic != null) {
-            return metaDataObject.reportTopic as ArrayList<ReportTopic>
+            return metaDataObject.reportTopic as List<ReportTopic>
         }
-        return arrayListOf()
+        return listOf()
     }
 
-    fun getNotificationsGroup(): ArrayList<NotificationGroup> {
+    fun getNotificationsGroup(): List<NotificationGroup> {
         if (getMetaDataObject()?.notificationsGroup != null) {
-            return metaDataObject.notificationsGroup as ArrayList<NotificationGroup>
+            return metaDataObject.notificationsGroup as List<NotificationGroup>
         }
-        return arrayListOf()
+        return listOf()
     }
 
-    fun getSettings(): ArrayList<AppSetting> {
+    fun getSettings(): List<AppSetting> {
         if (getMetaDataObject()?.settings != null) {
-            return metaDataObject.settings as ArrayList<AppSetting>
+            return metaDataObject.settings as List<AppSetting>
         }
-        return arrayListOf()
+        return listOf()
     }
 
 
@@ -223,6 +224,30 @@ class MetaDataRepository(private val apiService: ApiService) {
                 return (settings.value!!) as Int
         }
         return 60
+    }
+
+    fun getDefaultLat(): Double {
+        for (settings in getSettings()){
+            if(settings.key == "default_feed_lat")
+                return ((settings.value!!) as BigDecimal).toDouble()
+        }
+        return 0.0
+    }
+
+    fun getDefaultLng(): Double {
+        for (settings in getSettings()){
+            if(settings.key == "default_feed_lng")
+                return ((settings.value!!) as BigDecimal).toDouble()
+        }
+        return 0.0
+    }
+
+    fun getDefaultFeedLocationName(): String {
+        for (settings in getSettings()){
+            if(settings.key == "default_feed_location_name")
+                return (settings.value!!) as String
+        }
+        return ""
     }
 
 

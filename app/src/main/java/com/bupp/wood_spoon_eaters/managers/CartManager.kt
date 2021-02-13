@@ -6,7 +6,7 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
 import java.util.*
 
-class CartManager(val apiService: ApiService, val eaterDataManager: EaterDataManager, val newOrderRepository: NewOrderRepository, val deliveryTimeManager: DeliveryTimeManager) {
+class CartManager(val apiService: ApiService, val feedDataManager: FeedDataManager, val newOrderRepository: NewOrderRepository, val deliveryTimeManager: DeliveryTimeManager) {
 
     var currentShowingDish: FullDish? = null
 
@@ -17,18 +17,22 @@ class CartManager(val apiService: ApiService, val eaterDataManager: EaterDataMan
         val isSoldOut: Boolean
     )
 
+//    val getFeedRequestLiveData = feedDataManager.getFeedRequestLiveData()
+
     suspend fun getFullDish(menuItemId: Long): GetFullDishResult? {
-        val feedRequest = eaterDataManager.getFeedRequest()
-        val result = newOrderRepository.getFullDish(menuItemId, feedRequest)
-        result?.let {
-            this.currentShowingDish = it
-            return GetFullDishResult(
-                it,
-                isAvailable = checkCookingSlotAvailability(),
-                startingTime = getStartingDate(),
-                isSoldOut = checkDishSellout()
-            )
-        }
+//        val feedRequest = getFeedRequestLiveData.value
+//        feedRequest?.let{
+//            val result = newOrderRepository.getFullDish(menuItemId, feedRequest)
+//            result?.let {
+//                this.currentShowingDish = it
+//                return GetFullDishResult(
+//                    it,
+//                    isAvailable = checkCookingSlotAvailability(),
+//                    startingTime = getStartingDate(),
+//                    isSoldOut = checkDishSellout()
+//                )
+//            }
+//        }
         return null
     }
 

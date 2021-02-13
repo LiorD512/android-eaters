@@ -69,16 +69,24 @@
             app:layout_constraintTop_toBottomOf="@+id/mainActLocationDisabledText"
             app:type="HEADER_VIEW_TYPE_FEED" />
 
-    <fragment
+    <FrameLayout
             android:id="@+id/mainActContainer"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintVertical_weight="1"
-            app:defaultNavHost="true"
             app:layout_constraintTop_toBottomOf="@+id/mainActHeaderView"
-            app:layout_constraintBottom_toTopOf="@+id/mainActOrdersBB"
-            app:navGraph="@navigation/main_nav" />
+            app:layout_constraintBottom_toTopOf="@+id/mainActOrdersBB"/>
+<!--<fragment-->
+<!--            android:id="@+id/mainActContainer"-->
+<!--            android:name="androidx.navigation.fragment.NavHostFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintVertical_weight="1"-->
+<!--            app:defaultNavHost="true"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/mainActHeaderView"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/mainActOrdersBB"-->
+<!--            app:navGraph="@navigation/main_nav" />-->
 
     <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
             android:id="@+id/mainActOrdersBB"

@@ -121,5 +121,8 @@
     <string name="delivery_method_pickup_outside">pickup_outside</string>
     <!--    <string name="google_api_key">AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU</string>-->
 
+    <string name="banner_my_location">You are now seeing dishes in Brooklyn, please enter your address to see home chefs that deliver to you</string>
+    <string name="banner_known_address">Since your location services are off, WoodSpoon is using your last saved address</string>
+    <string name="banner_no_gps"> You disabled your location services. WoodSpoon is using your last saved address for now.</string>
 
 </resources>

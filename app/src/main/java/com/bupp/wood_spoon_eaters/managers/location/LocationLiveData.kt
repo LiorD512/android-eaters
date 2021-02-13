@@ -19,6 +19,7 @@ import java.util.*
 
 class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
 
+    private var forceStop: Boolean = false
     private var isStarted =  false
     private var requestingLocationUpdates =  false
     private var fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -59,35 +60,39 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
         )
     }
 
-//    private fun stopLocationUpdates() {
-//        if (isStarted) {
-//            fusedLocationClient.removeLocationUpdates(locationCallback)
-//        }
-//    }
+    private fun stopLocationUpdates() {
+        if (isStarted) {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+        }
+    }
 
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
-            Log.d(TAG,"onLocationResult")
-            locationResult ?: return
-            for (location in locationResult.locations) {
-                setLocationData(location, true)
+            if(forceStop){
+                Log.d(TAG,"forceStop: $forceStop")
+                stopLocationUpdates()
+            }else{
+                Log.d(TAG,"onLocationResult")
+                locationResult ?: return
+                for (location in locationResult.locations) {
+                    setLocationData(location)
+                }
             }
         }
     }
 
-    private fun setLocationData(location: Location, isFinalResult: Boolean = false) {
+    private fun setLocationData(location: Location) {
         Log.d(TAG,"setLocationData:")
         val accuracy = location.accuracy
         Log.d(TAG,"onLocationResult accuracy: $accuracy")
         value = getAddressRequestFromLocation(location)
     }
 
-    fun getAddressRequestFromLocation(location: Location): AddressRequest? {
+    private fun getAddressRequestFromLocation(location: Location): AddressRequest? {
         var addresses: List<android.location.Address> = arrayListOf()
         val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
 
-        var streetLine = ""
         try {
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             if (addresses.isNotEmpty()) {
@@ -95,51 +100,14 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
             }
         } catch (e: IOException) {
             Log.d(TAG, "location manager error: " + e.message)
-//            Toast.makeText(context, "location manager error: " + e.message, Toast.LENGTH_SHORT).show()
         }
         return null
     }
 
-//    fun getAddressFromLocation(location: Location): Address {
-//        var addresses: List<android.location.Address> = arrayListOf()
-//        val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
-//
-//        var streetLine = ""
-//        try {
-//            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//            if (addresses.isNotEmpty()) {
-//                streetLine = getStreetStr(addresses[0])
-//                Log.d(TAG,"streetLine: $streetLine")
-//            }
-//        } catch (e: IOException) {
-//            Log.d(TAG, "location manager error: " + e.message)
-////            Toast.makeText(context, "location manager error: " + e.message, Toast.LENGTH_SHORT).show()
-//        }
-//
-//        Log.d(TAG, "latlng to address success")
-//
-//        var address = Address()
-//        address.streetLine1 = streetLine
-//        address.lat = location.latitude
-//        address.lng = location.longitude
-//        return address
-//    }
-
-    private fun getStreetStr(address: android.location.Address): String {
-        var number = ""
-        var street = ""
-        var city = ""
-        if (address.featureName != null) {
-            number = address.featureName
-        }
-        if (address.thoroughfare != null) {
-            street = address.thoroughfare
-        }
-        if (address.locality != null) {
-            city = address.locality
-        }
-        return "$number $street"//, $city"
+    fun setForcedStop(forceStop: Boolean) {
+        this.forceStop = forceStop
     }
+
 
     companion object {
         const val TAG = "wowLocationLiveData"

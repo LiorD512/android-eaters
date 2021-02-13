@@ -44,7 +44,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cook_profile_dialog, null)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -83,7 +83,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
             it.name?.let{
                 country = ", ${it}"
             }
-            Glide.with(context!!).load(it.flagUrl).into(cookProfileFragFlag)
+            Glide.with(requireContext()).load(it.flagUrl).into(cookProfileFragFlag)
         }
         cookProfileFragProfession.text = "$profession"// $country"
         cookProfileFragRating.text = cook.rating.toString()
@@ -122,9 +122,9 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
 
         cookProfileFragDishList.layoutManager = LinearLayoutManager(context)
-        dishAdapter = CooksProfileDishesAdapter(context!!, cook.dishes, this)
+        dishAdapter = CooksProfileDishesAdapter(requireContext(), cook.dishes, this)
         cookProfileFragDishList.adapter = dishAdapter
-        val divider = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        val divider = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
         cookProfileFragDishList.addItemDecoration(divider)
 
         cookProfileFragRating.setOnClickListener { onRatingClick() }

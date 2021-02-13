@@ -20,7 +20,7 @@ class PickFiltersViewModel(val metaDataRepository: MetaDataRepository, val searc
         return arrayListOf()
     }
 
-    fun getDietaryList(): ArrayList<SelectableIcon>{
+    fun getDietaryList(): List<SelectableIcon>{
         return metaDataRepository.getDietaryList()
     }
 

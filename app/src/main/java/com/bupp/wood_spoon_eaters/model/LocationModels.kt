@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 
-data class LocationStatus(val type: LocationStatusType, val address: Address? = null)
-enum class LocationStatusType{
+data class FeedUiStatus(val type: FeedUiStatusType)
+enum class FeedUiStatusType{
     CURRENT_LOCATION,
-    KNOWN_LOCATION,
+    KNOWN_ADDRESS,
     HAS_LOCATION,
-    KNOWN_LOCATION_WITH_BANNER,
+    KNOWN_ADDRESS_WITH_BANNER,
     NO_GPS_ENABLED_AND_NO_LOCATION,
     HAS_GPS_ENABLED_BUT_NO_LOCATION,
     NO_GPS_PERMISSION,
@@ -43,6 +43,10 @@ data class AddressRequest(
         }
     }
 
+    fun toAddress(): Address? {
+        return Address(id = null, lat = lat, lng = lng, streetLine1 = streetLine1, streetLine2 = streetLine2)
+    }
+
 }
 
 
@@ -62,7 +66,8 @@ data class Address(
 ) : Parcelable {
 
     fun getUserLocationStr(): String{
-        return "$streetLine1, ${city?.name ?: ""} ${state?.name ?: ""}"
+        val street = streetLine1?.let{"${it},"} ?: ""
+        return "$street ${city?.name ?: ""} ${state?.name ?: ""}"
     }
     fun getDropoffLocationStr(): String {
         return when (dropOfLocationStr) {

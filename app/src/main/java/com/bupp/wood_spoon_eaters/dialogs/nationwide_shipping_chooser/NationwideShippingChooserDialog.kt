@@ -51,7 +51,7 @@ class NationwideShippingChooserDialog() : DialogFragment(), NationwideShippingCh
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.nationwide_shipping_chooser_dialog, null)
-        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -68,9 +68,9 @@ class NationwideShippingChooserDialog() : DialogFragment(), NationwideShippingCh
             dismiss()
         }
 
-        adapter = NationwideShippingChooserAdapter(context!!, this)
+        adapter = NationwideShippingChooserAdapter(requireContext(), this)
         nationwideShippingChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
-        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
         nationwideShippingChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
         nationwideShippingChooserDialogRecycler.adapter = adapter
 

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.dialogs.NoDishesAvailableDialog
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
@@ -21,7 +21,6 @@ import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener,
@@ -53,11 +52,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         Analytics.with(requireContext()).screen("Feed")
         initUi()
 
-
-//        viewModel.updateLocationStatus()
-
         showEmptyLayout()
         initObservers()
+
     }
 
     private fun initUi() {
@@ -65,15 +62,17 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     private fun initObservers() {
-        viewModel.getFinalAddressLiveData.observe(viewLifecycleOwner, Observer{
-            handleAddress(it)
+        viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
+            handleFeedUi(it)
         })
-
-//        viewModel.updateMainHeaderUiEvent.observe(viewLifecycleOwner, Observer{
-//            mainViewModel.refreshMainHeaderUi()
-//        })
-        viewModel.oldfeedEventOld.observe(this, Observer { event ->
-//            (activity as MainActivity).isFeedReady = true
+        viewModel.getLocationLiveData().observe(viewLifecycleOwner, {
+            Log.d(TAG, "getLocationLiveData observer called ")
+            viewModel.refreshFeedByLocationIfNeeded()
+        })
+        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+            viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
+        })
+        viewModel.feedResultData.observe(this, Observer { event ->
             if(event.isSuccess){
                 initFeed(event.feedArr!!)
             }
@@ -84,75 +83,73 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
                 CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
-        viewModel.locationStatusEvent.observe(viewLifecycleOwner, Observer{
-            Log.d("wowFeedFrag","feed location status: ${it.type}")
-            handleLocationStatus(it)
-        })
-//        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, Observer {
-//            Log.d("wowFeedFrag","getLocationLiveData observer called ")
-//            doSomething(0)
-////            viewModel.initAddressBasedUi(it)
-////            viewModel.updateLocationStatus()
-//        })
     }
 
-    private fun doSomething(i: Int) {
-
-    }
-
-    private fun handleLocationStatus(status: LocationStatus){
-        when(status.type){
-            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
-                handleAddress(status.address)
+    private fun handleFeedUi(feedUiStatus: FeedUiStatus?) {
+        feedUiStatus?.let{
+            Log.d(TAG, "handleFeedUi: ${it.type}")
+            when(it.type){
+                FeedUiStatusType.CURRENT_LOCATION, FeedUiStatusType.KNOWN_ADDRESS, FeedUiStatusType.HAS_LOCATION -> {
+                    mainViewModel.showBanner(Constants.NO_BANNER)
+                }
+                FeedUiStatusType.KNOWN_ADDRESS_WITH_BANNER -> {
+                    mainViewModel.showBanner(Constants.BANNER_KNOWN_ADDRESS)
+                }
+                FeedUiStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {
+                    mainViewModel.showBanner(Constants.BANNER_MY_LOCATION)
+                }
+                FeedUiStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
+                    mainViewModel.showBanner(Constants.BANNER_NO_GPS)
+                }
+                else -> {}
             }
-            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {}
-            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {}
         }
     }
 
-    private fun handleAddress(address: Address?) {
-        Log.d(TAG, "handleAddress $address")
-        address?.let{
-            viewModel.initAddressBasedUi(it)
-        }
-    }
 
-    //CookProfileDialog interface
+
+//    private fun handleLocationStatus(status: LocationStatus){
+//        when(status.type){
+//            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
+//                handleAddress(status.address)
+//            }
+//            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {}
+//            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {}
+//        }
+//    }
+//
+//    private fun handleAddress(FeedRequest: FeedRequest?) {
+//        Log.d(TAG, "handleFeedRequest $FeedRequest")
+//        FeedRequest?.let{
+//            viewModel.initAddressBasedUi(it)
+//        }
+//    }
+
+
     override fun onDishClick(menuItemId: Long) {
         mainViewModel.onDishClick(menuItemId)
-//        (activity as MainActivity).loadNewOrderActivity(menuItemId)
     }
 
-    private fun initFeed(feedArr: ArrayList<Feed>) {
+    private fun initFeed(feedArr: List<Feed>) {
         feedFragEmptyLayout.visibility = View.GONE
         feedFragListLayout.visibility = View.VISIBLE
         feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
     }
 
-    private fun FetchLocationAndFeed() {
-//        Log.d(TAG, "feed fragment started")
-//        feedFragPb.show()
-//        viewModel.getFeed()
-    }
 
-    override fun refreshList() {
-        FetchLocationAndFeed()
-    }
-
+    @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
         feedFragEmptyLayout.visibility = View.VISIBLE
-        feedFragEmptyFeedTitle.text =  String.format("Hey %s", viewModel.getEaterFirstName() ?: "Guest")
-        feedFragEmptyLayout.setOnClickListener { startDeliveryDetails() }
+        feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
+        feedFragEmptyLayout.setOnClickListener {
+            mainViewModel.startLocationAndAddressAct()
+        }
     }
 
-    private fun startDeliveryDetails() {
-        (activity as MainActivity).loadDeliveryDetails()
-
-    }
 
     override fun onDishClick(dish: Dish) {
         dish.menuItem?.let{
-            (activity as MainActivity).loadNewOrderActivity(it.id)
+            mainViewModel.onDishClick(it.id)
         }
     }
 
@@ -171,7 +168,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     fun silentRefresh() {
         Log.d("wowFeedFrag","silentRefresh")
-        viewModel.getFeed()
+//        viewModel.getFeed()
     }
 
 }

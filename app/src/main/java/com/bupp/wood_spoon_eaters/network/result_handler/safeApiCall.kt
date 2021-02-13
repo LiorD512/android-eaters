@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.network.test
+package com.bupp.wood_spoon_eaters.network.result_handler
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

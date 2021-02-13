@@ -36,7 +36,7 @@
 //
 //    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 //        val view = inflater!!.inflate(R.layout.payment_methods_dialog, null)
-////        getDialog().getWindow().setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)));
+////        getDialog().getWindow().setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
 //        return view
 //    }
 //
@@ -50,7 +50,7 @@
 //        paymentMethodsHeaderView.setHeaderViewListener(this)
 //        paymentMethodsSave.setOnClickListener { onSave() }
 //
-////        CustomerSession.initCustomerSession(context!!, EphemeralKeyProvider(
+////        CustomerSession.initCustomerSession(requireContext(), EphemeralKeyProvider(
 ////                object : EphemeralKeyProvider.ProgressListener() {
 ////                    fun onStringResponse(string: String) {
 ////                        if (string.startsWith("Error: ")) {

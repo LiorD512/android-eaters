@@ -15,7 +15,7 @@ import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import kotlinx.android.synthetic.main.fragment_cuisines_chooser.*
 import kotlin.collections.ArrayList
 
-class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: ArrayList<SelectableIcon>, val choiceCount: Int) : DialogFragment(), HeaderView.HeaderViewListener {
+class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: List<SelectableIcon>, val choiceCount: Int) : DialogFragment(), HeaderView.HeaderViewListener {
 
     private var selectedCuisine: ArrayList<SelectableIcon>? = null
 
@@ -30,7 +30,7 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_cuisines_chooser, null)
-        getDialog()?.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context!!, R.color.dark_43)));
+        getDialog()?.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
         return view
     }
 

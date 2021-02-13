@@ -120,7 +120,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     private fun initUi() {
         itemDecor = GridItemDecoration(15.dpToPx(), 2)
         searchFragList.addItemDecoration(itemDecor)
-        adapter = SearchAdapter(context!!, viewModel.getCuisineLabels(), this)
+        adapter = SearchAdapter(requireContext(), viewModel.getCuisineLabels(), this)
         searchFragList.adapter = adapter
         showListLayout(SEARCH_LIST_TYPE_CUISINE)
 

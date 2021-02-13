@@ -26,7 +26,7 @@ class OrderItemsView : LinearLayout {
 
     private fun initUi() {
         orderItemsViewRecyclerView.layoutManager = LinearLayoutManager(context)
-        val divider = DividerItemDecorator(ContextCompat.getDrawable(context!!, R.drawable.divider))
+        val divider = DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
 
         orderItemsViewRecyclerView.addItemDecoration(divider)
     }

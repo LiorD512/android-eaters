@@ -53,7 +53,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         this.listener = listener
     }
 
-    fun initFeed(feedArr: ArrayList<Feed>, isWithFavorites: Boolean = true, stubView: Int, isPullToRefreshEnabled: Boolean = true, isEvent: Boolean = false) {
+    fun initFeed(feedArr: List<Feed>, isWithFavorites: Boolean = true, stubView: Int, isPullToRefreshEnabled: Boolean = true, isEvent: Boolean = false) {
         clearFeed()
         multiSectionViewRefreshLayout.setRefreshing(false)
         val dishArr: ArrayList<Feed> = arrayListOf()

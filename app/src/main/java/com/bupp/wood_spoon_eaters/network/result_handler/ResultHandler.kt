@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.network.test
+package com.bupp.wood_spoon_eaters.network.result_handler
 
 sealed class ResultHandler<out T> {
     data class Success<out T>(val value: T): ResultHandler<T>()
