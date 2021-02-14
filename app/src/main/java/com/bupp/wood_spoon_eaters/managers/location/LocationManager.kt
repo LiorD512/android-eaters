@@ -49,7 +49,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
     /////////////////////////////////////////
     /////////////    LOCATION    ////////////
     /////////////////////////////////////////
-    var lastChosenAddress: Address? = null
+    private var lastChosenAddress: Address? = null
     var previousChosenAddress: Address? = null
 
     fun getLocationData() = locationLiveData
@@ -73,7 +73,9 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
         locationLiveData.setForcedStop(forceStop)
     }
 
-
+    fun getLastChosenAddress(): Address?{
+        return lastChosenAddress
+    }
 
     companion object {
 

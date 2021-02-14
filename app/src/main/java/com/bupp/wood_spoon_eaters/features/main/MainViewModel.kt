@@ -65,6 +65,11 @@ class MainViewModel(
     }
 
 
+    fun getDefaultLocationName(): String{
+        return metaDataRepository.getDefaultFeedLocationName()
+    }
+
+
 //    var waitingForAddressAction: Boolean = false
     private var hasPendingOrder: Boolean = false
     private var hasActiveOrder: Boolean = false
@@ -101,7 +106,7 @@ class MainViewModel(
         NO_LOCATIONS_SAVED
     }
 
-    val noUserLocationEvent = SingleLiveEvent<NoLocationUiEvent>()
+//    val noUserLocationEvent = SingleLiveEvent<NoLocationUiEvent>()
 //    override fun onLocationEmpty() {
 //        //this method fires when device location services is off
 //        if (getListOfAddresses() == null || getListOfAddresses()!!.isEmpty()) {

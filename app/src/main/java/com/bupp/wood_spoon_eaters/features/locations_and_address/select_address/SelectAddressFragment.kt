@@ -42,7 +42,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun initData() {
-        viewModel.updateMyLocationUiState(isLocationEnabled(requireContext()))
+        viewModel.updateMyLocationUiState(isGpsEnabled(requireContext()))
         viewModel.fetchAddress()
     }
 
@@ -56,7 +56,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.updateMyLocationUiState(isEnabled)
     }
 
-    private fun isLocationEnabled(context: Context): Boolean {
+    private fun isGpsEnabled(context: Context): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return LocationManagerCompat.isLocationEnabled(locationManager)
     }

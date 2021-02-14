@@ -55,6 +55,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         showEmptyLayout()
         initObservers()
 
+        viewModel.initFeed()
     }
 
     private fun initUi() {
@@ -106,7 +107,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         }
     }
 
-
+    override fun refreshList() {
+        viewModel.initFeed()
+    }
 
 //    private fun handleLocationStatus(status: LocationStatus){
 //        when(status.type){
@@ -158,8 +161,8 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     override fun onShareClick() {
-        val text = viewModel.getShareText()
-        activity?.let { Utils.shareText(it, text) }
+//        val text = viewModel.getShareText()
+//        activity?.let { Utils.shareText(it, text) }
     }
 
     override fun onWorldwideInfoClick() {

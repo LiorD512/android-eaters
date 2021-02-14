@@ -46,6 +46,7 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
     private fun refresh() {
         Log.d("wowMultiSection","refresh !")
         listener.refreshList()
+//        multiSectionViewRefreshLayout.isRefreshing = false
     }
 
 

@@ -8,13 +8,14 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
-    private val feedDataManager: FeedDataManager, val eaterDataManager: EaterDataManager, private val feedRepository: FeedRepository): ViewModel() {
+    private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository): ViewModel() {
 
 
-    init{
+    fun initFeed(){
         feedDataManager.initFeedDataManager()
     }
 
@@ -72,15 +73,14 @@ class FeedViewModel(
     }
 
 
-
-
-    fun getEaterFirstName(): String?{
-        return eaterDataManager.currentEater?.firstName
-    }
-
     private fun validFeedRequest(feedRequest: FeedRequest): Boolean {
         return (feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null
     }
+
+    fun getEaterFirstName(): String?{
+        return feedDataManager.getUser()?.firstName
+    }
+
 
 
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
@@ -106,11 +106,11 @@ class FeedViewModel(
 //        })
     }
 
-    fun getShareText(): String {
-        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
-        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-        return "$text \n $inviteUrl"
-    }
+//    fun getShareText(): String {
+//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+//        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
+//        return "$text \n $inviteUrl"
+//    }
 
 
 

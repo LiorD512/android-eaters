@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.utils
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +39,7 @@ object DateUtils {
         return "$date, $time"
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun parseDateToTime(date: Date?): String {
         val sdf = SimpleDateFormat("h:mm a")
         if (date != null)

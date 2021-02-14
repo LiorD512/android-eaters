@@ -35,21 +35,21 @@ class EventsManager(val context: Context, private val appSetting: AppSettings, p
                     .putValue("shipped Order Count", user.ordersCount), null
             )
 
-//            val address = eaterDataManager.getLastChosenAddress()//todo - nyc
-//            Log.d("wowEventsManager", "address: $address")
-//            address?.let{
-//                Analytics.with(context).identify(
-//                    user.id.toString(), Traits()
-//                        .putAddress(
-//                            Traits.Address()
-//                                .putCity(it.city?.name)
-//                                .putCountry(it.country?.name)
-//                                .putState(it.state?.name)
-//                                .putStreet(it.streetLine1)
-//                                .putPostalCode(it.zipCode)
-//                        ), null
-//                )
-//            }
+            val address = eaterDataManager.getLastChosenAddress()//todo - check this
+            Log.d("wowEventsManager", "address: $address")
+            address?.let{
+                Analytics.with(context).identify(
+                    user.id.toString(), Traits()
+                        .putAddress(
+                            Traits.Address()
+                                .putCity(it.city?.name)
+                                .putCountry(it.country?.name)
+                                .putState(it.state?.name)
+                                .putStreet(it.streetLine1)
+                                .putPostalCode(it.zipCode)
+                        ), null
+                )
+            }
         }
     }
 

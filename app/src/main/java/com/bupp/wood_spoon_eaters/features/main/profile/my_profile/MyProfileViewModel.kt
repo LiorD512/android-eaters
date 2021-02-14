@@ -129,7 +129,7 @@ class MyProfileViewModel(val api: ApiService, val userRepository: UserRepository
     }
 
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
-        eaterDataManager.updateCustomerCard(paymentMethod)
+//        eaterDataManager.updateCustomerCard(paymentMethod)//todo - nyyyyy
     }
 
     fun getShareText(): String {

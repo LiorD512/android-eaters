@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         setContentView(R.layout.activity_main)
 
         initObservers()
-        initBackgroundTasks()
         initUi()
 
         initUiRelatedProcesses()
@@ -92,48 +91,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    ////////////////////////////////////////////////
-    ///////   Background processes - start   ///////
-    ////////////////////////////////////////////////
-
-    private fun initBackgroundTasks() {
-        //init location and gps status
-//        viewModel.initGpsStatus(this)
-//        viewModel.getLocationLiveData().observe(this, Observer{
-//            Log.d("wowMainAct","getLocationLiveData: $it")
-//            //do nothing. - observer starts location updates.
-//        })
-
-
-//        viewModel.startLocationUpdates()
-    }
-
-//    private fun registerGpsBroadcastReceiver() {
-//        gpsBroadcastReceiver = GPSBroadcastReceiver(this)
-//        registerReceiver(gpsBroadcastReceiver, IntentFilter("android.location.PROVIDERS_CHANGED"))
-//    }
-
-
-
-    private fun startLocationUpdates() {
-//        GpsUtils(this).turnGPSOn(object : GpsUtils.OnGpsListener {
-//            override fun gpsStatus(isGPSEnable: Boolean) {
-//
-//            }
-//        })
-    }
-
-//    private fun onGPSChanged(isEnabled: Boolean) {
-//        Log.d("wowMainAct", "onGPSChanged - isEnabled: $isEnabled")
-//        if (isEnabled && currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
-//            startLocationUpdates()
-//            loadFeed()
-//        }
-//    }
-
-    ////////////////////////////////////////////////
-    ///////    Background processes - end    ///////
-    ////////////////////////////////////////////////
 
 
     ////////////////////////////////////////////////
@@ -224,12 +181,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
         })
 
-//        viewModel.getGpsLiveData().observe(this, Observer { it ->
-//            val isGpsEnabled = it.getContentIfNotHandled()
-//            isGpsEnabled?.let {
-//                onGPSChanged(it)
-//            }
-//        })
 
         viewModel.dishClickEvent.observe(this, Observer{
             val event = it.getContentIfNotHandled()
@@ -285,18 +236,18 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
         })
-        viewModel.noUserLocationEvent.observe(this, Observer {
-            when (it) {
-                MainViewModel.NoLocationUiEvent.DEVICE_LOCATION_OFF -> {
-                    handleDeviceLocationOff()
-                }
-                MainViewModel.NoLocationUiEvent.NO_LOCATIONS_SAVED -> {
-                    loadFragment(NoLocationsAvailableFragment(), Constants.NO_LOCATIONS_AVAILABLE_TAG)
-                }
-                else -> {
-                }
-            }
-        })
+//        viewModel.noUserLocationEvent.observe(this, Observer {
+//            when (it) {
+//                MainViewModel.NoLocationUiEvent.DEVICE_LOCATION_OFF -> {
+//                    handleDeviceLocationOff()
+//                }
+//                MainViewModel.NoLocationUiEvent.NO_LOCATIONS_SAVED -> {
+//                    loadFragment(NoLocationsAvailableFragment(), Constants.NO_LOCATIONS_AVAILABLE_TAG)
+//                }
+//                else -> {
+//                }
+//            }
+//        })
         viewModel.locationSettingsEvent.observe(this, Observer {
             startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), Constants.ANDROID_SETTINGS_REQUEST_CODE)
         })
@@ -340,9 +291,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         })
     }
 
-    private fun handleBannerEvent(bunnerType: Int) {
-        bunnerType?.let{
-            when(bunnerType){
+    private fun handleBannerEvent(bannerType: Int) {
+        bannerType.let{
+            when(bannerType){
                 Constants.NO_BANNER -> {
                     tooltip?.dismiss()
                 }
@@ -353,7 +304,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
                 Constants.BANNER_MY_LOCATION -> {
                     mainActHeaderView.post {
-                        showBanner(getString(R.string.banner_my_location))
+                        val city = viewModel.getDefaultLocationName()
+                        showBanner(getString(R.string.banner_my_location, city))
                     }
                 }
                 Constants.BANNER_NO_GPS -> {
@@ -735,7 +687,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 when (lastFragmentTag) {
                     Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
                         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
-                        startLocationUpdates()
                     }
                     else -> {
 //                        updateAddressTimeView()
@@ -793,7 +744,6 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
         if (requestCode == Constants.ANDROID_SETTINGS_REQUEST_CODE) {
             Log.d("wowMainActivity", "BACK FROM SETTINGS")
-            startLocationUpdates()
         }
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {

@@ -77,31 +77,4 @@ class TipPercentView : FrameLayout, View.OnClickListener {
         tipPercentCustomText.text = spannableString
     }
 
-    fun updateCurrentTip(tipPercentage: Int? = 0, tip: Int? = null) {
-        if(tipPercentage != 0){
-            when (tipPercentage) {
-                10 -> {
-                    tipPercent10.isSelected = true
-                }
-                15 -> {
-                    tipPercent15.isSelected = true
-                }
-                20 -> {
-                    tipPercent20.isSelected = true
-                }
-
-            }
-        }
-        tip?.let{
-            if(tip != 0){
-                tipPercentCustom.isSelected = true
-                tipPercentCustomText.text = "Custom\n $$tip"
-            }
-        }
-//        tipPercent10.setOnClickListener(null)
-//        tipPercent15.setOnClickListener(null)
-//        tipPercent20.setOnClickListener(null)
-//        tipPercentCustom.setOnClickListener(null)
-    }
-
 }

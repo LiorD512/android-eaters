@@ -24,7 +24,7 @@ object CountryCodeUtils {
         return CountryCodeResult(exampleNumber?.countryCode, flag)
     }
 
-    fun getDeviceCountryCode(context: Context): String {
+    private fun getDeviceCountryCode(context: Context): String {
         var countryCode: String?
 
         // try to get country code from TelephonyManager service

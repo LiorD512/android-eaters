@@ -33,7 +33,9 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
         locationManager.setSelectedAddressAndUpdateParams(selectedAddress)
     }
 
-
+    fun getLastChosenAddress(): Address?{
+        return locationManager.getLastChosenAddress()
+    }
 
     /////////////////////////////////////////
     ///////////      FEED         ///////////
@@ -52,42 +54,42 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
 
 
 
-    //Stripe customer card
-    private var currentPaymentMethod: PaymentMethod? = null
-
-    fun updateCustomerCard(paymentMethod: PaymentMethod) {
-        this.currentPaymentMethod = paymentMethod
-    }
-
-    fun getCurrentPaymentMethod(): PaymentMethod? {
-        return currentPaymentMethod
-    }
-
-    fun getCustomerCardId(): String {
-        if (currentPaymentMethod != null) {
-            return currentPaymentMethod?.id!!
-        }
-        return ""
-    }
-
-
-    //eater params and data
-
-
-
-    private var isUserChooseSpecificAddress: Boolean = false
-
-
-    fun setUserChooseSpecificAddress(isSpecificAddress: Boolean) {
-//        this.isUserChooseSpecificAddress = isSpecificAddress
-    }
-
-    fun isUserChooseSpecificAddress(): Boolean {
-        //is user didn't chose my location
-        return false
-
-    }
-
+//    //Stripe customer card
+//    private var currentPaymentMethod: PaymentMethod? = null
+//
+//    fun updateCustomerCard(paymentMethod: PaymentMethod) {
+//        this.currentPaymentMethod = paymentMethod
+//    }
+//
+//    fun getCurrentPaymentMethod(): PaymentMethod? {
+//        return currentPaymentMethod
+//    }
+//
+//    fun getCustomerCardId(): String {
+//        if (currentPaymentMethod != null) {
+//            return currentPaymentMethod?.id!!
+//        }
+//        return ""
+//    }
+//
+//
+////    eater params and data
+////
+//
+//
+//    private var isUserChooseSpecificAddress: Boolean = false
+//
+////
+//    fun setUserChooseSpecificAddress(isSpecificAddress: Boolean) {
+////        this.isUserChooseSpecificAddress = isSpecificAddress
+//    }
+//
+//    fun isUserChooseSpecificAddress(): Boolean {
+//        //is user didn't chose my location
+//        return false
+//
+//    }
+//
 //    fun getDropoffLocation(): String? {
 //        if (currentEater?.addresses != null && currentEater?.addresses!!.size > 0) {
 //            return currentEater?.addresses?.first()?.getDropoffLocationStr()
@@ -95,11 +97,11 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
 //            return getLastChosenAddress()?.getDropoffLocationStr()
 //        }
 //    }
-
-
-    fun setUserChooseSpecificTime(hasSpecificTime: Boolean) {
-//        this.hasSpecificTime = hasSpecificTime
-    }
+//
+//
+//    fun setUserChooseSpecificTime(hasSpecificTime: Boolean) {
+////        this.hasSpecificTime = hasSpecificTime
+//    }
 
     var sid: String? = null
     var cid: String? = null

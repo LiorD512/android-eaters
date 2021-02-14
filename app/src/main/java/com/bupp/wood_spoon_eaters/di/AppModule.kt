@@ -50,25 +50,25 @@ val appModule = module {
     //global
     single { FcmManager(get()) }
     factory { PermissionManager() }
-    single { DeliveryTimeManager() }
-    single { PaymentManager(get()) }
     single { AppSettings(get(), get()) }
     single { MetaDataRepository(get()) }
-    single { LocationManager(get(), get()) }
 
     //repos
+    single { FeedRepository(get()) }
+    single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
     single { UserRepository(get(), get()) }
-    single { FeedRepositoryImpl(get()) }
-    single { FeedRepository(get()) }
     single { NewOrderRepository(get(), get()) }
 
     //managers
+    single { DeliveryTimeManager() }
+    single { PaymentManager(get()) }
+    single { LocationManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }
+    single { FeedDataManager(get(), get(), get()) }
     single { CartManager(get(), get(), get(), get()) }
     single { EventsManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
-    single { FeedDataManager(get(), get()) }
     single { EaterDataManager(get(), get(), get(), get()) }
 
 
@@ -100,7 +100,7 @@ val appModule = module {
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { FeedViewModel(get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }

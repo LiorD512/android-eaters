@@ -1,15 +1,17 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import android.content.Context
+import android.location.LocationManager
 import android.util.Log
+import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.LocationUtils
 
 
-class FeedDataManager(
-    private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings
-) {
+class FeedDataManager(private val context: Context,
+    private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings) {
 
     private var isWaitingToLocationUpdate: Boolean = false
 
@@ -19,18 +21,24 @@ class FeedDataManager(
     fun getFeedUiStatus() = finalFeedUiStatus
     private val finalFeedUiStatus = MutableLiveData<FeedUiStatus>()
 
+    private fun isGpsEnabled(): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
+    }
+
 
     fun initFeedDataManager(){
         val lastSelectedAddress = eaterDataManager.getFinalAddressLiveDataParam().value
         val knownAddresses = eaterDataManager.currentEater?.addresses
         val myLocation = getLocationLiveData().value
         val hasGpsPermission = appSettings.hasGPSPermission
+        val isGpsEnabled = isGpsEnabled()
         Log.d(
             TAG,
             "getLocationStatus: lastSelectedAddress: $lastSelectedAddress, hasGpsPermission: $hasGpsPermission," +
                     " knownAddresses size: ${knownAddresses?.size}, myLocation: $myLocation"
         )
-        if (hasGpsPermission) {
+        if (isGpsEnabled && hasGpsPermission) {
             Log.d(TAG, "has gpsPermission")
             if (knownAddresses.isNullOrEmpty()) {
                 Log.d(TAG, "don't have known address")
@@ -105,6 +113,10 @@ class FeedDataManager(
         feedRequest.timestamp = eaterDataManager.getDeliveryTimestamp()
 
         return feedRequest
+    }
+
+    fun getUser(): Eater?{
+        return eaterDataManager.currentEater
     }
 
 

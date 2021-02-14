@@ -44,7 +44,7 @@ class CheckoutViewModel(val api: ApiService, val orderManager: OrderManager, val
     }
 
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
-        eaterDataManager.updateCustomerCard(paymentMethod)
+//        eaterDataManager.updateCustomerCard(paymentMethod)//todo - nyyyy
     }
 
 
