@@ -12,7 +12,7 @@ data class OrderRequest(
     @SerializedName("deliver_at") var deliveryAt: String? = null,
     @SerializedName("delivery_address") var deliveryAddress: Address? = null,
     @SerializedName("delivery_address_id") var deliveryAddressId: Long? = null,
-    @SerializedName("order_items") var orderItemRequests: ArrayList<OrderItemRequest>? = null,
+    @SerializedName("order_items") var orderItemRequests: List<OrderItemRequest>? = null,
     @SerializedName("tip_percentage") var tipPercentage: Float? = null,
     @SerializedName("tip") var tip: Int? = null,
     @SerializedName("disposable_tableware") var addUtensils: Boolean? = null,
@@ -23,10 +23,10 @@ data class OrderRequest(
 )
 
 data class OrderItemRequest(
-    @SerializedName("id") var id: Long? = null,
+//    @SerializedName("id") var id: Long? = null,
     @SerializedName("dish_id") val dishId: Long? = null,
     @SerializedName("quantity") var quantity: Int? = null,
-    @SerializedName("removed_ingredient_ids") var removedIndredientsIds: ArrayList<Long>? = null,
+    @SerializedName("removed_ingredient_ids") var removedIngredientsIds: ArrayList<Long>? = null,
     @SerializedName("notes") var notes: String? = null,
     @SerializedName("_destroy") var _destroy: Boolean? = false
 )

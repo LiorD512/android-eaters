@@ -18,7 +18,6 @@ import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.ErrorDialog
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.promo_code_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

@@ -7,17 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
-import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.stripe.android.CustomerSession
 import com.stripe.android.StripeError
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.stripe.android.model.PaymentMethod
 import com.stripe.android.CustomerSession.PaymentMethodsRetrievalListener
-import com.stripe.android.model.Customer
-import com.stripe.android.CustomerSession.CustomerRetrievalListener
 
 
 class CheckoutViewModel(val api: ApiService, val orderManager: OrderManager, val eaterDataManager: EaterDataManager) :

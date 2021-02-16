@@ -25,24 +25,18 @@ interface ApiService {
     suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
     //New Order
-    @GET("menu_items/{menu_item_id}/dish")
-    suspend fun getSingleDish(
-        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
-        @Query("lat") lat: Double? = null,
-        @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null,
-        @Query("timestamp") timestamp: String? = null
-    ): ServerResponse<FullDish>
+
 
     @GET("cooks/{cook_id}/reviews")
     suspend fun getDishReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
-    //Address
-//    @DELETE("eaters/me/addresses/{address_id}")
-//    fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): Call<ServerResponse<Void>>
 
-    @POST("eaters/me/addresses/{address_id}")
-    fun updateAddress(@Path(value = "address_id", encoded = true) addressId: Long, @Body addressRequest: AddressRequest): Call<ServerResponse<Address>>
+
+    //Address
+    @DELETE("eaters/me/addresses/{address_id}")
+    suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Void>
+
+
 
     //Feed
     @GET("eaters/me/feed")
@@ -99,8 +93,7 @@ interface ApiService {
     @POST("eaters/me/addresses")
     suspend fun postNewAddress(@Body addressRequest: AddressRequest): ServerResponse<Address>
 
-    @DELETE("eaters/me/addresses/{address_id}")
-    suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Void>
+
 
 
 
@@ -139,8 +132,17 @@ interface ApiService {
 
 
     //New Order calls
+    @GET("menu_items/{menu_item_id}/dish")
+    suspend fun getSingleDish(
+        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
+        @Query("lat") lat: Double? = null,
+        @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null,
+        @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<FullDish>
+
     @POST("eaters/me/orders")
-    fun postOrder(@Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
+    suspend fun postOrder(@Body orderRequest: OrderRequest): ServerResponse<Order>
 
     @POST("eaters/me/orders/{order_id}")
     fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): Call<ServerResponse<Order>>

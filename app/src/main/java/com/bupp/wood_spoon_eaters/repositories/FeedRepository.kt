@@ -37,6 +37,10 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                     Log.d("wowUserRepository","initUserRepo - Success")
                     FeedRepoResult(FeedRepoStatus.SUCCESS, result.value.data)
                 }
+                else -> {
+                    Log.d("wowUserRepository","initUserRepo - wsError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
             }
         }
     }

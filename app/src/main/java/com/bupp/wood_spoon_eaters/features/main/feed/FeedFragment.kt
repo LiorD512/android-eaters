@@ -111,23 +111,6 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.initFeed()
     }
 
-//    private fun handleLocationStatus(status: LocationStatus){
-//        when(status.type){
-//            LocationStatusType.KNOWN_LOCATION_WITH_BANNER -> {
-//                handleAddress(status.address)
-//            }
-//            LocationStatusType.NO_GPS_ENABLED_AND_NO_LOCATION -> {}
-//            LocationStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {}
-//        }
-//    }
-//
-//    private fun handleAddress(FeedRequest: FeedRequest?) {
-//        Log.d(TAG, "handleFeedRequest $FeedRequest")
-//        FeedRequest?.let{
-//            viewModel.initAddressBasedUi(it)
-//        }
-//    }
-
 
     override fun onDishClick(menuItemId: Long) {
         mainViewModel.onDishClick(menuItemId)

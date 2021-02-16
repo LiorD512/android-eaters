@@ -19,10 +19,8 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.additional_dishes_dialog.*
-import kotlinx.android.synthetic.main.additional_dishes_dialog.dishAddonPrice
 import kotlinx.android.synthetic.main.dish_addon_view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.text.DecimalFormat
 
 class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : DialogFragment(), AdditionalDishesAdapter.AdditionalDishesListener, OrderItemsAdapter.OrderItemsListener,
     ClearCartDialog.ClearCartDialogListener {
@@ -34,9 +32,9 @@ class AdditionalDishesDialog(val listener: AdditionalDishesDialogListener) : Dia
     }
 
     //    private val dishSharedViewModel by sharedViewModel<SingleDishViewModel>()
-    private val sharedViewModel by sharedViewModel<NewOrderMainViewModel>()
 //    private val viewModel by viewModel<AdditionalDishesViewModel>()
 
+    private val sharedViewModel by sharedViewModel<NewOrderMainViewModel>()
     private var mainAdapter: AdditionalDishMainAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

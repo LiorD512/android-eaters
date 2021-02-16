@@ -19,14 +19,13 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
-import com.bupp.wood_spoon_eaters.features.main.no_locations.NoLocationsAvailableFragment
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    OrdersBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
+    CartBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
 
     private var tooltip: Tooltip? = null
 
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     private fun initUi() {
         mainActHeaderView.setHeaderViewListener(this, viewModel.getCurrentEater())
-        mainActOrdersBB.setOrdersBottomBarListener(this)
+        mainActOrdersBB.setCartBottomBarListener(this)
     }
 
     private fun initUiRelatedProcesses() {
@@ -224,7 +223,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             if (pendingOrderEvent.hasPendingOrder) {
                 mainActOrdersBB.handleBottomBar(showCheckout = true)
                 pendingOrderEvent.totalPrice?.let {
-                    mainActOrdersBB.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = it)
+                    mainActOrdersBB.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = it)
                 }
             } else {
                 mainActOrdersBB.handleBottomBar(showCheckout = false)
@@ -361,7 +360,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
     }
 
-    override fun onBottomBarOrdersClick(type: Int) {
+    override fun onCartBottomBarOrdersClick(type: Int) {
         viewModel.checkForActiveOrder(true)
     }
 

@@ -15,16 +15,20 @@ import androidx.navigation.findNavController
 import com.bupp.wood_spoon.dialogs.AddressChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.address_chooser.sub_screen.AddressMenuDialog
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.additional_dishes.AdditionalDishesBottomSheet
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.SingleDishFragment
 import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
+import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
+import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.AdditionalDishesDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
+import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.android.synthetic.main.activity_new_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,7 +38,8 @@ import java.util.ArrayList
 class NewOrderActivity : AppCompatActivity(),
     CheckoutFragment.CheckoutDialogListener, AddressChooserDialog.AddressChooserDialogListener,
     AddressMenuDialog.EditAddressDialogListener, ClearCartDialog.ClearCartDialogListener,
-    SingleDishHeader.SingleDishHeaderListener {
+    SingleDishHeader.SingleDishHeaderListener, StartNewCartDialog.StartNewCartDialogListener, CartBottomBar.OrderBottomBatListener,
+    AdditionalDishesDialog.AdditionalDishesDialogListener {
 
     companion object{
         const val TAG = "wowNewOrderAct"
@@ -63,11 +68,106 @@ class NewOrderActivity : AppCompatActivity(),
 //        checkActivityIntent()
 
         viewModel.initNewOrderActivity(intent)
+        viewModel.checkCartStatusAndUpdateUi()
 
     }
 
     private fun initUi() {
         newOrderHeader.setSingleDishHeaderListener(this)
+        singleDishStatusBar.setCartBottomBarListener(this)
+    }
+
+    private fun initObservers() {
+        viewModel.ephemeralKeyProvider.observe(this, { event ->
+            if (!event.isSuccess) {
+                Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
+            }
+        })
+        viewModel.cartStatusEvent.observe(this, { cartStatusEvent ->
+            handleCartStatus(cartStatusEvent)
+        })
+        viewModel.cartBottomBarEvent.observe(this, {
+            updateStatusBottomBar(it)
+        })
+        viewModel.mainActionEvent.observe(this, {
+            when(it){
+                NewOrderMainViewModel.NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG -> {
+                    AdditionalDishesBottomSheet().show(supportFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
+                }
+                else -> {}
+            }
+        })
+
+//        viewModel.orderStatusEvent.observe(this, Observer { event ->
+//            if (event.hasActiveOrder) {
+////                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+//            } else {
+//                viewModel.initNewOrder()
+//            }
+//        })
+//
+//        viewModel.navigationEvent.observe(this, Observer { event ->
+//            event?.let {
+//                if(event.menuItemId != (-1).toLong()) {
+//                    viewModel.checkOrderStatus()
+//                    loadSingleDish(event.menuItemId)
+//                }
+//                if (event.isCheckout) {
+////                    onCheckout()
+//                } else if (event.menuItemId == (-1).toLong() && !event.isCheckout) {
+//                    finish()
+//                }
+//            }
+//        })
+
+
+
+
+
+
+
+
+
+//        viewModel.actionEvent.observe(this, Observer{
+//            when(it){
+//                NewOrderMainViewModel.NewOrderActionEvent.OPEN_ADDRESS_CHOOSER -> {
+//                    Log.d(TAG, "OPEN_ADDRESS_CHOOSER")
+//                    startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java)
+//                        .putExtra(Constants.START_WITH, Constants.START_WITH_ADDRESS_CHOOSER))
+//                }
+//            }
+//        })
+
+        viewModel.getReviewsEvent.observe(this, Observer{
+            it?.let{
+                RatingsDialog(it).show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            }
+        })
+    }
+
+    private fun updateStatusBottomBar(bottomBarEvent: NewOrderMainViewModel.CartBottomBarEvent) {
+        Log.d(TAG, "updateStatusBottomBar type: $bottomBarEvent.type")
+        singleDishStatusBar.updateStatusBottomBar(type = bottomBarEvent.type, price = bottomBarEvent.price, itemCount = bottomBarEvent.itemCount)
+    }
+
+    override fun onCartBottomBarOrdersClick(type: Int) {
+        viewModel.onCartBottomBarClick(type)
+//        when (type) {
+//            Constants.STATUS_BAR_TYPE_CART -> {
+//                if (viewModel.hasValidDeliveryAddress()) {
+//                    addToCart()
+//                } else {
+//                    openAddressMissingDialog()
+//                }
+//            }
+//            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
+//                (activity as NewOrderActivity).onCheckout()
+//            }
+//        }
+    }
+
+    override fun onBottomBarCheckoutClick() {
+//        (activity as NewOrderActivity).onCheckout()
     }
 
     override fun onBackClick() {
@@ -89,91 +189,55 @@ class NewOrderActivity : AppCompatActivity(),
         }
     }
 
-    private fun initObservers() {
-        viewModel.ephemeralKeyProvider.observe(this, { event ->
-            if (!event.isSuccess) {
-                Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
+
+
+    private fun handleCartStatus(cartStatus: CartManager.CartStatus) {
+        Log.d(TAG, "handleCartStatus: ${cartStatus.type}")
+        when(cartStatus.type){
+            CartManager.CartStatusEventType.NEW_ORDER -> {
+                singleDishStatusBar.handleBottomBar(showCheckout = false)
             }
-        })
-
-        viewModel.orderStatusEvent.observe(this, Observer { event ->
-            if (event.hasActiveOrder) {
-//                ClearCartDialog(this).show(supportFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-            } else {
-                viewModel.initNewOrder()
+            CartManager.CartStatusEventType.DIFFERENT_COOKING_SLOT -> {
+                val bundle = Bundle()
+                bundle.putString(Constants.START_NEW_CART_IN_CART_COOK_NAME_ARG, cartStatus.inCartCookName)
+                bundle.putString(Constants.START_NEW_CART_CURRENT_COOK_NAME_ARG, cartStatus.currentShowingCookName)
+                val dialog = StartNewCartDialog(this)
+                dialog.arguments = bundle
+                dialog.show(supportFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
             }
-        })
-
-        viewModel.navigationEvent.observe(this, Observer { event ->
-            event?.let {
-                if(event.menuItemId != (-1).toLong()) {
-                    viewModel.checkOrderStatus()
-                    loadSingleDish(event.menuItemId)
-                }
-                if (event.isCheckout) {
-//                    onCheckout()
-                } else if (event.menuItemId == (-1).toLong() && !event.isCheckout) {
-                    finish()
-                }
+            CartManager.CartStatusEventType.ADD_TO_ORDER_FOR_CURRENT_COOKING_SLOT -> {
+                singleDishStatusBar.handleBottomBar(showCheckout = true)
             }
-        })
-
-
-
-
-
-
-
-
-
-        viewModel.actionEvent.observe(this, Observer{
-            when(it){
-                NewOrderMainViewModel.NewOrderActionEvent.OPEN_ADDRESS_CHOOSER -> {
-                    Log.d(TAG, "OPEN_ADDRESS_CHOOSER")
-                    startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java)
-                        .putExtra(Constants.START_WITH, Constants.START_WITH_ADDRESS_CHOOSER))
-                }
-            }
-        })
-
-        viewModel.getReviewsEvent.observe(this, Observer{
-            it?.let{
-                RatingsDialog(it).show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
-            }
-        })
+        }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//    private fun handleOrderData(orderDataEvent: Order?) {
+//        if (orderDataEvent != null) {
+//            updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_CHECKOUT, checkoutPrice = ordersViewModel.calcTotalDishesPrice())
+////            singleDishHeader.updateUi(SingleDishHeader.COOK)
+//            singleDishScrollView.fullScroll(View.FOCUS_DOWN)
+//            singleDishStatusBar.handleBottomBar(false)
+//        } else {
+//            Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
     override fun onClearCart() {
 //        viewModel.initNewOrder()
     }
 
-    private fun checkActivityIntent() {
-        val menuItemId = intent.getLongExtra("menuItemId", -1)
-        val isCheckout = intent.getBooleanExtra("isCheckout", false)
-        val isEvent = intent.getBooleanExtra("isEvent", false)
-        viewModel.setIntentParams(menuItemId, isCheckout, isEvent)
+
+    override fun onNewCartClick() {
+
     }
+
+//    private fun checkActivityIntent() {
+//        val menuItemId = intent.getLongExtra("menuItemId", -1)
+//        val isCheckout = intent.getBooleanExtra("isCheckout", false)
+//        val isEvent = intent.getBooleanExtra("isEvent", false)
+//        viewModel.setIntentParams(menuItemId, isCheckout, isEvent)
+//    }
 
     fun startPaymentMethodActivity() {
         PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
@@ -254,9 +318,9 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
     override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is SingleDishFragment) {
-//            fragment.setSingleDishDialogListener(this)
-        }
+//        if (fragment is SingleDishFragment) {
+////            fragment.setSingleDishDialogListener(this)
+//        }
     }
 
     private fun getFragmentByTag(tag: String): Fragment? {
@@ -314,11 +378,11 @@ class NewOrderActivity : AppCompatActivity(),
 //            .show(supportFragmentManager, Constants.LOCATION_CHOOSER_TAG)
 //    }
 
-    override fun onAddressChoose(address: Address) {
-        viewModel.setChosenAddress(address)
-        if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
-            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
-        }
+    override fun onAddressChoose(address: Address) {//todo - nyc
+//        viewModel.setChosenAddress(address)
+//        if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
+//            (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
+//        }
     }
 
     override fun onEditAddress(address: Address) {
@@ -347,7 +411,17 @@ class NewOrderActivity : AppCompatActivity(),
         finish()
     }
 
+    override fun onProceedToCheckout() {
+        TODO("Not yet implemented")
+    }
 
+    override fun onDishClick(dish: Dish) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAdditionalDialogDismiss() {
+        TODO("Not yet implemented")
+    }
 
 
 }

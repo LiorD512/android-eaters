@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
     <com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/newOrderHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+    <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/singleDishStatusBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@color/white"
             android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            app:layout_constraintBottom_toTopOf="@+id/singleDishStatusBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newOrderHeader">
 
         <fragment
                 android:id="@+id/newOrderContainer"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/new_order_nav" />
 
     </androidx.core.widget.NestedScrollView>
 
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/singleDishPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone" />
 
-        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-                android:id="@+id/singleDishPb"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:visibility="gone" />
-
-    </LinearLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

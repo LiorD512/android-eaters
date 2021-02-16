@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -340,7 +338,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
         checkoutFragTotalPriceText.text = "${curOrder.totalBeforeTip.formatedValue}"
 
-        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.STATUS_BAR_TYPE_FINALIZE, price = totalWithTip)
+        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_FINALIZE, price = totalWithTip)
 
     }
 

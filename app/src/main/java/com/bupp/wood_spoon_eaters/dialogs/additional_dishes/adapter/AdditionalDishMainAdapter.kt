@@ -39,21 +39,21 @@ class AdditionalDishMainAdapter(
     }
 
     @SuppressLint("LongLogTag")
-    fun refreshOrderItems(orderItemList: ArrayList<OrderItem>) {
+    fun refreshOrderItems(orderItemList: List<OrderItem>) {
         Log.d(TAG, "refreshOrderItems $orderItemList")
         orderItemsSection.removeItem()
         orderItemsSection.setItem(OrderItems(orderItemList))
         orderItemsSection.showSection()
     }
 
-    fun ArrayList<Dish>.f(orderItems: List<Dish>) = filter { dish ->
-        orderItems.any { orderItem ->
-            orderItem.id != dish.id
-        }
-    }
+//    fun List<Dish>.f(orderItems: List<Dish>) = filter { dish ->
+//        orderItems.any { orderItem ->
+//            orderItem.id != dish.id
+//        }
+//    }
 
     @SuppressLint("LongLogTag")
-    fun refreshAdditionalDishes(dishes: ArrayList<Dish>) {
+    fun refreshAdditionalDishes(dishes: List<Dish>) {
         Log.d(TAG, "refreshAdditionalDishes $dishes")
         val orderItems = orderItemsSection.item?.orderItems
         //remove order items from additional dish list

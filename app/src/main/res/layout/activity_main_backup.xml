@@ -78,7 +78,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+            <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
                     android:id="@+id/mainActOrdersBB"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

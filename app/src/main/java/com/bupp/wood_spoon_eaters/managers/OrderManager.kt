@@ -57,14 +57,14 @@ class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager, 
         return null//todo - nyc
     }
 
-    fun addOrderItem(orderItemRequest: OrderItemRequest) {
-        currentOrderRequest?.let {
-            if (it.orderItemRequests == null) {
-                it.orderItemRequests = arrayListOf()
-            }
-            it.orderItemRequests?.add(orderItemRequest)
-        }
-    }
+//    fun addOrderItem(orderItemRequest: OrderItemRequest) {
+//        currentOrderRequest?.let {
+//            if (it.orderItemRequests == null) {
+//                it.orderItemRequests = arrayListOf()
+//            }
+//            it.orderItemRequests?.add(orderItemRequest)
+//        }
+//    }
 
 
     fun setOrderResponse(order: Order?) {

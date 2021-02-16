@@ -72,6 +72,7 @@ object GoogleAddressParserUtil {
         addressRequest.stateIso = State.valueOfState(location.adminArea).iso
         addressRequest.countryIso = location.countryCode
         addressRequest.zipCode = location.postalCode
+        addressRequest.addressSlug = location.getAddressLine(0)
 
         return addressRequest
     }

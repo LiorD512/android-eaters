@@ -6,6 +6,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.text.InputType
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -17,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
+import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
 
 class WSEditText @JvmOverloads
@@ -86,10 +88,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private var inputType: Int = 0
-
-    fun setChecked() {
-        binding.wsEditTextCheck.visibility = View.VISIBLE
-    }
 
     fun showError() {
         with(binding){
@@ -269,5 +267,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun getPrefix(): String {
         return binding.wsEditTextPrefix.text.toString()
     }
+
 
 }

@@ -99,7 +99,7 @@ class FeedDataManager(private val context: Context,
     }
 
 
-    fun getFeedRequest(currentAddress: Address): FeedRequest {
+    fun getFeedRequestWithAddress(currentAddress: Address): FeedRequest {
         var feedRequest = FeedRequest()
         //address
         if (currentAddress.id != null) {
@@ -107,6 +107,25 @@ class FeedDataManager(private val context: Context,
         } else {
             feedRequest.lat = currentAddress.lat
             feedRequest.lng = currentAddress.lng
+        }
+
+        //time
+        feedRequest.timestamp = eaterDataManager.getDeliveryTimestamp()
+
+        return feedRequest
+    }
+
+    fun getLastFeedRequest(): FeedRequest {
+        var feedRequest = FeedRequest()
+        val lastAddress = getFinalAddressLiveDataParam().value
+        lastAddress?.let{
+            //address
+            if (lastAddress.id != null) {
+                feedRequest.addressId = lastAddress.id
+            } else {
+                feedRequest.lat = lastAddress.lat
+                feedRequest.lng = lastAddress.lng
+            }
         }
 
         //time

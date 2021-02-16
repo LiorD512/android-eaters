@@ -47,6 +47,8 @@ class UserRepository(
                     Log.d("wowUserRepository","initUserRepo - Success")
                     this.currentUser = result.value.data?.copy()
                 }
+                is ResultHandler.WSCustomError -> {
+                }
             }
         }
     }
@@ -81,6 +83,9 @@ class UserRepository(
                     Log.d("wowUserRepository","sendPhoneVerification - Success")
                     UserRepoResult(UserRepoStatus.SUCCESS)
                 }
+                is ResultHandler.WSCustomError -> {
+                    UserRepoResult(UserRepoStatus.INVALID_PHONE)
+                }
             }
         }
     }
@@ -105,6 +110,9 @@ class UserRepository(
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
                 }
+                is ResultHandler.WSCustomError -> {
+                    UserRepoResult(UserRepoStatus.WRONG_PASSWORD)
+                }
             }
         }
     }
@@ -128,6 +136,9 @@ class UserRepository(
                     val eater = result.value.data
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
+                }
+                is ResultHandler.WSCustomError -> {
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
         }
@@ -154,6 +165,9 @@ class UserRepository(
                     initUserRepo()
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
                 }
+                is ResultHandler.WSCustomError -> {
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                }
             }
         }
     }
@@ -177,6 +191,9 @@ class UserRepository(
                         Log.d("wowUserRepository", "deleteAddress - Success")
                         initUserRepo()
                         UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
+                    }
+                    is ResultHandler.WSCustomError -> {
+                        UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                     }
                     else -> {
                         Log.d("wowUserRepository", "deleteAddress - addressId is null")

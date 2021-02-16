@@ -8,6 +8,7 @@ import android.text.InputFilter
 import android.text.InputType
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.input_title_view.view.*
 import render.animations.Attention
@@ -27,6 +29,9 @@ class InputTitleView : LinearLayout {
 
     private var inputType: Int = 0
     private var listener: InputTitleViewListener? = null
+    var maxChar = -1
+    var throttlingTimeout: Long = 0
+    protected var watcher: AutoCompleteTextWatcher? = null
 
     interface InputTitleViewListener {
         fun onInputTitleChange(str: String?){}
@@ -83,7 +88,10 @@ class InputTitleView : LinearLayout {
                 inputTitleViewInput.setTextSize(TypedValue.COMPLEX_UNIT_SP, Utils.toSp(textSize.toInt()).toFloat())
             }
 
-            val maxChar = a.getInt(R.styleable.InputTitleView_maxChar, -1)
+            throttlingTimeout = a.getInt(R.styleable.InputTitleView_throttlingTimeout, 0).toLong()
+            watcher = getAutoCompleteTextWatcher()
+            
+            maxChar = a.getInt(R.styleable.InputTitleView_maxChar, -1)
             //limit edit text length
             if (maxChar != -1) {
                 val filterArray = arrayOfNulls<InputFilter>(1)
@@ -150,16 +158,17 @@ class InputTitleView : LinearLayout {
                 }
             }
 
-            inputTitleViewInput.addTextChangedListener(object : SimpleTextWatcher() {
-                @SuppressLint("SetTextI18n")
-                override fun afterTextChanged(s: Editable) {
-                    if (maxChar != -1) {
-                        inputTitleViewCounter.text = (s.length.toString()) + "/" + maxChar
-                    }
-                    listener?.onInputTitleChange(s.toString())
-                    hideError()
-                }
-            })
+            inputTitleViewInput.addTextChangedListener(watcher)
+//            inputTitleViewInput.addTextChangedListener(object : SimpleTextWatcher() {
+//                @SuppressLint("SetTextI18n")
+//                override fun afterTextChanged(s: Editable) {
+//                    if (maxChar != -1) {
+//                        inputTitleViewCounter.text = (s.length.toString()) + "/" + maxChar
+//                    }
+//                    listener?.onInputTitleChange(s.toString())
+//                    hideError()
+//                }
+//            })
 
             a.recycle()
         }
@@ -200,6 +209,23 @@ class InputTitleView : LinearLayout {
 
     fun hideError() {
         inputTitleViewInputError.visibility = View.GONE
+    }
+
+    private fun getAutoCompleteTextWatcher(): AutoCompleteTextWatcher {
+        return object : AutoCompleteTextWatcher(throttlingTimeout) {
+            override fun handleInputString(input: String) {
+                Log.d(TAG, "throttlingTimeout: $throttlingTimeout, afterTextChanged: $input")
+                if (maxChar != -1) {
+                    inputTitleViewCounter.text = "${input.length} / $maxChar"
+                }
+                listener?.onInputTitleChange(input)
+                hideError()
+            }
+        }
+    }
+
+    companion object{
+        const val TAG = "wowInputTitleView"
     }
 
 }

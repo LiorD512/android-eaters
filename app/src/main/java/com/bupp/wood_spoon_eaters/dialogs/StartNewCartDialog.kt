@@ -8,10 +8,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.Cook
 import kotlinx.android.synthetic.main.start_new_cart_dialog_layout.*
 
-class StartNewCartDialog(val cookInCartName: String = "", val currentShowingCookName: String = "", val listener: StartNewCartDialogListener) : DialogFragment() {
+class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragment() {
+
+    private var cookInCartName = ""
+    private var currentCookName = ""
 
     interface StartNewCartDialogListener {
         fun onNewCartClick()
@@ -21,6 +25,11 @@ class StartNewCartDialog(val cookInCartName: String = "", val currentShowingCook
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+
+        arguments?.let{
+            cookInCartName = it.getString(Constants.START_NEW_CART_IN_CART_COOK_NAME_ARG, "")
+            currentCookName = it.getString(Constants.START_NEW_CART_CURRENT_COOK_NAME_ARG, "")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,7 +55,7 @@ class StartNewCartDialog(val cookInCartName: String = "", val currentShowingCook
         }
 
 
-        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCartName, currentShowingCookName)
+        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCartName, currentCookName)
     }
 
 }

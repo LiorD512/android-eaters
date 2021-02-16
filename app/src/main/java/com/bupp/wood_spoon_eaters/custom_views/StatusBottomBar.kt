@@ -19,7 +19,7 @@ class StatusBottomBar : FrameLayout {
     }
     private var listener: StatusBottomBarListener? = null
 
-    private var curType: Int? = Constants.STATUS_BAR_TYPE_CART
+    private var curType: Int? = Constants.CART_BOTTOM_BAR_TYPE_CART
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -57,17 +57,17 @@ class StatusBottomBar : FrameLayout {
             statusBottomBarPrice.text = "$$priceStr"
         }
         when(curType){
-            Constants.STATUS_BAR_TYPE_CART -> {
+            Constants.CART_BOTTOM_BAR_TYPE_CART -> {
                 statusBottomBarPrice.visibility = View.VISIBLE
                 if(itemCount != null){
                     statusBottomBarTitle.text = "Add $itemCount To Cart"
                 }
             }
-            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
+            Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT -> {
                 statusBottomBarPrice.visibility = View.VISIBLE
                 statusBottomBarTitle.text = "Proceed To Checkout"
             }
-            Constants.STATUS_BAR_TYPE_FINALIZE -> {
+            Constants.CART_BOTTOM_BAR_TYPE_FINALIZE -> {
                 statusBottomBarTitle.text = "PLACE AN ORDER"
             }
         }

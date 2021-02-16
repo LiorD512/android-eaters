@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.header_view.view.*
 
 class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndTimeView.AddressAndTimeViewListener {
 
-    protected var watcher: AutoCompleteTextWatcher? = getAutoCompleteTextWatecher()
+    protected var watcher: AutoCompleteTextWatcher? = getAutoCompleteTextWatcher()
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -129,8 +129,8 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
         headerViewSearchInput.addTextChangedListener(watcher)
     }
 
-    private fun getAutoCompleteTextWatecher(): AutoCompleteTextWatcher {
-        return object : AutoCompleteTextWatcher() {
+    private fun getAutoCompleteTextWatcher(): AutoCompleteTextWatcher {
+        return object : AutoCompleteTextWatcher(450) {
             override fun handleInputString(input: String) {
                 Log.d("wowHeaderView", "afterTextChanged: $input")
                 listener?.onHeaderTextChange(input)

@@ -2,43 +2,35 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
-import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.utils.DateUtils
-import kotlinx.coroutines.launch
 import java.util.*
 
 class SingleDishInfoViewModel(
-    val cartManager: CartManager,
-    val settings: AppSettings,
-    val orderManager: OrderManager,
-    val eaterDataManager: EaterDataManager,
-    val metaDataRepository: MetaDataRepository,
-    val newOrderRepository: NewOrderRepository
+    private val cartManager: CartManager,
 ) : ViewModel() {
 
-
-    val getReviewsEvent: SingleLiveEvent<Review?> = SingleLiveEvent()
-    fun getDishReview() {
-        progressData.startProgress()
-        val currentDishId = cartManager.currentShowingDish?.id
-        currentDishId?.let{
-            viewModelScope.launch {
-                val result = newOrderRepository.getDishReview(it)
-                result?.let{
-                    getReviewsEvent.postValue(it)
-                }
-            }
-        }
+    fun updateCurrentOrderItem(quantity: Int? = null, note: String? = null){
+        cartManager.updateCurrentOrderItem(OrderItemRequest(quantity = quantity, notes = note))
     }
+
+//    fun addNewItemToCart(){
+//        cartManager.addNewItemToCart()
+//    }
+//    val getReviewsEvent: SingleLiveEvent<Review?> = SingleLiveEvent()
+//    fun getDishReview() {
+//        progressData.startProgress()
+//        val currentDishId = cartManager.currentShowingDish?.id
+//        currentDishId?.let{
+//            viewModelScope.launch {
+//                val result = newOrderRepository.getDishReview(it)
+//                result?.let{
+//                    getReviewsEvent.postValue(it)
+//                }
+//            }
+//        }
+//    }
 
 
 

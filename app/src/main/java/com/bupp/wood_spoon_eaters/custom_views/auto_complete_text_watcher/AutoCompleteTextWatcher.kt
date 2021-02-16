@@ -1,9 +1,9 @@
 package com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher
 
-abstract class AutoCompleteTextWatcher : InputTextWatcher {
+abstract class AutoCompleteTextWatcher(throttlingTimeout: Long) : InputTextWatcher() {
 
-    constructor() {
-        setThrottlingTimeout(450)
+    init {
+        setThrottlingTimeout(throttlingTimeout)
     }
 
     override fun prepareString(input: String): String {

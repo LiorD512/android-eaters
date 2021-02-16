@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients
 
 import android.content.Context
 import android.view.LayoutInflater

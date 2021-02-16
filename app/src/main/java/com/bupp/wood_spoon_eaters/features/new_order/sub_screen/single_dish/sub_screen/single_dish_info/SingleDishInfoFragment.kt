@@ -3,16 +3,17 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.dialogs.VideoPlayerDialog
-import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
@@ -24,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageView.UserImageViewListener,
-    DishMediaAdapter.DishMediaAdapterListener {
+    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener {
 
     private val viewModel by viewModel<SingleDishInfoViewModel>()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
@@ -49,13 +50,31 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         singleDishInfoImagePager.adapter = dishMediaPagerAdapter
 
         singleDishChangeTimeBtn.setOnClickListener { openOrderTimeDialog() }
+
+        singleDishNote.setInputTitleViewListener(this)
     }
 
     private fun initObserver() {
-        mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, Observer{
+        mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, {
             updateDishInfoUi(it)
+            mainViewModel.updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CART, price = it.getPriceObj().value, itemCount = 1)
         })
+//        mainViewModel.mainActionEvent.observe(viewLifecycleOwner, {
+//            addCurrentDishToCart()
+//        })
     }
+
+//    private fun addCurrentDishToCart() {
+//        Log.d(TAG, "addCurrentDishToCart")
+//        viewModel.addNewItemToCart()
+////        val quantity = singleDishPlusMinus.counter
+//////        val removedIngredients = ingredientsAdapter?.ingredientsRemoved todo - add this in the right place
+////        val note = singleDishIngredientInstructions.getText()
+////        viewModel.updateDishBeforeAddingToCart(
+////            quantity = quantity,
+////            note = note
+////        )
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun updateDishInfoUi(fullDish: FullDish) {
@@ -113,6 +132,10 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         }
     }
 
+    override fun onInputTitleChange(str: String?) {
+        viewModel.updateCurrentOrderItem(note = str)
+    }
+
     private fun onRatingClick() {
         mainViewModel.getCooksReview()
     }
@@ -127,7 +150,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
-        //updating ui only
+        viewModel.updateCurrentOrderItem(quantity = counter)
 //        viewModel.getCurrentDish().let {
 //            val newValue = it.price.value * counter
 //            updateStatusBottomBar(price = newValue, itemCount = counter)
@@ -149,7 +172,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
                     currentDish.menuItem?.cookingSlot?.orderFrom?.let {
                         singleDishInfoDate.text = DateUtils.parseDateToDayDateHour(it)
                     }
-                } else if (currentDish.doorToDoorTime != null) {
+                } else {
                     singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
                 }
 //            }
@@ -170,5 +193,8 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         VideoPlayerDialog(uri).show(childFragmentManager, Constants.VIDEO_PLAYER_DIALOG)
     }
 
+    companion object{
+        const val TAG = "wowSingleDishInfoFrag"
+    }
 
 }

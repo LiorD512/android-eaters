@@ -4,11 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
@@ -32,11 +30,10 @@ class FeedViewModel(
 
     fun refreshFeedForNewAddress(address: Address) {
         Log.d(TAG,"refreshFeedForNewAddress: $address")
-        val feedRequest = feedDataManager.getFeedRequest(address)
+        val feedRequest = feedDataManager.getFeedRequestWithAddress(address)
         Log.d(TAG,"refreshFeedForNewAddress feedRequest: $feedRequest")
         getFeedWith(feedRequest)
     }
-
 
 
     val feedResultData: SingleLiveEvent<OldFeedEvent> = SingleLiveEvent()

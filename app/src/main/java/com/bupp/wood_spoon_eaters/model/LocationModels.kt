@@ -29,7 +29,8 @@ data class AddressRequest(
     @SerializedName("city_name") var cityName: String? = null,
     @SerializedName("dropoff_location") var dropoffLocation: String? = null, //Available values : delivery_to_door, pickup_outside
     @SerializedName("zipcode") var zipCode: String? = null,
-    @SerializedName("notes") var notes: String? = null
+    @SerializedName("notes") var notes: String? = null,
+    var addressSlug: String? = null
 ) : Parcelable{
 
     fun getUserLocationStr(): String{
@@ -44,7 +45,8 @@ data class AddressRequest(
     }
 
     fun toAddress(): Address? {
-        return Address(id = null, lat = lat, lng = lng, streetLine1 = streetLine1, streetLine2 = streetLine2)
+        val fullStreetLine1 = "${streetNumber} ${streetLine1}"
+        return Address(id = null, lat = lat, lng = lng, streetLine1 = fullStreetLine1, streetLine2 = streetLine2, addressSlug = addressSlug)
     }
 
 }
@@ -62,12 +64,17 @@ data class Address(
     @SerializedName("street_line_1") var streetLine1: String? = null,
     @SerializedName("street_line_2") var streetLine2: String? = null,
     @SerializedName("zipcode") val zipCode: String? = null,
-    @SerializedName("notes") val notes: String? = null
+    @SerializedName("notes") val notes: String? = null,
+    val addressSlug: String? = null
 ) : Parcelable {
 
     fun getUserLocationStr(): String{
-        val street = streetLine1?.let{"${it},"} ?: ""
-        return "$street ${city?.name ?: ""} ${state?.name ?: ""}"
+        if(city == null && state == null && addressSlug != null){
+            return addressSlug
+        }else{
+            val street = streetLine1?.let{"${it},"} ?: ""
+            return "$street ${city?.name ?: ""} ${state?.name ?: ""}"
+        }
     }
     fun getDropoffLocationStr(): String {
         return when (dropOfLocationStr) {

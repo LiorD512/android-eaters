@@ -36,10 +36,11 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.base_repos.FeedRepositoryImpl
+import com.bupp.wood_spoon_eaters.network.base_repos.OrderRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.repositories.NewOrderRepository
+import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -49,7 +50,6 @@ val appModule = module {
 
     //global
     single { FcmManager(get()) }
-    factory { PermissionManager() }
     single { AppSettings(get(), get()) }
     single { MetaDataRepository(get()) }
 
@@ -58,7 +58,8 @@ val appModule = module {
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
     single { UserRepository(get(), get()) }
-    single { NewOrderRepository(get(), get()) }
+    single { OrderRepository(get(), get()) }
+    single { OrderRepositoryImpl(get()) }
 
     //managers
     single { DeliveryTimeManager() }
@@ -66,7 +67,7 @@ val appModule = module {
     single { LocationManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
-    single { CartManager(get(), get(), get(), get()) }
+    single { CartManager(get(), get(), get()) }
     single { EventsManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get()) }
@@ -94,8 +95,11 @@ val appModule = module {
     viewModel { TimePickerViewModel(get()) }
 
     //New Order
+    viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { SingleDishInfoViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SingleDishInfoViewModel(get()) }
+    viewModel { CheckoutViewModel(get(), get(), get()) }
+    viewModel { PromoCodeViewModel(get(),get())}
 
 
     //main
@@ -103,8 +107,6 @@ val appModule = module {
     viewModel { FeedViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
-    viewModel { CheckoutViewModel(get(), get(), get()) }
-    viewModel { PromoCodeViewModel(get(),get())}
     viewModel { RateLastOrderViewModel(get(),get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { OrderDetailsViewModel(get()) }
@@ -113,7 +115,6 @@ val appModule = module {
     viewModel { PaymentMethodsViewModel(get()) }
     viewModel { UpdateRequiredViewModel(get()) }
 
-    viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { ActiveOrderTrackerViewModel(get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 

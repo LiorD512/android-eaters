@@ -105,9 +105,9 @@ class Constants {
         const val TOOL_TIP_MINMUM_ORDER_FEE = 4
 
         //status bottom bar types
-        const val STATUS_BAR_TYPE_CART = 0
-        const val STATUS_BAR_TYPE_CHECKOUT = 1
-        const val STATUS_BAR_TYPE_FINALIZE = 2
+        const val CART_BOTTOM_BAR_TYPE_CART = 0
+        const val CART_BOTTOM_BAR_TYPE_CHECKOUT = 1
+        const val CART_BOTTOM_BAR_TYPE_FINALIZE = 2
 
         //Mlti Section View stsub View
         const val FEED_VIEW_STUB_SHARE = 0
@@ -149,7 +149,6 @@ class Constants {
         const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog"
         const val CONTACT_US_DIALOG_TAG = "contact_us_dialog"
         const val THANK_YOU_DIALOG_TAG = "thank_you_dialog"
-        const val START_NEW_CART_DIALOG_TAG = "start_new_cart_dialog"
         const val DISH_SOLD_OUT_DIALOG_TAG = "dish_sold_out_dialog"
         const val ORDER_DATE_CHOOSER_DIALOG_TAG = "order_date_chooser_dialog"
         const val CERTIFICATES_DIALOG_TAG = "certificated_dialog"
@@ -181,6 +180,11 @@ class Constants {
         const val NATIONWIDE_SHIPPING_INFO_DIALOG = "nationwide_shipping_info_dialog"
         const val NATIONWIDE_SHIPPING_SELECT_DIALOG = "nationwide_shipping_select_dialog"
         const val WS_ERROR_DIALOG = "ws_error_dialog"
+
+        //start new cart dialog
+        const val START_NEW_CART_IN_CART_COOK_NAME_ARG = "in_cart_cook_name"
+        const val START_NEW_CART_CURRENT_COOK_NAME_ARG = "current_cook_name"
+        const val START_NEW_CART_DIALOG_TAG = "start_new_cart_dialog"
 
         //bottom sheet
         const val TIME_PICKER_BOTTOM_SHEET = "time_picker_bottom_sheet"

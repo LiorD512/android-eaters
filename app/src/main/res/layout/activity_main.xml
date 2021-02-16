@@ -88,7 +88,7 @@
 <!--            app:layout_constraintBottom_toTopOf="@+id/mainActOrdersBB"-->
 <!--            app:navGraph="@navigation/main_nav" />-->
 
-    <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
+    <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
             android:id="@+id/mainActOrdersBB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

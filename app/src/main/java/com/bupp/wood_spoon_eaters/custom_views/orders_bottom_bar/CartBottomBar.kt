@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.orders_bottom_bar.view.*
 import java.text.DecimalFormat
 
 
-class OrdersBottomBar : FrameLayout{
+class CartBottomBar : FrameLayout{
 
     private var curType: Int = -1
     var ordersVisible = false
@@ -20,15 +20,13 @@ class OrdersBottomBar : FrameLayout{
 
     var listener: OrderBottomBatListener? = null
     interface OrderBottomBatListener{
-        fun onBottomBarOrdersClick(curType: Int)
+        fun onCartBottomBarOrdersClick(curType: Int)
         fun onBottomBarCheckoutClick()
     }
 
-    fun setOrdersBottomBarListener(listener: OrderBottomBatListener){
+    fun setCartBottomBarListener(listener: OrderBottomBatListener){
         this.listener = listener
     }
-
-
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -40,7 +38,7 @@ class OrdersBottomBar : FrameLayout{
     }
 
     private fun initUi() {
-        ordersBottomBarOrder.setOnClickListener { listener?.onBottomBarOrdersClick(curType) }
+        ordersBottomBarOrder.setOnClickListener { listener?.onCartBottomBarOrdersClick(curType) }
         ordersBottomBarCheckout.setOnClickListener { listener?.onBottomBarCheckoutClick() }
     }
 
@@ -75,13 +73,13 @@ class OrdersBottomBar : FrameLayout{
         }
     }
 
-    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, checkoutPrice : Double? = null, itemCount: Int? = null) {
+    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
         if(type != null){
             this.curType = type
         }
 
         when(curType){
-            Constants.STATUS_BAR_TYPE_CART -> {
+            Constants.CART_BOTTOM_BAR_TYPE_CART -> {
                 ordersBottomBarOrder.visibility = View.VISIBLE
                 ordersVisible = true
                 ordersBottomBarOrderPrice.visibility = View.VISIBLE
@@ -93,16 +91,16 @@ class OrdersBottomBar : FrameLayout{
                     ordersBottomBarOrderPrice.text = "$$priceStr"
                 }
             }
-            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
+            Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT -> {
                 checkoutVisible = true
                 ordersBottomBarCheckout.visibility = View.VISIBLE
-                checkoutPrice?.let{
-                    val checkoutPriceStr = DecimalFormat("##.##").format(checkoutPrice)
+                price?.let{
+                    val checkoutPriceStr = DecimalFormat("##.##").format(it)
                     ordersBottomBarCheckoutPrice.text = "$$checkoutPriceStr"
                     ordersBottomBarCheckoutPrice.visibility = View.VISIBLE
                 }
             }
-            Constants.STATUS_BAR_TYPE_FINALIZE -> {
+            Constants.CART_BOTTOM_BAR_TYPE_FINALIZE -> {
                 ordersBottomBarOrderTitle.text = "PLACE AN ORDER"
                 ordersBottomBarCheckout.visibility = View.GONE
                 checkoutVisible = false
@@ -111,12 +109,6 @@ class OrdersBottomBar : FrameLayout{
         checkSepEnable()
     }
 
-//    fun handleOrderBar(shouldShow: Boolean){
-//        when(shouldShow){
-//            true -> ordersBottomBarOrder.visibility = View.VISIBLE
-//            false -> ordersBottomBarOrder.visibility = View.GONE
-//        }
-//    }
 
 
 }

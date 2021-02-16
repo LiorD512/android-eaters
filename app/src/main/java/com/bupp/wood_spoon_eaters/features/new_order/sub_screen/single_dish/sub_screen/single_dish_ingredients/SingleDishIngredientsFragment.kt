@@ -6,14 +6,16 @@ import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import androidx.fragment.app.Fragment
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.model.FullDish
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.bupp.wood_spoon_eaters.common.Constants
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlinx.android.synthetic.main.fragment_single_dish_ingredients.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.DishIngredientsAdapter
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment
 import com.segment.analytics.Analytics
 
 class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ingredients) {
@@ -32,6 +34,23 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
         mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, Observer{
             initIngredient(it)
         })
+        mainViewModel.mainActionEvent.observe(viewLifecycleOwner, {
+            addCurrentDishToCart()
+        })
+    }
+
+    private fun addCurrentDishToCart() {
+        Log.d(TAG, "addCurrentDishToCart")
+//        viewModel.update
+//        val quantity = singleDishPlusMinus.counter
+//        val removedIngredients = ingredientsAdapter?.ingredientsRemoved
+//        val note = singleDishIngredientInstructions.getText()
+//        ordersViewModel.addToCart(
+//            fullDish = viewModel.fullDish.value?.fullDish,
+//            quantity = quantity,
+//            removedIngredients = removedIngredients,
+//            note = note
+//        )
     }
 
     @SuppressLint("SetTextI18n")
@@ -50,5 +69,9 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
         singleDishIngredientList.addItemDecoration(divider)
         val ingredientsAdapter = DishIngredientsAdapter(requireContext(), currentDish.dishIngredients)
         singleDishIngredientList.adapter = ingredientsAdapter
+    }
+
+    companion object{
+        const val TAG = "wowSingleDishIngredientsFrag"
     }
 }

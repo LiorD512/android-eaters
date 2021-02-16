@@ -77,6 +77,7 @@
         <attr name="error"/>
         <attr name="lines" format="integer"/>
         <attr name="maxChar" format="integer"/>
+        <attr name="throttlingTimeout" format="integer"/>
         <attr name="inputType"/>
         <attr name="android:gravity" />
         <attr name="android:textSize" />

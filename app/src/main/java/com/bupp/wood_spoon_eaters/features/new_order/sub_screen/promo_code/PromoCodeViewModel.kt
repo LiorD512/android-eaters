@@ -7,18 +7,7 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.network.ApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import com.google.gson.GsonBuilder
-import com.google.gson.Gson
-import android.widget.Toast
-import com.facebook.FacebookSdk.getApplicationContext
-import retrofit2.adapter.rxjava2.Result.response
-import android.R.string
 import com.bupp.wood_spoon_eaters.network.BaseCallback
-import com.uxcam.internals.it
-import java.io.IOException
 
 
 class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : ViewModel() {

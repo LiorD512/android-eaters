@@ -3,12 +3,7 @@ package com.bupp.wood_spoon_eaters.features.new_order.service
 import com.bupp.wood_spoon_eaters.model.EphemeralKey
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import io.reactivex.Observable
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.http.FieldMap
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.POST
 
 /**
  * A Retrofit service used to communicate with a server.
