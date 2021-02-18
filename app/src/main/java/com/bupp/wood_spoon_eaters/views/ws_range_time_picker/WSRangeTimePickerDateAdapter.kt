@@ -39,16 +39,18 @@ class WSRangeTimePickerDateAdapter :
         private val itemText: TextView = view.wsRangeTimePickerItem
 
         fun bindItem(date: Date, position: Int, itemCount: Int) {
-            if(position == 1){
+            if(DateUtils.isToday(date)){
                 itemText.text = "Today"
             }else{
                 itemText.text = DateUtils.parseDateToUsDate(date)
             }
-            if(position+1 == itemCount || position == 0){
-                itemText.alpha = 0.3f
-            }else{
-                itemText.alpha = 1f
-            }
+//            if(itemCount > 1){
+//                if(position+1 == itemCount || position == 0){
+//                    itemText.alpha = 0.3f
+//                }else{
+//                    itemText.alpha = 1f
+//                }
+//            }
         }
     }
 

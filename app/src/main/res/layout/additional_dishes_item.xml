@@ -6,6 +6,7 @@
         android:layout_height="wrap_content">
 
     <com.bupp.wood_spoon_eaters.custom_views.DishAddonView
+            android:paddingVertical="15.4dp"
             android:id="@+id/additionalDishItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

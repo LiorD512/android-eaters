@@ -5,76 +5,79 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.PlusMinusViewBinding
+import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
 import kotlinx.android.synthetic.main.blue_btn.view.*
 import kotlinx.android.synthetic.main.plus_minus_view.view.*
 
 
-class PlusMinusView : FrameLayout {
+class PlusMinusView@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr) {
 
+    private var binding: PlusMinusViewBinding = PlusMinusViewBinding.inflate(LayoutInflater.from(context), this, true)
+
+    private var counter: Int = 0
     private var listener: PlusMinusInterface? = null
     private var position: Int = -1
     private var quantityLeft: Int = -1
+    private var canReachZero: Boolean = true
 
-    fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initialCounter: Int = 0, quantityLeft: Int? = 1) {
+    fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initialCounter: Int = 0, quantityLeft: Int? = 1, canReachZero: Boolean = true) {
         Log.d("wowPlusMinus","initialCounter $initialCounter, quantityLeft: $quantityLeft")
         this.listener = listener
         this.position = position
         this.counter = initialCounter
+        this.canReachZero = canReachZero
+
         quantityLeft?.let{
             this.quantityLeft = it
         }
         plusMinusCounter.text = "$counter"
 
         if(counter >= this.quantityLeft){
-            plusMinusPlus.isEnabled = false
-            plusMinusPlus.alpha = 0.5f
+            handlePlus(false)
         }
+
+        if(!canReachZero && counter == 1){
+            handleMinus(false)
+        }
+
+        initUi()
     }
 
-    fun updateCounterUiOnly(count: Int) {
-        counter = count
-        plusMinusCounter.text = "$counter"
-    }
+//    fun updateCounterUiOnly(count: Int) {
+//        counter = count
+//        plusMinusCounter.text = "$counter"
+//    }
 
     fun setViewEnabled(isEnabled: Boolean) {
-        when(isEnabled){
-            true ->{
-
-            }
-            false -> {
-                plusMinusPlus.isEnabled = false
-                plusMinusPlus.alpha = 0.5f
-                plusMinusMinus.isEnabled = false
-                plusMinusMinus.alpha = 0.5f
-                plusMinusCounter.alpha = 0.5f
-            }
-        }
+        handleMinus(isEnabled)
+        handlePlus(isEnabled)
     }
 
     interface PlusMinusInterface {
         fun onPlusMinusChange(counter: Int, position: Int)
     }
 
-    var counter: Int = 0
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.plus_minus_view, this, true)
-
+    private fun initUi() {
         plusMinusMinus.setOnClickListener {
             if (counter > 0) {
-                counter--
-                plusMinusCounter.text = "$counter"
-                listener?.onPlusMinusChange(counter, position)
-
-                if(counter == quantityLeft){
-                    plusMinusPlus.isEnabled = false
-                    plusMinusPlus.alpha = 0.5f
+                if(!canReachZero && counter == 1){
+                    handleMinus(false)
                 }else{
-                    plusMinusPlus.isEnabled = true
-                    plusMinusPlus.alpha = 1f
+                    counter--
+                    plusMinusCounter.text = "$counter"
+                    listener?.onPlusMinusChange(counter, position)
+
+                    if(counter == quantityLeft){
+                        handlePlus(false)
+                    }else{
+                        handlePlus(true)
+                    }
                 }
             }
         }
@@ -84,12 +87,33 @@ class PlusMinusView : FrameLayout {
             listener?.onPlusMinusChange(counter, position)
 
             if(counter >= quantityLeft){
-                plusMinusPlus.isEnabled = false
-                plusMinusPlus.alpha = 0.5f
+                handlePlus(false)
             }else{
-                plusMinusPlus.isEnabled = true
-                plusMinusPlus.alpha = 1f
+                handlePlus(true)
             }
+            handleMinus(true)
+        }
+    }
+
+    private fun handlePlus(isEnabled: Boolean){
+        plusMinusPlus.isEnabled = isEnabled
+        if(isEnabled){
+            plusMinusPlus.alpha = 1f
+            plusMinusCounter.alpha = 1f
+        }else{
+            plusMinusPlus.alpha = 0.5f
+            plusMinusCounter.alpha = 0.5f
+        }
+    }
+
+    private fun handleMinus(isEnabled: Boolean){
+        plusMinusMinus.isEnabled = isEnabled
+        if(isEnabled){
+            plusMinusMinus.alpha = 1f
+//            plusMinusCounter.alpha = 1f
+        }else{
+            plusMinusMinus.alpha = 0.5f
+//            plusMinusCounter.alpha = 0.5f
         }
     }
 

@@ -39,11 +39,13 @@ class WSRangeTimePickerHoursAdapter :
 
         fun bindItem(date: Date, position: Int, itemCount: Int) {
             itemText.text = DateUtils.parseDateOneHourInterval(date)
-            if(position+1 == itemCount || position == 0){
-                itemText.alpha = 0.3f
-            }else{
-                itemText.alpha = 1f
-            }
+//            if(itemCount > 1){
+//                if(position+1 == itemCount || position == 0){
+//                    itemText.alpha = 0.3f
+//                }else{
+//                    itemText.alpha = 1f
+//                }
+//            }
         }
     }
 

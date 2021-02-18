@@ -24,4 +24,8 @@ class WSRangeTimePickerViewModel: KoinComponent{//}, EaterDataManager.EaterDataM
         return metaDataRepository.getMinFutureOrderWindow()
     }
 
+    fun getHoursInterval(): Int{
+        return 30
+    }
+
 }

@@ -13,13 +13,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="268dp"
+            android:layout_height="@dimen/single_dish_info_media_layout_height"
             android:background="@color/white"
             tools:visibility="gone">
-
-        <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
             <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/singleDishInfoImagePager"
@@ -39,8 +35,6 @@
                     app:ci_gravity="center"
                     app:ci_height="10dp"
                     app:ci_width="10dp" />
-
-        </FrameLayout>
 
         <com.bupp.wood_spoon_eaters.custom_views.UserImageView
                 android:id="@+id/singleDishInfoCook"
@@ -169,13 +163,6 @@
 
         </LinearLayout>
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/silver" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -274,6 +261,13 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/silver" />
 
         <LinearLayout
                 android:id="@+id/singleDishInstructionsLayout"

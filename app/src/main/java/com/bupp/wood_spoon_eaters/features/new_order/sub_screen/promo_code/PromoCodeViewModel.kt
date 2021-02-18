@@ -19,20 +19,20 @@ class PromoCodeViewModel(val api: ApiService,val orderManager: OrderManager) : V
 
     fun savePromoCode(code: String) {
         orderManager.updateOrderRequest(promoCode = code)
-        api.updateOrder(orderManager.curOrderResponse!!.id, orderManager.getPromoCodeOrderRequest()).enqueue(object: BaseCallback<ServerResponse<Order>>(){
-            override fun onSuccess(result: ServerResponse<Order>) {
-                val order = result.data
-                orderManager.setOrderResponse(order)
-                promoCodeEvent.postValue(PromoCodeEvent(true))
-            }
+//        api.updateOrder(orderManager.curOrderResponse!!.id, orderManager.getPromoCodeOrderRequest()).enqueue(object: BaseCallback<ServerResponse<Order>>(){
+//            override fun onSuccess(result: ServerResponse<Order>) {
+//                val order = result.data
+//                orderManager.setOrderResponse(order)
+//                promoCodeEvent.postValue(PromoCodeEvent(true))
+//            }
+//
+//            override fun onError(errors: List<WSError>) {
+//                errorEvent.postValue(errors)
+//            }
 
-            override fun onError(errors: List<WSError>) {
-                errorEvent.postValue(errors)
-            }
 
 
-
-        })
+//        })
     }
 
 

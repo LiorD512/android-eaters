@@ -6,14 +6,12 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
 
 interface OrderRepository{
-    suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
     suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): ResultHandler<ServerResponse<FullDish>>
+    suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
+    suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
 }
 
 class OrderRepositoryImpl(private val service: ApiService) : OrderRepository {
-    override suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>> {
-        return safeApiCall { service.postOrder(orderRequest) }
-    }
     override suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): ResultHandler<ServerResponse<FullDish>> {
         return safeApiCall { service.getSingleDish(
             menuItemId = menuItemId,
@@ -22,6 +20,13 @@ class OrderRepositoryImpl(private val service: ApiService) : OrderRepository {
             addressId = feedRequest.addressId,
             timestamp = feedRequest.timestamp
         ) }
+    }
+    override suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>> {
+        return safeApiCall { service.postOrder(orderRequest) }
+    }
+
+    override suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>> {
+        return safeApiCall { service.updateOrder(orderId, orderRequest) }
     }
 
 

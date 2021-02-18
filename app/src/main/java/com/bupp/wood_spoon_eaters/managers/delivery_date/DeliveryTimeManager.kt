@@ -8,13 +8,23 @@ class DeliveryTimeManager {
 
     data class DeliveryTimeLiveData(val deliveryDate: Date?, val deliveryTimestamp: String?, val deliveryDateUi: String)
 
+    private var hasChangedTime: Boolean = false
+    private var previousDeliveryTime: Date? = null
     private var deliveryTime: Date? = null
     private val deliveryTimeDateLiveData = MutableLiveData<DeliveryTimeLiveData?>()
     fun getDeliveryTimeLiveData() = deliveryTimeDateLiveData
 
     fun setNewDeliveryTime(newDeliveryTime: Date?){
+        this.previousDeliveryTime = deliveryTime
         this.deliveryTime = newDeliveryTime
         deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryDateUiString()))
+    }
+
+    fun setTemporaryDeliveryTimeDate(tempDate: Date?){
+        tempDate?.let{
+            this.hasChangedTime = true
+            setNewDeliveryTime(it)
+        }
     }
 
     fun getDeliveryTimeDate(): Date? {
@@ -38,4 +48,12 @@ class DeliveryTimeManager {
         }
         return "Now"
     }
+
+    fun goBackToPreviousDeliveryTime(){
+        if(this.hasChangedTime){
+            setNewDeliveryTime(previousDeliveryTime)
+            this.previousDeliveryTime = null
+        }
+    }
+
 }

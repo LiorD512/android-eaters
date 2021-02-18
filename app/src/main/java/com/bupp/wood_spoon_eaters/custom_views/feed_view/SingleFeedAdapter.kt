@@ -87,7 +87,7 @@ class SingleFeedAdapter(
 
         if (dish.menuItem != null) {
             holder.unAvailableLayout.visibility = View.GONE
-            holder.dishCount.text = dish.menuItem.getQuantityLeft()
+            holder.dishCount.text = dish.menuItem.getQuantityLeftString()
 
             if(dish.menuItem.orderAt == null){
                 //Dish is offered today.

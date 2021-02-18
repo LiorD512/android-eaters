@@ -19,7 +19,7 @@ class DividerItemDecorator(val divider: Drawable?): ItemDecoration() {
                 val params = child.layoutParams as RecyclerView.LayoutParams
                 val top = child.bottom + params.bottomMargin
                 val bottom = top + divider!!.intrinsicHeight
-                divider.setBounds(0, top, right, bottom)
+                divider.setBounds(left, top, right, bottom)
                 divider.draw(canvas)
             }
         }

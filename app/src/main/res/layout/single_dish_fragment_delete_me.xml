@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/singleDishMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".features.new_order.sub_screen.single_dish.SingleDishFragment">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        android:background="@color/white">
 
         <com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/singleDishHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         <LinearLayout
+                android:id="@+id/main_layout"
+                app:layout_constraintTop_toBottomOf="@+id/singleDishHeader"
+                app:layout_constraintBottom_toTopOf="@+id/singleDishStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -27,14 +26,6 @@
             <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                <androidx.core.widget.NestedScrollView
-                        android:id="@+id/singleDishScrollView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:fillViewport="true"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                     <LinearLayout
                             android:id="@+id/singleDishContentLayout"
@@ -56,9 +47,6 @@
                                     android:background="@color/white"
                                     tools:visibility="gone">
 
-                                <FrameLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
 
                                     <androidx.viewpager2.widget.ViewPager2
                                             android:id="@+id/singleDishInfoImagePager"
@@ -79,7 +67,6 @@
                                             app:ci_height="10dp"
                                             app:ci_width="10dp" />
 
-                                </FrameLayout>
                                 <!--<ImageView-->
                                 <!--android:scaleType="centerCrop"-->
                                 <!--android:id="@+id/singleDishInfoImg"-->
@@ -211,57 +198,6 @@
 
                                 </LinearLayout>
 
-                                <!--<LinearLayout-->
-                                <!--android:visibility="gone"-->
-                                <!--android:orientation="vertical"-->
-                                <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
-                                <!--<RadioGroup-->
-                                <!--android:layout_marginTop="40dp"-->
-                                <!--android:orientation="horizontal"-->
-                                <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
-
-                                <!--<RadioButton-->
-                                <!--android:checked="true"-->
-                                <!--android:layout_marginRight="7.7dp"-->
-                                <!--android:id="@+id/singleDishSingleDishCb"-->
-                                <!--android:fontFamily="@font/open_sans_reg"-->
-                                <!--android:textSize="13.4sp"-->
-                                <!--android:text="Single Dish"-->
-                                <!--android:paddingLeft="7.2dp"-->
-                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
-                                <!--android:button="@drawable/checkbox_selector"-->
-                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
-
-                                <!--<RadioButton-->
-                                <!--android:layout_marginRight="7.7dp"-->
-                                <!--android:id="@+id/singleDishWholeBatchCb"-->
-                                <!--android:text="The Whole Batch (10 dishes)"-->
-                                <!--android:paddingLeft="7.2dp"-->
-                                <!--android:layout_marginLeft="8.6dp"-->
-                                <!--android:fontFamily="@font/open_sans_reg"-->
-                                <!--android:textSize="13.4sp"-->
-                                <!--android:button="@drawable/checkbox_selector"-->
-                                <!--android:textColor="@color/grey_to_black_cb_selector"-->
-                                <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
-
-                                <!--</RadioGroup>-->
-
-                                <!--<TextView-->
-                                <!--android:layout_marginTop="9dp"-->
-                                <!--style="@style/Reg11PurpleyGrey"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:text="Buy the whole batch for a 20% discount"/>-->
-
-                                <View
-                                        android:layout_width="match_parent"
-                                        android:layout_height="1dp"
-                                        android:layout_marginTop="18dp"
-                                        android:layout_marginBottom="10dp"
-                                        android:background="@color/silver" />
-                                <!---->
-                                <!--</LinearLayout>-->
-
                                 <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
@@ -361,17 +297,12 @@
 
                                 </LinearLayout>
 
-                                <!--                                <TextView-->
-                                <!--                                        android:layout_marginTop="10dp"-->
-                                <!--                                        android:visibility="gone"-->
-                                <!--                                        tools:visibility="visible"-->
-                                <!--                                        android:id="@+id/singleDishInfoDeliveryNationwide"-->
-                                <!--                                        android:layout_width="wrap_content"-->
-                                <!--                                        android:layout_height="wrap_content"-->
-                                <!--                                        style="@style/Reg13Dark"-->
-                                <!--                                        android:letterSpacing="0.04"-->
-                                <!--                                        android:text="Delivered Time and Fee will be set at checkout"/>-->
-
+                                <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_marginTop="18dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:background="@color/silver" />
 
                                 <LinearLayout
                                         android:id="@+id/singleDishInstructionsLayout"
@@ -600,23 +531,26 @@
 
                     </LinearLayout>
 
-                </androidx.core.widget.NestedScrollView>
-
-                <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-                        android:id="@+id/singleDishPb"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:visibility="gone" />
 
             </FrameLayout>
 
         </LinearLayout>
 
         <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/singleDishStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-    </LinearLayout>
+    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/singleDishPb"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:visibility="gone" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

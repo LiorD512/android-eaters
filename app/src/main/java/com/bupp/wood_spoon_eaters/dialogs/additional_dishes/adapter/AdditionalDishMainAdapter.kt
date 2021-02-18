@@ -19,9 +19,9 @@ class AdditionalDishMainAdapter(
 
     private val TAG: String = "wowAdditionalMainAdApter"
 
-    val orderItemsSection = ItemSection<OrderItems>()
-    val additionalDishesHeaderAndSection = HeaderSection<AdditionalDishHeader>()
-    val additionalDishesSection = ItemSection<AdditionalDishes>()
+    private val orderItemsSection = ItemSection<OrderItems>()
+    private val additionalDishesHeaderAndSection = HeaderSection<AdditionalDishHeader>()
+    private val additionalDishesSection = ItemSection<AdditionalDishes>()
 
     init {
         this.registerItemBinders(OrderItemsBinder(orderItemsListener), AdditionalDishesHeaderBinder(), AdditionalDishesBinder(additionalDishesListener))

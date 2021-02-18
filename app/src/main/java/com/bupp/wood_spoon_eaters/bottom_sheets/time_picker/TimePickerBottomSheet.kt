@@ -9,15 +9,19 @@ import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TimePickerBottomSheet: BottomSheetDialogFragment() {
+class TimePickerBottomSheet() : BottomSheetDialogFragment() {
+
 
     private lateinit var binding: TimePickerBottomSheetBinding
     val viewModel by viewModel<TimePickerViewModel>()
+    private var menuItems: List<MenuItem>? = null
+    private var isTemporary: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.time_picker_bottom_sheet, container, false)
@@ -65,9 +69,18 @@ class TimePickerBottomSheet: BottomSheetDialogFragment() {
             dismiss()
         }
         binding.timePickerScheduleBtn.setOnClickListener {
-            viewModel.setDeliveryTime(binding.timePickerTimePicker.getChosenDate())
+            viewModel.setDeliveryTime(binding.timePickerTimePicker.getChosenDate(), isTemporary)
             dismiss()
         }
+
+        menuItems?.let{
+            binding.timePickerTimePicker.setDatesByMenuItems(it)
+        }
+    }
+
+    fun setMenuItems(menuItems: List<MenuItem>){
+        this.isTemporary = true
+        this.menuItems = menuItems
     }
 
 }

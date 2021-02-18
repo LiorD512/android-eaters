@@ -165,4 +165,16 @@ object DateUtils {
         val today = Calendar.getInstance()
         return isSameDay(orderDate, today)
     }
+
+    fun truncateDate30MinUp(date: Date): Date{
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val unroundedMinutes = calendar[Calendar.MINUTE]
+        val mod = unroundedMinutes % 30
+        calendar.set(Calendar.MINUTE, unroundedMinutes + mod)
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.time
+    }
 }

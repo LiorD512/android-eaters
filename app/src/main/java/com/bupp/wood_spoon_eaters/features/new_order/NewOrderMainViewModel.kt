@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.new_order
 
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewModelScope
@@ -33,11 +34,13 @@ class NewOrderMainViewModel(
 
     var menuItemId: Long? = null
     val progressData = ProgressData()
-
+    val wsErrorEvent = MutableLiveData<List<WSError>>()
 
     val dishInfoEvent = MutableLiveData<FullDish>()
     val dishCookEvent = MutableLiveData<Cook>()
     val cartStatusEvent = MutableLiveData<CartManager.CartStatus>()
+
+    val deliveryTimeLiveData = cartManager.deliveryTimeLiveData
 
     val getReviewsEvent: SingleLiveEvent<Review?> = SingleLiveEvent()
 
@@ -45,7 +48,7 @@ class NewOrderMainViewModel(
     data class AdditionalDishesEvent(val orderItems: List<OrderItem>?, val additionalDishes: List<Dish>?)
 
     val cartBottomBarEvent = MutableLiveData<CartBottomBarEvent>()
-    data class CartBottomBarEvent(val type: Int, val price: Double, val itemCount: Int)
+    data class CartBottomBarEvent(val type: Int, val price: Double, val itemCount: Int? = null)
 
     val mainActionEvent = MutableLiveData<NewOrderActionEvent>()
     enum class NewOrderActionEvent{
@@ -59,6 +62,7 @@ class NewOrderMainViewModel(
     enum class NewOrderNavigationEvent{
         REDIRECT_TO_CHECKOUT,
         REDIRECT_TO_COOK_PROFILE,
+        SHOW_ADDRESS_MISSING_DIALOG,
         REDIRECT_TO_SELECT_PROMO_CODE,
         START_LOCATION_AND_ADDRESS_ACTIVITY
     }
@@ -84,7 +88,7 @@ class NewOrderMainViewModel(
         cartStatusEvent.postValue(cartManager.getOrderStatus())
     }
 
-    fun updateCartBottomBar(type: Int, price: Double, itemCount: Int) {
+    fun updateCartBottomBar(type: Int, price: Double, itemCount: Int? = null) {
         cartBottomBarEvent.postValue(CartBottomBarEvent(type, price, itemCount))
     }
 
@@ -103,29 +107,90 @@ class NewOrderMainViewModel(
     }
 
     private fun handleAddToCartClick() {
+        //check if user set an address and add to cart
+        if(eaterDataManager.hasUserSetAnAddress()){
+            addToCart()
+        }else{
+            navigationEvent.postValue(NewOrderNavigationEvent.SHOW_ADDRESS_MISSING_DIALOG)
+        }
+
+    }
+
+    private fun addToCart(){
         viewModelScope.launch {
-            val result = cartManager.addNewItemToCart()
+            val result = cartManager.addCurrentOrderItemToCart()
 
             when(result.type){
                 OrderRepository.OrderRepoStatus.POST_ORDER_SUCCESS -> {
                     if(cartManager.shouldShowAdditionalDishesDialog()){
                         mainActionEvent.postValue(NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG)
+                    }else{
+                        navigationEvent.postValue(NewOrderNavigationEvent.REDIRECT_TO_COOK_PROFILE)
+                        showProceedToCartBottomBar()
                     }
+
                 }
                 OrderRepository.OrderRepoStatus.POST_ORDER_FAILED -> {
                     result.data
                 }
+                OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                    result.wsError?.let{
+                        wsErrorEvent.postValue(it)
+                    }
+                }
                 else -> {}
             }
-
         }
     }
 
+    fun updateOrderItem(orderItem: OrderItem) {
+        viewModelScope.launch {
+            val result = cartManager.updateInCartOrderItem(orderItem)
+            result?.let{
+                when(result.type){
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        initAdditionalDishes()
+                    }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        result.wsError?.let{
+                            wsErrorEvent.postValue(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
 
     fun initAdditionalDishes() {
         val orderItems = cartManager.getCurrentOrderItems()
         val additionalDishes = cartManager.getAdditionalDishes()
         additionalDishesEvent.postValue(AdditionalDishesEvent(orderItems, additionalDishes))
+    }
+
+    fun addNewDishToCart(dishId: Long, quantity: Int) {
+        val newOrderItem = OrderItemRequest(dishId = dishId, quantity = quantity)
+        Log.d(TAG, "addNewDishToCart: $newOrderItem")
+        viewModelScope.launch {
+            val result = cartManager.addNewOrderItemToCart(newOrderItem)
+            result?.let{
+                when(result.type){
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        initAdditionalDishes()
+                    }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        result.wsError?.let{
+                            wsErrorEvent.postValue(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
 
@@ -244,12 +309,9 @@ class NewOrderMainViewModel(
         }
     }
 
-    //create new order
-    fun initNewOrder() {
-        orderManager.clearCurrentOrder()
-        orderRequestData.postValue(orderManager.initNewOrder())
+    fun showProceedToCartBottomBar() {
+        updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = cartManager.calcTotalDishesPrice())
     }
-
 
 
     var isFirstPurchase: Boolean = true
@@ -744,7 +806,9 @@ class NewOrderMainViewModel(
 //        }
 //    }
 
-
+    companion object{
+        const val TAG = "wowNewOrderVM"
+    }
 
 
 }

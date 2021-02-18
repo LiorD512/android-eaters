@@ -3,12 +3,11 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
@@ -18,11 +17,13 @@ import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDial
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.FullDish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageView.UserImageViewListener,
     DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener {
@@ -49,12 +50,28 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         dishMediaPagerAdapter = DishMediaAdapter(this)
         singleDishInfoImagePager.adapter = dishMediaPagerAdapter
 
-        singleDishChangeTimeBtn.setOnClickListener { openOrderTimeDialog() }
-
+        singleDishChangeTimeBtn.setOnClickListener {
+            viewModel.onTimeChangeClick()
+        }
         singleDishNote.setInputTitleViewListener(this)
     }
 
     private fun initObserver() {
+        viewModel.timeChangeEvent.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let{
+                openOrderTimeBottomSheet(it)
+            }
+        })
+        viewModel.availability.observe(viewLifecycleOwner, { availabilityEvent ->
+            availabilityEvent.startingTime?.let {
+                if (!availabilityEvent.isAvailable) {
+                    handleUnAvailableCookingSlot(it)
+                }
+                if (availabilityEvent.isSoldOut) {
+                    handleSoldoutCookingSlot(it)
+                }
+            }
+        })
         mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, {
             updateDishInfoUi(it)
             mainViewModel.updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CART, price = it.getPriceObj().value, itemCount = 1)
@@ -108,9 +125,9 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         val menuItem = fullDish.menuItem
         if (menuItem != null) {
             singleDishQuantityView.initQuantityView(menuItem)
-            val quantityLeft = menuItem.quantity - menuItem.unitsSold
+            val quantityLeft = menuItem.getQuantityCount()
             val currentCounter = singleDishCount.text.toString()
-            singleDishPlusMinus.setPlusMinusListener(this, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft)
+            singleDishPlusMinus.setPlusMinusListener(this, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft, canReachZero = false)
         }
 
         initOrderDate(fullDish)
@@ -132,6 +149,21 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         }
     }
 
+    private fun handleUnAvailableCookingSlot(startsAt: Date) {
+//        Log.d("wowSingleDish", "handleUnAvailableCookingSlot startsAt: $startsAt")
+//        startsAt?.let {
+//            viewModel.updateChosenDeliveryDate(newChosenDate = it)
+//        }
+    }
+
+
+
+    private fun handleSoldoutCookingSlot(startsAt: Date) {
+//        DishSoldOutDialog().show(childFragmentManager, Constants.UNAVAILABLE_DISH_DIALOG_TAG)
+//        singleDishStatusBar.handleBottomBar(showActiveOrders = false)
+//        singleDishPlusMinus.setViewEnabled(false)
+    }
+
     override fun onInputTitleChange(str: String?) {
         viewModel.updateCurrentOrderItem(note = str)
     }
@@ -140,7 +172,10 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         mainViewModel.getCooksReview()
     }
 
-    private fun openOrderTimeDialog() {
+    private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
+        val timePickerBottomSheet = TimePickerBottomSheet()
+        timePickerBottomSheet.setMenuItems(menuItems)
+        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
 //        viewModel.getCurrentDish()?.let {
 //            val currentDateSelected = it.menuItem
 //            val availableMenuItems = it.availableMenuItems
@@ -151,6 +186,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateCurrentOrderItem(quantity = counter)
+        mainViewModel.updateCartBottomBar(Constants.CART_BOTTOM_BAR_TYPE_CART, itemCount = counter, price = viewModel.getTotalPriceForDishQuantity(counter))
 //        viewModel.getCurrentDish().let {
 //            val newValue = it.price.value * counter
 //            updateStatusBottomBar(price = newValue, itemCount = counter)
@@ -177,7 +213,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
                 }
 //            }
 
-            singleDishInfoDelivery.text = "${viewModel.getDropoffLocation()}"
+            singleDishInfoDelivery.text = "${viewModel.getDropOffLocation()}"
         }
     }
 
@@ -191,6 +227,14 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         //media adapter interface
         val uri = Uri.parse(url)
         VideoPlayerDialog(uri).show(childFragmentManager, Constants.VIDEO_PLAYER_DIALOG)
+    }
+
+    override fun onDestroyView() {
+
+        singleDishInfoImagePager?.let {
+            it.adapter = null
+        }
+        super.onDestroyView()
     }
 
     companion object{

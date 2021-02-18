@@ -45,7 +45,7 @@ data class MenuItem(
     @SerializedName("order_at") val orderAt: Date? = null,
     @SerializedName("cooking_slot") val cookingSlot: CookingSlot
 ): Parcelable{
-    fun getQuantityLeft(): String{
+    fun getQuantityLeftString(): String{
         val left = quantity - unitsSold
         return "$left Left"
     }
@@ -113,16 +113,17 @@ data class FullDish(
     fun getAdditionalDishes(curCookingSlotId: Long? = null): ArrayList<Dish>{
         val availableArr = arrayListOf<Dish>()
         if (curCookingSlotId != null) {
-            cook.dishes?.forEach { dish ->
-                dish.menuItem?.let {
-                    if (it.cookingSlot.id == curCookingSlotId) {
-                        availableArr.add(dish)
-                    }
-                }
-            }
+            availableArr.addAll(cook.dishes.filter { it.menuItem?.cookingSlot?.id == curCookingSlotId })
+//            cook.dishes.forEach { dish ->
+//                dish.menuItem?.let {
+//                    if (it.cookingSlot.id == curCookingSlotId) {
+//                        availableArr.add(dish)
+//                    }
+//                }
+//            }
         } else {
             //todo - first case when entering screen and there is not cooking slot yet for order.
-            cook.dishes?.forEach { dish ->
+            cook.dishes.forEach { dish ->
                 dish.menuItem?.let {
                     availableArr.add(dish)
                 }

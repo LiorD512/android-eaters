@@ -2,17 +2,37 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import java.util.*
 
 class SingleDishInfoViewModel(
     private val cartManager: CartManager,
+    private val eaterDataManager: EaterDataManager
 ) : ViewModel() {
+
+    val timeChangeEvent = LiveEventData<List<MenuItem>>()
 
     fun updateCurrentOrderItem(quantity: Int? = null, note: String? = null){
         cartManager.updateCurrentOrderItem(OrderItemRequest(quantity = quantity, notes = note))
+    }
+
+    fun getDropOffLocation(): String? {
+        return eaterDataManager.getLastChosenAddress()?.getDropoffLocationStr()
+    }
+
+    fun getTotalPriceForDishQuantity(counter: Int): Double {
+        return cartManager.getTotalPriceForDishQuantity(counter)
+    }
+
+    fun onTimeChangeClick() {
+        val menuItems = cartManager.currentShowingDish?.availableMenuItems
+        menuItems?.let{
+            timeChangeEvent.postRawValue(it)
+        }
     }
 
 //    fun addNewItemToCart(){
@@ -184,10 +204,6 @@ class SingleDishInfoViewModel(
 //        return Date()
 //    }
 
-    fun getDropoffLocation(): String? {
-//        return eaterDataManager.getDropoffLocation()//todo - nyc
-        return ""
-    }
 
 
 
@@ -206,7 +222,6 @@ class SingleDishInfoViewModel(
         this.menuItemId = menuItemId
 //        getFullDish(newChosenDate)
     }
-
 
 
 

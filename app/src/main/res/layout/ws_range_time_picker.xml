@@ -15,12 +15,18 @@
             android:weightSum="2">
 
         <androidx.recyclerview.widget.RecyclerView
+                android:clipToPadding="false"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
                 android:id="@+id/wsRangeTimePickerDateList"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
         <androidx.recyclerview.widget.RecyclerView
+                android:clipToPadding="false"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
                 android:id="@+id/wsRangeTimePickerHoursList"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -29,24 +35,25 @@
     </LinearLayout>
 
     <LinearLayout
+            android:background="@color/light_periwinkle_20"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/wsRangeTimePickerUiLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:orientation="vertical">
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/dark" />
+<!--        <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:background="@color/dark" />-->
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="40dp"
-                android:background="@color/dark" />
+<!--        <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                android:background="@color/dark" />-->
 
     </LinearLayout>
 

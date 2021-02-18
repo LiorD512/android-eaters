@@ -80,6 +80,7 @@ class SingleDishHeader : FrameLayout {
         const val INFO = 0
         const val INGREDIENT = 1
         const val COOK = 2
+        const val CHECKOUT = 3
     }
 
 

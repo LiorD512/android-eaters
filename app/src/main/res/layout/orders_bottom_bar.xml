@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        android:background="@color/white"
+        android:background="@color/transparent"
         android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
@@ -22,7 +23,7 @@
                 style="@style/Bold17White"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Track your order"/>
+                tools:text="Track your order"/>
 
         <TextView
                 android:layout_marginRight="16.8dp"
@@ -36,6 +37,7 @@
     </FrameLayout>
 
     <View
+            android:visibility="gone"
             tools:visibility="visible"
             android:id="@+id/bottomBarSeparator"
             android:layout_width="match_parent" android:layout_height="15.4dp"/>
@@ -57,7 +59,7 @@
                 android:background="@color/teal_blue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/status_bottom_bar_height"
-                android:text="Proceed to cart"/>
+                tools:text="Proceed to cart"/>
 
         <TextView
                 android:layout_marginRight="16.8dp"

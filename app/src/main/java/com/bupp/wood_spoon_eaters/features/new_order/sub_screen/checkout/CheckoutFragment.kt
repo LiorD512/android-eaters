@@ -3,9 +3,7 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
@@ -34,7 +32,7 @@ import kotlin.collections.ArrayList
 
 
 
-class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
+class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     StatusBottomBar.StatusBottomBarListener, ClearCartDialog.ClearCartDialogListener,
@@ -49,12 +47,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
         fun onCheckoutCanceled()
     }
 
-//    val viewModel by viewModel<CheckoutViewModel>()
-    val ordersViewModel by sharedViewModel<NewOrderMainViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.checkout_fragment, container, false)
-    }
+//    val viewModel by viewModel<CheckoutViewModel>()
+    val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -183,7 +179,7 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 //        }
 
 
-        ordersViewModel.getLastOrderDetails()
+        mainViewModel.getLastOrderDetails()
 //        ordersViewModel.resetTip()
 
     }
@@ -398,18 +394,18 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
         if (selectedMenuItem != null) {
-            ordersViewModel.updateDeliveryTime(newChosenDate)
+            mainViewModel.updateDeliveryTime(newChosenDate)
         }
     }
 
 
     override fun onHeaderBackClick() {
-        listener.onCheckoutCanceled()
+//        listener.onCheckoutCanceled()
     }
 
     fun onAddressChooserSelected() {
         Log.d("wow","onAddressChooserSelected")
-        ordersViewModel.updateAddress()
+        mainViewModel.updateAddress()
     }
 
 
@@ -465,10 +461,10 @@ class CheckoutFragment(val listener: CheckoutDialogListener) : Fragment(),
     override fun onTimeSet(view: com.wdullaer.materialdatetimepicker.time.TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         val newCal = Calendar.getInstance()
 //        newCal.time = ordersViewModel.orderData.value?.cookingSlot?.startsAt
-        newCal.time = ordersViewModel.orderData.value?.cookingSlot?.orderFrom
+        newCal.time = mainViewModel.orderData.value?.cookingSlot?.orderFrom
         newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
         newCal.set(Calendar.MINUTE, minute)
-        ordersViewModel.updateDeliveryTime(newCal.time)
+        mainViewModel.updateDeliveryTime(newCal.time)
     }
 
 

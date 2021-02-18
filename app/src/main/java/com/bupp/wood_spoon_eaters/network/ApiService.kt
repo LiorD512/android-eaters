@@ -145,7 +145,7 @@ interface ApiService {
     suspend fun postOrder(@Body orderRequest: OrderRequest): ServerResponse<Order>
 
     @POST("eaters/me/orders/{order_id}")
-    fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): Call<ServerResponse<Order>>
+    suspend fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): ServerResponse<Order>
 
     @POST("eaters/me/orders/{order_id}/checkout")
     fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>

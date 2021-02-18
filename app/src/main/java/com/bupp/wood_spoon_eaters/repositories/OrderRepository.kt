@@ -11,14 +11,17 @@ import kotlinx.coroutines.withContext
 class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager: EaterDataManager) {
 
 
-    data class OrderRepoResult<T>(val type: OrderRepoStatus, val data: T? = null)
+    data class OrderRepoResult<T>(val type: OrderRepoStatus, val data: T? = null, val wsError: List<WSError>? = null)
     enum class OrderRepoStatus {
         FULL_DISH_SUCCESS,
         FULL_DISH_FAILED,
         POST_ORDER_SUCCESS,
+        UPDATE_ORDER_FAILED,
+        UPDATE_ORDER_SUCCESS,
         POST_ORDER_FAILED,
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
+        WS_ERROR
     }
 
     suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): OrderRepoResult<FullDish> {
@@ -28,20 +31,20 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"postNewOrder - NetworkError")
-                    OrderRepoResult<FullDish>(OrderRepoStatus.SERVER_ERROR)
+                    Log.d(TAG,"getFullDish - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"postNewOrder - GenericError")
-                    OrderRepoResult<FullDish>(OrderRepoStatus.FULL_DISH_FAILED)
+                    Log.d(TAG,"getFullDish - GenericError")
+                    OrderRepoResult(OrderRepoStatus.FULL_DISH_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"postNewOrder - Success")
-                    OrderRepoResult<FullDish>(OrderRepoStatus.FULL_DISH_SUCCESS, result.value.data)
+                    Log.d(TAG,"getFullDish - Success")
+                    OrderRepoResult(OrderRepoStatus.FULL_DISH_SUCCESS, result.value.data)
                 }
-                else -> {
-                    Log.d(TAG,"postNewOrder - WSError")
-                    OrderRepoResult<FullDish>(OrderRepoStatus.FULL_DISH_FAILED)
+                is ResultHandler.WSCustomError -> {
+                    Log.d(TAG,"getFullDish - WSError")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
         }
@@ -61,24 +64,51 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
            return  when (result) {
                 is ResultHandler.NetworkError -> {
                     Log.d(TAG,"postNewOrder - NetworkError")
-                    OrderRepoResult<Order>(OrderRepoStatus.SERVER_ERROR)
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
                     Log.d(TAG,"postNewOrder - GenericError")
-                    OrderRepoResult<Order>(OrderRepoStatus.POST_ORDER_FAILED)
+                    OrderRepoResult(OrderRepoStatus.POST_ORDER_FAILED)
                 }
                 is ResultHandler.Success -> {
                     Log.d(TAG,"postNewOrder - Success")
-                    OrderRepoResult<Order>(OrderRepoStatus.POST_ORDER_SUCCESS, result.value.data)
+                    OrderRepoResult(OrderRepoStatus.POST_ORDER_SUCCESS, result.value.data)
                 }
                is ResultHandler.WSCustomError -> {
-                   Log.d(TAG,"postNewOrder - wsError ${result.errors?.get(0)?.msg}")
-                   OrderRepoResult<Order>(OrderRepoStatus.POST_ORDER_FAILED)
+//                   Log.d(TAG,"postNewOrder - wsError ${result.errors?.get(0)?.msg}")
+                   OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                }
            }
         }
     }
-    
+
+    suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): OrderRepoResult<Order> {
+        val result = withContext(Dispatchers.IO){
+            apiService.updateOrder(orderId, orderRequest)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"updateOrder - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"updateOrder - GenericError")
+                    OrderRepoResult(OrderRepoStatus.UPDATE_ORDER_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"updateOrder - Success")
+                    OrderRepoResult(OrderRepoStatus.UPDATE_ORDER_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+//                    Log.d(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+
     companion object{
         const val TAG = "wowOrderRepo"
     }

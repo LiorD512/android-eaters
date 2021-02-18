@@ -4,42 +4,45 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon.dialogs.AddressChooserDialog
-import com.bupp.wood_spoon_eaters.dialogs.address_chooser.sub_screen.AddressMenuDialog
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.additional_dishes.AdditionalDishesBottomSheet
-import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
-import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.bottom_sheets.additional_dishes.AdditionalDishesDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SingleDishHeader
 import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
+import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
-import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.AdditionalDishesDialog
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.dialogs.address_chooser.sub_screen.AddressMenuDialog
 import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.android.synthetic.main.activity_new_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.ArrayList
+import java.util.*
 
 
 class NewOrderActivity : AppCompatActivity(),
     CheckoutFragment.CheckoutDialogListener, AddressChooserDialog.AddressChooserDialogListener,
     AddressMenuDialog.EditAddressDialogListener, ClearCartDialog.ClearCartDialogListener,
     SingleDishHeader.SingleDishHeaderListener, StartNewCartDialog.StartNewCartDialogListener, CartBottomBar.OrderBottomBatListener,
-    AdditionalDishesDialog.AdditionalDishesDialogListener {
+    AdditionalDishesDialog.AdditionalDishesDialogListener, AddressMissingDialog.AddressMissingDialogListener {
 
     companion object{
         const val TAG = "wowNewOrderAct"
@@ -47,7 +50,7 @@ class NewOrderActivity : AppCompatActivity(),
 
     //activityLauncher Results
     private val startAddressChooserForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        Log.d(TAG,"Activity For Result")
+        Log.d(TAG, "Activity For Result")
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
         }
@@ -78,6 +81,12 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
     private fun initObservers() {
+        viewModel.deliveryTimeLiveData.observe(this, {
+            viewModel.initNewOrderActivity(intent)
+        })
+        viewModel.navigationEvent.observe(this, {
+            handleNavigationEvent(it)
+        })
         viewModel.ephemeralKeyProvider.observe(this, { event ->
             if (!event.isSuccess) {
                 Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
@@ -90,11 +99,17 @@ class NewOrderActivity : AppCompatActivity(),
             updateStatusBottomBar(it)
         })
         viewModel.mainActionEvent.observe(this, {
-            when(it){
+            when (it) {
                 NewOrderMainViewModel.NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG -> {
-                    AdditionalDishesBottomSheet().show(supportFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
+                    AdditionalDishesDialog().show(supportFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
                 }
-                else -> {}
+                else -> {
+                }
+            }
+        })
+        viewModel.wsErrorEvent.observe(this, {
+            it[0].let { wsError ->
+                WSErrorDialog(wsError.msg, null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
             }
         })
 
@@ -138,36 +153,35 @@ class NewOrderActivity : AppCompatActivity(),
 //            }
 //        })
 
-        viewModel.getReviewsEvent.observe(this, Observer{
-            it?.let{
+        viewModel.getReviewsEvent.observe(this, Observer {
+            it?.let {
                 RatingsDialog(it).show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
             }
         })
     }
 
+    private fun handleNavigationEvent(event: NewOrderMainViewModel.NewOrderNavigationEvent?) {
+        when(event){
+            NewOrderMainViewModel.NewOrderNavigationEvent.SHOW_ADDRESS_MISSING_DIALOG -> {
+                AddressMissingDialog(this).show(supportFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
+            }
+        }
+    }
+
     private fun updateStatusBottomBar(bottomBarEvent: NewOrderMainViewModel.CartBottomBarEvent) {
         Log.d(TAG, "updateStatusBottomBar type: $bottomBarEvent.type")
+        if(singleDishStatusBar.visibility != View.VISIBLE){
+            singleDishStatusBar.visibility = View.VISIBLE
+        }
         singleDishStatusBar.updateStatusBottomBar(type = bottomBarEvent.type, price = bottomBarEvent.price, itemCount = bottomBarEvent.itemCount)
     }
 
     override fun onCartBottomBarOrdersClick(type: Int) {
         viewModel.onCartBottomBarClick(type)
-//        when (type) {
-//            Constants.STATUS_BAR_TYPE_CART -> {
-//                if (viewModel.hasValidDeliveryAddress()) {
-//                    addToCart()
-//                } else {
-//                    openAddressMissingDialog()
-//                }
-//            }
-//            Constants.STATUS_BAR_TYPE_CHECKOUT -> {
-//                (activity as NewOrderActivity).onCheckout()
-//            }
-//        }
     }
 
     override fun onBottomBarCheckoutClick() {
-//        (activity as NewOrderActivity).onCheckout()
+        redirectToCheckout()
     }
 
     override fun onBackClick() {
@@ -175,21 +189,32 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
     override fun onPageClick(page: Int) {
+        val navBuilder = NavOptions.Builder()
+        navBuilder.setEnterAnim(R.anim.slide_right_enter).setExitAnim(R.anim.slide_right_exit).setPopEnterAnim(R.anim.slide_left_enter).setPopExitAnim(R.anim.slide_left_exit)
         when (page) {
             SingleDishHeader.INFO -> {
-                findNavController(R.id.newOrderContainer).navigate(R.id.singleDishInfoFragment)
-//                singleDishStatusBar.handleBottomBar(true)
+                findNavController(R.id.newOrderContainer).navigate(R.id.singleDishInfoFragment, null, navBuilder.build())
             }
             SingleDishHeader.COOK -> {
-                findNavController(R.id.newOrderContainer).navigate(R.id.singleDishCookFragment)
+                findNavController(R.id.newOrderContainer).navigate(R.id.singleDishCookFragment, null, navBuilder.build())
             }
             SingleDishHeader.INGREDIENT -> {
-                findNavController(R.id.newOrderContainer).navigate(R.id.singleDishIngredientsFragment)
+                findNavController(R.id.newOrderContainer).navigate(R.id.singleDishIngredientsFragment, null, navBuilder.build())
+            }
+            SingleDishHeader.CHECKOUT -> {
+                findNavController(R.id.newOrderContainer).navigate(R.id.checkoutFragment, null, navBuilder.build())
             }
         }
     }
 
 
+    private fun redirectToCooksPage() {
+        onPageClick(SingleDishHeader.COOK)
+    }
+
+    private fun redirectToCheckout() {
+        onPageClick(SingleDishHeader.CHECKOUT)
+    }
 
     private fun handleCartStatus(cartStatus: CartManager.CartStatus) {
         Log.d(TAG, "handleCartStatus: ${cartStatus.type}")
@@ -253,13 +278,13 @@ class NewOrderActivity : AppCompatActivity(),
                     result?.let {
                         Log.d("wowNewOrder", "payment method success")
                         if (getFragmentByTag(Constants.CHECKOUT_TAG) != null) {
-                            result.paymentMethod?.let{
+                            result.paymentMethod?.let {
                                 (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).updateCustomerPaymentMethod(it)
                             }
                         }
                     }
                 }
-                Constants.ADDRESS_CHOOSER_REQUEST_CODE ->{
+                Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
                     if (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment? != null) {
                         (getFragmentByTag(Constants.CHECKOUT_TAG) as CheckoutFragment).onAddressChooserSelected()
                     }
@@ -411,8 +436,9 @@ class NewOrderActivity : AppCompatActivity(),
         finish()
     }
 
+    //Additional Dished Dialog interface
     override fun onProceedToCheckout() {
-        TODO("Not yet implemented")
+        redirectToCheckout()
     }
 
     override fun onDishClick(dish: Dish) {
@@ -420,7 +446,15 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
     override fun onAdditionalDialogDismiss() {
-        TODO("Not yet implemented")
+        redirectToCooksPage()
+        viewModel.showProceedToCartBottomBar()
+    }
+
+
+    //Address Missing Dialog interface
+    override fun openUpdateAddress() {
+        startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+//                        .putExtra(Constants.START_WITH, Constants.START_WITH_ADDRESS_CHOOSER))
     }
 
 

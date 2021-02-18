@@ -42,7 +42,7 @@ class CooksProfileDishesAdapter(
         if (dish.menuItem != null) {
             val quantityCount = dish.menuItem.getQuantityCount()
             if (quantityCount > 0) {
-                holder.quantityLeft.text = "${dish.menuItem.getQuantityLeft()}"
+                holder.quantityLeft.text = "${dish.menuItem.getQuantityLeftString()}"
 //                holder.quantitySep.visibility = View.VISIBLE
             } else {
                 holder.quantityLeft.text = "Sold Out"

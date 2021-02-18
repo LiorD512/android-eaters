@@ -1,11 +1,12 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.additional_dishes
 
-import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,17 +17,15 @@ import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishMainAdapter
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishesAdapter
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.OrderItemsAdapter
+import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.additional_dishes_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapter.OrderItemsListener, AdditionalDishesAdapter.AdditionalDishesListener,
+class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsListener, AdditionalDishesAdapter.AdditionalDishesListener,
     ClearCartDialog.ClearCartDialogListener {
 
     private var mainAdapter: AdditionalDishMainAdapter? = null
@@ -51,26 +50,13 @@ class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapt
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
-    private lateinit var behavior: BottomSheetBehavior<View>
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            val d = it as BottomSheetDialog
-            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isFitToContents = true
-//            behavior.expandedOffset = Utils.toPx(230)
-        }
-
-        return dialog
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = AdditionalDishesDialogBinding.bind(view)
 
         val parent = view.parent as View
-        parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
+        parent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
 
         initUi()
         initObservers()
@@ -83,7 +69,7 @@ class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapt
         with(binding){
             mainViewModel.additionalDishesEvent.observe(viewLifecycleOwner, Observer { data ->
                 handleData(data)
-                additionalDishDialogList.scrollToPosition(0)
+//                additionalDishDialogList.scrollToPosition(0)
             })
 //            mainViewModel.additionalDishes.observe(viewLifecycleOwner, Observer { additionalDishes ->
 //                handleAdditionalDishes(additionalDishes)
@@ -96,7 +82,7 @@ class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapt
 //            })
             mainViewModel.emptyCartEvent.observe(viewLifecycleOwner, Observer { emptyCartEvent ->
                 if(emptyCartEvent.shouldShow) {
-                    ClearCartDialog(this@AdditionalDishesBottomSheet).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+                    ClearCartDialog(this@AdditionalDishesDialog).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
                 }
             })
         }
@@ -104,6 +90,7 @@ class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapt
     }
 
     private fun handleData(data: NewOrderMainViewModel.AdditionalDishesEvent) {
+//        mainAdapter?.clearAllSelections()
         data.orderItems?.let {
             mainAdapter?.refreshOrderItems(it)
         }
@@ -136,14 +123,14 @@ class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapt
 
             additionalDishDialogClose.setOnClickListener { dismiss() }
             dishAddonProceedBtn.setOnClickListener {
+                listener?.onProceedToCheckout()
                 dismiss()
-                listener?.onProceedToCheckout() }
+                 }
         }
     }
 
     override fun onAddBtnClick(dish: Dish) {
-//        mainViewModel.addNewDishToCart(dish.id, 1)
-
+        mainViewModel.addNewDishToCart(dish.id, 1)
         mainAdapter?.removeDish(dish)
     }
 
@@ -152,15 +139,33 @@ class AdditionalDishesBottomSheet : BottomSheetDialogFragment(), OrderItemsAdapt
     }
 
     override fun onDishCountChange(orderItemsCount: Int, curOrderItem: OrderItem) {
-//        if(orderItemsCount == 0){
+        if(orderItemsCount == 0){
 //            mainViewModel.pulItemBackToAdditionalList(curOrderItem)
-//        }
-//        mainViewModel.updateOrder(curOrderItem)
+        }
+        mainViewModel.updateOrderItem(curOrderItem)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         listener?.onAdditionalDialogDismiss()
         super.onDismiss(dialog)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is AdditionalDishesDialogListener) {
+            listener = context
+        }
+        else if (parentFragment is AdditionalDishesDialogListener){
+            this.listener = parentFragment as AdditionalDishesDialogListener
+        }
+        else {
+            throw RuntimeException("$context must implement AdditionalDishesDialogListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
 }

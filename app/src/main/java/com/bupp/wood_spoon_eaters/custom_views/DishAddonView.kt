@@ -42,7 +42,7 @@ class DishAddonView : FrameLayout, PlusMinusView.PlusMinusInterface {
                 currentDish = dish.dish
                 shouldExpend = currentDish.isRecurring
 
-                dishAddonPrice.text = dish.price.formatedValue // todo check this when in event
+                dishAddonPrice.text = dish.price.formatedValue
                 dishAddonCount.text = "${dish.quantity}"
                 dishAddonAddBtn.visibility = View.GONE
                 dishAddonPlusMinus.visibility = View.VISIBLE
@@ -55,6 +55,7 @@ class DishAddonView : FrameLayout, PlusMinusView.PlusMinusInterface {
                 currentDish = dish as Dish
                 dishAddonAddBtn.visibility = View.VISIBLE
                 dishAddonPlusMinus.visibility = View.GONE
+                dishAddonPrice.text = dish.price.formatedValue
                 dishAddonCount.text = "${currentDish.menuItem?.quantity ?: 0}"
                 dishAddonAddBtn.setOnClickListener { listener?.onAddBtnClick(position) }
 //                dishAddonAddBtn.setOnClickListener { listener?.onAddBtnClick(currentDish) }

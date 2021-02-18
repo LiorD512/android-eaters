@@ -5,7 +5,6 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:background="@color/white"
-        android:paddingBottom="16.9dp"
         android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -90,6 +89,7 @@
                 android:id="@+id/dishAddonAddBtn"
                 android:gravity="center"
                 android:layout_marginRight="10dp"
+                tools:visibility="visible"
                 android:visibility="gone"
                 android:background="@drawable/blue_cornered_bkg"
                 style="@style/SemiBold13White"
@@ -105,6 +105,7 @@
     </LinearLayout>
 
     <LinearLayout
+            android:visibility="gone"
             android:layout_marginStart="9.4dp"
             android:id="@+id/dishAddonChooserLayout"
             android:orientation="vertical"

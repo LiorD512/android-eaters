@@ -73,7 +73,7 @@ class CartBottomBar : FrameLayout{
         }
     }
 
-    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null) {
+    fun updateStatusBottomBar(type: Int? = null, price: Double? = null, itemCount: Int? = null, showBoth: Boolean = false) {
         if(type != null){
             this.curType = type
         }
@@ -90,6 +90,7 @@ class CartBottomBar : FrameLayout{
                     val priceStr = DecimalFormat("##.##").format(price)
                     ordersBottomBarOrderPrice.text = "$$priceStr"
                 }
+                handleBottomBar(true, showBoth)
             }
             Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT -> {
                 checkoutVisible = true
@@ -99,6 +100,9 @@ class CartBottomBar : FrameLayout{
                     ordersBottomBarCheckoutPrice.text = "$$checkoutPriceStr"
                     ordersBottomBarCheckoutPrice.visibility = View.VISIBLE
                 }
+                ordersBottomBarCheckoutTitle.text = "Proceed to cart"
+                handleBottomBar(showBoth, true)
+
             }
             Constants.CART_BOTTOM_BAR_TYPE_FINALIZE -> {
                 ordersBottomBarOrderTitle.text = "PLACE AN ORDER"

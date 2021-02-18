@@ -1,20 +1,15 @@
 package com.bupp.wood_spoon_eaters.features.main.cook_profile
 
 import android.annotation.SuppressLint
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Dish
-import kotlinx.android.synthetic.main.address_list_item.view.*
 import kotlinx.android.synthetic.main.cooks_profile_dish_item.view.*
 
 class CooksDishesAdapter(private val listener: CooksProfileDishesListener?) :
@@ -62,7 +57,7 @@ class CooksDishesAdapter(private val listener: CooksProfileDishesListener?) :
             if (dish.menuItem != null) {
                 val quantityCount = dish.menuItem.getQuantityCount()
                 if (quantityCount > 0) {
-                    quantityLeft.text = "${dish.menuItem.getQuantityLeft()}"
+                    quantityLeft.text = "${dish.menuItem.getQuantityLeftString()}"
 //                quantitySep.visibility = View.VISIBLE
                 } else {
                     quantityLeft.text = "Sold Out"

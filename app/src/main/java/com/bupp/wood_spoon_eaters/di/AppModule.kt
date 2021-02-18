@@ -97,7 +97,7 @@ val appModule = module {
     //New Order
     viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { SingleDishInfoViewModel(get()) }
+    viewModel { SingleDishInfoViewModel(get(), get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(),get())}
 

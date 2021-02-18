@@ -23,7 +23,7 @@ data class OrderRequest(
 )
 
 data class OrderItemRequest(
-//    @SerializedName("id") var id: Long? = null,
+    @SerializedName("id") var id: Long? = null,
     @SerializedName("dish_id") val dishId: Long? = null,
     @SerializedName("quantity") var quantity: Int? = null,
     @SerializedName("removed_ingredient_ids") var removedIngredientsIds: ArrayList<Long>? = null,

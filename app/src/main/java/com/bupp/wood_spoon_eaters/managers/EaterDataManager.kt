@@ -37,6 +37,10 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
         return locationManager.getLastChosenAddress()
     }
 
+    fun hasUserSetAnAddress(): Boolean{
+        return getFinalAddressLiveDataParam().value?.id != null
+    }
+
     /////////////////////////////////////////
     ///////////      FEED         ///////////
     /////////////////////////////////////////

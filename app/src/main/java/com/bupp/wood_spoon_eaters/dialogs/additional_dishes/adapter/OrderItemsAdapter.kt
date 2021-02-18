@@ -50,10 +50,3 @@ class OrderItemsAdapter(val context: Context, val listener: OrderItemsListener) 
 }
 
 
-//class OrderItemsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//    val item = view.additionalDishItem
-//}
-
-
-
-

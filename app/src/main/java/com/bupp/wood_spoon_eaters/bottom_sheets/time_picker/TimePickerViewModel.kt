@@ -9,7 +9,12 @@ class TimePickerViewModel(
     private val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 
-    fun setDeliveryTime(date: Date?) {
-        deliveryTimeManager.setNewDeliveryTime(date)
+    fun setDeliveryTime(date: Date?, isTempDeliveryTime: Boolean = false) {
+        if(isTempDeliveryTime){
+            //set temporary time when user change deliveryTime from singleDishInfo - set temp so that global time wont change (and mess feed)
+            deliveryTimeManager.setTemporaryDeliveryTimeDate(date)
+        }else{
+            deliveryTimeManager.setNewDeliveryTime(date)
+        }
     }
 }
