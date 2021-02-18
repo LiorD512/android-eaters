@@ -209,11 +209,11 @@ class NewOrderActivity : AppCompatActivity(),
 
 
     private fun redirectToCooksPage() {
-        onPageClick(SingleDishHeader.COOK)
+        newOrderHeader.updateUi(SingleDishHeader.COOK)
     }
 
     private fun redirectToCheckout() {
-        onPageClick(SingleDishHeader.CHECKOUT)
+        newOrderHeader.updateUi(SingleDishHeader.CHECKOUT)
     }
 
     private fun handleCartStatus(cartStatus: CartManager.CartStatus) {

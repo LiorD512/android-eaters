@@ -10,10 +10,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import java.io.IOException
 import java.util.*
 
@@ -38,12 +35,15 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
         if (!isStarted) {
             isStarted = true
             Log.d(TAG,"onActive")
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    location?.also {
-                        setLocationData(it)
-                    }
-                }
+//            fusedLocationClient.lastLocation
+//                .addOnSuccessListener { location: Location? ->
+//                    location?.also {
+//                        setLocationData(it)
+//                    }
+//                }.addOnFailureListener { error ->
+//                    Log.d(TAG,"Failure: ${error.message}")
+//
+//                }
             startLocationUpdates()
         }
 
@@ -80,12 +80,15 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
                 }
             }
         }
+
+        override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
+            Log.d(TAG, "LocationAvailability: ${locationAvailability?.isLocationAvailable}")
+        }
     }
 
     private fun setLocationData(location: Location) {
-        Log.d(TAG,"setLocationData:")
         val accuracy = location.accuracy
-        Log.d(TAG,"onLocationResult accuracy: $accuracy")
+        Log.d(TAG,"setLocationData - accuracy: $accuracy")
         value = getAddressRequestFromLocation(location)
     }
 
@@ -115,6 +118,7 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
             interval = 10000
             fastestInterval = 5000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            maxWaitTime = 1
         }
     }
 }

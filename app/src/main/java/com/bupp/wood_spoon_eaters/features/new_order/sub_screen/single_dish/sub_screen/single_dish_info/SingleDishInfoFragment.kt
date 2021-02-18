@@ -238,7 +238,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     companion object{
-        const val TAG = "wowSingleDishInfoFrag"
+        const val TAG = "wowNSingleDishInfoFrag"
     }
 
 }

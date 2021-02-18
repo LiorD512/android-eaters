@@ -140,7 +140,7 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
     override fun onDishCountChange(orderItemsCount: Int, curOrderItem: OrderItem) {
         if(orderItemsCount == 0){
-//            mainViewModel.pulItemBackToAdditionalList(curOrderItem)
+//            mainViewModel.pulItemBackToAdditionalList(curOrderItem)//todo - nyc
         }
         mainViewModel.updateOrderItem(curOrderItem)
     }

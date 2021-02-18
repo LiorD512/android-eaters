@@ -129,7 +129,14 @@ class CartManager(
 
         val result = orderRepository.postNewOrder(orderRequest)
         this.currentOrderResponse = result.data
+        updateCart(result.data)
         return result
+    }
+
+    private fun updateCart(order: Order?) {
+        order?.let{
+            updateCurrentOrderItem(OrderItemRequest(id = it.orderItems[0].id))
+        }
     }
 
     private fun buildOrderRequest(tempCart: List<OrderItemRequest>? = null): OrderRequest {
@@ -157,7 +164,8 @@ class CartManager(
 
     suspend fun addNewOrderItemToCart(orderItemRequest: OrderItemRequest): OrderRepository.OrderRepoResult<Order>? {
         val tempCart = mutableListOf<OrderItemRequest>()
-            tempCart.add(0, orderItemRequest)
+            tempCart.add(orderItemRequest)
+            cart.add(0, orderItemRequest)
         val orderRequest = buildOrderRequest(tempCart)
         return postUpdateOrder(orderRequest)
     }
@@ -168,9 +176,9 @@ class CartManager(
 
 //        val updatedOrderItemId = currentOrderResponse?.orderItems?.find { it.id == updatedOrderItem.id }?.id
         val orderRequest = buildOrderRequest()
-        for(item in cart){
-            if(item.dishId == updatedOrderItem.dish.id){
-                item.apply {
+        for(item in currentOrderResponse?.orderItems ?: arrayListOf()){
+            if(item.id == updatedOrderItem.id){
+                cart.find { it.dishId == item.dish.id }?.apply {
                     id = updatedOrderItem.id
                     quantity = updatedOrderItem.quantity
                     notes = updatedOrderItem.notes
@@ -217,10 +225,22 @@ class CartManager(
     private suspend fun postUpdateOrder(orderRequest: OrderRequest): OrderRepository.OrderRepoResult<Order>? {
         val result = orderRepository.updateOrder(currentOrderResponse!!.id, orderRequest)
         result.data?.let {
-            this.currentOrderResponse = it
+            updateLocaParams(it)
             return result
         }
         return null
+    }
+
+    private fun updateLocaParams(order: Order) {
+        this.currentOrderResponse = order
+        order.orderItems.forEach { orderItem ->
+            cart.find { it.dishId == orderItem.dish.id }?.apply {
+                id = orderItem.id
+                quantity = orderItem.quantity
+                notes = orderItem.notes
+            }
+        }
+        Log.d(TAG, "updateLocaParams: $cart")
     }
 
     fun clearCart() {
@@ -280,7 +300,7 @@ class CartManager(
 //    }
 
     companion object {
-        const val TAG = "wowCartManager"
+        const val TAG = "wowNCartManager"
     }
 
 }

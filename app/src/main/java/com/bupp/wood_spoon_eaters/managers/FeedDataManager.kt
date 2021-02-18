@@ -28,6 +28,7 @@ class FeedDataManager(private val context: Context,
 
 
     fun initFeedDataManager(){
+        //to understand flow needs check -> app\src\main\flowHelpers\main_location_flow_helper
         val lastSelectedAddress = eaterDataManager.getFinalAddressLiveDataParam().value
         val knownAddresses = eaterDataManager.currentEater?.addresses
         val myLocation = getLocationLiveData().value
@@ -35,8 +36,8 @@ class FeedDataManager(private val context: Context,
         val isGpsEnabled = isGpsEnabled()
         Log.d(
             TAG,
-            "getLocationStatus: lastSelectedAddress: $lastSelectedAddress, hasGpsPermission: $hasGpsPermission," +
-                    " knownAddresses size: ${knownAddresses?.size}, myLocation: $myLocation"
+            "getLocationStatus: \nlastSelectedAddress: $lastSelectedAddress, \nhasGpsPermission: $hasGpsPermission," +
+                    " \nknownAddresses size: ${knownAddresses?.size}, \nmyLocation: $myLocation"
         )
         if (isGpsEnabled && hasGpsPermission) {
             Log.d(TAG, "has gpsPermission")
@@ -59,7 +60,7 @@ class FeedDataManager(private val context: Context,
                 if (myLocation != null) {
                     val closestAddress = LocationUtils.getClosestAddressToLocation(myLocation.lat, myLocation.lng, knownAddresses)
                     if (closestAddress != null) {
-                        Log.d(TAG, "using closest address: $closestAddress")
+                        Log.d(TAG, "using closest address: ${closestAddress.id}")
                         finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.KNOWN_ADDRESS))
                         eaterDataManager.updateSelectedAddress(closestAddress)
                         isWaitingToLocationUpdate = false
@@ -72,8 +73,9 @@ class FeedDataManager(private val context: Context,
                         isWaitingToLocationUpdate = true
                     }
                 } else {
+                    Log.d(TAG, "using known address with banner: ${knownAddresses[0].id}")
                     finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.KNOWN_ADDRESS_WITH_BANNER))
-                    eaterDataManager.updateSelectedAddress(knownAddresses[0])
+//                    eaterDataManager.updateSelectedAddress(knownAddresses[0])
                     //start location updates
                     Log.d(TAG, "starts location update")
                     isWaitingToLocationUpdate = true
@@ -92,14 +94,15 @@ class FeedDataManager(private val context: Context,
     }
 
     fun refreshFeedByLocationIfNeeded() {
-        if(isWaitingToLocationUpdate){
+//        if(isWaitingToLocationUpdate){
             initFeedDataManager()
             eaterDataManager.stopLocationUpdates()
-        }
+//        }
     }
 
 
     fun getFeedRequestWithAddress(currentAddress: Address): FeedRequest {
+        Log.d(TAG, "getFeedRequestWithAddress: ${currentAddress.id}")
         var feedRequest = FeedRequest()
         //address
         if (currentAddress.id != null) {
@@ -116,6 +119,7 @@ class FeedDataManager(private val context: Context,
     }
 
     fun getLastFeedRequest(): FeedRequest {
+        //being used in NewOrderActivity, uses params to init new Order.
         var feedRequest = FeedRequest()
         val lastAddress = getFinalAddressLiveDataParam().value
         lastAddress?.let{

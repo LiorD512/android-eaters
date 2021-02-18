@@ -117,6 +117,7 @@ class NewOrderMainViewModel(
     }
 
     private fun addToCart(){
+        Log.d(TAG, "addToCart")
         viewModelScope.launch {
             val result = cartManager.addCurrentOrderItemToCart()
 
@@ -144,6 +145,7 @@ class NewOrderMainViewModel(
     }
 
     fun updateOrderItem(orderItem: OrderItem) {
+        Log.d(TAG, "updateOrderItem -> orderItem: $orderItem")
         viewModelScope.launch {
             val result = cartManager.updateInCartOrderItem(orderItem)
             result?.let{
@@ -165,6 +167,7 @@ class NewOrderMainViewModel(
     }
 
     fun initAdditionalDishes() {
+        Log.d(TAG, "initAdditionalDishes")
         val orderItems = cartManager.getCurrentOrderItems()
         val additionalDishes = cartManager.getAdditionalDishes()
         additionalDishesEvent.postValue(AdditionalDishesEvent(orderItems, additionalDishes))
