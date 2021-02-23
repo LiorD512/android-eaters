@@ -29,7 +29,7 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
         val order = orders[position]
         (holder as ItemViewHolder).initItem(context,order )
 
-        if(order.wasRated || order.status.equals("cancelled")){
+        if(order?.wasRated == true || order.status.equals("cancelled")){
             holder.rateBtn.isEnabled = false
             holder.rateBtn.setOnClickListener(null)
             holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue_50))
@@ -38,16 +38,16 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
             holder.rateBtn.isClickable = true
             holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue))
             holder.rateBtn.setOnClickListener {
-                listener?.onRateClick(order.id)
+                listener?.onRateClick(order.id!!)
             }
         }
 
         holder.reportIssue.setOnClickListener {
-            listener?.onReportClick(order.id)
+            listener?.onReportClick(order.id!!)
         }
 
         holder.mainLayout.setOnClickListener {
-            listener?.onOrderClick(order.id)
+            listener?.onOrderClick(order.id!!)
         }
 
     }
@@ -68,9 +68,9 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
 
 class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun initItem(context: Context, order: Order) {
-        Glide.with(context).load(order.cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(img)
-        title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook.firstName}"
-        price.text = "Total: ${order.total.formatedValue}"
+        Glide.with(context).load(order.cook?.thumbnail).apply(RequestOptions.circleCropTransform()).into(img)
+        title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook?.firstName}"
+        price.text = "Total: ${order.total?.formatedValue}"
         if(order.estDeliveryTime != null){
             date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
         }else{

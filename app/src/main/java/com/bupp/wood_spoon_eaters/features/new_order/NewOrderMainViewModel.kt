@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.new_order
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +15,7 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,6 +41,7 @@ class NewOrderMainViewModel(
     val dishInfoEvent = MutableLiveData<FullDish>()
     val dishCookEvent = MutableLiveData<Cook>()
     val cartStatusEvent = MutableLiveData<CartManager.CartStatus>()
+    val clearCartEvent = SingleLiveEvent<Boolean>()
 
     val deliveryTimeLiveData = cartManager.deliveryTimeLiveData
 
@@ -47,8 +50,10 @@ class NewOrderMainViewModel(
     val additionalDishesEvent = MutableLiveData<AdditionalDishesEvent>()
     data class AdditionalDishesEvent(val orderItems: List<OrderItem>?, val additionalDishes: List<Dish>?)
 
-    val cartBottomBarEvent = MutableLiveData<CartBottomBarEvent>()
-    data class CartBottomBarEvent(val type: Int, val price: Double, val itemCount: Int? = null)
+    val cartBottomBarTypeEvent = MutableLiveData<CartBottomBarTypeEvent>()
+    data class CartBottomBarTypeEvent(val type: CartBottomBar.BottomBarTypes, val price: Double?, val itemCount: Int? = null, val totalPrice: Double? = null)
+//    val cartBottomBarEvent = MutableLiveData<CartBottomBarEvent>()
+//    data class CartBottomBarEvent(val type: Int, val price: Double, val itemCount: Int? = null, val totalPrice: Double)
 
     val mainActionEvent = MutableLiveData<NewOrderActionEvent>()
     enum class NewOrderActionEvent{
@@ -58,20 +63,15 @@ class NewOrderMainViewModel(
     }
 
 
-    val navigationEvent = MutableLiveData<NewOrderNavigationEvent>()
-    enum class NewOrderNavigationEvent{
-        REDIRECT_TO_CHECKOUT,
-        REDIRECT_TO_COOK_PROFILE,
-        SHOW_ADDRESS_MISSING_DIALOG,
-        REDIRECT_TO_SELECT_PROMO_CODE,
-        START_LOCATION_AND_ADDRESS_ACTIVITY
-    }
-
     fun initNewOrderActivity(intent: Intent?) {
         //get full dish and check order status prior to dish
         intent?.let{
             menuItemId = it.getLongExtra(Constants.NEW_ORDER_MENU_ITEM_ID, Constants.NOTHING.toLong())
         }
+        getFullDish()
+    }
+
+    private fun getFullDish() {
         menuItemId?.let{
             viewModelScope.launch {
                 progressData.startProgress()
@@ -79,30 +79,75 @@ class NewOrderMainViewModel(
                 getFullDishResult?.let{
                     dishInfoEvent.postValue(it.fullDish)
                     dishCookEvent.postValue(it.fullDish.cook)
+
+                    checkCartStatusAndUpdateUi()
+                    handleAndShowBottomBar(CartBottomBar.BottomBarTypes.ADD_TO_CART)
+                    progressData.endProgress()
                 }
             }
         }
+    }
+
+    fun refreshFullDish(menuItemId: Long?) {
+        this.menuItemId = menuItemId
+        getFullDish()
     }
 
     fun checkCartStatusAndUpdateUi(){
         cartStatusEvent.postValue(cartManager.getOrderStatus())
     }
 
-    fun updateCartBottomBar(type: Int, price: Double, itemCount: Int? = null) {
-        cartBottomBarEvent.postValue(CartBottomBarEvent(type, price, itemCount))
+
+    fun handleAndShowBottomBar(bottomBarType: CartBottomBar.BottomBarTypes) {
+//        val isCartEmpty = isCartEmpty()
+//        when(bottomBarType){
+//            CartBottomBar.BottomBarTypes.ADD_TO_CART -> {
+//
+//            }
+//        }
     }
 
-    fun onCartBottomBarClick(type: Int) {
+    fun updateCartBottomBarByType(type: CartBottomBar.BottomBarTypes, price: Double?, itemCount: Int? = null, totalPrice: Double? = null) {
+        cartBottomBarTypeEvent.postValue(CartBottomBarTypeEvent(type, price, itemCount, totalPrice))
+    }
+//    fun updateCartBottomBar(type: Int, price: Double, totalPrice: Double, itemCount: Int? = null) {
+//        cartBottomBarEvent.postValue(CartBottomBarEvent(type, price, itemCount, totalPrice))
+//    }
+
+    fun onCartBottomBarClick(type: CartBottomBar.BottomBarTypes) {
         when(type){
-            Constants.CART_BOTTOM_BAR_TYPE_CART -> {
+            CartBottomBar.BottomBarTypes.ADD_TO_CART, CartBottomBar.BottomBarTypes.ADD_TO_CART_OR_CHECKOUT -> {
                 handleAddToCartClick()
             }
-            Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT -> {
+            CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT -> {
 
             }
-            Constants.CART_BOTTOM_BAR_TYPE_FINALIZE -> {
-
+            CartBottomBar.BottomBarTypes.PLACE_AN_ORDER -> {
+                finalizeOrder()
             }
+        }
+    }
+
+    private fun finalizeOrder() {
+        viewModelScope.launch {
+            val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()?.id
+            progressData.startProgress()
+            val result = cartManager.finalizeOrder(paymentMethodId)
+            when(result?.type){
+                OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
+                    Log.d(TAG, "finalizeOrder - success")
+                    cartManager.clearCart()
+                    handleNavigation(NewOrderScreen.FINISH_ACTIVITY)
+                }
+                OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
+                    Log.d(TAG, "finalizeOrder - failed")
+                }
+                OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                    Log.d(TAG, "finalizeOrder - ws error")
+
+                }
+            }
+            progressData.endProgress()
         }
     }
 
@@ -118,28 +163,40 @@ class NewOrderMainViewModel(
 
     private fun addToCart(){
         Log.d(TAG, "addToCart")
+        progressData.startProgress()
+        cartManager.addCurrentOrderItemToCart()
+
         viewModelScope.launch {
-            val result = cartManager.addCurrentOrderItemToCart()
-
-            when(result.type){
-                OrderRepository.OrderRepoStatus.POST_ORDER_SUCCESS -> {
-                    if(cartManager.shouldShowAdditionalDishesDialog()){
-                        mainActionEvent.postValue(NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG)
-                    }else{
-                        navigationEvent.postValue(NewOrderNavigationEvent.REDIRECT_TO_COOK_PROFILE)
+            val result = cartManager.postNewOrUpdateCart()
+            result?.let{
+                when(it.type){
+                    OrderRepository.OrderRepoStatus.POST_ORDER_SUCCESS -> {
+                        if(cartManager.shouldShowAdditionalDishesDialog()){
+                            mainActionEvent.postValue(NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG)
+                        }else{
+                            handleNavigation(NewOrderScreen.LOCK_SINGLE_DISH_COOK)
+                        }
+//                        getFullDish()
+//                        handleAndShowBottomBar()
                         showProceedToCartBottomBar()
-                    }
 
-                }
-                OrderRepository.OrderRepoStatus.POST_ORDER_FAILED -> {
-                    result.data
-                }
-                OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    result.wsError?.let{
-                        wsErrorEvent.postValue(it)
                     }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        handleNavigation(NewOrderScreen.SINGLE_DISH_COOK)
+                        getFullDish()
+                    }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.POST_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        result.wsError?.let{
+                            wsErrorEvent.postValue(it)
+                        }
+                    }
+                    else -> {}
                 }
-                else -> {}
+                progressData.endProgress()
             }
         }
     }
@@ -147,6 +204,7 @@ class NewOrderMainViewModel(
     fun updateOrderItem(orderItem: OrderItem) {
         Log.d(TAG, "updateOrderItem -> orderItem: $orderItem")
         viewModelScope.launch {
+            progressData.startProgress()
             val result = cartManager.updateInCartOrderItem(orderItem)
             result?.let{
                 when(result.type){
@@ -163,6 +221,7 @@ class NewOrderMainViewModel(
                     else -> {}
                 }
             }
+            progressData.endProgress()
         }
     }
 
@@ -178,6 +237,7 @@ class NewOrderMainViewModel(
         Log.d(TAG, "addNewDishToCart: $newOrderItem")
         viewModelScope.launch {
             val result = cartManager.addNewOrderItemToCart(newOrderItem)
+            progressData.startProgress()
             result?.let{
                 when(result.type){
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -193,6 +253,7 @@ class NewOrderMainViewModel(
                     else -> {}
                 }
             }
+            progressData.endProgress()
         }
     }
 
@@ -211,8 +272,125 @@ class NewOrderMainViewModel(
     }
 
 
+    //Navigation
+    private var currentShowingScreen: NewOrderScreen = NewOrderScreen.SINGLE_DISH_INFO
+    enum class NewOrderScreen{
+        ADDITIONAL_DISHES,
+        SINGLE_DISH_INFO,
+        SINGLE_DISH_COOK,
+        SINGLE_DISH_INGR,
+        FINISH_ACTIVITY,
+        START_PAYMENT_METHOD_ACTIVITY,
+        LOCATION_AND_ADDRESS_ACTIVITY,
+        LOCK_SINGLE_DISH_COOK,
+        ADDITIONAL_DISHES_DISMISS,
+        BACK_PRESS,
+        PROMO_CODE,
+        CHECKOUT,
+    }
+    val navigationEvent = MutableLiveData<NewOrderNavigationEvent>()
+    enum class NewOrderNavigationEvent{
+        MAIN_TO_CHECKOUT,
+        BACK_TO_PREVIOUS,
+        BACK_FROM_CHECKOUT,
+        CHECKOUT_TO_PROMO_CODE,
+        SHOW_ADDRESS_MISSING_DIALOG,
+        REDIRECT_TO_COOK_PROFILE,
+        REDIRECT_TO_DISH_INFO,
+        LOCK_SINGLE_DISH_COOK,
+        FINISH_ACTIVITY,
+        START_PAYMENT_METHOD_ACTIVITY,
+        REDIRECT_TO_SELECT_PROMO_CODE,
+        START_LOCATION_AND_ADDRESS_ACTIVITY
+    }
+
+    fun updateCurrentScreen(screen: NewOrderScreen) {
+        this.currentShowingScreen = screen
+    }
+
+    fun handleNavigation(nextShowingScreen: NewOrderScreen) {
+        when(nextShowingScreen){
+            NewOrderScreen.SINGLE_DISH_INFO ->{
+             navigationEvent.postValue(NewOrderNavigationEvent.REDIRECT_TO_DISH_INFO)
+            }
+            NewOrderScreen.SINGLE_DISH_COOK ->{
+             navigationEvent.postValue(NewOrderNavigationEvent.REDIRECT_TO_COOK_PROFILE)
+            }
+            NewOrderScreen.CHECKOUT ->{
+                Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
+             navigationEvent.postValue(NewOrderNavigationEvent.MAIN_TO_CHECKOUT)
+            }
+            NewOrderScreen.PROMO_CODE ->{
+                Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
+             navigationEvent.postValue(NewOrderNavigationEvent.REDIRECT_TO_SELECT_PROMO_CODE)
+            }
+            NewOrderScreen.LOCK_SINGLE_DISH_COOK ->{
+                Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
+             navigationEvent.postValue(NewOrderNavigationEvent.LOCK_SINGLE_DISH_COOK)
+            }
+            NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY ->{
+                Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
+             navigationEvent.postValue(NewOrderNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+            }
+            NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY ->{
+                Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
+             navigationEvent.postValue(NewOrderNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+            }
+            NewOrderScreen.FINISH_ACTIVITY ->{
+                Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
+             navigationEvent.postValue(NewOrderNavigationEvent.FINISH_ACTIVITY)
+            }
+        }
+        currentShowingScreen = nextShowingScreen
+    }
 
 
+    // Checkout section
+    val orderData = cartManager.getCurrentOrderData()
+
+    fun onLocationChanged() {
+        viewModelScope.launch {
+            val result = cartManager.refreshOrderParams()
+            result?.let{
+                when(result.type){
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        initAdditionalDishes()
+                    }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        cartManager.onLocationInvalid()
+                        result.wsError?.let{
+                            wsErrorEvent.postValue(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    fun onDeliveryTimeChange() {
+        viewModelScope.launch {
+            val result = cartManager.refreshOrderParams()
+            result?.let{
+                when(result.type){
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+//                        do nothing.. live data updates it self.
+                    }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        cartManager.onDeliveryTimeInvalid()
+                        result.wsError?.let{
+                            wsErrorEvent.postValue(it)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
 
 
 
@@ -268,9 +446,9 @@ class NewOrderMainViewModel(
 //        }
     }
 
-    data class EmptyCartEvent(val shouldShow: Boolean = false)
+//    data class EmptyCartEvent(val shouldShow: Boolean = false)
 
-    val emptyCartEvent = SingleLiveEvent<EmptyCartEvent>()
+//    val emptyCartEvent = SingleLiveEvent<EmptyCartEvent>()
 
 
 //    fun setIntentParams(menuItemId: Long = -1, isCheckout: Boolean = false, isEvent: Boolean) {
@@ -302,7 +480,6 @@ class NewOrderMainViewModel(
 
 
     //ORDER DATA
-    val orderData = MutableLiveData<Order>() //current order result
     val orderRequestData = MutableLiveData<OrderRequest>() // current order request
     val additionalDishes = MutableLiveData<ArrayList<Dish>>() // current order other available dishes
 
@@ -313,8 +490,41 @@ class NewOrderMainViewModel(
     }
 
     fun showProceedToCartBottomBar() {
-        updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = cartManager.calcTotalDishesPrice())
+        updateCartBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = cartManager.calcTotalDishesPrice())
     }
+
+    fun onNewOrderFinish() {
+        cartManager.onNewOrderFinish()
+    }
+
+    fun clearCart() {
+        cartManager.clearCart()
+        getFullDish()
+    }
+
+    fun showClearCartDialog() {
+        clearCartEvent.postValue(true)
+    }
+
+    fun isCartEmpty(): Boolean {
+        return cartManager.isEmpty()
+    }
+
+    fun onCooksProfileDishClick(menuItemId: Long?) {
+        menuItemId?.let{
+            refreshFullDish(menuItemId)
+            navigationEvent.postValue(NewOrderNavigationEvent.REDIRECT_TO_DISH_INFO)
+        }
+    }
+
+    fun refreshPaymentsMethod(context: Context) {
+        paymentManager.getStripeCustomerCards(context, true)
+    }
+
+
+//    fun removeItemFromCart(orderItemId: OrderItem) {
+//        cartManager.removeItemFromCart(orderItemId)
+//    }
 
 
     var isFirstPurchase: Boolean = true
@@ -683,13 +893,13 @@ class NewOrderMainViewModel(
 //    val tipPercentage = MutableLiveData<Int>()
 //
 //    fun updateTip(tipPercentage: Int? = null, tipInCents: Int? = null) {
-//        tipPercentage?.let {
-//            this.tipPercentage.postValue(tipPercentage)
-//        }
-//        tipInCents?.let {
-//            this.tipInDollars.postValue(tipInCents)
-//        }
-//        postUpdateOrder(OrderRequest(tip = tipInCents?.times(100), tipPercentage = tipPercentage?.toFloat()))
+//        cartManager.updateOrderRequest(OrderRequest(tip = tipInCents?.times(100), tipPercentage = tipPercentage?.toFloat()))
+////        tipPercentage?.let {
+////            this.tipPercentage.postValue(tipPercentage)
+////        }
+////        tipInCents?.let {
+////            this.tipInDollars.postValue(tipInCents)
+////        }
 //    }
 //
 //    fun updateAddUtensils(shouldAdd: Boolean) {
@@ -730,7 +940,7 @@ class NewOrderMainViewModel(
 //
 //
 //    //Stripe stuff
-////    val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
+//    val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
 //
 //    data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
 //

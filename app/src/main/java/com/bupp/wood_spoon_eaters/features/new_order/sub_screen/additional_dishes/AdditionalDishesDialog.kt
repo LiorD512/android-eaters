@@ -1,6 +1,5 @@
-package com.bupp.wood_spoon_eaters.bottom_sheets.additional_dishes
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dishes
 
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +16,6 @@ import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishMainAdapter
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishesAdapter
 import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.OrderItemsAdapter
-import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -32,13 +30,16 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
     private lateinit var binding: AdditionalDishesDialogBinding
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
-    var listener: AdditionalDishesDialogListener? = null
+    var isDismissed = true // if true - redirects to cook's profile and lock header when dismissed.
 
-    interface AdditionalDishesDialogListener{
-        fun onProceedToCheckout()
-        fun onDishClick(dish: Dish)
-        fun onAdditionalDialogDismiss()
-    }
+//    var listener: AdditionalDishesDialogListener? = null
+//
+//    interface AdditionalDishesDialogListener{
+////        fun onProceedToCheckout()
+////        fun onDishClick(dish: Dish)
+////        fun onAdditionalDialogDismiss()
+////        fun onNewOrderDone()
+//    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,27 +67,14 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
 
     private fun initObservers() {
-        with(binding){
             mainViewModel.additionalDishesEvent.observe(viewLifecycleOwner, Observer { data ->
                 handleData(data)
-//                additionalDishDialogList.scrollToPosition(0)
             })
-//            mainViewModel.additionalDishes.observe(viewLifecycleOwner, Observer { additionalDishes ->
-//                handleAdditionalDishes(additionalDishes)
-//            })
-//            mainViewModel.progressData.observe(viewLifecycleOwner, Observer { progress ->
-//                when (progress) {
-//                    true -> dishAddonPb.show()
-//                    false -> dishAddonPb.hide()
-//                }
-//            })
-            mainViewModel.emptyCartEvent.observe(viewLifecycleOwner, Observer { emptyCartEvent ->
-                if(emptyCartEvent.shouldShow) {
+            mainViewModel.clearCartEvent.observe(viewLifecycleOwner, Observer { emptyCartEvent ->
+                if(emptyCartEvent) {
                     ClearCartDialog(this@AdditionalDishesDialog).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
                 }
             })
-        }
-
     }
 
     private fun handleData(data: NewOrderMainViewModel.AdditionalDishesEvent) {
@@ -99,33 +87,20 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
         }
     }
 
-    override fun onClearCart() {
-//        mainViewModel.clearCart()
-        dismiss()
-    }
-
-    override fun onCancelClearCart() {
-//        binding.dishAddonPlusMinus.updateCounterUiOnly(1)
-    }
-
-//    private fun handleAdditionalDishes(additionalDishes: ArrayList<Dish>?) {
-//        additionalDishes?.let {
-//            mainAdapter?.refreshAdditionalDishes(it)
-//        }
-//    }
-
-
     private fun initUi() {
         mainAdapter = AdditionalDishMainAdapter(requireContext(), this, this)
         with(binding){
             additionalDishDialogList.layoutManager = LinearLayoutManager(context)
             additionalDishDialogList.adapter = mainAdapter
 
-            additionalDishDialogClose.setOnClickListener { dismiss() }
-            dishAddonProceedBtn.setOnClickListener {
-                listener?.onProceedToCheckout()
+            additionalDishDialogClose.setOnClickListener {
                 dismiss()
-                 }
+            }
+            dishAddonProceedBtn.setOnClickListener {
+                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT)
+                isDismissed = false
+                dismiss()
+             }
         }
     }
 
@@ -135,37 +110,56 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
     }
 
     override fun onDishClick(dish: Dish) {
-        listener?.onDishClick(dish)
+//        listener?.onDishClick(dish)
+        mainViewModel.refreshFullDish(dish.menuItem?.id)
+        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INFO)
+        isDismissed = false
+        dismiss()
     }
 
-    override fun onDishCountChange(orderItemsCount: Int, curOrderItem: OrderItem) {
-        if(orderItemsCount == 0){
-//            mainViewModel.pulItemBackToAdditionalList(curOrderItem)//todo - nyc
+    override fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {
+        if(isOrderItemsEmpty){
+            mainViewModel.showClearCartDialog()
+        }else{
+            mainViewModel.updateOrderItem(curOrderItem)
         }
-        mainViewModel.updateOrderItem(curOrderItem)
+    }
+
+    override fun onClearCart() {
+        mainViewModel.clearCart()
+        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
+        isDismissed = false
+        dismiss()
+    }
+
+    override fun onCancelClearCart() {
+        //refresh additional dishes counter (set to 0 by user and canceled)
+        mainViewModel.initAdditionalDishes()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        listener?.onAdditionalDialogDismiss()
-        super.onDismiss(dialog)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is AdditionalDishesDialogListener) {
-            listener = context
-        }
-        else if (parentFragment is AdditionalDishesDialogListener){
-            this.listener = parentFragment as AdditionalDishesDialogListener
-        }
-        else {
-            throw RuntimeException("$context must implement AdditionalDishesDialogListener")
+        if(isDismissed){
+            mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCK_SINGLE_DISH_COOK)
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if (context is AdditionalDishesDialogListener) {
+//            listener = context
+//        }
+//        else if (parentFragment is AdditionalDishesDialogListener){
+//            this.listener = parentFragment as AdditionalDishesDialogListener
+//        }
+//        else {
+//            throw RuntimeException("$context must implement AdditionalDishesDialogListener")
+//        }
+//    }
+//
+//    override fun onDetach() {
+//        super.onDetach()
+//        listener = null
+//    }
+
 
 }

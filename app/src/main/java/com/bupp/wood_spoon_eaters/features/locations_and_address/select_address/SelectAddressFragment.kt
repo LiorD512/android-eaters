@@ -124,7 +124,15 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
         viewModel.myAddressesEvent.observe(viewLifecycleOwner, {
-            addressAdapter?.submitList(it)
+            if(it.isNullOrEmpty()){
+                selectAddressFragEmptyList.visibility = View.VISIBLE
+                selectAddressFragList.visibility = View.GONE
+            }else{
+                selectAddressFragList.visibility = View.VISIBLE
+                selectAddressFragEmptyList.visibility = View.GONE
+                addressAdapter?.submitList(it)
+
+            }
         })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.updateSelectedAddressUi(it.id)

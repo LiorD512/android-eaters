@@ -1,10 +1,7 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.AddressRequest
-import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.model.EaterRequest
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
@@ -218,7 +215,6 @@ class UserRepository(
     fun getUser(): Eater? {
         return this.currentUser
     }
-
 
 
 

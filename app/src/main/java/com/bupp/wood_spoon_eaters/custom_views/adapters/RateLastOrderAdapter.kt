@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.order_item_view.view.orderItemImage
 import kotlinx.android.synthetic.main.order_item_view.view.orderItemName
 import kotlinx.android.synthetic.main.rate_dish_item_view.view.*
 
-class RateLastOrderAdapter(val context: Context, private var orderItems: ArrayList<OrderItem>?, val listener: RateOrderAdapterListener) : RecyclerView.Adapter<RateLastOrderAdapter.DishViewHolder>() {
+class RateLastOrderAdapter(val context: Context, private var orderItems: List<OrderItem>?, val listener: RateOrderAdapterListener) : RecyclerView.Adapter<RateLastOrderAdapter.DishViewHolder>() {
 
     val NEGATIVE = 0
     val POSITIVE = 1

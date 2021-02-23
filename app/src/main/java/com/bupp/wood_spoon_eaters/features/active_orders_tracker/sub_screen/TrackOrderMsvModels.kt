@@ -8,9 +8,9 @@ import kotlin.collections.ArrayList
 
 data class OrderTrackMapData(val order: Order, val orderUserInfo: OrderUserInfo?)
 
-data class OrderTrackDetailsHeader(val orderNumber: String)
+data class OrderTrackDetailsHeader(val orderNumber: String?)
 
-data class OrderUserInfo(val paymentMethod: String? = null, val userInfo: String? = null, val userLocation: Address? = null)
+data class OrderUserInfo(val paymentMethod: String? = null, val userInfo: String? = null, val userLocation: Address? = null, val note: String? = null)
 data class OrderTrackDetails(val order: Order, val orderUserInfo: OrderUserInfo?)
 
 data class OrderTrackProgress(val order: Order?)

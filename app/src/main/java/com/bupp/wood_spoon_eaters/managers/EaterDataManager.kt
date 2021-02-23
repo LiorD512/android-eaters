@@ -1,15 +1,19 @@
 package com.bupp.wood_spoon_eaters.managers
 
 import android.content.Context
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
+import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 
 
 class EaterDataManager(val context: Context, private val locationManager: LocationManager,
-                       val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository) {
+                       private val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository){
 
     val currentEater: Eater?
     get() = userRepository.getUser()
@@ -50,8 +54,36 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
     }
 
 
+    /////////////////////////////////////////
+    /////      Traceable Orders         /////
+    /////////////////////////////////////////
 
+    var traceableOrdersList: List<Order>? = null
+    fun getTraceableOrders() = traceableOrders
+    private val traceableOrders = MutableLiveData<List<Order>>()
 
+    suspend fun checkForTraceableOrders() {
+        val result = eaterDataRepository.getTraceableOrders()
+        when (result.type) {
+            EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_SUCCESS -> {
+                result.data?.let {
+                    Log.d(TAG, "checkForTraceableOrders - success")
+                    traceableOrders.postValue(it)
+                    traceableOrdersList = it
+                }
+            }
+            EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_FAILED -> {
+                Log.d(TAG, "checkForTraceableOrders - failed")
+            }
+            EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+                Log.d(TAG, "checkForTraceableOrders - es error")
+
+            }
+            else -> {
+
+            }
+        }
+    }
 
 
 
@@ -128,7 +160,7 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
 
 
     companion object {
-        const val TAG = "wowEaterAddressManager"
+        const val TAG = "wowEaterDataManager"
     }
 
 

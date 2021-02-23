@@ -18,6 +18,10 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         POST_ORDER_SUCCESS,
         UPDATE_ORDER_FAILED,
         UPDATE_ORDER_SUCCESS,
+        FINALIZE_ORDER_FAILED,
+        FINALIZE_ORDER_SUCCESS,
+        ACTIVE_ORDERS_FAILED,
+        ACTIVE_ORDERS_SUCCESS,
         POST_ORDER_FAILED,
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
@@ -107,6 +111,34 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
             }
         }
     }
+
+    suspend fun finalizeOrder(orderId: Long, paymentMethodId: String?): OrderRepoResult<Any> {
+        val result = withContext(Dispatchers.IO){
+            apiService.checkoutOrder(orderId, paymentMethodId)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"updateOrder - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"updateOrder - GenericError")
+                    OrderRepoResult(OrderRepoStatus.FINALIZE_ORDER_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"updateOrder - Success")
+                    OrderRepoResult(OrderRepoStatus.FINALIZE_ORDER_SUCCESS)
+                }
+                is ResultHandler.WSCustomError -> {
+//                    Log.d(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+
 
 
     companion object{

@@ -44,11 +44,12 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
 
 
     val payments = MutableLiveData<List<PaymentMethod>>()
+    fun getPaymentsLiveData() = payments
 
-    fun getStripeCustomerCards(context: Context): SingleLiveEvent<List<PaymentMethod>> {
+    fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false): SingleLiveEvent<List<PaymentMethod>> {
         val paymentsLiveData = SingleLiveEvent<List<PaymentMethod>>()
         if (hasStripeInitialized) {
-            if (this.payments.value != null) {
+            if (this.payments.value != null && !forceRefresh) {
                 paymentsLiveData.postValue(payments.value)
             } else {
                 CustomerSession.getInstance().getPaymentMethods(

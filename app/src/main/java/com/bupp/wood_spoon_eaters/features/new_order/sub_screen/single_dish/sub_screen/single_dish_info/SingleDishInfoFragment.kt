@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -74,7 +75,9 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         })
         mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, {
             updateDishInfoUi(it)
-            mainViewModel.updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CART, price = it.getPriceObj().value, itemCount = 1)
+//            mainViewModel.updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CART, price = it.getPriceObj().value, itemCount = 1)
+            mainViewModel.updateCartBottomBarByType(type = CartBottomBar.BottomBarTypes.ADD_TO_CART, price = it.getPriceObj().value, itemCount = 1)
+            mainViewModel.handleAndShowBottomBar(CartBottomBar.BottomBarTypes.ADD_TO_CART)
         })
 //        mainViewModel.mainActionEvent.observe(viewLifecycleOwner, {
 //            addCurrentDishToCart()
@@ -186,7 +189,8 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateCurrentOrderItem(quantity = counter)
-        mainViewModel.updateCartBottomBar(Constants.CART_BOTTOM_BAR_TYPE_CART, itemCount = counter, price = viewModel.getTotalPriceForDishQuantity(counter))
+        mainViewModel.handleAndShowBottomBar(CartBottomBar.BottomBarTypes.ADD_TO_CART)
+        mainViewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.ADD_TO_CART, itemCount = counter, price = viewModel.getTotalPriceForDishQuantity(counter))
 //        viewModel.getCurrentDish().let {
 //            val newValue = it.price.value * counter
 //            updateStatusBottomBar(price = newValue, itemCount = counter)
@@ -230,7 +234,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     override fun onDestroyView() {
-
         singleDishInfoImagePager?.let {
             it.adapter = null
         }

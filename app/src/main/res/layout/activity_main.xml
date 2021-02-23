@@ -88,14 +88,14 @@
 <!--            app:layout_constraintBottom_toTopOf="@+id/mainActOrdersBB"-->
 <!--            app:navGraph="@navigation/main_nav" />-->
 
-    <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+    <com.bupp.wood_spoon_eaters.views.CartBottomBar
             android:id="@+id/mainActOrdersBB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible" />
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/mainActPb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

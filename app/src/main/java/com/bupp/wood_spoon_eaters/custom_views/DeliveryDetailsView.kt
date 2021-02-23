@@ -129,12 +129,20 @@ class DeliveryDetailsView : LinearLayout {
         deliveryDetailsViewInput.text = input
     }
 
-    fun updateDeliveryFullDetails(address: Address) {
-        deliveryDetailsViewInput.text = address.streetLine1
-        deliveryDetailsViewAptNumber.text = "Apt number:  ${address.streetLine2}"
-        deliveryDetailsViewDelivery.text = address.getDropoffLocationStr()
-        deliveryDetailsViewAptNumber.visibility = View.VISIBLE
-        deliveryDetailsViewDelivery.visibility = View.VISIBLE
+    fun updateDeliveryFullDetails(address: Address?) {
+        address?.let{
+            deliveryDetailsViewInput.text = address.streetLine1
+            deliveryDetailsViewDelivery.text = address.getDropoffLocationStr()
+            deliveryDetailsViewDelivery.visibility = View.VISIBLE
+            address.streetLine2?.let{
+                deliveryDetailsViewAptNumber.text = "Apt number:  $it"
+                deliveryDetailsViewAptNumber.visibility = View.VISIBLE
+            }
+            address.notes?.let{
+                deliveryDetailsViewNote.text = address.notes
+                deliveryDetailsViewNote.visibility = View.VISIBLE
+            }
+        }
     }
 
 

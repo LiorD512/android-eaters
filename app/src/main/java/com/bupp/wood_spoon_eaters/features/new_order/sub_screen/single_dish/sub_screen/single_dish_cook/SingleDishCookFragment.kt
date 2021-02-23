@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.features.main.cook_profile.CooksDishesAdapter
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
@@ -112,5 +113,9 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
         cook?.let{
             VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
         }
+    }
+
+    override fun onDishClick(dish: Dish) {
+        mainViewModel.onCooksProfileDishClick(dish.menuItem?.id)
     }
 }

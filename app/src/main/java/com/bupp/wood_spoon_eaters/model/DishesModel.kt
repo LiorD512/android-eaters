@@ -89,7 +89,7 @@ data class FullDish(
     @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>,
     @SerializedName("image_gallery") val imageGallery: ArrayList<String>? = null,
     @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
-    @SerializedName("dish_ingredients") val dishIngredients: ArrayList<DishIngredient>
+    @SerializedName("dish_ingredients") val dishIngredients: List<DishIngredient>
 ){
     fun getPriceObj(): Price {
         if(availableMenuItems?.size > 0 && availableMenuItems[0].price != null){
@@ -137,6 +137,7 @@ data class MediaList(
     val media: String,
     val isImage: Boolean
 )
+
 
 @Parcelize
 data class DishIngredient(

@@ -19,7 +19,7 @@ class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragm
 
     interface StartNewCartDialogListener {
         fun onNewCartClick()
-//        fun onCancelClick()
+        fun onCancelClick()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragm
         }
         startNewCartDialogCloseBtn.setOnClickListener { dismiss()}
         startNewCartDialogCancelBtn.setOnClickListener {
-//            listener.onCancelClick()
+            listener.onCancelClick()
             dismiss()
         }
 

@@ -49,11 +49,12 @@ class DeliveryTimeManager {
         return "Now"
     }
 
-    fun goBackToPreviousDeliveryTime(){
+    fun rollBackToPreviousDeliveryTime(){
         if(this.hasChangedTime){
             setNewDeliveryTime(previousDeliveryTime)
             this.previousDeliveryTime = null
         }
     }
+
 
 }

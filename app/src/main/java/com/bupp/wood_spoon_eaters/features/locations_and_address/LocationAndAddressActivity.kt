@@ -81,6 +81,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                     onBackPressed()
                 }
                 LocationAndAddressViewModel.NavigationEventType.LOCATION_AND_ADDRESS_DONE -> {
+                    setResult(RESULT_OK, intent);
                     finish()
                 }
                 LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE -> {
@@ -94,9 +95,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 }
                 LocationAndAddressViewModel.NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS -> {
                     redirectToAddressVerificationMapFromFinalDetails()
-                }
-                LocationAndAddressViewModel.NavigationEventType.DONE_WITH_LOCATION_AND_ADDRESS -> {
-                    finish()
                 }
 //                LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
 ////                    redirectToAddressListChooser()

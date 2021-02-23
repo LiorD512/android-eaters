@@ -54,7 +54,7 @@
                 android:id="@+id/headerViewSaveBtn"
                 android:text="Save"
                 tools:visibility="gone"
-                android:textColor="@color/blue_alpha_selector"
+                android:textColor="@color/blue_to_blue_20_selector"
                 android:visibility="gone"
                 android:gravity="center"
                 android:layout_gravity="center|right"
@@ -64,7 +64,6 @@
                 android:layout_height="match_parent"/>
 
         <TextView
-
                 style="@style/SemiBold13Dark"
                 android:id="@+id/headerViewSkipBtn"
                 android:text="Skip"

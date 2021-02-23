@@ -2,31 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/singleDishInfoFragment"
-    android:id="@+id/main_navigation">
+        android:id="@+id/main_navigation"
+        app:startDestination="@id/newOrderMainFragment">
 
     <fragment
-            android:id="@+id/singleDishInfoFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment"
-            android:label="fragment_single_dish_info"
-            tools:layout="@layout/fragment_single_dish_info">
-
-    </fragment>
-
-    <fragment
-            android:id="@+id/singleDishIngredientsFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientsFragment"
-            android:label="fragment_single_dish_ingredients"
-            tools:layout="@layout/fragment_single_dish_ingredients">
-
-    </fragment>
-
-    <fragment
-            android:id="@+id/singleDishCookFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_cook.SingleDishCookFragment"
-            android:label="fragment_single_dish_cook"
-            tools:layout="@layout/cook_profile_fragment">
-
+            android:id="@+id/newOrderMainFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragment"
+            android:label="fragment_main"
+            tools:layout="@layout/fragment_new_order_main">
+        <action
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/newOrderMainFragment"
+                android:id="@+id/action_newOrderMainFragment_to_checkoutFragment"
+                app:destination="@id/checkoutFragment" />
     </fragment>
 
     <fragment

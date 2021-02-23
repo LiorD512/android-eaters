@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -56,7 +55,7 @@ class TrackOrderItemDetailsAdapter(val context: Context) :
         }
 
         holder.ingredientsList.layoutManager = LinearLayoutManager(context)
-        val adapter = IngredientsCheckoutAdapter(context, item.removedIndredients)
+        val adapter = IngredientsCheckoutAdapter(context, item.removedIngredients)
         holder.ingredientsList.adapter = adapter
     }
 

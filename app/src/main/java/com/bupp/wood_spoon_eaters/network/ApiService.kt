@@ -148,10 +148,10 @@ interface ApiService {
     suspend fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): ServerResponse<Order>
 
     @POST("eaters/me/orders/{order_id}/checkout")
-    fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): Call<ServerResponse<Void>>
+    suspend fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): ServerResponse<Void>
 
-    @POST("eaters/me/orders/{order_id}/finalize")
-    fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
+//    @POST("eaters/me/orders/{order_id}/finalize")
+//    fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
 
     @DELETE("eaters/me/orders/{order_id}/")
     fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
@@ -162,7 +162,7 @@ interface ApiService {
 
     //Active Order
     @GET("eaters/me/orders/trackable")
-    fun getTrackableOrders(): Call<ServerResponse<ArrayList<Order>>>
+    suspend fun getTraceableOrders(): ServerResponse<List<Order>>
 
 //    @GET("eaters/me/orders/trackable")
 //    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>

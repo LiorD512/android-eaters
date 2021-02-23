@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.model.Ingredient
 import kotlinx.android.synthetic.main.order_item_view.view.*
 import kotlinx.android.synthetic.main.removed_ingredient_view.view.*
 
-class IngredientsCheckoutAdapter(val context: Context, private val ingredients: ArrayList<Ingredient>) :
+class IngredientsCheckoutAdapter(val context: Context, private val ingredients: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsCheckoutAdapter.RemovedIngredientViewHolder>() {
 
     class RemovedIngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {

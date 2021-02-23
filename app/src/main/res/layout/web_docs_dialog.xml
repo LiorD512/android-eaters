@@ -40,7 +40,7 @@
                     android:background="@drawable/web_docs_title_selector"
                     android:gravity="center"
                     android:text="Privacy policy"
-                    android:textColor="@color/blue_alpha_selector" />
+                    android:textColor="@color/white_to_blue_20_selector" />
 
             <TextView
                     android:id="@+id/webDocsTerms"
@@ -52,7 +52,7 @@
                     android:background="@drawable/web_docs_title_selector"
                     android:gravity="center"
                     android:text="Terms"
-                    android:textColor="@color/blue_alpha_selector" />
+                    android:textColor="@color/white_to_blue_20_selector" />
 
 
         </LinearLayout>
@@ -70,7 +70,7 @@
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/webDocsPb"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

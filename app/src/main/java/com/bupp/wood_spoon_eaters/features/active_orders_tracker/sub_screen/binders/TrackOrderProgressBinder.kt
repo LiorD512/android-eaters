@@ -98,7 +98,7 @@ class TrackOrderProgressBinder(val listener: TrackOrderProgressBinder.TrackOrder
                 }
 
                 itemView.trackOrderBottomCancelBtn.setOnClickListener {
-                    listener.onOrderCanceled(curOrderStage, order.id)
+                    listener.onOrderCanceled(curOrderStage, order.id!!)
 
                 }
 

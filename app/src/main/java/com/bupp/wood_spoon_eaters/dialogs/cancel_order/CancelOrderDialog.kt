@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.dialogs.cancel_order
 
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,15 +12,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import kotlinx.android.synthetic.main.cancel_order_dialog_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CancelOrderDialog(val type: Int, val orderId: Long?, val listener: CancelOrderDialogListener) : DialogFragment() {
+class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
     interface CancelOrderDialogListener{
         fun onOrderCanceled()
     }
 
+    var listener: CancelOrderDialogListener? = null
     val viewModel: CancelOrderViewModel by viewModel<CancelOrderViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,10 +64,10 @@ class CancelOrderDialog(val type: Int, val orderId: Long?, val listener: CancelO
             }
         }
 
-        viewModel.cancelOrder.observe(this, Observer {cancelOrderEvent ->
+        viewModel.cancelOrder.observe(viewLifecycleOwner, {cancelOrderEvent ->
             cancelOrderPb.hide()
             if(cancelOrderEvent.isSuccess){
-                listener.onOrderCanceled()
+                listener?.onOrderCanceled()
                 dismiss()
             }else{
                 Toast.makeText(context, "Problem canceling order", Toast.LENGTH_SHORT).show()
@@ -76,5 +79,21 @@ class CancelOrderDialog(val type: Int, val orderId: Long?, val listener: CancelO
         cancelOrderPb.show()
         val note = ""//cancelOrderDialogReason.getText()
         viewModel.cancelOrder(orderId, note)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is CancelOrderDialogListener) {
+            listener = context
+        } else if (parentFragment is CancelOrderDialogListener) {
+            this.listener = parentFragment as CancelOrderDialogListener
+        } else {
+            throw RuntimeException("$context must implement CancelOrderDialogListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 }

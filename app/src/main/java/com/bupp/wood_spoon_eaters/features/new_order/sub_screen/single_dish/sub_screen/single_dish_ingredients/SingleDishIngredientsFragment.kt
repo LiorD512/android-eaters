@@ -17,15 +17,17 @@ import kotlinx.android.synthetic.main.fragment_single_dish_ingredients.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment
 import com.segment.analytics.Analytics
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ingredients) {
+class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ingredients), DishIngredientsAdapter.DishIngredientsAdapterListener {
 
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
+    private val viewModel by viewModel<SingleDishIngredientViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Dishe page (ingredients)")
+        Analytics.with(requireContext()).screen("Dish page (ingredients)")
 
         initObservers()
     }
@@ -34,23 +36,6 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
         mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, Observer{
             initIngredient(it)
         })
-        mainViewModel.mainActionEvent.observe(viewLifecycleOwner, {
-            addCurrentDishToCart()
-        })
-    }
-
-    private fun addCurrentDishToCart() {
-        Log.d(TAG, "addCurrentDishToCart")
-//        viewModel.update
-//        val quantity = singleDishPlusMinus.counter
-//        val removedIngredients = ingredientsAdapter?.ingredientsRemoved
-//        val note = singleDishIngredientInstructions.getText()
-//        ordersViewModel.addToCart(
-//            fullDish = viewModel.fullDish.value?.fullDish,
-//            quantity = quantity,
-//            removedIngredients = removedIngredients,
-//            note = note
-//        )
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,8 +52,15 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { divider.setDrawable(it) }
         singleDishIngredientList.addItemDecoration(divider)
-        val ingredientsAdapter = DishIngredientsAdapter(requireContext(), currentDish.dishIngredients)
+        val ingredientsAdapter = DishIngredientsAdapter(this)
         singleDishIngredientList.adapter = ingredientsAdapter
+
+        ingredientsAdapter.submitList(currentDish.dishIngredients)
+
+    }
+
+    override fun onIngredientChange(ingredientsRemoved: List<Long>) {
+        viewModel.updateCurrentOrderItem(ingredientsRemoved)
     }
 
     companion object{

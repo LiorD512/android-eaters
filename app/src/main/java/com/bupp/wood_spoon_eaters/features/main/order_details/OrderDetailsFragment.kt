@@ -65,7 +65,7 @@ class OrderDetailsFragment() : Fragment() {
 
     private fun handleOrderItems(curOrder: Order) {
         orderDetailsFragDishesRecycler.layoutManager = LinearLayoutManager(context)
-        adapter = OrderDetailsAdapter(requireContext(), curOrder.orderItems)
+        adapter = OrderDetailsAdapter(requireContext(), curOrder.orderItems!!)
 
 
         var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -77,10 +77,10 @@ class OrderDetailsFragment() : Fragment() {
         val firstOrderItem = curOrder.orderItems.first()
         Glide.with(requireContext()).load(firstOrderItem.dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(orderDetailsFragDishImage)
 
-        val tax: Double = curOrder.tax.value
-        val serviceFee = curOrder.serviceFee.value
-        val deliveryFee = curOrder.deliveryFee.value
-        val discount = curOrder.discount.value
+        val tax: Double? = curOrder.tax?.value
+        val serviceFee = curOrder.serviceFee?.value
+        val deliveryFee = curOrder.deliveryFee?.value
+        val discount = curOrder.discount?.value
         val smallOrderFee = curOrder.minPrice?.value
 
         orderDetailsFragTax.text = "$$tax"
@@ -98,7 +98,7 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragPromoDiscount.text = "$$discount" //todo - add this when server ready
         orderDetailsFragOrderId.text = "${curOrder.orderNumber}"
 
-        orderDetailsFragCookName.text = "By cook ${curOrder.cook.getFullName()}"
+        orderDetailsFragCookName.text = "By cook ${curOrder.cook?.getFullName()}"
 
         if(curOrder.estDeliveryTime != null){
             val date = DateUtils.parseDateToUsDate(curOrder.estDeliveryTime)
@@ -108,7 +108,7 @@ class OrderDetailsFragment() : Fragment() {
             orderDetailsFragOrderDate.text = "${curOrder.estDeliveryTimeText}"
         }
 
-        orderDetailsFragTotalPrice.text = curOrder.total.formatedValue
+        orderDetailsFragTotalPrice.text = curOrder.total?.formatedValue
 
         if(curOrder.status.equals("cancelled")){
             orderDetailsStatus.text = "Order Cancelled"

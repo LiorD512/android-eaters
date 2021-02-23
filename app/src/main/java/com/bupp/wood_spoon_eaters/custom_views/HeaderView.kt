@@ -255,6 +255,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
 
     fun setSaveButtonClickable(isClickable: Boolean) {
         headerViewSaveBtn.isEnabled = isClickable
+        headerViewSaveBtn.isSelected = isClickable
     }
 
     fun setDoneButtonClickable(isEnabled: Boolean) {

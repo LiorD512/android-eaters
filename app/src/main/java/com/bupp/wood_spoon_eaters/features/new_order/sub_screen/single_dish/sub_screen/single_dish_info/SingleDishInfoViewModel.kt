@@ -17,7 +17,7 @@ class SingleDishInfoViewModel(
     val timeChangeEvent = LiveEventData<List<MenuItem>>()
 
     fun updateCurrentOrderItem(quantity: Int? = null, note: String? = null){
-        cartManager.updateCurrentOrderItem(OrderItemRequest(quantity = quantity, notes = note))
+        cartManager.updateCurrentOrderItemRequest(OrderItemRequest(quantity = quantity, notes = note))
     }
 
     fun getDropOffLocation(): String? {

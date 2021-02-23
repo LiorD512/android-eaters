@@ -153,7 +153,7 @@ class ToolTipView : FrameLayout {
         return location
     }
 
-    fun isNationWide(nationwide: Boolean) {
-        viewModel.isNationwide = nationwide
+    fun isNationWide(nationwide: Boolean? = false) {
+        viewModel.isNationwide = nationwide!!
     }
 }

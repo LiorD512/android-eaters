@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
@@ -50,7 +50,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     NoDeliveryToAddressDialog.NoDeliveryToAddressDialogListener, TipCourierDialog.TipCourierDialogListener,
-    StartNewCartDialog.StartNewCartDialogListener, ContactUsDialog.ContactUsDialogListener,
+    ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     CartBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
@@ -200,41 +200,46 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             }
         })
 
-        viewModel.getActiveOrders.observe(this, Observer { ordersEvent ->
-            mainActPb.hide()
-            if (ordersEvent.isSuccess) {
-                mainActOrdersBB.handleBottomBar(showActiveOrders = true)
-                if (ordersEvent.showDialog) {
-                    openActiveOrdersDialog(ordersEvent.orders!!)
-                }
-            } else {
-                mainActOrdersBB.handleBottomBar(showActiveOrders = false)
+        viewModel.getTraceableOrder.observe(this, { traceableOrders ->
+            if(traceableOrders.isNotEmpty()){
+                //show track your order bottom bar
+                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER)
             }
+//            mainActPb.hide()
+//            if (ordersEvent.isSuccess) {
+//                mainActOrdersBB.handleBottomBar(showActiveOrders = true)
+//                if (ordersEvent.showDialog) {
+//                    openActiveOrdersDialog(ordersEvent.orders!!)
+//                }
+//            } else {
+//                mainActOrdersBB.handleBottomBar(showActiveOrders = false)
+//            }
         })
 
-        viewModel.getTriggers.observe(this, Observer { triggerEvent ->
-            if (triggerEvent.isSuccess) {
-                Log.d("wowMain", "found should rate id !: ${triggerEvent.trigger?.shouldRateOrder}")
-                RateLastOrderDialog(triggerEvent.trigger?.shouldRateOrder!!.id, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
-            }
-        })
+//        viewModel.getTriggers.observe(this, Observer { triggerEvent ->
+//            if (triggerEvent.isSuccess) {
+//                Log.d("wowMain", "found should rate id !: ${triggerEvent.trigger?.shouldRateOrder}")
+//                RateLastOrderDialog(triggerEvent.trigger?.shouldRateOrder!!.id!!, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+//            }
+//        })
 
         viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
             if (pendingOrderEvent.hasPendingOrder) {
                 mainActOrdersBB.handleBottomBar(showCheckout = true)
                 pendingOrderEvent.totalPrice?.let {
-                    mainActOrdersBB.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = it)
+                    mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = it)
+//                    mainActOrdersBB.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = it)
                 }
             } else {
                 mainActOrdersBB.handleBottomBar(showCheckout = false)
             }
         })
-        viewModel.getCookEvent.observe(this, Observer { event ->
-//            feedFragPb.hide()
-            if (event.isSuccess) {
-                CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
-            }
-        })
+//        viewModel.getCookEvent.observe(this, Observer { event ->
+////            feedFragPb.hide()
+//            if (event.isSuccess) {
+//                CookProfileDialog(this, event.cook!!).show(supportFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//            }
+//        })
 //        viewModel.noUserLocationEvent.observe(this, Observer {
 //            when (it) {
 //                MainViewModel.NoLocationUiEvent.DEVICE_LOCATION_OFF -> {
@@ -360,8 +365,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
     }
 
-    override fun onCartBottomBarOrdersClick(type: Int) {
-        viewModel.checkForActiveOrder(true)
+    override fun onCartBottomBarOrdersClick(type: CartBottomBar.BottomBarTypes) {
+        when(type){
+            CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER ->{
+                //show track your order dialog
+                ActiveOrderTrackerDialog().show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+            }
+        }
     }
 
     override fun onBottomBarCheckoutClick() {
@@ -372,7 +382,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
-        ActiveOrderTrackerDialog.newInstance(orders).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+//        ActiveOrderTrackerDialog.newInstance(orders).show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
     override fun onContactUsClick() {
@@ -513,9 +523,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onNewCartClick() {
-        Toast.makeText(this, "onNewCartClick", Toast.LENGTH_SHORT).show()
-    }
+//    override fun onNewCartClick() {
+//        Toast.makeText(this, "onNewCartClick", Toast.LENGTH_SHORT).show()
+//    }
 
     override fun onCallSupportClick() {
         onContactUsClick()

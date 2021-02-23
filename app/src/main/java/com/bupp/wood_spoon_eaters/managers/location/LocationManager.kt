@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.dialogs.OrderUpdateErrorDialog
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.City
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -64,6 +65,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
     fun setSelectedAddressAndUpdateParams(selectedAddress: Address?){
         Log.d(TAG, "setSelectedAddressAndUpdateParams: $selectedAddress")
         selectedAddress?.let{
+            previousChosenAddress = lastChosenAddress
             lastChosenAddress = selectedAddress.copy()
             finalAddressLiveDataParam.postValue(FinalAddressParam(selectedAddress.id, selectedAddress.lat, selectedAddress.lng, selectedAddress.getUserLocationStr()))
         }
@@ -75,6 +77,10 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
 
     fun getLastChosenAddress(): Address?{
         return lastChosenAddress
+    }
+
+    fun rollBackToPreviousAddress(){
+        setSelectedAddressAndUpdateParams(previousChosenAddress)
     }
 
     companion object {

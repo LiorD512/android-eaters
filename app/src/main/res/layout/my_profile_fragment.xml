@@ -344,7 +344,7 @@
 
     </ScrollView>
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
             tools:visibility="gone"
             android:id="@+id/myProfileFragPb"
             android:layout_width="match_parent"

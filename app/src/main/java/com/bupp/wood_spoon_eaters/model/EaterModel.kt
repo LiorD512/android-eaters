@@ -17,9 +17,9 @@ data class Eater(
     @SerializedName("email") val email: String?,
     @SerializedName("created_at") val createdAt: Date?,
     @SerializedName("orders_count") val ordersCount: Int = 0,
-    @SerializedName("addresses") val addresses: ArrayList<Address>,
-    @SerializedName("cuisines") var cuisines: ArrayList<CuisineLabel>? = null,
-    @SerializedName("diets") var diets: ArrayList<DietaryIcon>? = null,
+    @SerializedName("addresses") val addresses: List<Address>,
+    @SerializedName("cuisines") var cuisines: List<CuisineLabel>? = null,
+    @SerializedName("diets") var diets: List<DietaryIcon>? = null,
     @SerializedName("active_campaign") val activeCampaign: ActiveCampaign? = null,
     @SerializedName("share_campaign") val shareCampaign: Campaign? = null,
     @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>

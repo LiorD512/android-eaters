@@ -3,13 +3,9 @@ package com.bupp.wood_spoon_eaters.features.login.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.bupp.wood_spoon.dialogs.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
-import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
-import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
+import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -49,9 +45,9 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     private fun updateEater() {
         if(validateFields()){
             with(binding!!){
-                val firstName = createAccountFragmentFirstName.getText()
-                val lastName = createAccountFragmentLastName.getText()
-                val email = createAccountFragmentEmail.getText()
+                val firstName = createAccountFragmentFirstName.getText()!!
+                val lastName = createAccountFragmentLastName.getText()!!
+                val email = createAccountFragmentEmail.getText()!!
 
                 viewModel.updateClientAccount(requireContext(), firstName, lastName, email)
             }
@@ -61,15 +57,15 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     private fun validateFields(): Boolean {
         var isValid = true
         with(binding!!){
-            if(createAccountFragmentFirstName.getText().isEmpty()){
+            if(createAccountFragmentFirstName.getText().isNullOrEmpty()){
                 createAccountFragmentFirstName.showError()
                 isValid = false
             }
-            if(createAccountFragmentLastName.getText().isEmpty()){
+            if(createAccountFragmentLastName.getText().isNullOrEmpty()){
                 createAccountFragmentLastName.showError()
                 isValid = false
             }
-            if(createAccountFragmentEmail.getText().isEmpty()){
+            if(createAccountFragmentEmail.getText().isNullOrEmpty()){
                 createAccountFragmentEmail.showError()
                 isValid = false
             }

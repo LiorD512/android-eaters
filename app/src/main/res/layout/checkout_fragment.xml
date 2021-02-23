@@ -409,7 +409,7 @@
                         android:text="Tip your courier now"/>
 
                 <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
-                        android:id="@+id/checkoutFragTipPercntView"
+                        android:id="@+id/checkoutFragTipPercentView"
                         android:layout_marginBottom="15.4dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -418,7 +418,6 @@
 
 
             <LinearLayout
-                    android:paddingBottom="@dimen/status_bottom_bar_height"
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:layout_width="match_parent" android:layout_height="wrap_content">
@@ -511,17 +510,5 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.bupp.wood_spoon_eaters.custom_views.StatusBottomBar
-            android:layout_alignParentBottom="true"
-            android:id="@+id/checkoutFragStatusBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
-            tools:visibility="gone"
-            android:id="@+id/checkoutFragPb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 
 </RelativeLayout>

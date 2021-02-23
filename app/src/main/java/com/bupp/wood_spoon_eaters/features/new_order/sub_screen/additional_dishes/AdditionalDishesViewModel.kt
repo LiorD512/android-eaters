@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.bottom_sheets.additional_dishes
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dishes
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

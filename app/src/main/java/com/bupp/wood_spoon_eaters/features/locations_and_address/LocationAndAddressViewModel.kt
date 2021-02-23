@@ -4,7 +4,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.model.Address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
@@ -29,7 +28,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         OPEN_ADDRESS_LIST_CHOOSER,
         OPEN_ADD_NEW_ADDRESS_SCREEN,
         OPEN_ADDRESS_AUTO_COMPLETE,
-        DONE_WITH_LOCATION_AND_ADDRESS,
         OPEN_LOCATION_PERMISSION_SCREEN,
         OPEN_MAP_VERIFICATION_SCREEN,
         OPEN_FINAL_ADDRESS_DETAILS_SCREEN,
@@ -143,10 +141,11 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         }
     }
 
-    fun saveNewAddress() {
+    fun saveNewAddress(note: String?) {
         progressData.startProgress()
         unsavedNewAddress?.let{
             it.streetLine1 = "${it.streetNumber} ${it.streetLine1}"
+            it.notes = note
             viewModelScope.launch {
                 val userRepoResult = userRepository.addNewAddress(it)
                 progressData.endProgress()
@@ -161,10 +160,10 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
-                        mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
                         userRepoResult.eater?.addresses?.get(0)?.let{ address ->
                             eaterDataManager.updateSelectedAddress(address)
                         }
+                        mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
                     }
                     else -> {
                         Log.d(TAG, "NetworkError")

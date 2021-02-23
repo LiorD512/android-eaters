@@ -27,21 +27,19 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
+import com.bupp.wood_spoon_eaters.network.base_repos.EaterDataRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.base_repos.FeedRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.base_repos.OrderRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
-import com.bupp.wood_spoon_eaters.repositories.FeedRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.repositories.OrderRepository
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import com.bupp.wood_spoon_eaters.repositories.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -60,6 +58,8 @@ val appModule = module {
     single { UserRepository(get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get()) }
+    single { EaterDataRepository(get()) }
+    single { EaterDataRepositoryImpl(get()) }
 
     //managers
     single { DeliveryTimeManager() }
@@ -67,10 +67,10 @@ val appModule = module {
     single { LocationManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
-    single { CartManager(get(), get(), get()) }
+    single { CartManager(get(), get(), get(), get()) }
     single { EventsManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
-    single { EaterDataManager(get(), get(), get(), get()) }
+    single { EaterDataManager(get(), get(), get(), get(), get()) }
 
 
 
@@ -95,11 +95,11 @@ val appModule = module {
     viewModel { TimePickerViewModel(get()) }
 
     //New Order
-    viewModel { NewOrderViewModel(get(), get(), get()) }
     viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SingleDishInfoViewModel(get(), get()) }
+    viewModel { SingleDishIngredientViewModel(get()) }
     viewModel { CheckoutViewModel(get(), get(), get()) }
-    viewModel { PromoCodeViewModel(get(),get())}
+    viewModel { PromoCodeViewModel(get())}
 
 
     //main

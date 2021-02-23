@@ -78,14 +78,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+            <com.bupp.wood_spoon_eaters.views.CartBottomBar
                     android:id="@+id/mainActOrdersBB"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+        <com.bupp.wood_spoon_eaters.views.WSProgressBar
                 android:id="@+id/mainActPb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

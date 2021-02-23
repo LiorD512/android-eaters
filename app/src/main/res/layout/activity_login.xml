@@ -30,7 +30,7 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/login_nav" />
 
-        <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+        <com.bupp.wood_spoon_eaters.views.WSProgressBar
                 android:id="@+id/loginActPb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

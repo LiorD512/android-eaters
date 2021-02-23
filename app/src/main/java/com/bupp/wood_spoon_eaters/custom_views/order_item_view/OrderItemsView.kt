@@ -31,27 +31,27 @@ class OrderItemsView : LinearLayout {
         orderItemsViewRecyclerView.addItemDecoration(divider)
     }
 
-    fun setOrderItems(context: Context, orderItems: ArrayList<OrderItem>, listener: OrderItemsViewAdapter.OrderItemsViewAdapterListener) {
-        adapter = OrderItemsViewAdapter(listener, context, orderItems)
+    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsViewAdapter.OrderItemsViewAdapterListener) {
+        adapter = OrderItemsViewAdapter(context, listener)
         orderItemsViewRecyclerView.adapter = adapter
-
+        adapter!!.submitList(orderItems)
 //        ingredientsAdapter?.setOrderItemRequests()
     }
 
-    fun getAllDishPriceValue(): Double {
-        if(adapter != null){
-            return adapter!!.getAllDishPriceValue()
-        }else{
-            return 0.0
-        }
-    }
-
-    fun getOrderItemsQuantity(): Int {
-        if (adapter != null) {
-            return adapter!!.getOrderItemsQuantity()
-        } else {
-            return 0
-        }
-    }
+//    fun getAllDishPriceValue(): Double {
+//        if(adapter != null){
+//            return adapter!!.getAllDishPriceValue()
+//        }else{
+//            return 0.0
+//        }
+//    }
+//
+//    fun getOrderItemsQuantity(): Int {
+//        if (adapter != null) {
+//            return adapter!!.getOrderItemsQuantity()
+//        } else {
+//            return 0
+//        }
+//    }
 
 }

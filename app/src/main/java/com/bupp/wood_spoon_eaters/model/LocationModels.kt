@@ -73,7 +73,8 @@ data class Address(
             return addressSlug
         }else{
             val street = streetLine1?.let{"${it},"} ?: ""
-            return "$street ${city?.name ?: ""} ${state?.name ?: ""}"
+            val apt = streetLine2?.let{",${it}"} ?: ""
+            return "$street ${city?.name ?: ""} ${state?.name ?: ""} $apt"
         }
     }
     fun getDropoffLocationStr(): String {

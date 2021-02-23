@@ -2,7 +2,8 @@
 <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <me.relex.circleindicator.CircleIndicator3
@@ -16,7 +17,7 @@
             app:ci_gravity="center"
             android:id="@+id/ordersTrackerIndicator"
             android:layout_width="match_parent"
-            android:layout_height="11dp"/>
+            android:layout_height="20dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/ordersTrackerPager"

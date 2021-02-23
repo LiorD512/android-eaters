@@ -14,11 +14,11 @@ import kotlinx.android.synthetic.main.tip_percent_view.view.*
 class TipPercentView : FrameLayout, View.OnClickListener {
 
     interface TipPercentViewListener {
-        fun onTipIconClick(tipSelection: Int)
+        fun onTipIconClick(tipSelection: Int?)
     }
 
     private var listener: TipPercentViewListener? = null
-    private var selectedTip = Constants.TIP_NOT_SELECTED
+    private var selectedTip: Int? = null
 
     fun setTipPercentViewListener(listener: TipPercentViewListener) {
         this.listener = listener
@@ -69,6 +69,7 @@ class TipPercentView : FrameLayout, View.OnClickListener {
         tipPercent15.isSelected = false
         tipPercent20.isSelected = false
         tipPercentCustom.isSelected = false
+        selectedTip = null
     }
 
     fun setCustomTipValue(tipValue: Int? = 0){

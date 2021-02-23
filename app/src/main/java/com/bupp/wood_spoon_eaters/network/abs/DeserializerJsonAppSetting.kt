@@ -38,7 +38,7 @@ class DeserializerJsonAppSetting: JsonDeserializer<AppSetting>{
                 appSetting.value = jsonObject?.get("value")?.asBoolean
             }
             "csv_array" -> { //array
-                appSetting.value = jsonObject?.get("value") as Array<String>
+                appSetting.value = jsonObject?.get("value")
             }
         }
         return appSetting

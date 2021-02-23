@@ -9,6 +9,14 @@
              android:layout_height="match_parent"
              android:background="@color/white_80">
 
+    <com.airbnb.lottie.LottieAnimationView
+            android:layout_gravity="center"
+            android:id="@+id/progressBarLayoutLottie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:lottie_autoPlay="true"/>
+
     <!--<com.bupp.wood_spoon_eaters.custom_views.progress_bar.CircularDotsLoader-->
             <!--android:id="@+id/progressBar"-->
             <!--android:layout_width="wrap_content"-->

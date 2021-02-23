@@ -74,10 +74,12 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
 
     private fun sendCode() {
         val phoneStr = binding!!.verificationFragmentInput.getText()
-        val phone = CountryCodeUtils.simplifyNumber(requireContext(), phoneStr)
-        phone?.let{
-            viewModel.setUserPhone(it)
-            viewModel.sendPhoneNumber()
+        phoneStr?.let{
+            val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
+            phone?.let{
+                viewModel.setUserPhone(it)
+                viewModel.sendPhoneNumber()
+            }
         }
     }
 

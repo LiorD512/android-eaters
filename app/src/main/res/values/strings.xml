@@ -124,5 +124,9 @@
     <string name="banner_my_location">You are now seeing dishes in %1$s, please enter your address to see home chefs that deliver to you</string>
     <string name="banner_known_address">Since your location services are off, WoodSpoon is using your last saved address</string>
     <string name="banner_no_gps"> You disabled your location services. WoodSpoon is using your last saved address for now.</string>
+    <string name="bottom_bar_item_counter">Add %1$s To Cart</string>
+    <string name="bottom_bar_place_an_order">PLACE AN ORDER</string>
+    <string name="bottom_bar_tract_your_order">Track your order</string>
+    <string name="bottom_bar_procees_to_cart">Proceed to cart</string>
 
 </resources>

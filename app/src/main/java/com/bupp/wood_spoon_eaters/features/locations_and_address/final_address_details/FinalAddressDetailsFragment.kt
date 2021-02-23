@@ -1,17 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address.final_address_details
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionInflater
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFinalAddressDetailsBinding
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
-import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_details) {
@@ -38,13 +33,14 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
         }
         binding!!.addressDetailsSaveBtn.setOnClickListener {
             if(validateFields()){
-                mainViewModel.saveNewAddress()
+                mainViewModel.saveNewAddress(binding!!.addressDetailsNote.getText())
             }
         }
         binding!!.addressDetailsEditBtn.setOnClickListener {
             mainViewModel.redirectFinalDetailsToMap()
         }
         binding!!.addressDetailsDeliverToDoor.performClick()
+
     }
 
     private fun validateFields(): Boolean {

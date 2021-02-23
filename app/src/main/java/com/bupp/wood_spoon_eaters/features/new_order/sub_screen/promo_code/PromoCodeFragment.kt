@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -19,54 +20,51 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.ErrorDialog
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import kotlinx.android.synthetic.main.promo_code_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
+class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.HeaderViewListener {
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.promo_code_fragment, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         promoCodeFragHeaderView.setHeaderViewListener(this)
         promoCodeFragHeaderView.setSaveButtonClickable(false)
 
-        promoCodeFragCodeInput.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        promoCodeFragCodeInput.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable) {
                 if (!s.isNullOrBlank()) {
                     promoCodeFragHeaderView.setSaveButtonClickable(true)
                 } else {
                     promoCodeFragHeaderView.setSaveButtonClickable(false)
                 }
+
             }
         })
 
-        viewModel.promoCodeEvent.observe(this, Observer{ event ->
+        viewModel.promoCodeEvent.observe(this, { event ->
             promoCodeFragPb.hide()
             if(event.isSuccess){
 //                listener.onPromoCodeDone()
 //                (activity as NewOrderActivity).onCheckout()//ny !!!
             }
         })
-        viewModel.errorEvent.observe(this, Observer {
+        viewModel.errorEvent.observe(this, {
             promoCodeFragPb.hide()
             it?.let{
                 var errorStr = ""
                 it.forEach {
                     errorStr += "${it.msg} \n"
                 }
-                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
+                showWrongPromoCodeNotification(errorStr)
+//                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
 //                WSErrorDialog(it.msg).show(childFragmentManager, Constants.ERROR_DIALOG)
 //                showWrongPromoCodeNotification()
             }
@@ -75,17 +73,15 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
         openKeyboard(promoCodeFragCodeInput)
     }
 
-    private fun showWrongPromoCodeNotification() {
+    private fun showWrongPromoCodeNotification(msg: String?) {
         snackbar = TSnackbar.make(promoCodeFragmentLayout,
-            "The promo code seems to be invalid. \nplease check again",
+            msg ?: "The promo code seems to be invalid. \nplease check again",
             TSnackbar.LENGTH_LONG)
         val snackBarView = snackbar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
         val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textView.setTextAppearance(R.style.SemiBold13Dark)
-        }
-        textView.setGravity(Gravity.CENTER_HORIZONTAL)
+        textView.setTextAppearance(R.style.SemiBold13Dark)
+        textView.gravity = Gravity.CENTER_HORIZONTAL
         textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         snackbar.show()
     }
@@ -104,5 +100,6 @@ class PromoCodeFragment : Fragment(), HeaderView.HeaderViewListener {
 
     override fun onHeaderBackClick() {
 //        (activity as NewOrderActivity).onCheckout() // nyyy
+        activity?.onBackPressed()
     }
 }

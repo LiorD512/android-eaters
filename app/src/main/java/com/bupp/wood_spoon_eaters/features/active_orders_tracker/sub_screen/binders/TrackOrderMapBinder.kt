@@ -65,8 +65,8 @@ class TrackOrderMapBinder(val fragManager: FragmentManager): ItemBinder<OrderTra
 
                     val builder = LatLngBounds.Builder()
 
-                    val chefLat = curOrderData.cook.pickupAddress?.lat
-                    val chefLng = curOrderData.cook.pickupAddress?.lng
+                    val chefLat = curOrderData.cook?.pickupAddress?.lat
+                    val chefLng = curOrderData.cook?.pickupAddress?.lng
                     chefLat?.let{
                         chefLng?.let{
                             val chefLocation = LatLng(chefLat, chefLng)
@@ -75,8 +75,8 @@ class TrackOrderMapBinder(val fragManager: FragmentManager): ItemBinder<OrderTra
                             Log.d("wowMapBinder","chefLocation $chefLocation")
                         }
                     }
-                    val myLat = curOrderData.deliveryAddress.lat
-                    val myLng = curOrderData.deliveryAddress.lng
+                    val myLat = curOrderData.deliveryAddress?.lat
+                    val myLng = curOrderData.deliveryAddress?.lng
                     myLat?.let{
                         myLng?.let{
                             val myLocation = LatLng(myLat, myLng)

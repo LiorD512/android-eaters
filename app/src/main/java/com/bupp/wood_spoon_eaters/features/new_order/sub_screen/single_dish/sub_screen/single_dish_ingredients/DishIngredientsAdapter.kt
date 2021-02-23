@@ -1,62 +1,91 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.DishIngredient
 import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
 
-class DishIngredientsAdapter(val context: Context, val ingredient: ArrayList<DishIngredient>) : RecyclerView.Adapter<DishIngredientsAdapter.ViewHolder>() {
+class DishIngredientsAdapter(private val listener: DishIngredientsAdapterListener?) :
+    ListAdapter<DishIngredient, RecyclerView.ViewHolder>(DiffCallback()) {
 
-    val ingredientsRemoved: ArrayList<Long> = arrayListOf()
+    private val ingredientsRemoved: MutableList<Long> = arrayListOf()
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title = view.dishIngredientItemTitle
-        val remove = view.dishIngredientItemRemove
-        val layout = view.dishIngredientItemLayout
+    interface DishIngredientsAdapterListener {
+        fun onIngredientChange(ingredientsRemoved: List<Long>)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.dish_ingredient_item, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return DishIngredientViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.dish_ingredient_item,
+                parent,
+                false
+            )
+        )
     }
 
-    override fun getItemCount(): Int {
-        return ingredient.size
-    }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val dishIngredient = getItem(position) as DishIngredient
+        val itemViewHolder = holder as DishIngredientViewHolder
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val dishIngredient = ingredient[position]
         val ingredient = dishIngredient.ingredient
         val name = ingredient?.name
         val quantity = "${dishIngredient.quantity} ${dishIngredient.unit?.name}"
-        holder.title.text = "$name ($quantity)"
+        itemViewHolder.title.text = "$name ($quantity)"
         if(dishIngredient.isAdjustable!!){
-            holder.remove.visibility = View.VISIBLE
+            itemViewHolder.remove.visibility = View.VISIBLE
 
             if(ingredientsRemoved.contains(ingredient?.id)){
-                holder.remove.text = "Add"
-                holder.title.alpha = 0.5f
+                itemViewHolder.remove.text = "Add"
+                itemViewHolder.title.alpha = 0.5f
             }else{
-                holder.remove.text = "Remove"
-                holder.title.alpha = 1f
+                itemViewHolder.remove.text = "Remove"
+                itemViewHolder.title.alpha = 1f
             }
 
-            holder.remove.setOnClickListener {
-                if(ingredientsRemoved.contains(ingredient?.id)){
-                    ingredientsRemoved.remove(ingredient?.id)
-                }else{
-                    ingredientsRemoved.add(ingredient?.id!!)
+            itemViewHolder.remove.setOnClickListener {
+                ingredient?.id?.let{
+                    if(ingredientsRemoved.contains(it)){
+                        ingredientsRemoved.remove(it)
+                    }else{
+                        ingredientsRemoved.add(it)
+                    }
+                listener?.onIngredientChange(ingredientsRemoved)
+                    notifyItemChanged(position)
                 }
-                notifyDataSetChanged()
             }
         }else{
-            holder.remove.visibility = View.GONE
+            itemViewHolder.remove.visibility = View.GONE
         }
-
     }
 
+    class DishIngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val title: TextView = view.dishIngredientItemTitle
+        val remove: TextView = view.dishIngredientItemRemove
+        val layout: LinearLayout = view.dishIngredientItemLayout
+    }
 
+    class DiffCallback : DiffUtil.ItemCallback<DishIngredient>() {
+
+        override fun areItemsTheSame(oldItem: DishIngredient, newItem: DishIngredient): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: DishIngredient, newItem: DishIngredient): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    fun getIngredientsRemovedList(): List<Long>{
+        return ingredientsRemoved
+    }
 }
+
+

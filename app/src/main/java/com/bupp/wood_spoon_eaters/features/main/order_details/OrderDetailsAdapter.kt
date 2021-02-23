@@ -10,7 +10,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import kotlinx.android.synthetic.main.order_details_dish_item_view.view.*
 
-class OrderDetailsAdapter(val context: Context, private var dishes: ArrayList<OrderItem>) : RecyclerView.Adapter<OrderDetailsAdapter.DishViewHolder>() {
+class OrderDetailsAdapter(val context: Context, private var dishes: List<OrderItem>) : RecyclerView.Adapter<OrderDetailsAdapter.DishViewHolder>() {
 
     class DishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.orderDetailsDishName

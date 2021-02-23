@@ -1,24 +1,28 @@
-package com.bupp.wood_spoon_eaters.custom_views
+package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.WoodspoonProgressBarBinding
+import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
+import kotlinx.android.synthetic.main.lottie_animation_view.view.*
 import kotlinx.android.synthetic.main.woodspoon_progress_bar.view.*
 
 
-class WoodSpoonProgressBar : FrameLayout {
+class WSProgressBar @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) {
 
     private var isBlue: Boolean = false
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.woodspoon_progress_bar, this, true)
+    private var binding: WoodspoonProgressBarBinding = WoodspoonProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
 
+    init {
         if (attrs != null) {
             val attrSet = context.obtainStyledAttributes(attrs, R.styleable.WoodSpoonProgressBar)
 
@@ -26,16 +30,17 @@ class WoodSpoonProgressBar : FrameLayout {
                 isBlue = attrSet.getBoolean(R.styleable.WoodSpoonProgressBar_isBlueStyle, false)
             }
         }
-//        setProgressBarStyle()
     }
 
     fun show() {
-        progressBarLayout.visibility = View.VISIBLE
+        binding.progressBarLayout.visibility = View.VISIBLE
+        binding.progressBarLayoutLottie.setAnimation("loader.json")
+        binding.progressBarLayoutLottie.playAnimation()
     }
 
     fun hide() {
-//        progressBar.stop()
-        progressBarLayout.visibility = View.GONE
+        binding.progressBarLayout.visibility = View.GONE
+        binding.progressBarLayoutLottie.cancelAnimation()
     }
 
 //    private fun setProgressBarStyle() {

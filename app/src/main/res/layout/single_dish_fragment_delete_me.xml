@@ -536,14 +536,14 @@
 
         </LinearLayout>
 
-        <com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.CartBottomBar
+        <com.bupp.wood_spoon_eaters.views.CartBottomBar
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/singleDishStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-    <com.bupp.wood_spoon_eaters.custom_views.WoodSpoonProgressBar
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

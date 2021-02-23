@@ -78,6 +78,18 @@
             android:gravity="left"
             android:text="Apt number"/>
 
+
+    <TextView
+            android:visibility="gone"
+            style="@style/Reg13Dark"
+            android:id="@+id/deliveryDetailsViewNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:text=""/>
+
     <TextView
             android:visibility="gone"
             style="@style/Reg13Dark"

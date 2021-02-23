@@ -6,16 +6,16 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import kotlinx.android.synthetic.main.single_dish_header_view.view.*
 
 
 class SingleDishHeader : FrameLayout {
 
 
-
     interface SingleDishHeaderListener {
         fun onBackClick()
-        fun onPageClick(page: Int)
+        fun onPageClick(page: NewOrderMainViewModel.NewOrderScreen)
     }
 
     fun setSingleDishHeaderListener(listener: SingleDishHeaderListener) {
@@ -34,35 +34,35 @@ class SingleDishHeader : FrameLayout {
 
     private fun initUi() {
 
-        singleDishHeaderInfo.setOnClickListener { scrollPageTo(Companion.INFO) }
-        singleDishHeaderCook.setOnClickListener { scrollPageTo(COOK) }
-        singleDishHeaderIngredient.setOnClickListener { scrollPageTo(INGREDIENT) }
+        singleDishHeaderInfo.setOnClickListener { scrollPageTo(NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INFO) }
+        singleDishHeaderCook.setOnClickListener { scrollPageTo(NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_COOK) }
+        singleDishHeaderIngredient.setOnClickListener { scrollPageTo(NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INGR) }
         singleDishHeaderBack.setOnClickListener { listener?.onBackClick() }
         singleDishHeaderInfo.performClick()
     }
 
-    private fun scrollPageTo(scrollPos: Int) {
+    private fun scrollPageTo(scrollPos: NewOrderMainViewModel.NewOrderScreen) {
         unSelectAll()
         when (scrollPos) {
-            Companion.INFO -> {
+            NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INFO -> {
                 singleDishHeaderInfo.isSelected = true
-                singleDishHeaderInfo.setTypeface(singleDishHeaderInfo.getTypeface(), Typeface.BOLD);
-                listener?.onPageClick(Companion.INFO)
+                singleDishHeaderInfo.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD);
+                listener?.onPageClick(scrollPos)
             }
-            INGREDIENT -> {
+            NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INGR -> {
                 singleDishHeaderIngredient.isSelected = true
-                singleDishHeaderIngredient.setTypeface(singleDishHeaderInfo.getTypeface(), Typeface.BOLD);
-                listener?.onPageClick(INGREDIENT)
+                singleDishHeaderIngredient.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD);
+                listener?.onPageClick(scrollPos)
             }
-            COOK -> {
+            NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_COOK -> {
                 singleDishHeaderCook.isSelected = true
-                singleDishHeaderCook.setTypeface(singleDishHeaderInfo.getTypeface(), Typeface.BOLD);
-                listener?.onPageClick(COOK)
+                singleDishHeaderCook.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD);
+                listener?.onPageClick(scrollPos)
             }
         }
     }
 
-    fun updateUi(page: Int){
+    fun updateUi(page: NewOrderMainViewModel.NewOrderScreen){
         scrollPageTo(page)
     }
 
@@ -76,12 +76,12 @@ class SingleDishHeader : FrameLayout {
 
     }
 
-    companion object {
-        const val INFO = 0
-        const val INGREDIENT = 1
-        const val COOK = 2
-        const val CHECKOUT = 3
-    }
+//    companion object {
+//        const val INFO = 0
+//        const val INGREDIENT = 1
+//        const val COOK = 2
+//        const val CHECKOUT = 3
+//    }
 
 
 }

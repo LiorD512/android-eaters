@@ -26,20 +26,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.track_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class TrackOrderFragment() : Fragment(),
+class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
     CancelOrderDialog.CancelOrderDialogListener, TrackOrderProgressBinder.TrackOrderProgressListener, OnMapReadyCallback {
 
     private var mMap: GoogleMap? = null
     var curOrderId: Long? = null
     var listener: TrackOrderDialogListener? = null
 
+//    val binding: FragmentTrackOrderBinding? = null
     var currentBoundSize = 150
 
 
     private lateinit var mainAdapter: TrackOrderMainAdapter
-    val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
+    val viewModel by viewModel<ActiveOrderTrackerViewModel>()
 
     private lateinit var progressList: ArrayList<CheckBox>
 
@@ -52,7 +54,7 @@ class TrackOrderFragment() : Fragment(),
     }
 
     companion object {
-        private val CUR_ORDER_ID_PARAM = "curOrderId"
+        const val CUR_ORDER_ID_PARAM = "curOrderId"
 
         fun newInstance(curOrderId: Long): TrackOrderFragment {
             val fragment = TrackOrderFragment()
@@ -74,10 +76,6 @@ class TrackOrderFragment() : Fragment(),
         Log.d("wowTrackOrderFragment", "newInstance ARGS: $curOrderId")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.track_order_dialog, null)
-        return view
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,6 +84,7 @@ class TrackOrderFragment() : Fragment(),
         initUi()
         initMap()
         initUpdateObserver()
+
     }
 
     private fun initMap() {
@@ -99,9 +98,13 @@ class TrackOrderFragment() : Fragment(),
 
 
     override fun onMapReady(googleMap: GoogleMap?) {
-        mMap = googleMap
-        mMap?.uiSettings?.isScrollGesturesEnabled = false
-        mMap?.uiSettings?.isZoomControlsEnabled = false
+        if(mMap == null){
+            mMap = googleMap
+            mMap?.uiSettings?.isScrollGesturesEnabled = false
+            mMap?.uiSettings?.isZoomControlsEnabled = false
+
+            viewModel.getCurrentOrder(curOrderId)
+        }
     }
 
     fun updateMap(
@@ -113,8 +116,8 @@ class TrackOrderFragment() : Fragment(),
 
             mMap?.clear()
 
-            val chefLat = curOrderData.cook.pickupAddress?.lat
-            val chefLng = curOrderData.cook.pickupAddress?.lng
+            val chefLat = curOrderData.cook?.pickupAddress?.lat
+            val chefLng = curOrderData.cook?.pickupAddress?.lng
             chefLat?.let{
                 chefLng?.let{
                     val chefLocation = LatLng(chefLat, chefLng)
@@ -123,8 +126,8 @@ class TrackOrderFragment() : Fragment(),
                     Log.d("wowMapBinder","chefLocation $chefLocation")
                 }
             }
-            val myLat = curOrderData.deliveryAddress.lat
-            val myLng = curOrderData.deliveryAddress.lng
+            val myLat = curOrderData.deliveryAddress?.lat
+            val myLng = curOrderData.deliveryAddress?.lng
             myLat?.let{
                 myLng?.let{
                     val myLocation = LatLng(myLat, myLng)
@@ -180,19 +183,11 @@ class TrackOrderFragment() : Fragment(),
     }
 
     private fun initUpdateObserver() {
-        viewModel.getActiveOrders.observe(this, Observer { result ->
-            result.orders?.size?.let{
-                if(result.isSuccess && result.orders?.size > 0){
-                    Log.d("wowTrackOrderFragment","updating orders")
-                    for(order in result.orders){
-                        Log.d("wowTrackOrderFragment","curOrderId: $curOrderId, order: ${order.id}")
-                        if(order.id == curOrderId){
-                            Log.d("wowTrackOrderFragment","found Id: ${order.id}")
-                            updateOrderUi(order, result.userInfo)
-                            updateMap(order)
-                        }
-                    }
-                }
+        viewModel.getCurrentOrderDetails.observe(viewLifecycleOwner, { result ->
+            result.order.let{
+                Log.d("wowTrackOrderFragment","updating orders")
+                updateOrderUi(it, result.userInfo)
+                updateMap(it)
             }
         })
     }
@@ -207,20 +202,19 @@ class TrackOrderFragment() : Fragment(),
 
     override fun onOrderCanceled(orderState: Int, orderId: Long) {
         if(orderState <= 1){
-            CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrderId, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+            CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_1, curOrderId).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
         }
         if(orderState == 2){
-            CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_2, curOrderId, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+            CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_2, curOrderId).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
         }
         if(orderState == 3){
-            CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_3, curOrderId, this).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
+            CancelOrderDialog(Constants.CANCEL_ORDER_STAGE_3, curOrderId).show(childFragmentManager, Constants.CANCEL_ORDER_DIALOG_TAG)
         }
     }
 
     private fun updateOrderUi(
         order: Order,
-        userInfo: OrderUserInfo?
-    ){
+        userInfo: OrderUserInfo?){
         mainAdapter.updateUi(order, userInfo)
         trackOrderDialogList.scrollToPosition(0)
     }
@@ -247,8 +241,19 @@ class TrackOrderFragment() : Fragment(),
             this.listener = parentFragment as TrackOrderDialogListener
         }
         else {
-            throw RuntimeException(context.toString() + " must implement TrackOrderDialogListener")
+            throw RuntimeException("$context must implement TrackOrderDialogListener")
         }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startSilentUpdate()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.endUpdates()
     }
 
     override fun onDetach() {
@@ -257,9 +262,12 @@ class TrackOrderFragment() : Fragment(),
     }
 
     override fun onDestroy() {
-        viewModel.endUpdates()
+        mMap?.clear()
+        mMap = null
+//        binding = null
         super.onDestroy()
     }
+
 
 
 

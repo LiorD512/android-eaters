@@ -246,8 +246,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun getText(): String {
-        return binding.wsEditTextInput.text.toString()
+    fun getText(): String? {
+        var textOrNull: String? = null
+        if(!binding.wsEditTextInput.text.isEmpty()){
+            textOrNull = binding.wsEditTextInput.text.toString()
+        }
+        return textOrNull
     }
 
     fun setText(text: String?) {

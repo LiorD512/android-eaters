@@ -4,13 +4,13 @@ import android.util.Log
 import androidx.core.util.Consumer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -94,7 +95,7 @@ class MainViewModel(
 //        eaterDataManager.stopLocationUpdates()
 //    }
 
-    private fun getListOfAddresses(): ArrayList<Address>? {
+    private fun getListOfAddresses(): List<Address>? {
         if (eaterDataManager.currentEater != null) {
             return eaterDataManager.currentEater!!.addresses
         }
@@ -151,67 +152,40 @@ class MainViewModel(
         checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder, totalPrice))
     }
 
-    val getActiveOrders: SingleLiveEvent<GetActiveOrdersEvent> = SingleLiveEvent()
+    val getTraceableOrder = eaterDataManager.getTraceableOrders()
 
-    data class GetActiveOrdersEvent(val isSuccess: Boolean, val orders: ArrayList<Order>?, val showDialog: Boolean = false)
-
-    fun checkForActiveOrder(showDialog: Boolean = false) {
-        api.getTrackableOrders().enqueue(object : Callback<ServerResponse<ArrayList<Order>>> {
-            override fun onResponse(call: Call<ServerResponse<ArrayList<Order>>>, response: Response<ServerResponse<ArrayList<Order>>>) {
-                if (response.isSuccessful) {
-//                    Log.d("wow", "phoneNumber sent: $phoneNumber")
-                    Log.d("wowMainVM", "getTrackableOrders success")
-                    val activeOrders = response.body()!!.data
-                    if (activeOrders != null && activeOrders?.size > 0) {
-                        hasActiveOrder = true
-                        getActiveOrders.postValue(GetActiveOrdersEvent(true, activeOrders, showDialog))
-                    } else {
-                        hasActiveOrder = false
-                        getActiveOrders.postValue(GetActiveOrdersEvent(false, null, showDialog))
-                    }
-                    if(showDialog){
-                        eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_TRACK_ORDER_CLICK)
-                    }
-                } else {
-                    hasActiveOrder = false
-                    Log.d("wowMainVM", "getTrackableOrders fail")
-                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<ArrayList<Order>>>, t: Throwable) {
-                Log.d("wowMainVM", "getTrackableOrders big fail")
-                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
-            }
-        })
+    fun checkForActiveOrder() {
+        viewModelScope.launch {
+            eaterDataManager.checkForTraceableOrders()
+        }
     }
 
     val getTriggers: SingleLiveEvent<GetTriggers> = SingleLiveEvent()
 
     data class GetTriggers(val isSuccess: Boolean, val trigger: Trigger?)
-
+    //move to eater data manager
     fun checkForTriggers() {
-        api.getTriggers().enqueue(object : Callback<ServerResponse<Trigger>> {
-            override fun onResponse(call: Call<ServerResponse<Trigger>>, response: Response<ServerResponse<Trigger>>) {
-                if (response.isSuccessful) {
-                    Log.d("wowMainVM", "getTriggers success")
-                    val trigger = response.body()!!.data
-                    if (trigger != null && trigger.shouldRateOrder != null) {
-                        getTriggers.postValue(GetTriggers(true, trigger))
-                    } else {
-                        getTriggers.postValue(GetTriggers(false, null))
-                    }
-                } else {
-                    Log.d("wowMainVM", "getTriggers fail")
-                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Trigger>>, t: Throwable) {
-                Log.d("wowMainVM", "getTriggers big fail")
-                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
-            }
-        })
+//        api.getTriggers().enqueue(object : Callback<ServerResponse<Trigger>> {
+//            override fun onResponse(call: Call<ServerResponse<Trigger>>, response: Response<ServerResponse<Trigger>>) {
+//                if (response.isSuccessful) {
+//                    Log.d("wowMainVM", "getTriggers success")
+//                    val trigger = response.body()!!.data
+//                    if (trigger != null && trigger.shouldRateOrder != null) {
+//                        getTriggers.postValue(GetTriggers(true, trigger))
+//                    } else {
+//                        getTriggers.postValue(GetTriggers(false, null))
+//                    }
+//                } else {
+////                    Log.d("wowMainVM", "getTriggers fail")
+////                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+////                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Trigger>>, t: Throwable) {
+////                Log.d("wowMainVM", "getTriggers big fail")
+////                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
+//            }
+//        })
     }
 
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
@@ -259,6 +233,7 @@ class MainViewModel(
     }
 
 
+    //move to eater data manager
     val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
     fun checkForShareCampaign() {
         api.getCurrentShareCampaign().enqueue(object : Callback<ServerResponse<Campaign>> {

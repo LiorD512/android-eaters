@@ -48,10 +48,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initUi()
     }
 
-//    fun updateCounterUiOnly(count: Int) {
-//        counter = count
-//        plusMinusCounter.text = "$counter"
-//    }
+    fun updateCounterUiOnly(count: Int) {
+        counter = count
+        plusMinusCounter.text = "$counter"
+    }
 
     fun setViewEnabled(isEnabled: Boolean) {
         handleMinus(isEnabled)

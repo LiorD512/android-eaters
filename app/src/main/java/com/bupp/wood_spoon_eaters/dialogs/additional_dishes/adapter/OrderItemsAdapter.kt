@@ -26,8 +26,7 @@ class OrderItemsAdapter(val context: Context, val listener: OrderItemsListener) 
     }
 
     interface OrderItemsListener {
-//        fun onDishClick(dish: Dish) {}
-        fun onDishCountChange(counter: Int, curOrderItem: OrderItem) {}
+        fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {}
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -41,9 +40,14 @@ class OrderItemsAdapter(val context: Context, val listener: OrderItemsListener) 
     }
 
     override fun onDishCountChange(counter: Int, position: Int) {
+        var isOrderItemsEmpty = false
         val updatedOrderItem = getItem(position).copy()
         updatedOrderItem.quantity = counter
-        listener.onDishCountChange(counter, updatedOrderItem)
+        if(counter == 0){
+            isOrderItemsEmpty = itemCount == 1
+            updatedOrderItem._destroy = true
+        }
+        listener.onDishCountChange(updatedOrderItem, isOrderItemsEmpty)
     }
 
 

@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.Orde
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.track_order_details_section.view.*
+import kotlinx.android.synthetic.main.track_order_item_details_view.view.*
 import mva2.adapter.ItemBinder
 
 
@@ -41,17 +42,21 @@ class TrackOrderDetailsBinder() : ItemBinder<OrderTrackDetails, TrackOrderDetail
             itemView.trackOrderDetailsSectionOrderItemList.addItemDecoration(divider)
             adapter.submitList(order.orderItems)
 
-            itemView.trackOrderDetailsSectionSubTotal.text = order.subtotal.formatedValue
-            itemView.trackOrderDetailsSectionServiceFee.text = order.serviceFee.formatedValue
-            itemView.trackOrderDetailsSectionDeliveryFee.text = order.deliveryFee.formatedValue
-            itemView.trackOrderDetailsSectionTax.text = order.tax.formatedValue
-            itemView.trackOrderDetailsSectionTotal.text = order.total.formatedValue
+            itemView.trackOrderDetailsSectionSubTotal.text = order.subtotal?.formatedValue ?: ""
+            itemView.trackOrderDetailsSectionServiceFee.text = order.serviceFee?.formatedValue ?: ""
+            itemView.trackOrderDetailsSectionDeliveryFee.text = order.deliveryFee?.formatedValue ?: ""
+            itemView.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
+            itemView.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
 //
             itemView.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
             itemView.trackOrderDetailsSectionPayment.text = userInfo?.paymentMethod
             itemView.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
             itemView.trackOrderDetailsSectionLocation.text = userInfo?.userLocation?.getUserLocationStr()
             itemView.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
+
+            userInfo?.note?.let{
+                itemView.trackOrderItemNote.text = it
+            }
         }
     }
 

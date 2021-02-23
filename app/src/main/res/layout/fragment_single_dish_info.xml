@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/singleDishInfoLayout"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        android:background="@color/white"
+        android:fillViewport="true">
 
-    <FrameLayout
-            android:id="@+id/media_layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/singleDishInfoLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/single_dish_info_media_layout_height"
-            android:background="@color/white"
-            tools:visibility="gone">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <FrameLayout
+                android:id="@+id/media_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/single_dish_info_media_layout_height"
+                android:background="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone">
 
             <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/singleDishInfoImagePager"
@@ -36,299 +42,301 @@
                     app:ci_height="10dp"
                     app:ci_width="10dp" />
 
-        <com.bupp.wood_spoon_eaters.custom_views.UserImageView
-                android:id="@+id/singleDishInfoCook"
-                android:layout_width="57.6dp"
-                android:layout_height="57.6dp"
-                android:layout_margin="10.6dp"
-                app:imageSize="SMALL" />
+            <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                    android:id="@+id/singleDishInfoCook"
+                    android:layout_width="57.6dp"
+                    android:layout_height="57.6dp"
+                    android:layout_margin="10.6dp"
+                    app:imageSize="SMALL" />
 
-        <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
-                android:id="@+id/singleDishInfoFavorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_marginRight="7.7dp"
-                android:layout_marginBottom="7.7dp" />
+            <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+                    android:id="@+id/singleDishInfoFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginRight="7.7dp"
+                    android:layout_marginBottom="7.7dp" />
 
-    </FrameLayout>
-
-    <LinearLayout
-            app:layout_constraintTop_toBottomOf="@+id/media_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="15.4dp"
-            android:paddingTop="7.7dp"
-            android:paddingRight="15.4dp">
-
-        <TextView
-                android:id="@+id/singleDishInfoName"
-                style="@style/SemiBold15Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                tools:text="Tomato Soup" />
+        </FrameLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:gravity="center|left"
-                android:orientation="horizontal">
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="15.4dp"
+                android:paddingTop="7.7dp"
+                android:paddingRight="15.4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/media_layout">
 
             <TextView
-                    android:id="@+id/singleDishInfoCookName"
-                    style="@style/Reg13Dark_50"
+                    android:id="@+id/singleDishInfoName"
+                    style="@style/SemiBold15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="By Oded Shoshan" />
-
-            <ImageView
-                    android:id="@+id/singleDishInfoCookFlag"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_marginLeft="7.7dp" />
-
-        </LinearLayout>
-
-        <TextView
-                android:id="@+id/singleDishInfoDescription"
-                style="@style/Reg13Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers" />
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16.8dp"
-                android:gravity="center"
-                android:weightSum="3">
-
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icons_price_black" />
-
-                <TextView
-                        android:id="@+id/singleDishInfoPrice"
-                        style="@style/Reg13Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingLeft="7.8dp"
-                        tools:text="$7" />
-
-            </LinearLayout>
-
-            <com.bupp.wood_spoon_eaters.custom_views.QuantityView
-                    android:id="@+id/singleDishQuantityView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:views_gravity="CENTER" />
-
-            <LinearLayout
-                    android:id="@+id/singleDishInfoRating"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icons_raitings" />
-
-                <TextView
-                        android:id="@+id/singleDishInfoRatingVal"
-                        style="@style/Reg13Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingLeft="7.8dp"
-                        tools:text="4.8" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start|center_vertical"
-                android:orientation="horizontal">
-
-            <TextView
-                    style="@style/SemiBold13Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Count:" />
-
-            <TextView
-                    android:id="@+id/singleDishCount"
-                    style="@style/SemiBold13Blue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="1" />
-
-            <View
-                    android:layout_width="1dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-            <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
-                    android:id="@+id/singleDishPlusMinus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/singleDishInfoDeliveryTimeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/silver" />
+                    android:gravity="center_horizontal"
+                    tools:text="Tomato Soup" />
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center|left"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/singleDishInfoCookName"
+                        style="@style/Reg13Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="By Oded Shoshan" />
+
+                <ImageView
+                        android:id="@+id/singleDishInfoCookFlag"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginLeft="7.7dp" />
+
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/singleDishInfoDescription"
+                    style="@style/Reg13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    tools:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16.8dp"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    tools:visibility="visible">
+                    android:weightSum="3">
 
                 <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:gravity="center">
 
-                    <TextView
-                            android:id="@+id/singleDishInfoDate"
-                            style="@style/SemiBold13Dark"
+                    <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            tools:text="ASAP, 37-49 min" />
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons_price_black" />
 
                     <TextView
-                            android:id="@+id/singleDishInfoDelivery"
+                            android:id="@+id/singleDishInfoPrice"
                             style="@style/Reg13Dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="7.9dp"
-                            android:letterSpacing="0.04"
-                            tools:text="Delivered To Your Door" />
+                            android:gravity="center"
+                            android:paddingLeft="7.8dp"
+                            tools:text="$7" />
 
                 </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                        android:id="@+id/singleDishChangeTimeBtn"
-                        android:layout_width="117dp"
-                        android:layout_height="79dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="2.9dp"
-                        app:cardElevation="8dp"
-                        app:cardUseCompatPadding="true">
+                <com.bupp.wood_spoon_eaters.custom_views.QuantityView
+                        android:id="@+id/singleDishQuantityView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:views_gravity="CENTER" />
+
+                <LinearLayout
+                        android:id="@+id/singleDishInfoRating"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons_raitings" />
 
                     <TextView
-                            style="@style/SemiBold15Blue"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:id="@+id/singleDishInfoRatingVal"
+                            style="@style/Reg13Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Change" />
+                            android:paddingLeft="7.8dp"
+                            tools:text="4.8" />
 
-
-                </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal">
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/silver" />
+                <TextView
+                        style="@style/SemiBold13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Count:" />
 
-        <LinearLayout
-                android:id="@+id/singleDishInstructionsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                <TextView
+                        android:id="@+id/singleDishCount"
+                        style="@style/SemiBold13Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="1" />
+
+                <View
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+                        android:id="@+id/singleDishPlusMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/singleDishInfoDeliveryTimeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/silver" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:visibility="visible">
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:id="@+id/singleDishInfoDate"
+                                style="@style/SemiBold13Dark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                tools:text="ASAP, 37-49 min" />
+
+                        <TextView
+                                android:id="@+id/singleDishInfoDelivery"
+                                style="@style/Reg13Dark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7.9dp"
+                                android:letterSpacing="0.04"
+                                tools:text="Delivered To Your Door" />
+
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                            android:id="@+id/singleDishChangeTimeBtn"
+                            android:layout_width="117dp"
+                            android:layout_height="79dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="2.9dp"
+                            app:cardElevation="8dp"
+                            app:cardUseCompatPadding="true">
+
+                        <TextView
+                                style="@style/SemiBold15Blue"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Change" />
+
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="22dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@color/silver" />
+
+            <LinearLayout
+                    android:id="@+id/singleDishInstructionsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="22dp"
+                        android:background="@color/silver" />
+
+                <TextView
+                        style="@style/SemiBold15Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home Chef's Instructions" />
+
+                <TextView
+                        android:id="@+id/singleDishInstructionsBody"
+                        style="@style/Reg13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness." />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/silver" />
+
+            </LinearLayout>
 
             <TextView
                     style="@style/SemiBold15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Home Chef's Instructions" />
+                    android:text="Special Requests" />
 
             <TextView
-                    android:id="@+id/singleDishInstructionsBody"
-                    style="@style/Reg13Dark"
+                    style="@style/Reg13Dark_50"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness." />
+                    android:text="The home chef will try to take your request into consideration" />
 
-            <View
+            <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+                    android:id="@+id/singleDishNote"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@color/silver" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_marginBottom="23dp"
+                    app:hint="Add your request here..."
+                    app:inputType="INPUT_TYPE_DONE_BTN"
+                    app:lines="3"
+                    app:throttlingTimeout="450" />
 
         </LinearLayout>
 
-        <TextView
-                style="@style/SemiBold15Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Special Requests" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-                style="@style/Reg13Dark_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="The home chef will try to take your request into consideration" />
-
-        <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-                android:id="@+id/singleDishNote"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15.4dp"
-                android:layout_marginBottom="23dp"
-                app:hint="Add your request here..."
-                app:inputType="INPUT_TYPE_DONE_BTN"
-                app:throttlingTimeout="450"
-                app:lines="3" />
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
