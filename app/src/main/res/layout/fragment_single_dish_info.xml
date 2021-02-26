@@ -87,7 +87,7 @@
 
                 <TextView
                         android:id="@+id/singleDishInfoCookName"
-                        style="@style/Reg13Dark_50"
+                        style="@style/SemiBold13Dark50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="By Oded Shoshan" />
@@ -102,7 +102,7 @@
 
             <TextView
                     android:id="@+id/singleDishInfoDescription"
-                    style="@style/Reg13Dark"
+                    style="@style/SemiBold13Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -170,6 +170,7 @@
             </LinearLayout>
 
             <LinearLayout
+                    android:layout_marginTop="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="start|center_vertical"
@@ -211,7 +212,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
-                        android:background="@color/silver" />
+                        android:background="@color/light_periwinkle" />
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -241,7 +242,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="7.9dp"
                                 android:letterSpacing="0.04"
-                                tools:text="Delivered To Your Door" />
+                                tools:text="Delivered to your door" />
 
                     </LinearLayout>
 
@@ -273,7 +274,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/silver" />
+                    android:background="@color/light_periwinkle" />
 
             <LinearLayout
                     android:id="@+id/singleDishInstructionsLayout"
@@ -288,7 +289,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="22dp"
-                        android:background="@color/silver" />
+                        android:background="@color/light_periwinkle" />
 
                 <TextView
                         style="@style/SemiBold15Dark"
@@ -308,7 +309,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@color/silver" />
+                        android:background="@color/light_periwinkle" />
 
             </LinearLayout>
 

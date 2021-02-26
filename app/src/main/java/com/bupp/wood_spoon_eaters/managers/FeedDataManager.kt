@@ -21,6 +21,8 @@ class FeedDataManager(private val context: Context,
     fun getFeedUiStatus() = finalFeedUiStatus
     private val finalFeedUiStatus = MutableLiveData<FeedUiStatus>()
 
+    val getFavoritesLiveData = eaterDataManager.getFavoritesLiveData()
+
     private fun isGpsEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return LocationManagerCompat.isLocationEnabled(locationManager)
@@ -73,7 +75,7 @@ class FeedDataManager(private val context: Context,
                         isWaitingToLocationUpdate = true
                     }
                 } else {
-                    Log.d(TAG, "using known address with banner: ${knownAddresses[0].id}")
+                    Log.d(TAG, "using known address with banner: ${knownAddresses.last().id}")
                     finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.KNOWN_ADDRESS_WITH_BANNER))
 //                    eaterDataManager.updateSelectedAddress(knownAddresses[0])
                     //start location updates
@@ -88,7 +90,7 @@ class FeedDataManager(private val context: Context,
                 eaterDataManager.setDefaultFeedUi()
             } else {
                 finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.KNOWN_ADDRESS_WITH_BANNER))
-                eaterDataManager.updateSelectedAddress(knownAddresses[0])
+                eaterDataManager.updateSelectedAddress(knownAddresses.last())
             }
         }
     }
@@ -140,6 +142,10 @@ class FeedDataManager(private val context: Context,
 
     fun getUser(): Eater?{
         return eaterDataManager.currentEater
+    }
+
+    suspend fun refreshFavorites() {
+        eaterDataManager.refreshMyFavorites()
     }
 
 

@@ -13,7 +13,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:paddingHorizontal="15.4dp"
-            android:paddingTop="17dp"
+            android:paddingTop="7.7dp"
             android:paddingBottom="7.4dp">
 
         <TextView

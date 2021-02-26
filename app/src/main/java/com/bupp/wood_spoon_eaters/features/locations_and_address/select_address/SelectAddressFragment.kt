@@ -67,7 +67,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                 viewModel.onMyLocationClick()
             }
             selectAddressFragDone.setOnClickListener {
-                mainViewModel.onDoneClick()
+                mainViewModel.onDoneClick(addressAdapter?.selectedAddress)
             }
 
             selectAddressFragAutoComplete.setOnClickListener {
@@ -88,12 +88,13 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
             with(binding!!){
                 viewModel.onMyLocationReceived()
                 selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
-                selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
-                selectAddressFragMyLocationPickup.visibility = View.VISIBLE
+//                selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
+//                selectAddressFragMyLocationPickup.visibility = View.VISIBLE
+                hideMyLocationPb()
             }
         })
         mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, {
-            selectAddressFragAutoComplete.text = it.getUserLocationStr()
+//            selectAddressFragAutoComplete.text = it.getUserLocationStr()
         })
         mainViewModel.actionEvent.observe(viewLifecycleOwner, {
             viewModel.fetchAddress()
@@ -124,13 +125,14 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
         viewModel.myAddressesEvent.observe(viewLifecycleOwner, {
-            if(it.isNullOrEmpty()){
+            if(it.address.isNullOrEmpty()){
                 selectAddressFragEmptyList.visibility = View.VISIBLE
                 selectAddressFragList.visibility = View.GONE
             }else{
                 selectAddressFragList.visibility = View.VISIBLE
                 selectAddressFragEmptyList.visibility = View.GONE
-                addressAdapter?.submitList(it)
+                addressAdapter?.submitList(it.address)
+                addressAdapter?.selectedAddress = it?.currentAddress
 
             }
         })
@@ -143,6 +145,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         with(binding!!){
             when (myLocation) {
                 SelectAddressViewModel.MyLocationStatus.FETCHING -> {
+                    showMyLocationPb()
                     selectAddressFragMyLocationAddress.text = "Fetching your location"
                     selectAddressFragMyLocationPickup.visibility = View.GONE
                 }
@@ -158,9 +161,22 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         }
     }
 
+    private fun showMyLocationPb() {
+        binding!!.selectAddressFragMyLocationPb.visibility = View.VISIBLE
+        binding!!.selectAddressFragMyLocationPb.setAnimation("loader.json")
+        binding!!.selectAddressFragMyLocationPb.playAnimation()
+    }
+
+    private fun hideMyLocationPb() {
+        binding!!.selectAddressFragMyLocationPb.cancelAnimation()
+        binding!!.selectAddressFragMyLocationPb.visibility = View.GONE
+    }
+
     override fun onAddressClick(selected: Address) {
         Log.d(TAG, "onAddressClick")
-        viewModel.onAddressSelected(selected)
+//        mainViewModel.setTempSelectedAddress(selected)
+//        addressAdapter?.notifyDataSetChanged()
+//        viewModel.onAddressSelected(selected)
     }
 
     override fun onMenuClick(selected: Address) {

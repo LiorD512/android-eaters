@@ -61,6 +61,9 @@
     <color name="seafoam_blue_20">#337ccbd2</color>
     <color name="pale_grey">#e5f4f5</color>
     <color name="greyish_brown">#494949</color>
+    <color name="teal_blue_10">#190097a3</color>
+    <color name="light_periwinkle_50">#80dcdcdf</color>
+    <color name="white_90">#e6ffffff</color>
 
 </resources>
 

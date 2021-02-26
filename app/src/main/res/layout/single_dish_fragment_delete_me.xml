@@ -270,7 +270,7 @@
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginTop="7.9dp"
                                                     android:letterSpacing="0.04"
-                                                    tools:text="Delivered To Your Door" />
+                                                    tools:text="Delivered to your door" />
 
                                         </LinearLayout>
 

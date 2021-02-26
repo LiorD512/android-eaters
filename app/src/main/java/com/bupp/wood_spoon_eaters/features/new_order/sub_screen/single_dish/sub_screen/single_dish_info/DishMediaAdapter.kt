@@ -6,31 +6,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.model.DishIngredient
 import com.bupp.wood_spoon_eaters.model.MediaList
+import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
 import kotlinx.android.synthetic.main.dish_media_item.view.*
 
-class DishMediaAdapter(val listener: DishMediaAdapterListener) : RecyclerView.Adapter<MediaViewHolder>() {
+class DishMediaAdapter(val listener: DishMediaAdapterListener): ListAdapter<MediaList, RecyclerView.ViewHolder>(DiffCallback()) {
+
 
     interface DishMediaAdapterListener{
         fun onPlayClick(url: String)
     }
-    var list: List<MediaList> = listOf()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
-        return MediaViewHolder(parent)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return MediaViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.dish_media_item,
+                parent,
+                false
+            )
+        )
     }
 
-    override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
-        val media = list[position]
-
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val media = getItem(position)
+        holder as MediaViewHolder
         if(media.isImage){
-            Glide.with(holder.context).load(media.media).into(holder.img)
+            Glide.with(holder.itemView.context).load(media.media).into(holder.img)
         }else{
-            Glide.with(holder.context).asBitmap().load(media.media).into(object : CustomTarget<Bitmap>() {
+            Glide.with(holder.itemView.context).asBitmap().load(media.media).into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     holder.img.setImageBitmap(resource)
                 }
@@ -43,19 +56,22 @@ class DishMediaAdapter(val listener: DishMediaAdapterListener) : RecyclerView.Ad
         }
     }
 
-    fun setItem(list: List<MediaList>) {
-        this.list = list
-        notifyDataSetChanged()
+    class MediaViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val img: ImageView = itemView.mediaItemImg
+        val playBtn: ImageView = itemView.mediaItemPlay
     }
 
-    override fun getItemCount(): Int = list.size
+
+    class DiffCallback : DiffUtil.ItemCallback<MediaList>() {
+
+        override fun areItemsTheSame(oldItem: MediaList, newItem: MediaList): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: MediaList, newItem: MediaList): Boolean {
+            return oldItem == newItem
+        }
+    }
+
 }
 
-
-class MediaViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    constructor(parent: ViewGroup) : this(LayoutInflater.from(parent.context).inflate(R.layout.dish_media_item, parent, false))
-    val context = itemView.context
-    val img: ImageView = itemView.mediaItemImg
-    val playBtn: ImageView = itemView.mediaItemPlay
-
-}

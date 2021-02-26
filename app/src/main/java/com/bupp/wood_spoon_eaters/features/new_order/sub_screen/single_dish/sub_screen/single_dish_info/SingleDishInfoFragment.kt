@@ -77,7 +77,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
             updateDishInfoUi(it)
 //            mainViewModel.updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CART, price = it.getPriceObj().value, itemCount = 1)
             mainViewModel.updateCartBottomBarByType(type = CartBottomBar.BottomBarTypes.ADD_TO_CART, price = it.getPriceObj().value, itemCount = 1)
-            mainViewModel.handleAndShowBottomBar(CartBottomBar.BottomBarTypes.ADD_TO_CART)
         })
 //        mainViewModel.mainActionEvent.observe(viewLifecycleOwner, {
 //            addCurrentDishToCart()
@@ -107,7 +106,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         singleDishInfoPrice.text = fullDish.getPriceObj().formatedValue
 
 
-        dishMediaPagerAdapter.setItem(fullDish.getMediaList())
+        dishMediaPagerAdapter.submitList(fullDish.getMediaList())
         if (fullDish.getMediaList().size > 1) {
             singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
         }
@@ -189,7 +188,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateCurrentOrderItem(quantity = counter)
-        mainViewModel.handleAndShowBottomBar(CartBottomBar.BottomBarTypes.ADD_TO_CART)
         mainViewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.ADD_TO_CART, itemCount = counter, price = viewModel.getTotalPriceForDishQuantity(counter))
 //        viewModel.getCurrentDish().let {
 //            val newValue = it.price.value * counter

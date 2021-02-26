@@ -5,11 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -18,7 +22,7 @@ import kotlinx.android.synthetic.main.feed_dish_item.view.*
 
 class SingleFeedAdapter(
     val context: Context,
-    val dishes: ArrayList<Dish>,
+    val dishes: List<Dish>,
     val listener: SearchAdapterListener,
 //    val deliveryFee: String,
     val isEvent: Boolean = false
@@ -109,7 +113,9 @@ class SingleFeedAdapter(
                     }
                 }
             }
-            holder.mainLayout.setOnClickListener { listener?.onDishClick(dish) }
+            holder.mainLayout.setOnClickListener {
+                listener.onDishClick(dish)
+            }
 
             val upcomingSlot = dish.menuItem.cookingSlot
             val deliveryFee = upcomingSlot.deliveryFee?.cents
@@ -155,25 +161,25 @@ class SingleFeedAdapter(
 
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val mainLayout = view.feedDishItemLayout
-    val bottomLayout = view.feedDishItemBottomLayout
-    val nationwideDate = view.feedDishItemNationwideDate
-    val cardLayout = view.feedDishItemCardLayout
-    val worldwideLayout = view.feedDishItemWorldwideLayout
-    val worldwideLayoutRect = view.feedDishItemWorldwideLayoutRect
-    val soldOutLayout = view.feedDishItemSoldOutLayout
-    val unAvailableLayout = view.feedDishUnAvailable
-    val bkgImg = view.feedDishItemBkg
-    val cookImg = view.feedDishItemUserImg
-    val cookFlag = view.feedDishCookFlag
-    val favBtn = view.feedDishItemFavorite
-    val name = view.feedDishItemDishName
-    val price = view.feedDishItemPrice
-    val dishCount = view.feedDishQuantityLeft
-    val cookName = view.feedDishItemCookName
-    val rating = view.feedDishItemRating
-    val date = view.feedDishItemDate
-    val freeDelivery = view.feedDishItemFreeDelivery
+    val mainLayout: RelativeLayout = view.feedDishItemLayout
+    val bottomLayout: RelativeLayout = view.feedDishItemBottomLayout
+    val nationwideDate: AutofitTextView = view.feedDishItemNationwideDate
+    val cardLayout: CardView = view.feedDishItemCardLayout
+    val worldwideLayout: LinearLayout = view.feedDishItemWorldwideLayout
+    val worldwideLayoutRect: View = view.feedDishItemWorldwideLayoutRect
+    val soldOutLayout: FrameLayout = view.feedDishItemSoldOutLayout
+    val unAvailableLayout: TextView = view.feedDishUnAvailable
+    val bkgImg: ImageView = view.feedDishItemBkg
+    val cookImg: ImageView = view.feedDishItemUserImg
+    val cookFlag: ImageView = view.feedDishCookFlag
+    val favBtn: FavoriteBtn = view.feedDishItemFavorite
+    val name: TextView = view.feedDishItemDishName
+    val price: TextView = view.feedDishItemPrice
+    val dishCount: TextView = view.feedDishQuantityLeft
+    val cookName: TextView = view.feedDishItemCookName
+    val rating: TextView = view.feedDishItemRating
+    val date: TextView = view.feedDishItemDate
+    val freeDelivery: TextView = view.feedDishItemFreeDelivery
 }
 
 

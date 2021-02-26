@@ -1,9 +1,7 @@
-package com.bupp.wood_spoon.dialogs
+package com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view
 
-import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,7 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
     private var selectedCuisine: ArrayList<SelectableIcon>? = null
 
     interface CuisinesChooserListener{
-        fun onCuisineChoose(selectedCuisines: ArrayList<SelectableIcon>)
+        fun onCuisineChoose(selectedCuisines: List<SelectableIcon>)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

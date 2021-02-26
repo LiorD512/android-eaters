@@ -18,7 +18,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
-import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
@@ -103,6 +103,7 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
             }
         })
         viewModel.progressData.observe(this, {
+            Log.d(TAG, "progressData observer: $it")
             if(it){
                 newOrderActPb.show()
             }else{
@@ -215,7 +216,7 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
 //        navBuilder.setEnterAnim(R.anim.slide_right_enter).setExitAnim(R.anim.slide_right_exit).setPopEnterAnim(R.anim.slide_left_enter).setPopExitAnim(R.anim.slide_left_exit)
         when (event) {
             NewOrderMainViewModel.NewOrderNavigationEvent.SHOW_ADDRESS_MISSING_DIALOG -> {
-                AddressMissingDialog(this).show(supportFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
+//                AddressMissingDialog(this).show(supportFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
             }
             NewOrderMainViewModel.NewOrderNavigationEvent.MAIN_TO_CHECKOUT -> {
                 val action = NewOrderMainFragmentDirections.actionNewOrderMainFragmentToCheckoutFragment()
@@ -242,11 +243,31 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
         }
     }
 
-    fun handleBackPressed(force: Boolean = false) {
+    private fun handleBackPressed(force: Boolean = false) {
         if (force) {
             onBackPressed()
         } else {
             viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.BACK_PRESS)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUI()
+    }
+
+
+    private fun updateUI() {
+        val decorView = window.decorView
+        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+            }
         }
     }
 

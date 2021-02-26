@@ -42,7 +42,8 @@ data class MetaDataModel(
     @SerializedName("report_topics") val reportTopic: List<ReportTopic>? = listOf(),
     @SerializedName("settings") val settings: List<AppSetting>? = listOf(),
     @SerializedName("notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
-    @SerializedName("states") val states: List<State>? = listOf()
+    @SerializedName("states") val states: List<State>? = listOf(),
+    @SerializedName("welcome_screens") val welcome_screens: List<WelcomeScreen>? = listOf(),
 )
 
 data class ReportTopic(
@@ -84,6 +85,11 @@ data class AppSetting(
     @SerializedName("key") var key: String?,
     @SerializedName("dataType") var dataType: String?,
     @SerializedName("value") var value: Any?
+)
+
+data class WelcomeScreen(
+    @SerializedName("text") var text: String?,
+    @SerializedName("image_url") var url: String?
 )
 
 //orders grid data class

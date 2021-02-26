@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -22,6 +23,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
 
     var binding: FragmentCodeBinding? = null
     private val viewModel: LoginViewModel by sharedViewModel()
+    private var timer: CountDownTimer? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,6 +31,8 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
 
         initObservers()
         initUi()
+
+        startResendTimer()
     }
 
     private fun initObservers() {
@@ -93,9 +97,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
                 }
             })
 
-            codeFragResendCode.setOnClickListener {
-                resendCode()
-            }
+
         }
     }
 
@@ -105,6 +107,23 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
 
     private fun sendCode() {
         viewModel.sendPhoneAndCodeNumber()
+    }
+
+    private fun startResendTimer() {
+
+        timer = object : CountDownTimer(20000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding!!.codeFragResendCode.text = "Resend code in: ${millisUntilFinished/1000}"
+            }
+
+            override fun onFinish() {
+                binding!!.codeFragResendCode.text = "Press here to resend"
+                binding!!.codeFragResendCode.setOnClickListener {
+                    resendCode()
+                }
+            }
+        }
+        timer?.start()
     }
 
 }

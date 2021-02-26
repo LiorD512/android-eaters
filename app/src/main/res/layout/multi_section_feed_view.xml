@@ -27,7 +27,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                <com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
+                <com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
                         android:id="@+id/multiSectionViewFavorites"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>

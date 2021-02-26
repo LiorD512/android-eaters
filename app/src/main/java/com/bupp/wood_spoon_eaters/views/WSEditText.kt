@@ -2,6 +2,9 @@ package com.bupp.wood_spoon_eaters.views
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.text.InputType
@@ -14,12 +17,14 @@ import android.view.animation.BounceInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
+import com.bupp.wood_spoon_eaters.utils.Utils
 
 class WSEditText @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -48,9 +53,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setInputType(inputType)
 
                 val isEditable = attr.getBoolean(R.styleable.WSEditText_isEditable, true)
-                wsEditTextInput.isFocusable = isEditable
-                wsEditTextInput.isClickable = isEditable
-                this@WSEditText.isEditable = isEditable
+               setIsEditable(isEditable)
 
 
                 attr.recycle()
@@ -71,33 +74,30 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         super.afterTextChanged(s)
                     }
                 })
-                wsEditTextInput.setOnFocusChangeListener(object: OnFocusChangeListener{
-                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        if(hasFocus){
-                            wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.teal_blue))
-                        }else{
-                            wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.dark))
-                        }
+                wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+                    if(hasFocus){
+                        wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.teal_blue))
+                    }else{
+                        wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.dark))
                     }
-
-                })
+                }
             }
-
 
         }
     }
+
+
 
     private var inputType: Int = 0
 
     fun showError() {
         with(binding){
+            Utils.vibrate(context)
             if(wsEditTextErrorIcon.alpha > 0){
                 animateErrorIconBounce()
             }else{
                 animateErrorIconEntrance()
                 animateErrorTextEntrance()
-//                wsEditTextErrorText.visibility = View.VISIBLE
-
             }
         }
     }
@@ -262,6 +262,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
     }
+    fun setIsEditable(editable: Boolean) {
+        with(binding){
+            wsEditTextInput.isFocusable = editable
+            wsEditTextInput.isClickable = editable
+            this@WSEditText.isEditable = editable
+        }
+    }
 
     fun setPrefix(prefix: String) {
         binding.wsEditTextPrefix.visibility = View.VISIBLE
@@ -271,6 +278,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun getPrefix(): String {
         return binding.wsEditTextPrefix.text.toString()
     }
+
 
 
 }

@@ -35,7 +35,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
             }
             var isWithSep = a.getBoolean(R.styleable.HeaderViewAttrs_isWithSep, true)
             if (!isWithSep) {
-                headerViewSep.visibility = View.GONE
+//                headerViewSep.visibility = View.GONE
             }
             a.recycle()
         }
@@ -158,7 +158,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
                 headerViewLocationLayout.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_SEARCH -> {
-                headerViewSep.visibility = View.GONE
+//                headerViewSep.visibility = View.GONE
                 headerViewBackBtn.visibility = View.VISIBLE
                 headerViewSearchLayout.visibility = View.VISIBLE
                 headerViewFilterBtn.visibility = View.VISIBLE
@@ -195,7 +195,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
             }
             Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS -> {
                 headerViewTitle.visibility = VISIBLE
-                headerViewSettingsBtn.visibility = View.VISIBLE
+//                headerViewSettingsBtn.visibility = View.VISIBLE
                 headerViewBackBtn.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_DONE -> {

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
@@ -13,6 +14,7 @@ import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -143,6 +145,26 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        updateScreenUi()
+    }
+
+
+//    private fun updateUI() {
+//        val decorView = window.decorView
+//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+//            }
+//        }
+//    }
 
 
 

@@ -31,32 +31,35 @@ object GoogleAddressParserUtil {
 
         val addressComponents = place.addressComponents?.asList()
         addressComponents?.forEach {
-
-            val data = it.types.intersect(this.allowed_types)
-            Log.d(TAG, "parseLocationToAddress: $data")
-            if (data.isNotEmpty()) {
-                Log.d(TAG, "parseLocationToAddress: ${it.name}")
-                when (data.toString().replace("[", "").replace("]", "")) {
-                    "route" -> {
-                        addressRequest.streetLine1 = it.name
-                    }
-                    "country" -> {
-                        addressRequest.countryIso = it.shortName
-                    }
-                    "sublocality_level_1", "sublocality" -> {
-                        addressRequest.cityName = it.name
-                    }
-                    "postal_code" -> {
-                        addressRequest.zipCode = it.name
-                    }
-                    "street_number" -> {
-                        addressRequest.streetNumber = it.name
-                    }
-                    "administrative_area_level_1" -> {
-                        addressRequest.stateIso = it.shortName
+            val data = it.types.intersect(this.allowed_types).toString().replace("[", "").replace("]", "")
+            var result = data.split(",").map { it.trim() }
+            result.forEach { data ->
+                Log.d(TAG, "parseLocationToAddress: $data")
+                if (data.isNotEmpty()) {
+                    Log.d(TAG, "parseLocationToAddress: ${it.name}")
+                    when (data) {
+                        "route" -> {
+                            addressRequest.streetLine1 = it.name
+                        }
+                        "country" -> {
+                            addressRequest.countryIso = it.shortName
+                        }
+                        "sublocality_level_1", "sublocality", "locality" -> {
+                            addressRequest.cityName = it.name
+                        }
+                        "postal_code" -> {
+                            addressRequest.zipCode = it.name
+                        }
+                        "street_number" -> {
+                            addressRequest.streetNumber = it.name
+                        }
+                        "administrative_area_level_1" -> {
+                            addressRequest.stateIso = it.shortName
+                        }
                     }
                 }
             }
+
         }
         return addressRequest
     }

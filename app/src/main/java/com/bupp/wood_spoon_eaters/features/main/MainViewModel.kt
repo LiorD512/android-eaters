@@ -25,7 +25,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
-    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val orderManager: OrderManager,
+    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val cartManager: CartManager,
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 
@@ -39,6 +39,11 @@ class MainViewModel(
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
     enum class MainNavigationEvent{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
+    }
+
+
+    fun handleMainNavigation(type: MainNavigationEvent) {
+        mainNavigationEvent.postValue(type)
     }
 
 
@@ -138,21 +143,24 @@ class MainViewModel(
 
     data class CheckCartStatusEvent(val hasPendingOrder: Boolean, val totalPrice: Double?)
 
-    fun checkCartStatus() {
-        hasPendingOrder = orderManager.haveCurrentActiveOrder()
-        var totalPrice = 0.0
-        if (hasPendingOrder) {
-            orderManager.curOrderResponse?.orderItems?.let {
-                it.forEach {
-                    totalPrice += (it.price?.value * it.quantity)
-                }
-            }
-//            totalPrice = orderManager.curOrderResponse?.total?.value
-        }
-        checkCartStatus.postValue(CheckCartStatusEvent(hasPendingOrder, totalPrice))
+    fun refreshMainBottomBarUi(){
+        val hasPending = !cartManager.isEmpty()
+        val totalPrice = cartManager.calcTotalDishesPrice()
+        val activeOrders = eaterDataManager.traceableOrdersList
+        mainBottomBarEvent.postValue(MainBottomBarEvent(hasPending, totalPrice, activeOrders, !activeOrders.isNullOrEmpty() && hasPending))
     }
 
+    data class MainBottomBarEvent(val hasPendingOrder: Boolean, val totalPrice: Double?, val activeOrders: List<Order>? = null, val hasBoth: Boolean)
+    val mainBottomBarEvent = MutableLiveData<MainBottomBarEvent>()
+
     val getTraceableOrder = eaterDataManager.getTraceableOrders()
+
+//    fun checkCartStatus() {
+//        if(!cartManager.isEmpty()){
+//            val totalPrice = cartManager.calcTotalDishesPrice()
+//            checkCartStatus.postValue(CheckCartStatusEvent(true, totalPrice))
+//        }
+//    }
 
     fun checkForActiveOrder() {
         viewModelScope.launch {
@@ -160,32 +168,11 @@ class MainViewModel(
         }
     }
 
-    val getTriggers: SingleLiveEvent<GetTriggers> = SingleLiveEvent()
-
-    data class GetTriggers(val isSuccess: Boolean, val trigger: Trigger?)
-    //move to eater data manager
+    val getTriggers = eaterDataManager.getTriggers()
     fun checkForTriggers() {
-//        api.getTriggers().enqueue(object : Callback<ServerResponse<Trigger>> {
-//            override fun onResponse(call: Call<ServerResponse<Trigger>>, response: Response<ServerResponse<Trigger>>) {
-//                if (response.isSuccessful) {
-//                    Log.d("wowMainVM", "getTriggers success")
-//                    val trigger = response.body()!!.data
-//                    if (trigger != null && trigger.shouldRateOrder != null) {
-//                        getTriggers.postValue(GetTriggers(true, trigger))
-//                    } else {
-//                        getTriggers.postValue(GetTriggers(false, null))
-//                    }
-//                } else {
-////                    Log.d("wowMainVM", "getTriggers fail")
-////                    getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
-////                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Trigger>>, t: Throwable) {
-////                Log.d("wowMainVM", "getTriggers big fail")
-////                getActiveOrders.postValue(GetActiveOrdersEvent(false, null))
-//            }
-//        })
+        viewModelScope.launch {
+            eaterDataManager.checkForTriggers()
+        }
     }
 
     val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
@@ -347,6 +334,7 @@ class MainViewModel(
     fun getContactUsTextNumber(): String {
         return metaDataRepository.getContactUsTextNumber()
     }
+
 
 
 }

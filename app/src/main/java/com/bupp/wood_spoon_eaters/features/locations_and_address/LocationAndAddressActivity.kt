@@ -6,11 +6,14 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -29,9 +32,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
-    companion object{
-        const val TAG = "wowLocationAndAddressAct"
-    }
     
     private lateinit var binding: ActivityLocationAndAddressBinding
 
@@ -64,6 +64,18 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     private fun initUi() {
         Places.initialize(this, getString(R.string.google_api_key))
         binding.locationActHeader.setHeaderViewListener(this)
+
+        var navController : NavController = Navigation.findNavController(this, R.id.locationActContainer)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            Log.d(TAG, "onDestinationChanged: "+destination.label)
+            when(destination.label){
+                Constants.LOCATION_DESTINATION_SELECT_ADDRESS -> {
+                    binding.locationActHeader.setType(Constants.HEADER_VIEW_TYPE_CLOSE_TITLE, "Delivery address")
+                }
+                Constants.LOCATION_DESTINATION_MAP_VERIFICATION -> {}
+                Constants.LOCATION_DESTINATION_FINAL_DETAILS -> {}
+            }
+        }
     }
 
     @SuppressLint("LongLogTag")
@@ -96,15 +108,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 LocationAndAddressViewModel.NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS -> {
                     redirectToAddressVerificationMapFromFinalDetails()
                 }
-//                LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
-////                    redirectToAddressListChooser()
-//                }
-//                LocationAndAddressViewModel.NavigationEventType.OPEN_ADD_NEW_ADDRESS_SCREEN -> {
-////                    redirectToAddAddress()
-//                }
-//                LocationAndAddressViewModel.NavigationEventType.OPEN_EDIT_ADDRESS_SCREEN -> {
-////                    redirectToEditAddress(it.address)
-//                }
                 else -> {
                     Log.d(TAG, "wow else")
                 }
@@ -132,6 +135,14 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 }
             }
         })
+//        viewModel.actionEvent.observe(this, {
+//            when(it){
+//                LocationAndAddressViewModel.ActionEvent.RESET_HEADER_TITLE -> {
+//                    Log.d(TAG, "RESET_HEADER_TITLE")
+//                    binding.locationActHeader.setType(Constants.HEADER_VIEW_TYPE_CLOSE_TITLE, "Delivery address")
+//                }
+//            }
+//        })
     }
 
     private fun handleProgressBar(shouldShow: Boolean?) {
@@ -146,7 +157,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
 
     private fun updateAddressHeaderUi(address: AddressRequest?) {
         address?.let{
-            binding.locationActHeader.setTitle(address.getUserLocationStr())
+            binding.locationActHeader.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, address.getUserLocationStr())
         }
     }
 
@@ -171,25 +182,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
 
     private fun redirectToAddressVerificationMapFromFinalDetails() {
         onBackPressed()
-//        findNavController(R.id.locationActContainer).navigate(R.id.action_finalAddressDetailsFragment_to_addressVerificationMapFragment)
     }
-
-
-//    private fun redirectToAddressListChooser() {
-//        locationActHeader.setTitle("My Address")
-//        findNavController(R.id.locationActContainer).navigate(R.id.action_deliveryDetailsFragment_to_addressListChooserFragment)
-//    }
-//
-//    private fun redirectToAddAddress() {
-//        locationActHeader.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Add New Address")
-//        findNavController(R.id.locationActContainer).navigate(R.id.action_addressListChooserFragment_to_addOrEditAddressFragment)
-//    }
-//
-//    private fun redirectToEditAddress(address: Address?) {
-//        locationActHeader.setTitle("Edit Address")
-//        val bundle = bundleOf("address" to address)
-//        findNavController(R.id.locationActContainer).navigate(R.id.action_addressListChooserFragment_to_addOrEditAddressFragment, bundle)
-//    }
 
     private fun askLocationPermission() {
         when {
@@ -248,12 +241,32 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         onBackPressed()
     }
 
-    override fun onHeaderSaveClick() {
-        //add new Address - Save header btn
-        viewModel.onSaveNewAddressClick()
+    override fun onHeaderCloseClick() {
+        finish()
     }
 
+    companion object{
+        const val TAG = "wowLocationAndAddressAct"
+    }
 
+//    override fun onResume() {
+//        super.onResume()
+////        updateUI()
+//    }
+//
+//    private fun updateUI() {
+//        val decorView = window.decorView
+//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+//            }
+//        }
+//    }
 
 
 }

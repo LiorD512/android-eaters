@@ -7,6 +7,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
@@ -32,16 +33,20 @@ class AddressMapVerificationViewModel(val metaDataRepository: MetaDataRepository
         SHAKE,
     }
 
+    val vibrateEvent = LiveEventData<Boolean>()
     val addressMapVerificationDoneEvent = LiveEventData<Boolean>()
     val addressMapVerificationStatus = MutableLiveData<AddressMapVerificationStatus>()
     fun checkCenterLatLngPosition(currentLatLng: LatLng) {
         anchorLatLng?.let { anchorLatLng ->
-            val isInRadius = LocationUtils.isLocationsNear(anchorLatLng.latitude, anchorLatLng.longitude,
-                currentLatLng.latitude, currentLatLng.longitude, metaDataRepository.getLocationDistanceThreshold())
+            val isInRadius = LocationUtils.isLocationsNear(
+                anchorLatLng.latitude, anchorLatLng.longitude,
+                currentLatLng.latitude, currentLatLng.longitude, metaDataRepository.getLocationDistanceThreshold()
+            )
             if (isInRadius) {
                 addressMapVerificationStatus.postValue(AddressMapVerificationStatus.CORRECT)
-            } else {
+            } else if (addressMapVerificationStatus.value != AddressMapVerificationStatus.WRONG && addressMapVerificationStatus.value != AddressMapVerificationStatus.SHAKE) {
                 addressMapVerificationStatus.postValue(AddressMapVerificationStatus.WRONG)
+                vibrateEvent.postRawValue(true)
             }
         }
     }
@@ -51,9 +56,16 @@ class AddressMapVerificationViewModel(val metaDataRepository: MetaDataRepository
             addressMapVerificationDoneEvent.postRawValue(true)
         } else {
             addressMapVerificationStatus.postValue(AddressMapVerificationStatus.SHAKE)
+            vibrateEvent.postRawValue(true)
         }
     }
 
+    val redirectToMyLocation = MutableLiveData<LatLng?>()
+    fun redirectToMyLocation() {
+        anchorLatLng?.let{
+            redirectToMyLocation.postValue(it)
+        }
+    }
 
 
 }

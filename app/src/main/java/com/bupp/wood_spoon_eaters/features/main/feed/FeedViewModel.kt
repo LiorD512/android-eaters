@@ -17,11 +17,18 @@ class FeedViewModel(
         feedDataManager.initFeedDataManager()
     }
 
+
     fun getLocationLiveData() = feedDataManager.getLocationLiveData()
     fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
 
     val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
 
+    val favoritesLiveData = feedDataManager.getFavoritesLiveData
+    fun refreshFavorites() {
+        viewModelScope.launch {
+            feedDataManager.refreshFavorites()
+        }
+    }
 
 
     fun refreshFeedByLocationIfNeeded() {
@@ -80,27 +87,35 @@ class FeedViewModel(
 
 
 
-    val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
-    data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
+    val getCookEvent: SingleLiveEvent<Cook?> = SingleLiveEvent()
     fun getCurrentCook(id: Long) {//todo - nyc
-//        val currentAddress = eaterDataManager.getLastChosenAddress()
-//        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object: Callback<ServerResponse<Cook>>{
-//            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
-//                if(response.isSuccessful){
-//                    val cook = response.body()?.data
-//                    Log.d("wowFeedVM","getCurrentCook success: ")
-//                    getCookEvent.postValue(CookEvent(true, cook))
-//                }else{
-//                    Log.d("wowFeedVM","getCurrentCook fail")
-//                    getCookEvent.postValue(CookEvent(false,null))
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
-//                Log.d("wowFeedVM","getCurrentCook big fail")
-//                getCookEvent.postValue(CookEvent(false,null))
-//            }
-//        })
+        val feedRequest = feedDataManager.getLastFeedRequest()
+        val lat = feedRequest.lat
+        val lng = feedRequest.lng
+        val addressId = feedRequest.addressId
+        viewModelScope.launch {
+//                progressData.startProgress()
+            val result = feedRepository.getCookById(id, addressId, lat, lng)
+//                progressData.endProgress()
+            when (result.type) {
+                FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
+                    Log.d(TAG, "NetworkError")
+//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                }
+                FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
+                    Log.d(TAG, "GenericError")
+//                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
+                }
+                FeedRepository.FeedRepoStatus.SUCCESS -> {
+                    Log.d(TAG, "Success")
+                    getCookEvent.postValue(result.cook)
+                }
+                else -> {
+                    Log.d(TAG, "NetworkError")
+//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                }
+            }
+        }
     }
 
 //    fun getShareText(): String {

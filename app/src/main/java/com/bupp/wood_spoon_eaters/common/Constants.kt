@@ -14,6 +14,7 @@ class Constants {
         //activities intent param
         const val START_WITH = "startWith"
         const val NEW_ORDER_MENU_ITEM_ID = "menuItemId"
+        const val NEW_ORDER_IS_CHECKOUT = "is_checkout"
         const val NOTHING = -1
         const val START_WITH_ADDRESS_CHOOSER = 0
 
@@ -127,6 +128,7 @@ class Constants {
         const val PHONE_VERIFICATION_TAG = "phone_verification_tag"
 
         const val FEED_TAG = "feed_tag"
+        const val FEED_LOADER_TAG = "feed_loader_tag"
         const val SEARCH_TAG = "search_tag"
         const val ADD_NEW_ADDRESS_TAG = "add_new_address_tag"
         const val DELIVERY_DETAILS_TAG = "delivery_details_tag"
@@ -191,6 +193,11 @@ class Constants {
         const val ADDRESS_MENU_BOTTOM_SHEET = "address_menu_bottom_sheet"
         const val COUNTRY_CODE_BOTTOM_SHEET = "country_code_bottom_sheet"
         const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
+
+        //Location navigation destination labels
+        const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"
+        const val LOCATION_DESTINATION_MAP_VERIFICATION = "address_verification_map"
+        const val LOCATION_DESTINATION_FINAL_DETAILS = "final_address_details"
 
 
         //cancel order dialog stage

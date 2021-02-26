@@ -128,7 +128,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
         viewModel.clearSearchParams()
     }
 
-    override fun onIconClick(selected: ArrayList<SelectableIcon>) {
+    override fun onIconClick(selected: List<SelectableIcon>) {
         validateFields()
     }
 

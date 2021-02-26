@@ -36,7 +36,7 @@ import kotlin.math.ln
  * Created by MonkeyFather on 15/05/2018.
  */
 
-class LocationManager(val context: Context, private val metaDataRepository: MetaDataRepository){
+class LocationManager(val context: Context, private val metaDataRepository: MetaDataRepository) {
 
 
     fun setDefaultAddress() {
@@ -57,17 +57,31 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
     private val locationLiveData = LocationLiveData(context)
 
 
+    data class FinalAddressParam(
+        val id: Long? = null,
+        val lat: Double? = null,
+        val lng: Double? = null,
+        val locationTitle: String? = null,
+        val shortTitle: String? = null
+    )
 
-    data class FinalAddressParam(val id: Long? = null, val lat: Double? = null, val lng: Double? = null, val locationTitle: String? = null)
     fun getFinalAddressLiveDataParam() = finalAddressLiveDataParam
     private val finalAddressLiveDataParam = MutableLiveData<FinalAddressParam>()
 
-    fun setSelectedAddressAndUpdateParams(selectedAddress: Address?){
+    fun setSelectedAddressAndUpdateParams(selectedAddress: Address?) {
         Log.d(TAG, "setSelectedAddressAndUpdateParams: $selectedAddress")
-        selectedAddress?.let{
+        selectedAddress?.let {
             previousChosenAddress = lastChosenAddress
             lastChosenAddress = selectedAddress.copy()
-            finalAddressLiveDataParam.postValue(FinalAddressParam(selectedAddress.id, selectedAddress.lat, selectedAddress.lng, selectedAddress.getUserLocationStr()))
+            finalAddressLiveDataParam.postValue(
+                FinalAddressParam(
+                    selectedAddress.id,
+                    selectedAddress.lat,
+                    selectedAddress.lng,
+                    selectedAddress.getUserLocationStr(),
+                    selectedAddress.getUserShortLocationStr()
+                )
+            )
         }
     }
 
@@ -75,11 +89,11 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
         locationLiveData.setForcedStop(forceStop)
     }
 
-    fun getLastChosenAddress(): Address?{
+    fun getLastChosenAddress(): Address? {
         return lastChosenAddress
     }
 
-    fun rollBackToPreviousAddress(){
+    fun rollBackToPreviousAddress() {
         setSelectedAddressAndUpdateParams(previousChosenAddress)
     }
 

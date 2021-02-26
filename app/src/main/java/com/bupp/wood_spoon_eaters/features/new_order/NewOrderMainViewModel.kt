@@ -42,6 +42,7 @@ class NewOrderMainViewModel(
     val dishCookEvent = MutableLiveData<Cook>()
     val cartStatusEvent = MutableLiveData<CartManager.CartStatus>()
     val clearCartEvent = SingleLiveEvent<Boolean>()
+    val validationError = SingleLiveEvent<OrderValidationErrorType>()
 
     val deliveryTimeLiveData = cartManager.deliveryTimeLiveData
 
@@ -67,8 +68,15 @@ class NewOrderMainViewModel(
         //get full dish and check order status prior to dish
         intent?.let{
             menuItemId = it.getLongExtra(Constants.NEW_ORDER_MENU_ITEM_ID, Constants.NOTHING.toLong())
+            if(menuItemId != Constants.NOTHING.toLong()){
+                getFullDish()
+            }
+
+            isCheckout = it.getBooleanExtra(Constants.NEW_ORDER_IS_CHECKOUT, false)
+            if(isCheckout){
+                handleNavigation(NewOrderScreen.CHECKOUT)
+            }
         }
-        getFullDish()
     }
 
     private fun getFullDish() {
@@ -81,7 +89,6 @@ class NewOrderMainViewModel(
                     dishCookEvent.postValue(it.fullDish.cook)
 
                     checkCartStatusAndUpdateUi()
-                    handleAndShowBottomBar(CartBottomBar.BottomBarTypes.ADD_TO_CART)
                     progressData.endProgress()
                 }
             }
@@ -97,15 +104,6 @@ class NewOrderMainViewModel(
         cartStatusEvent.postValue(cartManager.getOrderStatus())
     }
 
-
-    fun handleAndShowBottomBar(bottomBarType: CartBottomBar.BottomBarTypes) {
-//        val isCartEmpty = isCartEmpty()
-//        when(bottomBarType){
-//            CartBottomBar.BottomBarTypes.ADD_TO_CART -> {
-//
-//            }
-//        }
-    }
 
     fun updateCartBottomBarByType(type: CartBottomBar.BottomBarTypes, price: Double?, itemCount: Int? = null, totalPrice: Double? = null) {
         cartBottomBarTypeEvent.postValue(CartBottomBarTypeEvent(type, price, itemCount, totalPrice))
@@ -123,7 +121,9 @@ class NewOrderMainViewModel(
 
             }
             CartBottomBar.BottomBarTypes.PLACE_AN_ORDER -> {
-                finalizeOrder()
+                if(validateOrder()){
+                    finalizeOrder()
+                }
             }
         }
     }
@@ -156,7 +156,7 @@ class NewOrderMainViewModel(
         if(eaterDataManager.hasUserSetAnAddress()){
             addToCart()
         }else{
-            navigationEvent.postValue(NewOrderNavigationEvent.SHOW_ADDRESS_MISSING_DIALOG)
+            navigationEvent.postValue(NewOrderNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
         }
 
     }
@@ -269,6 +269,24 @@ class NewOrderMainViewModel(
 //                }
 //            }
 //        }
+    }
+
+
+    enum class OrderValidationErrorType{
+        SHIPPING_METHOD_MISSING,
+        PAYMENT_METHOD_MISSING
+    }
+    private fun validateOrder(): Boolean {
+        if(cartManager.checkShippingMethodValidation()){
+            validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
+            return false
+        }
+        val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
+        if(paymentMethod == null){
+            validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
+            return false
+        }
+        return true
     }
 
 
@@ -520,6 +538,8 @@ class NewOrderMainViewModel(
     fun refreshPaymentsMethod(context: Context) {
         paymentManager.getStripeCustomerCards(context, true)
     }
+
+
 
 
 //    fun removeItemFromCart(orderItemId: OrderItem) {

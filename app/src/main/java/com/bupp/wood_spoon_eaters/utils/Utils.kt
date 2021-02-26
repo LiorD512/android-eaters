@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -9,7 +8,8 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
-import android.telephony.TelephonyManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -17,11 +17,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
 import com.bupp.wood_spoon_eaters.common.Constants
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
 import java.util.*
 
 
@@ -125,7 +124,19 @@ object Utils {
         activity.startActivity(Intent.createChooser(shareIntent, "Share"))
     }
 
-
+    fun vibrate(context: Context){
+        val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        // Vibrate for 500 milliseconds
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(
+                VibrationEffect.createOneShot(150,
+                    VibrationEffect.DEFAULT_AMPLITUDE))
+        }
+        else {
+            v.vibrate(150)
+        }
+    }
 
 
 }

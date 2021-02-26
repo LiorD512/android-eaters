@@ -18,7 +18,7 @@ android {
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 25
         targetSdkVersion 30
         applicationId "com.bupp.wood_spoon_eater"
         versionCode 37
@@ -108,7 +108,7 @@ dependencies {
     implementation 'com.asksira.android:dropdownview:1.0.3'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-alpha01'
     implementation 'com.androidadvance:topsnackbar:1.1.1'
     implementation 'com.trading212:sticky-headers:0.1.4'
     implementation 'com.daasuu:EasingInterpolator:1.0.0'
@@ -146,7 +146,7 @@ dependencies {
 
     //3rd party events
     implementation 'com.uxcam:uxcam:3.3.2@aar'
-    implementation 'com.appsflyer:af-android-sdk:6.1.4'
+    implementation 'com.appsflyer:af-android-sdk:6.2.0'
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
     implementation 'com.facebook.android:facebook-core:5.15.3'
     implementation 'com.facebook.android:facebook-applinks:5.15.3'

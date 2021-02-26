@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -16,8 +15,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedAdapter
-import com.bupp.wood_spoon_eaters.dialogs.rating_dialog.RatingsDialog
-import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
@@ -28,7 +26,7 @@ import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook) : DialogFragment(), HeaderView.HeaderViewListener,
-    SingleFeedAdapter.SearchAdapterListener, UserImageView.UserImageViewListener, CooksProfileDishesAdapter.CooksProfileDishesListener {
+     UserImageView.UserImageViewListener, CooksProfileDishesAdapter.CooksProfileDishesListener {
 
     interface CookProfileDialogListener{
         fun onDishClick(menuItemId: Long)
@@ -55,17 +53,11 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
     }
 
     private fun initObservers() {
-        viewModel.getReviewsEvent.observe(this, Observer { event ->
-            if (event != null) {
-                cookProfilePb.hide()
-                if (event.isSuccess) {
-                    if (event.reviews != null) {
-                        RatingsDialog(event.reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
-                    }
-                } else {
-                    Toast.makeText(context, "Problem uploading order", Toast.LENGTH_SHORT).show()
+        viewModel.getReviewsEvent.observe(this, Observer { reviews ->
+            cookProfilePb.hide()
+                reviews?.let{
+                    RatingsDialog(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
                 }
-            }
         })
     }
 
@@ -89,7 +81,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         cookProfileFragRating.text = cook.rating.toString()
 
         //cuisine
-        if(cook.cuisines != null && cook?.cuisines?.size > 0){
+        if(cook?.cuisines.isNotEmpty()){
             cookProfileFragCuisineLayout.visibility = View.VISIBLE
             cookProfileFragCuisineGrid.clear()
             cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
@@ -98,7 +90,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         }
 
         //dietry
-        if(cook.diets != null && cook?.diets?.size > 0){
+        if(cook.diets.isNotEmpty()){
             cookProfileFragDietaryLayout.visibility = View.VISIBLE
             cookProfileFragDietryGrid.clear()
             cookProfileFragDietryGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
@@ -109,7 +101,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         //Certificates
         val certificates = cook.certificates
 //        cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }
-        if (certificates != null && certificates?.size > 0) {
+        if (certificates.isNotEmpty()) {
             cookProfileFragCertificateLayout.visibility = View.VISIBLE
             cookProfileFragCertificateGrid.clear()
             cookProfileFragCertificateGrid.initStackableViewWith(certificates)

@@ -16,6 +16,7 @@ class CartManager(
     private val locationManager: LocationManager
 ) {
 
+    private var shippingService: String? = null
     fun getCurrentOrderData() = currentOrderLiveData
     private val currentOrderLiveData = MutableLiveData<Order>()
 
@@ -376,6 +377,26 @@ class CartManager(
             return orderRepository.finalizeOrder(it, paymentMethodId)
         }
         return null
+    }
+
+
+    suspend fun getUpsShippingRates(): OrderRepository.OrderRepoResult<List<ShippingMethod>>? {
+        this.currentOrderResponse?.id?.let { it ->
+            return orderRepository.getUpsShippingRates(it)
+        }
+        return null
+    }
+
+    suspend fun updateShippingService(shippingService: String) {
+        this.shippingService = shippingService
+        val deliveryTime = currentShowingDish?.menuItem?.cookingSlot?.startsAt
+        val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
+        val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
+        postUpdateOrder(orderRequest)
+    }
+
+    fun checkShippingMethodValidation(): Boolean {
+        return currentOrderResponse?.isNationwide == true && shippingService == null
     }
 
 

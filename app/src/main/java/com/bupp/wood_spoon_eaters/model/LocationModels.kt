@@ -37,14 +37,7 @@ data class AddressRequest(
         return "$streetNumber $streetLine1, ${"$cityName," ?: ""} ${stateIso ?: ""}"
     }
 
-    fun getDropoffLocationStr(): String {
-        return when (dropoffLocation) {
-            "delivery_to_door" -> "Delivered To Your Door"
-            else -> "Pick up outside"
-        }
-    }
-
-    fun toAddress(): Address? {
+    fun toAddress(): Address {
         val fullStreetLine1 = "${streetNumber} ${streetLine1}"
         return Address(id = null, lat = lat, lng = lng, streetLine1 = fullStreetLine1, streetLine2 = streetLine2, addressSlug = addressSlug)
     }
@@ -77,10 +70,13 @@ data class Address(
             return "$street ${city?.name ?: ""} ${state?.name ?: ""} $apt"
         }
     }
+    fun getUserShortLocationStr(): String{
+        return "$streetLine1"
+    }
     fun getDropoffLocationStr(): String {
         return when (dropOfLocationStr) {
-            "delivery_to_door" -> "Delivered To Your Door"
-            else -> "Pick up outside"
+            "delivery_to_door" -> "Deliver to door"
+            else -> "Meet outside"
         }
     }
 }

@@ -47,7 +47,9 @@ class CooksProfileDishesAdapter(
             } else {
                 holder.quantityLeft.text = "Sold Out"
             }
-            holder.mainLayout.setOnClickListener { listener.onDishClick(dish) }
+            holder.mainLayout.setOnClickListener {
+                listener.onDishClick(dish)
+            }
         } else {
             holder.quantityLeft.text = "Currently Not Available"
         }

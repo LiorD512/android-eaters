@@ -11,22 +11,17 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
 import com.bupp.wood_spoon_eaters.databinding.FragmentActiveOrderTrackerBinding
-import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
 import kotlinx.android.synthetic.main.sharing_campaign_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ActiveOrderTrackerDialog : DialogFragment(),
@@ -87,9 +82,9 @@ class ActiveOrderTrackerDialog : DialogFragment(),
                     adapter = OrdersPagerAdapter(this@ActiveOrderTrackerDialog, it)
                     ordersTrackerPager.adapter = adapter
                     ordersTrackerPager.setPageTransformer(DepthPageTransformer())
-                    ordersTrackerPager.offscreenPageLimit = it.size
 
-                    if (it.size > 1) {
+                    if (it.isNotEmpty()) {
+                        ordersTrackerPager.offscreenPageLimit = it.size
                         ordersTrackerIndicator.visibility = View.VISIBLE
                         ordersTrackerIndicator.setViewPager(ordersTrackerPager)
     //                    adapter.registerAdapterDataObserver(ordersTrackerIndicator.adapterDataObserver);
@@ -134,7 +129,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
 
 
     override fun onOrderCanceled() {
-        (activity as MainActivity).checkForActiveOrder()
+        (activity as MainActivity).checkBottomBarStatus()
         dismiss()
     }
 

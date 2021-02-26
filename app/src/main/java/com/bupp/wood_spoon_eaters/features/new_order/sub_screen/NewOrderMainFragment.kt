@@ -2,27 +2,28 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
-import com.bupp.wood_spoon_eaters.common.ZoomOutPageTransformer
 import com.bupp.wood_spoon_eaters.databinding.FragmentNewOrderMainBinding
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_cook.SingleDishCookFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientsFragment
-import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
 
     var binding: FragmentNewOrderMainBinding? = null
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
+
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.checkCartStatusAndUpdateUi()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,9 +90,6 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
     }
 
     override fun onDestroyView() {
-        singleDishInfoImagePager?.let {
-            it.adapter = null
-        }
         binding = null
         super.onDestroyView()
     }

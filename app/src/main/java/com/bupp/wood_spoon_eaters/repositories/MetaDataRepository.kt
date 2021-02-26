@@ -68,6 +68,13 @@ class MetaDataRepository(private val apiService: ApiService) {
         return listOf()
     }
 
+    fun getWelcomeScreens(): List<WelcomeScreen> {
+        if (getMetaDataObject()?.welcome_screens != null) {
+            return metaDataObject.welcome_screens as List<WelcomeScreen>
+        }
+        return listOf()
+    }
+
     fun getSettings(): List<AppSetting> {
         if (getMetaDataObject()?.settings != null) {
             return metaDataObject.settings as List<AppSetting>

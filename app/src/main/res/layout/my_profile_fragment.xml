@@ -179,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"/>
 
-            <com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
+            <com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
                     android:id="@+id/myProfileFragFavorites"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -321,21 +321,14 @@
             <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                     android:id="@+id/myProfileFragJoinBtn"
                     android:layout_marginBottom="23.5dp"
+                    android:paddingHorizontal="25dp"
                     app:title="Join WoodSpoon's Home Chefs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            <com.bupp.wood_spoon_eaters.custom_views.BlueStrokeBtn
-                    android:id="@+id/myProfileFragEventsBtn"
-                    android:layout_marginBottom="22.6dp"
-                    app:title="Join Event"
-                    android:layout_width="match_parent"
-                                                                   android:layout_height="wrap_content"/>
-
             <TextView
                     style="@style/Reg11Dark"
-                    android:layout_marginTop="15.4dp"
-                    android:layout_marginBottom="15.4dp"
+                    android:layout_marginBottom="7.7dp"
                     android:layout_marginStart="15.4dp"
                     android:id="@+id/myProfileFragVersion"
                     android:layout_width="wrap_content"

@@ -12,18 +12,19 @@ import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 
 
-class EaterDataManager(val context: Context, private val locationManager: LocationManager,
-                       private val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository){
+class EaterDataManager(
+    val context: Context, private val locationManager: LocationManager,
+    private val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository
+) {
 
     val currentEater: Eater?
-    get() = userRepository.getUser()
+        get() = userRepository.getUser()
 
     /////////////////////////////////////////
     ////////    DELIVERY_TIME       /////////
     /////////////////////////////////////////
 
     fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
-
 
 
     /////////////////////////////////////////
@@ -37,11 +38,11 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
         locationManager.setSelectedAddressAndUpdateParams(selectedAddress)
     }
 
-    fun getLastChosenAddress(): Address?{
+    fun getLastChosenAddress(): Address? {
         return locationManager.getLastChosenAddress()
     }
 
-    fun hasUserSetAnAddress(): Boolean{
+    fun hasUserSetAnAddress(): Boolean {
         return getFinalAddressLiveDataParam().value?.id != null
     }
 
@@ -67,9 +68,11 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
         when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_SUCCESS -> {
                 result.data?.let {
-                    Log.d(TAG, "checkForTraceableOrders - success")
-                    traceableOrders.postValue(it)
-                    traceableOrdersList = it
+                    if(it.isNotEmpty()){
+                        Log.d(TAG, "checkForTraceableOrders - success")
+                        traceableOrdersList = it
+                        traceableOrders.postValue(it)
+                    }
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_FAILED -> {
@@ -84,6 +87,101 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
             }
         }
     }
+
+    /////////////////////////////////////////
+    /////////      Favorites         ////////
+    /////////////////////////////////////////
+
+    var favoritesDishList: List<Dish>? = null
+    fun getFavoritesLiveData() = favoritesDishLiveData
+    private val favoritesDishLiveData = MutableLiveData<List<Dish>>()
+
+    suspend fun refreshMyFavorites() {
+        val result = eaterDataRepository.getFavorites(getLastFeedRequest())
+        when (result.type) {
+            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_SUCCESS -> {
+                result.data?.let {
+                    Log.d(TAG, "checkForTraceableOrders - success")
+                    favoritesDishLiveData.postValue(it)
+                    favoritesDishList = it
+                }
+            }
+            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_FAILED -> {
+                Log.d(TAG, "checkForTraceableOrders - failed")
+            }
+            EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+                Log.d(TAG, "checkForTraceableOrders - es error")
+
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun getLastFeedRequest(): FeedRequest {
+        //being used in NewOrderActivity, uses params to init new Order.
+        var feedRequest = FeedRequest()
+        val lastAddress = getFinalAddressLiveDataParam().value
+        lastAddress?.let {
+            //address
+            if (lastAddress.id != null) {
+                feedRequest.addressId = lastAddress.id
+            } else {
+                feedRequest.lat = lastAddress.lat
+                feedRequest.lng = lastAddress.lng
+            }
+        }
+
+        //time
+        feedRequest.timestamp = getDeliveryTimestamp()
+
+        return feedRequest
+    }
+
+
+    /////////////////////////////////////////
+    /////////      Triggers         /////////
+    /////////////////////////////////////////
+
+    fun getTriggers() = triggerEvent
+    private val triggerEvent = MutableLiveData<Trigger>()
+
+    suspend fun checkForTriggers() {
+        val result = eaterDataRepository.getTriggers()
+        when (result.type) {
+            EaterDataRepository.EaterDataRepoStatus.GET_TRIGGERS_SUCCESS -> {
+                result.data?.let {
+                    Log.d(TAG, "checkForTraceableOrders - success")
+                    triggerEvent.postValue(it)
+                }
+            }
+            EaterDataRepository.EaterDataRepoStatus.GET_TRIGGERS_FAILED -> {
+                Log.d(TAG, "checkForTraceableOrders - failed")
+            }
+            EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+                Log.d(TAG, "checkForTraceableOrders - es error")
+
+            }
+            else -> {
+
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -162,7 +260,6 @@ class EaterDataManager(val context: Context, private val locationManager: Locati
     companion object {
         const val TAG = "wowEaterDataManager"
     }
-
 
 
 }

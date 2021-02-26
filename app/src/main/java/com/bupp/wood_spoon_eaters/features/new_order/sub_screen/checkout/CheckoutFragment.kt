@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
@@ -13,9 +14,8 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.*
-import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.NationwideShippingChooserDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
@@ -35,13 +35,12 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
-    com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, OrderUpdateErrorDialog.updateErrorDialogListener,
+    OrderUpdateErrorDialog.updateErrorDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener {
 
     private var binding: CheckoutFragmentBinding? = null
 
     private var hasPaymentMethod: Boolean = false
-    lateinit var curOrder: Order
 
     interface CheckoutDialogListener {
         fun onCheckoutDone()
@@ -66,12 +65,19 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
     }
 
     private fun initObservers() {
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            if (it) {
+                binding!!.checkoutFragmentPb.show()
+            } else {
+                binding!!.checkoutFragmentPb.hide()
+            }
+        })
         mainViewModel.orderData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
             updateBottomBar(orderData.total)
         })
         viewModel.timeChangeEvent.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let{
+            it.getContentIfNotHandled()?.let {
                 openOrderTimeBottomSheet(it)
             }
         })
@@ -87,75 +93,30 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
             }
         }
         mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
-            if(emptyCartEvent) {
+            if (emptyCartEvent) {
                 ClearCartDialog(this@CheckoutFragment).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
             }
         })
-//        mainViewModel.checkoutOrderEvent.observe(this, Observer { checkoutEvent ->
-//            if(checkoutEvent != null && checkoutEvent.isSuccess){
-//                listener.onCheckoutDone()
-//            }else{
-//                Toast.makeText(context, "checkoutEvent failed", Toast.LENGTH_SHORT).show()
-//            }
-//         })
-//
-//
-//
-//
-//        ordersViewModel.tipInDollars.observe(viewLifecycleOwner, Observer { orderData ->
-//            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
-//        })
-//
-//        ordersViewModel.tipPercentage.observe(viewLifecycleOwner, Observer { orderData ->
-//            updatePriceUi(ordersViewModel.tipPercentage.value, ordersViewModel.tipInDollars.value)
-//        })
-//
-//        ordersViewModel.progressData.observe(viewLifecycleOwner, Observer { shouldShow ->
-//            if(shouldShow){
-//                checkoutFragPb.show()
-//            }else{
-//                checkoutFragPb.hide()
-//            }
-//        })
-//        ordersViewModel.editDeliveryTime.observe(this, Observer { editTimeEvent ->
-//            editTimeEvent.endsAt?.let{
-//                editTimeEvent.startAt?.let{
-//                    onEditDateClick(editTimeEvent.startAt, editTimeEvent.endsAt)
-//                }
-//            }
-//        })
-//        ordersViewModel.emptyCartEvent.observe(this, Observer { emptyCartEvent ->
-//            if(emptyCartEvent.shouldShow) {
-//                ClearCartDialog(this).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-//            }
-//        })
-//
-//        ordersViewModel.updateOrderError.observe(this, Observer { errorEvent ->
-//            when(errorEvent){
-//                400 -> {
-//                    OrderUpdateErrorDialog(this).show(childFragmentManager, Constants.ORDER_UPDATE_ERROR_DIALOG)
-//                }
-//                else -> {}
-//            }
-//        })
-//        ordersViewModel.errorEvent.observe(this, Observer{
-//            it?.let{
-//                var errorStr = ""
-//                it.forEach {
-//                    errorStr += "${it.msg} \n"
-//                }
-//                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
-//            }
-//        })
-//        ordersViewModel.shippingMethodsEvent.observe(viewLifecycleOwner, Observer{
-//            it?.let{
-//                if(it?.size > 0){
-//                    NationwideShippingChooserDialog.newInstance(it).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
-//                }else{
-//                    Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        })
+        viewModel.shippingMethodsEvent.observe(viewLifecycleOwner, {
+            it?.let {
+                if (it.isNotEmpty()) {
+                    NationwideShippingChooserDialog.newInstance(ArrayList(it)).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
+                } else {
+                    Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+        mainViewModel.validationError.observe(viewLifecycleOwner, {
+            when (it) {
+                NewOrderMainViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING -> {
+                    viewModel.onNationwideShippingSelectClick()
+                }
+                NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
+                    binding!!.checkoutFragChangePaymentChangeBtn.performClick()
+                }
+            }
+        })
     }
 
     private fun updateBottomBar(totalPrice: Price?) {
@@ -185,24 +146,18 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
             checkoutFragChangePaymentChangeBtn.setOnClickListener {
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
             }
+
+            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
+                if (isChecked) {
+                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
+                } else {
+                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
+                }
+            }
         }
 
-//        checkoutFragUtensilsSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-//            ordersViewModel.updateAddUtensils(isChecked)
-//            when(isChecked){
-//                true -> {
-//                    checkoutFragUtensilsText.text = "These items will be added to your order"
-//                }
-//                false -> {
-//                    checkoutFragUtensilsText.text = "These items won’t be included unless you ask"
-//                }
-//            }
-//        }
-
-
         mainViewModel.getLastOrderDetails()
-//        ordersViewModel.resetTip()
-
     }
 
     private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
@@ -228,10 +183,10 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
         }
     }
 
-    fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
+    private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
         with(binding!!) {
             val card = paymentMethod.card
-            card?.let{
+            card?.let {
                 hasPaymentMethod = true
                 Log.d("wowCheckoutFrag", "updateCustomerPaymentMethod: ${paymentMethod.id}")
                 checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
@@ -278,9 +233,9 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
-        if(isCartEmpty){
+        if (isCartEmpty) {
             mainViewModel.showClearCartDialog()
-        }else{
+        } else {
             mainViewModel.updateOrderItem(updatedOrderItem)
 
         }
@@ -323,7 +278,7 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
             }
 
             checkoutFragTaxPriceText.text = "$$tax"
-            serviceFee?.let{
+            serviceFee?.let {
                 if (serviceFee > 0.0) {
                     checkoutFragServiceFeePriceText.text = "$$serviceFee"
                     checkoutFragServiceFeePriceText.visibility = View.VISIBLE
@@ -333,7 +288,7 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
                     checkoutFragServiceFeePriceFree.visibility = View.VISIBLE
                 }
             }
-            deliveryFee?.let{
+            deliveryFee?.let {
                 if (deliveryFee > 0.0) {
                     checkoutFragDeliveryFeePriceText.text = "$$deliveryFee"
                     checkoutFragDeliveryFeePriceText.visibility = View.VISIBLE
@@ -344,39 +299,18 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
                 }
             }
 
-            val allDishSubTotal = curOrder.subtotal?.value//checkoutFragOrderItemsView.getAllDishPriceValue() todo: check if this s ok
+            val allDishSubTotal = curOrder.subtotal?.value
             val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
-
-//            var tipValue = 0.0
-//            tipPercent?.let{
-//                if(tipPercent != 0){
-//                    tipValue = allDishSubTotal.times(tipPercent).div(100)
-//                }
-//            }
-//            tipInDollars?.let{
-//                if(tipInDollars > 0.0){
-//                    tipValue = tipInDollars.toDouble()
-//                }
-//            }
-
-//        val total: Double = (allDishSubTotal.plus(tax).plus(serviceFee).plus(deliveryFee).plus(discount))
-//        val total: Double = curOrder.discount.value
-//            val total: Double = curOrder.totalBeforeTip.value
-//            val totalWithTip: Double = total.plus(tipValue)
-
 
             checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
             checkoutFragTotalPriceText.text = curOrder.totalBeforeTip?.formatedValue ?: ""
-
-//        checkoutFragStatusBar.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_FINALIZE, price = totalWithTip)
         }
 
     }
 
-    override fun onShippingMethodChoose(choosenShippingMethod: ShippingMethod) {
-//        checkoutFragStatusBar.isEnabled = true
-//        checkoutFragNationwideSelect.updateNationwideShippingDetails("${choosenShippingMethod.name}")
-//        ordersViewModel.updateShppingMethod(choosenShippingMethod)
+    override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
+        viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
+        binding!!.checkoutFragNationwideSelect.updateNationwideShippingDetails(chosenShippingMethod.name)
     }
 
     override fun onClearCart() {
@@ -394,13 +328,13 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            viewModel.updateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()))
+            viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()))
         }
     }
 
     override fun onTipDone(tipAmount: Int) {
         binding!!.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.updateOrder(OrderRequest(tipAmount = tipAmount.toString()))
+        viewModel.simpleUpdateOrder(OrderRequest(tipAmount = tipAmount.toString()))
     }
 
     override fun onChangeLocationClick() {
@@ -413,7 +347,7 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onNationwideShippingChange() {
-//        ordersViewModel.onNationwideShippingSelectClick()
+        viewModel.onNationwideShippingSelectClick()
     }
 
     private fun openOrderTimeDialog() {
@@ -421,83 +355,17 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
-        if (selectedMenuItem != null) {
-            mainViewModel.updateDeliveryTime(newChosenDate)
-        }
+        mainViewModel.updateDeliveryTime(newChosenDate)
     }
 
 
     override fun onHeaderBackClick() {
-//        listener.onCheckoutCanceled()
-    }
-
-    fun onAddressChooserSelected() {
-        Log.d("wow", "onAddressChooserSelected")
-        mainViewModel.updateAddress()
-    }
-
-
-    fun onEditDateClick(startsAt: Date, endsAt: Date) {
-        val calStart = Calendar.getInstance()
-        calStart.time = startsAt
-
-        val calEnd = Calendar.getInstance()
-        calEnd.time = endsAt
-
-        if (DateUtils.isSameDay(calStart, calEnd)) {
-            openTimePicker(calStart, calEnd)
-        } else {
-            openDatePicker(calStart, calEnd)
+        if(mainViewModel.isCheckout){
+            mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
+        }else{
+            activity?.onBackPressed()
         }
 
-    }
-
-    fun openDatePicker(calStart: Calendar, calEnd: Calendar) {
-        val c = Calendar.getInstance()
-        val year = calStart.get(Calendar.YEAR)
-        val month = calStart.get(Calendar.MONTH)
-        val day = calStart.get(Calendar.DAY_OF_MONTH)
-
-        val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year, monthOfYear, dayOfMonth)
-            if (DateUtils.isSameDay(selectedDate, calStart)) {
-                selectedDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59)
-                openTimePicker(calStart, selectedDate)
-            } else {
-                selectedDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
-                openTimePicker(selectedDate, calEnd)
-            }
-        }, year, month, day)
-
-        dpd.datePicker.minDate = calStart.timeInMillis
-        dpd.datePicker.maxDate = calEnd.timeInMillis
-
-        dpd.show()
-    }
-
-    fun openTimePicker(calStart: Calendar, calEnd: Calendar) {
-        val dpd = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance(
-            this,
-            calStart.get(Calendar.HOUR_OF_DAY),
-            calStart.get(Calendar.MINUTE),
-            false
-        )
-
-        dpd.show(childFragmentManager, "Datepickerdialog")
-        if (calStart.before(calEnd)) {
-            dpd.setMinTime(calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), 0)
-            dpd.setMaxTime(calEnd.get(Calendar.HOUR_OF_DAY), calEnd.get(Calendar.MINUTE), 0)
-        }
-    }
-
-    override fun onTimeSet(view: com.wdullaer.materialdatetimepicker.time.TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
-        val newCal = Calendar.getInstance()
-//        newCal.time = ordersViewModel.orderData.value?.cookingSlot?.startsAt
-        newCal.time = mainViewModel.orderData.value?.cookingSlot?.orderFrom
-        newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        newCal.set(Calendar.MINUTE, minute)
-        mainViewModel.updateDeliveryTime(newCal.time)
     }
 
 

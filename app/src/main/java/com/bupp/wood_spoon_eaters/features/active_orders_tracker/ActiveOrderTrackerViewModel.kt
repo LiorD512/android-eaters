@@ -10,11 +10,6 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.ApiService
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -25,13 +20,8 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
     var orderId: Long? = null
     val traceableOrdersLiveData = eaterDataManager.getTraceableOrders()
-    private val compositeDisposable: ArrayList<Disposable> = arrayListOf()
-    private var disposable: Disposable? = null
+    private var refreshRepeatedJob: Job? = null
 
-    var repeatJob: Job? = null
-
-//    val orderDetails: SingleLiveEvent<OrderDetailsEvent> = SingleLiveEvent()
-//    data class OrderDetailsEvent(/*val order: Order,*/val orderProgress: Int, val arrivalTime:String, val isNewMsgs:Boolean)
 
     fun getShareText(): String {
         val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
@@ -70,7 +60,6 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
         }
     }
 
-    val paymentCardEvent = SingleLiveEvent<Boolean>()
     private fun getOrderUserInfo(): OrderUserInfo? {
         var paymentString = "Fetching data...."
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()
@@ -89,12 +78,12 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
 
     fun startSilentUpdate() {
-        repeatJob = repeatRequest()
+        refreshRepeatedJob = repeatRequest()
     }
 
     fun endUpdates() {
         Log.d("wowActiveOrderTrackerVM", "endUpdates for id: $orderId")
-        repeatJob?.cancel()
+        refreshRepeatedJob?.cancel()
     }
 
 

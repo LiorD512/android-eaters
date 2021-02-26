@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.locations_and_address.final_address_
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentFinalAddressDetailsBinding
@@ -24,22 +25,30 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
         initObserver()
     }
 
+
+
     private fun initUi() {
-        binding!!.addressDetailsDeliverToDoor.setOnClickListener{
-            onDeliverToDoorClick()
-        }
-        binding!!.addressDetailsPickOutside.setOnClickListener{
-            onPickupOutsideClick()
-        }
-        binding!!.addressDetailsSaveBtn.setOnClickListener {
-            if(validateFields()){
-                mainViewModel.saveNewAddress(binding!!.addressDetailsNote.getText())
+        with(binding!!){
+            addressDetailsDeliverToDoor.setOnClickListener{
+                onDeliverToDoorClick()
             }
+            addressDetailsPickOutside.setOnClickListener{
+                onPickupOutsideClick()
+            }
+            addressDetailsSaveBtn.setOnClickListener {
+                if(validateFields()){
+                    val apt = binding!!.addressDetailsApt.getText()
+                    val note = binding!!.addressDetailsNote.getText()
+                    val city = binding!!.addressDetailsCity.getText()
+                    val state = binding!!.addressDetailsState.getText()
+                    mainViewModel.saveNewAddress(note, apt, city, state)
+                }
+            }
+            addressDetailsEditBtn.setOnClickListener {
+                mainViewModel.redirectFinalDetailsToMap()
+            }
+            addressDetailsDeliverToDoor.performClick()
         }
-        binding!!.addressDetailsEditBtn.setOnClickListener {
-            mainViewModel.redirectFinalDetailsToMap()
-        }
-        binding!!.addressDetailsDeliverToDoor.performClick()
 
     }
 
@@ -59,10 +68,22 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     }
 
     private fun updateAddressUi(address: AddressRequest) {
-        binding!!.addressDetailsStreet.setText("${address.streetNumber} ${address.streetLine1}")
-        binding!!.addressDetailsCity.setText(address.cityName)
-        binding!!.addressDetailsState.setText(address.stateIso)
-        binding!!.addressDetailsZipcode.setText(address.zipCode)
+        with(binding!!){
+            addressDetailsStreet.setText("${address.streetNumber} ${address.streetLine1}")
+            address.cityName?.let{
+                addressDetailsCity.setIsEditable(false)
+                addressDetailsCity.setText(address.cityName)
+            }
+            address.stateIso?.let{
+                addressDetailsState.setIsEditable(false)
+                addressDetailsState.setText(address.stateIso)
+            }
+            address.zipCode?.let{
+                addressDetailsZipcode.setIsEditable(false)
+                addressDetailsZipcode.setText(address.zipCode)
+
+            }
+        }
     }
 
     private fun onDeliverToDoorClick() {

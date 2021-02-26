@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -9,10 +10,10 @@
 
     <TextView
             android:id="@+id/title"
-            style="@style/Bold19Dark"
+            style="@style/LatoBlack23Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15.4dp"
+            android:layout_marginTop="7.7dp"
             android:letterSpacing="0.03"
             android:paddingStart="15.4dp"
             android:text="Enter Your Mobile Number"
@@ -21,84 +22,74 @@
 
     <TextView
             android:id="@+id/subtitle"
-            style="@style/Reg13Black"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="15.2dp"
             android:letterSpacing="0.03"
             android:lineSpacingExtra="6.7sp"
             android:paddingStart="15.4dp"
-            android:text="You will receive an SMS to confirm your phone number"
+            android:text="You will receive an SMS to confirm your \nphone number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15.4dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subtitle"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/subtitle">
 
-        <LinearLayout
-                android:layout_marginTop="4dp"
-                android:id="@+id/verificationFragFlagLayout"
-                android:orientation="vertical"
+        <TextView
+                android:id="@+id/verificationFragFlag"
+                android:layout_width="28.8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15.4dp"
+                android:textSize="23sp"
+                app:layout_constraintEnd_toStartOf="@+id/arrow"
+                app:layout_constraintStart_toStartOf="@id/sep"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+                android:id="@+id/arrow"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9.4dp"
+                android:text="@string/triangle_string"
+                android:textColor="@color/black"
+                android:gravity="start"
+                app:layout_constraintBottom_toBottomOf="@+id/verificationFragFlag"
+                app:layout_constraintStart_toEndOf="@+id/verificationFragFlag"
+                app:layout_constraintTop_toTopOf="@+id/verificationFragFlag" />
 
-            <LinearLayout
-                    android:id="@+id/verificationFragIsoLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="3dp"
-                    android:paddingStart="15.4dp"
-                    android:paddingEnd="11dp"
-                    android:gravity="center"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                        android:id="@+id/verificationFragFlag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="7.7dp"
-                        android:textSize="18sp" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/triangle_string"
-                        android:textColor="@color/black" />
-
-            </LinearLayout>
-
-            <View
-                    android:layout_marginHorizontal="7.7dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/light_periwinkle" />
-
-        </LinearLayout>
+        <View
+                android:id="@+id/sep"
+                android:layout_width="75.8dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="5.3dp"
+                android:background="@color/light_periwinkle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verificationFragFlag" />
 
         <com.bupp.wood_spoon_eaters.views.WSEditText
-                android:layout_gravity="top"
-                android:layout_marginTop="2.7dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginTop="7.3dp"
                 android:id="@+id/verificationFragmentInput"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
                 app:error="@string/phone_verification_fragment_phone_error"
                 app:hint="Mobile number"
-                app:inputType="PHONE"/>
+                app:inputType="PHONE"
+                android:layout_marginEnd="15.4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sep"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -112,24 +103,24 @@
                 style="@style/LatoReg11Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:letterSpacing="0.03"
                 android:lineSpacingExtra="8.6sp"
-                android:gravity="center_horizontal"
-                android:text="By continuing you confirm our"/>
+                android:text="By continuing you confirm our" />
 
         <TextView
                 android:id="@+id/verificationFragmentTerms"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/pale_grey_cornered_rect"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="9dp"
                 style="@style/LatoBold11Teal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/pale_grey_cornered_rect"
+                android:gravity="center_horizontal"
                 android:letterSpacing="0.03"
                 android:lineSpacingExtra="8.6sp"
-                android:gravity="center_horizontal"
-                android:text="Terms of use"/>
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="5dp"
+                android:text="Terms of use" />
 
     </LinearLayout>
 

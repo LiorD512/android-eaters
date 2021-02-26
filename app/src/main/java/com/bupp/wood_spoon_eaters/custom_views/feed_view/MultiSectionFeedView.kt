@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.favorites_view.FavoritesView
+import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.model.Cook
@@ -82,15 +82,15 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
             initCooksList(cooksArr, cooksTitle)
         }
 
-        when(isWithFavorites){
-            true -> {
-                multiSectionViewFavorites.setFavoritesViewListener(this)
-                multiSectionViewFavorites.initFavorites()
-            }
-            false -> {
-                multiSectionViewFavorites.visibility = View.GONE
-            }
-        }
+//        when(isWithFavorites){
+//            true -> {
+//                multiSectionViewFavorites.setFavoritesViewListener(this)
+//                multiSectionViewFavorites.initFavorites()
+//            }
+//            false -> {
+//                multiSectionViewFavorites.visibility = View.GONE
+//            }
+//        }
 
         when(stubView){
             Constants.FEED_VIEW_STUB_SHARE -> {
@@ -107,6 +107,10 @@ class MultiSectionFeedView : FrameLayout, SearchAdapter.SearchAdapterListener, M
         if(!isPullToRefreshEnabled){
             multiSectionViewRefreshLayout.isEnabled = false
         }
+    }
+
+    fun initFavorites(favorites: List<Dish>){
+        multiSectionViewFavorites.setFavoritesViewData(favorites, this)
     }
 
     private fun clearFeed() {

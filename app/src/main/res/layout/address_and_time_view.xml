@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:paddingStart="7.7dp"
+            android:paddingStart="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icons_location" />
@@ -28,11 +28,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:ellipsize="end"
-            android:gravity="center"
+            android:gravity="start|center"
             android:letterSpacing="0.03"
             android:lines="1"
-            android:layout_marginStart="7.7dp"
-            android:layout_marginEnd="7.7dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:text="Address"
             app:layout_constraintStart_toEndOf="@+id/icon"
             app:layout_constraintEnd_toStartOf="@+id/time_layout"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="7.7dp"
+            android:layout_marginEnd="7dp"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
@@ -52,7 +52,8 @@
             android:orientation="horizontal">
 
         <TextView
-                android:padding="7.7dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="9dp"
                 android:id="@+id/locationDetailsViewTime"
                 style="@style/SemiBold11Dark"
                 android:layout_width="wrap_content"
@@ -61,7 +62,11 @@
                 android:letterSpacing="0.03"
                 android:text="Now" />
 
-        <TextView
+        <ImageView
+                android:paddingEnd="9dp"
+                android:layout_marginTop="2dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_down"
                 android:text="@string/triangle_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

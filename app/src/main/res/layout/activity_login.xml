@@ -3,39 +3,32 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:animateLayoutChanges="true"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/loginActHeaderView"
-            app:type="HEADER_VIEW_TYPE_SIGNUP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:isWithSep="false"/>
-
-    <FrameLayout
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginActHeaderView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
         <fragment
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/loginActContainer"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/login_nav" />
 
         <com.bupp.wood_spoon_eaters.views.WSProgressBar
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/loginActPb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-    </FrameLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

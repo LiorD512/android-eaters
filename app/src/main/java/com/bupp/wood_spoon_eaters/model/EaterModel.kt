@@ -69,7 +69,7 @@ data class Device(
 )
 
 data class Trigger(
-    @SerializedName("should_rate") var shouldRateOrder: Order
+    @SerializedName("should_rate") var shouldRateOrder: Order?
 )
 
 data class EphemeralKey(

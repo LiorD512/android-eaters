@@ -43,27 +43,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun handleBottomBar(showActiveOrders: Boolean? = null, showCheckout: Boolean? = null) {
-        with(binding) {
-            showActiveOrders?.let {
-                if (it) {
-                    ordersBottomBarOrder.visibility = View.VISIBLE
-                } else {
-                    ordersBottomBarOrder.visibility = View.GONE
-                }
-                    ordersVisible = it
-            }
-            showCheckout?.let {
-                if (it) {
-                    ordersBottomBarCheckout.visibility = View.VISIBLE
-                } else {
-                    ordersBottomBarCheckout.visibility = View.GONE
-                }
-                    checkoutVisible = it
-            }
-            checkSepEnable()
-        }
-    }
 
     private fun checkSepEnable() {
         with(binding) {
@@ -88,7 +67,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 }
                 BottomBarTypes.TRACK_YOUR_ORDER ->{
                     val text = context.getString(R.string.bottom_bar_tract_your_order)
-                    showUpperBarAndUpdate(text, price)
+                    showUpperBarAndUpdate(text, null)
                 }
                 BottomBarTypes.PROCEED_TO_CHECKOUT -> {
                     val text = context.getString(R.string.bottom_bar_procees_to_cart)
@@ -100,6 +79,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
                     val text2 = context.getString(R.string.bottom_bar_procees_to_cart)
                     showLowerBarAndUpdate(text2, totalPrice)
+                }
+                BottomBarTypes.TRACK_ORDER_OR_CHECKOUT -> {
+                    val text1 = context.getString(R.string.bottom_bar_tract_your_order)
+                    showUpperBarAndUpdate(text1, null)
+
+                    val text2 = context.getString(R.string.bottom_bar_procees_to_cart)
+                    showLowerBarAndUpdate(text2, price)
                 }
             }
             checkSepEnable()
@@ -149,6 +135,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         TRACK_YOUR_ORDER,
         PROCEED_TO_CHECKOUT,
         ADD_TO_CART_OR_CHECKOUT,
+        TRACK_ORDER_OR_CHECKOUT,
     }
 
     companion object{

@@ -20,6 +20,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         UPDATE_ORDER_SUCCESS,
         FINALIZE_ORDER_FAILED,
         FINALIZE_ORDER_SUCCESS,
+        GET_SHIPPING_METHOD_FAILED,
+        GET_SHIPPING_METHOD_SUCCESS,
         ACTIVE_ORDERS_FAILED,
         ACTIVE_ORDERS_SUCCESS,
         POST_ORDER_FAILED,
@@ -138,7 +140,31 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         }
     }
 
-
+    suspend fun getUpsShippingRates(orderId: Long): OrderRepoResult<List<ShippingMethod>> {
+        val result = withContext(Dispatchers.IO){
+            apiService.getUpsShippingRates(orderId)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"updateOrder - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"updateOrder - GenericError")
+                    OrderRepoResult(OrderRepoStatus.GET_SHIPPING_METHOD_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"updateOrder - Success")
+                    OrderRepoResult(OrderRepoStatus.GET_SHIPPING_METHOD_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+//                    Log.d(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
 
 
     companion object{

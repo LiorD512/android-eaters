@@ -42,7 +42,7 @@
 
         <TextView
                 android:id="@+id/trackOrderDetailsSectionSubTotal"
-                style="@style/SemiBold13Dark_50"
+                style="@style/SemiBold13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -69,7 +69,7 @@
 
         <TextView
                 android:id="@+id/trackOrderDetailsSectionServiceFee"
-                style="@style/SemiBold13Dark_50"
+                style="@style/SemiBold13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -96,7 +96,7 @@
 
         <TextView
                 android:id="@+id/trackOrderDetailsSectionDeliveryFee"
-                style="@style/SemiBold13Dark_50"
+                style="@style/SemiBold13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -123,7 +123,7 @@
 
         <TextView
                 android:id="@+id/trackOrderDetailsSectionTax"
-                style="@style/SemiBold13Dark_50"
+                style="@style/SemiBold13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"

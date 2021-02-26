@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
@@ -13,6 +14,7 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
+import com.bupp.wood_spoon_eaters.utils.showKeyboard
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -61,7 +63,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
                 sendCode()
             }
 
-            verificationFragFlagLayout.setOnClickListener {
+            verificationFragFlag.setOnClickListener {
                 val countryCodePicker = CountryChooserBottomSheet()
                 countryCodePicker.show(childFragmentManager, Constants.COUNTRY_CODE_BOTTOM_SHEET)
             }
@@ -69,16 +71,21 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
             verificationFragmentTerms.setOnClickListener {
                 WebDocsDialog(Constants.WEB_DOCS_TERMS).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
             }
+            verificationFragmentInput.requestFocus()
         }
     }
 
     private fun sendCode() {
         val phoneStr = binding!!.verificationFragmentInput.getText()
-        phoneStr?.let{
-            val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
-            phone?.let{
-                viewModel.setUserPhone(it)
-                viewModel.sendPhoneNumber()
+        if(phoneStr.isNullOrEmpty()){
+            binding!!.verificationFragmentInput.showError()
+        }else{
+            phoneStr.let{
+                val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
+                phone?.let{
+                    viewModel.setUserPhone(it)
+                    viewModel.sendPhoneNumber()
+                }
             }
         }
     }

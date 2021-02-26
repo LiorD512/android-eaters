@@ -23,13 +23,7 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     }
 
     private fun onLoginClick() {
-        viewModel.directToPhoneFrag()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as LoginActivity).setTitleVisibility(View.GONE)
-        Log.d("wowWelcomeFrag","onResume")
+        viewModel.directToMainFrag()
     }
 
     override fun onDestroy() {

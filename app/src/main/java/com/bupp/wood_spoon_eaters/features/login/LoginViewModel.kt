@@ -39,6 +39,7 @@ class LoginViewModel(
     val phoneCbFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     enum class NavigationEventType {
+        OPEN_MAIN_LOGIN_SCREEN,
         OPEN_PHONE_SCREEN,
         OPEN_CODE_SCREEN,
         OPEN_MAIN_ACT,
@@ -67,10 +68,13 @@ class LoginViewModel(
                 return "$phonePrefix (xxx) xxx - ${it.takeLast(4)}"
             }
         }
-        return "error on getting phone"
+        return " "
     }
 
 
+    fun directToMainFrag() {
+        navigationEvent.postValue(NavigationEventType.OPEN_MAIN_LOGIN_SCREEN)
+    }
     fun directToPhoneFrag() {
         navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }

@@ -57,26 +57,27 @@ class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: Ea
 
     }
 
-    data class AddressAdapterWrapper(val address: Address?, val isSelected: Boolean = false)
-    val myAddressesEvent = SingleLiveEvent<List<AddressAdapterWrapper>?>()
-    fun fetchAddress(selectedId: Long? = -1) {
-        val addresses = eaterDataManager.currentEater?.addresses?.map {
-            AddressAdapterWrapper(it, it.id == selectedId)
-        }
-        myAddressesEvent.postValue(addresses?.toList())
+    data class AddressAdapterWrapper(val address: List<Address>?, val currentAddress: Address? = null)
+    val myAddressesEvent = SingleLiveEvent<AddressAdapterWrapper>()
+    fun fetchAddress() {
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        val addresses = eaterDataManager.currentEater?.addresses
+        myAddressesEvent.postValue(AddressAdapterWrapper(addresses, currentAddress))
     }
 
     fun onMyLocationReceived() {
         myLocationEvent.postValue(MyLocationStatus.READY)
     }
 
-    fun onAddressSelected(selectedAddress: Address) {
-        eaterDataManager.updateSelectedAddress(selectedAddress)
-    }
+//    fun onAddressSelected(selectedAddress: Address) {
+//        eaterDataManager.updateSelectedAddress(selectedAddress)
+//    }
 
     fun updateSelectedAddressUi(selectedAddressId: Long?) {
-        fetchAddress(selectedAddressId)
+//        fetchAddress(selectedAddressId)
     }
+
+
 
 
     companion object{

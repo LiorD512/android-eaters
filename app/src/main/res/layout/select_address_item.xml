@@ -4,22 +4,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="15.4dp"
         android:paddingVertical="15.4dp"
+        android:paddingHorizontal="15.4dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
+            android:paddingStart="15.4dp"
             android:visibility="invisible"
             android:id="@+id/selectAddressItemCheck"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/check_icon" />
+            android:src="@drawable/ic_check_v" />
 
     <LinearLayout
             android:animateLayoutChanges="true"
-            android:paddingStart="14.6dp"
+            android:paddingStart="14.7dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -27,22 +28,24 @@
 
         <TextView
                 android:id="@+id/selectAddressItemStreet"
-                style="@style/SemiBold13Dark"
+                style="@style/LatoBold13Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current location" />
 
         <TextView
+                android:paddingTop="3dp"
                 android:id="@+id/selectAddressItemState"
-                style="@style/Reg13PurpleyGreyTwo"
+                style="@style/LatoReg13PurpelyGreyTwo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
                 tools:text="Mannhattan, NY"/>
 
         <TextView
+                android:paddingTop="3dp"
                 android:id="@+id/selectAddressItemDropOff"
-                style="@style/Reg13PurpleyGreyTwo"
+                style="@style/LatoReg13PurpelyGreyTwo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"

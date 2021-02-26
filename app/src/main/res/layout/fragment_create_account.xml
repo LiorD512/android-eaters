@@ -28,7 +28,7 @@
             android:lineSpacingExtra="6.7sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="Let’s get you started. Enter your name and \n email address" />
+            android:text="Let’s get you started. Enter your name and \n email address" />
 
     <LinearLayout
             android:layout_width="match_parent"

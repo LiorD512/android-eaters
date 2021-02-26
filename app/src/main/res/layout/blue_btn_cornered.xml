@@ -12,7 +12,7 @@
     <TextView
             android:layout_gravity="center"
             android:id="@+id/blueBtnText"
-            style="@style/Bold15White"
+            style="@style/LatoBlack15White"
             android:padding="17.3dp"
             tools:text="Next"
             android:lines="1"

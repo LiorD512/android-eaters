@@ -73,16 +73,19 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
         })
-        viewModel.feedResultData.observe(this, Observer { event ->
+        viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
             if(event.isSuccess){
                 initFeed(event.feedArr!!)
             }
         })
-        viewModel.getCookEvent.observe(this, Observer { event ->
-            if(event.isSuccess){
-                Analytics.with(requireContext()).screen("Home chef page (from feed)")
-                CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+        viewModel.getCookEvent.observe(viewLifecycleOwner, { cook ->
+            cook?.let{
+                    Analytics.with(requireContext()).screen("Home chef page (from feed)")
+                CookProfileDialog(this, it).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
             }
+        })
+        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
+            feedFragSectionsView.initFavorites(it)
         })
     }
 

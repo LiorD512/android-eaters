@@ -17,15 +17,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
+import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
@@ -39,6 +39,8 @@ import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.updateScreenUi
+import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.canhub.cropper.CropImage
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import it.sephiroth.android.library.xtooltip.ClosePolicy
@@ -63,18 +65,19 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     val viewModel by viewModel<MainViewModel>()
 
     private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-        Log.d("wowMain","Activity For Result")
+        Log.d("wowMain", "Activity For Result - location")
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             //check if location changed and refresh ui
         }
     }
     private val afterOrderResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-        Log.d("wowMain","Activity For Result")
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
+        Log.d("wowMain", "Activity For Result - new order")
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val data = result.data
             //check if has order and refresh ui
-        }
+        checkBottomBarStatus()
+//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,10 +89,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         initUiRelatedProcesses()
 
+        loadFeedProgressBarFragment()
         loadFeed()
     }
 
-
+    private fun loadFeedProgressBarFragment() {
+//        loadFragment(FeedLoaderFragment(), Constants.FEED_LOADER_TAG)
+        FeedLoaderDialog().show(supportFragmentManager, Constants.FEED_LOADER_TAG)
+    }
 
 
     ////////////////////////////////////////////////
@@ -105,6 +112,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         checkForBranchIntent()
         viewModel.checkForCampaignReferrals()
         viewModel.checkForTriggers()
+        viewModel.checkForActiveOrder()
     }
 
     private fun checkForBranchIntent() {
@@ -148,16 +156,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadNewOrderActivity(menuItemId)
     }
 
-    fun checkForActiveOrder() {
-        viewModel.checkForActiveOrder()
+    fun checkBottomBarStatus() {
+        viewModel.refreshMainBottomBarUi()
     }
 
-    private fun checkForTriggers() {
-    }
-
-    private fun checkCartStatus() {
-        viewModel.checkCartStatus()
-    }
+//    private fun checkCartStatus() {
+//        viewModel.checkCartStatus()
+//    }
 
     private fun initObservers() {
         viewModel.progressData.observe(this, {
@@ -174,16 +179,16 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         //header event
         viewModel.getFinalAddressParams().observe(this, {
-            mainActHeaderView.setLocationTitle(it?.locationTitle)
+            mainActHeaderView.setLocationTitle(it?.shortTitle)
         })
         viewModel.getDeliveryTimeLiveData().observe(this, {
             mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
         })
 
 
-        viewModel.dishClickEvent.observe(this, Observer{
+        viewModel.dishClickEvent.observe(this, Observer {
             val event = it.getContentIfNotHandled()
-            event?.let{
+            event?.let {
                 afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_MENU_ITEM_ID, event))
             }
         })
@@ -199,41 +204,37 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 }
             }
         })
-
+        viewModel.mainBottomBarEvent.observe(this, {
+            handleMainBottomBarUi(it)
+        })
         viewModel.getTraceableOrder.observe(this, { traceableOrders ->
-            if(traceableOrders.isNotEmpty()){
-                //show track your order bottom bar
-                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER)
-            }
-//            mainActPb.hide()
-//            if (ordersEvent.isSuccess) {
-//                mainActOrdersBB.handleBottomBar(showActiveOrders = true)
-//                if (ordersEvent.showDialog) {
-//                    openActiveOrdersDialog(ordersEvent.orders!!)
+            viewModel.refreshMainBottomBarUi()
+//            if(traceableOrders.isNotEmpty()){
+//                //show track your order bottom bar
+//                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER)
+//            }
+        })
+//        viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
+//            if (pendingOrderEvent.hasPendingOrder) {
+//                Log.d(TAG, "hasPendingOrder")
+////                mainActOrdersBB.handleBottomBar(showCheckout = true)
+//                pendingOrderEvent.totalPrice?.let {
+//                    mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = it)
+////                    mainActOrdersBB.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = it)
 //                }
 //            } else {
-//                mainActOrdersBB.handleBottomBar(showActiveOrders = false)
-//            }
-        })
-
-//        viewModel.getTriggers.observe(this, Observer { triggerEvent ->
-//            if (triggerEvent.isSuccess) {
-//                Log.d("wowMain", "found should rate id !: ${triggerEvent.trigger?.shouldRateOrder}")
-//                RateLastOrderDialog(triggerEvent.trigger?.shouldRateOrder!!.id!!, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+////                mainActOrdersBB.handleBottomBar(showCheckout = false)
 //            }
 //        })
-
-        viewModel.checkCartStatus.observe(this, Observer { pendingOrderEvent ->
-            if (pendingOrderEvent.hasPendingOrder) {
-                mainActOrdersBB.handleBottomBar(showCheckout = true)
-                pendingOrderEvent.totalPrice?.let {
-                    mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = it)
-//                    mainActOrdersBB.updateStatusBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CHECKOUT, price = it)
+        viewModel.getTriggers.observe(this, Observer { triggerEvent ->
+            triggerEvent?.let {
+                it.shouldRateOrder?.id?.let {
+                    Log.d(TAG, "found should rate id !: ${triggerEvent.shouldRateOrder}")
+                    RateLastOrderDialog(it, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
                 }
-            } else {
-                mainActOrdersBB.handleBottomBar(showCheckout = false)
             }
         })
+
 //        viewModel.getCookEvent.observe(this, Observer { event ->
 ////            feedFragPb.hide()
 //            if (event.isSuccess) {
@@ -295,6 +296,21 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         })
     }
 
+    private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {
+        if(bottomBarEvent?.hasBoth == true){
+            val totalPrice = bottomBarEvent.totalPrice
+                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT, price = totalPrice)
+        }else{
+            bottomBarEvent?.activeOrders?.let{
+                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER)
+            }
+            if(bottomBarEvent?.hasPendingOrder == true){
+                val totalPrice = bottomBarEvent.totalPrice
+                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = totalPrice)
+            }
+        }
+    }
+
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let{
             when(bannerType){
@@ -324,7 +340,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     private fun showBanner(text: String) {
         tooltip = Tooltip.Builder(this)
-            .anchor(mainActHeaderView, 0, 0, true)
+            .anchor(mainActHeaderView, 0, -30, true)
 //            .anchor(150, 150)
             .text(text)
 //                        .styleId(Int)
@@ -332,11 +348,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //                        .maxWidth(Int)
             .arrow(true)
             .floatingAnimation(Tooltip.Animation.SLOW)
-            .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
+            .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
 //            .showDuration(1500)
 //            .fadeDuration(5000)
             .overlay(false)
-            .maxWidth(750)
+            .maxWidth(mainActHeaderView.measuredWidth)
             .create()
 
         tooltip!!
@@ -367,7 +383,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onCartBottomBarOrdersClick(type: CartBottomBar.BottomBarTypes) {
         when(type){
-            CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER ->{
+            CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT -> {
                 //show track your order dialog
                 ActiveOrderTrackerDialog().show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
             }
@@ -375,10 +391,11 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onBottomBarCheckoutClick() {
-        startActivityForResult(
-            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true),
-            Constants.NEW_ORDER_REQUEST_CODE
-        )
+        afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_IS_CHECKOUT, true))
+//        startActivityForResult(
+//            Intent(this, NewOrderActivity::class.java).putExtra("isCheckout", true),
+//            Constants.NEW_ORDER_REQUEST_CODE
+//        )
     }
 
     private fun openActiveOrdersDialog(orders: ArrayList<Order>) {
@@ -735,8 +752,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         if (requestCode == Constants.NEW_ORDER_REQUEST_CODE) {
             resetOrderTimeIfNeeded()
             loadOrRefreshFeed()
-            checkForActiveOrder()
-            checkCartStatus()
+//            checkBottomBarStatus()
+//            checkCartStatus()
             data?.let {
                 if (it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)) {
                     if (getFragmentByTag(Constants.FEED_TAG) is FeedFragment) {
@@ -749,7 +766,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
         if (requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE) {
 //            viewModel.disableEventData()
-            checkForActiveOrder()
+//            checkBottomBarStatus()
         }
         if (requestCode == Constants.ANDROID_SETTINGS_REQUEST_CODE) {
             Log.d("wowMainActivity", "BACK FROM SETTINGS")
@@ -853,30 +870,29 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onResume() {
         super.onResume()
-        checkForActiveOrder()
+        checkBottomBarStatus()
+        updateScreenUi()
 //        checkIfMemoryCleaned() //check if this is nesseracy. ny code
     }
 
-    private fun checkIfMemoryCleaned() {
-        //this method belongs to Android 7 and below.. when garbadge collector cleaned the apps memory
-        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP){
-            Log.d("wowMainAct", "checkIfMemoryCleaned()")
-            viewModel.checkIfMemoryCleaned()
-        }
+
+//    fun updateUI() {
+//        val decorView = window.decorView
+//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+//            }
+//        }
+//    }
+
+    companion object{
+        const val TAG = "wowMainAct"
     }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-
-    override fun onStop() {
-        super.onStop()
-//        unregisterReceiver(gpsBroadcastReceiver)
-    }
-
-
 
 
 }

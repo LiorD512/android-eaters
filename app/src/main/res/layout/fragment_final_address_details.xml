@@ -23,11 +23,11 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/addressMapFragMapLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="101dp"
+                    android:layout_height="151dp"
                     android:layout_margin="15.4dp"
                     android:transitionName="mapTransition"
                     app:cardCornerRadius="7.7dp"
-                    app:cardElevation="11dp">
+                    app:cardElevation="7dp">
 
                 <fragment
                         android:id="@+id/mainNavFragment"
@@ -109,7 +109,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        app:isEditable="false" />
+                        app:hint="City" />
 
                 <LinearLayout
                         android:id="@+id/constraint2"
@@ -126,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
                             android:layout_weight="1"
-                            app:isEditable="false" />
+                            app:hint="State" />
 
                     <com.bupp.wood_spoon_eaters.views.WSEditText
                             app:hint="Zip Code"
@@ -176,7 +176,6 @@
                     android:id="@+id/deliveryOptions"
                     app:layout_constraintTop_toBottomOf="@+id/title2"
                     android:gravity="center"
-                    android:paddingVertical="15.4dp"
                     android:paddingHorizontal="15.4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -194,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:WSicon="@drawable/delivery_to_door_selector"
-                        app:title="Delivery to door" />
+                        app:title="Deliver to door" />
 
                 <com.bupp.wood_spoon_eaters.views.WSSelectableBtn
                         app:layout_constraintStart_toEndOf="@+id/addressDetailsDeliverToDoor"
@@ -205,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:WSicon="@drawable/delivery_to_door_selector"
-                        app:title="Pick up outside" />
+                        app:title="Meet outside" />
 
             </LinearLayout>
 

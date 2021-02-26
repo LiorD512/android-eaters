@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,6 +9,8 @@
         tools:context=".features.new_order.sub_screen.checkout.CheckoutFragment">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/checkoutFragHeaderView"
             app:type="HEADER_VIEW_TYPE_BACK_TITLE"
             app:title="Checkout"
@@ -17,6 +19,8 @@
             android:layout_height="wrap_content"/>
 
     <androidx.core.widget.NestedScrollView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkoutFragHeaderView"
             android:layout_below="@+id/checkoutFragHeaderView"
             android:background="@color/light_periwinkle_20"
             android:layout_width="match_parent"
@@ -110,7 +114,7 @@
                             android:id="@+id/checkoutFragUtensilsSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
+                            android:checked="false"
                             android:layout_marginStart="12.3dp"
                             android:thumb="@drawable/stroked_white_circle"
                             app:track="@drawable/red_green_switch_track_selector"/>
@@ -125,7 +129,7 @@
                         android:layout_marginBottom="15.4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="These items will be added to your order"/>
+                        android:text="@string/checkout_utensils_off"/>
 
             </LinearLayout>
 
@@ -511,4 +515,10 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            tools:visibility="gone"
+            android:id="@+id/checkoutFragmentPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

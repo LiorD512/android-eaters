@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.icons_grid_view.view.*
 class IconsGridView : FrameLayout, IconsGridViewAdapter.IconGridViewAdapterListener {
 
     interface IconsGridViewListener{
-        fun onIconClick(selected: ArrayList<SelectableIcon>)
+        fun onIconClick(selected: List<SelectableIcon>)
     }
 
     private var listener: IconsGridViewListener? = null

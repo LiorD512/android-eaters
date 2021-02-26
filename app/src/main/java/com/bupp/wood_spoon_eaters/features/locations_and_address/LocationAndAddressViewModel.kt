@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
@@ -17,6 +18,8 @@ import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
 class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val userRepository: UserRepository) : ViewModel() {
+
+    var tempSelectAddress: Address? = null
 
     val progressData = ProgressData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
@@ -42,18 +45,23 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
 
     fun getLocationLiveData() = eaterDataManager.getLocationData()
 
-    fun onDoneClick() {
+    fun onDoneClick(selectedAddress: Address?) {
+        selectedAddress?.let{
+            eaterDataManager.updateSelectedAddress(it)
+        }
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
     }
 
-
+    fun setTempSelectedAddress(selected: Address) {
+        this.tempSelectAddress =  selected
+    }
 
     private var unsavedNewAddress: AddressRequest? = null
-    private lateinit var currentPlaceFound: Place
     val actionEvent = MutableLiveData<ActionEvent>()
     enum class ActionEvent {
         SAVE_NEW_ADDRESS,
-        FETCH_MY_ADDRESS
+        FETCH_MY_ADDRESS,
+        RESET_HEADER_TITLE
     }
 
     val addressFoundUiEvent = MutableLiveData<AddressRequest>()
@@ -85,6 +93,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         myLocationAddress?.let{
             unsavedNewAddress = it.copy()
             mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN)
+            addressFoundUiEvent.postValue(it)
         }
     }
 
@@ -118,8 +127,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         mainNavigationEvent.postValue(NavigationEventType.OPEN_FINAL_ADDRESS_DETAILS_SCREEN)
     }
 
-
-
     fun updateUnsavedAddressLatLng(currentLatLng: LatLng) {
         unsavedNewAddress?.let{
             it.lat = currentLatLng.latitude
@@ -141,11 +148,18 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         }
     }
 
-    fun saveNewAddress(note: String?) {
+    fun saveNewAddress(note: String?, apt: String?, city: String?, state: String?) {
         progressData.startProgress()
         unsavedNewAddress?.let{
             it.streetLine1 = "${it.streetNumber} ${it.streetLine1}"
+            it.streetLine2 = apt
             it.notes = note
+            if(it.cityName == null){
+                it.cityName = city
+            }
+            if(it.stateIso == null){
+                it.stateIso = state
+            }
             viewModelScope.launch {
                 val userRepoResult = userRepository.addNewAddress(it)
                 progressData.endProgress()
@@ -160,7 +174,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
-                        userRepoResult.eater?.addresses?.get(0)?.let{ address ->
+                        userRepoResult.eater?.addresses?.last()?.let{ address ->
                             eaterDataManager.updateSelectedAddress(address)
                         }
                         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
@@ -174,6 +188,11 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
             }
         }
     }
+
+//    fun setDefaultActivityHeaderTitle() {
+//        Log.d(TAG, "setDefaultActivityHeaderTitle")
+////        actionEvent.postValue(ActionEvent.RESET_HEADER_TITLE)
+//    }
 
     companion object{
         const val TAG = "wowLocationAndAddressVM"

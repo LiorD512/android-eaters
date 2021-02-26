@@ -5,7 +5,7 @@ import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsViewModel
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredViewModel
-import com.bupp.wood_spoon_eaters.dialogs.web_docs.CookProfileViewModel
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
+import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
@@ -104,13 +105,14 @@ val appModule = module {
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { FeedLoaderViewModel(get()) }
     viewModel { FeedViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get(),get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { OrderDetailsViewModel(get()) }
-    viewModel { CookProfileViewModel(get(), get())}
+    viewModel { CookProfileViewModel(get(), get()) }
 
     viewModel { PaymentMethodsViewModel(get()) }
     viewModel { UpdateRequiredViewModel(get()) }

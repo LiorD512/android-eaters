@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,14 +10,23 @@
         tools:context=".features.locations_and_address.LocationPermissionFragment">
 
     <TextView
-            style="@style/Bold19Black"
-            android:layout_width="match_parent"
+            android:layout_marginTop="53dp"
+            android:id="@+id/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/LatoBlack23Dark"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
             android:gravity="center"
-            tools:text="See home chefs in your area"/>
+            android:text="See home chefs in \nyour area"/>
 
     <ImageView
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/logo"
+            app:layout_constraintTop_toBottomOf="@+id/title"
             android:layout_marginTop="60dp"
             android:layout_gravity="center"
             android:src="@drawable/gps_permission_logo"
@@ -25,7 +34,10 @@
             android:layout_height="wrap_content"/>
 
     <TextView
-            style="@style/Reg15Black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            style="@style/LatoReg15Black"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="38dp"
             android:layout_marginHorizontal="45.4dp"
@@ -33,10 +45,12 @@
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
             android:lineSpacingExtra="7.7sp"
+            android:paddingHorizontal="45dp"
             android:gravity="center_horizontal"
-            android:text="Share your location to see nearby chefs and dishes"/>
+            android:text="We need access to your location to see nearby chefs and dishes and to create an accurate delivery address"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            app:layout_constraintBottom_toTopOf="@+id/locationPermissionFragReject"
             android:layout_marginTop="38dp"
             android:layout_marginHorizontal="15.4dp"
             app:title="Allow location access"
@@ -45,10 +59,11 @@
             android:layout_height="wrap_content"/>
 
     <TextView
-            style="@style/Bold15Blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/LatoBlack15Teal"
             android:layout_gravity="center"
             android:paddingTop="26.5dp"
-            android:paddingBottom="10dp"
+            android:paddingBottom="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/teal_blue"
@@ -57,4 +72,4 @@
             android:gravity="center_horizontal"
             android:text="Not now"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

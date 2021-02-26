@@ -15,6 +15,10 @@
                 android:name="showBtns"
                 app:argType="boolean"
                 android:defaultValue="false" />
+        <argument
+                android:name="zoomLevel"
+                app:argType="string"
+                android:defaultValue="16" />
     </fragment>
 
 </navigation>

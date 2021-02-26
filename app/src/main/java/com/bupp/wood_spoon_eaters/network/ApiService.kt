@@ -28,7 +28,7 @@ interface ApiService {
 
 
     @GET("cooks/{cook_id}/reviews")
-    suspend fun getDishReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
+    suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
 
 
@@ -58,7 +58,7 @@ interface ApiService {
     fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
 
     @GET("eaters/me/triggers")
-    fun getTriggers(): Call<ServerResponse<Trigger>>
+    suspend fun getTriggers(): ServerResponse<Trigger>
 
     @GET("eaters/me/stripe/ephemeral_key")
     fun getEphemeralKey(): Observable<ResponseBody>
@@ -112,13 +112,14 @@ interface ApiService {
     fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
 
     @GET("cooks/{cook_id}")
-    fun getCook(
+    suspend fun getCook(
         @Path(value = "cook_id", encoded = true) cookId: Long,
+        @Query("address_id") addressId: Long? = null,
         @Query("lat") lat: Double? = null,
         @Query("lng") lng: Double? = null,
         @Query("timestamp") timestamp: String? = null,
         @Query("event_id") eventId: Long? = null
-    ): Call<ServerResponse<Cook>>
+    ): ServerResponse<Cook>
 
     //Single Dish
 //    @GET("menu_items/{menu_item_id}/dish")
@@ -157,12 +158,18 @@ interface ApiService {
     fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
 
     @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
-    fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<ArrayList<ShippingMethod>>>
+    suspend fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<ShippingMethod>>
 
 
-    //Active Order
+    //Eater Data
     @GET("eaters/me/orders/trackable")
     suspend fun getTraceableOrders(): ServerResponse<List<Order>>
+
+    @GET("eaters/me/favorites")
+    suspend fun getEaterFavorites(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<Search>
 
 //    @GET("eaters/me/orders/trackable")
 //    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
@@ -181,11 +188,11 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
     ): Call<ServerResponse<Search>>
 
-    @GET("eaters/me/favorites")
-    fun getEaterFavorites(
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): Call<ServerResponse<Search>>
+//    @GET("eaters/me/favorites")
+//    fun getEaterFavorites(
+//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): Call<ServerResponse<Search>>
 
 
 //    //Feed
