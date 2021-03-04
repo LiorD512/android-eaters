@@ -29,6 +29,7 @@ import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -43,6 +44,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Analytics.with(requireContext()).screen("Profile page")
 
         binding = MyProfileFragmentBinding.bind(view)
         binding!!.myProfileFragEditPayment.setDeliveryDetailsViewListener(this)
@@ -131,7 +133,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
             myProfileFragPrivacyBtn.setOnClickListener { WebDocsDialog(Constants.WEB_DOCS_PRIVACY).show(childFragmentManager, Constants.WEB_DOCS_DIALOG_TAG) }
             myProfileFragSupportBtn.setOnClickListener { (activity as MainActivity).loadSupport() }
 
-            myProfileFragJoinBtn.setOnClickListener { OpenWoodSpoonGooglePlay() }
+            myProfileFragJoinBtn.setOnClickListener { openWoodSpoonGooglePlay() }
             myProfileFragShareBtnLayout.setOnClickListener { share() }
 
             myProfileFragOrderHistoryBtn.setOnClickListener { openOrderHistoryDialog() }
@@ -156,7 +158,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         viewModel.updateClientAccount(cuisineIcons = selectedCuisines, forceUpdate = true)
     }
 
-    private fun OpenWoodSpoonGooglePlay() {
+    private fun openWoodSpoonGooglePlay() {
         val url = getString(R.string.wood_spoon_chefs_play_store_url)
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse(url)
@@ -190,7 +192,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         }
     }
 
-    fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
+    private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
         val card = paymentMethod.card
         if(card != null){
             Log.d("wowMyProfile","updateCustomerPaymentMethod: ${paymentMethod.id}")

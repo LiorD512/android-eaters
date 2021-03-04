@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
+
+<LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:background="@color/white"
-        android:gravity="center"
-        tools:context=".features.locations_and_address.LocationPermissionFragment">
+        android:gravity="center_horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
             android:layout_marginTop="53dp"
             android:id="@+id/title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             style="@style/LatoBlack23Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,16 +18,15 @@
             android:gravity="center"
             android:text="See home chefs in \nyour area"/>
 
-    <ImageView
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+    <com.bupp.wood_spoon_eaters.views.LottieAnimationView
             android:id="@+id/logo"
+            app:lottieAnimType="LOCATION-PERMISSION"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="22dp"
             android:layout_gravity="center"
-            android:src="@drawable/gps_permission_logo"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"/>
 
     <TextView
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +35,7 @@
             style="@style/LatoReg15Black"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="38dp"
-            android:layout_marginHorizontal="45.4dp"
+            android:layout_marginHorizontal="15.4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -50,7 +45,6 @@
             android:text="We need access to your location to see nearby chefs and dishes and to create an accurate delivery address"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-            app:layout_constraintBottom_toTopOf="@+id/locationPermissionFragReject"
             android:layout_marginTop="38dp"
             android:layout_marginHorizontal="15.4dp"
             app:title="Allow location access"
@@ -59,7 +53,6 @@
             android:layout_height="wrap_content"/>
 
     <TextView
-            app:layout_constraintBottom_toBottomOf="parent"
             style="@style/LatoBlack15Teal"
             android:layout_gravity="center"
             android:paddingTop="26.5dp"
@@ -72,4 +65,5 @@
             android:gravity="center_horizontal"
             android:text="Not now"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+

@@ -7,7 +7,8 @@
         android:background="@color/white"
         tools:context=".features.main.profile.my_profile.MyProfileFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -53,14 +54,6 @@
                     style="@style/SemiBold13Blue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-
-            <!--<com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView-->
-                    <!--android:layout_marginTop="34.2dp"-->
-                    <!--android:id="@+id/myProfileFragEditLocation"-->
-                    <!--app:detailsType="DELIVERY_DETAILS_LOCATION_PROFILE"-->
-                    <!--app:isSelectionGray="true"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"/>-->
 
             <LinearLayout
                     android:id="@+id/myProfileFragEditLocation"
@@ -190,8 +183,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="38.2dp"
-                    app:subTitle="Change your preferences at any time"
-                    app:title="Cooking Cuisines" />
+                    app:subTitle="Add one or more"
+                    app:title="Cuisines" />
 
             <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
                     android:id="@+id/myProfileFragDietaryIcons"
@@ -199,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15.8dp"
                     app:subTitle="Pick any that apply"
-                    app:title="Dietary" />
+                    app:title="Dietary preferences" />
 
 
             <ImageView
@@ -322,7 +315,7 @@
                     android:id="@+id/myProfileFragJoinBtn"
                     android:layout_marginBottom="23.5dp"
                     android:paddingHorizontal="25dp"
-                    app:title="Join WoodSpoon's Home Chefs"
+                    app:title="Become a Woodspoon Home Chef"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -335,7 +328,7 @@
                     android:layout_height="wrap_content" />
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             tools:visibility="gone"

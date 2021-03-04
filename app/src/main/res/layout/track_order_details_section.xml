@@ -133,9 +133,37 @@
     </LinearLayout>
 
     <LinearLayout
+            android:id="@+id/trackOrderDetailsSectionTipLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingStart="23dp"
+            android:paddingEnd="23dp">
+
+        <TextView
+                style="@style/Reg13Dark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:letterSpacing="0.03"
+                android:text="Tip" />
+
+        <TextView
+                android:id="@+id/trackOrderDetailsSectionTip"
+                style="@style/SemiBold13Dark50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:letterSpacing="0.03"
+                tools:text="$7" />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
             android:orientation="horizontal"
             android:paddingStart="23dp"
             android:paddingEnd="23dp">
@@ -176,7 +204,7 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:orientation="horizontal"
                 android:paddingStart="23dp"
                 android:paddingEnd="23dp">
@@ -203,7 +231,7 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:orientation="horizontal"
                 android:paddingStart="23dp"
                 android:paddingEnd="23dp">
@@ -230,7 +258,7 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:orientation="horizontal"
                 android:paddingStart="23dp"
                 android:paddingEnd="23dp">
@@ -255,10 +283,10 @@
         </LinearLayout>
 
         <LinearLayout
-                android:gravity="start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
+                android:gravity="start"
                 android:orientation="horizontal"
                 android:paddingStart="23dp"
                 android:paddingEnd="23dp">
@@ -271,25 +299,42 @@
                     android:letterSpacing="0.03"
                     android:text="Location:" />
 
-            <TextView
-                    android:id="@+id/trackOrderDetailsSectionLocation"
-                    style="@style/Reg11Dark"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:letterSpacing="0.03"
-                    tools:text="5 West 91st, New York NY " />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/trackOrderDetailsSectionLocation1"
+                        style="@style/Reg11Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:letterSpacing="0.03"
+                        tools:text="5 West 91st, New York NY " />
+
+                <TextView
+                        android:id="@+id/trackOrderDetailsSectionLocation2"
+                        style="@style/Reg11Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:letterSpacing="0.03"
+                        tools:text="5 West 91st, New York NY " />
+            </LinearLayout>
+
 
         </LinearLayout>
 
         <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:orientation="horizontal"
                 android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                android:paddingEnd="23dp"
+                android:visibility="gone">
 
             <TextView
                     style="@style/Bold11Dark"
@@ -313,7 +358,7 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:orientation="horizontal"
                 android:paddingStart="23dp"
                 android:paddingEnd="23dp">

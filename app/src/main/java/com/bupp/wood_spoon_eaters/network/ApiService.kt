@@ -75,9 +75,8 @@ interface ApiService {
 
 
     //Utils
-    @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
-    fun postEaterPreSignedUrl(@Field("type") type: String): Call<ServerResponse<PreSignedUrl>>
+    suspend fun postEaterPreSignedUrl(): ServerResponse<PreSignedUrl>
 
 
     //Eater
@@ -106,7 +105,7 @@ interface ApiService {
     fun postEaterNotificationGroup(@Field("notification_group_ids") notificationGroupIds: Array<Long>): Call<ServerResponse<Eater>>
 
     @POST("eaters/me/searches")
-    fun search(@Body searchRequest: SearchRequest): Call<ServerResponse<ArrayList<Search>>>
+    suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
 
     @GET("eaters/me/searches/{id}")
     fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
@@ -155,7 +154,7 @@ interface ApiService {
 //    fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
 
     @DELETE("eaters/me/orders/{order_id}/")
-    fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): Call<ServerResponse<Void>>
+    suspend fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): ServerResponse<Void>
 
     @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
     suspend fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<ShippingMethod>>

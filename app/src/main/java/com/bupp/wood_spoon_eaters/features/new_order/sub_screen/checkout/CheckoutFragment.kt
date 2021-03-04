@@ -42,11 +42,6 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
 
     private var hasPaymentMethod: Boolean = false
 
-    interface CheckoutDialogListener {
-        fun onCheckoutDone()
-        fun onCheckoutCanceled()
-    }
-
 
     val viewModel by viewModel<CheckoutViewModel>()
     val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
@@ -113,7 +108,7 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
                     viewModel.onNationwideShippingSelectClick()
                 }
                 NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
-                    binding!!.checkoutFragChangePaymentChangeBtn.performClick()
+                    binding!!.checkoutFragChangePaymentLayout.performClick()
                 }
             }
         })
@@ -143,7 +138,7 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
             }
 
-            checkoutFragChangePaymentChangeBtn.setOnClickListener {
+            checkoutFragChangePaymentLayout.setOnClickListener {
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
             }
 
@@ -328,13 +323,13 @@ class CheckoutFragment() : Fragment(R.layout.checkout_fragment),
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()))
+            viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
         }
     }
 
     override fun onTipDone(tipAmount: Int) {
         binding!!.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.simpleUpdateOrder(OrderRequest(tipAmount = tipAmount.toString()))
+        viewModel.simpleUpdateOrder(OrderRequest(tipAmount = tipAmount.toString()), Constants.EVENT_TIP)
     }
 
     override fun onChangeLocationClick() {

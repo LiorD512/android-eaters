@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -15,6 +16,9 @@ import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import me.ibrahimsn.lib.Countries
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -36,19 +40,20 @@ class CountryChooserBottomSheet() : BottomSheetDialogFragment(), CountryIsoChoos
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
-//    private lateinit var behavior: BottomSheetBehavior<View>
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-//        dialog.setOnShowListener {
-//            val d = it as BottomSheetDialog
-//            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-//            behavior = BottomSheetBehavior.from(sheet!!)
-////            behavior.isFitToContents = false
-////            behavior.expandedOffset = Utils.toPx(230)
-//        }
-//
-//        return dialog
-//    }
+    private lateinit var behavior: BottomSheetBehavior<View>
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val d = it as BottomSheetDialog
+            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
+            behavior = BottomSheetBehavior.from(sheet!!)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            behavior.isFitToContents = true
+//            behavior.expandedOffset = Utils.toPx(230)
+        }
+
+        return dialog
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,6 +97,9 @@ class CountryChooserBottomSheet() : BottomSheetDialogFragment(), CountryIsoChoos
                 }
             })
 
+            countryCodeBottomSheetClose.setOnClickListener {
+                dismiss()
+            }
         }
 
     }

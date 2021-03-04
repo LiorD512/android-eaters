@@ -57,9 +57,6 @@ class TrackOrderDetailsHeaderBinder(val listener: TrackOrderHeaderListener) : It
                     itemView.trackOrderDetailsHeaderArrow.startAnimation(rotateAntiClock)
                 }
             }
-
-
-
         }
     }
 

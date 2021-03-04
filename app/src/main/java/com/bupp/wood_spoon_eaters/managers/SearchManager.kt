@@ -1,13 +1,30 @@
 package com.bupp.wood_spoon_eaters.managers
 
 import com.bupp.wood_spoon_eaters.model.SearchRequest
-import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
+import com.bupp.wood_spoon_eaters.model.CuisineLabel
+import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 
-class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager, val settings: AppSettings, val deliveryTimeManager: DeliveryTimeManager) {
+class SearchManager(private val feedRepository: FeedRepository, val eaterDataManager: EaterDataManager, val settings: AppSettings, private val deliveryTimeManager: DeliveryTimeManager) {
 
     var curSearch: SearchRequest = SearchRequest()
+
+
+    suspend fun doSearch(str: String, cuisine: CuisineLabel? = null): FeedRepository.SearchResult {
+        eaterDataManager.logUxCamEvent(Constants.EVENT_SEARCHED_ITEM, mapOf(Pair("query", str), Pair("cuisine", cuisine?.name ?: "null")))
+        val searchRequest = refreshSearchRequest(str, cuisine)
+        return feedRepository.getSearch(searchRequest)
+    }
+
+    suspend fun getCookById(cookId: Long): FeedRepository.CookResult {
+        val feedRequest = eaterDataManager.getLastFeedRequest()
+        val lat = feedRequest.lat
+        val lng = feedRequest.lng
+        val addressId = feedRequest.addressId
+        return feedRepository.getCookById(cookId, addressId, lat, lng)
+    }
 
     fun updateCurSearch(lat: Double? = null,
                         lng: Double? = null,
@@ -32,32 +49,34 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
         return curSearch
     }
 
-    fun getSearchRequest(str: String, cuisineIds: ArrayList<Long>?): SearchRequest {//todo - nyc
-//        val currentAddress = eaterDataManager.getLastChosenAddress()
-//        if(eaterDataManager.isUserChooseSpecificAddress()){
-//            curSearch.addressId = currentAddress?.id
-//            curSearch.lat = null
-//            curSearch.lng = null
-//        }else{
-//            curSearch.addressId = null
-//            curSearch.lat = currentAddress?.lat
-//            curSearch.lng = currentAddress?.lng
-//        }
-//        if(!str.isNullOrEmpty()){
-//            curSearch.q = str
-//        }else{
-//            curSearch.q = ""
-//        }
-//
-//        if(cuisineIds != null && cuisineIds.size!! > 0){
-//            curSearch.cuisineIds = arrayListOf()
-//            curSearch.cuisineIds?.addAll(cuisineIds)
-//        }else{
-//            curSearch.cuisineIds?.clear()
-//        }
-//
-//        //time
-//        curSearch.timestamp = deliveryTimeManager.getDeliveryTimestamp()
+
+    private fun refreshSearchRequest(str: String, cuisine: CuisineLabel?): SearchRequest {
+        val currentAddress = eaterDataManager.getLastChosenAddress()
+        if(currentAddress?.id != null){
+            curSearch.addressId = currentAddress.id
+            curSearch.lat = null
+            curSearch.lng = null
+        }else{
+            curSearch.addressId = null
+            curSearch.lat = currentAddress?.lat
+            curSearch.lng = currentAddress?.lng
+        }
+
+        if(str.isNotEmpty()){
+            curSearch.q = str
+        }else{
+            curSearch.q = ""
+        }
+
+        if(cuisine != null){
+            curSearch.cuisineIds = arrayListOf()
+            curSearch.cuisineIds?.add(cuisine.id)
+        }else{
+            curSearch.cuisineIds?.clear()
+        }
+
+        //time
+        curSearch.timestamp = deliveryTimeManager.getDeliveryTimestamp()
 
         return curSearch
     }
@@ -65,7 +84,6 @@ class SearchManager(val api: ApiService, val eaterDataManager: EaterDataManager,
     fun clearSearch(){
         curSearch = SearchRequest()
     }
-
 
 
 

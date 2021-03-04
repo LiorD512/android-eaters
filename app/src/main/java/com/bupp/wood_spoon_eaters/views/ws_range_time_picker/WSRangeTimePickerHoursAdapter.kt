@@ -38,7 +38,7 @@ class WSRangeTimePickerHoursAdapter :
         private val itemText: TextView = view.wsRangeTimePickerItem
 
         fun bindItem(date: Date, position: Int, itemCount: Int) {
-            itemText.text = DateUtils.parseDateOneHourInterval(date)
+            itemText.text = DateUtils.parseDateHalfHourInterval(date)
 //            if(itemCount > 1){
 //                if(position+1 == itemCount || position == 0){
 //                    itemText.alpha = 0.3f

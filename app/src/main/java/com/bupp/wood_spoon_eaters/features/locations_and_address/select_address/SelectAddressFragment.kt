@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieDrawable
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
@@ -82,7 +83,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         }
     }
 
-    private fun initObservers() {
+    private fun initLocationObserver(){
         mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, {
             Log.d(TAG, "getLocationLiveData observer called ")
             with(binding!!){
@@ -93,11 +94,24 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                 hideMyLocationPb()
             }
         })
-        mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, {
-//            selectAddressFragAutoComplete.text = it.getUserLocationStr()
-        })
+    }
+
+    private fun initObservers() {
+
+
+//        mainViewModel.addressFoundUiEvent.observe(viewLifecycleOwner, {
+////            selectAddressFragAutoComplete.text = it.getUserLocationStr()
+//        })
         mainViewModel.actionEvent.observe(viewLifecycleOwner, {
-            viewModel.fetchAddress()
+            when(it){
+                LocationAndAddressViewModel.ActionEvent.REFRESH_MY_LOCATION_STATE -> {
+                    viewModel.updateMyLocationUiState(isGpsEnabled(requireContext()))
+                    initLocationObserver()
+                }
+                LocationAndAddressViewModel.ActionEvent.FETCH_MY_ADDRESS -> {
+                    viewModel.fetchAddress()
+                }
+            }
         })
 
 
@@ -128,6 +142,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
             if(it.address.isNullOrEmpty()){
                 selectAddressFragEmptyList.visibility = View.VISIBLE
                 selectAddressFragList.visibility = View.GONE
+                addressAdapter?.selectedAddress = null
             }else{
                 selectAddressFragList.visibility = View.VISIBLE
                 selectAddressFragEmptyList.visibility = View.GONE
@@ -148,23 +163,27 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                     showMyLocationPb()
                     selectAddressFragMyLocationAddress.text = "Fetching your location"
                     selectAddressFragMyLocationPickup.visibility = View.GONE
+                    initLocationObserver()
                 }
                 SelectAddressViewModel.MyLocationStatus.NO_PERMISSION -> {
                     selectAddressFragMyLocationAddress.text = "Need to turn on location permission."
                     selectAddressFragMyLocationPickup.text = "Tap here to enable it."
+                    selectAddressFragMyLocationPickup.visibility = View.VISIBLE
                 }
                 SelectAddressViewModel.MyLocationStatus.NO_GPS_ENABLED -> {
                     selectAddressFragMyLocationAddress.text = "Please enable GPS on device"
                     selectAddressFragMyLocationPickup.text = "Tap here to enable it."
+                    selectAddressFragMyLocationPickup.visibility = View.VISIBLE
                 }
             }
         }
     }
 
     private fun showMyLocationPb() {
-        binding!!.selectAddressFragMyLocationPb.visibility = View.VISIBLE
         binding!!.selectAddressFragMyLocationPb.setAnimation("loader.json")
+        binding!!.selectAddressFragMyLocationPb.repeatCount = LottieDrawable.INFINITE
         binding!!.selectAddressFragMyLocationPb.playAnimation()
+        binding!!.selectAddressFragMyLocationPb.visibility = View.VISIBLE
     }
 
     private fun hideMyLocationPb() {

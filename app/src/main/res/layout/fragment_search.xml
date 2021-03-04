@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="The cooks in your neigborhood currently do not offer the dish you are looking for… "/>
+                        android:text="The cooks in your neighborhood currently do not offer the dish you are looking for… "/>
 
                 <View
                         android:layout_marginTop="25dp"

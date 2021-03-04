@@ -93,7 +93,7 @@
 
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
+    <com.bupp.wood_spoon_eaters.views.LottieAnimationView
             android:id="@+id/mainActLottieView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

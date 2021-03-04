@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.delivery_details_view.view.*
+import kotlinx.android.synthetic.main.track_order_details_section.view.*
 
 class DeliveryDetailsView : LinearLayout {
 
@@ -134,10 +135,11 @@ class DeliveryDetailsView : LinearLayout {
             deliveryDetailsViewInput.text = address.streetLine1
             deliveryDetailsViewDelivery.text = address.getDropoffLocationStr()
             deliveryDetailsViewDelivery.visibility = View.VISIBLE
-            address.streetLine2?.let{
-                deliveryDetailsViewAptNumber.text = "Apt number:  $it"
-                deliveryDetailsViewAptNumber.visibility = View.VISIBLE
-            }
+
+            deliveryDetailsViewInput.text = "${it.streetLine1}, #${it.streetLine2}"
+            deliveryDetailsViewAptNumber.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
+            deliveryDetailsViewAptNumber.visibility = View.VISIBLE
+
             address.notes?.let{
                 deliveryDetailsViewNote.text = address.notes
                 deliveryDetailsViewNote.visibility = View.VISIBLE

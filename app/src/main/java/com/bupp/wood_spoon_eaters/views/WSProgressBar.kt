@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.views
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -18,6 +20,8 @@ class WSProgressBar @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
 
+    private var showAnimationSet: AnimatorSet? = null
+    private var hideAnimationSet: AnimatorSet? = null
     private var isBlue: Boolean = false
 
     private var binding: WoodspoonProgressBarBinding = WoodspoonProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
@@ -33,29 +37,39 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun show() {
-        binding.progressBarLayout.visibility = View.VISIBLE
-        binding.progressBarLayoutLottie.setAnimation("loader.json")
-        binding.progressBarLayoutLottie.playAnimation()
+        if(!binding.progressBarLayoutLottie.isAnimating){
+//            binding.progressBarLayoutLottie.visibility = View.VISIBLE
+
+            val imageFadeIn = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 0f, 1f)
+            imageFadeIn.duration = ChangingPictureView.DURATION
+
+            showAnimationSet = AnimatorSet()
+            showAnimationSet?.play(imageFadeIn)
+            showAnimationSet?.start()
+
+            binding.progressBarLayout.isClickable = true
+            binding.progressBarLayoutLottie.playAnimation()
+        }
     }
 
     fun hide() {
-        binding.progressBarLayout.visibility = View.GONE
+//        binding.progressBarLayoutLottie.visibility = View.GONE
         binding.progressBarLayoutLottie.cancelAnimation()
+
+        val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)
+        imageFadeOut.duration = ChangingPictureView.DURATION
+
+        hideAnimationSet = AnimatorSet()
+        hideAnimationSet?.play(imageFadeOut)
+        hideAnimationSet?.start()
+
+        binding.progressBarLayout.isClickable = false
     }
 
-//    private fun setProgressBarStyle() {
-//        if (isBlue) {
-//            progressBar.defaultColor = ContextCompat.getColor(context, R.color.white)
-//            progressBar.selectedColor = ContextCompat.getColor(context, R.color.white)
-//            progressBar.firstShadowColor = ContextCompat.getColor(context, R.color.white)
-//            progressBar.secondShadowColor = ContextCompat.getColor(context, R.color.white)
-//            progressBarLayout.background = ContextCompat.getDrawable(context, R.color.teal_blue_80)
-//        } else {
-//            progressBar.defaultColor = ContextCompat.getColor(context, R.color.teal_blue)
-//            progressBar.selectedColor = ContextCompat.getColor(context, R.color.teal_blue)
-//            progressBar.firstShadowColor = ContextCompat.getColor(context, R.color.teal_blue)
-//            progressBar.secondShadowColor = ContextCompat.getColor(context, R.color.teal_blue)
-//            progressBarLayout.background = ContextCompat.getDrawable(context, R.color.white_80)
-//        }
-//    }
+    override fun onDetachedFromWindow() {
+        showAnimationSet = null
+        hideAnimationSet = null
+        super.onDetachedFromWindow()
+    }
+
 }

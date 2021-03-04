@@ -75,7 +75,7 @@ class OrderDetailsFragment() : Fragment() {
         orderDetailsFragDishesRecycler.adapter = adapter
 
         val firstOrderItem = curOrder.orderItems.first()
-        Glide.with(requireContext()).load(firstOrderItem.dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(orderDetailsFragDishImage)
+        Glide.with(requireContext()).load(firstOrderItem.dish.thumbnail).into(orderDetailsFragDishImage)
 
         val tax: Double? = curOrder.tax?.value
         val serviceFee = curOrder.serviceFee?.value

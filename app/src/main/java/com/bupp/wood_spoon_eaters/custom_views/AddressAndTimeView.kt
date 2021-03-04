@@ -26,7 +26,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             this.listener?.onAddressClick()
         }
 
-        binding.locationDetailsViewTime.setOnClickListener {
+        binding.locationDetailsViewTimeLayout.setOnClickListener {
             this.listener?.onTimeClick()
         }
     }
@@ -38,6 +38,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setTime(text: String?) {
         binding.locationDetailsViewTime.text = text ?: "Now"
+    }
+
+    fun enableLocationClick(isEnabled: Boolean) {
+        binding.locationDetailsViewLocation.isEnabled = isEnabled
     }
 
 

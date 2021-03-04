@@ -60,14 +60,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             this@WSRangeTimePicker
         )
 
-//        binding.wsRangeTimePickerDateList.addItemDecoration(WSRangeTimeViewItemDecorator())
         ViewCompat.setNestedScrollingEnabled(binding.wsRangeTimePickerDateList, false)
 
         //hours
         wsRangeTimePickerHoursAdapter = WSRangeTimePickerHoursAdapter()
         binding.wsRangeTimePickerHoursList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         MyLinearSnapHelper().attachToRecyclerView(binding.wsRangeTimePickerHoursList)
-//        binding.wsRangeTimePickerHoursList.addItemDecoration(WSRangeTimeViewItemDecorator())
         binding.wsRangeTimePickerHoursList.adapter = wsRangeTimePickerHoursAdapter
         ViewCompat.setNestedScrollingEnabled(binding.wsRangeTimePickerHoursList, false)
 
@@ -165,7 +163,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         var startingTime: Long = startingDate.time
         val endingTime: Long = endingDate.time
 
-        if (DateUtils.isToday(startingDate)) {
+        if (DateUtils.isToday(startingDate) && startingDate.before(Date())) {
+            //check if cooking slot is today and if now is after cooking slot started. if so,
+            // allow order 30 minutes from now..
             startDate.time = DateUtils.truncateDate30MinUp(Date())
             startingTime = startDate.timeInMillis
         }

@@ -59,7 +59,15 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
-    fun parseDateOneHourInterval(date: Date): String {
+    fun parseDateToDayDateAndTime(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EE, MMM dd")
+        val dateVal = sdf.format(date.time)
+        val hours = parseDateHalfHourInterval(date)
+        return "$dateVal, $hours"
+    }
+
+    fun parseDateHalfHourInterval(date: Date): String {
         //4:30 PM - 5:30 PM
         val c = Calendar.getInstance()
         c.time = date
@@ -121,7 +129,7 @@ object DateUtils {
         date?.let{
             yourmilliseconds = date.time
         }
-        val droppedMillis = yourmilliseconds / 1000
+        val droppedMillis = yourmilliseconds / 1000// todo - changed this 4.3.21
         return droppedMillis.toString()
     }
 
@@ -173,8 +181,8 @@ object DateUtils {
         val unroundedMinutes = calendar[Calendar.MINUTE]
         val mod = unroundedMinutes % 30
         calendar.set(Calendar.MINUTE, unroundedMinutes + mod)
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
     }
 }

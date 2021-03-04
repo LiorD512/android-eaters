@@ -29,11 +29,11 @@ class FeedPagingSource(
             Log.d("wowFeedPagingSource","loading.. $nextPage");
 
             response.let{
-                return LoadResult.Page(
-                    data = response.data!!,
-                    prevKey = if (nextPage == 1) null else nextPage - 1,
-                    nextKey = if (nextPage > response.meta.totalPages!!) null else response.meta.currentPage?.plus(1)
-                )
+//                return LoadResult.Page(
+//                    data = response.data!!,
+//                    prevKey = if (nextPage == 1) null else nextPage - 1,
+//                    nextKey = if (nextPage > response.meta.totalPages!!) null else response.meta.currentPage?.plus(1)
+//                )
             }
             Log.d("wowFeedPagingSource","FeedPagingSource failed");
             return LoadResult.Page(listOf(), 0, 0)

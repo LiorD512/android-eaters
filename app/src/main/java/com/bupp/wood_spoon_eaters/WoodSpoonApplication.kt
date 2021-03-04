@@ -72,7 +72,7 @@ class WoodSpoonApplication : Application() {
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
             val analytics = Analytics.Builder(this@WoodSpoonApplication, "ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg") // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
-                .recordScreenViews()
+//                .recordScreenViews()
                 .use(MixpanelIntegration.FACTORY)
                 .use(AppsflyerIntegration.FACTORY)
                 .build()
@@ -80,7 +80,7 @@ class WoodSpoonApplication : Application() {
         }else{
             val analytics = Analytics.Builder(this@WoodSpoonApplication, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
-                .recordScreenViews()
+//                .recordScreenViews()
                 .logLevel(Analytics.LogLevel.VERBOSE)
                 .use(MixpanelIntegration.FACTORY)
                 .use(AppsflyerIntegration.FACTORY)

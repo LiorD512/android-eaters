@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -37,7 +38,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
     var listener: TrackOrderDialogListener? = null
 
 //    val binding: FragmentTrackOrderBinding? = null
-    var currentBoundSize = 150
+    var currentBoundSize = 100
 
 
     private lateinit var mainAdapter: TrackOrderMainAdapter
@@ -103,6 +104,21 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
             mMap?.uiSettings?.isScrollGesturesEnabled = false
             mMap?.uiSettings?.isZoomControlsEnabled = false
 
+            try {
+                // Customise the styling of the base map using a JSON object defined
+                // in a raw resource file.
+                val success: Boolean = mMap!!.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        requireContext(), R.raw.map_style
+                    )
+                )
+                if (!success) {
+                    Log.e("MapsActivityRaw", "Style parsing failed.")
+                }
+            } catch (e: Resources.NotFoundException) {
+                Log.e("MapsActivityRaw", "Can't find style.", e)
+            }
+
             viewModel.getCurrentOrder(curOrderId)
         }
     }
@@ -158,7 +174,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
     private fun animateCamera(bounds: LatLngBounds?) {
         bounds?.let{
             try{
-                mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, currentBoundSize),1000, null)
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, currentBoundSize), 150, null)
                 Log.d("wowTrackOrder","bound size: $currentBoundSize")
             }catch (ex: Exception){
                 if(currentBoundSize > 100){
@@ -267,51 +283,6 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
 //        binding = null
         super.onDestroy()
     }
-
-
-
-
-//
-////    private fun handleOrderDetails(details: ActiveOrderTrackerViewModel.OrderDetailsEvent) {
-////        setProgress(details.orderProgress)
-////        setMessagesIcon(details.isNewMsgs)
-////        setArrivalTime(details.arrivalTime)
-////    }
-//
-//    private fun setArrivalTime(arrivalTime: String){
-////        trackOrderDialogArrivalTime.text = arrivalTime
-//    }
-//
-//    private fun setMessagesIcon(isNewMessages: Boolean) {
-//        trackOrderDialogMessageBtn.isSelected = isNewMessages
-//    }
-//
-////    private fun setProgress(stepNum: Int) {
-////        clearProgress()
-////        setOrderProgress(stepNum)
-////    }
-////
-////    private fun clearProgress() {
-////        for (cb in progressList){
-////            cb.isSelected = false
-////            cb.text = Utils.setCustomFontTypeSpan(requireContext(),cb.text.toString(),0,cb.text.toString().length,R.font.open_sans_reg)
-////            cb.setTextColor(ContextCompat.getColor(requireContext(),R.color.dark_50))
-////        }
-////    }
-////
-////    private fun setOrderProgress(stepNum: Int) {
-////        if (stepNum == Constants.ORDER_PROGRESS_NO_PROGRESS) {
-////            return
-////        }
-////
-////        var cbItem = progressList[stepNum]
-////
-////        cbItem.isSelected = true
-////        cbItem.text = Utils.setCustomFontTypeSpan(requireContext(),cbItem.text.toString(),0,cbItem.text.toString().length,R.font.open_sans_semi_bold)
-////        cbItem.setTextColor(ContextCompat.getColor(requireContext(),R.color.dark))
-////
-////        setOrderProgress(stepNum - 1)
-////    }
 
 
 

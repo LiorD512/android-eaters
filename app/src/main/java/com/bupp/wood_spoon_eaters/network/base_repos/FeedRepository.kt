@@ -9,6 +9,8 @@ interface FeedRepository{
     suspend fun getFeed(lat: Double?, lng: Double?, addressId: Long?, timestamp: String? = null): ResultHandler<ServerResponse<List<Feed>>>
     suspend fun getCookById(cookId: Long, addressId: Long?, lat: Double?, lng: Double?): ResultHandler<ServerResponse<Cook>>
     suspend fun getCookReview(cookId: Long): ResultHandler<ServerResponse<Review>>
+    suspend fun search(searchRequest: SearchRequest): ResultHandler<ServerResponse<List<Search>>>
+
 }
 
 class FeedRepositoryImpl(private val service: ApiService) : FeedRepository {
@@ -24,5 +26,8 @@ class FeedRepositoryImpl(private val service: ApiService) : FeedRepository {
         return safeApiCall { service.getCookReview(cookId = cookId) }
     }
 
+    override suspend fun search(searchRequest: SearchRequest): ResultHandler<ServerResponse<List<Search>>> {
+        return safeApiCall { service.search(searchRequest) }
+    }
 
 }

@@ -27,7 +27,7 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Dish page (ingredients)")
+        Analytics.with(requireContext()).screen("dishIngredients")
 
         initObservers()
     }

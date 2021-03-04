@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
@@ -16,7 +16,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 
-class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, val paymentManager: PaymentManager) : ViewModel() {
+class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, private val paymentManager: PaymentManager) : ViewModel() {
 
     var orderId: Long? = null
     val traceableOrdersLiveData = eaterDataManager.getTraceableOrders()
@@ -84,6 +84,10 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
     fun endUpdates() {
         Log.d("wowActiveOrderTrackerVM", "endUpdates for id: $orderId")
         refreshRepeatedJob?.cancel()
+    }
+
+    fun sendOpenEvent() {
+        eaterDataManager.logUxCamEvent(Constants.EVENT_TRACK_ORDER_CLICK)
     }
 
 

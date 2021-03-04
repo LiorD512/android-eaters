@@ -38,10 +38,13 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
-import com.canhub.cropper.CropImage
+import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
+import com.mikhaellopez.ratebottomsheet.RateBottomSheet
+import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener {
+    CartBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener{
 
     private var tooltip: Tooltip? = null
 
@@ -66,6 +69,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
         Log.d("wowMain", "Activity For Result - location")
+        mainActHeaderView.enableLocationClick(true)
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             //check if location changed and refresh ui
@@ -76,8 +80,65 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //        if (result.resultCode == Activity.RESULT_OK) {
 //            val data = result.data
             //check if has order and refresh ui
-        checkBottomBarStatus()
+        viewModel.refreshMainBottomBarUi()
+        result.data?.let {
+            if (it.getBooleanExtra("isAfterPurchase", false)) {
+                showRateTheAppDialog()
+                viewModel.checkForActiveOrder()
+//                    checkForSharingCampaign()
+//                    refreshUser()
+            }
+        }
+    }
+
+    private fun showRateTheAppDialog() {
+        Log.d(TAG, "showRateTheAppDialog")
+        RateBottomSheetManager(this)
+            .setInstallDays(3) // 3 by default
+            .setLaunchTimes(2) // 5 by default
+            .setRemindInterval(1) // 2 by default
+            .setShowAskBottomSheet(true) // True by default
+            .setShowLaterButton(true) // True by default
+            .setShowCloseButtonIcon(true) // True by default
+            .monitor()
+        RateBottomSheet.showRateBottomSheetIfMeetsConditions(
+            this,
+            listener = object : AskRateBottomSheet.ActionListener {
+                override fun onDislikeClickListener() {
+                    // Will be called when a click on the "I don't like" button is triggered
+                    Log.d(TAG, "showRateTheAppDialog - onDislikeClickListener")
+                }
+
+                override fun onRateClickListener() {
+                    Log.d(TAG, "showRateTheAppDialog - onRateClickListener")
+                    // Will be called when a click on the "Rate" button is triggered
+
+//        val reviewManager = ReviewManagerFactory.create(this@MainActivity)
+//        val requestReviewFlow = reviewManager.requestReviewFlow()
+//        requestReviewFlow.addOnCompleteListener { request ->
+//            if (request.isSuccessful) {
+//                // We got the ReviewInfo object
+//                val reviewInfo = request.result
+//                val flow = reviewManager.launchReviewFlow(this@MainActivity, reviewInfo)
+//                flow.addOnCompleteListener {
+//                    // The flow has finished. The API does not indicate whether the user
+//                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+//                    // matter the result, we continue our app flow.
+//                }
+//            } else {
+//                Log.d(TAG, "Error: ${request.exception.toString()}")
+//                // There was some problem, continue regardless of the result.
+//            }
 //        }
+                }
+
+                /*override fun onNoClickListener() {
+                    // Will be called when a click on the "No thanks" button is triggered,
+                    // in this example is commented,
+                    // but each callback is optional and it's up to you whether to implement it or not!
+                }*/
+            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +152,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
         loadFeedProgressBarFragment()
         loadFeed()
+
     }
 
     private fun loadFeedProgressBarFragment() {
@@ -157,7 +219,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     fun checkBottomBarStatus() {
-        viewModel.refreshMainBottomBarUi()
+//        viewModel.refreshMainBottomBarUi()
     }
 
 //    private fun checkCartStatus() {
@@ -169,12 +231,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             handlePb(it)
         })
         viewModel.mainNavigationEvent.observe(this, {
-            startLocationAndAddresAct()
+            handleNavigation(it)
         })
-
-        viewModel.bannerEvent.observe(this, {
-            handleBannerEvent(it)
-        })
+//
+//        viewModel.bannerEvent.observe(this, {
+//            handleBannerEvent(it)
+//        })
 
 
         //header event
@@ -302,7 +364,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
                 mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT, price = totalPrice)
         }else{
             bottomBarEvent?.activeOrders?.let{
-                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER)
+                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, itemCount = it.size)
             }
             if(bottomBarEvent?.hasPendingOrder == true){
                 val totalPrice = bottomBarEvent.totalPrice
@@ -311,56 +373,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    private fun handleBannerEvent(bannerType: Int) {
-        bannerType.let{
-            when(bannerType){
-                Constants.NO_BANNER -> {
-                    tooltip?.dismiss()
-                }
-                Constants.BANNER_KNOWN_ADDRESS -> {
-                    mainActHeaderView.post {
-                        showBanner(getString(R.string.banner_known_address))
-                    }
-                }
-                Constants.BANNER_MY_LOCATION -> {
-                    mainActHeaderView.post {
-                        val city = viewModel.getDefaultLocationName()
-                        showBanner(getString(R.string.banner_my_location, city))
-                    }
-                }
-                Constants.BANNER_NO_GPS -> {
-                    mainActHeaderView.post {
-                        showBanner(getString(R.string.banner_no_gps))
-                    }
-                }
-                else -> {}
-            }
-        }
-    }
 
-    private fun showBanner(text: String) {
-        tooltip = Tooltip.Builder(this)
-            .anchor(mainActHeaderView, 0, -30, true)
-//            .anchor(150, 150)
-            .text(text)
-//                        .styleId(Int)
-//                        .typeface(Typeface)
-//                        .maxWidth(Int)
-            .arrow(true)
-            .floatingAnimation(Tooltip.Animation.SLOW)
-            .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
-//            .showDuration(1500)
-//            .fadeDuration(5000)
-            .overlay(false)
-            .maxWidth(mainActHeaderView.measuredWidth)
-            .create()
-
-        tooltip!!
-            .doOnHidden { }
-            .doOnFailure { }
-            .doOnShown { }
-            .show(mainActHeaderView, Tooltip.Gravity.BOTTOM, false)
-    }
 
     private fun refreshFeedIfNecessary() {
         if (currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
@@ -368,14 +381,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    private fun handleDeviceLocationOff() {
-        mainActLocationDisabledText.visibility = View.VISIBLE
-        mainActLocationDisabledText.setOnClickListener {
-            mainActLocationDisabledText.visibility = View.GONE
-            openDeviceLocationSettings()
-        }
-
-    }
+//    private fun handleDeviceLocationOff() {
+//        mainActLocationDisabledText.visibility = View.VISIBLE
+//        mainActLocationDisabledText.setOnClickListener {
+//            mainActLocationDisabledText.visibility = View.GONE
+//            openDeviceLocationSettings()
+//        }
+//
+//    }
 
     private fun openDeviceLocationSettings() {
         startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
@@ -445,16 +458,20 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     //fragment and sub features
 
-    private fun startLocationAndAddresAct() {
-        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+    private fun handleNavigation(mainNavigationEvent: MainViewModel.MainNavigationEvent) {
+        when(mainNavigationEvent){
+           MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
+                updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+           }
+            MainViewModel.MainNavigationEvent.OPEN_CAMERA_UTIL -> {
+
+            }
+        }
     }
 
     private fun loadFeed() {
         loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
         mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
-
-//        viewModel.checkForShareCampaign()
-//        setHeaderViewLocationDetails(viewModel.getLastOrderTime(), viewModel.getLastOrderAddress())
     }
 
     private fun loadSearchFragment() {
@@ -660,7 +677,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onHeaderAddressClick() {
-        startLocationAndAddresAct()
+        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+        mainActHeaderView.enableLocationClick(false)
     }
 
 
@@ -749,74 +767,66 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.NEW_ORDER_REQUEST_CODE) {
-            resetOrderTimeIfNeeded()
-            loadOrRefreshFeed()
-//            checkBottomBarStatus()
-//            checkCartStatus()
-            data?.let {
-                if (it.hasExtra("isAfterPurchase") && it.getBooleanExtra("isAfterPurchase", false)) {
-                    if (getFragmentByTag(Constants.FEED_TAG) is FeedFragment) {
-                        (getFragmentByTag(Constants.FEED_TAG) as FeedFragment).silentRefresh()
-                        checkForSharingCampaign()
-                        refreshUser()
-                    }
-                }
-            }
-        }
-        if (requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE) {
-//            viewModel.disableEventData()
-//            checkBottomBarStatus()
-        }
-        if (requestCode == Constants.ANDROID_SETTINGS_REQUEST_CODE) {
-            Log.d("wowMainActivity", "BACK FROM SETTINGS")
-        }
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-                    val result = CropImage.getActivityResult(data)
-                    val resultUri = result?.uri
-
-                    if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment? != null) {
-                        (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onMediaCaptureResult(
-                            resultUri
-                        )
-                    }
-                }
-                PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    Log.d("wowMainActivity", "Stripe")
-//                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivityStarter.REQUEST_CODE) as PaymentMethod)
-//                    if (paymentMethod != null && paymentMethod.card != null) {
-                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
-                    result?.let {
-                        Log.d("wowNewOrder", "payment method success")
-                        if (getFragmentByTag(Constants.MY_PROFILE_TAG) != null) {
-                            result.paymentMethod?.let {
-                                (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(it)
-                            }
-                        }
-                    }
-                }
-                Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
-                    Log.d("wowMianActivity", "result ADDRESS_CHOOSER_REQUEST_CODE success")
-//                    handlePb(false)
-//                    updateAddressTimeView()
-
-                    when (currentFragmentTag) {
-//                        Constants.DELIVERY_DETAILS_TAG -> {
-//                            if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
-//                                (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
+//        if (requestCode == Constants.NEW_ORDER_REQUEST_CODE) {
+//            resetOrderTimeIfNeeded()
+//            loadOrRefreshFeed()
+////            checkBottomBarStatus()
+////            checkCartStatus()
+//
+//        }
+//        if (requestCode == Constants.EVENT_ACTIVITY_REQUEST_CODE) {
+////            viewModel.disableEventData()
+////            checkBottomBarStatus()
+//        }
+//        if (requestCode == Constants.ANDROID_SETTINGS_REQUEST_CODE) {
+//            Log.d("wowMainActivity", "BACK FROM SETTINGS")
+//        }
+//        if (resultCode == Activity.RESULT_OK) {
+//            when (requestCode) {
+//                CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+//                    val result = CropImage.getActivityResult(data)
+//                    val resultUri = result?.uri
+//
+//                    if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment? != null) {
+//                        (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onMediaCaptureResult(
+//                            resultUri
+//                        )
+//                    }
+//                }
+//                PaymentMethodsActivityStarter.REQUEST_CODE -> {
+//                    Log.d("wowMainActivity", "Stripe")
+////                    val paymentMethod: PaymentMethod = (data?.getParcelableExtra(PaymentMethodsActivityStarter.REQUEST_CODE) as PaymentMethod)
+////                    if (paymentMethod != null && paymentMethod.card != null) {
+//                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+//                    result?.let {
+//                        Log.d("wowNewOrder", "payment method success")
+//                        if (getFragmentByTag(Constants.MY_PROFILE_TAG) != null) {
+//                            result.paymentMethod?.let {
+//                                (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).updateCustomerPaymentMethod(it)
 //                            }
 //                        }
-                        Constants.MY_PROFILE_TAG -> {
-                            if (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment? != null) {
-                                (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//                    }
+//                }
+//                Constants.ADDRESS_CHOOSER_REQUEST_CODE -> {
+//                    Log.d("wowMianActivity", "result ADDRESS_CHOOSER_REQUEST_CODE success")
+////                    handlePb(false)
+////                    updateAddressTimeView()
+//
+//                    when (currentFragmentTag) {
+////                        Constants.DELIVERY_DETAILS_TAG -> {
+////                            if (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment? != null) {
+////                                (getFragmentByTag(Constants.DELIVERY_DETAILS_TAG) as DeliveryDetailsFragment).onAddressChooserSelected()
+////                            }
+////                        }
+//                        Constants.MY_PROFILE_TAG -> {
+//                            if (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment? != null) {
+//                                (getFragmentByTag(Constants.MY_PROFILE_TAG) as MyProfileFragment).onAddressChooserSelected()
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
 //        updateAddressTimeView()
     }
 
@@ -868,27 +878,22 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 //        startActivity(Intent(this, EventActivity::class.java))
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkBottomBarStatus()
-        updateScreenUi()
-//        checkIfMemoryCleaned() //check if this is nesseracy. ny code
+//    override fun onResume() {
+//        super.onResume()
+////        checkBottomBarStatus()
+//
+////        checkIfMemoryCleaned() //check if this is nesseracy. ny code
+//    }
+
+    override fun onStart() {
+        super.onStart()
+//        updateScreenUi()
     }
 
-
-//    fun updateUI() {
-//        val decorView = window.decorView
-//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//            }
-//        }
-//    }
+    override fun onDestroy() {
+//        binding = null
+        super.onDestroy()
+    }
 
     companion object{
         const val TAG = "wowMainAct"

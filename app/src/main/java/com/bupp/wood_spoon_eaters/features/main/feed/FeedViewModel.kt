@@ -1,8 +1,10 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -12,14 +14,17 @@ import kotlinx.coroutines.launch
 class FeedViewModel(
     private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository): ViewModel() {
 
+    val progressData = ProgressData()
 
     fun initFeed(){
+        progressData.startProgress()
         feedDataManager.initFeedDataManager()
     }
 
 
     fun getLocationLiveData() = feedDataManager.getLocationLiveData()
     fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
+    fun getDeliveryTimeLiveData() = feedDataManager.getDeliveryTimeLiveData()
 
     val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
 
@@ -42,15 +47,20 @@ class FeedViewModel(
         getFeedWith(feedRequest)
     }
 
+    fun onPullToRefresh() {
+        val feedRequest = feedDataManager.getLastFeedRequest()
+        getFeedWith(feedRequest)
+        refreshFavorites()
+    }
 
-    val feedResultData: SingleLiveEvent<OldFeedEvent> = SingleLiveEvent()
+    val feedResultData: MutableLiveData<OldFeedEvent> = MutableLiveData()
     data class OldFeedEvent(val isSuccess: Boolean = false, val feedArr: List<Feed>?)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
             viewModelScope.launch {
 //                progressData.startProgress()
                 val feedRepository = feedRepository.getFeed(feedRequest)
-//                progressData.endProgress()
+                progressData.endProgress()
                 when (feedRepository.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         Log.d(TAG, "NetworkError")
@@ -87,36 +97,9 @@ class FeedViewModel(
 
 
 
-    val getCookEvent: SingleLiveEvent<Cook?> = SingleLiveEvent()
-    fun getCurrentCook(id: Long) {//todo - nyc
-        val feedRequest = feedDataManager.getLastFeedRequest()
-        val lat = feedRequest.lat
-        val lng = feedRequest.lng
-        val addressId = feedRequest.addressId
-        viewModelScope.launch {
-//                progressData.startProgress()
-            val result = feedRepository.getCookById(id, addressId, lat, lng)
-//                progressData.endProgress()
-            when (result.type) {
-                FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
-                    Log.d(TAG, "NetworkError")
-//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                }
-                FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
-                    Log.d(TAG, "GenericError")
-//                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-                }
-                FeedRepository.FeedRepoStatus.SUCCESS -> {
-                    Log.d(TAG, "Success")
-                    getCookEvent.postValue(result.cook)
-                }
-                else -> {
-                    Log.d(TAG, "NetworkError")
-//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                }
-            }
-        }
-    }
+
+
+
 
 //    fun getShareText(): String {
 //        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl

@@ -1,13 +1,13 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address
 
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.common.Constants
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants.Companion.EVENT_LOCATION_PERMISSION
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
-class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val userRepository: UserRepository) : ViewModel() {
+class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager) : ViewModel() {
 
     var tempSelectAddress: Address? = null
 
@@ -35,7 +35,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         OPEN_MAP_VERIFICATION_SCREEN,
         OPEN_FINAL_ADDRESS_DETAILS_SCREEN,
         OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS,
-        LOCATION_PERMISSION_DONE,
+        LOCATION_PERMISSION_GUARENTEED,
         LOCATION_AND_ADDRESS_DONE
     }
 
@@ -45,9 +45,11 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
 
     fun getLocationLiveData() = eaterDataManager.getLocationData()
 
+
     fun onDoneClick(selectedAddress: Address?) {
         selectedAddress?.let{
             eaterDataManager.updateSelectedAddress(it)
+            eaterDataManager.refreshSegment()
         }
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
     }
@@ -61,6 +63,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
     enum class ActionEvent {
         SAVE_NEW_ADDRESS,
         FETCH_MY_ADDRESS,
+        REFRESH_MY_LOCATION_STATE,
         RESET_HEADER_TITLE
     }
 
@@ -68,6 +71,9 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
 
     fun updateMyAddresses(){
         actionEvent.postValue(ActionEvent.FETCH_MY_ADDRESS)
+    }
+    fun updateMyLocationStats(){
+        actionEvent.postValue(ActionEvent.REFRESH_MY_LOCATION_STATE)
     }
 
 
@@ -107,20 +113,20 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
         }
     }
 
-    fun checkIntentParam(intent: Intent?) {
-        intent?.let {
-            if (it.hasExtra(Constants.START_WITH)) {
-                when (it.getIntExtra(Constants.START_WITH, Constants.NOTHING)) {
-                    Constants.START_WITH_ADDRESS_CHOOSER -> {
-                        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER)
-                    }
-                }
-            }
-        }
-    }
+//    fun checkIntentParam(intent: Intent?) {
+////        intent?.let {
+////            if (it.hasExtra(Constants.START_WITH)) {
+////                when (it.getIntExtra(Constants.START_WITH, Constants.NOTHING)) {
+////                    Constants.START_WITH_ADDRESS_CHOOSER -> {
+////                        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER)
+////                    }
+////                }
+////            }
+////        }
+//    }
 
     fun onLocationPermissionDone() {
-        mainNavigationEvent.postValue(NavigationEventType.LOCATION_PERMISSION_DONE)
+        mainNavigationEvent.postValue(NavigationEventType.LOCATION_PERMISSION_GUARENTEED)
     }
 
     fun onAddressMapVerificationDone() {
@@ -174,8 +180,9 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
-                        userRepoResult.eater?.addresses?.last()?.let{ address ->
+                        userRepoResult.eater?.addresses?.get(0)?.let{ address ->
                             eaterDataManager.updateSelectedAddress(address)
+                            eaterDataManager.refreshSegment()
                         }
                         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
                     }
@@ -187,6 +194,21 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, val us
 
             }
         }
+    }
+
+    fun onReEnterAddressClick() {
+        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER)
+    }
+
+    fun locationPermissionEvent(isAllowPermission: Boolean) {
+        eventsManager.logEvent(EVENT_LOCATION_PERMISSION, getEventData(isAllowPermission))
+    }
+
+
+    private fun getEventData(isAllow: Boolean): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["permitted"] = isAllow.toString()
+        return data
     }
 
 //    fun setDefaultActivityHeaderTitle() {

@@ -118,9 +118,9 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
             headerViewSearchInput.text.clear()
         }
 
-        headerViewSettingsBtn.setOnClickListener {
-            listener?.onHeaderSettingsClick()
-        }
+//        headerViewSettingsBtn.setOnClickListener {
+//            listener?.onHeaderSettingsClick()
+//        }
 
         setTitleInputListener()
     }
@@ -155,7 +155,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
         hideAll()
         when (type) {
             Constants.HEADER_VIEW_TYPE_FEED -> {
-                headerViewLocationLayout.visibility = View.VISIBLE
+                headerViewFeedLayout.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_SEARCH -> {
 //                headerViewSep.visibility = View.GONE
@@ -204,7 +204,7 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
                 headerViewCloseBtn.visibility = View.VISIBLE
             }
             Constants.HEADER_VIEW_TYPE_EVENT -> {
-                headerViewLocationLayout.visibility = View.VISIBLE
+                headerViewFeedLayout.visibility = View.VISIBLE
                 headerViewSearchBtn.visibility = View.INVISIBLE
                 headerViewProfileBtn.visibility = View.INVISIBLE
                 headerViewCloseBtn.visibility = View.VISIBLE
@@ -227,8 +227,8 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
         headerViewDoneBtn.visibility = View.GONE
         headerViewSaveBtn.visibility = View.GONE
         headerViewNextBtn.visibility = View.GONE
-        headerViewSettingsBtn.visibility = View.GONE
-        headerViewLocationLayout.visibility = View.GONE
+//        headerViewSettingsBtn.visibility = View.GONE
+        headerViewFeedLayout.visibility = View.GONE
         headerViewSearchLayout.visibility = View.GONE
     }
 
@@ -276,5 +276,9 @@ class HeaderView : FrameLayout, UserImageView.UserImageViewListener, AddressAndT
 
     override fun onTimeClick() {
         listener?.onHeaderTimeClick()
+    }
+
+    fun enableLocationClick(isEnable: Boolean) {
+        headerViewAddressAndTime.enableLocationClick(isEnable)
     }
 }

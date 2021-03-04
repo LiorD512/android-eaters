@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile
 
-import android.net.Uri
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,17 +9,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.UserImageView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.edit_my_profile_fragment.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener, UserImageView.UserImageViewListener {
+class EditMyProfileFragment : Fragment(), UserImageView.UserImageViewListener, CameraUtils.CameraUtilListener {
 
     companion object {
         fun newInstance() = EditMyProfileFragment()
@@ -28,6 +29,7 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
     private var photoUploaded: Boolean = false
     private var hasUpdated: Boolean = false
     val viewModel by viewModel<EditMyProfileViewModel>()
+    val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.edit_my_profile_fragment, container, false)
@@ -38,74 +40,109 @@ class EditMyProfileFragment : Fragment(), InputTitleView.InputTitleViewListener,
 
         Analytics.with(requireContext()).screen("Profile edit")
 
+        initUi()
+        initObservers()
+    }
+
+    private fun initUi() {
         editMyProfileFragUserImageView.setUserImageViewListener(this)
+        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
+    }
 
-        editMyProfileFragFullName.setInputTitleViewListener(this)
-        editMyProfileFragEmail.setInputTitleViewListener(this)
-
-
+    private fun initObservers() {
         viewModel.userDetails.observe(this, Observer { eater -> setEaterDetails(eater) })
 
-        viewModel.navigationEvent.observe(this, Observer { event -> handleSaveResponse(event) })
+        viewModel.refreshThumbnailEvent.observe(this, Observer { event -> handleSaveResponse(event) })
 
         viewModel.getEaterProfile()
 
-        (activity as MainActivity).handlePb(true)
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            (activity as MainActivity).handlePb(it)
+        })
+
     }
 
     private fun handleSaveResponse(event: EditMyProfileViewModel.NavigationEvent?) {
-        (activity as MainActivity).handlePb(false)
         if (event!!.isSuccess) {
             (activity as MainActivity).refreshUserUi()
-            (activity as MainActivity).loadMyProfile()
+            activity?.onBackPressed()
         } else {
             Toast.makeText(context, "There was a problem accessing the server", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setEaterDetails(eater: Eater?) {
-        (activity as MainActivity).handlePb(false)
 
         if (eater != null) {
             editMyProfileFragUserImageView.setImage(eater.thumbnail)
 
-            if (!eater.getFullName().isNullOrBlank()) {
-                editMyProfileFragFullName.setText(eater.getFullName())
+            eater.firstName?.let{
+                editMyProfileFragFirstName.setText(it)
+            }
+            eater.lastName?.let{
+                editMyProfileFragLastName.setText(it)
             }
 
             eater.email?.let{
                 editMyProfileFragEmail.setText(it)
             }
-            editMyProfileFragMobileNum.setText(eater.phoneNumber)
+
+            eater.phoneNumber.let{
+                editMyProfileFragPhone.setText(it)
+            }
+
         }
-        hasUpdated = false
         this.photoUploaded = false
-        (activity as MainActivity).setHeaderViewSaveBtnClickable(false)
-    }
-
-
-    override fun onInputTitleChange(str: String?) {
-        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
-        this.hasUpdated = true
     }
 
     fun saveEaterDetails() {
-        if (hasUpdated) {
-            viewModel.saveEater(editMyProfileFragFullName.getText(), editMyProfileFragEmail.getText(), photoUploaded)
+        if(validateFields()){
+            val first = editMyProfileFragFirstName.getText()
+            val last = editMyProfileFragLastName.getText()
+            val email = editMyProfileFragEmail.getText()
+            viewModel.saveEater(first, last, email, photoUploaded)
         }
     }
 
-    override fun onUserImageClick(cook: Cook?) {
-        CameraUtils.openProfileCamera(activity as MainActivity)
+    private fun validateFields(): Boolean {
+        var isValid = true
+        val first = editMyProfileFragFirstName.getText()
+        val last = editMyProfileFragLastName.getText()
+        val email = editMyProfileFragEmail.getText()
+        if(first.isNullOrEmpty()){
+            editMyProfileFragFirstName.showError()
+            isValid = false
+        }
+        if(last.isNullOrEmpty()){
+            editMyProfileFragLastName.showError()
+            isValid = false
+        }
+        if(email.isNullOrEmpty()){
+            editMyProfileFragEmail.showError()
+            isValid = false
+        }
+        return isValid
     }
 
-    fun onMediaCaptureResult(resultUri: Uri?) {
-        editMyProfileFragUserImageView.setImage(resultUri!!)
-        viewModel.updateTempThumbnail(resultUri)
-        this.photoUploaded = true
+    override fun onUserImageClick(cook: Cook?) {
+        CameraUtils.openCameraForResult(activity as Activity, this)
+    }
 
-        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
-        this.hasUpdated = true
+//    fun onMediaCaptureResult(resultUri: Uri?) {
+//        editMyProfileFragUserImageView.setImage(resultUri!!)
+//        viewModel.updateTempThumbnail(resultUri)
+//
+//    }
+
+    override fun onCameraUtilResult(result: CameraUtils.CameraUtilResult) {
+        result.fileUri?.let{
+            editMyProfileFragUserImageView.setImage(it)
+            viewModel.updateTempThumbnail(it)
+            this.photoUploaded = true
+
+            (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
+            this.hasUpdated = true
+        }
     }
 
 }

@@ -55,19 +55,27 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         Log.d(TAG, "bottom bar updating: $type")
         type?.let{
             this.curType = it
-        hideAll()
             when (type) {
+                BottomBarTypes.UPDATE_COUNTER -> {
+                    val text = context.getString(R.string.bottom_bar_item_counter, itemCount.toString())
+                    showUpperBarAndUpdate(text, price)
+                }
                 BottomBarTypes.ADD_TO_CART -> {
+                    hideAll()
                     val text = context.getString(R.string.bottom_bar_item_counter, itemCount.toString())
                     showUpperBarAndUpdate(text, price)
                 }
                 BottomBarTypes.PLACE_AN_ORDER ->{
+                    hideAll()
                     val text = context.getString(R.string.bottom_bar_place_an_order)
                     showUpperBarAndUpdate(text, price)
                 }
                 BottomBarTypes.TRACK_YOUR_ORDER ->{
-                    val text = context.getString(R.string.bottom_bar_tract_your_order)
-                    showUpperBarAndUpdate(text, null)
+                    hideAll()
+                    if(itemCount ?: 0 > 0){
+                        val text = context.getString(R.string.bottom_bar_tract_your_order)
+                        showUpperBarAndUpdate(text, null)
+                    }
                 }
                 BottomBarTypes.PROCEED_TO_CHECKOUT -> {
                     val text = context.getString(R.string.bottom_bar_procees_to_cart)
@@ -130,6 +138,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     enum class BottomBarTypes{
+        UPDATE_COUNTER,
         ADD_TO_CART,
         PLACE_AN_ORDER,
         TRACK_YOUR_ORDER,

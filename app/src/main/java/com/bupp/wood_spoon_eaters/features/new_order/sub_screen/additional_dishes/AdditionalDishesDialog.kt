@@ -32,15 +32,6 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
     var isDismissed = true // if true - redirects to cook's profile and lock header when dismissed.
 
-//    var listener: AdditionalDishesDialogListener? = null
-//
-//    interface AdditionalDishesDialogListener{
-////        fun onProceedToCheckout()
-////        fun onDishClick(dish: Dish)
-////        fun onAdditionalDialogDismiss()
-////        fun onNewOrderDone()
-//    }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.additional_dishes_dialog, container, false)
@@ -48,7 +39,7 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
 
@@ -78,7 +69,6 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
     }
 
     private fun handleData(data: NewOrderMainViewModel.AdditionalDishesEvent) {
-//        mainAdapter?.clearAllSelections()
         data.orderItems?.let {
             mainAdapter?.refreshOrderItems(it)
         }
@@ -142,24 +132,6 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
             mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCK_SINGLE_DISH_COOK)
         }
     }
-
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is AdditionalDishesDialogListener) {
-//            listener = context
-//        }
-//        else if (parentFragment is AdditionalDishesDialogListener){
-//            this.listener = parentFragment as AdditionalDishesDialogListener
-//        }
-//        else {
-//            throw RuntimeException("$context must implement AdditionalDishesDialogListener")
-//        }
-//    }
-//
-//    override fun onDetach() {
-//        super.onDetach()
-//        listener = null
-//    }
 
 
 }

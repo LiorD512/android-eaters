@@ -66,5 +66,5 @@ data class Pagination(
     @SerializedName("item_count") val itemCount: Int? = null,
     @SerializedName("items_per_page") val itemsPerPage: Int? = null,
     @SerializedName("total_pages") val totalPages: Int? = null,
-    @SerializedName("current_page") val currentPage: Int? = null
+    @SerializedName("current_page") val currentPage: String? = null
 ):Parcelable

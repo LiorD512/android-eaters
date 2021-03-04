@@ -41,6 +41,7 @@
             app:layout_constraintTop_toBottomOf="@+id/subtitle">
 
         <TextView
+                android:layout_marginTop="5.3dp"
                 android:id="@+id/verificationFragFlag"
                 android:layout_width="28.8dp"
                 android:layout_height="wrap_content"
@@ -50,12 +51,12 @@
                 app:layout_constraintStart_toStartOf="@id/sep"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <ImageView
                 android:id="@+id/arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="9.4dp"
-                android:text="@string/triangle_string"
+                android:src="@drawable/ic_arrow_down"
                 android:textColor="@color/black"
                 android:gravity="start"
                 app:layout_constraintBottom_toBottomOf="@+id/verificationFragFlag"
@@ -68,7 +69,7 @@
                 android:layout_height="1dp"
                 android:layout_marginStart="15.4dp"
                 android:layout_marginEnd="25dp"
-                android:layout_marginTop="5.3dp"
+
                 android:background="@color/light_periwinkle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/verificationFragFlag" />

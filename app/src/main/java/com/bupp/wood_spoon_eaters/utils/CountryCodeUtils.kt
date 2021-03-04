@@ -116,4 +116,14 @@ object CountryCodeUtils {
         val phoneNumberKit = PhoneNumberKit(context)
         return phoneNumberKit.formatPhoneNumber(phoneStr, "us")?.replace("+","")
     }
+
+    fun isPhoneValid(phone: String?): Boolean{
+        phone?.let{
+            val re = Regex("[^A-Za-z0-9 ]")
+            val phone = re.replace(phone, "")
+            if(phone.isNotEmpty() && phone.length >= 10)
+                return true
+        }
+        return false
+    }
 }

@@ -5,7 +5,7 @@
         android:background="@color/teal_blue">
 
     <ImageView
-            android:layout_marginTop="120dp"
+            android:paddingTop="185dp"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:src="@drawable/ic_woodspoon_logo"

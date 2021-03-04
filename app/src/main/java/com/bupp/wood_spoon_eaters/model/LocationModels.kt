@@ -34,11 +34,12 @@ data class AddressRequest(
 ) : Parcelable{
 
     fun getUserLocationStr(): String{
-        return "$streetNumber $streetLine1, ${"$cityName," ?: ""} ${stateIso ?: ""}"
+        val cityNameStr = cityName?.let{ "$it,"} ?: ""
+        return "$streetNumber $streetLine1, $cityNameStr ${stateIso ?: ""}"
     }
 
     fun toAddress(): Address {
-        val fullStreetLine1 = "${streetNumber} ${streetLine1}"
+        val fullStreetLine1 = "$streetNumber $streetLine1"
         return Address(id = null, lat = lat, lng = lng, streetLine1 = fullStreetLine1, streetLine2 = streetLine2, addressSlug = addressSlug)
     }
 

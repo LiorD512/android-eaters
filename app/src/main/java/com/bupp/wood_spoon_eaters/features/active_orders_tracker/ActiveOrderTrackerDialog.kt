@@ -66,6 +66,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
         binding = FragmentActiveOrderTrackerBinding.bind(view)
 
         initObservers()
+        viewModel.sendOpenEvent()
     }
 
     private fun initObservers() {
@@ -129,7 +130,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
 
 
     override fun onOrderCanceled() {
-        (activity as MainActivity).checkBottomBarStatus()
+//        (activity as MainActivity).checkBottomBarStatus()
         dismiss()
     }
 

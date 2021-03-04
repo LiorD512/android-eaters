@@ -436,6 +436,7 @@
                         android:text="Payment method"/>
 
                 <LinearLayout
+                        android:id="@+id/checkoutFragChangePaymentLayout"
                         android:paddingTop="17dp"
                         android:paddingBottom="16.4dp"
                         android:orientation="horizontal"

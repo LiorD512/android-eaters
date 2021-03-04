@@ -32,7 +32,7 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
             override fun handleOnBackPressed() {
                 if (binding!!.newOrderFragViewPager.currentItem == 0) {
                     isEnabled = false
-                    activity?.onBackPressed()
+                    mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
                 } else {
                     binding!!.newOrderFragViewPager.currentItem = 0
                 }

@@ -15,7 +15,9 @@ import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentCodeBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
+import com.segment.analytics.Analytics
 import me.ibrahimsn.lib.util.clear
+import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -29,9 +31,15 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCodeBinding.bind(view)
 
+
         initObservers()
         initUi()
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         startResendTimer()
     }
 
@@ -43,12 +51,15 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
                 }
             }
         })
+        viewModel.userData.observe(viewLifecycleOwner, {
+            binding!!.codeFragNumber.text = "+$it"
+        })
     }
 
     @SuppressLint("SetTextI18n")
     private fun initUi() {
         with(binding!!){
-            codeFragNumber.text = "+${viewModel.getCensoredPhone()}"
+
             codeFragInput.isEnabled = false
             codeFragNext.setOnClickListener {
                 if (codeFragNext.isEnabled) {
@@ -110,20 +121,26 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     }
 
     private fun startResendTimer() {
-
+        binding?.codeFragResendCode?.setOnClickListener(null)
         timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding!!.codeFragResendCode.text = "Resend code in: ${millisUntilFinished/1000}"
+                binding?.codeFragResendCode?.text = "Resend code in: ${millisUntilFinished/1000}"
             }
 
             override fun onFinish() {
-                binding!!.codeFragResendCode.text = "Press here to resend"
-                binding!!.codeFragResendCode.setOnClickListener {
+                binding?.codeFragResendCode?.text = "Press here to resend"
+                binding?.codeFragResendCode?.setOnClickListener {
                     resendCode()
                 }
             }
         }
         timer?.start()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        timer = null
+        super.onDestroyView()
     }
 
 }

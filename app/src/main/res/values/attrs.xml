@@ -173,5 +173,11 @@
 
     <declare-styleable name="LottieViewAttrs">
         <attr name="withBkg" format="boolean"/>
+        <attr name="lottieAnimType" format="enum" >
+            <enum name="PB" value="0"/>
+            <enum name="SELECT_ADDRESS" value="1"/>
+            <enum name="LOCATION-PERMISSION" value="2"/>
+
+        </attr>
     </declare-styleable>
 </resources>

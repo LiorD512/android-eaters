@@ -1,17 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -41,10 +36,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         handleAutocompleteResult(result)
     }
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        viewModel.onLocationPermissionDone()
-    }
-
     val viewModel by viewModel<LocationAndAddressViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +46,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
 
 
         Analytics.with(this).screen("Manage addresses")
-        viewModel.checkIntentParam(intent)
+//        viewModel.checkIntentParam(intent)
 
         initUi()
         initObservers()
@@ -86,14 +77,17 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         viewModel.mainNavigationEvent.observe(this, {
             Log.d(TAG, it.name)
             when(it){
+                LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
+                    FinalDetailsToSelectAddress()
+                }
                 LocationAndAddressViewModel.NavigationEventType.OPEN_LOCATION_PERMISSION_SCREEN -> {
                     redirectToLocationPermission()
                 }
-                LocationAndAddressViewModel.NavigationEventType.LOCATION_PERMISSION_DONE -> {
-                    onBackPressed()
+                LocationAndAddressViewModel.NavigationEventType.LOCATION_PERMISSION_GUARENTEED -> {
+                    viewModel.updateMyLocationStats()
                 }
                 LocationAndAddressViewModel.NavigationEventType.LOCATION_AND_ADDRESS_DONE -> {
-                    setResult(RESULT_OK, intent);
+                    setResult(RESULT_OK, intent)
                     finish()
                 }
                 LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE -> {
@@ -113,9 +107,9 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 }
             }
         })
-        viewModel.locationPermissionActionEvent.observe(this, {
-            askLocationPermission()
-        })
+//        viewModel.locationPermissionActionEvent.observe(this, {
+//            askLocationPermission()
+//        })
         viewModel.addressFoundUiEvent.observe(this, {
             updateAddressHeaderUi(it)
         })
@@ -135,14 +129,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 }
             }
         })
-//        viewModel.actionEvent.observe(this, {
-//            when(it){
-//                LocationAndAddressViewModel.ActionEvent.RESET_HEADER_TITLE -> {
-//                    Log.d(TAG, "RESET_HEADER_TITLE")
-//                    binding.locationActHeader.setType(Constants.HEADER_VIEW_TYPE_CLOSE_TITLE, "Delivery address")
-//                }
-//            }
-//        })
     }
 
     private fun handleProgressBar(shouldShow: Boolean?) {
@@ -168,8 +154,10 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     }
 
     private fun redirectToLocationPermission() {
-        binding.locationActHeader.setTitle("Location permission")
-        findNavController(R.id.locationActContainer).navigate(R.id.action_selectAddressFragment_to_locationPermissionFragment)
+//        binding.locationActHeader.setTitle("Location permission")
+        val permissionSheet = LocationPermissionFragment()
+        permissionSheet.show(supportFragmentManager, Constants.LOCATION_PERMISSION_BOTTOM_SHEET)
+//        findNavController(R.id.locationActContainer).navigate(R.id.action_selectAddressFragment_to_locationPermissionFragment)
     }
 
     private fun redirectToAddressVerificationMap() {
@@ -184,34 +172,11 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         onBackPressed()
     }
 
-    private fun askLocationPermission() {
-        when {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED -> {
-                Log.d(TAG,"location grated")
-                viewModel.onLocationPermissionDone()
-            }
-            shouldShowRequestPermissionRationale() -> {
-                Log.d(TAG,"shouldShowRequestPermissionRationale")
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected.
-                requestPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
-            }
-            else -> {
-                Log.d(TAG,"asking for permission")
-                requestPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
-            }
-        }
-
+    private fun FinalDetailsToSelectAddress() {
+        findNavController(R.id.locationActContainer).navigate(R.id.action_finalAddressDetailsFragment_to_selectAddressFragment)
     }
 
-    private fun shouldShowRequestPermissionRationale() =
-        ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) && ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
+
 
     @SuppressLint("LongLogTag")
     private fun handleAutocompleteResult(result: ActivityResult) {

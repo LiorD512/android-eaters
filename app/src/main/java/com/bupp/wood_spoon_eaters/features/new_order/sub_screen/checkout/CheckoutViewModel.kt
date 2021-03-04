@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
@@ -15,7 +17,7 @@ import com.bupp.wood_spoon_eaters.utils.DateUtils
 import kotlinx.coroutines.launch
 
 
-class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager) :
+class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager, private val eventsManager: EventsManager) :
     ViewModel() {
 
 
@@ -26,14 +28,13 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     val timeChangeEvent = LiveEventData<List<MenuItem>>()
     fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
-    fun simpleUpdateOrder(orderRequest: OrderRequest) {
+    fun simpleUpdateOrder(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
             progressData.startProgress()
-            val result = cartManager.postUpdateOrder(orderRequest)
+            val result = cartManager.postUpdateOrder(orderRequest, eventType)
             progressData.endProgress()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
-
                 }
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
 
@@ -41,6 +42,8 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
             }
         }
     }
+
+
 
     fun onTimeChangeClick() {
         val menuItems = cartManager.currentShowingDish?.availableMenuItems

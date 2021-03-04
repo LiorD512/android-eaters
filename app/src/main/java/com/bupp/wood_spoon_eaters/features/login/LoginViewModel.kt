@@ -5,24 +5,25 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
 import kotlinx.coroutines.launch
 
 
 class LoginViewModel(
-    val apiService: UserRepositoryImpl,
-    val userRepository: UserRepository,
-    val eaterDataManager: EaterDataManager,
-    val metaDataRepository: MetaDataRepository,
-    val deviceDetailsManager: FcmManager,
-    val paymentManager: PaymentManager
+    private val eventsManager: EventsManager,
+    private val userRepository: UserRepository,
+    private val eaterDataManager: EaterDataManager,
+    private val metaDataRepository: MetaDataRepository,
+    private val deviceDetailsManager: FcmManager,
+    private val paymentManager: PaymentManager
 ) : ViewModel() {
 
     var phone: String? = null
@@ -33,6 +34,7 @@ class LoginViewModel(
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
     val countryCodeEvent: MutableLiveData<CountriesISO> = MutableLiveData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
+    val userData: MutableLiveData<String?> = MutableLiveData()
     val progressData = ProgressData()
 
     val phoneFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
@@ -80,6 +82,8 @@ class LoginViewModel(
     }
 
     private fun directToCodeFrag() {
+//        actionEvent.postValue(START_RESEND_TIMER)
+        userData.postValue(getCensoredPhone())
         navigationEvent.postValue(NavigationEventType.OPEN_CODE_SCREEN)
     }
 
@@ -104,23 +108,34 @@ class LoginViewModel(
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
                         Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
                     }
                     UserRepository.UserRepoStatus.INVALID_PHONE -> {
                         Log.d("wowLoginVM", "GenericError")
                         errorEvents.postValue(ErrorEventType.INVALID_PHONE)
+                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d("wowLoginVM", "Success")
+                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(true))
                         directToCodeFrag()
                     }
                     else -> {
                         Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
                     }
                 }
                 progressData.endProgress()
             }
         }
+    }
+
+    private fun getSendOtpData(isSuccess: Boolean): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["number"] = this.phonePrefix+this.phone
+        data["success"] = isSuccess.toString()
+        return data
     }
 
     fun resendCode() {
@@ -163,10 +178,12 @@ class LoginViewModel(
                         UserRepository.UserRepoStatus.SERVER_ERROR -> {
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - NetworkError")
                             errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
                         }
                         UserRepository.UserRepoStatus.WRONG_PASSWORD -> {
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - GenericError")
                             errorEvents.postValue(ErrorEventType.WRONG_PASSWORD)
+                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
                         }
                         UserRepository.UserRepoStatus.SUCCESS -> {
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
@@ -176,10 +193,12 @@ class LoginViewModel(
                             } else {
                                 navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
+                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(true))
                         }
                         else -> {
                             Log.d("wowLoginVM", "NetworkError")
                             errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
                         }
                     }
                     progressData.endProgress()
@@ -214,20 +233,24 @@ class LoginViewModel(
                 UserRepository.UserRepoStatus.SERVER_ERROR -> {
                     Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "false"))
                 }
                 UserRepository.UserRepoStatus.SOMETHING_WENT_WRONG -> {
                     Log.d("wowLoginVM", "GenericError")
                     errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "false"))
                 }
                 UserRepository.UserRepoStatus.SUCCESS -> {
                     Log.d("wowLoginVM", "Success")
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
                     navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "true"))
                 }
                 else -> {
                     Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "false"))
                 }
             }
             progressData.endProgress()

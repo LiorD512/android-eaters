@@ -5,6 +5,8 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:paddingHorizontal="15.4dp"
+        android:animateLayoutChanges="true"
+        android:id="@+id/createAccountFragMainLayout"
         tools:context=".features.login.fragments.CreateAccountFragment">
 
     <TextView
@@ -28,7 +30,7 @@
             android:lineSpacingExtra="6.7sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            android:text="Let’s get you started. Enter your name and \n email address" />
+            android:text="Let’s get you started. \nEnter your name and email address" />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -42,45 +44,50 @@
 
         <com.bupp.wood_spoon_eaters.views.WSEditText
                 android:layout_marginEnd="15.4dp"
-                android:id="@+id/createAccountFragmentFirstName"
+                android:id="@+id/createAccountFragFirstName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                app:inputType="INPUT_TYPE_FULL_NAME"
                 app:error="Please enter your name"
                 app:hint="First name" />
 
         <com.bupp.wood_spoon_eaters.views.WSEditText
-                android:id="@+id/createAccountFragmentLastName"
+                android:id="@+id/createAccountFragLastName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                app:inputType="INPUT_TYPE_FULL_NAME"
                 app:error="Please enter your last name"
                 app:hint="Last name" />
 
     </LinearLayout>
 
     <com.bupp.wood_spoon_eaters.views.WSEditText
+            android:layout_marginTop="31dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_layout"
-            android:id="@+id/createAccountFragmentEmail"
+            android:id="@+id/createAccountFragEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:error="Please enter your Email"
+            app:inputType="MAIL"
+            app:error="Please enter your email"
             app:hint="Email address" />
 
     <ImageView
-            app:layout_constraintBottom_toTopOf="@+id/createAccountFragmentNext"
+            android:id="@+id/createAccountFragAnim"
+            app:layout_constraintBottom_toTopOf="@+id/createAccountFragNext"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/creata_account_img"
+            android:src="@drawable/create_account_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             app:title="Done"
             android:layout_marginBottom="14.8dp"
-            android:id="@+id/createAccountFragmentNext"
+            android:id="@+id/createAccountFragNext"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"

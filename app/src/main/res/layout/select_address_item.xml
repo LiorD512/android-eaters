@@ -55,10 +55,10 @@
 
     <ImageView
             android:id="@+id/selectAddressItemMenu"
-            android:layout_gravity="center"
-            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="7.7dp"
             android:src="@drawable/ic_delete" />
 
 </LinearLayout>

@@ -25,10 +25,10 @@
 
                 <ImageView
                         android:id="@+id/orderDetailsFragDishImage"
-                        tools:src="@drawable/my_dishes_pic"
-                        android:scaleType="centerCrop"
                         android:layout_width="match_parent"
-                        android:layout_height="166dp"/>
+                        android:layout_height="166dp"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/my_dishes_pic" />
 
                 <TextView
                         android:id="@+id/orderDetailsStatus"
@@ -280,6 +280,7 @@
         </ScrollView>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            tools:visibility="gone"
             android:id="@+id/orderHistoryPb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

@@ -198,7 +198,7 @@
                 <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
                         android:id="@+id/singleDishPlusMinus"
                         android:layout_width="wrap_content"
-                        android:layout_height="80dp" />
+                        android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -248,8 +248,8 @@
 
                     <androidx.cardview.widget.CardView
                             android:id="@+id/singleDishChangeTimeBtn"
-                            android:layout_width="117dp"
-                            android:layout_height="79dp"
+                            android:layout_width="114dp"
+                            android:layout_height="66dp"
                             app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="2.9dp"
                             app:cardElevation="8dp"
@@ -283,13 +283,6 @@
                     android:orientation="vertical"
                     android:visibility="gone"
                     tools:visibility="visible">
-
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="22dp"
-                        android:background="@color/light_periwinkle" />
 
                 <TextView
                         style="@style/SemiBold15Dark"

@@ -11,10 +11,12 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -26,19 +28,20 @@ import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager
+    val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, private val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 
     val progressData = ProgressData()
 
     init {
-        eventsManager.initSegment()
+        eaterDataManager.refreshSegment()
         fcmManager.initFcmListener()
     }
 
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
     enum class MainNavigationEvent{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
+        OPEN_CAMERA_UTIL,
     }
 
 
@@ -51,10 +54,14 @@ class MainViewModel(
         mainNavigationEvent.postValue(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
-    val bannerEvent = MutableLiveData<Int>()
-    fun showBanner(bannerType: Int) {
-        bannerEvent.postValue(bannerType!!)
-    }
+//    val bannerEvent = MutableLiveData<Int>()
+//    fun showBanner(bannerType: Int) {
+//        bannerEvent.postValue(bannerType)
+//    }
+//
+//    fun clearBanner(){
+//        bannerEvent.postValue(Constants.NO_BANNER)
+//    }
 
 
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
@@ -90,6 +97,12 @@ class MainViewModel(
 
     fun getUserName(): String {
         return eaterDataManager.currentEater?.firstName!!
+    }
+
+    fun getShareText(): String {
+        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
+        return "$text \n $inviteUrl"
     }
 
 //    fun startLocationUpdates() {

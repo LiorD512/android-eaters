@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AddressMenuBottomSheetBinding
@@ -27,6 +28,11 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.address_menu_bottom_sheet, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,7 +47,7 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
                 resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT 16dp
                 0,
                 resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // RIGHT 16dp
-                0
+                50
             )
             parent.layoutParams = layoutParams
             parent.setBackgroundResource(R.drawable.floating_bottom_sheet_bkg)
@@ -58,7 +64,8 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
 
     private fun initObservers() {
         viewModel.currentAddress.observe(viewLifecycleOwner, {
-            binding.addressMenuTitle.text = it.getUserLocationStr()
+            binding.addressMenuTitle.text = "${it.streetLine1}, #${it.streetLine2}"
+            binding.addressMenuSubtitle.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
         })
 
         viewModel.navigationEvent.observe(viewLifecycleOwner, {

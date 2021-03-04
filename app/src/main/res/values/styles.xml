@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -20,7 +20,7 @@
     </style>
 
 
-    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
+    <style name="FullScreenDialogStyle" parent="Theme.MaterialComponents.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -79,6 +79,11 @@
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+    <style name="LatoBold13Black">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="LatoBold13Dark">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">13.4sp</item>
@@ -88,6 +93,11 @@
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="LatoBold15Dark">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark</item>
     </style>
     <style name="LatoReg11Black">
         <item name="android:fontFamily">@font/lato_reg</item>
@@ -470,7 +480,7 @@
 
 
     //Calendar view
-    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+    <style name="CalenderViewCustom" parent="Theme.MaterialComponents">
         <item name="colorAccent">@color/teal_blue</item>
         <item name="android:textColor">@color/calender_text_color_selector</item>
         <item name="android:focusedMonthDateColor">@color/teal_blue</item>
@@ -478,14 +488,14 @@
         <item name="android:selectedWeekBackgroundColor">@color/black</item>
     </style>
 
-    <style name="CalendarDateText" parent="Theme.AppCompat">
+    <style name="CalendarDateText" parent="Theme.MaterialComponents">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">15.1sp</item>
         <item name="android:textColor">@color/dark</item>
         <item name="android:selectedWeekBackgroundColor">@color/white</item>
     </style>
 
-    <style name="CalendarViewHeader" parent="Theme.AppCompat">
+    <style name="CalendarViewHeader" parent="Theme.MaterialComponents">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">13.2sp</item>
         <item name="android:textColor">@color/dark</item>
@@ -509,7 +519,7 @@
     </style>
 
 
-    <style name="CardWidgetStyle" parent="Theme.AppCompat">
+    <style name="CardWidgetStyle" parent="Theme.MaterialComponents">
         <item name="editTextStyle">@style/EditTextOverride</item>
         <item name="android:editTextStyle">@style/EditTextOverride</item>
     </style>
@@ -562,7 +572,7 @@
     </style>
 
     <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsFloating">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
     </style>

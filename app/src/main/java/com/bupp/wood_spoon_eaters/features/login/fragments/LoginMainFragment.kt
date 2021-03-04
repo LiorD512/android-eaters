@@ -1,26 +1,15 @@
 package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
-import com.bupp.wood_spoon_eaters.common.ZoomOutPageTransformer
 import com.bupp.wood_spoon_eaters.databinding.FragmentLoginMainBinding
-import com.bupp.wood_spoon_eaters.databinding.FragmentNewOrderMainBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_cook.SingleDishCookFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientsFragment
-import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginMainFragment : Fragment(R.layout.fragment_login_main) {
@@ -48,13 +37,6 @@ class LoginMainFragment : Fragment(R.layout.fragment_login_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentLoginMainBinding.bind(view)
 
-        arguments?.let{
-            val startWith = it.getInt("start_with_args")
-            if(startWith > 0){
-                binding!!.loginMainFragViewPager.currentItem = startWith
-            }
-        }
-
         with(binding!!){
             val pagerAdapter = ScreenSlidePagerAdapter(requireActivity())
             loginMainFragViewPager.adapter = pagerAdapter
@@ -63,6 +45,13 @@ class LoginMainFragment : Fragment(R.layout.fragment_login_main) {
 
             loginMainFragCloseBtn.setOnClickListener {
                 activity?.onBackPressed()
+            }
+        }
+
+        arguments?.let{
+            val startWith = it.getInt("start_with_args")
+            if(startWith > 0){
+                binding!!.loginMainFragViewPager.setCurrentItem(startWith, false)
             }
         }
 
@@ -104,9 +93,9 @@ class LoginMainFragment : Fragment(R.layout.fragment_login_main) {
     }
 
     override fun onDestroyView() {
-        singleDishInfoImagePager?.let {
-            it.adapter = null
-        }
+//        singleDishInfoImagePager?.let {
+//            it.adapter = null
+//        }
         binding = null
         super.onDestroyView()
     }

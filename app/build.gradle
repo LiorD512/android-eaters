@@ -83,7 +83,7 @@ dependencies {
     // Android
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation 'com.android.support:design:28.0.0'
+//    implementation 'com.android.support:design:28.0.0'
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.3"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.3"
@@ -118,17 +118,25 @@ dependencies {
     implementation 'com.daasuu:BubbleLayout:1.2.0'
 
     //Google
+    implementation 'com.google.android.play:core:1.9.1'
+    implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation 'com.google.android.libraries.places:places:2.4.0'
+//    implementation "com.google.android.material:material:$material_version"
+    implementation 'com.google.android.material:material:1.3.0'
 
     //utils
     implementation 'com.stripe:stripe-android:15.1.0'
     implementation 'me.grantland:autofittextview:0.2.1'
+    implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.1'
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.5'
-    implementation 'com.github.CanHub:Android-Image-Cropper:2.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+
+    //camera util
+    implementation 'com.github.dhaval2404:imagepicker:1.8'
+    implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.4'
 
     //Branch.io
     // required for all Android apps

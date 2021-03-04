@@ -99,5 +99,43 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         }
     }
 
+    data class SearchResult(val type: SearchStatus, val feed: List<Search>? = null)
+    enum class SearchStatus {
+        EMPTY,
+        SUCCESS,
+        SERVER_ERROR,
+        SOMETHING_WENT_WRONG,
+    }
+
+    suspend fun getSearch(searchRequest: SearchRequest): SearchResult {
+        val result = withContext(Dispatchers.IO){
+            apiService.search(searchRequest)
+        }
+        result.let{
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    SearchResult(SearchStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    SearchResult(SearchStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d("wowUserRepository","initUserRepo - Success")
+                    if(result.value.data.isNullOrEmpty()){
+                        SearchResult(SearchStatus.EMPTY)
+                    }else{
+                        SearchResult(SearchStatus.SUCCESS, result.value.data)
+                    }
+                }
+                else -> {
+                    Log.d("wowUserRepository","initUserRepo - wsError")
+                    SearchResult(SearchStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
 
 }

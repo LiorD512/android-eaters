@@ -18,7 +18,7 @@
 //import com.bumptech.glide.Glide
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-//import com.bupp.wood_spoon_eaters.custom_views.LottieAnimationView
+//import com.bupp.wood_spoon_eaters.views.LottieAnimationView
 //import com.bupp.wood_spoon_eaters.custom_views.orders_bottom_bar.OrdersBottomBar
 //import com.bupp.wood_spoon_eaters.dialogs.*
 //import com.bupp.wood_spoon_eaters.dialogs.locationAutoComplete.LocationChooserFragment

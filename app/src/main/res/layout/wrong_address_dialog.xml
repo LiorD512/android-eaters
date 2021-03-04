@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/errorDialogBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/back"
+        android:background="@color/dark_43"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:background="@drawable/rounded_white_bkg"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="50.9dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="19dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:padding="5dp"
+            android:id="@+id/wrongAddressDialogCloseBtn"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginTop="15.4dp"
+            android:src="@drawable/icons_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+                android:layout_gravity="center"
+                style="@style/LatoBold15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="7.7sp"
+                android:layout_marginTop="-15.4dp"
+                android:gravity="center_horizontal"
+                android:text="Did we not get your\n
+address right?"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:layout_marginTop="24dp"
+                app:title="Re-enter address"
+                android:id="@+id/wrongAddressDialogBtn"
+                android:paddingHorizontal="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</FrameLayout>

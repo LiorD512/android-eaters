@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:scrollbars="none"
             android:id="@+id/multiSectionViewRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
         <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent" android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                 <LinearLayout
                         android:id="@+id/multiSectionViewDishList"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
                 <com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
                         android:id="@+id/multiSectionViewFavorites"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
                 <include
-                        android:visibility="gone"
                         android:id="@+id/multiSectionViewShareView"
-                        layout="@layout/feed_view_sharing_stub"/>
+                        layout="@layout/feed_view_sharing_stub"
+                        android:visibility="gone" />
 
                 <include
-                        android:visibility="gone"
                         android:id="@+id/multiSectionViewLogo"
-                        layout="@layout/feed_view_logo_stub"/>
+                        layout="@layout/feed_view_logo_stub"
+                        android:visibility="gone" />
 
 
                 <com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
                         android:id="@+id/multiSectionViewTopCooks"
-                        android:layout_marginTop="38.4dp"
-                        android:layout_marginBottom="23.5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="38.4dp"
+                        android:layout_marginBottom="23.5dp" />
 
             </LinearLayout>
 

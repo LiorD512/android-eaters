@@ -2,20 +2,24 @@ package com.bupp.wood_spoon_eaters.managers
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import java.util.*
 
 class CartManager(
     private val orderRepository: OrderRepository,
     private val feedDataManager: FeedDataManager,
     private val deliveryTimeManager: DeliveryTimeManager,
-    private val locationManager: LocationManager
+    private val locationManager: LocationManager,
+    private val eventsManager: EventsManager
 ) {
 
+    private var isInCheckout = false
     private var shippingService: String? = null
     fun getCurrentOrderData() = currentOrderLiveData
     private val currentOrderLiveData = MutableLiveData<Order>()
@@ -101,8 +105,6 @@ class CartManager(
 
     data class CartStatus(
         val type: CartStatusEventType,
-        val inCartCookName: String? = null,
-        val currentShowingCookName: String? = null,
         val inCartTotalPrice: Double? = null,
         val currentOrderItemCounter: Int? = null,
         val currentOrderItemPrice: Double? = null
@@ -110,40 +112,54 @@ class CartManager(
     )
 
     enum class CartStatusEventType {
-        NEW_ORDER,
-        ADD_TO_ORDER_FOR_CURRENT_COOKING_SLOT,
-        DIFFERENT_COOKING_SLOT
+        CART_IS_EMPTY,
+        SHOWING_CURRENT_CART,
+//        DIFFERENT_COOKING_SLOT
     }
 
-    //check order status - is there any open order?
-    fun getOrderStatus(): CartStatus {
+    data class NewCartData(
+        val inCartCookName: String? = null,
+        val currentShowingCookName: String? = null
+    )
+
+    //check if needs to force clear cart - when user tries to add item to cart while has different cooking slot in his cart
+    fun shouldForceClearCart(): NewCartData? {
         currentOrderResponse?.let { orderResponse ->
             val currentCookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
             val inCartCookingSlot = orderResponse.cookingSlot
-            inCartCookingSlot.let { inCartCookingSlot ->
-                if (inCartCookingSlot?.id != currentCookingSlotId) {
+            inCartCookingSlot?.let { cookingSlot ->
+                if (cookingSlot.id != currentCookingSlotId) {
                     //if the showing dish's (cook) is the same as the in-cart order's cook
                     val currentShowingCookName = currentShowingDish?.cook?.getFullName()
                     val inCartCookName = orderResponse.cook?.getFullName()
-                    return CartStatus(
-                        CartStatusEventType.DIFFERENT_COOKING_SLOT,
+                    return NewCartData(
                         inCartCookName = inCartCookName,
                         currentShowingCookName = currentShowingCookName
-                    )
-                } else {
-                    val inCartTotalPrice = currentOrderResponse?.total?.value
-                    val currentOrderItemCounter = currentOrderItemRequest?.quantity
-                    val currentOrderItemPrice = currentShowingDish?.price?.value
-                    return CartStatus(
-                        CartStatusEventType.ADD_TO_ORDER_FOR_CURRENT_COOKING_SLOT,
-                        inCartTotalPrice = inCartTotalPrice,
-                        currentOrderItemCounter = currentOrderItemCounter,
-                        currentOrderItemPrice = currentOrderItemPrice
                     )
                 }
             }
         }
-        return CartStatus(CartStatusEventType.NEW_ORDER)
+        return null
+    }
+
+    //check order status - is there any open order?
+    fun getCartStatus(): CartStatus {
+        currentOrderResponse?.let { orderResponse ->
+            val inCartCookingSlot = orderResponse.cookingSlot
+            inCartCookingSlot.let { inCartCookingSlot ->
+                //SHOWING_CURRENT_CART
+                val inCartTotalPrice = currentOrderResponse?.total?.value
+                val currentOrderItemCounter = currentOrderItemRequest?.quantity
+                val currentOrderItemPrice = currentShowingDish?.price?.value
+                return CartStatus(
+                    CartStatusEventType.SHOWING_CURRENT_CART,
+                    inCartTotalPrice = inCartTotalPrice,
+                    currentOrderItemCounter = currentOrderItemCounter,
+                    currentOrderItemPrice = currentOrderItemPrice
+                )
+            }
+        }
+        return CartStatus(CartStatusEventType.CART_IS_EMPTY, currentOrderItemPrice = currentShowingDish?.getPriceObj()?.value, currentOrderItemCounter = 1)
     }
 
     //cart methods
@@ -205,38 +221,21 @@ class CartManager(
             //this is first itemRequest therefore post new order
             Log.d(TAG, "postNewOrUpdateCart.. posting new order")
             result = orderRepository.postNewOrder(orderRequest)
+
+            eventsManager.sendAddToCart(result.data?.id)
+            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData())
         } else {
             //order already have items therefore update order
             Log.d(TAG, "postNewOrUpdateCart.. updating current order")
             result = postUpdateOrder(orderRequest)
+
+            eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData())
         }
         result?.data?.let {
             updateCartManagerParams(it.copy())
         }
         return result
     }
-
-
-//    suspend fun addCurrentOrderItemToCart(): OrderRepository.OrderRepoResult<Order> {
-//        Log.d(TAG, "addCurrentOrderItemToCart")
-//        currentOrderItemRequest?.let {
-//            cart.add(0, it)
-//            Log.d(TAG, "addNewItemToCart: $currentOrderItemRequest")
-//        }
-//        val orderRequest = buildOrderRequest()
-//
-//        val result = orderRepository.postNewOrder(orderRequest)
-//        result.data?.let{
-//            updateCartParams(result.data)
-//        }
-//        return result
-//    }
-
-//    private fun updateCart(order: Order?) {
-//        order?.let {
-//            updateCurrentOrderItemRequest(OrderItemRequest(id = it.orderItems[0].id))
-//        }
-//    }
 
 
     suspend fun addNewOrderItemToCart(orderItemRequest: OrderItemRequest): OrderRepository.OrderRepoResult<Order>? {
@@ -252,7 +251,8 @@ class CartManager(
     private fun buildOrderRequest(tempCart: List<OrderItemRequest>? = null): OrderRequest {
         Log.d(TAG, "buildOrderRequest withTempCart: ${!tempCart.isNullOrEmpty()}")
         val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
-        val deliverAt = DateUtils.parseUnixTimestamp(deliveryTimeLiveData.value?.deliveryDate)
+//        val deliverAt = DateUtils.parseUnixTimestamp(deliveryTimeLiveData.value?.deliveryDate)
+        val deliverAt = getDeliveryAt()
         val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
         return OrderRequest(
@@ -263,15 +263,44 @@ class CartManager(
         )
     }
 
+    private fun getDeliveryAt(): String? {
+        currentShowingDish?.menuItem?.orderAt?.let{
+            //Dish is offered in the future.
+            return DateUtils.parseUnixTimestamp(it)
+        }
+        return deliveryTimeLiveData.value?.deliveryTimestamp
+    }
 
-    suspend fun postUpdateOrder(orderRequest: OrderRequest): OrderRepository.OrderRepoResult<Order>? {
+    suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "postUpdateOrder")
-        val result = orderRepository.updateOrder(currentOrderResponse!!.id!!, orderRequest)
-        result.data?.let {
-            updateCartManagerParams(it.copy())
+        currentOrderResponse?.let {
+            val result = orderRepository.updateOrder(it.id!!, orderRequest)
+            handleEvent(eventType)
+            result.data?.let {
+                updateCartManagerParams(it.copy())
+                return result
+            }
             return result
         }
-        return result
+        return null
+    }
+
+    private fun handleEvent(eventType: String?) {
+        eventType?.let{
+            when(it){
+                Constants.EVENT_TIP -> {
+                    eventsManager.logEvent(eventType, getTipData())
+                }
+            }
+        }
+    }
+
+    private fun getTipData(): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["order_total_before_tip"] = currentOrderResponse?.totalBeforeTip?.formatedValue ?: "0"
+        data["order_total_including_tip"] = currentOrderResponse?.total?.formatedValue ?: "0"
+        data["tip_quantity"] = currentOrderResponse?.tip?.formatedValue ?: "0"
+        return data
     }
 
 
@@ -303,7 +332,9 @@ class CartManager(
     fun clearCart() {
         Log.d(TAG, "clearCart")
         cart.clear()
+        currentShowingDish = null
         currentOrderResponse = null
+        isInCheckout = false
     }
 
     fun refreshOrderUi() {
@@ -374,7 +405,11 @@ class CartManager(
 
     suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {
         this.currentOrderResponse?.id?.let { it ->
-            return orderRepository.finalizeOrder(it, paymentMethodId)
+            val result = orderRepository.finalizeOrder(it, paymentMethodId)
+            val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
+            eventsManager.sendPurchaseEvent(it, calcTotalDishesPrice())
+            eventsManager.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(isSuccess))
+            return result
         }
         return null
     }
@@ -399,6 +434,102 @@ class CartManager(
         return currentOrderResponse?.isNationwide == true && shippingService == null
     }
 
+    //Events param -
+
+    private fun getOrderValue(isSuccess: Boolean): Map<String, String> {
+        val chefsName = getCurrentOrderChefName()
+        val chefsId = getCurrentOrderChefId()
+        val totalCostStr = calcTotalDishesPrice()
+        val dishesName = getCurrentOrderDishNames()
+        val cuisine = getCurrentOrderChefCuisine()
+        val data = mutableMapOf<String, String>("revenue" to totalCostStr.toString(), "currency" to "USD", "cook_name" to chefsName, "success" to isSuccess.toString())
+        data["cook_id"] = chefsId
+        dishesName.forEachIndexed {index, it ->
+            data["dish_name_${index}"] = it
+        }
+        if(cuisine.isNotEmpty()){
+            data["cuisine"] = cuisine[0]
+        }
+        return data
+    }
+
+    private fun getCurrentOrderDishNames(): List<String> {
+        val dishNames = mutableListOf<String>()
+        currentOrderResponse?.orderItems?.forEach {
+            dishNames.add(it.dish.name)
+        }
+        return dishNames
+    }
+
+    private fun getAddDishData(): Map<String, String> {
+        val currentDishName = getCurrentDishName()
+        val chefsName = getCurrentOrderChefName()
+        val chefsId = getCurrentOrderChefId()
+        val cuisine = getCurrentOrderChefCuisine()
+        val dishId = getCurrentDishId()
+        val dishPrice = getCurrentDishPrice()
+        val data = mutableMapOf<String, String>("cook_name" to chefsName)
+
+        data["cook_id"] = chefsId
+        data["dish_id"] = "$dishId"
+        data["dish_price"] = dishPrice
+        data["dish_name"] = currentDishName
+        if(cuisine.isNotEmpty()){
+            data["cuisine"] = cuisine[0]
+        }
+        return data
+    }
+
+    private fun getCurrentDishName(): String {
+        currentShowingDish?.name?.let{
+            return it
+        }
+        return ""
+    }
+
+    private fun getCurrentOrderChefId(): String {
+        currentShowingDish.let{
+            return it?.cook?.id.toString()
+        }
+    }
+
+    private fun getCurrentDishPrice(): String {
+        currentShowingDish?.let{
+            return it.price.formatedValue
+        }
+        return ""
+    }
+
+    private fun getCurrentDishId(): Long {
+        currentShowingDish?.let{
+            return it.id
+        }
+        return 0
+    }
+
+    private fun getCurrentOrderChefCuisine(): List<String> {
+        val cuisine = mutableListOf<String>()
+        currentShowingDish?.cuisines?.let{
+            it.forEach {
+                cuisine.add(it.name)
+            }
+        }
+        return cuisine
+    }
+
+    private fun getCurrentOrderChefName(): String {
+        currentShowingDish.let{
+            return it?.cook?.getFullName() ?: "no_name"
+        }
+    }
+
+    fun isInCheckout(): Boolean {
+        return this.isInCheckout
+    }
+
+    fun setIsInCheckout(isInCheckout: Boolean) {
+        this.isInCheckout = isInCheckout
+    }
 
 
 //    fun checkoutOrder(orderId: Long) {

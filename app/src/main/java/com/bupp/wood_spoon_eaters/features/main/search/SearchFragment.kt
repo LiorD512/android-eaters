@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
@@ -19,14 +18,18 @@ import com.bupp.wood_spoon_eaters.features.main.filter.FilterFragment
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
-import kotlinx.android.synthetic.main.search_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.segment.analytics.Analytics
+import kotlinx.android.synthetic.main.fragment_search.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
     FilterFragment.FilterFragmentListener, CookProfileDialog.CookProfileDialogListener {
+
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     companion object {
         fun newInstance() = SearchFragment()
@@ -41,7 +44,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     val viewModel: SearchViewModel by viewModel<SearchViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.search_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +57,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     }
 
     private fun initObservers() {
-        viewModel.searchEvent.observe(this, Observer { event ->
+        viewModel.searchEvent.observe(viewLifecycleOwner, { event ->
             if(event != null){
                 searchFragPb.hide()
                 if(event.isSuccess){
@@ -78,7 +81,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
             }
         })
 
-        viewModel.nextSearchEvent.observe(this, Observer { event ->
+        viewModel.nextSearchEvent.observe(viewLifecycleOwner, { event ->
             if(event != null){
                 searchFragPb.hide()
                 if(event.isSuccess){
@@ -91,7 +94,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
             }
         })
 
-        viewModel.suggestionEvent.observe(this, Observer { event ->
+        viewModel.suggestionEvent.observe(viewLifecycleOwner, { event ->
             if(event != null){
                 if(event.isSuccess){
                     (activity as MainActivity).loadDishOfferedDialog()
@@ -101,17 +104,18 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
             }
         })
 
-        viewModel.getCookEvent.observe(this, Observer { event ->
-            searchFragPb.hide()
-            if(event.isSuccess){
-                CookProfileDialog(this, event.cook!!).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
-            }
-        })
+//        viewModel.getCookEvent.observe(viewLifecycleOwner, { event ->
+//            searchFragPb.hide()
+//            if(event != null){
+//                CookProfileDialog(this, event).show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//            }
+//        })
     }
 
     //CookProfileDialog interface
     override fun onDishClick(menuItemId: Long) {
-        (activity as MainActivity).loadNewOrderActivity(menuItemId)
+        mainViewModel.onDishClick(menuItemId)
+//        (activity as MainActivity).loadNewOrderActivity(menuItemId)
     }
 
     fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
@@ -156,9 +160,9 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     }
 
     fun onSearchInputChanged(str: String) {
-        Log.d("wowSearch","onSearchInputChanged: " + str)
+        Log.d("wowSearch", "onSearchInputChanged: $str")
         this.query = str
-        if(str.isNullOrEmpty()){
+        if(str.isEmpty()){
             adapter.clearData()
             showListLayout(SEARCH_LIST_TYPE_CUISINE)
             viewModel.clearSearchQuery()
@@ -171,19 +175,22 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     override fun onDishClick(dish: Dish) {
         Log.d("wowSearch","onDishClick")
         dish.menuItem?.let{
-            (activity as MainActivity).loadNewOrderActivity(it.id)
+            mainViewModel.onDishClick(it.id)
         }
     }
 
     override fun onCookClick(cook: Cook) {
-        searchFragPb.show()
-        viewModel.getCurrentCook(cook.id)
+        val args = Bundle()
+        args.putLong(Constants.ARG_COOK_ID, cook.id)
+        val cookDialog = CookProfileDialog(this)
+        cookDialog.arguments = args
+        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
     }
 
     override fun onCuisineClick(cuisine: CuisineLabel) {
         Log.d("wowSearch","onCuisineClick")
         updateInput(cuisine.name)
-        viewModel.getDishesByCusineId(cuisine.id)
+        viewModel.getDishesByCuisineId(cuisine)
     }
 
     private fun updateInput(name: String) {

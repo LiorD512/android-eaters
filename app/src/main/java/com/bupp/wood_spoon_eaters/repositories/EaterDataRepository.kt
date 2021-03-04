@@ -23,6 +23,9 @@ class EaterDataRepository(
         GET_TRIGGERS_SUCCESS,
         GET_TRIGGERS_FAILED,
 
+        CANCEL_ORDER_SUCCESS,
+        CANCEL_ORDER_FAILED,
+
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
         WS_ERROR
@@ -99,6 +102,31 @@ class EaterDataRepository(
                 is ResultHandler.Success -> {
                     Log.d(TAG,"getFavorites - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+                    EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun cancelOrder(orderId: Long, note: String?): EaterDataRepoResult<Void> {
+        val result = withContext(Dispatchers.IO){
+            apiService.cancelOrder(orderId, note)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"cancelOrder - NetworkError")
+                    EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"cancelOrder - GenericError")
+                    EaterDataRepoResult(EaterDataRepoStatus.CANCEL_ORDER_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"cancelOrder - Success")
+                    EaterDataRepoResult(EaterDataRepoStatus.CANCEL_ORDER_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)

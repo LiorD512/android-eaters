@@ -5,7 +5,6 @@
     android:id="@+id/on_boarding_nav"
     app:startDestination="@id/welcomeFragment">
 
-
     <fragment
             android:id="@+id/loginMainFragment"
             android:name="com.bupp.wood_spoon_eaters.features.login.fragments.LoginMainFragment"

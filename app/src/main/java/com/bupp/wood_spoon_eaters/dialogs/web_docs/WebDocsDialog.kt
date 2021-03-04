@@ -31,7 +31,6 @@ class WebDocsDialog(val type: Int) : DialogFragment(), HeaderView.HeaderViewList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        webDocsPb.show()
         initUi()
         when(type){
             Constants.WEB_DOCS_PRIVACY -> {

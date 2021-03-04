@@ -11,6 +11,8 @@ ext {
     //Paging
     paging_version = "3.0.0-beta01"
 
+    material_version = "1.4.0-alpha01"
+
     // Android Sdk and tools
     minSdkVersion = 14
     targetSdkVersion = 28

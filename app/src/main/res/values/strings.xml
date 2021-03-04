@@ -91,15 +91,15 @@
         start preparing your dish,
         per our cancellation policy, there is no cancellation fee. \n We hope you consider ordering again with us soon
     </string>
-    <string name="cancel_dialog_stage_2_title">50% cancellation fee</string>
-    <string name="cancel_dialog_stage_2_body">We are sorry to see you have to cancel your order. Per our cancellation policy,
+    <string name="cancel_dialog_stage_2_title">"50% cancellation fee"</string>
+    <string name="cancel_dialog_stage_2_body">"We are sorry to see you have to cancel your order. Per our cancellation policy,
         because our cook already started to prepare your order, you will be charged for 50% of the order cost.
-        \n We hope you can understand and wishing to see you ordering again soon
+        \n We hope you can understand and wishing to see you ordering again soon"
     </string>
-    <string name="cancel_dialog_stage_3_title">100% cancellation fee</string>
-    <string name="cancel_dialog_stage_3_body">We are sorry to see you cancel your order. Per our cancellation policy,
+    <string name="cancel_dialog_stage_3_title">"100% cancellation fee"</string>
+    <string name="cancel_dialog_stage_3_body">"We are sorry to see you cancel your order. Per our cancellation policy,
         because your order is already on its way, you will be charged for 100% of the order cost.
-        \n We hope you can understand and wishing to see you ordering again soon
+        \n We hope you can understand and wishing to see you ordering again soon"
     </string>
     <string name="title_activity_address_chooser">AddressChooserActivity</string>
     <string name="fcm_message_title">WoodSpoon</string>
@@ -121,7 +121,8 @@
     <string name="delivery_method_pickup_outside">pickup_outside</string>
     <!--    <string name="google_api_key">AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU</string>-->
 
-    <string name="banner_my_location">You are now seeing dishes in %1$s, please enter your address to see home chefs that deliver to you</string>
+    <string name="banner_my_location">Enter your address to discover Home Chefs that deliver to you</string>
+    <string name="banner_no_location">You are seeing home chefs based on your last saved address since we’re unable to get your current location.</string>
     <string name="banner_known_address">Since your location services are off, WoodSpoon is using your last saved address</string>
     <string name="banner_no_gps"> You disabled your location services. WoodSpoon is using your last saved address for now.</string>
     <string name="bottom_bar_item_counter">Add %1$s To Cart</string>
@@ -131,5 +132,17 @@
     <string name="wood_spoon_chefs_play_store_url">https://play.google.com/store/apps/details?id=com.bupp.wood_spoon_chef</string>
     <string name="checkout_utensils_on">These items will be added to your order</string>
     <string name="checkout_utensils_off">These items won’t be included unless you ask</string>
+
+    <string name="rate_popup_ask_title">Like this App?</string>
+    <string name="rate_popup_ask_message">Do you like using this application?</string>
+    <string name="rate_popup_ask_ok">Yes I do</string>
+    <string name="rate_popup_ask_no">Not really</string>
+
+<!--    rating bottom sheet-->
+    <string name="rate_popup_title">Rate this app</string>
+    <string name="rate_popup_message">Would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks for your support!</string>
+    <string name="rate_popup_ok">Rate it now</string>
+    <string name="rate_popup_later">Remind me later</string>
+    <string name="rate_popup_no">No, thanks</string>
 
 </resources>

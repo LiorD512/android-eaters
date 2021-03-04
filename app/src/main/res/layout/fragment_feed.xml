@@ -1,31 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:animateLayoutChanges="true"
         android:id="@+id/feedFragMainLayout"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-    <LinearLayout
+    <TextView
+            android:id="@+id/feedFragHeaderError"
+            style="@style/SemiBold13White"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/teal_blue"
+            android:gravity="center"
+            android:paddingStart="15.4dp"
+            android:paddingEnd="15.4dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+    <FrameLayout
             android:id="@+id/feedFragEmptyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="72dp"
             android:background="@drawable/my_dishes_pic"
             android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderError"
+            tools:visibility="visible">
 
         <LinearLayout
-                android:background="@color/offwhite_90"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginEnd="15.4dp"
-                android:layout_marginTop="63.6dp"
-                android:layout_marginBottom="62.6dp"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginTop="63.6dp"
+                android:layout_marginEnd="15.4dp"
+                android:layout_marginBottom="62.6dp"
+                android:background="@color/offwhite_90"
+                android:gravity="center"
+                android:orientation="vertical">
 
             <TextView
                     android:id="@+id/feedFragEmptyFeedTitle"
@@ -33,39 +53,52 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    tools:text="Hey Neta"/>
+                    tools:text="Hey Neta" />
 
             <View
-                    android:background="@color/black"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginEnd="15.4dp"
-                    android:layout_marginTop="12.6dp"
-                    android:layout_marginBottom="15.4dp"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginTop="12.6dp"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:background="@color/black" />
 
             <TextView
                     style="@style/Reg13Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="In order to see the dishes,\nplease enter your address at the top row"/>
+                    android:text="In order to see the dishes,\nplease enter your address at the top row" />
 
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <FrameLayout
             android:id="@+id/feedFragListLayout"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderError"
+            tools:visibility="visible">
 
         <com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
                 android:id="@+id/feedFragSectionsView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
     </FrameLayout>
 
-</FrameLayout>
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            android:id="@+id/feedFragPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

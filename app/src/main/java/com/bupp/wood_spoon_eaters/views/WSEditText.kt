@@ -16,6 +16,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
@@ -28,13 +29,18 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 
 class WSEditText @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr) {
+    ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var binding: WsEditTextBinding = WsEditTextBinding.inflate(LayoutInflater.from(context), this, true)
     private var isEditable = false
 
     init {
          initUi(attrs)
+    }
+
+    var listener: WSEditTextListener? = null
+    interface WSEditTextListener{
+        fun onWSEditUnEditableClick()
     }
 
     private fun initUi(attrs: AttributeSet?) {
@@ -53,7 +59,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setInputType(inputType)
 
                 val isEditable = attr.getBoolean(R.styleable.WSEditText_isEditable, true)
-               setIsEditable(isEditable)
+               setIsEditable(isEditable, null)
 
 
                 attr.recycle()
@@ -76,9 +82,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 })
                 wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
                     if(hasFocus){
-                        wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.teal_blue))
+                        wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.greyish_brown))
                     }else{
-                        wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.dark))
+                        wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.light_periwinkle))
                     }
                 }
             }
@@ -262,11 +268,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
     }
-    fun setIsEditable(editable: Boolean) {
+    fun setIsEditable(editable: Boolean, listener: WSEditTextListener?) {
+        this.listener = listener
         with(binding){
             wsEditTextInput.isFocusable = editable
             wsEditTextInput.isClickable = editable
             this@WSEditText.isEditable = editable
+
+            wsEditTextInput.setOnClickListener {
+                listener?.onWSEditUnEditableClick()
+            }
         }
     }
 

@@ -5,12 +5,16 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFinalAddressDetailsBinding
+import com.bupp.wood_spoon_eaters.dialogs.WrongAddressDialog
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
+import com.bupp.wood_spoon_eaters.views.WSEditText
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_details) {
+class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_details), WrongAddressDialog.WrongAddressDialogListener,
+    WSEditText.WSEditTextListener {
 
     val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
     var binding: FragmentFinalAddressDetailsBinding? = null
@@ -71,20 +75,21 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
         with(binding!!){
             addressDetailsStreet.setText("${address.streetNumber} ${address.streetLine1}")
             address.cityName?.let{
-                addressDetailsCity.setIsEditable(false)
+                addressDetailsCity.setIsEditable(false, this@FinalAddressDetailsFragment)
                 addressDetailsCity.setText(address.cityName)
             }
             address.stateIso?.let{
-                addressDetailsState.setIsEditable(false)
+                addressDetailsState.setIsEditable(false, this@FinalAddressDetailsFragment)
                 addressDetailsState.setText(address.stateIso)
             }
             address.zipCode?.let{
-                addressDetailsZipcode.setIsEditable(false)
+                addressDetailsZipcode.setIsEditable(false, this@FinalAddressDetailsFragment)
                 addressDetailsZipcode.setText(address.zipCode)
 
             }
         }
     }
+
 
     private fun onDeliverToDoorClick() {
         mainViewModel.updateDeliveryMethod(getString(R.string.delivery_method_deliver_to_door))
@@ -98,6 +103,13 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
         binding!!.addressDetailsDeliverToDoor.setBtnSelected(false)
     }
 
+    override fun onReEnterAddressClick() {
+        mainViewModel.onReEnterAddressClick()
+    }
+
+    override fun onWSEditUnEditableClick() {
+        WrongAddressDialog().setWrongAddressDialogListener(this).show(childFragmentManager, Constants.WRONG_ADDRESS_DIALOG)
+    }
 
 
 }

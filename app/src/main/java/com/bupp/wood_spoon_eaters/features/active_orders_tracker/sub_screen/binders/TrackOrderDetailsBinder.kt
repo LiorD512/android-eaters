@@ -47,12 +47,22 @@ class TrackOrderDetailsBinder() : ItemBinder<OrderTrackDetails, TrackOrderDetail
             itemView.trackOrderDetailsSectionDeliveryFee.text = order.deliveryFee?.formatedValue ?: ""
             itemView.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
             itemView.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
+
+            order.tip?.let{
+                itemView.trackOrderDetailsSectionTipLayout.visibility = View.VISIBLE
+                itemView.trackOrderDetailsSectionTip.text = it.formatedValue
+
+            }
 //
             itemView.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
             itemView.trackOrderDetailsSectionPayment.text = userInfo?.paymentMethod
             itemView.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
-            itemView.trackOrderDetailsSectionLocation.text = userInfo?.userLocation?.getUserLocationStr()
             itemView.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
+            val address = userInfo?.userLocation
+            address?.let{
+                itemView.trackOrderDetailsSectionLocation1.text = "${it.streetLine1}, #${it.streetLine2}"
+                itemView.trackOrderDetailsSectionLocation2.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
+            }
 
             userInfo?.note?.let{
                 itemView.trackOrderItemNote.text = it

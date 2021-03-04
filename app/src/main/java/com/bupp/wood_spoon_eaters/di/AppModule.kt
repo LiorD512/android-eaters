@@ -36,11 +36,12 @@ import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
-import com.bupp.wood_spoon_eaters.network.base_repos.EaterDataRepositoryImpl
-import com.bupp.wood_spoon_eaters.network.base_repos.FeedRepositoryImpl
-import com.bupp.wood_spoon_eaters.network.base_repos.OrderRepositoryImpl
-import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
+import com.bupp.wood_spoon_eaters.network.base_repos.*
 import com.bupp.wood_spoon_eaters.repositories.*
+import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
+import com.bupp.wood_spoon_eaters.repositories.FeedRepository
+import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -65,20 +66,21 @@ val appModule = module {
     //managers
     single { DeliveryTimeManager() }
     single { PaymentManager(get()) }
+    single { MediaUploadManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
-    single { CartManager(get(), get(), get(), get()) }
-    single { EventsManager(get(), get(), get(), get()) }
+    single { CartManager(get(), get(), get(), get(), get()) }
+    single { EventsManager(get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
-    single { EaterDataManager(get(), get(), get(), get(), get()) }
+    single { EaterDataManager(get(), get(), get(), get(), get(), get()) }
 
 
 
     //VIEW MODELS
 
     //bottom sheet
-    viewModel { AddressMenuViewModel(get()) }
+    viewModel { AddressMenuViewModel(get(), get(), get()) }
 
     //splash
     viewModel { SplashViewModel(get(), get(), get(), get()) }
@@ -88,31 +90,31 @@ val appModule = module {
 
 
     //location
-    viewModel { LocationAndAddressViewModel(get(), get()) }
+    viewModel { LocationAndAddressViewModel(get(), get(), get()) }
     viewModel { SelectAddressViewModel(get(), get(), get(), get()) }
     viewModel { AddressMapVerificationViewModel(get(), get()) }
 
     //time
-    viewModel { TimePickerViewModel(get()) }
+    viewModel { TimePickerViewModel(get(), get()) }
 
     //New Order
-    viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SingleDishInfoViewModel(get(), get()) }
     viewModel { SingleDishIngredientViewModel(get()) }
-    viewModel { CheckoutViewModel(get(), get(), get()) }
+    viewModel { CheckoutViewModel(get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get())}
 
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FeedLoaderViewModel(get()) }
     viewModel { FeedViewModel(get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get(),get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { OrderDetailsViewModel(get()) }
-    viewModel { CookProfileViewModel(get(), get()) }
+    viewModel { CookProfileViewModel(get(), get(), get()) }
 
     viewModel { PaymentMethodsViewModel(get()) }
     viewModel { UpdateRequiredViewModel(get()) }
@@ -126,7 +128,7 @@ val appModule = module {
     viewModel { OrdersHistoryViewModel(get()) }
 
     //support
-    viewModel { SupportViewModel(get())}
+    viewModel { SupportViewModel(get(), get())}
     viewModel { WebDocsViewModel(get()) }
 
 

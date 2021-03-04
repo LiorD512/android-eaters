@@ -71,6 +71,11 @@ class Constants {
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT = 9
         const val HEADER_VIEW_TYPE_EVENT = 10
 
+        //Lottie animation types
+        const val LOTTIE_ANIM_PB = 0
+        const val LOTTIE_ANIM_SELECT_ADDRESS = 1
+        const val LOTTIE_ANIM_LOCATION_PERMISSION = 2
+
 
         //input title view input type
         const val INPUT_TYPE_TEXT = 0
@@ -117,6 +122,8 @@ class Constants {
 
 
         //activity / dialog tags
+        const val ARG_COOK_ID = "args_cook_id"
+
         const val WELCOME_DIALOG_TAG = "welcome_dialog_tag"
         const val CREATE_ACCOUNT_TAG = "create_account_tag"
         const val OFFER_DISH_TAG = "offer_dish_tag"
@@ -182,6 +189,7 @@ class Constants {
         const val NATIONWIDE_SHIPPING_INFO_DIALOG = "nationwide_shipping_info_dialog"
         const val NATIONWIDE_SHIPPING_SELECT_DIALOG = "nationwide_shipping_select_dialog"
         const val WS_ERROR_DIALOG = "ws_error_dialog"
+        const val WRONG_ADDRESS_DIALOG = "wrong_address_dialog"
 
         //start new cart dialog
         const val START_NEW_CART_IN_CART_COOK_NAME_ARG = "in_cart_cook_name"
@@ -193,6 +201,7 @@ class Constants {
         const val ADDRESS_MENU_BOTTOM_SHEET = "address_menu_bottom_sheet"
         const val COUNTRY_CODE_BOTTOM_SHEET = "country_code_bottom_sheet"
         const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
+        const val LOCATION_PERMISSION_BOTTOM_SHEET = "location_permission_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"
@@ -272,12 +281,17 @@ class Constants {
         const val ANDROID_SETTINGS_REQUEST_CODE = 113
 
         //UXCAM Events
-        const val UXCAM_EVENT_ORDER_PLACED = "order_placed"
-        const val UXCAM_EVENT_ADD_DISH = "add_dish_to_cart"
-        const val UXCAM_EVENT_ADD_ADDITIONAL_DISH = "add_upsale_dish_to_cart"
-        const val UXCAM_EVENT_TRACK_ORDER_CLICK = "clicked_track_your_order"
-        const val UXCAM_EVENT_SEARCHED_ITEM = "searched_an_item"
-        const val UXCAM_EVENT_FUTURE_DELIVERY = "scheduled_future_delivery"
+        const val EVENT_ORDER_PLACED = "order_placed"
+        const val EVENT_ADD_DISH = "add_dish_to_cart"
+        const val EVENT_ADD_ADDITIONAL_DISH = "add_upsale_dish_to_cart"
+        const val EVENT_TRACK_ORDER_CLICK = "clicked_track_your_order"
+        const val EVENT_SEARCHED_ITEM = "searched_an_item"
+        const val EVENT_FUTURE_DELIVERY = "scheduled_future_delivery"
+        const val EVENT_SEND_OTP = "send_otp"
+        const val EVENT_VERIFY_OTP = "verify_otp"
+        const val EVENT_CREATE_ACCOUNT = "create_account"
+        const val EVENT_TIP = "tip"
+        const val EVENT_LOCATION_PERMISSION = "location_persuasion"
 
 
 

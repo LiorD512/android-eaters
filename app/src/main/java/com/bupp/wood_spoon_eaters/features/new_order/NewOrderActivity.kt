@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_new_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogListener,
+class NewOrderActivity : AppCompatActivity(),
     StartNewCartDialog.StartNewCartDialogListener, CartBottomBar.OrderBottomBatListener,
     AddressMissingDialog.AddressMissingDialogListener {
 
@@ -74,8 +74,8 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
                 Toast.makeText(this, "Error while loading payments method", Toast.LENGTH_SHORT).show()
             }
         })
-        viewModel.cartStatusEvent.observe(this, { cartStatusEvent ->
-            handleCartStatus(cartStatusEvent)
+        viewModel.startNewCartEvent.observe(this, { newCartEvent ->
+            showNewCartDialog(newCartEvent)
         })
         viewModel.cartBottomBarTypeEvent.observe(this, {
             updateStatusBottomBar(it)
@@ -112,6 +112,16 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
         })
     }
 
+    private fun showNewCartDialog(newCartEvent: NewOrderMainViewModel.NewCartDialog?) {
+        newCartEvent?.let{
+            val bundle = Bundle()
+            bundle.putString(Constants.START_NEW_CART_IN_CART_COOK_NAME_ARG, it.inCartCookName)
+            bundle.putString(Constants.START_NEW_CART_CURRENT_COOK_NAME_ARG, it.currentShowingCookName)
+            val dialog = StartNewCartDialog(this)
+            dialog.arguments = bundle
+            dialog.show(supportFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
+        }
+    }
 
     private fun updateStatusBottomBar(bottomBarEvent: NewOrderMainViewModel.CartBottomBarTypeEvent) {
         Log.d(TAG, "updateStatusBottomBar type: ${bottomBarEvent.type}")
@@ -138,32 +148,6 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
         viewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.PLACE_AN_ORDER, null, null)
     }
 
-    private fun handleCartStatus(cartStatus: CartManager.CartStatus) {
-        Log.d(TAG, "handleCartStatus: ${cartStatus.type}")
-        when (cartStatus.type) {
-            CartManager.CartStatusEventType.NEW_ORDER -> {
-//                singleDishStatusBar.handleBottomBar(showCheckout = false)
-
-            }
-            CartManager.CartStatusEventType.DIFFERENT_COOKING_SLOT -> {
-                val bundle = Bundle()
-                bundle.putString(Constants.START_NEW_CART_IN_CART_COOK_NAME_ARG, cartStatus.inCartCookName)
-                bundle.putString(Constants.START_NEW_CART_CURRENT_COOK_NAME_ARG, cartStatus.currentShowingCookName)
-                val dialog = StartNewCartDialog(this)
-                dialog.arguments = bundle
-                dialog.show(supportFragmentManager, Constants.START_NEW_CART_DIALOG_TAG)
-            }
-            CartManager.CartStatusEventType.ADD_TO_ORDER_FOR_CURRENT_COOKING_SLOT -> {
-//                singleDishStatusBar.handleBottomBar(showCheckout = true)
-                viewModel.updateCartBottomBarByType(
-                    type = CartBottomBar.BottomBarTypes.ADD_TO_CART_OR_CHECKOUT,
-                    price = cartStatus.currentOrderItemPrice,
-                    itemCount = cartStatus.currentOrderItemCounter,
-                    totalPrice = cartStatus.inCartTotalPrice
-                )
-            }
-        }
-    }
 
     override fun onNewCartClick() {
         viewModel.clearCart()
@@ -186,20 +170,7 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
         }
 
 
-    override fun onCheckoutDone() {
-        intent.putExtra("isAfterPurchase", true)
-        setResult(Activity.RESULT_OK, intent)
-        finishNewOrder()
-    }
-
-    override fun onCheckoutCanceled() {
-        viewModel.loadPreviousDish()
-//        loadSingleDish()
-//        setResult(Activity.RESULT_CANCELED)
-//        finishNewOrder()
-    }
-
-    fun finishNewOrder() {
+    private fun finishNewOrder() {
         viewModel.onNewOrderFinish()
         finish()
     }
@@ -240,6 +211,11 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
             NewOrderMainViewModel.NewOrderNavigationEvent.FINISH_ACTIVITY -> {
                 finishNewOrder()
             }
+            NewOrderMainViewModel.NewOrderNavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE -> {
+                intent.putExtra("isAfterPurchase", true)
+                setResult(Activity.RESULT_OK, intent)
+                finishNewOrder()
+            }
         }
     }
 
@@ -251,25 +227,25 @@ class NewOrderActivity : AppCompatActivity(), CheckoutFragment.CheckoutDialogLis
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateUI()
-    }
+//    override fun onResume() {
+//        super.onResume()
+////        updateUI()
+//    }
 
 
-    private fun updateUI() {
-        val decorView = window.decorView
-        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-            }
-        }
-    }
+//    private fun updateUI() {
+//        val decorView = window.decorView
+//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+//            }
+//        }
+//    }
 
 
 }

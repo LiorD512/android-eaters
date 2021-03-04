@@ -7,13 +7,11 @@ import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
-import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
-import com.stripe.android.model.PaymentMethod
 
 
 class EaterDataManager(
-    val context: Context, private val locationManager: LocationManager,
+    val context: Context, private val locationManager: LocationManager, private val eventsManager: EventsManager,
     private val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository
 ) {
 
@@ -34,7 +32,7 @@ class EaterDataManager(
     fun getFinalAddressLiveDataParam() = locationManager.getFinalAddressLiveDataParam()
     fun getLocationData() = locationManager.getLocationData()
 
-    fun updateSelectedAddress(selectedAddress: Address) {
+    fun updateSelectedAddress(selectedAddress: Address?) {
         locationManager.setSelectedAddressAndUpdateParams(selectedAddress)
     }
 
@@ -44,6 +42,10 @@ class EaterDataManager(
 
     fun hasUserSetAnAddress(): Boolean {
         return getFinalAddressLiveDataParam().value?.id != null
+    }
+
+    fun stopLocationUpdates() {
+        locationManager.forceStopLocationUpdates(true)
     }
 
     /////////////////////////////////////////
@@ -61,18 +63,16 @@ class EaterDataManager(
 
     var traceableOrdersList: List<Order>? = null
     fun getTraceableOrders() = traceableOrders
-    private val traceableOrders = MutableLiveData<List<Order>>()
+    private val traceableOrders = MutableLiveData<List<Order>?>()
 
     suspend fun checkForTraceableOrders() {
         val result = eaterDataRepository.getTraceableOrders()
         when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_SUCCESS -> {
                 result.data?.let {
-                    if(it.isNotEmpty()){
-                        Log.d(TAG, "checkForTraceableOrders - success")
-                        traceableOrdersList = it
-                        traceableOrders.postValue(it)
-                    }
+                    Log.d(TAG, "checkForTraceableOrders - success")
+                    traceableOrdersList = it
+                    traceableOrders.postValue(it)
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_FAILED -> {
@@ -88,6 +88,36 @@ class EaterDataManager(
         }
     }
 
+    suspend fun cancelOrder(orderId: Long?, note: String?): EaterDataRepository.EaterDataRepoResult<Void>? {
+        orderId?.let{
+            val result = eaterDataRepository.cancelOrder(it, note)
+            when (result.type) {
+                EaterDataRepository.EaterDataRepoStatus.CANCEL_ORDER_SUCCESS -> {
+                    result?.let {
+                        Log.d(TAG, "checkForTraceableOrders - success")
+                        checkForTraceableOrders()
+                        return result
+                    }
+                }
+                EaterDataRepository.EaterDataRepoStatus.CANCEL_ORDER_FAILED -> {
+                    Log.d(TAG, "checkForTraceableOrders - failed")
+                    return result
+                }
+                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+                    Log.d(TAG, "checkForTraceableOrders - es error")
+                    return result
+
+                }
+                else -> {
+                    return result
+                }
+            }
+        }
+        return null
+    }
+
+
+
     /////////////////////////////////////////
     /////////      Favorites         ////////
     /////////////////////////////////////////
@@ -101,16 +131,18 @@ class EaterDataManager(
         when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_SUCCESS -> {
                 result.data?.let {
-                    Log.d(TAG, "checkForTraceableOrders - success")
+                    Log.d(TAG, "refreshMyFavorites - success")
                     favoritesDishLiveData.postValue(it)
                     favoritesDishList = it
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_FAILED -> {
-                Log.d(TAG, "checkForTraceableOrders - failed")
+                Log.d(TAG, "refreshMyFavorites - failed")
+                favoritesDishLiveData.postValue(listOf())
+                favoritesDishList = null
             }
             EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-                Log.d(TAG, "checkForTraceableOrders - es error")
+                Log.d(TAG, "refreshMyFavorites - es error")
 
             }
             else -> {
@@ -119,7 +151,7 @@ class EaterDataManager(
         }
     }
 
-    private fun getLastFeedRequest(): FeedRequest {
+    fun getLastFeedRequest(): FeedRequest {
         //being used in NewOrderActivity, uses params to init new Order.
         var feedRequest = FeedRequest()
         val lastAddress = getFinalAddressLiveDataParam().value
@@ -138,6 +170,11 @@ class EaterDataManager(
 
         return feedRequest
     }
+
+    fun getDeliveryTimestamp(): String? {
+        return deliveryTimeManager.getDeliveryTimestamp()
+    }
+
 
 
     /////////////////////////////////////////
@@ -170,72 +207,9 @@ class EaterDataManager(
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    //Stripe customer card
-//    private var currentPaymentMethod: PaymentMethod? = null
-//
-//    fun updateCustomerCard(paymentMethod: PaymentMethod) {
-//        this.currentPaymentMethod = paymentMethod
-//    }
-//
-//    fun getCurrentPaymentMethod(): PaymentMethod? {
-//        return currentPaymentMethod
-//    }
-//
-//    fun getCustomerCardId(): String {
-//        if (currentPaymentMethod != null) {
-//            return currentPaymentMethod?.id!!
-//        }
-//        return ""
-//    }
-//
-//
-////    eater params and data
-////
-//
-//
-//    private var isUserChooseSpecificAddress: Boolean = false
-//
-////
-//    fun setUserChooseSpecificAddress(isSpecificAddress: Boolean) {
-////        this.isUserChooseSpecificAddress = isSpecificAddress
-//    }
-//
-//    fun isUserChooseSpecificAddress(): Boolean {
-//        //is user didn't chose my location
-//        return false
-//
-//    }
-//
-//    fun getDropoffLocation(): String? {
-//        if (currentEater?.addresses != null && currentEater?.addresses!!.size > 0) {
-//            return currentEater?.addresses?.first()?.getDropoffLocationStr()
-//        } else {
-//            return getLastChosenAddress()?.getDropoffLocationStr()
-//        }
-//    }
-//
-//
-//    fun setUserChooseSpecificTime(hasSpecificTime: Boolean) {
-////        this.hasSpecificTime = hasSpecificTime
-//    }
+    /////////////////////////////////////////
+    ///////         Referrals         ///////
+    /////////////////////////////////////////
 
     var sid: String? = null
     var cid: String? = null
@@ -248,13 +222,20 @@ class EaterDataManager(
         }
     }
 
-    fun getDeliveryTimestamp(): String? {
-        return deliveryTimeManager.getDeliveryTimestamp()
+    fun refreshSegment() {
+        val curAddress = locationManager.getLastChosenAddress()
+        eventsManager.initSegment(currentEater, curAddress)
     }
 
-    fun stopLocationUpdates() {
-        locationManager.forceStopLocationUpdates(true)
+
+    /////////////////////////////////////////
+    ////////         Events         /////////
+    /////////////////////////////////////////
+
+    fun logUxCamEvent(eventName: String, params: Map<String, String>? = null){
+        eventsManager.logEvent(eventName, params)
     }
+
 
 
     companion object {

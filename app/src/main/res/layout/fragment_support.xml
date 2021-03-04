@@ -26,8 +26,7 @@
                         style="@style/Reg13Dark_50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
+                        android:paddingHorizontal="15.4dp"
                         android:layout_gravity="center"
                         android:text="Help WoodSpoon to be better. Please send us any suggestions and comments you have"/>
 
@@ -35,8 +34,7 @@
                         android:id="@+id/supportDialogCommentInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginEnd="15.4dp"
+                        android:paddingHorizontal="15.4dp"
                         android:layout_marginBottom="16.3dp"
                         app:hint="Your thoughts…"
                         app:inputType="LONG_TEXT"
@@ -46,6 +44,7 @@
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                         app:title="Send"
+                        android:paddingHorizontal="15.4dp"
                         android:layout_gravity="center"
                         android:id="@+id/supportDialogNext"
                         android:layout_width="match_parent"

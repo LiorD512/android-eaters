@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentWelcomeBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
+import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -20,6 +21,8 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentWelcomeBinding.bind(view)
         binding!!.welcomeFragmentLogin.setOnClickListener { onLoginClick() }
+
+        Analytics.with(requireContext()).screen("onboarding")
     }
 
     private fun onLoginClick() {

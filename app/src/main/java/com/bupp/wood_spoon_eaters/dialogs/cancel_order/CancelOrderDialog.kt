@@ -66,7 +66,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
         viewModel.cancelOrder.observe(viewLifecycleOwner, {cancelOrderEvent ->
             cancelOrderPb.hide()
-            if(cancelOrderEvent.isSuccess){
+            if(cancelOrderEvent){
                 listener?.onOrderCanceled()
                 dismiss()
             }else{

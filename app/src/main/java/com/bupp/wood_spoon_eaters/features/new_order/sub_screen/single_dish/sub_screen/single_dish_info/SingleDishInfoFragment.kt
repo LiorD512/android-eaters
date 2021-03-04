@@ -37,7 +37,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Dish page (info)")
+        Analytics.with(requireContext()).screen("dishInfo")
 
         initUi()
         initObserver()
@@ -75,25 +75,9 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         })
         mainViewModel.dishInfoEvent.observe(viewLifecycleOwner, {
             updateDishInfoUi(it)
-//            mainViewModel.updateCartBottomBar(type = Constants.CART_BOTTOM_BAR_TYPE_CART, price = it.getPriceObj().value, itemCount = 1)
-            mainViewModel.updateCartBottomBarByType(type = CartBottomBar.BottomBarTypes.ADD_TO_CART, price = it.getPriceObj().value, itemCount = 1)
         })
-//        mainViewModel.mainActionEvent.observe(viewLifecycleOwner, {
-//            addCurrentDishToCart()
-//        })
     }
 
-//    private fun addCurrentDishToCart() {
-//        Log.d(TAG, "addCurrentDishToCart")
-//        viewModel.addNewItemToCart()
-////        val quantity = singleDishPlusMinus.counter
-//////        val removedIngredients = ingredientsAdapter?.ingredientsRemoved todo - add this in the right place
-////        val note = singleDishIngredientInstructions.getText()
-////        viewModel.updateDishBeforeAddingToCart(
-////            quantity = quantity,
-////            note = note
-////        )
-//    }
 
     @SuppressLint("SetTextI18n")
     private fun updateDishInfoUi(fullDish: FullDish) {
@@ -105,7 +89,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         singleDishInfoDescription.text = fullDish.description
         singleDishInfoPrice.text = fullDish.getPriceObj().formatedValue
 
-
+        singleDishInfoImagePager.offscreenPageLimit = fullDish.getMediaList().size
         dishMediaPagerAdapter.submitList(fullDish.getMediaList())
         if (fullDish.getMediaList().size > 1) {
             singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
@@ -114,15 +98,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         fullDish.cook.country?.let{
             Glide.with(requireContext()).load(fullDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
         }
-
-//        if (fullDish.cook?.diets?.size > 0) {
-//            singleDishInfoDietryList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//            val dietaryAdapter = CooksDietaryAdapter(requireContext(), fullDish.cook.diets)
-//            singleDishInfoDietryList.adapter = dietaryAdapter
-//        } else {
-//            singleDishInfoDietryList.visibility = View.GONE
-//        }
-
 
         val menuItem = fullDish.menuItem
         if (menuItem != null) {
@@ -171,29 +146,18 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     private fun onRatingClick() {
-        mainViewModel.getCooksReview()
+        mainViewModel.getDishReview(null)
     }
 
     private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
         val timePickerBottomSheet = TimePickerBottomSheet()
         timePickerBottomSheet.setMenuItems(menuItems)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
-//        viewModel.getCurrentDish()?.let {
-//            val currentDateSelected = it.menuItem
-//            val availableMenuItems = it.availableMenuItems
-//            OrderDateChooserDialog(currentDateSelected, availableMenuItems, this)
-//                .show(childFragmentManager, Constants.ORDER_DATE_CHOOSER_DIALOG_TAG)
-//        }
     }
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateCurrentOrderItem(quantity = counter)
-        mainViewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.ADD_TO_CART, itemCount = counter, price = viewModel.getTotalPriceForDishQuantity(counter))
-//        viewModel.getCurrentDish().let {
-//            val newValue = it.price.value * counter
-//            updateStatusBottomBar(price = newValue, itemCount = counter)
-//        }
-//        singleDishCount.text = "$counter"
+        mainViewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.UPDATE_COUNTER, itemCount = counter, price = viewModel.getTotalPriceForDishQuantity(counter))
     }
 
     private fun initOrderDate(currentDish: FullDish) {
@@ -201,20 +165,20 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
             singleDishInfoDeliveryTimeLayout.visibility = View.GONE
         }else {
             singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
-
-//            if(newSelectedDate != null){
-//                singleDishInfoDate.text = DateUtils.parseDateToDayDateHour(newSelectedDate)
-//            }else{
-                val orderAtDate = currentDish.menuItem?.orderAt
-                if (orderAtDate != null) {
-                    currentDish.menuItem?.cookingSlot?.orderFrom?.let {
-                        singleDishInfoDate.text = DateUtils.parseDateToDayDateHour(it)
+            if(currentDish.menuItem?.orderAt == null){
+                //Dish is offered today.
+                singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
+            }else{
+                currentDish.menuItem?.orderAt?.let{
+                    //Dish is offered in the future.
+                    if(DateUtils.isToday(it)){
+                        singleDishInfoDate.text = "Today, ${DateUtils.parseDateHalfHourInterval(it)}"
+                    }else{
+                        singleDishInfoDate.text = "${DateUtils.parseDateToDayDateAndTime(it)}"
                     }
-                } else {
-                    singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
                 }
-//            }
 
+            }
             singleDishInfoDelivery.text = "${viewModel.getDropOffLocation()}"
         }
     }

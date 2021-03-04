@@ -119,8 +119,8 @@ class UserImageView : FrameLayout {
                 val bkgLayout = LayoutParams(90.toPx(), 90.toPx())
                 cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = RelativeLayout.LayoutParams(86.toPx(), 86.toPx())
-                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                val imageLayout = RelativeLayout.LayoutParams(90.toPx(), 90.toPx())
+                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
                 cookImageView.layoutParams = imageLayout
             }
             Constants.MANY_COOKS_VIEW -> {

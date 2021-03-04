@@ -99,10 +99,10 @@ class SingleFeedAdapter(
                     holder.date.text = "ASAP, ${dish.doorToDoorTime}"
                 }
             }else{
-                if(isEvent){
-//                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
-                    holder.date.text = DateUtils.parseDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
-                }else{
+//                if(isEvent){
+////                    holder.date.text = Utils.parseDDateToUsTime(dish.menuItem.cookingSlot.startsAt)
+//                    holder.date.text = DateUtils.parseDateToUsTime(dish.menuItem.cookingSlot.orderFrom)
+//                }else{
                     if(DateUtils.isTodayOrTomorrow(dish.menuItem.orderAt)){
                         //Dish is offered today or tomorrow.
 //                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
@@ -111,7 +111,7 @@ class SingleFeedAdapter(
                         //Dish is offered later this week and beyond
                         holder.date.text = DateUtils.parseDateToFromStartingDate(dish.menuItem.cookingSlot.orderFrom)
                     }
-                }
+//                }
             }
             holder.mainLayout.setOnClickListener {
                 listener.onDishClick(dish)

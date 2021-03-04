@@ -5,11 +5,47 @@
     app:startDestination="@id/FeedFragment"
     android:id="@+id/main_navigation">
 
+
+
     <fragment
             android:id="@+id/FeedFragment"
             android:name="com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment"
             android:label="fragment_feed"
             tools:layout="@layout/fragment_feed">
 
+        <action
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpToInclusive="true"
+                android:id="@+id/action_FeedFragment_to_SearchFragment"
+                app:destination="@id/SearchFragment" />
+        <action
+                app:enterAnim="@anim/slide_left_enter"
+                app:exitAnim="@anim/slide_left_exit"
+                app:popEnterAnim="@anim/slide_right_enter"
+                app:popExitAnim="@anim/slide_right_exit"
+                app:popUpToInclusive="false"
+                android:id="@+id/action_FeedFragment_to_myProfileFragment"
+                app:destination="@id/myProfileFragment" />
     </fragment>
+
+    <fragment
+            android:id="@+id/SearchFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.main.search.SearchFragment"
+            android:label="fragment_search"
+            tools:layout="@layout/fragment_search">
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/myProfileFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment"
+            android:label="my_profile_fragment"
+            tools:layout="@layout/my_profile_fragment" >
+
+    </fragment>
+
+
 </navigation>

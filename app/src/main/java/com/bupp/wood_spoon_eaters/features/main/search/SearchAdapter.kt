@@ -137,14 +137,14 @@ class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>,
         }
     }
 
-    fun updateCooks(cooks: ArrayList<Cook>) {
+    fun updateCooks(cooks: List<Cook>) {
         hasCooks = true;
         this.cooks.clear()
         this.cooks.addAll(cooks)
         notifyDataSetChanged()
     }
 
-    fun updateDishes(dishes: ArrayList<Dish>) {
+    fun updateDishes(dishes: List<Dish>) {
         hasDishes = true;
         this.dishes.clear()
         this.dishes.addAll(dishes)

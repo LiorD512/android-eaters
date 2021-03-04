@@ -89,7 +89,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         } else {
             imgCount++
         }
-        return welcomeScreen.get(imgCount).url
+        if(welcomeScreen.isNotEmpty()){
+            return welcomeScreen[imgCount].url
+        }
+        return null
     }
 
     private fun getCurrentText(): String? {
@@ -98,7 +101,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         } else {
             textCount++
         }
-        return welcomeScreen.get(textCount).text
+        if(welcomeScreen.isNotEmpty()){
+            return welcomeScreen[imgCount].text
+        }
+        return null
     }
 
     private fun animateImages(imageUrl: String?, curImageView: ImageView?, lastImageView: ImageView?) {

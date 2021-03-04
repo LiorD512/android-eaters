@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_support.*
@@ -40,27 +42,33 @@ class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {
         supportDialogCommentInput.setInputTitleViewListener(this)
 
         supportDialogCallButton.setOnClickListener {
-            (activity as MainActivity).sendSmsText()
+            (activity as MainActivity).onContactUsClick()
         }
         supportDialogTextButton.setOnClickListener {
             (activity as MainActivity).sendSmsText()
         }
-
+        supportDialogQA.setOnClickListener{ openQaUrl()}
         supportDialogNext.setOnClickListener { sendMail() }
+    }
+
+    private fun openQaUrl() {
+        WebDocsDialog(Constants.WEB_DOCS_QA).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
     }
 
     private fun sendMail() {
         val text = supportDialogCommentInput.getText()
         val address = viewModel.getAdminMailAddress()
-        val intent = Intent(Intent.ACTION_SENDTO)
-        intent.data = Uri.parse("mailto:$address")
-        intent.putExtra(Intent.EXTRA_EMAIL, address)
-        intent.putExtra(Intent.EXTRA_SUBJECT, text)
-        activity?.let{
-            if (intent.resolveActivity(it.packageManager) != null) {
-                startActivity(intent)
-            }
-        }
+
+        val selectorIntent = Intent(Intent.ACTION_SENDTO)
+        selectorIntent.data = Uri.parse("mailto:")
+
+        val emailIntent = Intent(Intent.ACTION_SEND)
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, viewModel.getEmailSubject())
+        emailIntent.putExtra(Intent.EXTRA_TEXT, text)
+        emailIntent.selector = selectorIntent
+
+        activity?.startActivity(Intent.createChooser(emailIntent, "Send email..."))
     }
 
     override fun onInputTitleChange(str: String?) {

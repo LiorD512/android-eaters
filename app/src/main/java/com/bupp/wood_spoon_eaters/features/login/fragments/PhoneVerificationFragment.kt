@@ -9,12 +9,14 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.databinding.CountryCodePickerItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
 import com.bupp.wood_spoon_eaters.utils.showKeyboard
+import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -27,6 +29,8 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentPhoneVerificationBinding.bind(view)
+
+        Analytics.with(requireContext()).screen("getOtpCode")
 
         initUi()
         initObservers()
@@ -77,16 +81,16 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
 
     private fun sendCode() {
         val phoneStr = binding!!.verificationFragmentInput.getText()
-        if(phoneStr.isNullOrEmpty()){
-            binding!!.verificationFragmentInput.showError()
-        }else{
-            phoneStr.let{
+        if(CountryCodeUtils.isPhoneValid(phoneStr)){
+            phoneStr!!.let{
                 val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
                 phone?.let{
                     viewModel.setUserPhone(it)
                     viewModel.sendPhoneNumber()
                 }
             }
+        }else{
+            binding!!.verificationFragmentInput.showError()
         }
     }
 

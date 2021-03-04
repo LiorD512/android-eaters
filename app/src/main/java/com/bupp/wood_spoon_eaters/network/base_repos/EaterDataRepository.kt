@@ -9,6 +9,7 @@ interface EaterDataRepository{
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
     suspend fun getFavorites(feedRequest: FeedRequest): ResultHandler<ServerResponse<Search>>
     suspend fun getTrigger(): ResultHandler<ServerResponse<Trigger>>
+    suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Void>>
 }
 
 class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataRepository {
@@ -20,6 +21,10 @@ class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataReposi
     }
     override suspend fun getTrigger(): ResultHandler<ServerResponse<Trigger>> {
         return safeApiCall { service.getTriggers() }
+    }
+
+    override suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Void>> {
+        return safeApiCall { service.cancelOrder(orderId, note) }
     }
 
 

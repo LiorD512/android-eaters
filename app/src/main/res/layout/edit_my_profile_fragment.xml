@@ -20,33 +20,86 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-            android:id="@+id/editMyProfileFragFullName"
-            android:layout_marginTop="23dp"
-            app:title="Full Name"
-            app:isMandatory="true"
-            app:inputType="TEXT"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37.14dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:id="@+id/name_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitle">
 
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:layout_marginEnd="15.4dp"
+                android:id="@+id/editMyProfileFragFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:inputType="INPUT_TYPE_FULL_NAME"
+                app:error="Please enter your name"
+                app:hint="First name" />
 
-    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:id="@+id/editMyProfileFragLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:inputType="INPUT_TYPE_FULL_NAME"
+                app:error="Please enter your last name"
+                app:hint="Last name" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSEditText
+            android:layout_marginTop="31dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_layout"
             android:id="@+id/editMyProfileFragEmail"
-            android:layout_marginTop="15.4dp"
-            app:title="Email"
-            app:isMandatory="true"
-            app:inputType="TEXT"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:inputType="MAIL"
+            app:error="Please enter your email"
+            app:hint="Email address" />
+
+    <com.bupp.wood_spoon_eaters.views.WSEditText
+            android:layout_marginTop="31dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_layout"
+            android:id="@+id/editMyProfileFragPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isEditable="false"
+            app:inputType="PHONE"
+            app:hint="Mobile number" />
+
+<!--    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView-->
+<!--            android:id="@+id/editMyProfileFragFullName"-->
+<!--            android:layout_marginTop="23dp"-->
+<!--            app:title="Full Name"-->
+<!--            app:isMandatory="true"-->
+<!--            app:inputType="TEXT"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
 
 
-    <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView
-            android:id="@+id/editMyProfileFragMobileNum"
-            android:layout_marginTop="24dp"
-            app:title="Mobile Number"
-            app:isMandatory="true"
-            app:inputType="NUMBER"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+<!--    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView-->
+<!--            android:id="@+id/editMyProfileFragEmail"-->
+<!--            android:layout_marginTop="15.4dp"-->
+<!--            app:title="Email"-->
+<!--            app:isMandatory="true"-->
+<!--            app:inputType="TEXT"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
+
+
+<!--    <com.bupp.wood_spoon_eaters.custom_views.ActionTitleView-->
+<!--            android:id="@+id/editMyProfileFragMobileNum"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            app:title="Mobile Number"-->
+<!--            app:isMandatory="true"-->
+<!--            app:inputType="NUMBER"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
 
 </LinearLayout>

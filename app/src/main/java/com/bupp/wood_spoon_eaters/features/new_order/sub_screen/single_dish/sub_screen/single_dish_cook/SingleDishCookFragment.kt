@@ -31,7 +31,7 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Dish page (home chef)")
+        Analytics.with(requireContext()).screen("dishHomeChef")
 
         initUi()
         initObservers()
@@ -100,13 +100,9 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
         cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
 
 
-        cookProfileFragRating.setOnClickListener { onRatingClick() }
+        cookProfileFragRating.setOnClickListener { mainViewModel.getDishReview(cookId = cook.id) }
 
         cookProfileFragReviews.text = "${cook.reviewCount} Reviews"
-    }
-
-    private fun onRatingClick() {
-        mainViewModel.getCooksReview()
     }
 
     override fun onUserImageClick(cook: Cook?) {

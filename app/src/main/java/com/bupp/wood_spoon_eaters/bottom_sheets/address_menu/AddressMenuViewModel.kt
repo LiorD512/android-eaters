@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.FeedDataManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
@@ -12,7 +15,9 @@ import kotlinx.coroutines.launch
 
 
 class AddressMenuViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val eaterDataManager: EaterDataManager,
+    private val feedDataManager: FeedDataManager
 ) : ViewModel() {
 
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
@@ -42,6 +47,8 @@ class AddressMenuViewModel(
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d(LocationAndAddressViewModel.TAG, "Success")
+                        eaterDataManager.updateSelectedAddress(null)
+                        feedDataManager.initFeedDataManager()
                         navigationEvent.postValue(NavigationEventType.ADDRESS_MENU_DONE)
                     }
                     else -> {

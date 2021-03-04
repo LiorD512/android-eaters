@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.cook_profile_dialog.*
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook) : DialogFragment(), HeaderView.HeaderViewListener,
+class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragment(), HeaderView.HeaderViewListener,
      UserImageView.UserImageViewListener, CooksProfileDishesAdapter.CooksProfileDishesListener {
 
     interface CookProfileDialogListener{
@@ -38,6 +38,8 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
+
+        viewModel.initCookData(arguments?.getLong(Constants.ARG_COOK_ID, -1))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,20 +50,31 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCook()
         initObservers()
     }
 
     private fun initObservers() {
-        viewModel.getReviewsEvent.observe(this, Observer { reviews ->
+        viewModel.getReviewsEvent.observe(viewLifecycleOwner,  { reviews ->
             cookProfilePb.hide()
                 reviews?.let{
                     RatingsDialog(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
                 }
         })
+        viewModel.getCookEvent.observe(viewLifecycleOwner,{
+            it?.let{
+                initCook(it)
+            }
+        })
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            if(it){
+                cookProfilePb.show()
+            }else{
+                cookProfilePb.hide()
+            }
+        })
     }
 
-    private fun initCook() {
+    private fun initCook(cook: Cook) {
         cookProfileFragBackBtn.visibility = View.VISIBLE
         cookProfileFragBackBtn.setOnClickListener { dismiss() }
 
@@ -132,12 +145,11 @@ class CookProfileDialog(val listener: CookProfileDialogListener, val cook: Cook)
         dish.menuItem?.let{
             listener.onDishClick(it.id)
         }
-//        (activity as MainActivity).loadNewOrderActivity()
     }
 
     private fun onRatingClick() {
         cookProfilePb.show()
-        viewModel.getDishReview(cook.id)
+        viewModel.getDishReview()
     }
 
     override fun onUserImageClick(cook: Cook?) {

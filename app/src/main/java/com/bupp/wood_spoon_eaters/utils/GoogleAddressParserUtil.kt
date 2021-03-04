@@ -71,7 +71,12 @@ object GoogleAddressParserUtil {
         addressRequest.lng = location.longitude
         addressRequest.streetNumber = location.featureName
         addressRequest.streetLine1 = location.thoroughfare
-        addressRequest.cityName = location.subLocality
+        location.subLocality?.let{
+            addressRequest.cityName = it
+        }
+        location.locality?.let{
+            addressRequest.cityName = it
+        }
         addressRequest.stateIso = State.valueOfState(location.adminArea).iso
         addressRequest.countryIso = location.countryCode
         addressRequest.zipCode = location.postalCode

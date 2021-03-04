@@ -96,6 +96,7 @@
                             android:background="@color/dark" />
 
                     <LinearLayout
+                            android:id="@+id/cookProfileFragReviewLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginStart="7.2dp"

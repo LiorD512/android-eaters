@@ -12,14 +12,6 @@
             tools:layout="@layout/fragment_select_address">
 
         <action
-                android:id="@+id/action_selectAddressFragment_to_locationPermissionFragment"
-                app:destination="@id/locationPermissionFragment"
-                app:enterAnim="@anim/slide_left_enter"
-                app:exitAnim="@anim/slide_left_exit"
-                app:popEnterAnim="@anim/slide_right_enter"
-                app:popExitAnim="@anim/slide_right_exit"
-                app:popUpTo="@+id/selectAddressFragment" />
-        <action
                 android:id="@+id/action_selectAddressFragment_to_addressVerificationMapFragment"
                 app:destination="@id/addressVerificationMapFragment"
                 app:enterAnim="@anim/slide_right_enter"
@@ -27,21 +19,6 @@
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
                 app:popUpTo="@+id/selectAddressFragment"/>
-    </fragment>
-
-    <fragment
-            android:id="@+id/locationPermissionFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.locations_and_address.LocationPermissionFragment"
-            android:label="location_permission"
-            tools:layout="@layout/fragment_location_permission">
-
-        <action
-                android:id="@+id/action_locationPermissionFragment_to_selectAddressFragment"
-                app:destination="@id/selectAddressFragment"
-                app:enterAnim="@anim/slide_left_enter"
-                app:exitAnim="@anim/slide_left_exit"
-                app:popEnterAnim="@anim/slide_right_enter"
-                app:popExitAnim="@anim/slide_right_exit"/>
     </fragment>
 
     <fragment
@@ -85,5 +62,14 @@
                 app:popEnterAnim="@anim/slide_right_enter"
                 app:popExitAnim="@anim/slide_right_exit"
                 app:popUpTo="@+id/finalAddressDetailsFragment"/>
+        <action
+                app:popUpToInclusive="true"
+                app:popUpTo="@+id/selectAddressFragment"
+                android:id="@+id/action_finalAddressDetailsFragment_to_selectAddressFragment"
+                app:destination="@id/selectAddressFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"/>
     </fragment>
 </navigation>
