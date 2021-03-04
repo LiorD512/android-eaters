@@ -41,7 +41,7 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
         val curCook = cooksList.get(position)
 
         holder.cookFirstName.text = curCook.firstName
-        holder.cookLastName.text = curCook.lastName
+//        holder.cookLastName.text = curCook.lastName
         holder.cookImageView.setCookFromCooksView(curCook)
 
 //        Glide.with(context).load(ContextCompat.getDrawable(context, R.drawable.white_circle)).apply(RequestOptions.circleCropTransform()).into(holder.CooksViewBkg)

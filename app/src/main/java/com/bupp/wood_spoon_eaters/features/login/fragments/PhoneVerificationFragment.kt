@@ -67,6 +67,10 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
                 sendCode()
             }
 
+            verificationFragCloseBtn.setOnClickListener {
+                activity?.onBackPressed()
+            }
+
             verificationFragFlag.setOnClickListener {
                 val countryCodePicker = CountryChooserBottomSheet()
                 countryCodePicker.show(childFragmentManager, Constants.COUNTRY_CODE_BOTTOM_SHEET)

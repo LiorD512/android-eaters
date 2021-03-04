@@ -108,6 +108,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
                 }
             })
 
+            codeFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
 
         }
     }

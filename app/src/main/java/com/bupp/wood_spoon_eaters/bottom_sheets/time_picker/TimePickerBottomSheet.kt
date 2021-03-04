@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TimePickerBottomSheet() : BottomSheetDialogFragment() {
 
 
-    private lateinit var binding: TimePickerBottomSheetBinding
+    private var binding: TimePickerBottomSheetBinding? = null
     val viewModel by viewModel<TimePickerViewModel>()
     private var menuItems: List<MenuItem>? = null
     private var isTemporary: Boolean = false
@@ -71,17 +71,20 @@ class TimePickerBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun initUi() {
-        binding.timePickerAsapBtn.setOnClickListener {
-            viewModel.setDeliveryTime(null)
-            dismiss()
-        }
-        binding.timePickerScheduleBtn.setOnClickListener {
-            viewModel.setDeliveryTime(binding.timePickerTimePicker.getChosenDate(), isTemporary)
-            dismiss()
-        }
+        with(binding!!){
+            timePickerAsapBtn.setOnClickListener {
+                viewModel.setDeliveryTime(null)
+                dismiss()
+            }
+            timePickerScheduleBtn.setOnClickListener {
+                viewModel.setDeliveryTime(timePickerTimePicker.getChosenDate(), isTemporary)
+                dismiss()
+            }
 
-        menuItems?.let{
-            binding.timePickerTimePicker.setDatesByMenuItems(it)
+            menuItems?.let{
+                timePickerTimePicker.setDatesByMenuItems(it)
+                timePickerAsapBtn.visibility = View.GONE
+            }
         }
     }
 

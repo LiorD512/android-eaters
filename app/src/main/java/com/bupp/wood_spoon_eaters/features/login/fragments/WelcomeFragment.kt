@@ -26,7 +26,7 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     }
 
     private fun onLoginClick() {
-        viewModel.directToMainFrag()
+        viewModel.directToPhoneFrag()
     }
 
     override fun onDestroy() {

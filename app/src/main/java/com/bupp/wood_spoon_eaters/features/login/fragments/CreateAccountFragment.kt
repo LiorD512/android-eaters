@@ -51,6 +51,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
     private fun initUi() {
         binding!!.createAccountFragNext.setOnClickListener {updateEater()}
+        binding!!.createAccountFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
     }
 
     private fun updateEater() {

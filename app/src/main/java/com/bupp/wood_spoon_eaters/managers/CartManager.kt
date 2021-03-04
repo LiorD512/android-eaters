@@ -8,7 +8,6 @@ import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import java.util.*
 
 class CartManager(
@@ -33,7 +32,8 @@ class CartManager(
     //    private var currentOrderDeliveryTime: Date? = null
     private val cart: MutableList<OrderItemRequest> = mutableListOf()
 
-    val deliveryTimeLiveData = deliveryTimeManager.getDeliveryTimeLiveData()
+    val globalDeliveryTimeLiveData = deliveryTimeManager.getDeliveryTimeLiveData()
+    var currentCartDeliveryTimestamp: String? = null
 
     data class GetFullDishResult(
         val fullDish: FullDish,
@@ -49,6 +49,7 @@ class CartManager(
             //build new currentItemRequest
             initNewOrderItemRequest(it)
             this.currentShowingDish = it
+            updateCartDeliveryTime()
             return GetFullDishResult(
                 it,
                 isAvailable = checkCookingSlotAvailability(),
@@ -59,6 +60,22 @@ class CartManager(
         //inspect result log if reach here.
         return null
     }
+
+    fun updateCartDeliveryTime() {
+        val now = Date()
+        currentShowingDish?.menuItem?.orderAt?.let{
+            if(it.after(now)){
+                currentCartDeliveryTimestamp = DateUtils.parseUnixTimestamp(it)
+            }
+            return
+        }
+        currentCartDeliveryTimestamp = globalDeliveryTimeLiveData.value?.deliveryTimestamp
+    }
+
+
+//    fun refreshDeliveryTimeByUserTimeSelection() {
+//        currentCartDeliveryTimestamp = globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//    }
 
     private fun checkCookingSlotAvailability(): Boolean {
         currentShowingDish?.let {
@@ -80,7 +97,7 @@ class CartManager(
         return true
     }
 
-    private fun getStartingDate(): Date? {
+    private fun getStartingDate(): Date {
         var newDate = Date()
         currentShowingDish?.menuItem?.cookingSlot?.orderFrom?.let {
             if (it.after(newDate)) {
@@ -252,7 +269,8 @@ class CartManager(
         Log.d(TAG, "buildOrderRequest withTempCart: ${!tempCart.isNullOrEmpty()}")
         val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
 //        val deliverAt = DateUtils.parseUnixTimestamp(deliveryTimeLiveData.value?.deliveryDate)
-        val deliverAt = getDeliveryAt()
+//        val deliverAt = globalDeliveryTimeLiveData.value?.deliveryTimestamp
+        val deliverAt = currentCartDeliveryTimestamp
         val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
         return OrderRequest(
@@ -263,13 +281,18 @@ class CartManager(
         )
     }
 
-    private fun getDeliveryAt(): String? {
-        currentShowingDish?.menuItem?.orderAt?.let{
-            //Dish is offered in the future.
-            return DateUtils.parseUnixTimestamp(it)
-        }
-        return deliveryTimeLiveData.value?.deliveryTimestamp
-    }
+//    private fun getDeliveryAt(): String? {
+//        val userChosenDate = globalDeliveryTimeLiveData.value?.deliveryDate
+//        val futureOrderAt = currentShowingDish?.menuItem?.orderAt
+//        val deliveryTime = globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//        deliveryTime?.let{
+//        }
+//        currentShowingDish?.menuItem?.orderAt?.let{
+//            //Dish is offered in the future.
+//            return DateUtils.parseUnixTimestamp(it)
+//        }
+//        return globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//    }
 
     suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "postUpdateOrder")
@@ -530,6 +553,7 @@ class CartManager(
     fun setIsInCheckout(isInCheckout: Boolean) {
         this.isInCheckout = isInCheckout
     }
+
 
 
 //    fun checkoutOrder(orderId: Long) {

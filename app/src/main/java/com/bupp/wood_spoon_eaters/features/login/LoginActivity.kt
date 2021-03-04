@@ -46,10 +46,12 @@ class LoginActivity : AppCompatActivity() {
                     //do nothing this is default state
                 }
                 Constants.LOGIN_STATE_VERIFICATION -> {
-                    redirectToMainLoginScreen(1)
+//                    redirectToMainLoginScreen(1)
+                    redirectToCodeVerification()
                 }
                 Constants.LOGIN_STATE_CREATE_ACCOUNT -> {
-                    redirectToMainLoginScreen(2)
+                    redirectToCreateAccountFromWelcome()
+//                    redirectToMainLoginScreen(2)
                 }
             }
         }
@@ -60,15 +62,15 @@ class LoginActivity : AppCompatActivity() {
         viewModel.navigationEvent.observe(this, Observer {
             it?.let{
                 when(it){
-                    LoginViewModel.NavigationEventType.OPEN_MAIN_LOGIN_SCREEN -> {
-                        redirectToMainLoginScreen()
+                    LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
+                        redirectToPhoneVerification()
                     }
-//                    LoginViewModel.NavigationEventType.OPEN_CODE_SCREEN -> {
-//                        redirectToCodeVerification()
-//                    }
-//                    LoginViewModel.NavigationEventType.OPEN_SIGNUP_SCREEN -> {
-//                        redirectToCreateAccountFromVerification()
-//                    }
+                    LoginViewModel.NavigationEventType.OPEN_CODE_SCREEN -> {
+                        redirectToCodeVerification()
+                    }
+                    LoginViewModel.NavigationEventType.OPEN_SIGNUP_SCREEN -> {
+                        redirectToCreateAccountFromVerification()
+                    }
                     LoginViewModel.NavigationEventType.CODE_RESENT -> {
                         Toast.makeText(this, "Code sent!", Toast.LENGTH_SHORT).show()
                     }
@@ -105,31 +107,31 @@ class LoginActivity : AppCompatActivity() {
     private fun redirectToMainLoginScreen(startWith: Int = 0) {
 //        val bundle = Bundle()
 //        bundle.putInt("START_WITH", startWith)
-        val action = WelcomeFragmentDirections.actionWelcomeFragmentToLoginMainFragment()
-        action.startWithArgs = startWith
-        findNavController(R.id.loginActContainer).navigate(action)
+//        val action = WelcomeFragmentDirections.actionWelcomeFragmentToLoginMainFragment()
+//        action.startWithArgs = startWith
+//        findNavController(R.id.loginActContainer).navigate(action)
     }
 
-//    private fun redirectToCreateAccountFromWelcome() {
+    private fun redirectToCreateAccountFromWelcome() {
 //        setCloseBtnVisibility(View.VISIBLE)
-//        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
-//    }
-//
-//    private fun redirectToCreateAccountFromVerification() {
+        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+    }
+
+    private fun redirectToCreateAccountFromVerification() {
 //        setCloseBtnVisibility(View.VISIBLE)
-//        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
-//    }
-//
-//    private fun redirectToPhoneVerification() {
+        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+    }
+
+    private fun redirectToPhoneVerification() {
 //        setCloseBtnVisibility(View.VISIBLE)
-//        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
-//    }
-//
-//    private fun redirectToCodeVerification() {
-//        hideKeyboard()
+        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+    }
+
+    private fun redirectToCodeVerification() {
+        hideKeyboard()
 //        setCloseBtnVisibility(View.VISIBLE)
-//        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
-//    }
+        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+    }
 
 //    private fun redirectToLocationPermission(isFromCodeScreen: Boolean) {
 //        setHeaderView(getString(R.string.location_permission_title))

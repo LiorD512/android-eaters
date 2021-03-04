@@ -11,7 +11,6 @@ import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
@@ -43,7 +42,7 @@ class NewOrderMainViewModel(
     val clearCartEvent = SingleLiveEvent<Boolean>()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
 
-    val deliveryTimeLiveData = cartManager.deliveryTimeLiveData
+    val deliveryTimeLiveData = cartManager.globalDeliveryTimeLiveData
 
     val getReviewsEvent: SingleLiveEvent<Review?> = SingleLiveEvent()
 
@@ -448,6 +447,7 @@ class NewOrderMainViewModel(
 
     fun onDeliveryTimeChange() {
         viewModelScope.launch {
+            cartManager.updateCartDeliveryTime()
             val result = cartManager.refreshOrderParams()
             result?.let {
                 when (result.type) {
