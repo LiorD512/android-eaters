@@ -2,10 +2,15 @@ package com.bupp.wood_spoon_eaters.utils
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigator
 
 
 fun Fragment.showKeyboard() {
@@ -57,5 +62,17 @@ fun DialogFragment.updateScreenUi(){
                     or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
         }
+    }
+}
+
+fun NavController.navigateSafe(
+    @IdRes resId: Int,
+    args: Bundle? = null,
+    navOptions: NavOptions? = null,
+    navExtras: Navigator.Extras? = null
+) {
+    val action = currentDestination?.getAction(resId) ?: graph.getAction(resId)
+    if (action != null && currentDestination?.id != action.destinationId) {
+        navigate(resId, args, navOptions, navExtras)
     }
 }

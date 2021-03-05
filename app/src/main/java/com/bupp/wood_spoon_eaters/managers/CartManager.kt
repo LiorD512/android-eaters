@@ -62,14 +62,14 @@ class CartManager(
     }
 
     fun updateCartDeliveryTime() {
-        val now = Date()
-        currentShowingDish?.menuItem?.orderAt?.let{
-            if(it.after(now)){
-                currentCartDeliveryTimestamp = DateUtils.parseUnixTimestamp(it)
-            }
-            return
-        }
-        currentCartDeliveryTimestamp = globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//        val now = Date()
+//        currentShowingDish?.menuItem?.orderAt?.let{
+//            if(it.after(now)){
+//                currentCartDeliveryTimestamp = DateUtils.parseUnixTimestamp(it)
+//            }
+//            return
+//        }
+//        currentCartDeliveryTimestamp = globalDeliveryTimeLiveData.value?.deliveryTimestamp
     }
 
 
@@ -270,7 +270,8 @@ class CartManager(
         val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
 //        val deliverAt = DateUtils.parseUnixTimestamp(deliveryTimeLiveData.value?.deliveryDate)
 //        val deliverAt = globalDeliveryTimeLiveData.value?.deliveryTimestamp
-        val deliverAt = currentCartDeliveryTimestamp
+        val deliverAt = getDeliveryAt()
+//        val deliverAt = currentCartDeliveryTimestamp
         val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
         return OrderRequest(
@@ -281,18 +282,25 @@ class CartManager(
         )
     }
 
-//    private fun getDeliveryAt(): String? {
-//        val userChosenDate = globalDeliveryTimeLiveData.value?.deliveryDate
-//        val futureOrderAt = currentShowingDish?.menuItem?.orderAt
-//        val deliveryTime = globalDeliveryTimeLiveData.value?.deliveryTimestamp
-//        deliveryTime?.let{
-//        }
-//        currentShowingDish?.menuItem?.orderAt?.let{
-//            //Dish is offered in the future.
-//            return DateUtils.parseUnixTimestamp(it)
-//        }
-//        return globalDeliveryTimeLiveData.value?.deliveryTimestamp
-//    }
+    private fun getDeliveryAt(): String? {
+        if(currentShowingDish?.menuItem?.orderAt == null){
+            //Dish is offered today.
+            return globalDeliveryTimeLiveData.value?.deliveryTimestamp
+        }else{
+            currentShowingDish?.menuItem?.orderAt?.let{
+                //Dish is offered in the future.
+                val currentDate = globalDeliveryTimeLiveData.value?.deliveryDate ?: Date()
+                return if(currentDate.after(it)){
+                    globalDeliveryTimeLiveData.value?.deliveryTimestamp
+                }else{
+                    //order stating in the future. needs to update order delivery time to "orderAt"
+                    DateUtils.parseUnixTimestamp(it)
+                }
+            }
+
+        }
+        return globalDeliveryTimeLiveData.value?.deliveryTimestamp
+    }
 
     suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "postUpdateOrder")

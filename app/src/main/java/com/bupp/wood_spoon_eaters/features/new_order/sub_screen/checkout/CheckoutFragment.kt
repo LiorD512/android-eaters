@@ -200,7 +200,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     checkoutFragDeliveryAddress.updateDeliveryFullDetails(it.deliveryAddress)
 
                     if (it.estDeliveryTime != null) {
-                        val time = DateUtils.parseDateToDayDateHour(it.estDeliveryTime)
+                        val time = DateUtils.parseDateToDayDateAndTime(it.estDeliveryTime)
                         checkoutFragDeliveryTime.updateDeliveryDetails(time)
                     } else if (it.estDeliveryTimeText != null) {
                         checkoutFragDeliveryTime.updateDeliveryDetails(it.estDeliveryTimeText)

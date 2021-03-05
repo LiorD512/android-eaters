@@ -81,6 +81,8 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     @SuppressLint("SetTextI18n")
     private fun updateDishInfoUi(fullDish: FullDish) {
+        initOrderDate(fullDish)
+
         singleDishInfoCook.setUser(fullDish.cook)
         singleDishInfoFavorite.setIsFav(fullDish.isFavorite)
         singleDishInfoFavorite.setDishId(fullDish.id)
@@ -107,7 +109,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
             singleDishPlusMinus.setPlusMinusListener(this, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft, canReachZero = false)
         }
 
-        initOrderDate(fullDish)
         singleDishInfoRatingVal.text = fullDish.rating.toString()
 
         if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {

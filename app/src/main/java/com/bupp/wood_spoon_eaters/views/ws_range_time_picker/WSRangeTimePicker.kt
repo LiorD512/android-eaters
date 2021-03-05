@@ -161,7 +161,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         startDate.time = startingDate
 
         var startingTime: Long = startingDate.time
-        val endingTime: Long = endingDate.time
+        val endingTime: Long = endingDate.time - TimeUnit.MINUTES.toMillis(interval.toLong())
 
         if (DateUtils.isToday(startingDate) && startingDate.before(Date())) {
             //check if cooking slot is today and if now is after cooking slot started. if so,

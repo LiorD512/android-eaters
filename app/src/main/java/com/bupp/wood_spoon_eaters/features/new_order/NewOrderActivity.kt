@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddr
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.android.synthetic.main.activity_new_order.*
@@ -159,15 +160,15 @@ class NewOrderActivity : AppCompatActivity(),
         redirectToCheckout()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //change this to ActivityResultStarterCallback when stripe enables.
-        if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
-            Log.d(TAG, "Stripe on activity result")
-            viewModel.refreshPaymentsMethod(this)
-//            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
-            }
-        }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        //change this to ActivityResultStarterCallback when stripe enables.
+//        if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
+//            Log.d(TAG, "Stripe on activity result")
+//            viewModel.refreshPaymentsMethod(this)
+////            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+//            }
+//        }
 
 
     private fun finishNewOrder() {
@@ -190,8 +191,8 @@ class NewOrderActivity : AppCompatActivity(),
 //                AddressMissingDialog(this).show(supportFragmentManager, Constants.ADDRESS_MISSING_DIALOG)
             }
             NewOrderMainViewModel.NewOrderNavigationEvent.MAIN_TO_CHECKOUT -> {
-                val action = NewOrderMainFragmentDirections.actionNewOrderMainFragmentToCheckoutFragment()
-                findNavController(R.id.newOrderContainer).navigate(action)
+//                val action = NewOrderMainFragmentDirections.actionNewOrderMainFragmentToCheckoutFragment()
+                findNavController(R.id.newOrderContainer).navigateSafe(R.id.action_newOrderMainFragment_to_checkoutFragment)
             }
             NewOrderMainViewModel.NewOrderNavigationEvent.REDIRECT_TO_SELECT_PROMO_CODE -> {
                 val promoCodeBottomSheet = PromoCodeBottomSheet()

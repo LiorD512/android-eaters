@@ -85,7 +85,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
 
     private fun sendCode() {
         val phoneStr = binding!!.verificationFragmentInput.getText()
-        if(CountryCodeUtils.isPhoneValid(requireContext(), phoneStr)){
+        if(CountryCodeUtils.isPhoneValid(phoneStr)){
             phoneStr!!.let{
                 val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
                 phone?.let{

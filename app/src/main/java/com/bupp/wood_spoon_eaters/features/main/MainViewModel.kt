@@ -134,10 +134,10 @@ class MainViewModel(
 //        }
 //    }
 
-    val locationSettingsEvent = SingleLiveEvent<Boolean>()
-    fun startAndroidLocationSettings(){
-        locationSettingsEvent.postValue(true)
-    }
+//    val locationSettingsEvent = SingleLiveEvent<Boolean>()
+//    fun startAndroidLocationSettings(){
+//        locationSettingsEvent.postValue(true)
+//    }
 
 //    override fun onUsingPreviousLocation() {
 //        noUserLocationEvent.postValue(NoLocationUiEvent.DEVICE_LOCATION_OFF)

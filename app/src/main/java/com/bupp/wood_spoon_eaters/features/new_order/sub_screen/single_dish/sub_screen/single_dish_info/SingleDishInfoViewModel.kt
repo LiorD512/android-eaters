@@ -8,6 +8,8 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.utils.DateUtils
+import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import kotlinx.coroutines.launch
 import java.util.*
 

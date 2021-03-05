@@ -60,7 +60,7 @@ object DateUtils {
     }
 
     fun parseDateToDayDateAndTime(date: Date): String {
-        //Fri, Feb 12
+        //Fri, Feb 12, 4:30 PM - 5:00 PM
         val sdf = SimpleDateFormat("EE, MMM dd")
         val dateVal = sdf.format(date.time)
         val hours = parseDateHalfHourInterval(date)

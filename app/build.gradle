@@ -21,10 +21,8 @@ android {
         minSdkVersion 25
         targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 37
-        versionName "1.4.4"
-//        multiDexEnabled true
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 50
+        versionName "2.0.0"
     }
 
     androidExtensions {
@@ -41,7 +39,6 @@ android {
         }
         debug {
             debuggable true
-//            signingConfig signingConfigs.signing_config
         }
     }
 
