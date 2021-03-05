@@ -29,7 +29,7 @@ class LoginViewModel(
     var phone: String? = null
     var phonePrefix: String? = null
     var code: String? = null
-    var privacyPolicyCb: Boolean = false
+//    var privacyPolicyCb: Boolean = false
 
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
     val countryCodeEvent: MutableLiveData<CountriesISO> = MutableLiveData()

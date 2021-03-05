@@ -19,7 +19,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 25
-        targetSdkVersion 30
+        targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
         versionCode 37
         versionName "1.4.4"

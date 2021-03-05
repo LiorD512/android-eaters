@@ -83,6 +83,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderError"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible">
 
         <com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView

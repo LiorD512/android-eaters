@@ -2,11 +2,13 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import kotlinx.coroutines.launch
 import java.util.*
 
 class SingleDishInfoViewModel(
@@ -34,6 +36,8 @@ class SingleDishInfoViewModel(
             timeChangeEvent.postRawValue(it)
         }
     }
+
+
 
 //    fun addNewItemToCart(){
 //        cartManager.addNewItemToCart()

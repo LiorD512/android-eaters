@@ -51,6 +51,8 @@ import it.sephiroth.android.library.xtooltip.Tooltip
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener{
+    CartBottomBar.OrderBottomBatListener, CookProfileDialog.CookProfileDialogListener, TimePickerBottomSheet.TimePickerListener {
 
     private var tooltip: Tooltip? = null
 
@@ -672,9 +674,14 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
 
     override fun onHeaderTimeClick() {
 //        loadFragment(TimePickerBottomSheet(), "tag")
-        val timePickerBottomSheet = TimePickerBottomSheet()
+        val timePickerBottomSheet = TimePickerBottomSheet(this)
         timePickerBottomSheet.show(supportFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
+
+    override fun onTimerPickerResult(result: Date?) {
+        viewModel.updateFeedDeliveryTime(result)
+    }
+
 
     override fun onHeaderAddressClick() {
         updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
@@ -898,6 +905,7 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     companion object{
         const val TAG = "wowMainAct"
     }
+
 
 
 }

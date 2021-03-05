@@ -68,7 +68,7 @@ object DateUtils {
     }
 
     fun parseDateHalfHourInterval(date: Date): String {
-        //4:30 PM - 5:30 PM
+        //4:30 PM - 5:00 PM
         val c = Calendar.getInstance()
         c.time = date
         c.add(Calendar.MINUTE, 30)
