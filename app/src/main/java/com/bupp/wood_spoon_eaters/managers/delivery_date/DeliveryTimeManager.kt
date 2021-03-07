@@ -15,20 +15,25 @@ class DeliveryTimeManager {
     private val deliveryTimeDateLiveData = MutableLiveData<DeliveryTimeLiveData?>()
     fun getDeliveryTimeLiveData() = deliveryTimeDateLiveData
 
+    private var tempDeliveryTimeStamp: String? = null
+    fun getTempDeliveryTimeStamp() = tempDeliveryTimeStamp
+
     fun setNewDeliveryTime(newDeliveryTime: Date?){
         this.deliveryTime = newDeliveryTime
+        tempDeliveryTimeStamp = getDeliveryTimestamp()
         deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryDateUiString()))
     }
 
     fun setTemporaryDeliveryTimeDate(tempDate: Date?){
-        tempDate?.let{
-           if(!hasChangedTime){
-                this.previousDeliveryTime = deliveryTime
-                hasChangedTime = true
-            }
-//            this.hasChangedTime = true
-            setNewDeliveryTime(it)
-        }
+        tempDeliveryTimeStamp = DateUtils.parseUnixTimestamp(tempDate)
+//        tempDate?.let{
+//           if(!hasChangedTime){
+//                this.previousDeliveryTime = deliveryTime
+//                hasChangedTime = true
+//            }
+////            this.hasChangedTime = true
+//            setNewDeliveryTime(it)
+//        }
     }
 
     fun getDeliveryTimeDate(): Date? {
@@ -54,12 +59,12 @@ class DeliveryTimeManager {
     }
 
     fun rollBackToPreviousDeliveryTime(){
-        Log.d(TAG, "rollBackToPreviousDeliveryTime")
-        previousDeliveryTime.let{
-            Log.d(TAG, "rollBackToPreviousDeliveryTime - rolling back")
-            setNewDeliveryTime(it)
-            this.previousDeliveryTime = null
-        }
+//        Log.d(TAG, "rollBackToPreviousDeliveryTime")
+//        previousDeliveryTime.let{
+//            Log.d(TAG, "rollBackToPreviousDeliveryTime - rolling back")
+//            setNewDeliveryTime(it)
+//            this.previousDeliveryTime = null
+//        }
     }
 
     companion object{

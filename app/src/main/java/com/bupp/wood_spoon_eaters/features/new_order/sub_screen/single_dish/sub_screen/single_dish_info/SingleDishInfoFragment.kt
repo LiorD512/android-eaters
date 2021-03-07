@@ -27,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageView.UserImageViewListener,
-    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener {
+    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener {
 
     private val viewModel by viewModel<SingleDishInfoViewModel>()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
@@ -151,9 +151,13 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
-        val timePickerBottomSheet = TimePickerBottomSheet()
+        val timePickerBottomSheet = TimePickerBottomSheet(this)
         timePickerBottomSheet.setMenuItems(menuItems)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+    }
+
+    override fun onTimerPickerChange() {
+        mainViewModel.refreshFullDish()
     }
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
@@ -206,5 +210,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     companion object{
         const val TAG = "wowNSingleDishInfoFrag"
     }
+
 
 }

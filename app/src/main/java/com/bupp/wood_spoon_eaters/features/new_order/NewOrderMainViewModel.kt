@@ -42,7 +42,7 @@ class NewOrderMainViewModel(
     val clearCartEvent = SingleLiveEvent<Boolean>()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
 
-    val deliveryTimeLiveData = cartManager.globalDeliveryTimeLiveData
+    val deliveryTimeLiveData = cartManager.onDishChangeEvent()
 
     val getReviewsEvent: SingleLiveEvent<Review?> = SingleLiveEvent()
 
@@ -97,14 +97,16 @@ class NewOrderMainViewModel(
                     if(!cartManager.isInCheckout()){
                         checkCartStatusAndUpdateUi()
                     }
-                    progressData.endProgress()
                 }
+                progressData.endProgress()
             }
         }
     }
 
-    fun refreshFullDish(menuItemId: Long?) {
-        this.menuItemId = menuItemId
+    fun refreshFullDish(menuItemId: Long? = null) {
+        menuItemId?.let{
+            this.menuItemId = menuItemId
+        }
         getFullDish()
     }
 
@@ -447,7 +449,6 @@ class NewOrderMainViewModel(
 
     fun onDeliveryTimeChange() {
         viewModelScope.launch {
-            cartManager.updateCartDeliveryTime()
             val result = cartManager.refreshOrderParams()
             result?.let {
                 when (result.type) {

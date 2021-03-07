@@ -31,10 +31,8 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCodeBinding.bind(view)
 
-
         initObservers()
         initUi()
-
 
     }
 

@@ -17,7 +17,6 @@ class FeedViewModel(
     val progressData = ProgressData()
 
     fun initFeed(){
-        progressData.startProgress()
         feedDataManager.initFeedDataManager()
     }
 
@@ -58,9 +57,8 @@ class FeedViewModel(
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
             viewModelScope.launch {
-//                progressData.startProgress()
+                progressData.startProgress()
                 val feedRepository = feedRepository.getFeed(feedRequest)
-                progressData.endProgress()
                 when (feedRepository.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         Log.d(TAG, "NetworkError")
@@ -79,11 +77,13 @@ class FeedViewModel(
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                 }
+                progressData.endProgress()
             }
         }else{
             Log.d("wowFeedVM","getFeed setLocationListener")
             feedResultData.postValue(OldFeedEvent(false,null))
         }
+
     }
 
 

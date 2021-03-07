@@ -14,14 +14,14 @@ data class ServerResponse<T> (
     @SerializedName("meta") val meta: Pagination,
 )
 
-enum class ErrorEventType {
-    PHONE_EMPTY,
-    CODE_EMPTY,
-    INVALID_PHONE,
-    WRONG_PASSWORD,
-    SERVER_ERROR,
-    SOMETHING_WENT_WRONG
-}
+    enum class ErrorEventType {
+        PHONE_EMPTY,
+        CODE_EMPTY,
+        INVALID_PHONE,
+        WRONG_PASSWORD,
+        SERVER_ERROR,
+        SOMETHING_WENT_WRONG
+    }
 
 data class WSError(
     @SerializedName("code") val code: Int?,

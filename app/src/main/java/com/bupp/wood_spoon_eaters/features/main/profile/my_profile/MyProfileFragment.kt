@@ -61,7 +61,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         viewModel.getStripeCustomerCards(requireContext())
 
         with(binding){
-            myProfileFragPb.show()
+//            myProfileFragPb.show()
 
             myProfileFragCuisineIcons.setListener(this@MyProfileFragment)
             myProfileFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.MULTI_SELECTION)
@@ -79,7 +79,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
 
     private fun initObservers() {
         viewModel.getUserDetails.observe(viewLifecycleOwner, { getUserEvent ->
-            myProfileFragPb.hide()
             handleUserDetails(getUserEvent)
         })
 
@@ -98,6 +97,13 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         })
         viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
             myProfileFragFavorites.setFavoritesViewData(it, this)
+        })
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            if(it){
+                binding!!.myProfileFragPb.show()
+            }else{
+                binding!!.myProfileFragPb.hide()
+            }
         })
 
     }

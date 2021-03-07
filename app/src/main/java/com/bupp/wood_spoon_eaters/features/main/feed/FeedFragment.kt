@@ -54,7 +54,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         initObservers()
 
         viewModel.initFeed()
-
+        feedFragPb.show()
     }
 
     private fun initUi() {
@@ -89,8 +89,10 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.progressData.observe(viewLifecycleOwner, {
             if(it){
                 feedFragPb.show()
+                Log.d(TAG, "progress show")
             }else{
                 feedFragPb.hide()
+                Log.d(TAG, "progress hide")
             }
         })
     }
@@ -131,7 +133,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         }else{
             feedFragEmptyLayout.visibility = View.GONE
             feedFragListLayout.visibility = View.VISIBLE
-            feedFragPb.hide()
+//            feedFragPb.hide()
             feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
         }
     }

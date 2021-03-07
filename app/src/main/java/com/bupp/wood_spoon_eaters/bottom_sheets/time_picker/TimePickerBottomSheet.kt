@@ -16,8 +16,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TimePickerBottomSheet() : BottomSheetDialogFragment() {
+class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
 
+//    var listener: TimePickerListener? = null
+    interface TimePickerListener{
+        fun onTimerPickerChange()
+    }
 
     private var binding: TimePickerBottomSheetBinding? = null
     val viewModel by viewModel<TimePickerViewModel>()
@@ -73,11 +77,13 @@ class TimePickerBottomSheet() : BottomSheetDialogFragment() {
     private fun initUi() {
         with(binding!!){
             timePickerAsapBtn.setOnClickListener {
-                viewModel.setDeliveryTime(null)
+                viewModel.setDeliveryTime(null, isTemporary)
+                listener?.onTimerPickerChange()
                 dismiss()
             }
             timePickerScheduleBtn.setOnClickListener {
                 viewModel.setDeliveryTime(timePickerTimePicker.getChosenDate(), isTemporary)
+                listener?.onTimerPickerChange()
                 dismiss()
             }
 

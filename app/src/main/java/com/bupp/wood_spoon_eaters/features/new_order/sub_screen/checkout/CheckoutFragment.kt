@@ -36,7 +36,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.updateErrorDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener {
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener {
 
     private var binding: CheckoutFragmentBinding? = null
 
@@ -76,9 +76,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 openOrderTimeBottomSheet(it)
             }
         })
-        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-            mainViewModel.onDeliveryTimeChange()
-        })
+//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+//
+//        })
         viewModel.getStripeCustomerCards.observe(viewLifecycleOwner) { cardsEvent ->
             Log.d("wowCheckoutFrag", "getStripeCustomerCards()")
             if (cardsEvent != null) {
@@ -156,9 +156,14 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
-        val timePickerBottomSheet = TimePickerBottomSheet()
+        val timePickerBottomSheet = TimePickerBottomSheet(this)
         timePickerBottomSheet.setMenuItems(menuItems)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+    }
+
+    override fun onTimerPickerChange() {
+        mainViewModel.onDeliveryTimeChange()
+        mainViewModel.refreshFullDish()
     }
 
     private fun setEmptyPaymentMethod() {
@@ -362,6 +367,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
 
     }
+
+
 
 
 }

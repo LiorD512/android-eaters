@@ -32,8 +32,8 @@ class CartManager(
     //    private var currentOrderDeliveryTime: Date? = null
     private val cart: MutableList<OrderItemRequest> = mutableListOf()
 
-    val globalDeliveryTimeLiveData = deliveryTimeManager.getDeliveryTimeLiveData()
-    var currentCartDeliveryTimestamp: String? = null
+//    val globalDeliveryTimeLiveData = deliveryTimeManager.getDeliveryTimeLiveData()
+//    var currentCartDeliveryTimestamp: String? =
 
     data class GetFullDishResult(
         val fullDish: FullDish,
@@ -42,14 +42,33 @@ class CartManager(
         val isSoldOut: Boolean
     )
 
+    fun buildDishRequest(): FeedRequest{
+        val feedRequest = FeedRequest()
+        val lastAddress = locationManager.getFinalAddressLiveDataParam().value
+        lastAddress?.let {
+            //address
+            if (lastAddress.id != null) {
+                feedRequest.addressId = lastAddress.id
+            } else {
+                feedRequest.lat = lastAddress.lat
+                feedRequest.lng = lastAddress.lng
+            }
+        }
+
+        //time
+        feedRequest.timestamp = deliveryTimeManager.getTempDeliveryTimeStamp()
+
+        return feedRequest
+    }
+
     suspend fun getFullDish(menuItemId: Long): GetFullDishResult? {
-        val feedRequest = feedDataManager.getLastFeedRequest()
-        val result = orderRepository.getFullDish(menuItemId, feedRequest)
+//        val feedRequest = feedDataManager.getLastFeedRequest()
+        val result = orderRepository.getFullDish(menuItemId, buildDishRequest())
         result.data?.let {
             //build new currentItemRequest
             initNewOrderItemRequest(it)
             this.currentShowingDish = it
-            updateCartDeliveryTime()
+            checkIfFutureDish()
             return GetFullDishResult(
                 it,
                 isAvailable = checkCookingSlotAvailability(),
@@ -61,16 +80,25 @@ class CartManager(
         return null
     }
 
-    fun updateCartDeliveryTime() {
-//        val now = Date()
-//        currentShowingDish?.menuItem?.orderAt?.let{
-//            if(it.after(now)){
-//                currentCartDeliveryTimestamp = DateUtils.parseUnixTimestamp(it)
-//            }
-//            return
-//        }
-//        currentCartDeliveryTimestamp = globalDeliveryTimeLiveData.value?.deliveryTimestamp
-    }
+    private fun checkIfFutureDish(){
+        Log.d(TAG, "checkIfFutureDish")
+//            if(currentShowingDish?.menuItem?.orderAt == null){
+//                //Dish is offered today.
+//                return globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//            }else{
+                currentShowingDish?.menuItem?.orderAt?.let{
+                    //Dish is offered in the future.
+                    val userSelectedDate = DateUtils.parseFromUnixTimestamp(deliveryTimeManager.getTempDeliveryTimeStamp())
+                    if(userSelectedDate.before(it)){
+                        //order stating in the future. needs to update order delivery time to "orderAt" time
+                        deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
+                        Log.d(TAG, "checkIfFutureDish - changing delivery time to future order")
+                    }else{
+                        //do nothing. stay with user selected date,
+                    }
+                }
+
+            }
 
 
 //    fun refreshDeliveryTimeByUserTimeSelection() {
@@ -270,7 +298,7 @@ class CartManager(
         val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
 //        val deliverAt = DateUtils.parseUnixTimestamp(deliveryTimeLiveData.value?.deliveryDate)
 //        val deliverAt = globalDeliveryTimeLiveData.value?.deliveryTimestamp
-        val deliverAt = getDeliveryAt()
+        val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
 //        val deliverAt = currentCartDeliveryTimestamp
         val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
@@ -282,25 +310,25 @@ class CartManager(
         )
     }
 
-    private fun getDeliveryAt(): String? {
-        if(currentShowingDish?.menuItem?.orderAt == null){
-            //Dish is offered today.
-            return globalDeliveryTimeLiveData.value?.deliveryTimestamp
-        }else{
-            currentShowingDish?.menuItem?.orderAt?.let{
-                //Dish is offered in the future.
-                val currentDate = globalDeliveryTimeLiveData.value?.deliveryDate ?: Date()
-                return if(currentDate.after(it)){
-                    globalDeliveryTimeLiveData.value?.deliveryTimestamp
-                }else{
-                    //order stating in the future. needs to update order delivery time to "orderAt"
-                    DateUtils.parseUnixTimestamp(it)
-                }
-            }
-
-        }
-        return globalDeliveryTimeLiveData.value?.deliveryTimestamp
-    }
+//    private fun getDeliveryAt(): String? {
+//        if(currentShowingDish?.menuItem?.orderAt == null){
+//            //Dish is offered today.
+//            return globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//        }else{
+//            currentShowingDish?.menuItem?.orderAt?.let{
+//                //Dish is offered in the future.
+//                val currentDate = globalDeliveryTimeLiveData.value?.deliveryDate ?: Date()
+//                return if(currentDate.after(it)){
+//                    globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//                }else{
+//                    //order stating in the future. needs to update order delivery time to "orderAt"
+//                    DateUtils.parseUnixTimestamp(it)
+//                }
+//            }
+//
+//        }
+//        return globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//    }
 
     suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "postUpdateOrder")
@@ -562,6 +590,7 @@ class CartManager(
         this.isInCheckout = isInCheckout
     }
 
+    fun onDishChangeEvent() = deliveryTimeManager.getTempDeliveryTimeStamp()
 
 
 //    fun checkoutOrder(orderId: Long) {

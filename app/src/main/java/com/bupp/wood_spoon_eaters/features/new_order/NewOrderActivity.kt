@@ -64,9 +64,9 @@ class NewOrderActivity : AppCompatActivity(),
     }
 
     private fun initObservers() {
-        viewModel.deliveryTimeLiveData.observe(this, {
-            viewModel.initNewOrderActivity(intent)
-        })
+//        viewModel.deliveryTimeLiveData.observe(this, {
+//            viewModel.initNewOrderActivity(intent)
+//        })
         viewModel.navigationEvent.observe(this, {
             handleNavigationEvent(it)
         })

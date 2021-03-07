@@ -37,7 +37,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun show() {
-        if(!binding.progressBarLayoutLottie.isAnimating){
+        if(!binding.progressBarLayoutLottie.isAnimating && binding.progressBarLayout.alpha == 0f){
 //            binding.progressBarLayoutLottie.visibility = View.VISIBLE
 
             val imageFadeIn = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 0f, 1f)
@@ -53,17 +53,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun hide() {
+        if(binding.progressBarLayout.alpha != 0f) {
 //        binding.progressBarLayoutLottie.visibility = View.GONE
-        binding.progressBarLayoutLottie.cancelAnimation()
+            binding.progressBarLayoutLottie.cancelAnimation()
 
-        val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)
-        imageFadeOut.duration = ChangingPictureView.DURATION
+            val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)
+            imageFadeOut.duration = ChangingPictureView.DURATION
 
-        hideAnimationSet = AnimatorSet()
-        hideAnimationSet?.play(imageFadeOut)
-        hideAnimationSet?.start()
+            hideAnimationSet = AnimatorSet()
+            hideAnimationSet?.play(imageFadeOut)
+            hideAnimationSet?.start()
 
-        binding.progressBarLayout.isClickable = false
+            binding.progressBarLayout.isClickable = false
+        }
     }
 
     override fun onDetachedFromWindow() {

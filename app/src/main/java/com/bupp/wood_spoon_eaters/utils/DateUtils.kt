@@ -129,9 +129,23 @@ object DateUtils {
         date?.let{
             yourmilliseconds = date.time
         }
-        val droppedMillis = yourmilliseconds / 1000// todo - changed this 4.3.21
+        val droppedMillis = yourmilliseconds / 1000
         return droppedMillis.toString()
     }
+
+
+    fun parseFromUnixTimestamp(milliStr: String?): Date {
+        var yourmilliseconds: Long = Date().time
+        milliStr?.let{
+            yourmilliseconds = it.toLong()
+            yourmilliseconds *= 1000
+        }
+        val date = Date()
+        date.time = yourmilliseconds
+        return date
+    }
+
+
 
     fun isNow(newChosenDate: Date?): Boolean {
         newChosenDate?.let{

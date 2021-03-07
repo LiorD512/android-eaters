@@ -215,9 +215,9 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun initObservers() {
-        viewModel.progressData.observe(this, {
-            handlePb(it)
-        })
+//        viewModel.progressData.observe(this, {
+//            handlePb(it)
+//        })
         viewModel.mainNavigationEvent.observe(this, {
             handleNavigation(it)
         })

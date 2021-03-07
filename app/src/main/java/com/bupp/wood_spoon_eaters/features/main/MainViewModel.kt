@@ -31,7 +31,7 @@ class MainViewModel(
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, private val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 
-    val progressData = ProgressData()
+//    val progressData = ProgressData()
 
     init {
         eaterDataManager.refreshSegment()

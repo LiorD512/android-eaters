@@ -26,7 +26,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
 
     val timeChangeEvent = LiveEventData<List<MenuItem>>()
-    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
+//    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
     fun simpleUpdateOrder(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
