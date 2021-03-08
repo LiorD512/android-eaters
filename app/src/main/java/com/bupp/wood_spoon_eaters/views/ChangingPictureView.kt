@@ -28,8 +28,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var lastShowingView = 0
     private var lastShowingTextView = 0
 
-    var imgCount: Int = 0
-    var textCount: Int = 0
+    var imgCount: Int = -1
+    var textCount: Int = -1
 
     var welcomeScreen: List<WelcomeScreen> = listOf()
 

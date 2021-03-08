@@ -85,9 +85,9 @@ class TrackOrderProgressBinder(val listener: TrackOrderProgressBinder.TrackOrder
                     deliveryTime.time = order.estDeliveryTime
 
                     if (DateUtils.isSameDay(today, deliveryTime)) {
-                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateToTime(order.estDeliveryTime)}"
+                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateHalfHourInterval(order.estDeliveryTime)}"
                     } else {
-                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateToFullDate(order.estDeliveryTime)}"
+                        itemView.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateToDayDateAndTime(order.estDeliveryTime)}"
                     }
                 }else{
                     itemView.trackOrderProgressArrivalTime.text = "${order.estDeliveryTimeText}"
