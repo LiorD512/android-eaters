@@ -13,4 +13,8 @@ class SupportViewModel(val metaDataRepository: MetaDataRepository, val eaterData
     fun getEmailSubject(): String {
         return "Query from: ${eaterDataManager.currentEater?.email}"
     }
+
+//    fun openQAPage(): String {
+//        return metaDataRepository.getQaUrl()
+//    }
 }
