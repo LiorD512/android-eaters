@@ -63,7 +63,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun initUi() {
-        with(binding!!){
+        with(binding!!) {
             selectAddressFragMyLocationLayout.setOnClickListener {
                 viewModel.onMyLocationClick()
             }
@@ -83,15 +83,17 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         }
     }
 
-    private fun initLocationObserver(){
-        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called ")
-            with(binding!!){
-                viewModel.onMyLocationReceived()
-                selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
-//                selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
-//                selectAddressFragMyLocationPickup.visibility = View.VISIBLE
-                hideMyLocationPb()
+    private fun initLocationObserver() {
+        mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, { result ->
+            result?.let {
+                Log.d(TAG, "getLocationLiveData observer called ")
+                with(binding!!) {
+                    viewModel.onMyLocationReceived()
+                    selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
+                    //                selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
+                    //                selectAddressFragMyLocationPickup.visibility = View.VISIBLE
+                    hideMyLocationPb()
+                }
             }
         })
     }
@@ -103,7 +105,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
 ////            selectAddressFragAutoComplete.text = it.getUserLocationStr()
 //        })
         mainViewModel.actionEvent.observe(viewLifecycleOwner, {
-            when(it){
+            when (it) {
                 LocationAndAddressViewModel.ActionEvent.REFRESH_MY_LOCATION_STATE -> {
                     viewModel.updateMyLocationUiState(isGpsEnabled(requireContext()))
                     initLocationObserver()
@@ -139,11 +141,11 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
         viewModel.myAddressesEvent.observe(viewLifecycleOwner, {
-            if(it.address.isNullOrEmpty()){
+            if (it.address.isNullOrEmpty()) {
                 selectAddressFragEmptyList.visibility = View.VISIBLE
                 selectAddressFragList.visibility = View.GONE
                 addressAdapter?.selectedAddress = null
-            }else{
+            } else {
                 selectAddressFragList.visibility = View.VISIBLE
                 selectAddressFragEmptyList.visibility = View.GONE
                 addressAdapter?.submitList(it.address)
@@ -157,7 +159,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun handleMyLocationUiEvent(myLocation: SelectAddressViewModel.MyLocationStatus) {
-        with(binding!!){
+        with(binding!!) {
             when (myLocation) {
                 SelectAddressViewModel.MyLocationStatus.FETCHING -> {
                     showMyLocationPb()

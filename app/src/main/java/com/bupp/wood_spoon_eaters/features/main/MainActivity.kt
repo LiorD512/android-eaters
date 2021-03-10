@@ -155,6 +155,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadFeedProgressBarFragment()
         loadFeed()
 
+        viewModel.test()
+
     }
 
     private fun loadFeedProgressBarFragment() {

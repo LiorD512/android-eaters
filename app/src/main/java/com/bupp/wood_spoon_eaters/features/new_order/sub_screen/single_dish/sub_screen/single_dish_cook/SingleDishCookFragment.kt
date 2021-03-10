@@ -106,7 +106,7 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
     }
 
     override fun onUserImageClick(cook: Cook?) {
-        cook?.let{
+        cook?.video?.let{
             VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
         }
     }

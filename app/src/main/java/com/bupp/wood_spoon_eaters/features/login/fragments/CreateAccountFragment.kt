@@ -10,6 +10,8 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.segment.analytics.Analytics
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -27,31 +29,28 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
         binding = FragmentCreateAccountBinding.bind(view)
         initUi()
 
-        binding!!.createAccountFragMainLayout.viewTreeObserver.addOnGlobalLayoutListener {
-            val rec = Rect()
-            binding!!.createAccountFragMainLayout.getWindowVisibleDisplayFrame(rec)
 
-            //finding screen height
-            val screenHeight =  binding!!.createAccountFragMainLayout.rootView.height
-
-            //finding keyboard height
-            val keypadHeight = screenHeight - rec.bottom
-
-            if (keypadHeight > screenHeight * 0.15) {
-                //VISIBLE KEYBOARD
-                Log.d("wowKeyboard", "has keyboard")
-                binding!!.createAccountFragAnim.visibility = View.GONE
-            } else {
-                //NO KEYBOARD
-                Log.d("wowKeyboard", "no keyboard")
-                binding!!.createAccountFragAnim.visibility = View.VISIBLE
-            }
-        }
     }
 
     private fun initUi() {
-        binding!!.createAccountFragNext.setOnClickListener {updateEater()}
-        binding!!.createAccountFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
+        with(binding!!){
+            KeyboardVisibilityEvent.setEventListener(requireActivity(), viewLifecycleOwner,
+                object : KeyboardVisibilityEventListener {
+                    override fun onVisibilityChanged(isOpen: Boolean) {
+                        // some code depending on keyboard visiblity status
+                        if(isOpen){
+                            Log.d("wowKeyboard", "has keyboard")
+                            createAccountFragAnim.visibility = View.GONE
+                        }else{
+                            Log.d("wowKeyboard", "no keyboard")
+                            createAccountFragAnim.visibility = View.VISIBLE
+                        }
+                    }
+                })
+            createAccountFragNext.setOnClickListener {updateEater()}
+            createAccountFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
+
+        }
     }
 
     private fun updateEater() {

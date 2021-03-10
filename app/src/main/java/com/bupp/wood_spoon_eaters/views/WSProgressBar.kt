@@ -41,7 +41,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 //            binding.progressBarLayoutLottie.visibility = View.VISIBLE
 
             val imageFadeIn = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 0f, 1f)
-            imageFadeIn.duration = ChangingPictureView.DURATION
+            imageFadeIn.duration = DURATION
 
             showAnimationSet = AnimatorSet()
             showAnimationSet?.play(imageFadeIn)
@@ -58,7 +58,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             binding.progressBarLayoutLottie.cancelAnimation()
 
             val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)
-            imageFadeOut.duration = ChangingPictureView.DURATION
+            imageFadeOut.duration = DURATION
 
             hideAnimationSet = AnimatorSet()
             hideAnimationSet?.play(imageFadeOut)
@@ -72,6 +72,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         showAnimationSet = null
         hideAnimationSet = null
         super.onDetachedFromWindow()
+    }
+
+    companion object{
+        const val DURATION: Long = 500
     }
 
 }

@@ -11,12 +11,9 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -348,6 +345,11 @@ class MainViewModel(
         return metaDataRepository.getContactUsTextNumber()
     }
 
+    fun test() {
+        val cloudinery = metaDataRepository.getCloudinaryTransformations()
+        val large = cloudinery?.getByType(CloudinaryTransformationsType.LARGE)
+        Log.d(TAG, "coudirery: $cloudinery")
+    }
 
 
 }

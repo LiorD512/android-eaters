@@ -18,10 +18,10 @@ android {
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        minSdkVersion 25
+        minSdkVersion 23
         targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 51
+        versionCode 53
         versionName "2.0.0"
     }
 
@@ -129,6 +129,7 @@ dependencies {
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.5'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 
     //camera util

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.network.abs
 
+import android.util.Log
 import com.bupp.wood_spoon_eaters.model.*
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
@@ -8,7 +9,7 @@ import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-class DeserializerJsonAppSetting: JsonDeserializer<AppSetting>{
+class DeserializerJsonAppSetting : JsonDeserializer<AppSetting> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): AppSetting {
 
         val gson = Gson()
@@ -19,7 +20,7 @@ class DeserializerJsonAppSetting: JsonDeserializer<AppSetting>{
         appSetting.key = jsonObject?.get("key")?.asString
         appSetting.dataType = jsonObject?.get("data_type")?.asString
 
-        when(appSetting.dataType){
+        when (appSetting.dataType) {
             "string" -> { //string
                 appSetting.value = jsonObject?.get("value")?.asString
             }
@@ -30,9 +31,15 @@ class DeserializerJsonAppSetting: JsonDeserializer<AppSetting>{
                 appSetting.value = jsonObject?.get("value")?.asBigDecimal
             }
             "price" -> { //price
-                val type = object : TypeToken<Price>(){}.type
+                val type = object : TypeToken<Price>() {}.type
                 appSetting.value = gson.fromJson(jsonObject?.get("value"), type)
 //                appSetting.value = jsonObject?.get("value") as Price
+            }
+            "key_value" -> { //key-value
+                var map: Map<String, Any> = HashMap()
+                map = Gson().fromJson(jsonObject?.get("value"), map.javaClass)
+                Log.d("wowDeserializerJson", "map: $map")
+                appSetting.value = map
             }
             "boolean" -> { //boolean
                 appSetting.value = jsonObject?.get("value")?.asBoolean

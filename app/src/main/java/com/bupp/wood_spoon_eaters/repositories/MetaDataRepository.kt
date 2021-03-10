@@ -257,5 +257,20 @@ class MetaDataRepository(private val apiService: ApiService) {
         return ""
     }
 
+    fun getCloudinaryTransformations(): CloudinaryTransformations? {
+        for (settings in getSettings()){
+            if(settings.key == "cloudinary_transformations"){
+                val cloudinaryMap = settings.value as HashMap<CloudinaryTransformationsType, String>?
+                cloudinaryMap?.let{
+
+//                    val aaa = it.map { CloudinaryTransformationsType.valueOf(it.key.toString().toUpperCase()) to it.value }
+                    val cloudinary = CloudinaryTransformations(cloudinaryMap)
+                    return cloudinary
+                }
+            }
+        }
+        return null
+    }
+
 
 }

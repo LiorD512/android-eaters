@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 data class ServerResponse<T> (
     @SerializedName("code") var code: Int = 0,
@@ -86,6 +87,18 @@ data class AppSetting(
     @SerializedName("dataType") var dataType: String?,
     @SerializedName("value") var value: Any?
 )
+
+enum class CloudinaryTransformationsType{
+    SMALL, MEDIUM, LARGE
+}
+data class CloudinaryTransformations(
+    var keyValueMap: HashMap<CloudinaryTransformationsType, String>?
+){
+    fun getByType(type: CloudinaryTransformationsType): String?{
+        return keyValueMap?.get(type.name.toLowerCase())
+    }
+}
+
 
 data class WelcomeScreen(
     @SerializedName("text") var text: String?,
