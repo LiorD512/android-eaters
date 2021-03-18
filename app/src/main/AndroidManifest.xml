@@ -17,15 +17,15 @@
 
     <application
             android:name=".WoodSpoonApplication"
-            android:allowBackup="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="false"
             android:theme="@style/AppTheme"
+            tools:replace="supportsRtl"
+            android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning"
-            android:requestLegacyExternalStorage="true"
-            tools:replace="android:allowBackup,android:supportsRtl">
+            android:requestLegacyExternalStorage="true">
 
 <!--        <activity android:name=".delete_me.TestActivity"-->
 <!--                android:screenOrientation="portrait"-->
@@ -132,10 +132,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-                android:name="com.canhub.cropper.CropImageActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

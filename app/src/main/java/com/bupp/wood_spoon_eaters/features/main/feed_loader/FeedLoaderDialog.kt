@@ -57,7 +57,7 @@ class FeedLoaderDialog : DialogFragment() {
             }
 
             override fun onFinish() {
-                dismiss()
+                dismissAllowingStateLoss()
             }
         }
         timer?.start()
@@ -77,8 +77,8 @@ class FeedLoaderDialog : DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
         binding!!.feedLoaderImageView.stopAnimation()
+        super.onDismiss(dialog)
     }
 
 

@@ -192,6 +192,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     }
 
     companion object {
-        const val TAG = "wowAddressMapVerification"
+        const val TAG = "wowAddressMapVerificton"
     }
 }

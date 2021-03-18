@@ -113,10 +113,8 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
 
         //Certificates
         val certificates = cook.certificates
-//        cookProfileFragCertificateLayout.setOnClickListener { openCertificatesDialog(certificates) }
         if (certificates.isNotEmpty()) {
             cookProfileFragCertificateLayout.visibility = View.VISIBLE
-            cookProfileFragCertificateGrid.clear()
             cookProfileFragCertificateGrid.initStackableViewWith(certificates)
         } else {
             cookProfileFragCertificateLayout.visibility = View.GONE

@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.DishAddonView
+import com.bupp.wood_spoon_eaters.views.DishAddonView
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.OrderItem
-import kotlinx.android.synthetic.main.additional_dishes_item.view.*
 
 
 class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDishesListener) :
@@ -37,13 +35,13 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         Log.d("wowAdditionalAdapter","onBind")
 
         val dish = getItem(position)
-        (holder as DishItemViewHolder).item.setDish(dish, position)
-        holder.item.setDishAddonListener(this)
+//        (holder as DishItemViewHolder).item.setDish(dish, position)
+//        holder.item.setDishAddonListener(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.additional_dishes_item, parent, false)
+        val view = inflater.inflate(R.layout.additional_dishes_dialog_item_dish, parent, false)
         return DishItemViewHolder(view)
     }
 
@@ -54,13 +52,11 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
     override fun onDishClick(position: Int) {
         listener.onDishClick(getItem(position))
     }
-
-
 }
 
 
 class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val item = view.additionalDishItem
+//    val item: DishAddonView = view.additionalDishItem
 }
 
 

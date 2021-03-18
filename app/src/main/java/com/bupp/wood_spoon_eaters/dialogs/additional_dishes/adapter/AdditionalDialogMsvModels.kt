@@ -9,3 +9,5 @@ data class OrderItems(val orderItems: List<OrderItem>)
 data class AdditionalDishHeader(val cooksName: String?)
 data class AdditionalDishes(val dishes: ArrayList<Dish>)
 
+data class AdditionalDishData<T>(val viewType: Int, val dish: T)
+

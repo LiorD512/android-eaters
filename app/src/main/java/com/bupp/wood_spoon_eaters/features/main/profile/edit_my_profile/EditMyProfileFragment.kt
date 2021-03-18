@@ -57,7 +57,11 @@ class EditMyProfileFragment : Fragment(), UserImageView.UserImageViewListener, C
         viewModel.getEaterProfile()
 
         viewModel.progressData.observe(viewLifecycleOwner, {
-            (activity as MainActivity).handlePb(it)
+            if(it){
+                editMyProfileFragPb.show()
+            }else{
+                editMyProfileFragPb.hide()
+            }
         })
 
     }

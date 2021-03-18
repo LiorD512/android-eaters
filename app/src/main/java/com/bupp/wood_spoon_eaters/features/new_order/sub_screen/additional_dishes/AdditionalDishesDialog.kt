@@ -2,31 +2,29 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dish
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
-import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishMainAdapter
-import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishesAdapter
-import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.OrderItemsAdapter
+import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import kotlinx.android.synthetic.main.additional_dishes_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsListener, AdditionalDishesAdapter.AdditionalDishesListener,
-    ClearCartDialog.ClearCartDialogListener {
+    ClearCartDialog.ClearCartDialogListener, AdditionalDishesNewAdapter.AdditionalDishesAdapterListener {
 
-    private var mainAdapter: AdditionalDishMainAdapter? = null
+    //    private var mainAdapter: AdditionalDishMainAdapter? = null
+    private var mainAdapter: AdditionalDishesNewAdapter? = null
     private lateinit var binding: AdditionalDishesDialogBinding
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
@@ -52,34 +50,47 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
         initUi()
         initObservers()
-        
+
         mainViewModel.initAdditionalDishes()
     }
 
 
     private fun initObservers() {
-            mainViewModel.additionalDishesEvent.observe(viewLifecycleOwner, Observer { data ->
-                handleData(data)
-            })
-            mainViewModel.clearCartEvent.observe(viewLifecycleOwner, Observer { emptyCartEvent ->
-                if(emptyCartEvent) {
-                    ClearCartDialog(this@AdditionalDishesDialog).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
-                }
-            })
+        mainViewModel.additionalDishesEvent.observe(viewLifecycleOwner, { data ->
+            handleData(data)
+        })
+        mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
+            if (emptyCartEvent) {
+                ClearCartDialog(this@AdditionalDishesDialog).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+            }
+        })
     }
 
     private fun handleData(data: NewOrderMainViewModel.AdditionalDishesEvent) {
+        Log.d(TAG, "handleData")
+        val adapterData = mutableListOf<AdditionalDishData<Any>>()
         data.orderItems?.let {
-            mainAdapter?.refreshOrderItems(it)
+            it.forEach {
+                adapterData.add(AdditionalDishData(AdditionalDishesNewAdapter.VIEW_TYPE_ORDER_ITEM, it))
+            }
         }
-        data.additionalDishes?.let{
-            mainAdapter?.refreshAdditionalDishes(it)
+
+        data.additionalDishes?.let {
+            if (it.isNotEmpty()) {
+                adapterData.add(AdditionalDishData(AdditionalDishesNewAdapter.VIEW_TYPE_ADDITIONAL_HEADER, it[0]))
+                it.forEach {
+                    adapterData.add(AdditionalDishData(AdditionalDishesNewAdapter.VIEW_TYPE_ADDITIONAL, it))
+                }
+
+            }
         }
+        mainAdapter?.submitList(adapterData)
     }
 
     private fun initUi() {
-        mainAdapter = AdditionalDishMainAdapter(requireContext(), this, this)
-        with(binding){
+        Log.d(TAG, "initUi")
+        mainAdapter = AdditionalDishesNewAdapter(requireContext(), this)
+        with(binding) {
             additionalDishDialogList.layoutManager = LinearLayoutManager(context)
             additionalDishDialogList.adapter = mainAdapter
 
@@ -90,13 +101,13 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT)
                 isDismissed = false
                 dismiss()
-             }
+            }
         }
     }
 
     override fun onAddBtnClick(dish: Dish) {
         mainViewModel.addNewDishToCart(dish.id, 1)
-        mainAdapter?.removeDish(dish)
+//        mainAdapter?.removeDish(dish)// todo - do this nyc alon
     }
 
     override fun onDishClick(dish: Dish) {
@@ -108,9 +119,10 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
     }
 
     override fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {
-        if(isOrderItemsEmpty){
+        Log.d(TAG, "onDishCountChange")
+        if (isOrderItemsEmpty) {
             mainViewModel.showClearCartDialog()
-        }else{
+        } else {
             mainViewModel.updateOrderItem(curOrderItem)
         }
     }
@@ -128,9 +140,14 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        if(isDismissed){
+        Log.d(TAG, "onDismiss")
+        if (isDismissed) {
             mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCK_SINGLE_DISH_COOK)
         }
+    }
+
+    companion object {
+        const val TAG = "wowAdditionalDishDialog"
     }
 
 

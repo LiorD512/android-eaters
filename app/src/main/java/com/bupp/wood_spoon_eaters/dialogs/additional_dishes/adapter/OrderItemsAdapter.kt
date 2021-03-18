@@ -2,12 +2,13 @@ package com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.DishAddonView
+import com.bupp.wood_spoon_eaters.views.DishAddonView
 import com.bupp.wood_spoon_eaters.model.OrderItem
 
 
@@ -31,12 +32,12 @@ class OrderItemsAdapter(val context: Context, val listener: OrderItemsListener) 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val orderItem = getItem(position)
-        (holder as DishItemViewHolder).item.setDish(orderItem, position)
-        holder.item.setDishAddonListener(this)
+//        (holder as OrderItemViewHolder).item.setDish(orderItem, position)
+//        holder.item.setDishAddonListener(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_item, parent, false))
+        return OrderItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_dialog_item_dish, parent, false))
     }
 
     override fun onDishCountChange(counter: Int, position: Int) {
@@ -50,6 +51,10 @@ class OrderItemsAdapter(val context: Context, val listener: OrderItemsListener) 
         listener.onDishCountChange(updatedOrderItem, isOrderItemsEmpty)
     }
 
+
+    class OrderItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+//        val item: DishAddonView = view.additionalDishItem
+    }
 
 }
 

@@ -89,7 +89,10 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
     private fun setLocationData(location: Location) {
         val accuracy = location.accuracy
         Log.d(TAG,"setLocationData - accuracy: $accuracy")
-        value = getAddressRequestFromLocation(location)
+        val result = getAddressRequestFromLocation(location)
+        result?.let{
+            value = it
+        }
     }
 
     private fun getAddressRequestFromLocation(location: Location): AddressRequest? {

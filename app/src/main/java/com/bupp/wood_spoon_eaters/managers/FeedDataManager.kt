@@ -102,8 +102,7 @@ class FeedDataManager(
                     eaterDataManager.updateSelectedAddress(knownAddresses[0])
                 }
             }
-        }
-    else {
+        } else {
             Log.d(
                 TAG,
                 "skip feed status update"

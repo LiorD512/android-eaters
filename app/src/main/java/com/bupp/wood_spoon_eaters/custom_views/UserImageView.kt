@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -18,6 +19,9 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
 import kotlinx.android.synthetic.main.user_image_view.view.*
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.trading212.stickyheader.dpToPx
 
 
@@ -158,25 +162,21 @@ class UserImageView : FrameLayout {
 
     fun setImage(imageStr: String?) {
         if (!imageStr.isNullOrEmpty()) {
-            Glide.with(context).load(imageStr).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+            loadSmallImage(imageStr)
+//            Glide.with(context).load(imageStr).transform(CircleCrop()).into(cookImageView)
         } else if (placeHolder != null) {
             cookImageView.setImageDrawable(placeHolder)
         }
     }
 
     fun setImage(imageUri: Uri) {
-        Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(cookImageView)
+        Glide.with(context).load(imageUri).transform(CircleCrop()).into(cookImageView)
     }
-
-    private val circleOptions = RequestOptions()
-        .centerCrop()
-        .circleCrop()      // responsible for circle crop
-        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 
     fun setCookFromCooksView(cook: Cook) {
         this.curCook = cook
-        Glide.with(context).load(cook.thumbnail).apply(RequestOptions.circleCropTransform()).into(cookImageView)
-//        Glide.with(context).load(cook.thumbnail).apply(circleOptions).into(cookImageView)
+//        Glide.with(context).load(cook.thumbnail).transform(CircleCrop()).into(cookImageView)
+        loadSmallImage(cook.thumbnail)
     }
 
     fun setUser(eater: Eater) {
@@ -196,5 +196,11 @@ class UserImageView : FrameLayout {
             isWithStroke = true
         }
         initUi()
+    }
+
+    private fun loadSmallImage(imageUrl: String){
+        Log.d("wowUserImageView","loadSmallImage")
+        val smallThumbnail = imageUrl.replace("t_medium", "t_small")
+        Glide.with(context).load(smallThumbnail).transform(CircleCrop()).into(cookImageView)
     }
 }

@@ -57,6 +57,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         feedFragPb.show()
     }
 
+
     private fun initUi() {
         feedFragSectionsView.setMultiSectionFeedViewListener(this)
     }
@@ -76,7 +77,6 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
             viewModel.refreshFavorites()
-
         })
         viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
             if(event.isSuccess){
@@ -89,10 +89,8 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         viewModel.progressData.observe(viewLifecycleOwner, {
             if(it){
                 feedFragPb.show()
-                Log.d(TAG, "progress show")
             }else{
                 feedFragPb.hide()
-                Log.d(TAG, "progress hide")
             }
         })
     }
@@ -133,9 +131,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         }else{
             feedFragEmptyLayout.visibility = View.GONE
             feedFragListLayout.visibility = View.VISIBLE
-//            feedFragPb.hide()
             feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
         }
+        feedFragPb.hide()
     }
 
 

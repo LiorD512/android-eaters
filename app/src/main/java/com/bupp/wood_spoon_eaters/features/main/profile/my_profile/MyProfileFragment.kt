@@ -56,9 +56,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
     }
 
     private fun initProfileData() {
-        viewModel.initStripe((activity as MainActivity))
         viewModel.getUserDetails()
-        viewModel.getStripeCustomerCards(requireContext())
 
         with(binding){
 //            myProfileFragPb.show()

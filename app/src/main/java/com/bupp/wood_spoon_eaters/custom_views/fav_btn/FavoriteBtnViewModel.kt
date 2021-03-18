@@ -1,4 +1,4 @@
-package com.example.matthias.mvvmcustomviewexample.custom
+package com.bupp.wood_spoon_eaters.custom_views.fav_btn
 
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.ServerResponse

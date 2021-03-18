@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.PlusMinusViewBinding
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dishes.AdditionalDishesNewAdapter
 import kotlinx.android.synthetic.main.blue_btn.view.*
 import kotlinx.android.synthetic.main.plus_minus_view.view.*
 

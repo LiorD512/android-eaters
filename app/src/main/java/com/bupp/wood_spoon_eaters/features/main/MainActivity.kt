@@ -155,7 +155,8 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
         loadFeedProgressBarFragment()
         loadFeed()
 
-        viewModel.test()
+//        viewModel.test()
+
 
     }
 
@@ -366,13 +367,13 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun handlePb(shouldShow: Boolean) {
-        if (shouldShow) {
-            mainActPb.show()
-        } else {
-            mainActPb.hide()
-        }
-    }
+//    fun handlePb(shouldShow: Boolean) {
+//        if (shouldShow) {
+//            mainActPb.show()
+//        } else {
+//            mainActPb.hide()
+//        }
+//    }
 
 
     //fragment and sub features

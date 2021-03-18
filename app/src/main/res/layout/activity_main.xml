@@ -83,12 +83,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible" />
 
-    <com.bupp.wood_spoon_eaters.views.WSProgressBar
-            android:id="@+id/mainActPb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:isBlueStyle="false"
-            tools:visibility="gone" />
+<!--    <com.bupp.wood_spoon_eaters.views.WSProgressBar-->
+<!--            android:id="@+id/mainActPb"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:isBlueStyle="false"-->
+<!--            tools:visibility="gone" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

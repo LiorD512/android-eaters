@@ -1,14 +1,17 @@
 package com.bupp.wood_spoon_eaters.views
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieDrawable
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WoodspoonProgressBarBinding
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
@@ -19,6 +22,9 @@ import kotlinx.android.synthetic.main.woodspoon_progress_bar.view.*
 class WSProgressBar @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
+
+    private var pendingShow = false
+    private var pendingHide = false
 
     private var showAnimationSet: AnimatorSet? = null
     private var hideAnimationSet: AnimatorSet? = null
@@ -37,7 +43,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun show() {
-        if(!binding.progressBarLayoutLottie.isAnimating && binding.progressBarLayout.alpha == 0f){
+        Log.d(TAG, "pb - show called")
+//        if (!binding.progressBarLayoutLottie.isAnimating) {
+            pendingShow = false
+            Log.d(TAG, "pb - show action")
 //            binding.progressBarLayoutLottie.visibility = View.VISIBLE
 
             val imageFadeIn = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 0f, 1f)
@@ -47,25 +56,87 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             showAnimationSet?.play(imageFadeIn)
             showAnimationSet?.start()
 
+
+
+//            showAnimationSet?.addListener(object : Animator.AnimatorListener {
+//                override fun onAnimationStart(animation: Animator?) {
+//
+//                }
+//
+//                override fun onAnimationEnd(animation: Animator?) {
+//                    if (pendingHide) {
+//                        Log.d(TAG, "pb - show - start pendingHide")
+//                        hide()
+//                    }
+//                }
+//
+//                override fun onAnimationCancel(animation: Animator?) {
+//
+//                }
+//
+//                override fun onAnimationRepeat(animation: Animator?) {
+//
+//                }
+//
+//            })
+
             binding.progressBarLayout.isClickable = true
+            binding.progressBarLayoutLottie.setAnimation("dish_loader.json")
+            binding.progressBarLayoutLottie.repeatCount = LottieDrawable.INFINITE
             binding.progressBarLayoutLottie.playAnimation()
-        }
+            binding.progressBarLayoutLottie.enableMergePathsForKitKatAndAbove(true)
+
+//        }
+//        else {
+//            Log.d(TAG, "pb - show called but canceled")
+//            pendingShow = true
+//        }
     }
 
     fun hide() {
-        if(binding.progressBarLayout.alpha != 0f) {
+        Log.d(TAG, "pb - hide called")
+//        if (binding.progressBarLayout.alpha != 0f) {
+        pendingHide = false
+        Log.d(TAG, "pb - hide action")
 //        binding.progressBarLayoutLottie.visibility = View.GONE
-            binding.progressBarLayoutLottie.cancelAnimation()
+        binding.progressBarLayoutLottie.cancelAnimation()
 
-            val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)
-            imageFadeOut.duration = DURATION
+        val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)
+        imageFadeOut.duration = DURATION
 
-            hideAnimationSet = AnimatorSet()
-            hideAnimationSet?.play(imageFadeOut)
-            hideAnimationSet?.start()
+        hideAnimationSet = AnimatorSet()
+        hideAnimationSet?.play(imageFadeOut)
+        hideAnimationSet?.start()
 
-            binding.progressBarLayout.isClickable = false
-        }
+//        hideAnimationSet?.addListener(object : Animator.AnimatorListener {
+//            override fun onAnimationStart(animation: Animator?) {
+//
+//            }
+//
+//            override fun onAnimationEnd(animation: Animator?) {
+//                if (pendingShow) {
+//                    Log.d(TAG, "pb - hide - start pendingShow")
+//                    show()
+//                }
+//            }
+//
+//            override fun onAnimationCancel(animation: Animator?) {
+//
+//            }
+//
+//            override fun onAnimationRepeat(animation: Animator?) {
+//
+//            }
+//
+//        })
+
+        binding.progressBarLayout.isClickable = false
+
+//        } else {
+//            Log.d(TAG, "pb - hide called but canceled")
+//            pendingHide = true
+//
+//        }
     }
 
     override fun onDetachedFromWindow() {
@@ -74,8 +145,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         super.onDetachedFromWindow()
     }
 
-    companion object{
+    companion object {
         const val DURATION: Long = 500
+        const val TAG = "wowWSPb"
     }
 
 }

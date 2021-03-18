@@ -47,7 +47,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun setCustomAnimation(type: Int) {
         when(type){
             Constants.LOTTIE_ANIM_PB -> {
-                binding.lottieAnimationView.setAnimation("loader.json")
+                binding.lottieAnimationView.setAnimation("dish_loader.json")
                 binding.lottieAnimationView.repeatMode = REVERSE
                 binding.lottieAnimationView.repeatCount = INFINITE
             }

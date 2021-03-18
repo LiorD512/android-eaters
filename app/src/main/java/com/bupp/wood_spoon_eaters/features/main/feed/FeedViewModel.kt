@@ -77,7 +77,7 @@ class FeedViewModel(
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                 }
-                progressData.endProgress()
+//                progressData.endProgress()
             }
         }else{
             Log.d("wowFeedVM","getFeed setLocationListener")

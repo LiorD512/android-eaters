@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class LocationPermissionFragment : BottomSheetDialogFragment() {
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        Log.d(LocationAndAddressActivity.TAG,"requestPermissionLauncher: $it")
+        Log.d(TAG,"requestPermissionLauncher: $it")
         askLocationPermission()
     }
 
@@ -112,6 +112,10 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
     override fun onDestroy() {
         binding = null
         super.onDestroy()
+    }
+
+    companion object{
+        const val TAG = "wowLocationPermission"
     }
 
 

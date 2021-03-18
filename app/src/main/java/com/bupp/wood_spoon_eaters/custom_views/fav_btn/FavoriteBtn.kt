@@ -8,7 +8,6 @@ import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
-import com.example.matthias.mvvmcustomviewexample.custom.FavoriteBtnViewModel
 import kotlinx.android.synthetic.main.favorite_btn.view.*
 
 

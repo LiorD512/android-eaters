@@ -211,7 +211,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     }
 
     companion object{
-        const val TAG = "wowLocationAndAddressAct"
+        const val TAG = "wowLocationAndAddresAct"
     }
 
 //    override fun onResume() {

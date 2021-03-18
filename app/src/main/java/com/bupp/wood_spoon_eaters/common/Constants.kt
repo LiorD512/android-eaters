@@ -71,6 +71,11 @@ class Constants {
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT = 9
         const val HEADER_VIEW_TYPE_EVENT = 10
 
+        //Resizeable image sizes
+        const val RESIZEABLE_IMAGE_SMALL = 0
+        const val RESIZEABLE_IMAGE_MEDIUM = 1
+        const val RESIZEABLE_IMAGE_LARGE = 2
+
         //Lottie animation types
         const val LOTTIE_ANIM_PB = 0
         const val LOTTIE_ANIM_SELECT_ADDRESS = 1

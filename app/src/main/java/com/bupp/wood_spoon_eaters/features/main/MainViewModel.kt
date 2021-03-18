@@ -24,7 +24,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
-    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, val cartManager: CartManager,
+    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
     val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, private val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 

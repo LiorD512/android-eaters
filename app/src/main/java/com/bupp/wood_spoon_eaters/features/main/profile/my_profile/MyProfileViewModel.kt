@@ -169,12 +169,12 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
 //        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
     }
 
-    val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
-    data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
-    fun getStripeCustomerCards(context: Context){
-        val paymentMethod = paymentManager.getStripeCustomerCards(context)
-        getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethod.value))
-    }
+//    private val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
+//    data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
+//    fun getStripeCustomerCards(context: Context){
+//        val paymentMethod = paymentManager.getStripeCustomerCards(context)
+//        getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethod.value))
+//    }
 
     fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
 //        eaterDataManager.updateCustomerCard(paymentMethod)//todo - nyyyyy

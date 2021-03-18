@@ -1,10 +1,8 @@
 package com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import mva2.adapter.HeaderSection
 import mva2.adapter.ItemSection
@@ -17,7 +15,7 @@ class AdditionalDishMainAdapter(
 ) : MultiViewAdapter() {
 
 
-    private val TAG: String = "wowAdditionalMainAdApter"
+    private val TAG: String = "wowAdditionalMainAdptr"
 
     private val orderItemsSection = ItemSection<OrderItems>()
     private val additionalDishesHeaderAndSection = HeaderSection<AdditionalDishHeader>()
@@ -34,11 +32,11 @@ class AdditionalDishMainAdapter(
     }
 
     private fun hideAllSections() {
+        Log.d(TAG, "hideAllSections")
         orderItemsSection.hideSection()
         additionalDishesHeaderAndSection.hideSection()
     }
 
-    @SuppressLint("LongLogTag")
     fun refreshOrderItems(orderItemList: List<OrderItem>) {
         Log.d(TAG, "refreshOrderItems $orderItemList")
         orderItemsSection.removeItem()
@@ -46,13 +44,6 @@ class AdditionalDishMainAdapter(
         orderItemsSection.showSection()
     }
 
-//    fun List<Dish>.f(orderItems: List<Dish>) = filter { dish ->
-//        orderItems.any { orderItem ->
-//            orderItem.id != dish.id
-//        }
-//    }
-
-    @SuppressLint("LongLogTag")
     fun refreshAdditionalDishes(dishes: List<Dish>) {
         Log.d(TAG, "refreshAdditionalDishes $dishes")
         val orderItems = orderItemsSection.item?.orderItems
@@ -64,7 +55,7 @@ class AdditionalDishMainAdapter(
                 orderItemDishes.add(it.dish)
             }
         }
-        val additioanlDishes = dishes.mapNotNull { dish ->
+        val additionalDishes = dishes.mapNotNull { dish ->
             if (orderItemDishes.find { it.id == dish.id} != null){
                 null
             }else{
@@ -76,10 +67,10 @@ class AdditionalDishMainAdapter(
             }
         }
 
-        if (additioanlDishes.isNotEmpty()) {
+        if (additionalDishes.isNotEmpty()) {
             additionalDishesSection.removeItem()
-            additionalDishesSection.setItem(AdditionalDishes(ArrayList(additioanlDishes)))
-            additionalDishesHeaderAndSection.header = AdditionalDishHeader(ArrayList(additioanlDishes)[0]?.cook?.firstName)
+            additionalDishesSection.setItem(AdditionalDishes(ArrayList(additionalDishes)))
+            additionalDishesHeaderAndSection.header = AdditionalDishHeader(ArrayList(additionalDishes)[0]?.cook?.firstName)
             additionalDishesSection.showSection()
             additionalDishesHeaderAndSection.showSection()
         }

@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 
--keep class com.stripe.android.** { *; }
+#-keep class com.stripe.android.** { *; }
 -dontwarn com.stripe.android.**
 #-keep class com.nimbusds.jose.** { *; }
 -dontwarn com.nimbusds.jose.**
@@ -32,12 +32,12 @@
 
 #-keep public class com.bupp.wood_spoon_eaters.model.** {*;}
 
--keep class com.appsee.** { *; }
+#-keep class com.appsee.** { *; }
 -dontwarn com.appsee.**
--keep class android.support.** { *; }
--keep interface android.support.** { *; }
--keep class androidx.** { *; }
--keep interface androidx.** { *; }
+#-keep class android.support.** { *; }
+#-keep interface android.support.** { *; }
+#-keep class androidx.** { *; }
+#-keep interface androidx.** { *; }
 -keepattributes SourceFile,LineNumberTable
 -keepclassmembers enum * { *; }
 
@@ -47,5 +47,5 @@
 -dontwarn module-info
 
 
--keep class com.uxcam.** { *; }
+#-keep class com.uxcam.** { *; }
 -dontwarn com.uxcam.**

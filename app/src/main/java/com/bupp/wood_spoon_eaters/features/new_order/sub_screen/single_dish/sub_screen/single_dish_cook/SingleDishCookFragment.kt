@@ -89,7 +89,6 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
         val certificates = cook.certificates
         if (!certificates.isNullOrEmpty()) {
             cookProfileFragCertificateLayout.visibility = View.VISIBLE
-            cookProfileFragCertificateGrid.clear()
             cookProfileFragCertificateGrid.initStackableViewWith(certificates)
         } else {
             cookProfileFragCertificateLayout.visibility = View.GONE

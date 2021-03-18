@@ -55,7 +55,7 @@ class StackableTextView : FrameLayout {
         adapter.notifyDataSetChanged()
     }
 
-    fun initStackableViewWith(strings: ArrayList<String>){
+    fun initStackableViewWith(strings: List<String>){
         val selectables = arrayListOf<DietaryIcon>()
         strings.forEach {
             selectables.add(DietaryIcon(it, "", 0))

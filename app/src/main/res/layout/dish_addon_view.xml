@@ -21,10 +21,9 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp">
 
-            <ImageView
-                    android:scaleType="centerCrop"
+            <com.bupp.wood_spoon_eaters.views.resizeable_image.ResizeableImageView
+                    app:sizeType="SMALL"
                     android:layout_gravity="center"
-                    tools:src="@drawable/ic_utensiles"
                     android:id="@+id/dishAddonImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -43,7 +42,7 @@
                     android:layout_height="match_parent">
 
                 <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
-                        app:minTextSize="10sp"
+                        app:minTextSize="7sp"
                         android:lines="1"
                         android:ellipsize="end"
                         android:id="@+id/dishAddonName"
@@ -94,57 +93,13 @@
                 android:background="@drawable/blue_cornered_bkg"
                 style="@style/SemiBold13White"
                 android:layout_width="99dp"
-                android:layout_height="48dp"
+                android:layout_height="38dp"
                 android:text="Add"/>
 
         <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
                 android:id="@+id/dishAddonPlusMinus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:visibility="gone"
-            android:layout_marginStart="9.4dp"
-            android:id="@+id/dishAddonChooserLayout"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <CheckBox
-                android:id="@+id/dishAddonSingleDishCb"
-                style="@style/Reg13Dark"
-                android:lines="1"
-                android:paddingStart="4dp"
-                android:text="Single Dish"
-                android:button="@drawable/checkbox_selector"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        <LinearLayout
-                android:layout_marginTop="15.4dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent" android:layout_height="wrap_content">
-
-            <CheckBox
-                    android:id="@+id/dishAddonWholeBatchCb"
-                    style="@style/Reg13Dark_50"
-                    android:lines="1"
-                    android:paddingStart="4dp"
-                    android:text="The Whole Batch (10 dishes)"
-                    android:button="@drawable/checkbox_selector"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            <TextView
-                    android:layout_marginLeft="28dp"
-                    style="@style/Reg13Dark_50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Buy the whole batch for a 20% disscount"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

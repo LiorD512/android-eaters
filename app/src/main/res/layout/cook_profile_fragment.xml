@@ -216,7 +216,7 @@
                                 android:gravity="center"
                                 android:text="Certificats" />
 
-                        <com.bupp.wood_spoon_eaters.custom_views.stackableTextView.StackableTextView
+                        <com.bupp.wood_spoon_eaters.views.gridStackableTextView.GridStackableTextView
                                 android:id="@+id/cookProfileFragCertificateGrid"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

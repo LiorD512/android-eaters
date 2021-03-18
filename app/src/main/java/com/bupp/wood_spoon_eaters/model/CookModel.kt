@@ -18,7 +18,7 @@ data class Cook(
     @SerializedName("birthdate") val birthdate: Date,
     @SerializedName("pickup_address") var pickupAddress: Address? = null,
     @SerializedName("place_of_birth") val country: Country? = null,
-    @SerializedName("certificates") val certificates: ArrayList<String>,
+    @SerializedName("certificates") val certificates: List<String>,
     @SerializedName("cuisines") val cuisines: ArrayList<CuisineLabel>,
     @SerializedName("diets") val diets: ArrayList<DietaryIcon>,
     @SerializedName("avg_rating") val rating: Double,
