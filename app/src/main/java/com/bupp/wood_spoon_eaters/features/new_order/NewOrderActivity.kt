@@ -160,15 +160,15 @@ class NewOrderActivity : AppCompatActivity(),
         redirectToCheckout()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        //change this to ActivityResultStarterCallback when stripe enables.
-//        if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
-//            Log.d(TAG, "Stripe on activity result")
-//            viewModel.refreshPaymentsMethod(this)
-////            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
-//            }
-//        }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        //change this to ActivityResultStarterCallback when stripe enables.
+        if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
+//            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+            Log.d(TAG, "Stripe on activity result")
+            viewModel.refreshPaymentsMethod(this)
+            }
+        }
 
 
     private fun finishNewOrder() {

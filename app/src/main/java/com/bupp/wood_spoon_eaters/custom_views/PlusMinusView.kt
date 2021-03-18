@@ -31,7 +31,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         quantityLeft?.let{
             this.quantityLeft = it
         }
-        plusMinusCounter.text = "$counter"
+        binding.plusMinusCounter.text = "$counter"
 
         if(counter >= this.quantityLeft){
             handlePlus(false)
@@ -60,13 +60,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
 
     private fun initUi() {
-        plusMinusMinus.setOnClickListener {
+        binding.plusMinusMinus.setOnClickListener {
             if (counter > 0) {
                 if(!canReachZero && counter == 1){
                     handleMinus(false)
                 }else{
                     counter--
-                    plusMinusCounter.text = "$counter"
+                    binding.plusMinusCounter.text = "$counter"
                     listener?.onPlusMinusChange(counter, position)
 
                     if(counter == quantityLeft){
@@ -77,9 +77,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 }
             }
         }
-        plusMinusPlus.setOnClickListener {
+        binding.plusMinusPlus.setOnClickListener {
             counter++
-            plusMinusCounter.text = "$counter"
+            binding.plusMinusCounter.text = "$counter"
             listener?.onPlusMinusChange(counter, position)
 
             if(counter >= quantityLeft){
@@ -92,23 +92,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun handlePlus(isEnabled: Boolean){
-        plusMinusPlus.isEnabled = isEnabled
+        binding.plusMinusPlus.isEnabled = isEnabled
         if(isEnabled){
-            plusMinusPlus.alpha = 1f
-            plusMinusCounter.alpha = 1f
+            binding.plusMinusPlus.alpha = 1f
+            binding.plusMinusCounter.alpha = 1f
         }else{
-            plusMinusPlus.alpha = 0.5f
-            plusMinusCounter.alpha = 0.5f
+            binding.plusMinusPlus.alpha = 0.5f
+            binding.plusMinusCounter.alpha = 0.5f
         }
     }
 
     private fun handleMinus(isEnabled: Boolean){
-        plusMinusMinus.isEnabled = isEnabled
+        binding.plusMinusMinus.isEnabled = isEnabled
         if(isEnabled){
-            plusMinusMinus.alpha = 1f
+            binding.plusMinusMinus.alpha = 1f
 //            plusMinusCounter.alpha = 1f
         }else{
-            plusMinusMinus.alpha = 0.5f
+            binding.plusMinusMinus.alpha = 0.5f
 //            plusMinusCounter.alpha = 0.5f
         }
     }

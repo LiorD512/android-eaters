@@ -153,6 +153,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
 
         mainViewModel.getLastOrderDetails()
+
     }
 
     private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {

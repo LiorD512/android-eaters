@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -541,6 +542,9 @@ class NewOrderMainViewModel(
         }
     }
 
+    fun refreshPaymentsMethod(context: Context) {
+        paymentManager.getStripeCustomerCards(context, true)
+    }
 
 
     companion object {

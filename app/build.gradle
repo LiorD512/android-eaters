@@ -21,8 +21,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 56
-        versionName "2.0.2"
+        versionCode 55
+        versionName "2.0.1"
     }
 
     androidExtensions {
@@ -68,7 +68,12 @@ android {
         viewBinding true
     }
 
-
+//    lintOptions {
+//        checkReleaseBuilds false
+//        // Or, if you prefer, you can continue to check for errors in release builds,
+//        // but continue the build even when errors are found:
+//        abortOnError false
+//    }
 
 }
 

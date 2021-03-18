@@ -14,14 +14,12 @@ import com.bupp.wood_spoon_eaters.databinding.AdditionalDishItemHeaderBinding
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogItemDishBinding
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogItemOrderItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.views.DishAddonView
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.views.resizeable_image.ResizeableImageView
 
 
 class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDishesAdapterListener):
-    ListAdapter<AdditionalDishData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()), DishAddonView.DishAddonListener,
-    PlusMinusView.PlusMinusInterface {
+    ListAdapter<AdditionalDishData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()), PlusMinusView.PlusMinusInterface {
 
 
 
@@ -57,7 +55,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
                 (holder as OrderItemViewHolder).bind(orderItem)
 
                 orderItem.menuItem?.let{
-                    holder.plusMinusView.setPlusMinusListener(this, position, initialCounter = orderItem.quantity, quantityLeft = orderItem.menuItem?.getQuantityCount())
+                    holder.plusMinusView.setPlusMinusListener(this, position, initialCounter = orderItem.quantity, quantityLeft = it.getQuantityCount())
                 }
 
             }
@@ -73,25 +71,16 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
 
     }
 
-
-    override fun onDishCountChange(counter: Int, position: Int) {
+    override fun onPlusMinusChange(counter: Int, position: Int) {
         var isOrderItemsEmpty = false
-        val updatedOrderItem = (getItem(position).dish as OrderItem).copy()
-        updatedOrderItem.quantity = counter
+        val orderItem = (getItem(position).dish as OrderItem).copy()
+        orderItem.quantity = counter
         if(counter == 0){
-            isOrderItemsEmpty = itemCount == 1
-            updatedOrderItem._destroy = true
+            val orderItems = currentList.filter { it.viewType == VIEW_TYPE_ORDER_ITEM }
+            isOrderItemsEmpty = orderItems.size == 1
+            orderItem._destroy = true
         }
-        listener.onDishCountChange(updatedOrderItem, isOrderItemsEmpty)
-    }
-
-    override fun onAddBtnClick(position: Int) {
-        notifyItemRemoved(position)
-        listener.onAddBtnClick(getItem(position).dish as Dish)
-    }
-
-    override fun onDishClick(position: Int) {
-        listener.onDishClick(getItem(position).dish as Dish)
+        listener.onDishCountChange(orderItem, isOrderItemsEmpty)
     }
 
     class AdditionalHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -135,7 +124,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
 
     class AdditionalDishesDiffCallback : DiffUtil.ItemCallback<AdditionalDishData<Any>>() {
         override fun areItemsTheSame(oldItem: AdditionalDishData<Any>, newItem: AdditionalDishData<Any>): Boolean {
-            return oldItem == newItem
+            return false
         }
 
         override fun areContentsTheSame(oldItem: AdditionalDishData<Any>, newItem: AdditionalDishData<Any>): Boolean {
@@ -150,16 +139,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         const val VIEW_TYPE_ADDITIONAL = 3
     }
 
-    override fun onPlusMinusChange(counter: Int, position: Int) {
-        var isOrderItemsEmpty = false
-        val orderItem = getItem(position).dish as OrderItem
-        orderItem.quantity = counter
-        if(counter == 0){
-            isOrderItemsEmpty = itemCount == 1
-            orderItem._destroy = true
-        }
-        listener.onDishCountChange(orderItem, isOrderItemsEmpty)
-    }
+
 
 
 }
