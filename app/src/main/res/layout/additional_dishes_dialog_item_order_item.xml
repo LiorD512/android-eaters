@@ -45,17 +45,17 @@
         <TextView
                 android:id="@+id/orderItemName"
                 style="@style/SemiBold13Dark"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="180dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                tools:text="Tomato Soup Tomats dSoup " />
+                tools:text="Tomatd sd fsSoup " />
 
         <TextView
                 android:id="@+id/orderItemPrice"
                 style="@style/Reg13Dark_50"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:gravity="end"
                 android:lines="1"
                 android:layout_height="wrap_content"

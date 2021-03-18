@@ -13,18 +13,17 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.ClearCartDialog
-import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsListener, AdditionalDishesAdapter.AdditionalDishesListener,
-    ClearCartDialog.ClearCartDialogListener, AdditionalDishesNewAdapter.AdditionalDishesAdapterListener {
+class AdditionalDishesDialog : DialogFragment(),
+    ClearCartDialog.ClearCartDialogListener, AdditionalDishesAdapter.AdditionalDishesAdapterListener {
 
     //    private var mainAdapter: AdditionalDishMainAdapter? = null
-    private var mainAdapter: AdditionalDishesNewAdapter? = null
+    private var mainAdapter: AdditionalDishesAdapter? = null
     private lateinit var binding: AdditionalDishesDialogBinding
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
@@ -71,15 +70,15 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
         val adapterData = mutableListOf<AdditionalDishData<Any>>()
         data.orderItems?.let {
             it.forEach {
-                adapterData.add(AdditionalDishData(AdditionalDishesNewAdapter.VIEW_TYPE_ORDER_ITEM, it))
+                adapterData.add(AdditionalDishData(AdditionalDishesAdapter.VIEW_TYPE_ORDER_ITEM, it))
             }
         }
 
         data.additionalDishes?.let {
             if (it.isNotEmpty()) {
-                adapterData.add(AdditionalDishData(AdditionalDishesNewAdapter.VIEW_TYPE_ADDITIONAL_HEADER, it[0]))
+                adapterData.add(AdditionalDishData(AdditionalDishesAdapter.VIEW_TYPE_ADDITIONAL_HEADER, it[0]))
                 it.forEach {
-                    adapterData.add(AdditionalDishData(AdditionalDishesNewAdapter.VIEW_TYPE_ADDITIONAL, it))
+                    adapterData.add(AdditionalDishData(AdditionalDishesAdapter.VIEW_TYPE_ADDITIONAL, it))
                 }
 
             }
@@ -89,7 +88,7 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
     private fun initUi() {
         Log.d(TAG, "initUi")
-        mainAdapter = AdditionalDishesNewAdapter(requireContext(), this)
+        mainAdapter = AdditionalDishesAdapter(requireContext(), this)
         with(binding) {
             additionalDishDialogList.layoutManager = LinearLayoutManager(context)
             additionalDishDialogList.adapter = mainAdapter
@@ -107,7 +106,6 @@ class AdditionalDishesDialog : DialogFragment(), OrderItemsAdapter.OrderItemsLis
 
     override fun onAddBtnClick(dish: Dish) {
         mainViewModel.addNewDishToCart(dish.id, 1)
-//        mainAdapter?.removeDish(dish)// todo - do this nyc alon
     }
 
     override fun onDishClick(dish: Dish) {

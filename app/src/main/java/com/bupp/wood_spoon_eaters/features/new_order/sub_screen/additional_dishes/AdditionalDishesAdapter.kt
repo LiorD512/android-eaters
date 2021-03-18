@@ -10,17 +10,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
-import com.bupp.wood_spoon_eaters.dialogs.additional_dishes.adapter.AdditionalDishData
+import com.bupp.wood_spoon_eaters.databinding.AdditionalDishItemHeaderBinding
+import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogItemDishBinding
+import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogItemOrderItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.views.DishAddonView
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.views.resizeable_image.ResizeableImageView
-import kotlinx.android.synthetic.main.additional_dish_item_header.view.*
-import kotlinx.android.synthetic.main.additional_dishes_dialog_item_dish.view.*
-import kotlinx.android.synthetic.main.additional_dishes_dialog_item_order_item.view.*
 
 
-class AdditionalDishesNewAdapter(val context: Context, val listener: AdditionalDishesAdapterListener):
+class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDishesAdapterListener):
     ListAdapter<AdditionalDishData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()), DishAddonView.DishAddonListener,
     PlusMinusView.PlusMinusInterface {
 
@@ -87,6 +86,7 @@ class AdditionalDishesNewAdapter(val context: Context, val listener: AdditionalD
     }
 
     override fun onAddBtnClick(position: Int) {
+        notifyItemRemoved(position)
         listener.onAddBtnClick(getItem(position).dish as Dish)
     }
 
@@ -95,15 +95,17 @@ class AdditionalDishesNewAdapter(val context: Context, val listener: AdditionalD
     }
 
     class AdditionalHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val body: TextView = view.additionalHeaderBody
+        val binding = AdditionalDishItemHeaderBinding.bind(view)
+        val body: TextView = binding.additionalHeaderBody
     }
 
     class OrderItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val plusMinusView: PlusMinusView = view.orderItemPlusMinus
-        private val name: TextView = view.orderItemName
-        private val price: TextView = view.orderItemPrice
-        private val count: TextView = view.orderItemCount
-        private val img: ResizeableImageView = view.orderItemImg
+        val binding = AdditionalDishesDialogItemOrderItemBinding.bind(view)
+        val plusMinusView: PlusMinusView = binding.orderItemPlusMinus
+        private val name: TextView = binding.orderItemName
+        private val price: TextView = binding.orderItemPrice
+        private val count: TextView = binding.orderItemCount
+        private val img: ResizeableImageView = binding.orderItemImg
 
         fun bind(orderItem: OrderItem){
             price.text = orderItem.price.formatedValue
@@ -114,11 +116,12 @@ class AdditionalDishesNewAdapter(val context: Context, val listener: AdditionalD
     }
 
     class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val addBtn: TextView = view.additionalDishAddBtn
-        private val price: TextView = view.additionalDishPrice
-        private val name: TextView = view.additionalDishName
-        private val count: TextView = view.additionalDishCount
-        private val img: ResizeableImageView = view.additionalDishImg
+        val binding = AdditionalDishesDialogItemDishBinding.bind(view)
+        private val addBtn: TextView = binding.additionalDishAddBtn
+        private val price: TextView = binding.additionalDishPrice
+        private val name: TextView = binding.additionalDishName
+        private val count: TextView = binding.additionalDishCount
+        private val img: ResizeableImageView = binding.additionalDishImg
 
         fun bind(dish: Dish, listener: AdditionalDishesAdapterListener){
             price.text = dish.price.formatedValue

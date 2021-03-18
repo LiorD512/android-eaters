@@ -22,10 +22,12 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="false"
             android:theme="@style/AppTheme"
-            tools:replace="supportsRtl"
+            tools:replace="supportsRtl, fullBackupContent"
+            android:allowBackup="true"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning"
-            android:requestLegacyExternalStorage="true">
+            android:requestLegacyExternalStorage="true"
+            android:fullBackupContent="@xml/backup_descriptor">
 
 <!--        <activity android:name=".delete_me.TestActivity"-->
 <!--                android:screenOrientation="portrait"-->

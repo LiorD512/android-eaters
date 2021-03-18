@@ -417,10 +417,16 @@ class CartManager(
 
     fun getAdditionalDishes(): List<Dish>? {
         currentShowingDish?.let {
-            return it.getAdditionalDishes(currentShowingDish?.menuItem?.cookingSlot?.id)
+            val allAdditionalDishes = it.getAdditionalDishes(it.menuItem?.cookingSlot?.id)
+            currentOrderResponse?.orderItems?.let{
+                val filteredAdditionals =  allAdditionalDishes.f(it)
+                return filteredAdditionals
+            }
         }
         return null
     }
+
+    fun List<Dish>.f(orderItems: List<OrderItem>) = filter { m -> orderItems.all { !it.dish.name.equals(m.name) } }
 
     fun calcTotalDishesPrice(): Double {
         var total = 0.0

@@ -90,6 +90,7 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
                 ErrorEventType.SOMETHING_WENT_WRONG -> {
                     WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(childFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
+                else -> {}
             }
         })
     }
