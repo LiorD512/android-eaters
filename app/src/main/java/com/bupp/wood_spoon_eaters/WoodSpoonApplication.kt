@@ -67,18 +67,19 @@ class WoodSpoonApplication : Application() {
         AppsFlyerLib.getInstance().init(devKey, conversionDataListener, applicationContext)
         AppsFlyerLib.getInstance().start(this)
 
-        if(BuildConfig.BUILD_TYPE.equals("release", true)) {
+        if(!BuildConfig.BUILD_TYPE.equals("release", true)) {
             Log.d("wowApplication", "uxcam is on!")
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
-            val analytics = Analytics.Builder(this@WoodSpoonApplication, "ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg") // Enable this to record certain application events automatically!
+            val analytics = Analytics.Builder(applicationContext, "ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg") // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
 //                .recordScreenViews()
+//                .logLevel(Analytics.LogLevel.VERBOSE)
                 .use(MixpanelIntegration.FACTORY)
                 .use(AppsflyerIntegration.FACTORY)
                 .build()
             Analytics.setSingletonInstance(analytics)
         }else{
-            val analytics = Analytics.Builder(this@WoodSpoonApplication, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
+            val analytics = Analytics.Builder(applicationContext, "dBQhDMRWdKAvkBKC53ind9Pey34RuuQP") // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
 //                .recordScreenViews()
                 .logLevel(Analytics.LogLevel.VERBOSE)
