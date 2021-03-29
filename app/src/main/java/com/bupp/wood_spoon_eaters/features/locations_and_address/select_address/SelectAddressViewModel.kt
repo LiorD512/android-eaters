@@ -5,10 +5,12 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.Address
+import kotlinx.coroutines.launch
 
 class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager) : ViewModel(){
 
@@ -60,9 +62,18 @@ class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: Ea
     data class AddressAdapterWrapper(val address: List<Address>?, val currentAddress: Address? = null)
     val myAddressesEvent = SingleLiveEvent<AddressAdapterWrapper>()
     fun fetchAddress() {
-        val currentAddress = eaterDataManager.getLastChosenAddress()
-        val addresses = eaterDataManager.currentEater?.addresses
-        myAddressesEvent.postValue(AddressAdapterWrapper(addresses, currentAddress))
+        if(eaterDataManager.currentEater == null){
+            viewModelScope.launch {
+                eaterDataManager.refreshCurrentEater()
+                val currentAddress = eaterDataManager.getLastChosenAddress()
+                val addresses = eaterDataManager.currentEater?.addresses
+                myAddressesEvent.postValue(AddressAdapterWrapper(addresses, currentAddress))
+            }
+        }else{
+            val currentAddress = eaterDataManager.getLastChosenAddress()
+            val addresses = eaterDataManager.currentEater?.addresses
+            myAddressesEvent.postValue(AddressAdapterWrapper(addresses, currentAddress))
+        }
     }
 
     fun onMyLocationReceived() {

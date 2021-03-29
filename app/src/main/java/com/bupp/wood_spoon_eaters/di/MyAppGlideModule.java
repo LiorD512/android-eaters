@@ -50,7 +50,7 @@ public class MyAppGlideModule extends AppGlideModule {
         return new RequestOptions()
                 .signature(new ObjectKey(
                         System.currentTimeMillis() / (24 * 60 * 60 * 1000)))
-                .override(200, 200)
+//                .override(200, 200)
                 .centerCrop()
 //                .encodeFormat(Bitmap.CompressFormat.PNG)
 //                .encodeQuality(100)

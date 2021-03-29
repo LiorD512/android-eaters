@@ -77,7 +77,9 @@ object GoogleAddressParserUtil {
         location.locality?.let{
             addressRequest.cityName = it
         }
-        addressRequest.stateIso = State.valueOfState(location.adminArea).iso
+        location.adminArea?.let{
+            addressRequest.stateIso = State.valueOfState(it).iso
+        }
         addressRequest.countryIso = location.countryCode
         addressRequest.zipCode = location.postalCode
         addressRequest.addressSlug = location.getAddressLine(0)

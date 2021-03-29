@@ -67,7 +67,7 @@ class WoodSpoonApplication : Application() {
         AppsFlyerLib.getInstance().init(devKey, conversionDataListener, applicationContext)
         AppsFlyerLib.getInstance().start(this)
 
-        if(!BuildConfig.BUILD_TYPE.equals("release", true)) {
+        if(BuildConfig.BUILD_TYPE.equals("release", true)) {
             Log.d("wowApplication", "uxcam is on!")
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
             val analytics = Analytics.Builder(applicationContext, "ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg") // Enable this to record certain application events automatically!

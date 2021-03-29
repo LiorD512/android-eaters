@@ -120,8 +120,8 @@ object CountryCodeUtils {
     fun isPhoneValid(phone: String?): Boolean{
         phone?.let{
             val re = Regex("[^A-Za-z0-9 ]")
-            val phone = re.replace(phone, "")
-            if(phone.isNotEmpty() && phone.length >= 10)
+            val phone = re.replace(phone, "").replace(" ", "")
+            if(phone.isNotEmpty() && phone.length >= 8)
                 return true
         }
         return false

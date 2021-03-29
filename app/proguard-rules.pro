@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 
-#-keep class com.stripe.android.** { *; }
+-keep class com.stripe.android.** { *; }
 -dontwarn com.stripe.android.**
 #-keep class com.nimbusds.jose.** { *; }
 -dontwarn com.nimbusds.jose.**

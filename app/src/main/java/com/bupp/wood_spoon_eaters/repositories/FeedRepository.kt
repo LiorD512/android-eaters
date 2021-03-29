@@ -28,19 +28,19 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    Log.d(TAG,"getFeed - NetworkError")
                     FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    Log.d(TAG,"getFeed - GenericError")
                     FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","initUserRepo - Success")
+                    Log.d(TAG,"getFeed - Success")
                     FeedRepoResult(FeedRepoStatus.SUCCESS, result.value.data)
                 }
                 else -> {
-                    Log.d("wowUserRepository","initUserRepo - wsError")
+                    Log.d(TAG,"getFeed - wsError")
                     FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
@@ -54,19 +54,19 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    Log.d(TAG,"getCookById - NetworkError")
                     CookResult(FeedRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    Log.d(TAG,"getCookById - GenericError")
                     CookResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","initUserRepo - Success")
+                    Log.d(TAG,"getCookById - Success")
                     CookResult(FeedRepoStatus.SUCCESS, result.value.data)
                 }
                 else -> {
-                    Log.d("wowUserRepository","initUserRepo - wsError")
+                    Log.d(TAG,"getCookById - wsError")
                     CookResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
@@ -80,19 +80,19 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    Log.d(TAG,"getCookReview - NetworkError")
                     ReviewResult(FeedRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    Log.d(TAG,"getCookReview - GenericError")
                     ReviewResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","initUserRepo - Success")
+                    Log.d(TAG,"getCookReview - Success")
                     ReviewResult(FeedRepoStatus.SUCCESS, result.value.data)
                 }
                 else -> {
-                    Log.d("wowUserRepository","initUserRepo - wsError")
+                    Log.d(TAG,"getCookReview - wsError")
                     ReviewResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
@@ -114,15 +114,15 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    Log.d(TAG,"getSearch - NetworkError")
                     SearchResult(SearchStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    Log.d(TAG,"getSearch - GenericError")
                     SearchResult(SearchStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","initUserRepo - Success")
+                    Log.d(TAG,"getSearch - Success")
                     if(result.value.data.isNullOrEmpty()){
                         SearchResult(SearchStatus.EMPTY)
                     }else{
@@ -130,11 +130,15 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                     }
                 }
                 else -> {
-                    Log.d("wowUserRepository","initUserRepo - wsError")
+                    Log.d(TAG,"getSearch - wsError")
                     SearchResult(SearchStatus.SOMETHING_WENT_WRONG)
                 }
             }
         }
+    }
+
+    companion object{
+        const val TAG = "wowFeedRepo"
     }
 
 

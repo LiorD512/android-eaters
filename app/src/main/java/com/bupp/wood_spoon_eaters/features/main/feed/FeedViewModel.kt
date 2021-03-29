@@ -63,10 +63,12 @@ class FeedViewModel(
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         Log.d(TAG, "NetworkError")
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                         Log.d(TAG, "GenericError")
 //                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
+                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
@@ -75,6 +77,7 @@ class FeedViewModel(
                     else -> {
                         Log.d(TAG, "NetworkError")
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                        progressData.endProgress()
                     }
                 }
 //                progressData.endProgress()
@@ -82,6 +85,7 @@ class FeedViewModel(
         }else{
             Log.d("wowFeedVM","getFeed setLocationListener")
             feedResultData.postValue(OldFeedEvent(false,null))
+            progressData.endProgress()
         }
 
     }
