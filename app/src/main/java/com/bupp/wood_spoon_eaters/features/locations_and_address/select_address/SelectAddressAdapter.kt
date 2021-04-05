@@ -65,7 +65,7 @@ class SelectAddressAdapter(private val listener: SelectAddressAdapterListener?) 
         fun bindItem(listener: SelectAddressAdapterListener?, address: Address) {
             address.let{
                 streetText.text = "${it.streetLine1}, #${it.streetLine2}"
-                stateText.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
+                stateText.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode ?: ""}"
                 dropOff.text = it.getDropoffLocationStr()
 
                 menuBtn.setOnClickListener { listener?.onMenuClick(address) }

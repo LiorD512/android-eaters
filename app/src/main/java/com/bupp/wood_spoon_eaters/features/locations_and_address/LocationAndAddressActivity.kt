@@ -78,7 +78,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
             Log.d(TAG, it.name)
             when(it){
                 LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
-                    FinalDetailsToSelectAddress()
+                    finalDetailsToSelectAddress()
                 }
                 LocationAndAddressViewModel.NavigationEventType.OPEN_LOCATION_PERMISSION_SCREEN -> {
                     redirectToLocationPermission()
@@ -172,7 +172,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         onBackPressed()
     }
 
-    private fun FinalDetailsToSelectAddress() {
+    private fun finalDetailsToSelectAddress() {
         findNavController(R.id.locationActContainer).navigate(R.id.action_finalAddressDetailsFragment_to_selectAddressFragment)
     }
 

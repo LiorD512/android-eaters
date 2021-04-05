@@ -10,6 +10,7 @@ class Constants {
         const val BANNER_NO_GPS = 0
         const val BANNER_MY_LOCATION = 1
         const val BANNER_KNOWN_ADDRESS = 2
+        const val BANNER_NO_AVAILABLE_DISHES = 3
 
         //activities intent param
         const val START_WITH = "startWith"

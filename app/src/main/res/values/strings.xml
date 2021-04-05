@@ -125,6 +125,7 @@
     <string name="banner_no_location">You are seeing home chefs based on your last saved address since we’re unable to get your current location.</string>
     <string name="banner_known_address">Since your location services are off, WoodSpoon is using your last saved address</string>
     <string name="banner_no_gps"> You disabled your location services. WoodSpoon is using your last saved address for now.</string>
+    <string name="banner_no_available_dishes">Looks like our home chefs are unavailable at that time. Check out these other options!</string>
     <string name="bottom_bar_item_counter">Add %1$s To Cart</string>
     <string name="bottom_bar_place_an_order">PLACE AN ORDER</string>
     <string name="bottom_bar_tract_your_order">Track your order</string>

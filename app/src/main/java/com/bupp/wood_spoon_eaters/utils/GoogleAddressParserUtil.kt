@@ -78,7 +78,7 @@ object GoogleAddressParserUtil {
             addressRequest.cityName = it
         }
         location.adminArea?.let{
-            addressRequest.stateIso = State.valueOfState(it).iso
+            addressRequest.stateIso = State.valueOfState(it)?.iso
         }
         addressRequest.countryIso = location.countryCode
         addressRequest.zipCode = location.postalCode
@@ -170,12 +170,12 @@ object GoogleAddressParserUtil {
                 return state ?: UNKNOWN
             }
 
-            fun valueOfState(name: String): State {
+            fun valueOfState(name: String): State? {
                 val enumName = name.toUpperCase().replace(" ".toRegex(), "_")
                 return try {
                     valueOf(enumName)
                 } catch (e: IllegalArgumentException) {
-                    UNKNOWN
+                    null
                 }
             }
 

@@ -28,7 +28,8 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
 
     override fun onEmptyhDishList() {
-        NoDishesAvailableDialog().show(childFragmentManager, Constants.NO_DISHES_AVAILABLE_DIALOG)
+        handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
+//        NoDishesAvailableDialog().show(childFragmentManager, Constants.NO_DISHES_AVAILABLE_DIALOG)
     }
 
 
@@ -127,7 +128,8 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 
     private fun initFeed(feedArr: List<Feed>) {
         if(feedArr.isEmpty()){
-            showEmptyLayout()
+//            showEmptyLayout()
+            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         }else{
             feedFragEmptyLayout.visibility = View.GONE
             feedFragListLayout.visibility = View.VISIBLE
@@ -162,6 +164,9 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
                 }
                 Constants.BANNER_NO_GPS -> {
                     showBanner(getString(R.string.banner_no_gps))
+                }
+                Constants.BANNER_NO_AVAILABLE_DISHES -> {
+                    showBanner(getString(R.string.banner_no_available_dishes))
                 }
                 else -> {}
             }
