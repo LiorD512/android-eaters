@@ -227,6 +227,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     }
                 }
                 checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide)
+                it.tipPercentage?.let{ tip ->
+                    checkoutFragTipPercentView.selectDefaultTip(tip)
+                }
             }
             updatePriceUi(it)
 

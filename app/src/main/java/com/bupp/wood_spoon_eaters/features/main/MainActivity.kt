@@ -233,14 +233,12 @@ class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
             mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
         })
 
-
         viewModel.dishClickEvent.observe(this, Observer {
             val event = it.getContentIfNotHandled()
             event?.let {
                 afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_MENU_ITEM_ID, event))
             }
         })
-
 
         viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
             if (newAddressEvent != null) {

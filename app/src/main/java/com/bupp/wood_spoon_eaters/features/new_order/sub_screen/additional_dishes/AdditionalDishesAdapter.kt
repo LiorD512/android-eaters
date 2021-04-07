@@ -22,7 +22,6 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
     ListAdapter<AdditionalDishData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()), PlusMinusView.PlusMinusInterface {
 
 
-
     override fun getItemViewType(position: Int): Int {
         return getItem(position).viewType
     }
