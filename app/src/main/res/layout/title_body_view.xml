@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/titleBodyTitle"
+        style="@style/LatoBold15Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:layout_marginTop="11dp"
+        android:gravity="center_horizontal"
+        tools:text="Tomato Soup" />
+
+    <TextView
+        android:id="@+id/titleBodyBody"
+        style="@style/LatoReg15Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center"
+        android:layout_marginTop="7.8dp"
+        android:layout_marginBottom="11.3dp"
+        tools:text="A rich tomato, basil and parmesan soup with crunchy sourdough and cheddar toasty fingers" />
+
+    <View
+        android:id="@+id/titleBodyDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/silver_20" />
+
+</LinearLayout>

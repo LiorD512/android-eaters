@@ -4,19 +4,22 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 
 class AnimationUtil {
 
 
-    fun Shake (view: View) :AnimatorSet{
-        val animatorSet = AnimatorSet()
-
-        val object1:ObjectAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.05f, 0.90f, 1.05f, 1f)
-        val object2:ObjectAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 0.85f, 1.15f, 0.95f, 1f)
-
-        animatorSet.playTogether(object1, object2)
-        return animatorSet
+    fun shakeView(view: View) {
+        ObjectAnimator.ofFloat(
+            view, "translationX",
+            0f, -30f, 30.0f, -15.0f, 15.0f, -5.0f, 5.0f, 0f,
+        ).apply {
+            duration = 500
+            interpolator = AccelerateDecelerateInterpolator()
+            repeatCount = 0
+            start()
+        }
     }
 
 }

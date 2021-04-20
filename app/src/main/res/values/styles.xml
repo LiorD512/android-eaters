@@ -124,6 +124,11 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoBold9Grey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/purpley_grey</item>
+    </style>
     <style name="LatoReg13PurpelyGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>

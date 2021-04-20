@@ -111,12 +111,15 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
         singleDishInfoRatingVal.text = fullDish.rating.toString()
 
-        if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {
-            singleDishInstructionsLayout.visibility = View.VISIBLE
-            singleDishInstructionsBody.text = fullDish.cooksInstructions
-        } else {
-            singleDishInstructionsLayout.visibility = View.GONE
+        fullDish.portionSize?.let{
+            singleDisInfohPortion.setBody(it)
         }
+//        if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {
+//            singleDishInstructionsLayout.visibility = View.VISIBLE
+//            singleDishInstructionsBody.text = fullDish.cooksInstructions
+//        } else {
+//            singleDishInstructionsLayout.visibility = View.GONE
+//        }
 
         val isNationwide = fullDish.menuItem?.cookingSlot?.isNationwide
         if(isNationwide != null && isNationwide){

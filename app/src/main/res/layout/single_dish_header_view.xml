@@ -21,7 +21,7 @@
             android:layout_toLeftOf="@+id/singleDishHeaderIngredient"
             android:layout_centerVertical="true"
             android:id="@+id/singleDishHeaderInfo"
-            android:text="Info"
+            android:text="Dish"
             android:textColor="@color/grey_to_black_selector"
             android:layout_marginRight="47dp"
             android:background="@null"
@@ -33,7 +33,7 @@
     <TextView
             android:layout_centerInParent="true"
             android:id="@+id/singleDishHeaderIngredient"
-            android:text="Ingredients"
+            android:text="Info"
             android:textColor="@color/grey_to_black_selector"
             android:background="@null"
             android:gravity="center"

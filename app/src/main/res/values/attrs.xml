@@ -26,7 +26,14 @@
             <attr name="error" />
         </declare-styleable>
 
-        <declare-styleable name="ResizeableImageView">
+    <declare-styleable name="TitleBodyView">
+        <attr name="title"/>
+        <attr name="body" format="string"/>
+        <attr name="showDivider" format="boolean"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="ResizeableImageView">
             <attr name="sizeType" format="enum">
                 <enum name="SMALL" value="0" />
                 <enum name="MEDIUM" value="1" />

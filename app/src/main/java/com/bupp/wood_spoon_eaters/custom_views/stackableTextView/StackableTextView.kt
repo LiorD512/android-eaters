@@ -34,7 +34,7 @@ class StackableTextView : FrameLayout {
         stackableTextViewList.isNestedScrollingEnabled = false
     }
 
-    fun initStackableView(icons: ArrayList<SelectableIcon>){
+    fun initStackableView(icons: List<SelectableIcon>){
         val bundles: ArrayList<StackablesBundle> = arrayListOf()
         var shouldStop = false
         var i = 0
@@ -55,13 +55,13 @@ class StackableTextView : FrameLayout {
         adapter.notifyDataSetChanged()
     }
 
-    fun initStackableViewWith(strings: List<String>){
-        val selectables = arrayListOf<DietaryIcon>()
-        strings.forEach {
-            selectables.add(DietaryIcon(it, "", 0))
-        }
-        initStackableView(selectables as ArrayList<SelectableIcon>)
-    }
+//    fun initStackableViewWith(strings: List<String>){
+//        val selectables = arrayListOf<DietaryIcon>()
+//        strings.forEach {
+//            selectables.add(DietaryIcon(it, "", 0))
+//        }
+//        initStackableView(selectables as List<SelectableIcon>)
+//    }
 
 
 

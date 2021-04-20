@@ -105,35 +105,36 @@ data class WelcomeScreen(
     @SerializedName("image_url") var url: String?
 )
 
-//orders grid data class
+
+//icons grid data class
+interface SelectableIcon {
+    val id: Long
+    val name: String
+    val icon: String
+    val iconSelected: String
+}
 
 @Parcelize
 data class DietaryIcon(
     @SerializedName("name") override val name: String,
     @SerializedName("icon") override val icon: String,
+    @SerializedName("icon_selected") override val iconSelected: String,
     @SerializedName("id") override val id: Long
-): SelectableIcon, Parcelable
+) : SelectableIcon, Parcelable
 
 @Parcelize
 data class CuisineLabel(
     @SerializedName("name") override val name: String,
     @SerializedName("icon") override val icon: String,
+    @SerializedName("icon_selected") override val iconSelected: String,
     @SerializedName("cover") val cover: String,
     @SerializedName("id") override val id: Long
-): SelectableIcon, Parcelable
-
-interface SelectableIcon {
-    val id: Long
-    val name: String?
-    val icon: String
-}
+) : SelectableIcon, Parcelable
 
 interface SelectableString {
     val id: Long
     val name: String
 }
-
-
 
 data class PreSignedUrl(
     @SerializedName("key") val key: String,

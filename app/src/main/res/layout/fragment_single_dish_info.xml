@@ -276,35 +276,41 @@
                     android:layout_marginBottom="10dp"
                     android:background="@color/light_periwinkle" />
 
-            <LinearLayout
-                    android:id="@+id/singleDishInstructionsLayout"
+            <com.bupp.wood_spoon_eaters.views.TitleBodyView
+                    app:title="Portion size"
+                    android:id="@+id/singleDisInfohPortion"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
+                    android:layout_height="wrap_content"/>
 
-                <TextView
-                        style="@style/SemiBold15Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Home Chef's Instructions" />
+<!--            <LinearLayout-->
+<!--                    android:id="@+id/singleDishInstructionsLayout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:visibility="gone"-->
+<!--                    tools:visibility="visible">-->
 
-                <TextView
-                        android:id="@+id/singleDishInstructionsBody"
-                        style="@style/Reg13Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness." />
+<!--                <TextView-->
+<!--                        style="@style/SemiBold15Dark"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Home Chef's Instructions" />-->
 
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@color/light_periwinkle" />
+<!--                <TextView-->
+<!--                        android:id="@+id/singleDishInstructionsBody"-->
+<!--                        style="@style/Reg13Dark"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness." />-->
 
-            </LinearLayout>
+<!--                <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="1dp"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_marginBottom="16dp"-->
+<!--                        android:background="@color/light_periwinkle" />-->
+
+<!--            </LinearLayout>-->
 
             <TextView
                     style="@style/SemiBold15Dark"
