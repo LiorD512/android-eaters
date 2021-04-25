@@ -46,17 +46,17 @@ class SingleDishHeader : FrameLayout {
         when (scrollPos) {
             NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INFO -> {
                 singleDishHeaderInfo.isSelected = true
-                singleDishHeaderInfo.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD);
+                singleDishHeaderInfo.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD)
                 listener?.onPageClick(scrollPos)
             }
             NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_INGR -> {
                 singleDishHeaderIngredient.isSelected = true
-                singleDishHeaderIngredient.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD);
+                singleDishHeaderIngredient.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD)
                 listener?.onPageClick(scrollPos)
             }
             NewOrderMainViewModel.NewOrderScreen.SINGLE_DISH_COOK -> {
                 singleDishHeaderCook.isSelected = true
-                singleDishHeaderCook.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD);
+                singleDishHeaderCook.setTypeface(singleDishHeaderInfo.typeface, Typeface.BOLD)
                 listener?.onPageClick(scrollPos)
             }
         }

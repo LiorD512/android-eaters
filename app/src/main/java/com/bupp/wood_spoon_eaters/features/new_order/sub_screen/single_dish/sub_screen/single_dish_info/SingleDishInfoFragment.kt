@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -27,7 +28,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageView.UserImageViewListener,
-    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener {
+    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener,
+    WSCounterEditText.WSCounterListener {
 
     private val viewModel by viewModel<SingleDishInfoViewModel>()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
@@ -54,7 +56,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         singleDishChangeTimeBtn.setOnClickListener {
             viewModel.onTimeChangeClick()
         }
-        singleDishNote.setInputTitleViewListener(this)
+        singleDishNote.setWSCounterListener(this)
     }
 
     private fun initObserver() {
@@ -112,7 +114,8 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         singleDishInfoRatingVal.text = fullDish.rating.toString()
 
         fullDish.portionSize?.let{
-            singleDisInfohPortion.setBody(it)
+            singleDisInfoPortion.setBody(it)
+            singleDisInfoPortion.visibility = View.VISIBLE
         }
 //        if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {
 //            singleDishInstructionsLayout.visibility = View.VISIBLE

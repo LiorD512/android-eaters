@@ -525,22 +525,22 @@ class NewOrderMainViewModel(
         }
     }
 
-    fun checkIfFutureOrder(fullDish: FullDish) {
-        if(fullDish.menuItem?.orderAt == null){
-            //Dish is offered today.
-        }else{
-            fullDish.menuItem?.orderAt?.let{
-                //Dish is offered in the future.
-                if(Date().after(it)){
-
-                }else{
-                    //order stating in the future. needs to update order delivery time to "orderAt"
-                    deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
-                }
-            }
-
-        }
-    }
+//    fun checkIfFutureOrder(fullDish: FullDish) {
+//        if(fullDish.menuItem?.orderAt == null){
+//            //Dish is offered today.
+//        }else{
+//            fullDish.menuItem?.orderAt?.let{
+//                //Dish is offered in the future.
+//                if(Date().after(it)){
+//
+//                }else{
+//                    //order stating in the future. needs to update order delivery time to "orderAt"
+//                    deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
+//                }
+//            }
+//
+//        }
+//    }
 
     fun refreshPaymentsMethod(context: Context) {
         paymentManager.getStripeCustomerCards(context, true)

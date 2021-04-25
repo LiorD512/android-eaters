@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:id="@+id/counterEditTextLayout"
+    android:background="@color/white">
+
+    <TextView
+        android:visibility="gone"
+        android:paddingBottom="9dp"
+        tools:text="titleeeeeeeeeeeeeeeeeeee"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/LatoReg13Black"
+        android:id="@+id/counterEditTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/counterEditTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_two_rect_7_radius"
+        android:gravity="top|start"
+        tools:hint="HEx: Pour dressing over salad to eat."
+        android:padding="15.4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/counterEditTextTitle" />
+
+    <TextView
+        android:layout_marginTop="2dp"
+        android:id="@+id/counterEditTextCounter"
+        style="@style/LatoReg11Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="8.6sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/counterEditTextInput"
+        tools:text="Minimum 50 characters" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

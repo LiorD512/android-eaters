@@ -72,7 +72,7 @@
 
             <TextView
                     android:id="@+id/singleDishInfoName"
-                    style="@style/SemiBold15Dark"
+                    style="@style/LatoBlack15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -87,7 +87,7 @@
 
                 <TextView
                         android:id="@+id/singleDishInfoCookName"
-                        style="@style/SemiBold13Dark50"
+                        style="@style/LatoReg15Dark50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="By Oded Shoshan" />
@@ -102,7 +102,7 @@
 
             <TextView
                     android:id="@+id/singleDishInfoDescription"
-                    style="@style/SemiBold13Dark"
+                    style="@style/LatoReg15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -128,7 +128,7 @@
 
                     <TextView
                             android:id="@+id/singleDishInfoPrice"
-                            style="@style/Reg13Dark"
+                            style="@style/LatoReg13Dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -158,7 +158,7 @@
 
                     <TextView
                             android:id="@+id/singleDishInfoRatingVal"
-                            style="@style/Reg13Dark"
+                            style="@style/LatoReg13Dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -169,6 +169,12 @@
 
             </LinearLayout>
 
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/light_periwinkle" />
+
             <LinearLayout
                     android:layout_marginTop="25dp"
                     android:layout_width="match_parent"
@@ -177,14 +183,14 @@
                     android:orientation="horizontal">
 
                 <TextView
-                        style="@style/SemiBold13Dark"
+                        style="@style/LatoBold13Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Count:" />
 
                 <TextView
                         android:id="@+id/singleDishCount"
-                        style="@style/SemiBold13Blue"
+                        style="@style/LatoBold13Teal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -230,14 +236,14 @@
 
                         <TextView
                                 android:id="@+id/singleDishInfoDate"
-                                style="@style/SemiBold13Dark"
+                                style="@style/LatoBold13Dark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 tools:text="ASAP, 37-49 min" />
 
                         <TextView
                                 android:id="@+id/singleDishInfoDelivery"
-                                style="@style/Reg13Dark"
+                                style="@style/LatoReg13Dark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="7.9dp"
@@ -246,24 +252,38 @@
 
                     </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
+                    <TextView
+                            android:layout_marginEnd="10dp"
                             android:id="@+id/singleDishChangeTimeBtn"
-                            android:layout_width="114dp"
-                            android:layout_height="66dp"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="2.9dp"
-                            app:cardElevation="8dp"
-                            app:cardUseCompatPadding="true">
+                            style="@style/LatoBold15Teal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/pale_grey_cornered_rect"
+                            android:gravity="center_horizontal"
+                            android:letterSpacing="0.03"
+                            android:lineSpacingExtra="8.6sp"
+                            android:paddingHorizontal="9dp"
+                            android:paddingVertical="5dp"
+                            android:text="Change" />
 
-                        <TextView
-                                style="@style/SemiBold15Blue"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Change" />
+<!--                    <androidx.cardview.widget.CardView-->
+<!--                            android:id="@+id/singleDishChangeTimeBtn"-->
+<!--                            android:layout_width="114dp"-->
+<!--                            android:layout_height="66dp"-->
+<!--                            app:cardBackgroundColor="@color/white"-->
+<!--                            app:cardCornerRadius="2.9dp"-->
+<!--                            app:cardElevation="8dp"-->
+<!--                            app:cardUseCompatPadding="true">-->
+
+<!--                        <TextView-->
+<!--                                style="@style/SemiBold15Blue"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Change" />-->
 
 
-                    </androidx.cardview.widget.CardView>
+<!--                    </androidx.cardview.widget.CardView>-->
 
                 </LinearLayout>
 
@@ -278,39 +298,10 @@
 
             <com.bupp.wood_spoon_eaters.views.TitleBodyView
                     app:title="Portion size"
-                    android:id="@+id/singleDisInfohPortion"
+                    android:visibility="gone"
+                    android:id="@+id/singleDisInfoPortion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-
-<!--            <LinearLayout-->
-<!--                    android:id="@+id/singleDishInstructionsLayout"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:visibility="gone"-->
-<!--                    tools:visibility="visible">-->
-
-<!--                <TextView-->
-<!--                        style="@style/SemiBold15Dark"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Home Chef's Instructions" />-->
-
-<!--                <TextView-->
-<!--                        android:id="@+id/singleDishInstructionsBody"-->
-<!--                        style="@style/Reg13Dark"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        tools:text="Its saltiness and acidity make it good on its own, but you can also break up the uniformity by pairing it with some mozzarella sticks. That way you can go back and forth between spoonfuls of tomato soup, and bites of oozing, cheesy goodness." />-->
-
-<!--                <View-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="1dp"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_marginBottom="16dp"-->
-<!--                        android:background="@color/light_periwinkle" />-->
-
-<!--            </LinearLayout>-->
 
             <TextView
                     style="@style/SemiBold15Dark"
@@ -324,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:text="The home chef will try to take your request into consideration" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+            <com.bupp.wood_spoon_eaters.views.WSCounterEditText
                     android:id="@+id/singleDishNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -332,8 +323,19 @@
                     android:layout_marginBottom="23dp"
                     app:hint="Add your request here..."
                     app:inputType="INPUT_TYPE_DONE_BTN"
-                    app:lines="3"
-                    app:throttlingTimeout="450" />
+                    app:maxLines="3"
+                    app:throttlingTimeout="450"/>
+
+<!--            <com.bupp.wood_spoon_eaters.custom_views.InputTitleView-->
+
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="15.4dp"-->
+<!--                    android:layout_marginBottom="23dp"-->
+<!--                    app:hint="Add your request here..."-->
+<!--                    app:inputType="INPUT_TYPE_DONE_BTN"-->
+<!--                    app:lines="3"-->
+<!--                    app:throttlingTimeout="450" />-->
 
         </LinearLayout>
 

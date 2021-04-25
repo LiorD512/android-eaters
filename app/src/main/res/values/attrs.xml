@@ -1,199 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <resources>
-        <attr name="title" format="string" />
-        <attr name="isMandatory" format="boolean" />
-        <attr name="hint" format="string" />
-        <attr name="subTitle" format="string" />
-        <attr name="error" format="string" />
-        <attr name="isEditable" format="boolean" />
-        <attr name="WSicon" format="reference" />
-        <attr name="inputType" format="enum">
-            <enum name="TEXT" value="0" />
-            <enum name="NUMBER" value="1" />
-            <enum name="MAIL" value="2" />
-            <enum name="LONG_TEXT" value="3" />
-            <enum name="INPUT_TYPE_FULL_NAME" value="4" />
-            <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
-            <enum name="INPUT_TYPE_DONE_BTN" value="6" />
-            <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7" />
-            <enum name="PHONE" value="8" />
-        </attr>
+<resources>
+    <attr name="title" format="string" />
+    <attr name="isMandatory" format="boolean" />
+    <attr name="hint" format="string" />
+    <attr name="subTitle" format="string" />
+    <attr name="error" format="string" />
+    <attr name="isEditable" format="boolean" />
+    <attr name="WSicon" format="reference" />
+    <attr name="minChar" format="integer" />
+    <attr name="maxChar" format="integer" />
 
-        <declare-styleable name="WSEditText">
-            <attr name="inputType" />
-            <attr name="isEditable" />
-            <attr name="hint" />
-            <attr name="error" />
-        </declare-styleable>
+    <attr name="inputType" format="enum">
+        <enum name="TEXT" value="0" />
+        <enum name="NUMBER" value="1" />
+        <enum name="MAIL" value="2" />
+        <enum name="LONG_TEXT" value="3" />
+        <enum name="INPUT_TYPE_FULL_NAME" value="4" />
+        <enum name="INPUT_TYPE_TEXT_NO_TITLE" value="5" />
+        <enum name="INPUT_TYPE_DONE_BTN" value="6" />
+        <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7" />
+        <enum name="PHONE" value="8" />
+    </attr>
+
+    <declare-styleable name="WSEditText">
+        <attr name="inputType" />
+        <attr name="isEditable" />
+        <attr name="hint" />
+        <attr name="error" />
+    </declare-styleable>
 
     <declare-styleable name="TitleBodyView">
-        <attr name="title"/>
-        <attr name="body" format="string"/>
-        <attr name="showDivider" format="boolean"/>
+        <attr name="title" />
+        <attr name="body" format="string" />
+        <attr name="showDivider" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="WSCounterEditText">
+        <attr name="minChar" />
+        <attr name="maxChar" />
+        <attr name="isEditable" />
+        <attr name="title" />
+        <attr name="maxLines" />
+        <attr name="hint" />
+        <attr name="error" />
+    </declare-styleable>
+
+    <declare-styleable name="ResizeableImageView">
+        <attr name="sizeType" format="enum">
+            <enum name="SMALL" value="0" />
+            <enum name="MEDIUM" value="1" />
+            <enum name="LARGE" value="2" />
+        </attr>
+        <attr name="isRound" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="FloatingLabelEditText">
+        <attr name="inputType" />
+        <attr name="isEditable" />
+        <attr name="hint" />
+        <attr name="error" />
+        <attr name="floatingIcon" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="WSSelectableBtn">
+        <attr name="title" />
+        <attr name="WSicon" />
+    </declare-styleable>
+
+    <declare-styleable name="HeaderViewAttrs">
+        <attr name="type" format="enum">
+            <enum name="HEADER_VIEW_TYPE_FEED" value="0" />
+            <enum name="HEADER_VIEW_TYPE_SEARCH" value="1" />
+            <enum name="HEADER_VIEW_TYPE_SIGNUP" value="2" />
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE" value="3" />
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE_DONE" value="4" />
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SAVE" value="5" />
+            <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE" value="6" />
+            <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS" value="7" />
+            <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_DONE" value="8" />
+            <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE" value="11" />
+        </attr>
+        <attr name="title" />
+        <attr name="isWithSep" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="DeliveryDetailsAttrs">
+        <attr name="detailsType" format="enum">
+            <enum name="DELIVERY_DETAILS_LOCATION" value="0" />
+            <enum name="DELIVERY_DETAILS_TIME" value="1" />
+            <enum name="DELIVERY_DETAILS_PAYMENT" value="2" />
+            <enum name="DELIVERY_DETAILS_CHECKOUT_DELIVERY" value="3" />
+            <enum name="DELIVERY_DETAILS_LOCATION_PROFILE" value="4" />
+            <enum name="DELIVERY_DETAILS_NATIONWIDE_SHIPPING" value="5" />
+        </attr>
+        <attr name="changeable" format="boolean" />
+        <attr name="isSelectionGray" format="boolean" />
+        <attr name="btnTitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="InputTitleView">
+        <attr name="title" />
+        <attr name="isMandatory" />
+        <attr name="hint" />
+        <attr name="error" />
+        <attr name="lines" format="integer" />
+        <attr name="maxChar" />
+        <attr name="throttlingTimeout" format="integer" />
+        <attr name="inputType" />
+        <attr name="android:gravity" />
+        <attr name="android:textSize" />
+    </declare-styleable>
+
+    <declare-styleable name="IconsGridView">
+        <attr name="title" />
+        <attr name="subTitle" />
+    </declare-styleable>
+
+    <declare-styleable name="EmptyIconsGridView">
+        <attr name="title" />
+        <attr name="subTitle" />
+    </declare-styleable>
+
+    <declare-styleable name="ActionTitleView">
+        <attr name="title" />
+        <attr name="isMandatory" />
+        <attr name="hint" />
+        <attr name="error" />
+        <attr name="isWithLocation" format="boolean" />
+        <attr name="titleAction" format="enum">
+            <enum name="CALENDER" value="0" />
+            <enum name="NEW_INGREDIENT" value="1" />
+            <enum name="COUNTRY_CHOOSER" value="2" />
+            <enum name="LOCATION_CHOOSER" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="QuantityView">
+        <attr name="views_gravity" format="enum">
+            <enum name="CENTER" value="0" />
+            <enum name="RIGHT" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BlueBtnAttrs">
+        <attr name="title" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="SelectableBtn">
+        <attr name="title" />
+        <attr name="image" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ToolTipView">
+        <attr name="tip_type" format="enum">
+            <enum name="SERVICE_FEE" value="0" />
+            <enum name="CHECKOUT_SERVICE_FEE" value="2" />
+            <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
+            <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="progress_state">
+        <attr name="state_selected" format="boolean" />
+        <attr name="state_not_selected" format="boolean" />
+        <attr name="state_done" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="food">
+        <attr name="state_fried" format="boolean" />
+        <attr name="state_baked" format="boolean" />
     </declare-styleable>
 
 
-    <declare-styleable name="ResizeableImageView">
-            <attr name="sizeType" format="enum">
-                <enum name="SMALL" value="0" />
-                <enum name="MEDIUM" value="1" />
-                <enum name="LARGE" value="2" />
-            </attr>
-            <attr name="isRound" format="boolean" />
-        </declare-styleable>
+    <declare-styleable name="ChangeableSetting">
+        <attr name="setting_title" format="string" />
+        <attr name="setting_subtitle" format="string" />
+        <attr name="setting_icon" format="integer" />
+    </declare-styleable>
 
-        <declare-styleable name="FloatingLabelEditText">
-            <attr name="inputType" />
-            <attr name="isEditable" />
-            <attr name="hint" />
-            <attr name="error" />
-            <attr name="floatingIcon" format="integer" />
-        </declare-styleable>
+    <declare-styleable name="UserImageView">
+        <!--<attr name="isWithBkg" format="boolean" />-->
+        <attr name="placeHolder" format="integer" />
+        <attr name="imageSize" format="enum">
+            <enum name="HEADER" value="0" />
+            <enum name="SMALL" value="1" />
+            <enum name="BIG" value="2" />
+            <enum name="BIGGEST" value="3" />
+            <enum name="MANY_COOKS_VIEW" value="4" />
+        </attr>
+        <attr name="isWithStroke" format="boolean" />
+        <attr name="isWithShadow" format="boolean" />
+    </declare-styleable>
 
-        <declare-styleable name="WSSelectableBtn">
-            <attr name="title" />
-            <attr name="WSicon" />
-        </declare-styleable>
+    <declare-styleable name="TagInputView">
+        <attr name="tagInput_title" format="string" />
+        <attr name="tagInput_hint" format="string" />
+        <attr name="tagInput_maxTags" format="integer" />
+    </declare-styleable>
 
-        <declare-styleable name="HeaderViewAttrs">
-            <attr name="type" format="enum">
-                <enum name="HEADER_VIEW_TYPE_FEED" value="0" />
-                <enum name="HEADER_VIEW_TYPE_SEARCH" value="1" />
-                <enum name="HEADER_VIEW_TYPE_SIGNUP" value="2" />
-                <enum name="HEADER_VIEW_TYPE_BACK_TITLE" value="3" />
-                <enum name="HEADER_VIEW_TYPE_BACK_TITLE_DONE" value="4" />
-                <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SAVE" value="5" />
-                <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE" value="6" />
-                <enum name="HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS" value="7" />
-                <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE_DONE" value="8" />
-                <enum name="HEADER_VIEW_TYPE_CLOSE_TITLE" value="11" />
-            </attr>
-            <attr name="title" />
-            <attr name="isWithSep" format="boolean" />
-        </declare-styleable>
+    <declare-styleable name="LottieViewAttrs">
+        <attr name="withBkg" format="boolean" />
+        <attr name="lottieAnimType" format="enum">
+            <enum name="PB" value="0" />
+            <enum name="SELECT_ADDRESS" value="1" />
+            <enum name="LOCATION-PERMISSION" value="2" />
 
-        <declare-styleable name="DeliveryDetailsAttrs">
-            <attr name="detailsType" format="enum">
-                <enum name="DELIVERY_DETAILS_LOCATION" value="0" />
-                <enum name="DELIVERY_DETAILS_TIME" value="1" />
-                <enum name="DELIVERY_DETAILS_PAYMENT" value="2" />
-                <enum name="DELIVERY_DETAILS_CHECKOUT_DELIVERY" value="3" />
-                <enum name="DELIVERY_DETAILS_LOCATION_PROFILE" value="4" />
-                <enum name="DELIVERY_DETAILS_NATIONWIDE_SHIPPING" value="5" />
-            </attr>
-            <attr name="changeable" format="boolean" />
-            <attr name="isSelectionGray" format="boolean" />
-            <attr name="btnTitle" format="string" />
-        </declare-styleable>
-
-        <declare-styleable name="InputTitleView">
-            <attr name="title" />
-            <attr name="isMandatory" />
-            <attr name="hint" />
-            <attr name="error" />
-            <attr name="lines" format="integer" />
-            <attr name="maxChar" format="integer" />
-            <attr name="throttlingTimeout" format="integer" />
-            <attr name="inputType" />
-            <attr name="android:gravity" />
-            <attr name="android:textSize" />
-        </declare-styleable>
-
-        <declare-styleable name="IconsGridView">
-            <attr name="title" />
-            <attr name="subTitle" />
-        </declare-styleable>
-
-        <declare-styleable name="EmptyIconsGridView">
-            <attr name="title" />
-            <attr name="subTitle" />
-        </declare-styleable>
-
-        <declare-styleable name="ActionTitleView">
-            <attr name="title" />
-            <attr name="isMandatory" />
-            <attr name="hint" />
-            <attr name="error" />
-            <attr name="isWithLocation" format="boolean" />
-            <attr name="titleAction" format="enum">
-                <enum name="CALENDER" value="0" />
-                <enum name="NEW_INGREDIENT" value="1" />
-                <enum name="COUNTRY_CHOOSER" value="2" />
-                <enum name="LOCATION_CHOOSER" value="3" />
-            </attr>
-        </declare-styleable>
-
-        <declare-styleable name="QuantityView">
-            <attr name="views_gravity" format="enum">
-                <enum name="CENTER" value="0" />
-                <enum name="RIGHT" value="1" />
-            </attr>
-        </declare-styleable>
-
-        <declare-styleable name="BlueBtnAttrs">
-            <attr name="title" />
-            <attr name="textColor" format="color" />
-        </declare-styleable>
-
-        <declare-styleable name="SelectableBtn">
-            <attr name="title" />
-            <attr name="image" format="integer" />
-        </declare-styleable>
-
-        <declare-styleable name="ToolTipView">
-            <attr name="tip_type" format="enum">
-                <enum name="SERVICE_FEE" value="0" />
-                <enum name="CHECKOUT_SERVICE_FEE" value="2" />
-                <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
-                <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
-            </attr>
-        </declare-styleable>
-
-        <declare-styleable name="progress_state">
-            <attr name="state_selected" format="boolean" />
-            <attr name="state_not_selected" format="boolean" />
-            <attr name="state_done" format="boolean" />
-        </declare-styleable>
-
-        <declare-styleable name="food">
-            <attr name="state_fried" format="boolean" />
-            <attr name="state_baked" format="boolean" />
-        </declare-styleable>
-
-
-        <declare-styleable name="ChangeableSetting">
-            <attr name="setting_title" format="string" />
-            <attr name="setting_subtitle" format="string" />
-            <attr name="setting_icon" format="integer" />
-        </declare-styleable>
-
-        <declare-styleable name="UserImageView">
-            <!--<attr name="isWithBkg" format="boolean" />-->
-            <attr name="placeHolder" format="integer" />
-            <attr name="imageSize" format="enum">
-                <enum name="HEADER" value="0" />
-                <enum name="SMALL" value="1" />
-                <enum name="BIG" value="2" />
-                <enum name="BIGGEST" value="3" />
-                <enum name="MANY_COOKS_VIEW" value="4" />
-            </attr>
-            <attr name="isWithStroke" format="boolean" />
-            <attr name="isWithShadow" format="boolean" />
-        </declare-styleable>
-
-        <declare-styleable name="TagInputView">
-            <attr name="tagInput_title" format="string" />
-            <attr name="tagInput_hint" format="string" />
-            <attr name="tagInput_maxTags" format="integer" />
-        </declare-styleable>
-
-        <declare-styleable name="LottieViewAttrs">
-            <attr name="withBkg" format="boolean" />
-            <attr name="lottieAnimType" format="enum">
-                <enum name="PB" value="0" />
-                <enum name="SELECT_ADDRESS" value="1" />
-                <enum name="LOCATION-PERMISSION" value="2" />
-
-            </attr>
-        </declare-styleable>
-    </resources>
+        </attr>
+    </declare-styleable>
+</resources>
