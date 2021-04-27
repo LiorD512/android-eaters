@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
@@ -30,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_new_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NewOrderActivity : AppCompatActivity(),
+class NewOrderActivity : BaseActivity(),
     StartNewCartDialog.StartNewCartDialogListener, CartBottomBar.OrderBottomBatListener,
     AddressMissingDialog.AddressMissingDialogListener {
 

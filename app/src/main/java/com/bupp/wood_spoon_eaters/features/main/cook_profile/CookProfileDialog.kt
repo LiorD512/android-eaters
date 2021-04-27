@@ -82,15 +82,15 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
         cookProfileImageView.setUserImageViewListener(this)
         cookProfileFragNameAndAge.text = "${cook.getFullName()}"//, ${cook.getAge()}"
 
-        var profession = cook.profession
+//        var profession = cook.profession
         var country = ""
         cook.country?.let{
-            it.name?.let{
-                country = ", ${it}"
-            }
+//            it.name?.let{
+//                country = ", ${it}"
+//            }
             Glide.with(requireContext()).load(it.flagUrl).into(cookProfileFragFlag)
         }
-        cookProfileFragProfession.text = "$profession"// $country"
+//        cookProfileFragProfession.text = "$profession"// $country"
         cookProfileFragRating.text = cook.rating.toString()
 
         //cuisine

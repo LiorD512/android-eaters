@@ -22,8 +22,7 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:orientation="vertical"
-                    android:paddingLeft="15.4dp"
-                    android:paddingRight="15.4dp">
+                    android:paddingHorizontal="15.4dp">
 
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -56,12 +55,6 @@
                             android:gravity="center|left"
                             android:orientation="vertical">
 
-                        <TextView
-                                android:id="@+id/cookProfileFragNameAndAge"
-                                style="@style/SemiBold15Dark"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="Neta Nachmias, 29" />
 
                         <LinearLayout
                                 android:layout_width="match_parent"
@@ -71,12 +64,11 @@
                                 android:orientation="horizontal">
 
                             <TextView
-                                    android:id="@+id/cookProfileFragProfession"
-                                    style="@style/Reg13Dark_50"
+                                    android:id="@+id/cookProfileFragNameAndAge"
+                                    style="@style/SemiBold15Dark"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    tools:text="Architect, Israel" />
+                                    tools:text="Neta Nachmias, 29" />
 
                             <ImageView
                                     android:id="@+id/cookProfileFragFlag"
@@ -86,42 +78,43 @@
 
                         </LinearLayout>
 
-
-                    </LinearLayout>
-
-                    <View
-                            android:layout_width="1dp"
-                            android:layout_height="46dp"
-                            android:layout_gravity="center"
-                            android:background="@color/dark" />
-
-                    <LinearLayout
-                            android:id="@+id/cookProfileFragReviewLayout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="7.2dp"
-                            android:gravity="start|center"
-                            android:orientation="vertical">
-
-                        <TextView
-                                android:id="@+id/cookProfileFragRating"
-                                style="@style/SemiBold13Dark"
+                        <LinearLayout
+                                android:id="@+id/cookProfileFragReviewLayout"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="start"
-                                android:drawableStart="@drawable/icons_raitings_selected"
-                                android:drawablePadding="8.7dp"
-                                tools:text="4.8" />
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="start|center"
+                                android:orientation="horizontal">
 
-                        <TextView
-                                android:id="@+id/cookProfileFragReviews"
-                                style="@style/SemiBold13Dark50"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                tools:visibility="visible"
-                                tools:text="15 Reviewers" />
+                            <TextView
+                                    android:id="@+id/cookProfileFragRating"
+                                    style="@style/SemiBold13Dark"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:drawableStart="@drawable/icons_raitings_selected"
+                                    android:drawablePadding="8.7dp"
+                                    android:gravity="center"
+                                    tools:text="4.8" />
+
+                            <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="15.4dp"
+                                    android:background="@color/dark" />
+
+                            <TextView
+                                    android:id="@+id/cookProfileFragReviews"
+                                    style="@style/SemiBold13Dark50"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    tools:text="15 Reviewers"
+                                    tools:visibility="visible" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

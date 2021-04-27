@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.login.fragments.WelcomeFragmentDirections
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private val viewModel: LoginViewModel by viewModel<LoginViewModel>()
 
@@ -46,12 +47,10 @@ class LoginActivity : AppCompatActivity() {
                     //do nothing this is default state
                 }
                 Constants.LOGIN_STATE_VERIFICATION -> {
-//                    redirectToMainLoginScreen(1)
                     redirectToCodeVerification()
                 }
                 Constants.LOGIN_STATE_CREATE_ACCOUNT -> {
                     redirectToCreateAccountFromWelcome()
-//                    redirectToMainLoginScreen(2)
                 }
             }
         }
@@ -59,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, Observer {
+        viewModel.navigationEvent.observe(this, {
             it?.let{
                 when(it){
                     LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
@@ -99,53 +98,28 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.progressData.observe(this, Observer{
+        viewModel.progressData.observe(this, {
             handlePb(it)
         })
     }
 
-    private fun redirectToMainLoginScreen(startWith: Int = 0) {
-//        val bundle = Bundle()
-//        bundle.putInt("START_WITH", startWith)
-//        val action = WelcomeFragmentDirections.actionWelcomeFragmentToLoginMainFragment()
-//        action.startWithArgs = startWith
-//        findNavController(R.id.loginActContainer).navigate(action)
-    }
 
     private fun redirectToCreateAccountFromWelcome() {
-//        setCloseBtnVisibility(View.VISIBLE)
         findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
     }
 
     private fun redirectToCreateAccountFromVerification() {
-//        setCloseBtnVisibility(View.VISIBLE)
         findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
     }
 
     private fun redirectToPhoneVerification() {
-//        setCloseBtnVisibility(View.VISIBLE)
         findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
     }
 
     private fun redirectToCodeVerification() {
         hideKeyboard()
-//        setCloseBtnVisibility(View.VISIBLE)
         findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
     }
-
-//    private fun redirectToLocationPermission(isFromCodeScreen: Boolean) {
-//        setHeaderView(getString(R.string.location_permission_title))
-//        setTitleVisibility(View.VISIBLE)
-//        if(isFromCodeScreen){
-//            findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_locationPermissionFragment)
-//        }else{
-//            findNavController(R.id.loginActContainer).navigate(R.id.action_createAccountFragment_to_locationPermissionFragment)
-//        }
-//    }
-//
-//    fun setCloseBtnVisibility(visibility: Int) {
-//        loginActCloseBtn.visibility = visibility
-//    }
 
     private fun handlePb(shouldShow: Boolean) {
         if (shouldShow) {

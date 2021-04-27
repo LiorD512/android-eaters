@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
 import com.microsoft.appcenter.AppCenter
@@ -89,6 +90,12 @@ class WoodSpoonApplication : Application() {
 
             Analytics.setSingletonInstance(analytics)
         }
+
+        MTLogger.Builder()
+            .showLinks(true)
+            .autoTag(true)
+            .tagPrefix("wow")
+            .build()
 
     }
 

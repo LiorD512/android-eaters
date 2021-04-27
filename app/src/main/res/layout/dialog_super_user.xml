@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/superUserDialogBkg"
+    android:background="@color/black_50"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:background="@drawable/white_two_rect_7_radius"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginRight="50.9dp"
+        android:layout_marginLeft="50.9dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/SemiBold15Dark"
+            android:layout_gravity="center"
+            android:layout_marginTop="23.5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="OOOOOOO MY GOD YOUR'E SO HOT"/>
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_marginLeft="15.4dp"
+            style="@style/Reg13Dark_50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Lets get funky on the staging babe"/>
+
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+            app:hint="1234"
+            app:inputType="NUMBER"
+            android:paddingHorizontal="15.4dp"
+            android:paddingVertical="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:id="@+id/superUserDialogInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_marginHorizontal="15.4dp"
+            android:background="@color/silver_20"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <CheckBox
+            android:id="@+id/superUserDialogGravy"
+            android:text="Extra gravy"
+            android:layout_marginBottom="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            app:title="Send recent logs"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:id="@+id/superUserDialogLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            app:title="PART OF THE TEAM (change env)"
+            android:layout_marginHorizontal="15.4dp"
+            android:id="@+id/superUserDialogBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:gravity="center"
+            android:paddingVertical="15.4dp"
+            android:text="Reset"
+            android:id="@+id/superUserDialogReset"
+            style="@style/LatoReg15Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

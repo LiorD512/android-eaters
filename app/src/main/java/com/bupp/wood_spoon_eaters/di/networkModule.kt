@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.bupp.wood_spoon_eaters.FlavorConfig
+import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.network.abs.DeserializerJsonAppSetting
 import com.bupp.wood_spoon_eaters.network.abs.DeserializerJsonSearch
 import com.bupp.wood_spoon_eaters.model.AppSetting
@@ -25,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val networkModule = module {
 
     single { PutActionManager(get()) }
-
+    single { FlavorConfigManager(get()) }
     single { provideSharedPreferences(get()) }
     factory { ApiSettings(get()) }
     single { provideGoogleApi() }
@@ -67,7 +68,7 @@ fun provideRetrofit(client: OkHttpClient): Retrofit {
         .create()
 
     return Retrofit.Builder()
-        .baseUrl(FlavorConfig.CONSTANTS.BASE_URL)
+        .baseUrl(FlavorConfig.BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

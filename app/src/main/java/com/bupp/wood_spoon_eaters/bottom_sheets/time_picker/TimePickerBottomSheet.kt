@@ -95,6 +95,7 @@ class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSh
     }
 
     fun setMenuItems(menuItems: List<MenuItem>){
+        val menuItems = menuItems.filter { it.quantity > 0 }
         this.isTemporary = true
         this.menuItems = menuItems
     }

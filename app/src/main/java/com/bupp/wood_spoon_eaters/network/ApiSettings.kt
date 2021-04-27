@@ -7,7 +7,7 @@ class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
     companion object{
         const val TOKEN_KEY = "token_key"
-        const val DEFAULT_TOKEN = FlavorConfig.CONSTANTS.DEFAULT_TOKEN
+        const val DEFAULT_TOKEN = FlavorConfig.DEFAULT_TOKEN
     }
 
     var token: String?

@@ -266,25 +266,6 @@
                             android:paddingVertical="5dp"
                             android:text="Change" />
 
-<!--                    <androidx.cardview.widget.CardView-->
-<!--                            android:id="@+id/singleDishChangeTimeBtn"-->
-<!--                            android:layout_width="114dp"-->
-<!--                            android:layout_height="66dp"-->
-<!--                            app:cardBackgroundColor="@color/white"-->
-<!--                            app:cardCornerRadius="2.9dp"-->
-<!--                            app:cardElevation="8dp"-->
-<!--                            app:cardUseCompatPadding="true">-->
-
-<!--                        <TextView-->
-<!--                                style="@style/SemiBold15Blue"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="match_parent"-->
-<!--                                android:gravity="center"-->
-<!--                                android:text="Change" />-->
-
-
-<!--                    </androidx.cardview.widget.CardView>-->
-
                 </LinearLayout>
 
             </LinearLayout>
@@ -294,7 +275,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/light_periwinkle" />
+                    android:background="@color/light_periwinkle"/>
 
             <com.bupp.wood_spoon_eaters.views.TitleBodyView
                     app:title="Portion size"

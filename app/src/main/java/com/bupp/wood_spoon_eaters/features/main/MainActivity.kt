@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
+import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
@@ -55,7 +56,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainActivity : AppCompatActivity(), HeaderView.HeaderViewListener,
+class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
      TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,

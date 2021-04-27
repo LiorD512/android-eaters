@@ -64,7 +64,7 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
         cook.country?.let {
             Glide.with(requireContext()).load(it.flagUrl).into(cookProfileFragFlag)
         }
-        cookProfileFragProfession.text = profession
+//        cookProfileFragProfession.text = profession
         cookProfileFragRating.text = cook.rating.toString()
 
         //cuisine
