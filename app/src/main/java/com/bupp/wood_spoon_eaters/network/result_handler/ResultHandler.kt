@@ -9,10 +9,3 @@ sealed class ResultHandler<out T> {
     data class WSCustomError(val errors: List<WSError>? = null): ResultHandler<Nothing>()
     object NetworkError: ResultHandler<Nothing>()
 }
-
-//sealed class ServiceResponseHandler<out T> {
-//    data class Success<out T>(val value: T): ServiceResponseHandler<T>()
-//    data class GenericError(val code: Int? = null, val error: String? = null): ServiceResponseHandler<Nothing>()
-//    data class WSCustomError(val errors: List<WSError>? = null): ServiceResponseHandler<Nothing>()
-//    object NetworkError: ServiceResponseHandler<Nothing>()
-//}
