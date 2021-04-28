@@ -64,7 +64,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                     bundle.putString("OrderId", orderId.toString())
 
                     val logger = AppEventsLogger.newLogger(context)
-                    logger.logEvent("Add To Cart", bundle)
+                    logger.logEvent(Constants.EVENT_ADD_DISH, bundle)
                     isFirstPurchase = false
                 }
             }
@@ -80,11 +80,42 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
     }
 
     private fun sendFirstPurchaseEvent(orderId: Long?, purchaseCost: Double) {
-        Log.d(TAG, "sendFirstPurchaseEvent")
-        val logger = AppEventsLogger.newLogger(context)
-        val params = Bundle()
-        params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, "[{\"orderId\": $orderId]")
-        logger.logPurchase(BigDecimal.valueOf(purchaseCost), Currency.getInstance("USD"), params)
+        if(shouldFireEvent) {
+            Log.d(TAG, "sendFirstPurchaseEvent")
+            val logger = AppEventsLogger.newLogger(context)
+            val params = Bundle()
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, "[{\"orderId\": $orderId]")
+            logger.logPurchase(BigDecimal.valueOf(purchaseCost), Currency.getInstance("USD"), params)
+        }
+    }
+
+    fun sendRegistrationCompletedEvent() {
+        if(shouldFireEvent) {
+            Log.d(TAG, "sendRegistrationCompletedEvent")
+            val logger = AppEventsLogger.newLogger(context)
+            val params = Bundle()
+            params.putString(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, "onboarding_finished")
+            logger.logEvent("onboarding_finished", params)
+        }
+    }
+
+
+    fun logOnDishClickEvent(dishId: String) {
+        if(shouldFireEvent) {
+            Log.d(TAG, "sendRegistrationCompletedEvent")
+            val logger = AppEventsLogger.newLogger(context)
+            val params = Bundle()
+            params.putString("dish_id", dishId)
+            logger.logEvent(Constants.EVENT_CLICK_ON_DISH, params)
+        }
+    }
+
+    fun proceedToCheckoutEvent() {
+        if(shouldFireEvent) {
+            Log.d(TAG, "sendRegistrationCompletedEvent")
+            val logger = AppEventsLogger.newLogger(context)
+            logger.logEvent(Constants.EVENT_PROCEED_TO_CART)
+        }
     }
 
     fun logEvent(eventName: String, params: Map<String, String>? = null){
@@ -117,6 +148,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             }
         }
     }
+
 
     companion object{
         const val IS_FIRST_PURCHASE = "is_first_purchase"

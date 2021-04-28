@@ -268,13 +268,14 @@ class CartManager(
             result = orderRepository.postNewOrder(orderRequest)
 
             eventsManager.sendAddToCart(result.data?.id)
-            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData())
+
+            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id))
         } else {
             //order already have items therefore update order
             Log.d(TAG, "postNewOrUpdateCart.. updating current order")
             result = postUpdateOrder(orderRequest)
 
-            eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData())
+            eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(result?.data?.id))
         }
         result?.data?.let {
             updateCartManagerParams(it.copy())
@@ -526,7 +527,7 @@ class CartManager(
         return dishNames
     }
 
-    private fun getAddDishData(): Map<String, String> {
+    private fun getAddDishData(id: Long? = null): Map<String, String> {
         val currentDishName = getCurrentDishName()
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
@@ -541,6 +542,9 @@ class CartManager(
         data["dish_name"] = currentDishName
         if(cuisine.isNotEmpty()){
             data["cuisine"] = cuisine[0]
+        }
+        id?.let{
+            data["order_id"] = id.toString()
         }
         return data
     }

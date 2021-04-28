@@ -204,8 +204,6 @@ class NewOrderMainViewModel(
                         } else {
                             handleNavigation(NewOrderScreen.LOCK_SINGLE_DISH_COOK)
                         }
-//                        getFullDish()
-//                        handleAndShowBottomBar()
                         showProceedToCartBottomBar()
                     }
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -544,6 +542,15 @@ class NewOrderMainViewModel(
 
     fun refreshPaymentsMethod(context: Context) {
         paymentManager.getStripeCustomerCards(context, true)
+    }
+
+    fun sendClickOnDishEvent() {
+        val dishId = cartManager.currentShowingDish?.id
+        eventsManager.logOnDishClickEvent(dishId.toString())
+    }
+
+    fun proceedToCheckoutEvent() {
+        eventsManager.proceedToCheckoutEvent()
     }
 
 

@@ -294,6 +294,8 @@ class Constants {
         const val EVENT_TRACK_ORDER_CLICK = "clicked_track_your_order"
         const val EVENT_SEARCHED_ITEM = "searched_an_item"
         const val EVENT_FUTURE_DELIVERY = "scheduled_future_delivery"
+        const val EVENT_CLICK_ON_DISH = "click_on_dish"
+        const val EVENT_PROCEED_TO_CART = "proceed_checkout"
         const val EVENT_SEND_OTP = "send_otp"
         const val EVENT_VERIFY_OTP = "verify_otp"
         const val EVENT_CREATE_ACCOUNT = "create_account"

@@ -53,6 +53,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding = CheckoutFragmentBinding.bind(view)
 
         Analytics.with(requireContext()).screen("Checkout page")
+        mainViewModel.proceedToCheckoutEvent()
 
         initUi()
         initObservers()

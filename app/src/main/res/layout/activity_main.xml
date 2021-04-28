@@ -49,8 +49,6 @@
 
     </LinearLayout>
 
-
-
     <androidx.cardview.widget.CardView
             android:id="@+id/headerCard"
             android:layout_width="match_parent"

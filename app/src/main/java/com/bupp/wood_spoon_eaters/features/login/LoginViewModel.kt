@@ -245,6 +245,7 @@ class LoginViewModel(
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
                     navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                    eventsManager.sendRegistrationCompletedEvent()
                     eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "true"))
                 }
                 else -> {
@@ -256,21 +257,6 @@ class LoginViewModel(
             progressData.endProgress()
         }
     }
-
-//    fun getCuisineList(): ArrayList<SelectableIcon> {
-//        return metaDataRepository.getCuisineListSelectableIcons()
-//    }
-//
-//    fun getDietaryList(): ArrayList<SelectableIcon> {
-//        return metaDataRepository.getDietaryList()
-//    }
-
-
-
-    //Location Permission methods
-//    private val locationData = LocationLiveData(applicationContext)
-//    fun getLocationData() = locationData
-
 
 
 
