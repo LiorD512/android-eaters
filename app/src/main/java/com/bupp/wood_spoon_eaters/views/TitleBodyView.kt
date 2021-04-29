@@ -30,7 +30,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val body = attr.getString(R.styleable.TitleBodyView_body)
                 body?.let { titleBodyBody.text = it }
 
-                val showhDivider = attr.getBoolean(R.styleable.TitleBodyView_showDivider, true)
+                val showhDivider = attr.getBoolean(R.styleable.TitleBodyView_shouldShowDivider, true)
                 if(!showhDivider){
                     titleBodyDivider.visibility = GONE
                 }

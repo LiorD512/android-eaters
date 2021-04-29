@@ -119,13 +119,6 @@ data class FullDish(
         val availableArr = arrayListOf<Dish>()
         if (curCookingSlotId != null) {
             availableArr.addAll(cook.dishes.filter { it.menuItem?.cookingSlot?.id == curCookingSlotId })
-//            cook.dishes.forEach { dish ->
-//                dish.menuItem?.let {
-//                    if (it.cookingSlot.id == curCookingSlotId) {
-//                        availableArr.add(dish)
-//                    }
-//                }
-//            }
         } else {
             //todo - first case when entering screen and there is not cooking slot yet for order.
             cook.dishes.forEach { dish ->

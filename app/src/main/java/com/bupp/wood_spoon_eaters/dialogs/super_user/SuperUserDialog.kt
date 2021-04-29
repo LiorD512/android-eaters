@@ -53,7 +53,7 @@ class SuperUserDialog : DialogFragment() {
                 updateEnv("")
             }
             superUserDialogLog.setOnClickListener {
-                MTLogger.instance?.getCachedLog()?.let { it1 -> Utils.shareText(requireActivity(), it1) }
+                MTLogger.instance?.getCachedLog(superUserDialogGravy.isChecked)?.let { it1 -> Utils.shareText(requireActivity(), it1) }
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.base_repos.EaterDataRepositoryImpl
@@ -38,15 +39,15 @@ class EaterDataRepository(
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"getActiveOrders - NetworkError")
+                    MTLogger.c(TAG,"getActiveOrders - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"getActiveOrders - GenericError")
+                    MTLogger.c(TAG,"getActiveOrders - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRACEABLE_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"getActiveOrders - Success")
+                    MTLogger.c(TAG,"getActiveOrders - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRACEABLE_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
@@ -64,20 +65,21 @@ class EaterDataRepository(
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"getFavorites - NetworkError")
+                    MTLogger.c(TAG,"getFavorites - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"getFavorites - GenericError")
+                    MTLogger.c(TAG,"getFavorites - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"getFavorites - Success")
+                    MTLogger.c(TAG,"getFavorites - Success")
                     val searchObj = result.value.data
                     val favOrders = searchObj?.results
                     EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
                 }
                 is ResultHandler.WSCustomError -> {
+                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError ${result.errors?.get(0)?.msg}")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -92,18 +94,19 @@ class EaterDataRepository(
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"getFavorites - NetworkError")
+                    MTLogger.c(TAG,"getFavorites - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"getFavorites - GenericError")
+                    MTLogger.c(TAG,"getFavorites - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"getFavorites - Success")
+                    MTLogger.c(TAG,"getFavorites - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
+                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError ${result.errors?.get(0)?.msg}")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -117,18 +120,19 @@ class EaterDataRepository(
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"cancelOrder - NetworkError")
+                    MTLogger.c(TAG,"cancelOrder - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"cancelOrder - GenericError")
+                    MTLogger.c(TAG,"cancelOrder - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.CANCEL_ORDER_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"cancelOrder - Success")
+                    MTLogger.c(TAG,"cancelOrder - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.CANCEL_ORDER_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
+                    MTLogger.c(OrderRepository.TAG,"cancelOrder - wsError ${result.errors?.get(0)?.msg}")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

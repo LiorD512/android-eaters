@@ -21,8 +21,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 62
-        versionName "2.0.3"
+        versionCode 64
+        versionName "2.0.5"
     }
 
     androidExtensions {
@@ -123,6 +123,7 @@ dependencies {
 
     //utils
     implementation 'com.stripe:stripe-android:15.1.0'
+    implementation 'com.google.android:flexbox:2.0.1'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.1'

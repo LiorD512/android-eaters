@@ -116,7 +116,9 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
             count.text = "${dish.menuItem?.quantity ?: 0}"
             addBtn.setOnClickListener { listener.onAddBtnClick(dish) }
             img.setOnClickListener { listener.onDishClick(dish) }
-            img.loadResizableImage(dish.thumbnail)
+            dish.thumbnail?.let{
+                img.loadResizableImage(it)
+            }
             name.text = dish.name
         }
     }

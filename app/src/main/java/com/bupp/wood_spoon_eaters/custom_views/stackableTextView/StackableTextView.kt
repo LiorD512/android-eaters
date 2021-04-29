@@ -6,15 +6,17 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.DietaryIcon
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.stackable_text_view.view.*
 
 
 class StackableTextView : FrameLayout {
 
     data class StackablesBundle(
-            val stackables: ArrayList<SelectableIcon>
+        val stackables: ArrayList<SelectableIcon>
     )
 
     private lateinit var adapter: StackableTextViewAdapter
@@ -28,10 +30,15 @@ class StackableTextView : FrameLayout {
     }
 
     fun initUi() {
-        stackableTextViewList.layoutManager = LinearLayoutManager(context)
+//        stackableTextViewList.layoutManager = LinearLayoutManager(context)
         adapter = StackableTextViewAdapter(context)
         stackableTextViewList.adapter = adapter
         stackableTextViewList.isNestedScrollingEnabled = false
+
+        val layoutManager = FlexboxLayoutManager(context)
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.justifyContent = JustifyContent.FLEX_END
+        stackableTextViewList.layoutManager = layoutManager
     }
 
     fun initStackableView(icons: List<SelectableIcon>){
@@ -54,14 +61,6 @@ class StackableTextView : FrameLayout {
         adapter.addItem(bundles)
         adapter.notifyDataSetChanged()
     }
-
-//    fun initStackableViewWith(strings: List<String>){
-//        val selectables = arrayListOf<DietaryIcon>()
-//        strings.forEach {
-//            selectables.add(DietaryIcon(it, "", 0))
-//        }
-//        initStackableView(selectables as List<SelectableIcon>)
-//    }
 
 
 

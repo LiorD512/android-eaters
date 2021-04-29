@@ -10,8 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import java.io.*
@@ -34,8 +34,8 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
 
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+//        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!
+//                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
         acceleration = 10f
         currentAcceleration = SensorManager.GRAVITY_EARTH
         lastAcceleration = SensorManager.GRAVITY_EARTH
@@ -67,7 +67,6 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
                     Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
             )
         }
-
         super.onResume()
     }
 

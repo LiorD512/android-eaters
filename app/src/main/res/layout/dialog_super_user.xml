@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:background="@drawable/white_two_rect_7_radius"
+        android:background="@drawable/white_rect_7_radius"
         android:orientation="vertical"
         android:layout_gravity="center"
         android:layout_marginRight="50.9dp"
@@ -54,6 +54,7 @@
         <CheckBox
             android:id="@+id/superUserDialogGravy"
             android:text="Extra gravy"
+                style="@style/LatoBold13Black"
             android:layout_marginBottom="15.4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -85,7 +86,5 @@
 
 
     </LinearLayout>
-
-
 
 </FrameLayout>

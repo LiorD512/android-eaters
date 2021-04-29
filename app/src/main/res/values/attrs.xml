@@ -32,7 +32,7 @@
     <declare-styleable name="TitleBodyView">
         <attr name="title" />
         <attr name="body" format="string" />
-        <attr name="showDivider" format="boolean" />
+        <attr name="shouldShowDivider" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="WSCounterEditText">
@@ -114,6 +114,10 @@
     <declare-styleable name="IconsGridView">
         <attr name="title" />
         <attr name="subTitle" />
+    </declare-styleable>
+
+    <declare-styleable name="AutoGridLayout">
+        <attr name="columnWidth" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="EmptyIconsGridView">

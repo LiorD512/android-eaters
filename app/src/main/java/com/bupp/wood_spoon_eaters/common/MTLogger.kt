@@ -1,6 +1,10 @@
 package com.bupp.wood_spoon_eaters.common
 
+import android.os.Build
 import android.util.Log
+import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.utils.DateUtils
+import java.util.*
 
 
 class MTLogger {
@@ -79,8 +83,32 @@ class MTLogger {
         }
     }
 
-    fun getCachedLog(): String {
-        return stringBuilder.toString()
+    fun getCachedLog(extraGravy: Boolean = false): String {
+        if(extraGravy){
+            return getHeader() + stringBuilder.toString()
+        }
+        return toString()
+    }
+
+    private fun getHeader(): String {
+        val date = DateUtils.parseDateToDateAndTime(Date())
+        return "WoodSpoonEaters   -->     $date\n" +
+                "device: ${getDeviceType()}\n" +
+                "osVersion: ${getOsVersion()}\n" +
+                "appVersion: ${getAppVersion()}\n" +
+                "-------------------------------\n\n\n"
+    }
+
+    private fun getDeviceType(): String {
+        return Build.DEVICE + " - " + Build.MODEL
+    }
+
+    private fun getOsVersion(): String {
+        return Build.VERSION.SDK_INT.toString()
+    }
+
+    private fun getAppVersion(): String {
+        return BuildConfig.VERSION_NAME.toString()
     }
 
 }

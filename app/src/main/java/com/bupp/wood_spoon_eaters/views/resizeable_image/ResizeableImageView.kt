@@ -44,35 +44,37 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun loadResizableImage(imgUrl: String){
-        var finalUrl = imgUrl
-        when(size){
-            Constants.RESIZEABLE_IMAGE_SMALL -> {
-                val small = viewModel.getByType(CloudinaryTransformationsType.SMALL)
-                small?.let{
-                    Log.d(TAG, "resizing to: $small")
-                    finalUrl = finalUrl.replace("t_medium", small)
+    fun loadResizableImage(imgUrl: String?){
+        imgUrl?.let{
+            var finalUrl = imgUrl
+            when(size){
+                Constants.RESIZEABLE_IMAGE_SMALL -> {
+                    val small = viewModel.getByType(CloudinaryTransformationsType.SMALL)
+                    small?.let{
+                        Log.d(TAG, "resizing to: $small")
+                        finalUrl = finalUrl!!.replace("t_medium", small)
+                    }
+                }
+                Constants.RESIZEABLE_IMAGE_MEDIUM -> {
+                    val medium = viewModel.getByType(CloudinaryTransformationsType.MEDIUM)
+                    medium?.let{
+                        Log.d(TAG, "resizing to: $medium")
+                        finalUrl = finalUrl!!.replace("t_medium", medium)
+                    }
+                }
+                Constants.RESIZEABLE_IMAGE_LARGE -> {
+                    val large = viewModel.getByType(CloudinaryTransformationsType.LARGE)
+                    large?.let{
+                        Log.d(TAG, "resizing to: $large")
+                        finalUrl = finalUrl!!.replace("t_medium", large)
+                    }
                 }
             }
-            Constants.RESIZEABLE_IMAGE_MEDIUM -> {
-                val medium = viewModel.getByType(CloudinaryTransformationsType.MEDIUM)
-                medium?.let{
-                    Log.d(TAG, "resizing to: $medium")
-                    finalUrl = finalUrl.replace("t_medium", medium)
-                }
+            if(isRound){
+                Glide.with(context).load(finalUrl).transform(CircleCrop()).into(cookImageView)
+            }else{
+                Glide.with(context).load(finalUrl).into(binding.resizeableImageView)
             }
-            Constants.RESIZEABLE_IMAGE_LARGE -> {
-                val large = viewModel.getByType(CloudinaryTransformationsType.LARGE)
-                large?.let{
-                    Log.d(TAG, "resizing to: $large")
-                    finalUrl = finalUrl.replace("t_medium", large)
-                }
-            }
-        }
-        if(isRound){
-            Glide.with(context).load(finalUrl).transform(CircleCrop()).into(cookImageView)
-        }else{
-            Glide.with(context).load(finalUrl).into(binding.resizeableImageView)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.base_repos.OrderRepositoryImpl
@@ -37,19 +38,19 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"getFullDish - NetworkError")
+                    MTLogger.c(TAG,"getFullDish - NetworkError")
                     OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"getFullDish - GenericError")
+                    MTLogger.c(TAG,"getFullDish - GenericError")
                     OrderRepoResult(OrderRepoStatus.FULL_DISH_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"getFullDish - Success")
+                    MTLogger.c(TAG,"getFullDish - Success")
                     OrderRepoResult(OrderRepoStatus.FULL_DISH_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    Log.d(TAG,"getFullDish - WSError")
+                    MTLogger.c(TAG,"getFullDish - WSError")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -69,19 +70,19 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         result.let{
            return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"postNewOrder - NetworkError")
+                    MTLogger.c(TAG,"postNewOrder - NetworkError")
                     OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"postNewOrder - GenericError")
+                    MTLogger.c(TAG,"postNewOrder - GenericError")
                     OrderRepoResult(OrderRepoStatus.POST_ORDER_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"postNewOrder - Success")
+                    MTLogger.c(TAG,"postNewOrder - Success")
                     OrderRepoResult(OrderRepoStatus.POST_ORDER_SUCCESS, result.value.data)
                 }
                is ResultHandler.WSCustomError -> {
-//                   Log.d(TAG,"postNewOrder - wsError ${result.errors?.get(0)?.msg}")
+                   MTLogger.c(TAG,"postNewOrder - wsError ${result.errors?.get(0)?.msg}")
                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                }
            }
@@ -95,19 +96,19 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"updateOrder - NetworkError")
+                    MTLogger.c(TAG,"updateOrder - NetworkError")
                     OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"updateOrder - GenericError")
+                    MTLogger.c(TAG,"updateOrder - GenericError")
                     OrderRepoResult(OrderRepoStatus.UPDATE_ORDER_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"updateOrder - Success")
+                    MTLogger.c(TAG,"updateOrder - Success")
                     OrderRepoResult(OrderRepoStatus.UPDATE_ORDER_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-//                    Log.d(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
+//                    MTLogger.c(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -121,19 +122,19 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"updateOrder - NetworkError")
+                    MTLogger.c(TAG,"finalizeOrder - NetworkError")
                     OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"updateOrder - GenericError")
+                    MTLogger.c(TAG,"finalizeOrder - GenericError")
                     OrderRepoResult(OrderRepoStatus.FINALIZE_ORDER_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"updateOrder - Success")
+                    MTLogger.c(TAG,"finalizeOrder - Success")
                     OrderRepoResult(OrderRepoStatus.FINALIZE_ORDER_SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
-//                    Log.d(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(TAG,"finalizeOrder - wsError ${result.errors?.get(0)?.msg}")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -147,19 +148,19 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"updateOrder - NetworkError")
+                    MTLogger.c(TAG,"getUpsShippingRates - NetworkError")
                     OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"updateOrder - GenericError")
+                    MTLogger.c(TAG,"getUpsShippingRates - GenericError")
                     OrderRepoResult(OrderRepoStatus.GET_SHIPPING_METHOD_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"updateOrder - Success")
+                    MTLogger.c(TAG,"getUpsShippingRates - Success")
                     OrderRepoResult(OrderRepoStatus.GET_SHIPPING_METHOD_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-//                    Log.d(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(TAG,"getUpsShippingRates - wsError ${result.errors?.get(0)?.msg}")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
