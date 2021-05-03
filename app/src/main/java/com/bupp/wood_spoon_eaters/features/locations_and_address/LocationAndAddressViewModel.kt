@@ -47,8 +47,8 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
 
 
     fun onDoneClick(selectedAddress: Address?) {
+        eaterDataManager.updateSelectedAddress(selectedAddress)
         selectedAddress?.let{
-            eaterDataManager.updateSelectedAddress(it)
             eaterDataManager.refreshSegment()
         }
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)

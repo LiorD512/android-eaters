@@ -84,7 +84,8 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
                 )
             )
         }else{
-            finalAddressLiveDataParam.postValue(FinalAddressParam())
+            setDefaultAddress()
+//            finalAddressLiveDataParam.postValue(FinalAddressParam())
         }
     }
 

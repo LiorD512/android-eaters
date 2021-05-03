@@ -177,7 +177,7 @@ class NewOrderMainViewModel(
         }
     }
 
-    private fun handleAddToCartClick() {
+    fun handleAddToCartClick() {
         //check if user set an address and add to cart
         val newCartData = cartManager.shouldForceClearCart()
         if (newCartData != null) {

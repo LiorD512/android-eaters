@@ -32,6 +32,7 @@ class FeedViewModel(
         viewModelScope.launch {
             feedDataManager.refreshFavorites()
         }
+//        progressData.endProgress()
     }
 
 

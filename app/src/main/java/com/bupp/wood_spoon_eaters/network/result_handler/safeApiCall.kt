@@ -24,7 +24,12 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
                             var gson = Gson()
                             val serverResponse = gson.fromJson(errorsBody?.string(), ServerResponse::class.java)
                             Log.d("safeApiCall", "safeApiCall serverResponse: $serverResponse")
-                            ResultHandler.WSCustomError(serverResponse.errors)
+                            if(serverResponse.errors.isNullOrEmpty()){
+                                val errorResponse = convertErrorBody(throwable)
+                                ResultHandler.GenericError(code, errorResponse)
+                            }else{
+                                ResultHandler.WSCustomError(serverResponse.errors)
+                            }
                         }
                         else ->{
                             val errorResponse = convertErrorBody(throwable)
