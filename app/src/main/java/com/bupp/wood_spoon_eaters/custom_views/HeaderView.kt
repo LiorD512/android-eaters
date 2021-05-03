@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import kotlinx.android.synthetic.main.header_view.view.*
 
 

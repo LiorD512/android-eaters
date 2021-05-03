@@ -42,7 +42,7 @@
                     app:ci_height="10dp"
                     app:ci_width="10dp" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+            <com.bupp.wood_spoon_eaters.views.UserImageView
                     android:id="@+id/singleDishInfoCook"
                     android:layout_width="57.6dp"
                     android:layout_height="57.6dp"

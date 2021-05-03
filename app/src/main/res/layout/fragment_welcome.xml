@@ -24,32 +24,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <ScrollView
+            android:scrollbars="none"
             android:id="@+id/bottom_layout"
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="172dp"
-            android:background="@color/white"
-            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-                style="@style/Reg15Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:letterSpacing="0.03"
-                android:lineSpacingExtra="7.7sp"
-                android:padding="23dp"
-                android:text="Delicious homemade food from local home chefs delivered to your door!" />
-
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                android:id="@+id/welcomeFragmentLogin"
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="7dp"
-                app:title="@string/welcome_fragment_login_btn" />
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                    style="@style/Reg15Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="7.7sp"
+                    android:padding="23dp"
+                    android:text="Delicious homemade food from local home chefs delivered to your door!" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                    android:id="@+id/welcomeFragmentLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="7dp"
+                    app:title="@string/welcome_fragment_login_btn" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

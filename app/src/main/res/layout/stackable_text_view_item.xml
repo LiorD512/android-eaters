@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-
+<LinearLayout
+        android:orientation="horizontal"
+        android:layout_gravity="start"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <com.bupp.wood_spoon_eaters.custom_views.stackableTextView.StackableViewItem
-            android:id="@+id/stackableTextViewItem"
-            android:layout_marginTop="7.7dp"
-            android:gravity="start"
-            android:layout_gravity="start"
+    <TextView
+            android:paddingEnd="7.7dp"
+            android:id="@+id/stackableViewItem"
+            style="@style/Reg13Dark_50"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:ellipsize="none"
+            tools:text="adjaslkdasj"/>
 
-</FrameLayout>
+    <View
+            android:id="@+id/stackableViewItemDivider"
+            android:layout_width="5.8dp"
+            android:layout_height="5.8dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="7.7dp"
+            android:background="@drawable/light_rose_circle"/>
+
+</LinearLayout>

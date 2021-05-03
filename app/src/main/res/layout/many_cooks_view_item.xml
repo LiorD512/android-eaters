@@ -16,7 +16,7 @@
             app:cardElevation="@dimen/shadow_elevation"
             app:cardCornerRadius="40dp">
 
-        <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+        <com.bupp.wood_spoon_eaters.views.UserImageView
                 android:layout_gravity="center"
                 app:imageSize="MANY_COOKS_VIEW"
                 android:id="@+id/manyCooksViewItem"

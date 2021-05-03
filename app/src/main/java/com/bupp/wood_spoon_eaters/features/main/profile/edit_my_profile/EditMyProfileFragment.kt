@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook

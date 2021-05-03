@@ -14,7 +14,7 @@
             android:paddingLeft="15.4dp"
             android:paddingRight="15.4dp">
 
-        <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+        <com.bupp.wood_spoon_eaters.views.UserImageView
                 android:id="@+id/editMyProfileFragUserImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -344,7 +344,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onChangeLocationClick() {
         mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY)
-//        (activity as NewOrderActivity).loadAddressesDialog()
     }
 
     override fun onChangeTimeClick() {
@@ -355,14 +354,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.onNationwideShippingSelectClick()
     }
 
-    private fun openOrderTimeDialog() {
-//        ordersViewModel.editDeliveryTime()
-    }
-
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
         mainViewModel.updateDeliveryTime(newChosenDate)
     }
-
 
     override fun onHeaderBackClick() {
         if(mainViewModel.isCheckout){

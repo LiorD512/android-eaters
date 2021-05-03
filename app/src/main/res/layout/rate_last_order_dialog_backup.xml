@@ -50,7 +50,7 @@
 
                 </FrameLayout>
 
-                <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+                <com.bupp.wood_spoon_eaters.views.UserImageView
                         android:id="@+id/rateLastOrderUserImage"
                         app:imageSize="SMALL"
                         android:layout_marginBottom="7.7dp"

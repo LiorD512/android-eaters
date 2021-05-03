@@ -42,7 +42,7 @@ class CartManager(
         val isSoldOut: Boolean
     )
 
-    fun buildDishRequest(): FeedRequest{
+    private fun buildDishRequest(): FeedRequest{
         val feedRequest = FeedRequest()
         val lastAddress = locationManager.getFinalAddressLiveDataParam().value
         lastAddress?.let {
@@ -237,7 +237,6 @@ class CartManager(
         Log.d(TAG, "updateInCartOrderItem")
         //this method used to update orderItems in AdditionalDishesDialog and checkout.
         // get specific orderItem from response and update cart with new orderItemRequest
-//        val orderRequest = buildOrderRequest()
         for (item in currentOrderResponse?.orderItems ?: arrayListOf()) {
             if (item.id == updatedOrderItem.id) {
                 cart.find { it.dishId == item.dish.id }?.apply {
@@ -248,12 +247,6 @@ class CartManager(
                 }
             }
         }
-
-//        orderRequest.orderItemRequests = cart
-//        Log.d(TAG, "updateInCartOrderItem: ${orderRequest.orderItemRequests}")
-
-//        val orderItems = currentOrderRequest?.orderItemRequests?.toMutableList()
-//        Log.d(TAG, "orderRequest: $orderRequest")
 
         return postNewOrUpdateCart()
     }
@@ -297,10 +290,7 @@ class CartManager(
     private fun buildOrderRequest(tempCart: List<OrderItemRequest>? = null): OrderRequest {
         Log.d(TAG, "buildOrderRequest withTempCart: ${!tempCart.isNullOrEmpty()}")
         val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
-//        val deliverAt = DateUtils.parseUnixTimestamp(deliveryTimeLiveData.value?.deliveryDate)
-//        val deliverAt = globalDeliveryTimeLiveData.value?.deliveryTimestamp
         val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
-//        val deliverAt = currentCartDeliveryTimestamp
         val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
         return OrderRequest(
@@ -311,25 +301,6 @@ class CartManager(
         )
     }
 
-//    private fun getDeliveryAt(): String? {
-//        if(currentShowingDish?.menuItem?.orderAt == null){
-//            //Dish is offered today.
-//            return globalDeliveryTimeLiveData.value?.deliveryTimestamp
-//        }else{
-//            currentShowingDish?.menuItem?.orderAt?.let{
-//                //Dish is offered in the future.
-//                val currentDate = globalDeliveryTimeLiveData.value?.deliveryDate ?: Date()
-//                return if(currentDate.after(it)){
-//                    globalDeliveryTimeLiveData.value?.deliveryTimestamp
-//                }else{
-//                    //order stating in the future. needs to update order delivery time to "orderAt"
-//                    DateUtils.parseUnixTimestamp(it)
-//                }
-//            }
-//
-//        }
-//        return globalDeliveryTimeLiveData.value?.deliveryTimestamp
-//    }
 
     suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "postUpdateOrder")
@@ -377,12 +348,6 @@ class CartManager(
         val updatedItems = mutableListOf<OrderItemRequest>()
         order.orderItems?.forEach { orderItem ->
             val item = orderItem.toOrderItemRequest()
-//            val item = cart.find { it.dishId == orderItem.dish.id }?.apply {
-//                id = orderItem.id
-//                quantity = orderItem.quantity
-//                notes = orderItem.notes
-//                removedIngredientsIds = orderItem.getRemovedIngredientsIds()
-//            }
             updatedItems.add(item)
         }
         cart.clear()
@@ -516,6 +481,9 @@ class CartManager(
         if(cuisine.isNotEmpty()){
             data["cuisine"] = cuisine[0]
         }
+
+        val cookFee =
+
         return data
     }
 

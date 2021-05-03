@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomShee
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
-import com.bupp.wood_spoon_eaters.custom_views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.dialogs.VideoPlayerDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.custom_views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CooksDishesAdapter
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
@@ -70,7 +70,7 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
         //cuisine
         if(!cook.cuisines.isNullOrEmpty()){
             cookProfileFragCuisineLayout.visibility = View.VISIBLE
-            cookProfileFragCuisineGrid.clear()
+//            cookProfileFragCuisineGrid.clear()
             cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
         }else{
             cookProfileFragCuisineLayout.visibility = View.GONE
@@ -79,7 +79,7 @@ class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDi
         //dietary
         if(!cook.diets.isNullOrEmpty()){
             cookProfileFragDietaryLayout.visibility = View.VISIBLE
-            cookProfileFragDietryGrid.clear()
+//            cookProfileFragDietryGrid.clear()
             cookProfileFragDietryGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
         }else{
             cookProfileFragDietaryLayout.visibility = View.GONE

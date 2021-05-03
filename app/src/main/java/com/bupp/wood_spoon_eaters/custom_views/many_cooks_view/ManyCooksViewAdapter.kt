@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.model.Cook
 import kotlinx.android.synthetic.main.many_cooks_view_item.view.*
-import kotlinx.android.synthetic.main.user_image_view.view.*
 
 class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>, val listener: ManyCooksViewListener): RecyclerView.Adapter<ManyCooksViewAdapter.ViewHolder>(),
     UserImageView.UserImageViewListener {
@@ -23,7 +22,7 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
     }
 
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-        val CooksViewBkg = view.manyCooksViewBkg
+//        val CooksViewBkg = view.manyCooksViewBkg
         val cookImageView = view.manyCooksViewItem
         val cookFirstName = view.manyCooksViewName
         val cookLastName = view.manyCooksViewNameLast

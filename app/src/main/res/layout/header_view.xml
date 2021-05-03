@@ -89,7 +89,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
-        <com.bupp.wood_spoon_eaters.custom_views.UserImageView
+        <com.bupp.wood_spoon_eaters.views.UserImageView
                 android:id="@+id/headerViewProfileBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

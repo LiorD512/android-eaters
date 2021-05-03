@@ -1,43 +1,62 @@
 package com.bupp.wood_spoon_eaters.custom_views.stackableTextView
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import kotlinx.android.synthetic.main.stackable_text_view_item.view.*
 
-class StackableTextViewAdapter(val context: Context) : RecyclerView.Adapter<StackableTextViewAdapter.ViewHolder>() {
+class StackableTextViewAdapter(val context: Context) :
+    ListAdapter<SelectableIcon, RecyclerView.ViewHolder>(DiffCallback()) {
 
-    var bundles: ArrayList<StackableTextView.StackablesBundle> = arrayListOf()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.stackable_text_view_item,
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        val itemViewHolder = holder as ViewHolder
+
+        itemViewHolder.bindItem(item.name, position+1 == itemCount)
+        Log.d("wowWSRangeAdapter","onBind $position, $itemCount")
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val stackableViewItem: StackableViewItem = view.stackableTextViewItem
+        private val stackableViewItem: TextView = view.stackableViewItem
+        private val divider: View = view.stackableViewItemDivider
+
+        fun bindItem(string: String, isLast: Boolean) {
+            stackableViewItem.text = string
+            if(isLast){
+                divider.visibility = View.GONE
+            }else{
+                divider.visibility = View.VISIBLE
+            }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.stackable_text_view_item, parent, false))
-    }
+    class DiffCallback : DiffUtil.ItemCallback<SelectableIcon>() {
 
-    override fun getItemCount(): Int {
-        return bundles.size
-    }
+        override fun areItemsTheSame(oldItem: SelectableIcon, newItem: SelectableIcon): Boolean {
+            return oldItem == newItem
+        }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bundle: StackableTextView.StackablesBundle = bundles[position]
-
-        holder.stackableViewItem.init(bundle.stackables)
-    }
-
-    fun addItem(iconsList: ArrayList<StackableTextView.StackablesBundle>) {
-        bundles.addAll(iconsList)
-       notifyDataSetChanged()
-
-    }
-
-    fun clear() {
-        bundles.clear()
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: SelectableIcon, newItem: SelectableIcon): Boolean {
+            return oldItem.id == newItem.id
+        }
     }
 }
