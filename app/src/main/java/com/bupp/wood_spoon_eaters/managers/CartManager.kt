@@ -42,7 +42,7 @@ class CartManager(
         val isSoldOut: Boolean
     )
 
-    private fun buildDishRequest(): FeedRequest{
+    private fun buildDishRequest(): FeedRequest {
         val feedRequest = FeedRequest()
         val lastAddress = locationManager.getFinalAddressLiveDataParam().value
         lastAddress?.let {
@@ -80,25 +80,25 @@ class CartManager(
         return null
     }
 
-    private fun checkIfFutureDish(){
+    private fun checkIfFutureDish() {
         Log.d(TAG, "checkIfFutureDish")
 //            if(currentShowingDish?.menuItem?.orderAt == null){
 //                //Dish is offered today.
 //                return globalDeliveryTimeLiveData.value?.deliveryTimestamp
 //            }else{
-                currentShowingDish?.menuItem?.orderAt?.let{
-                    //Dish is offered in the future.
-                    val userSelectedDate = DateUtils.parseFromUnixTimestamp(deliveryTimeManager.getTempDeliveryTimeStamp())
-                    if(userSelectedDate.before(it)){
-                        //order stating in the future. needs to update order delivery time to "orderAt" time
-                        deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
-                        Log.d(TAG, "checkIfFutureDish - changing delivery time to future order")
-                    }else{
-                        //do nothing. stay with user selected date,
-                    }
-                }
-
+        currentShowingDish?.menuItem?.orderAt?.let {
+            //Dish is offered in the future.
+            val userSelectedDate = DateUtils.parseFromUnixTimestamp(deliveryTimeManager.getTempDeliveryTimeStamp())
+            if (userSelectedDate.before(it)) {
+                //order stating in the future. needs to update order delivery time to "orderAt" time
+                deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
+                Log.d(TAG, "checkIfFutureDish - changing delivery time to future order")
+            } else {
+                //do nothing. stay with user selected date,
             }
+        }
+
+    }
 
 
 //    fun refreshDeliveryTimeByUserTimeSelection() {
@@ -317,8 +317,8 @@ class CartManager(
     }
 
     private fun handleEvent(eventType: String?) {
-        eventType?.let{
-            when(it){
+        eventType?.let {
+            when (it) {
                 Constants.EVENT_TIP -> {
                     eventsManager.logEvent(eventType, getTipData())
                 }
@@ -384,8 +384,8 @@ class CartManager(
     fun getAdditionalDishes(): List<Dish>? {
         currentShowingDish?.let {
             val allAdditionalDishes = it.getAdditionalDishes(it.menuItem?.cookingSlot?.id)
-            currentOrderResponse?.orderItems?.let{
-                val filteredAdditionals =  allAdditionalDishes.f(it)
+            currentOrderResponse?.orderItems?.let {
+                val filteredAdditionals = allAdditionalDishes.f(it)
                 return filteredAdditionals
             }
         }
@@ -394,12 +394,20 @@ class CartManager(
 
     fun List<Dish>.f(orderItems: List<OrderItem>) = filter { m -> orderItems.all { !it.dish.name.equals(m.name) } }
 
+//    fun calcTotalDishesPrice(): Double {
+//        var total = 0.0
+//        currentOrderResponse?.orderItems?.let {
+//            it.forEach {
+//                total += (it.price.value * it.quantity)
+//            }
+//        }
+//        return total
+//    }
+
     fun calcTotalDishesPrice(): Double {
         var total = 0.0
-        currentOrderResponse?.orderItems?.let {
-            it.forEach {
-                total += (it.price.value * it.quantity)
-            }
+        currentOrderResponse?.total?.let {
+            total = it.value
         }
         return total
     }
@@ -439,7 +447,7 @@ class CartManager(
             val result = orderRepository.finalizeOrder(it, paymentMethodId)
             val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
             eventsManager.sendPurchaseEvent(it, calcTotalDishesPrice())
-            eventsManager.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(isSuccess))
+            eventsManager.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(isSuccess, result.wsError))
             return result
         }
         return null
@@ -467,32 +475,73 @@ class CartManager(
 
     //Events param -
 
-    private fun getOrderValue(isSuccess: Boolean): Map<String, String> {
+    private fun getOrderValue(isSuccess: Boolean, wsError: List<WSError>? = null): Map<String, Any> {
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
         val totalCostStr = calcTotalDishesPrice()
         val dishesName = getCurrentOrderDishNames()
         val cuisine = getCurrentOrderChefCuisine()
-        val data = mutableMapOf<String, String>("revenue" to totalCostStr.toString(), "currency" to "USD", "cook_name" to chefsName, "success" to isSuccess.toString())
+        val data =
+            mutableMapOf<String, Any>("revenue" to totalCostStr.toString(), "currency" to "USD", "cook_name" to chefsName, "success" to isSuccess.toString())
         data["cook_id"] = chefsId
-        dishesName.forEachIndexed {index, it ->
-            data["dish_name_${index}"] = it
+        dishesName.let {
+            data["dishes"] = it
         }
-        if(cuisine.isNotEmpty()){
-            data["cuisine"] = cuisine[0]
+        if (cuisine.isNotEmpty()) {
+            data["cuisine"] = cuisine
         }
 
-        val cookFee =
+        val isAsap = currentOrderResponse?.deliverAt == null
+        data["ASAP"] = isAsap
+
+        if (isSuccess) {
+            currentOrderResponse?.tip?.value?.let {
+                data["tip_amount"] = it
+            }
+            currentOrderResponse?.tax?.value?.let {
+                data["tax"] = it
+            }
+            currentOrderResponse?.deliveryFee?.value?.let {
+                data["delivery_fee"] = it
+            }
+            currentOrderResponse?.cooksServiceFee?.value?.let {
+                data["cook_service_fee"] = it
+            }
+            currentOrderResponse?.serviceFee?.value?.let {
+                data["woodspoon_service_fee"] = it
+            }
+            currentOrderResponse?.minOrderFee?.value?.let {
+                data["min_order_fee"] = it
+            }
+            currentOrderResponse?.orderItems?.let {
+                data["dish_count"] = it.size
+            }
+            currentOrderResponse?.deliveryAddress?.let {
+                data["city"] = it.city?.name ?: "na"
+                data["country"] = it.country?.name ?: "na"
+                data["postalCode"] = it.zipCode ?: "na"
+                data["state"] = it.state?.name ?: "na"
+                data["street"] = it.streetLine1 ?: "na"
+            }
+        } else {
+            wsError?.let {
+                if (it.isNotEmpty()) {
+                    data["error_message"] = it[0].msg ?: "no_error"
+                }
+            }
+        }
+
 
         return data
     }
 
     private fun getCurrentOrderDishNames(): List<String> {
-        val dishNames = mutableListOf<String>()
+        val dishNames = mutableSetOf<String>()
+        val chefsName = currentOrderResponse?.cook?.firstName ?: ""
         currentOrderResponse?.orderItems?.forEach {
-            dishNames.add(it.dish.name)
+            dishNames.add("${chefsName}_${it.dish.name}")
         }
-        return dishNames
+        return dishNames.toList()
     }
 
     private fun getAddDishData(id: Long? = null): Map<String, String> {
@@ -508,54 +557,55 @@ class CartManager(
         data["dish_id"] = "$dishId"
         data["dish_price"] = dishPrice
         data["dish_name"] = currentDishName
-        if(cuisine.isNotEmpty()){
+        if (cuisine.isNotEmpty()) {
             data["cuisine"] = cuisine[0]
         }
-        id?.let{
+        id?.let {
             data["order_id"] = id.toString()
         }
+
         return data
     }
 
     private fun getCurrentDishName(): String {
-        currentShowingDish?.name?.let{
+        currentShowingDish?.name?.let {
             return it
         }
         return ""
     }
 
     private fun getCurrentOrderChefId(): String {
-        currentShowingDish.let{
+        currentShowingDish.let {
             return it?.cook?.id.toString()
         }
     }
 
     private fun getCurrentDishPrice(): String {
-        currentShowingDish?.let{
+        currentShowingDish?.let {
             return it.price.formatedValue
         }
         return ""
     }
 
     private fun getCurrentDishId(): Long {
-        currentShowingDish?.let{
+        currentShowingDish?.let {
             return it.id
         }
         return 0
     }
 
     private fun getCurrentOrderChefCuisine(): List<String> {
-        val cuisine = mutableListOf<String>()
-        currentShowingDish?.cuisines?.let{
-            it.forEach {
+        val cuisine = mutableSetOf<String>()
+        currentOrderResponse?.orderItems?.forEach {
+            it.dish.cuisines?.get(0)?.let {
                 cuisine.add(it.name)
             }
         }
-        return cuisine
+        return cuisine.toList()
     }
 
     private fun getCurrentOrderChefName(): String {
-        currentShowingDish.let{
+        currentShowingDish.let {
             return it?.cook?.getFullName() ?: "no_name"
         }
     }

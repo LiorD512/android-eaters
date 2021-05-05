@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
@@ -39,7 +40,6 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
@@ -61,9 +61,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener {
+    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener {
 
     private var tooltip: Tooltip? = null
+
+    private val mediaUtil = MediaUtils(this, this)
 
     //    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
@@ -300,6 +302,14 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
             startActivity(Intent(this, SplashActivity::class.java))
             finishAffinity()
+        })
+
+        viewModel.navigationEvent.observe(this, {
+            when(it){
+                MainViewModel.NavigationEventType.OPEN_CAMERA_UTIL_IMAGE -> {
+                    mediaUtil.startPhotoFetcher()
+                }
+            }
         })
     }
 
@@ -638,6 +648,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         const val TAG = "wowMainAct"
     }
 
+    override fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
+        if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
+            (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onCameraUtilResult(result)
+        }
+    }
 
 
 }

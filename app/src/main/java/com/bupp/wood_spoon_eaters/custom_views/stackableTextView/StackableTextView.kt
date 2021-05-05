@@ -45,29 +45,7 @@ class StackableTextView : FrameLayout {
 
     fun initStackableView(icons: List<SelectableIcon>){
         adapter.submitList(icons)
-//        val bundles: ArrayList<StackablesBundle> = arrayListOf()
-//        var shouldStop = false
-//        var i = 0
-//        while(!shouldStop && i < icons.size){
-//            val iconsBundle: ArrayList<SelectableIcon> = arrayListOf()
-//            repeat(3){
-//                if(i < icons.size){
-//                    iconsBundle.add(icons.get(i))
-//                }else{
-//                    shouldStop = true
-//                }
-//                i++
-//            }
-//            val stackableBundle: StackablesBundle = StackablesBundle(iconsBundle)
-//            bundles.add(stackableBundle)
-//        }
-//        adapter.addItem(bundles)
-//        adapter.notifyDataSetChanged()
     }
 
 
-
-//    fun clear() {
-//        adapter.clear()
-//    }
 }

@@ -20,7 +20,8 @@ data class Dish(
     @SerializedName("is_recurring") val isRecurring: Boolean,
     @SerializedName("matching_menu") val menuItem: MenuItem?,
     @SerializedName("matching_slot") val matchingSlot: String,
-    @SerializedName("door_to_door_time") val doorToDoorTime: String?
+    @SerializedName("door_to_door_time") val doorToDoorTime: String?,
+    @SerializedName("cuisines") val cuisines: List<CuisineLabel>?
 ): Parcelable {
     fun getPriceObj(): Price {
         return if(menuItem?.price != null){

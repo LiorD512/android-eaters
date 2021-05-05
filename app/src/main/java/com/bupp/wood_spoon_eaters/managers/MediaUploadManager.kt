@@ -26,13 +26,8 @@ class MediaUploadManager(private val context: Context, private val apiService: A
         val preSignedUrlKey: String
     )
 
-    data class MediaUploadRequest(
-        val uri: Uri
-    )
-
     suspend fun upload(uploadRequests: List<Uri>, listener: UploadManagerListener) {
         Log.d("wowUploadManager", "uploadRequests -> ${uploadRequests.size}")
-//        taskCounter = (images?.size ?: 0)+(videos?.size ?: 0)
 
         val results = mutableListOf<MediaUploadResult>()
 
@@ -41,59 +36,35 @@ class MediaUploadManager(private val context: Context, private val apiService: A
             preSignedResult = apiService.postEaterPreSignedUrl().data
 
             preSignedResult?.let { it ->
-                putFileOnAws(filePath = getMediaPath(media), preSignedUrl = it.url)
+                putFileOnAws(uri = media, preSignedUrl = it.url)
                 results.add(MediaUploadResult(preSignedResult.key))
             }
         }
         listener.onMediaUploadCompleted(results)
     }
 
-    private fun getMediaPath(uri: Uri): String? {
-        return if ("content".equals(uri.scheme!!, ignoreCase = true)) {
-            getDataColumn(uri)
-        } else
-            uri.path
-    }
-
-
-    private fun getDataColumn(
-        uri: Uri?,
-        selection: String? = null,
-        selectionArgs: Array<String>? = null
-    ): String? {
-        var cursor: Cursor? = null
-        val column = "_data"
-        val projection = arrayOf(column)
-
-        try {
-            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
-            if (cursor != null && cursor.moveToFirst()) {
-                val index = cursor.getColumnIndexOrThrow(column)
-                return cursor.getString(index)
-            }
-        } catch (ex: java.lang.Exception) {
-            Log.d("wowImageUtils", "ex: $ex")
-        } finally {
-            cursor?.close()
-        }
-        return null
-    }
-
-
-    private suspend fun putFileOnAws(dispatcher: CoroutineDispatcher = Dispatchers.IO, filePath: String?, preSignedUrl: String) =
-        filePath?.let {
+    private suspend fun putFileOnAws(dispatcher: CoroutineDispatcher = Dispatchers.IO, uri: Uri?, preSignedUrl: String) {
+        uri?.let {
             withContext(dispatcher) {
-                val file = File(filePath)
-                val inVal = FileInputStream(file)
-                val buf: ByteArray
-                buf = ByteArray(inVal.available())
-                while (inVal.read(buf) !== -1) {
+                val resolver = context.contentResolver
+                resolver.openInputStream(it).use { stream ->
+                    // Perform operations on "stream".
+                    stream?.let {
+                        val buf: ByteArray = ByteArray(stream.available())
+                        while (stream.read(buf) !== -1) {
+                        }
+                        val requestBody = buf.toRequestBody("application/octet-stream".toMediaTypeOrNull(), 0, buf.size)
+                        val result = apiService.uploadAsset(preSignedUrl, requestBody)
+                        Log.d(TAG, "result - $result")
+                    }
                 }
-                val requestBody = buf.toRequestBody("application/octet-stream".toMediaTypeOrNull(), 0, buf.size)
-                apiService.uploadAsset(preSignedUrl, requestBody)
             }
-
         }
+    }
+
+    companion object{
+        const val TAG = "wowMediaUploadManager"
+    }
 
 
 }

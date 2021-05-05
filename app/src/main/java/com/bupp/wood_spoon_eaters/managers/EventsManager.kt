@@ -118,7 +118,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
-    fun logEvent(eventName: String, params: Map<String, String>? = null){
+    fun logEvent(eventName: String, params: Map<String, Any>? = null){
         Log.d(TAG, "logUxCamEvent: $eventName PARAMS: $params")
         if(params != null ){
             UXCam.logEvent(eventName, params)

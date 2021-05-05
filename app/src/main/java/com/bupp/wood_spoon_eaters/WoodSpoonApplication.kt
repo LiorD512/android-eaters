@@ -23,6 +23,12 @@ import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration;
 class WoodSpoonApplication : Application() {
     private val devKey  = "pdDuzVhDY8UpBHir8tgvKc"
 
+    companion object {
+        private lateinit var instance: WoodSpoonApplication
+
+        fun getInstance(): WoodSpoonApplication = instance
+    }
+
     override fun onCreate() {
         super.onCreate()
 

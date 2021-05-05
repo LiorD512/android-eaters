@@ -9,18 +9,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.utils.CameraUtils
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.edit_my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EditMyProfileFragment : Fragment(), UserImageView.UserImageViewListener, CameraUtils.CameraUtilListener {
+class EditMyProfileFragment : Fragment(), UserImageView.UserImageViewListener {
 
     companion object {
         fun newInstance() = EditMyProfileFragment()
@@ -129,16 +129,11 @@ class EditMyProfileFragment : Fragment(), UserImageView.UserImageViewListener, C
     }
 
     override fun onUserImageClick(cook: Cook?) {
-        CameraUtils.openCameraForResult(activity as Activity, this)
+        mainViewModel.onUserImageClick()
     }
 
-//    fun onMediaCaptureResult(resultUri: Uri?) {
-//        editMyProfileFragUserImageView.setImage(resultUri!!)
-//        viewModel.updateTempThumbnail(resultUri)
-//
-//    }
 
-    override fun onCameraUtilResult(result: CameraUtils.CameraUtilResult) {
+    fun onCameraUtilResult(result: MediaUtils.MediaUtilResult) {
         result.fileUri?.let{
             editMyProfileFragUserImageView.setImage(it)
             viewModel.updateTempThumbnail(it)

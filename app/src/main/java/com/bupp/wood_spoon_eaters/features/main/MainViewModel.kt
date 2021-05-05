@@ -66,7 +66,7 @@ class MainViewModel(
 
     val navigationEvent = MutableLiveData<NavigationEventType>()
     enum class NavigationEventType{
-
+        OPEN_CAMERA_UTIL_IMAGE
     }
 
     val dishClickEvent = LiveEventData<Long>()
@@ -349,6 +349,10 @@ class MainViewModel(
         val cloudinery = metaDataRepository.getCloudinaryTransformations()
         val large = cloudinery?.getByType(CloudinaryTransformationsType.LARGE)
         Log.d(TAG, "coudirery: $cloudinery")
+    }
+
+    fun onUserImageClick() {
+        navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
     }
 
 
