@@ -271,31 +271,31 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
         viewModel.activeCampaignEvent.observe(this, Observer {
-            val activeCampaign = it
-            if (activeCampaign != null) {
-                mainActCampaignHeader.visibility = View.VISIBLE
-                mainActCampaignTitle.text = it.title
-                mainActCampaignSubTitle.text = it.terms
-                it.image?.let {
-                    Glide.with(this).load(it).into(mainActCampaignImg)
-                }
-
-                it.color?.let {
-                    mainActCampaignHeader.setBackgroundColor(Color.parseColor(it))
-                }
-
-                mainActCampaignHeader.setOnClickListener {
-                    if (mainActCampaignImg.visibility == View.VISIBLE) {
-                        mainActCampaignImg.visibility = View.GONE
-                        mainActCampaignSubTitle.visibility = View.GONE
-                    } else {
-                        mainActCampaignImg.visibility = View.VISIBLE
-                        mainActCampaignSubTitle.visibility = View.VISIBLE
-                    }
-                }
-            } else {
-                mainActCampaignHeader.visibility = View.GONE
-            }
+//            val activeCampaign = it
+//            if (activeCampaign != null) {
+//                mainActCampaignHeader.visibility = View.VISIBLE
+//                mainActCampaignTitle.text = it.title
+//                mainActCampaignSubTitle.text = it.terms
+//                it.image?.let {
+//                    Glide.with(this).load(it).into(mainActCampaignImg)
+//                }
+//
+//                it.color?.let {
+//                    mainActCampaignHeader.setBackgroundColor(Color.parseColor(it))
+//                }
+//
+//                mainActCampaignHeader.setOnClickListener {
+//                    if (mainActCampaignImg.visibility == View.VISIBLE) {
+//                        mainActCampaignImg.visibility = View.GONE
+//                        mainActCampaignSubTitle.visibility = View.GONE
+//                    } else {
+//                        mainActCampaignImg.visibility = View.VISIBLE
+//                        mainActCampaignSubTitle.visibility = View.VISIBLE
+//                    }
+//                }
+//            } else {
+//                mainActCampaignHeader.visibility = View.GONE
+//            }
         })
 
         viewModel.refreshAppDataEvent.observe(this, Observer {

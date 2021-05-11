@@ -38,6 +38,7 @@
     <color name="silver_20">#33dcdcdf</color>
     <color name="silver_50">#80dcdcdf</color>
     <color name="white">#ffffff</color>
+    <color name="white_60">#99ffffff</color>
     <color name="white_80">#d9ffffff</color>
     <color name="white_95">#f2ffffff</color>
     <color name="teal_blue">#0097a3</color>

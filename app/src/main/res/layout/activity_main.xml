@@ -11,41 +11,42 @@
     <LinearLayout
             android:id="@+id/mainActCampaignHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:animateLayoutChanges="true"
             android:background="@color/teal_blue"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
-        <ImageView
-                android:id="@+id/mainActCampaignImg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible" />
+        <com.bupp.wood_spoon_eaters.views.UserImageView
+                app:imageSize="HEADER"
+                android:paddingStart="15.4dp"
+                android:layout_gravity="center"
+                android:id="@+id/mainActCampaignImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <TextView
                 android:id="@+id/mainActCampaignTitle"
-                style="@style/Bold15White"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="5dp"
-                tools:text="this is a campaign coupon that gives yoi 20% off" />
+                style="@style/LatoBold15White"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="start|center"
+                android:paddingStart="8dp"
+                tools:text=" Enjoy 30% off your first order" />
 
         <TextView
-                android:id="@+id/mainActCampaignSubTitle"
-                style="@style/Reg13White"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:visibility="gone"
-                tools:text="this is a campaign coupon subtitle that gives you 20% off"
-                tools:visibility="visible" />
+                android:id="@+id/mainActCampaignDetails"
+                android:paddingEnd="15.4dp"
+                style="@style/LatoBold11White60"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:letterSpacing="0.03"
+                android:gravity="end|center"
+                tools:text="View details"/>
 
     </LinearLayout>
 

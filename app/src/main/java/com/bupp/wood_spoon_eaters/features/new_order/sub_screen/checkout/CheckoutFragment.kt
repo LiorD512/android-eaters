@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
@@ -59,6 +60,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         initObservers()
 
     }
+
 
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {

@@ -180,6 +180,7 @@
 
             <com.bupp.wood_spoon_eaters.views.TitleBodyView
                     app:title="Portion size"
+                    app:shouldShowDivider="false"
                     android:visibility="gone"
                     tools:visibility="visible"
                     android:id="@+id/singleDisInfoPortion"
