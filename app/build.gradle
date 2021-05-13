@@ -22,8 +22,8 @@ android {
         targetSdkVersion 29
 
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 66
-        versionName "2.0.7"
+        versionCode 67
+        versionName "2.0.8"
     }
 
     androidExtensions {
