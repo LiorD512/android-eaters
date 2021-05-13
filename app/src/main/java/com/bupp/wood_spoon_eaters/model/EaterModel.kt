@@ -50,7 +50,7 @@ data class EaterRequest(
     @SerializedName("email") var email: String? = null,
     @SerializedName("addresses") var addresses: ArrayList<AddressRequest>? = null,
     @SerializedName("time_zone") var timezone: String = TimeZone.getDefault().id,
-    @SerializedName("device") var device: Device? = null,
+//    @SerializedName("device") var device: Device? = null,
     @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Int>? = null,
     @SerializedName("diet_ids") var dietIds: ArrayList<Int>? = null,
     var tempThumbnail: Uri? = null

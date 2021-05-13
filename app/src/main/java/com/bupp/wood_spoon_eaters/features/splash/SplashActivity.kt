@@ -99,6 +99,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
     private fun redirectToMain() {
         Log.d("wowSplash", "redirectToMain")
+        viewModel.initFCMAndRefreshToken()
         val intent = Intent(this, MainActivity::class.java)
         cookId?.let {
             intent.putExtra("cook_id", it.toLong())
@@ -147,22 +148,5 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         super.onResume()
         updateScreenUi()
     }
-
-
-//    private fun updateUI() {
-//        val decorView = window.decorView
-//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//            }
-//        }
-//    }
-
-
 
 }

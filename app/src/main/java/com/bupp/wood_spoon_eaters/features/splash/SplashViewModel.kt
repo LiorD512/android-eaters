@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
@@ -14,7 +15,9 @@ import kotlinx.coroutines.launch
 
 
 class SplashViewModel(
-    val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, private val paymentManager: PaymentManager)
+    val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, private val paymentManager: PaymentManager,
+private val deviceDetailsManager: FcmManager
+)
     : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     val splashEvent: LiveEventData<SplashEventType> = LiveEventData()
@@ -67,5 +70,9 @@ class SplashViewModel(
 
     fun setUserCampaignParam(sid: String?, cid: String?) {
        eaterDataManager.setUserCampaignParam(sid = sid, cid = cid)
+    }
+
+    fun initFCMAndRefreshToken() {
+        deviceDetailsManager.refreshPushNotificationToken()
     }
 }

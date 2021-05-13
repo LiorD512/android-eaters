@@ -98,6 +98,7 @@ class NewOrderMainViewModel(
                     if(!cartManager.isInCheckout()){
                         checkCartStatusAndUpdateUi()
                     }
+                    sendClickOnDishEvent()
                 }
                 progressData.endProgress()
             }
@@ -268,6 +269,7 @@ class NewOrderMainViewModel(
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        cartManager.sendFBAdditioanlDishEvent(dishId)
                         initAdditionalDishes()
                     }
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {

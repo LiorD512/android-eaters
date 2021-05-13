@@ -260,7 +260,7 @@ class CartManager(
             Log.d(TAG, "postNewOrUpdateCart.. posting new order")
             result = orderRepository.postNewOrder(orderRequest)
 
-            eventsManager.sendAddToCart(result.data?.id)
+//            eventsManager.sendAddToCart(result.data?.id)
 
             eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id))
         } else {
@@ -555,7 +555,7 @@ class CartManager(
 
         data["cook_id"] = chefsId
         data["dish_id"] = "$dishId"
-        data["dish_price"] = dishPrice
+        data["dish_price"] = dishPrice.toString()
         data["dish_name"] = currentDishName
         if (cuisine.isNotEmpty()) {
             data["cuisine"] = cuisine[0]
@@ -574,17 +574,21 @@ class CartManager(
         return ""
     }
 
+    fun sendFBAdditioanlDishEvent(dishId: Long) {
+        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(dishId))
+    }
+
     private fun getCurrentOrderChefId(): String {
         currentShowingDish.let {
             return it?.cook?.id.toString()
         }
     }
 
-    private fun getCurrentDishPrice(): String {
+    private fun getCurrentDishPrice(): Double? {
         currentShowingDish?.let {
-            return it.price.formatedValue
+            return it.price.value
         }
-        return ""
+        return null
     }
 
     private fun getCurrentDishId(): Long {
@@ -619,6 +623,7 @@ class CartManager(
     }
 
     fun onDishChangeEvent() = deliveryTimeManager.getTempDeliveryTimeStamp()
+
 
 
 //    fun checkoutOrder(orderId: Long) {

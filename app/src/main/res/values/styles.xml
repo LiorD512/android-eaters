@@ -74,7 +74,11 @@
 
     //fonts and colors
 
-    <style name="LatoBold11Teal">
+    <style name="LatoBold11White60">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/white_60</item>
+    </style><style name="LatoBold11Teal">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/teal_blue</item>

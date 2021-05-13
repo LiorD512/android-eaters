@@ -44,7 +44,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         initUi()
         initObserver()
 
-        mainViewModel.sendClickOnDishEvent()
+//        mainViewModel.sendClickOnDishEvent()
     }
 
     private fun initUi() {

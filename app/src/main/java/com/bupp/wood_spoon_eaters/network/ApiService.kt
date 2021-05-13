@@ -93,12 +93,8 @@ interface ApiService {
     suspend fun postNewAddress(@Body addressRequest: AddressRequest): ServerResponse<Address>
 
 
-
-
-
-
     @POST("eaters/me")
-    fun postDeviceDetails(@Body device: DeviceDetails): Call<ServerResponse<Void>>
+    suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Void>
 
     @FormUrlEncoded
     @POST("eaters/me")

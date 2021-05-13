@@ -233,31 +233,37 @@ class LoginViewModel(
                 UserRepository.UserRepoStatus.SERVER_ERROR -> {
                     Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "false"))
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
                 }
                 UserRepository.UserRepoStatus.SOMETHING_WENT_WRONG -> {
                     Log.d("wowLoginVM", "GenericError")
                     errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "false"))
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
                 }
                 UserRepository.UserRepoStatus.SUCCESS -> {
                     Log.d("wowLoginVM", "Success")
+                    val eater = userRepoResult.eater
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
                     navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
-                    eventsManager.sendRegistrationCompletedEvent()
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "true"))
+//                    eventsManager.sendRegistrationCompletedEvent()
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))
                 }
                 else -> {
                     Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, mutableMapOf<String, String>("success" to "false"))
+                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
                 }
             }
             progressData.endProgress()
         }
     }
 
+    private fun getCreateAccountEventData(isSuccess: Boolean, userId: Long? = null): Map<String, String> {
+        val data = mutableMapOf<String, String>("success" to if(isSuccess) "true" else "false")
+        data["user_id"] = userId.toString()
+        return data
+    }
 
 
 }

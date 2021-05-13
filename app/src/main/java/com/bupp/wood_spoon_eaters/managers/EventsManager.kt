@@ -15,6 +15,7 @@ import com.segment.analytics.Traits
 import com.uxcam.UXCam
 import java.math.BigDecimal
 import java.util.*
+import kotlin.math.log
 
 class EventsManager(val context: Context, private val sharedPreferences: SharedPreferences){
 
@@ -33,11 +34,9 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                     .putEmail(user.email)
                     .putPhone(user.phoneNumber)
                     .putValue("shipped Order Count", user.ordersCount)
-//                    .putValue("Last order made at", user.)
                 , null
             )
 
-//            val address = eaterDataManager.getLastChosenAddress()
             Log.d(TAG, "address: $address")
             address?.let{
                 Analytics.with(context).identify(
@@ -55,21 +54,21 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
-    fun sendAddToCart(orderId: Long?) {
-        if(shouldFireEvent) {
-            orderId?.let {
-                if (isFirstPurchase) {
-                    Log.d(TAG, "sendAddToCart")
-                    val bundle = Bundle()
-                    bundle.putString("OrderId", orderId.toString())
-
-                    val logger = AppEventsLogger.newLogger(context)
-                    logger.logEvent(Constants.EVENT_ADD_DISH, bundle)
-                    isFirstPurchase = false
-                }
-            }
-        }
-    }
+//    fun sendAddToCart(orderId: Long?) {
+//        if(shouldFireEvent) {
+//            orderId?.let {
+//                if (isFirstPurchase) {
+//                    Log.d(TAG, "sendAddToCart")
+//                    val bundle = Bundle()
+//                    bundle.putString("OrderId", orderId.toString())
+//
+//                    val logger = AppEventsLogger.newLogger(context)
+//                    logger.logEvent(Constants.EVENT_ADD_DISH, bundle)
+//                    isFirstPurchase = false
+//                }
+//            }
+//        }
+//    }
 
     fun sendPurchaseEvent(orderId: Long?, purchaseCost: Double) {
         if(shouldFireEvent){
@@ -89,20 +88,59 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
-    fun sendRegistrationCompletedEvent() {
+    private fun logFBAddToCart(eventData: Map<String, Any>?) {
         if(shouldFireEvent) {
-            Log.d(TAG, "sendRegistrationCompletedEvent")
+            Log.d(TAG, "logFBAddToCart")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
-            params.putString(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, "onboarding_finished")
-            logger.logEvent("onboarding_finished", params)
+
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("dish_name") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish")
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("dish_id") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
+            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, eventData?.get("dish_price").toString().toDouble(), params)
         }
     }
+
+    private fun logFBAddAdditionalToCart(eventData: Map<String, Any>?) {
+        if(shouldFireEvent) {
+            Log.d(TAG, "logFBAddAdditionalToCart")
+            val logger = AppEventsLogger.newLogger(context)
+            val params = Bundle()
+
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("dish_name") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish-Upsale")
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("dish_id") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
+            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, eventData?.get("dish_price").toString().toDouble(), params)
+        }
+    }
+
+    private fun logFBCreateAccount(eventData: Map<String, Any>?) {
+        if(shouldFireEvent) {
+            Log.d(TAG, "logFBAddAdditionalToCart")
+            val logger = AppEventsLogger.newLogger(context)
+            val params = Bundle()
+
+            params.putString("user_id", eventData?.get("user_id") as String?)
+            logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, params)
+        }
+    }
+
+//    fun sendRegistrationCompletedEvent() {
+//        if(shouldFireEvent) {
+//            Log.d(TAG, "sendRegistrationCompletedEvent")
+//            val logger = AppEventsLogger.newLogger(context)
+//            val params = Bundle()
+//            params.putString(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, "onboarding_finished")
+//            logger.logEvent("onboarding_finished", params)
+//        }
+//    }
 
 
     fun logOnDishClickEvent(dishId: String) {
         if(shouldFireEvent) {
-            Log.d(TAG, "sendRegistrationCompletedEvent")
+            Log.d(TAG, "logOnDishClickEvent")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
             params.putString("dish_id", dishId)
@@ -119,7 +157,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
     }
 
     fun logEvent(eventName: String, params: Map<String, Any>? = null){
-        Log.d(TAG, "logUxCamEvent: $eventName PARAMS: $params")
+        Log.d(TAG, "logEvent: $eventName PARAMS: $params")
         if(params != null ){
             UXCam.logEvent(eventName, params)
         }else{
@@ -136,12 +174,18 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             }
             Constants.EVENT_ADD_ADDITIONAL_DISH -> {
                 Analytics.with(context).track(Constants.EVENT_ADD_ADDITIONAL_DISH, eventData)
+                logFBAddAdditionalToCart(params)
             }
             Constants.EVENT_ADD_DISH -> {
                 Analytics.with(context).track(Constants.EVENT_ADD_DISH, eventData)
+                logFBAddToCart(params)
             }
             Constants.EVENT_SEARCHED_ITEM -> {
                 Analytics.with(context).track("search", eventData)
+            }
+            Constants.EVENT_CREATE_ACCOUNT -> {
+                Analytics.with(context).track("search", eventData)
+                logFBCreateAccount(params)
             }
             else -> {
                 Analytics.with(context).track(eventName, eventData)

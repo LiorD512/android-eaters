@@ -33,19 +33,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         listeners!!.add(listener)
     }
 
-    fun refreshToken(listener: FirebaseMessagingServiceListeners) {
-        setFCMListener(listener)
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
-            Log.d("wowFireBaseTokenService", "refreshed token: " + instanceIdResult.token)
-            if (listener != null) {
-                listener.onTokenRefreshed(instanceIdResult.token)
-            }
-        }
-    }
-
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
 
@@ -78,10 +67,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 listener.onTokenRefreshed(token)
             }
         }
-    }
-
-    private fun handleNow() {
-        Log.d(TAG, "Short lived task is done.")
     }
 
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -107,16 +108,16 @@ class NewOrderActivity : BaseActivity(),
         })
         viewModel.progressData.observe(this, {
             Log.d(TAG, "progressData observer: $it")
-            if(it){
+            if (it) {
                 newOrderActPb.show()
-            }else{
+            } else {
                 newOrderActPb.hide()
             }
         })
     }
 
     private fun showNewCartDialog(newCartEvent: NewOrderMainViewModel.NewCartDialog?) {
-        newCartEvent?.let{
+        newCartEvent?.let {
             val bundle = Bundle()
             bundle.putString(Constants.START_NEW_CART_IN_CART_COOK_NAME_ARG, it.inCartCookName)
             bundle.putString(Constants.START_NEW_CART_CURRENT_COOK_NAME_ARG, it.currentShowingCookName)
@@ -146,6 +147,7 @@ class NewOrderActivity : BaseActivity(),
     override fun onBottomBarCheckoutClick() {
         redirectToCheckout()
     }
+
     private fun redirectToCheckout() {
         viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT)
         viewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.PLACE_AN_ORDER, null, null)
@@ -169,8 +171,8 @@ class NewOrderActivity : BaseActivity(),
 //            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
             Log.d(TAG, "Stripe on activity result")
             viewModel.refreshPaymentsMethod(this)
-            }
         }
+    }
 
 
     private fun finishNewOrder() {
@@ -230,25 +232,15 @@ class NewOrderActivity : BaseActivity(),
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-////        updateUI()
-//    }
+    override fun onBackPressed() {
+        if (viewModel.isCheckout) {
+            viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
+        } else {
+            super.onBackPressed()
+        }
+    }
 
 
-//    private fun updateUI() {
-//        val decorView = window.decorView
-//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//            }
-//        }
-//    }
 
 
 }
