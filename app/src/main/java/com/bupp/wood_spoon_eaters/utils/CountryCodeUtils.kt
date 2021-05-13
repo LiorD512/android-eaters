@@ -112,9 +112,10 @@ object CountryCodeUtils {
             }
     }
 
-    fun simplifyNumber(context: Context, phoneStr: String): String? {
+    fun simplifyNumber(context: Context, phoneStr: String): String {
         val phoneNumberKit = PhoneNumberKit(context)
-        return phoneNumberKit.formatPhoneNumber(phoneStr, "us")?.replace("+","")
+//        return phoneNumberKit.formatPhoneNumber(phoneStr, "us")?.replace("+","")?.replace(" ","")
+        return phoneStr.replace("+","").replace(" ","").replace("(","").replace(")","").replace("-","")
     }
 
     fun isPhoneValid(phone: String?): Boolean{

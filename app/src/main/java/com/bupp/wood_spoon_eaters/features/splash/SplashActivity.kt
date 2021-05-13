@@ -99,6 +99,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
     private fun redirectToMain() {
         Log.d("wowSplash", "redirectToMain")
+        viewModel.initFCMAndRefreshToken()
         val intent = Intent(this, MainActivity::class.java)
         cookId?.let {
             intent.putExtra("cook_id", it.toLong())

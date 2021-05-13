@@ -32,7 +32,7 @@ class MainViewModel(
 
     init {
         eaterDataManager.refreshSegment()
-        fcmManager.initFcmListener()
+//        fcmManager.initFcmListener()
     }
 
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()

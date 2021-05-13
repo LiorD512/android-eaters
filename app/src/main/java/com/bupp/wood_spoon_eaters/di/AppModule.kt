@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.di
 
+import com.bupp.wood_spoon_chef.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
@@ -83,7 +84,8 @@ val appModule = module {
     viewModel { AddressMenuViewModel(get(), get(), get()) }
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SuperUserViewModel(get()) }
 
     //login
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }
