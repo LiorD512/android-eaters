@@ -10,45 +10,46 @@ import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.databinding.FragmentSupportBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.segment.analytics.Analytics
-import kotlinx.android.synthetic.main.fragment_support.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {
+class SupportFragment : Fragment(R.layout.fragment_support), InputTitleView.InputTitleViewListener {
 
+    lateinit var binding: FragmentSupportBinding
     val viewModel by viewModel<SupportViewModel>()
 
     companion object {
         fun newInstance() = SupportFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_support, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentSupportBinding.bind(view)
         Analytics.with(requireContext()).screen("Support center")
 
         initUI()
     }
 
     private fun initUI() {
-        supportDialogNext.setBtnEnabled(false)
-        supportDialogCommentInput.setInputTitleViewListener(this)
+        with(binding){
+            supportDialogNext.setBtnEnabled(false)
+            supportDialogCommentInput.setInputTitleViewListener(this@SupportFragment)
 
-        supportDialogCallButton.setOnClickListener {
-            (activity as MainActivity).onContactUsClick()
+            supportDialogCallButton.setOnClickListener {
+                (activity as MainActivity).onContactUsClick()
+            }
+            supportDialogTextButton.setOnClickListener {
+                (activity as MainActivity).sendSmsText()
+            }
+            supportDialogQA.setOnClickListener{ openQaUrl()}
+            supportDialogNext.setOnClickListener { sendMail() }
         }
-        supportDialogTextButton.setOnClickListener {
-            (activity as MainActivity).sendSmsText()
-        }
-        supportDialogQA.setOnClickListener{ openQaUrl()}
-        supportDialogNext.setOnClickListener { sendMail() }
     }
 
     private fun openQaUrl() {
@@ -56,7 +57,7 @@ class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {
     }
 
     private fun sendMail() {
-        val text = supportDialogCommentInput.getText()
+        val text = binding.supportDialogCommentInput.getText()
         val address = viewModel.getAdminMailAddress()
 
         val selectorIntent = Intent(Intent.ACTION_SENDTO)
@@ -72,10 +73,12 @@ class SupportFragment : Fragment(), InputTitleView.InputTitleViewListener {
     }
 
     override fun onInputTitleChange(str: String?) {
-        if (supportDialogCommentInput.isValid()) {
-            supportDialogNext.setBtnEnabled(true)
-        } else {
-            supportDialogNext.setBtnEnabled(false)
+        with(binding){
+            if (supportDialogCommentInput.isValid()) {
+                supportDialogNext.setBtnEnabled(true)
+            } else {
+                supportDialogNext.setBtnEnabled(false)
+            }
         }
     }
 }

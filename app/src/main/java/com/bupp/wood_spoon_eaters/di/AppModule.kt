@@ -2,9 +2,8 @@ package com.bupp.wood_spoon_eaters.di
 
 import com.bupp.wood_spoon_chef.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.common.AppSettings
-import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
+import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
-import com.bupp.wood_spoon_eaters.dialogs.payment_methods.PaymentMethodsViewModel
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
@@ -118,7 +117,6 @@ val appModule = module {
     viewModel { OrderDetailsViewModel(get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
 
-    viewModel { PaymentMethodsViewModel(get()) }
     viewModel { UpdateRequiredViewModel(get()) }
 
     viewModel { ActiveOrderTrackerViewModel(get(), get(), get()) }

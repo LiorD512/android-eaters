@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.address_missing_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.AddressMissingDialogBinding
 
 class AddressMissingDialog(val listener: AddressMissingDialogListener) : DialogFragment() {
 
+    lateinit var binding: AddressMissingDialogBinding
     interface AddressMissingDialogListener {
         fun openUpdateAddress()
     }
@@ -29,15 +30,17 @@ class AddressMissingDialog(val listener: AddressMissingDialogListener) : DialogF
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = AddressMissingDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        addressmissingUpdateBtn.setOnClickListener {
+        binding.addressmissingUpdateBtn.setOnClickListener {
             listener.openUpdateAddress()
             dismiss()
         }
-        caddressmissingCloseBtn.setOnClickListener { dismiss()}
+        binding.caddressmissingCloseBtn.setOnClickListener { dismiss()}
     }
 
 }

@@ -6,13 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
@@ -20,19 +17,19 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrac
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderProgressBinder
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.TrackOrderFragmentBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import kotlinx.android.synthetic.main.track_order_dialog.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
+class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     CancelOrderDialog.CancelOrderDialogListener, TrackOrderProgressBinder.TrackOrderProgressListener, OnMapReadyCallback {
 
+    lateinit var binding: TrackOrderFragmentBinding
     private var mMap: GoogleMap? = null
     var curOrderId: Long? = null
     var listener: TrackOrderDialogListener? = null
@@ -73,6 +70,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         curOrderId = requireArguments().getLong(CUR_ORDER_ID_PARAM)
         Log.d("wowTrackOrderFragment", "newInstance ARGS: $curOrderId")
     }
@@ -81,7 +79,8 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        initBtns()
+        binding = TrackOrderFragmentBinding.bind(view)
+
         initUi()
         initMap()
         initUpdateObserver()
@@ -232,7 +231,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
         order: Order,
         userInfo: OrderUserInfo?){
         mainAdapter.updateUi(order, userInfo)
-        trackOrderDialogList.scrollToPosition(0)
+        binding.trackOrderDialogList.scrollToPosition(0)
     }
 
     override fun onOrderCanceled() {
@@ -240,12 +239,14 @@ class TrackOrderFragment : Fragment(R.layout.track_order_dialog),
     }
 
     private fun initUi() {
-        Log.d("wowTrackOrderFragment","initUing now")
-        mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this)
-        trackOrderDialogList.layoutManager = LinearLayoutManager(requireContext())
-        trackOrderDialogList.adapter = mainAdapter
+        with(binding){
+            Log.d("wowTrackOrderFragment","initUing now")
+            mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this@TrackOrderFragment)
+            trackOrderDialogList.layoutManager = LinearLayoutManager(requireContext())
+            trackOrderDialogList.adapter = mainAdapter
 
-        trackOrderDialogCloseBtn.setOnClickListener { listener?.onCloseClick() }
+            trackOrderDialogCloseBtn.setOnClickListener { listener?.onCloseClick() }
+        }
     }
 
     override fun onAttach(context: Context) {

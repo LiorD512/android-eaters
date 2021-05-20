@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import kotlinx.android.synthetic.main.contact_us_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.ContactUsDialogBinding
 
 class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() {
 
+    lateinit var binding: ContactUsDialogBinding
     interface ContactUsDialogListener{
         fun onCallSupportClick()
         fun onSmsSupportClick()
@@ -31,19 +31,23 @@ class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = ContactUsDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        contactUsDialogCloseBtn.setOnClickListener { dismiss() }
-        contactUsDialogCallBtn.setOnClickListener {
-            listener.onCallSupportClick()
-            dismiss()
+        with(binding){
+            contactUsDialogCloseBtn.setOnClickListener { dismiss() }
+            contactUsDialogCallBtn.setOnClickListener {
+                listener.onCallSupportClick()
+                dismiss()
+            }
+            contactUsDialogSmsBtn.setOnClickListener {
+                listener.onSmsSupportClick()
+                dismiss()
+            }
+            contactUsDialogLayout.setOnClickListener { dismiss() }
         }
-        contactUsDialogSmsBtn.setOnClickListener {
-            listener.onSmsSupportClick()
-            dismiss()
-        }
-        contactUsDialogLayout.setOnClickListener { dismiss() }
     }
 }

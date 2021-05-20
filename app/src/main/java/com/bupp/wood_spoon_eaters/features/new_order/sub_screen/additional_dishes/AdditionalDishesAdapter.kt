@@ -27,15 +27,23 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+
         return when (viewType) {
             VIEW_TYPE_ADDITIONAL_HEADER -> {
-                 AdditionalHeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dish_item_header, parent, false))
+                val binding = AdditionalDishItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                AdditionalHeaderViewHolder(binding)
+//                 AdditionalHeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dish_item_header, parent, false))
             }
             VIEW_TYPE_ORDER_ITEM -> {
-                OrderItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_dialog_item_order_item, parent, false))
+                val binding = AdditionalDishesDialogItemOrderItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                OrderItemViewHolder(binding)
+//                OrderItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_dialog_item_order_item, parent, false))
             }
             else -> { // VIEW_TYPE_ADDITIONAL
-                DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_dialog_item_dish, parent, false))
+                val binding = AdditionalDishesDialogItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                DishItemViewHolder(binding)
+//                DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_dialog_item_dish, parent, false))
             }
         }
     }
@@ -82,13 +90,12 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         listener.onDishCountChange(orderItem, isOrderItemsEmpty)
     }
 
-    class AdditionalHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = AdditionalDishItemHeaderBinding.bind(view)
+    class AdditionalHeaderViewHolder(binding: AdditionalDishItemHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
         val body: TextView = binding.additionalHeaderBody
     }
 
-    class OrderItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = AdditionalDishesDialogItemOrderItemBinding.bind(view)
+    class OrderItemViewHolder(binding: AdditionalDishesDialogItemOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
+//        val binding = AdditionalDishesDialogItemOrderItemBinding.bind(view)
         val plusMinusView: PlusMinusView = binding.orderItemPlusMinus
         private val name: TextView = binding.orderItemName
         private val price: TextView = binding.orderItemPrice
@@ -103,8 +110,8 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         }
     }
 
-    class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = AdditionalDishesDialogItemDishBinding.bind(view)
+    class DishItemViewHolder(binding: AdditionalDishesDialogItemDishBinding) : RecyclerView.ViewHolder(binding.root) {
+//        val binding = AdditionalDishesDialogItemDishBinding.bind(view)
         private val addBtn: TextView = binding.additionalDishAddBtn
         private val price: TextView = binding.additionalDishPrice
         private val name: TextView = binding.additionalDishName

@@ -12,8 +12,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.CancelOrderDialogLayoutBinding
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
-import kotlinx.android.synthetic.main.cancel_order_dialog_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
@@ -22,6 +22,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
         fun onOrderCanceled()
     }
 
+    lateinit var binding: CancelOrderDialogLayoutBinding
     var listener: CancelOrderDialogListener? = null
     val viewModel: CancelOrderViewModel by viewModel<CancelOrderViewModel>()
 
@@ -38,45 +39,50 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = CancelOrderDialogLayoutBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
-        cancelOrderDialogKeepBtn.setOnClickListener { dismiss() }
-        cancelOrderDialogCancelBtn.setOnClickListener { cancelOrder() }
+        with(binding){
+            cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
+            cancelOrderDialogKeepBtn.setOnClickListener { dismiss() }
+            cancelOrderDialogCancelBtn.setOnClickListener { cancelOrder() }
 
-        when(type){
-            Constants.CANCEL_ORDER_STAGE_1 -> {
-                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
-                cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_1_body)
-//                cancelOrderDialogReason.visibility = View.VISIBLE
+            when(type){
+                Constants.CANCEL_ORDER_STAGE_1 -> {
+                    cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
+                    cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_1_body)
+    //                cancelOrderDialogReason.visibility = View.VISIBLE
+                }
+                Constants.CANCEL_ORDER_STAGE_2 -> {
+                    cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_2_title)
+                    cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_2_body)
+    //                cancelOrderDialogReason.visibility = View.GONE
+                }
+                Constants.CANCEL_ORDER_STAGE_3 -> {
+                    cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
+                    cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_3_body)
+    //                cancelOrderDialogReason.visibility = View.GONE
+                }
             }
-            Constants.CANCEL_ORDER_STAGE_2 -> {
-                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_2_title)
-                cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_2_body)
-//                cancelOrderDialogReason.visibility = View.GONE
-            }
-            Constants.CANCEL_ORDER_STAGE_3 -> {
-                cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
-                cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_3_body)
-//                cancelOrderDialogReason.visibility = View.GONE
-            }
+
+            viewModel.cancelOrder.observe(viewLifecycleOwner, {cancelOrderEvent ->
+                cancelOrderPb.hide()
+                if(cancelOrderEvent){
+                    listener?.onOrderCanceled()
+                    dismiss()
+                }else{
+                    Toast.makeText(context, "Problem canceling order", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
-        viewModel.cancelOrder.observe(viewLifecycleOwner, {cancelOrderEvent ->
-            cancelOrderPb.hide()
-            if(cancelOrderEvent){
-                listener?.onOrderCanceled()
-                dismiss()
-            }else{
-                Toast.makeText(context, "Problem canceling order", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun cancelOrder() {
-        cancelOrderPb.show()
+        binding.cancelOrderPb.show()
         val note = ""//cancelOrderDialogReason.getText()
         viewModel.cancelOrder(orderId, note)
     }

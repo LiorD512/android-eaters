@@ -3,29 +3,25 @@ package com.bupp.wood_spoon_eaters.features.main
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
-import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
@@ -38,22 +34,14 @@ import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
-import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
-import it.sephiroth.android.library.xtooltip.ClosePolicy
-import it.sephiroth.android.library.xtooltip.Tooltip
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
@@ -63,8 +51,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener {
 
-    private var tooltip: Tooltip? = null
-
+//    private var tooltip: Tooltip? = null
+    lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
 
     //    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
@@ -74,7 +62,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
         Log.d("wowMain", "Activity For Result - location")
-        mainActHeaderView.enableLocationClick(true)
+        binding.mainActHeaderView.enableLocationClick(true)
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             //check if location changed and refresh ui
@@ -116,39 +104,17 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
                 override fun onRateClickListener() {
                     Log.d(TAG, "showRateTheAppDialog - onRateClickListener")
-                    // Will be called when a click on the "Rate" button is triggered
-
-//        val reviewManager = ReviewManagerFactory.create(this@MainActivity)
-//        val requestReviewFlow = reviewManager.requestReviewFlow()
-//        requestReviewFlow.addOnCompleteListener { request ->
-//            if (request.isSuccessful) {
-//                // We got the ReviewInfo object
-//                val reviewInfo = request.result
-//                val flow = reviewManager.launchReviewFlow(this@MainActivity, reviewInfo)
-//                flow.addOnCompleteListener {
-//                    // The flow has finished. The API does not indicate whether the user
-//                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-//                    // matter the result, we continue our app flow.
-//                }
-//            } else {
-//                Log.d(TAG, "Error: ${request.exception.toString()}")
-//                // There was some problem, continue regardless of the result.
-//            }
-//        }
                 }
-
-                /*override fun onNoClickListener() {
-                    // Will be called when a click on the "No thanks" button is triggered,
-                    // in this example is commented,
-                    // but each callback is optional and it's up to you whether to implement it or not!
-                }*/
             }
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_main)
 
         initObservers()
         initUi()
@@ -157,10 +123,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
         loadFeedProgressBarFragment()
         loadFeed()
-
-//        viewModel.test()
-
-
     }
 
     private fun loadFeedProgressBarFragment() {
@@ -174,8 +136,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ////////////////////////////////////////////////
 
     private fun initUi() {
-        mainActHeaderView.setHeaderViewListener(this, viewModel.getCurrentEater())
-        mainActOrdersBB.setCartBottomBarListener(this)
+        with(binding){
+            mainActHeaderView.setHeaderViewListener(this@MainActivity, viewModel.getCurrentEater())
+            mainActOrdersBB.setCartBottomBarListener(this@MainActivity)
+        }
     }
 
     private fun initUiRelatedProcesses() {
@@ -230,10 +194,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
         //header event
         viewModel.getFinalAddressParams().observe(this, {
-            mainActHeaderView.setLocationTitle(it?.shortTitle)
+            binding.mainActHeaderView.setLocationTitle(it?.shortTitle)
         })
         viewModel.getDeliveryTimeLiveData().observe(this, {
-            mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
+            binding.mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
         })
 
         viewModel.dishClickEvent.observe(this, Observer {
@@ -316,14 +280,14 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {
         if(bottomBarEvent?.hasBoth == true){
             val totalPrice = bottomBarEvent.totalPrice
-                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT, price = totalPrice)
+            binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT, price = totalPrice)
         }else{
             bottomBarEvent?.activeOrders?.let{
-                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, itemCount = it.size)
+                binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, itemCount = it.size)
             }
             if(bottomBarEvent?.hasPendingOrder == true){
                 val totalPrice = bottomBarEvent.totalPrice
-                mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = totalPrice)
+                binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = totalPrice)
             }
         }
     }
@@ -400,32 +364,32 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun loadFeed() {
         loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
     }
 
     private fun loadSearchFragment() {
         loadFragment(SearchFragment.newInstance(), Constants.SEARCH_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_SEARCH)
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_SEARCH)
     }
 
     fun loadMyProfile() {
         loadFragment(MyProfileFragment.newInstance(), Constants.MY_PROFILE_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS, "My Account")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS, "My Account")
     }
 
     fun loadEditMyProfile() {
         loadFragment(EditMyProfileFragment.newInstance(), Constants.EDIT_MY_PROFILE_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Hey ${viewModel.getUserName()}!")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Hey ${viewModel.getUserName()}!")
     }
 
     fun loadSupport() {
         loadFragment(SupportFragment.newInstance(), Constants.SUPPORT_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
     }
 
     fun loadReport(orderId: Long) {
         loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Report issue")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Report issue")
     }
 
     fun loadRateOrder(orderId: Long) {
@@ -441,18 +405,18 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     fun loadOrderDetails(orderId: Long) {
         loadFragment(OrderDetailsFragment.newInstance(orderId), Constants.ORDER_DETAILS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order Details")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order Details")
     }
 
 
     fun loadSettingsFragment() {
         loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
     }
 
     fun loadOrderHistoryFragment() {
         loadFragment(OrdersHistoryFragment.newInstance(), Constants.ORDER_HISTORY_TAG)
-        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order History")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order History")
     }
 
 
@@ -551,7 +515,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun onHeaderAddressClick() {
         updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
-        mainActHeaderView.enableLocationClick(false)
+        binding.mainActHeaderView.enableLocationClick(false)
     }
 
 
@@ -562,7 +526,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     fun setHeaderViewSaveBtnClickable(isClickable: Boolean) {
-        mainActHeaderView.setSaveButtonClickable(isClickable)
+        binding.mainActHeaderView.setSaveButtonClickable(isClickable)
     }
 
 
@@ -598,7 +562,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             Constants.DELIVERY_DETAILS_TAG -> {
                 when (lastFragmentTag) {
                     Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
-                        mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
+                        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
                     }
                     else -> {
 //                        updateAddressTimeView()
@@ -619,7 +583,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     fun updateSearchBarTitle(str: String) {
-        mainActHeaderView.updateSearchTitle(str)
+        binding.mainActHeaderView.updateSearchTitle(str)
     }
 
     fun startPaymentMethodActivity() {
@@ -631,7 +595,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     fun updateFilterUi(isFiltered: Boolean) {
-        mainActHeaderView.updateFilterUi(isFiltered)
+        binding.mainActHeaderView.updateFilterUi(isFiltered)
     }
 
 
@@ -641,7 +605,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     fun refreshUserUi() {
-        mainActHeaderView.refreshUserUi(viewModel.getCurrentEater())
+        binding.mainActHeaderView.refreshUserUi(viewModel.getCurrentEater())
     }
 
     companion object{

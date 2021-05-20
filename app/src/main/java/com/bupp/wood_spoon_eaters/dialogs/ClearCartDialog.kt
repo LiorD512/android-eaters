@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.clear_cart_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.ClearCartDialogBinding
 
 class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() {
 
+    lateinit var binding: ClearCartDialogBinding
     interface ClearCartDialogListener {
         fun onClearCart()
         fun onCancelClearCart(){}
@@ -30,20 +31,24 @@ class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = ClearCartDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        clearCartDialogYesBtn.setOnClickListener {
-            listener.onClearCart()
-            dismiss()
-        }
-        clearCartDialogCloseBtn.setOnClickListener {
-            listener.onCancelClearCart()
-            dismiss()}
-        clearCartDialogNoBtn.setOnClickListener {
-            listener.onCancelClearCart()
-            dismiss()
+        with(binding){
+            clearCartDialogYesBtn.setOnClickListener {
+                listener.onClearCart()
+                dismiss()
+            }
+            clearCartDialogCloseBtn.setOnClickListener {
+                listener.onCancelClearCart()
+                dismiss()}
+            clearCartDialogNoBtn.setOnClickListener {
+                listener.onCancelClearCart()
+                dismiss()
+            }
         }
 
     }

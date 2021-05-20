@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.tip_courier_dialog_layout.*
+import com.bupp.wood_spoon_eaters.databinding.TipCourierDialogLayoutBinding
 
 class TipCourierDialog(val listener: TipCourierDialogListener) : DialogFragment() {
 
+    lateinit var binding: TipCourierDialogLayoutBinding
     interface TipCourierDialogListener {
         fun onTipDone(tipAmount: Int)
     }
@@ -22,27 +23,31 @@ class TipCourierDialog(val listener: TipCourierDialogListener) : DialogFragment(
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.tip_courier_dialog_layout, null)
+        val view = inflater.inflate(R.layout.tip_courier_dialog_layout, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = TipCourierDialogLayoutBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        tipCourierDialogCloseBtn.setOnClickListener { dismiss() }
-        tipCourierDialogDoneBtn.setOnClickListener {
-            val enteredAmountStr = tipCourierDialogTipAmount.text.toString()
-            var enteredAmount = 0
+        with(binding){
+            tipCourierDialogCloseBtn.setOnClickListener { dismiss() }
+            tipCourierDialogDoneBtn.setOnClickListener {
+                val enteredAmountStr = tipCourierDialogTipAmount.text.toString()
+                var enteredAmount = 0
 
-            if (enteredAmountStr.isNotEmpty()) {
-                enteredAmount = Integer.parseInt(enteredAmountStr)
+                if (enteredAmountStr.isNotEmpty()) {
+                    enteredAmount = Integer.parseInt(enteredAmountStr)
+                }
+                listener.onTipDone(enteredAmount)
+                dismiss()
             }
-            listener.onTipDone(enteredAmount)
-            dismiss()
         }
     }
 }

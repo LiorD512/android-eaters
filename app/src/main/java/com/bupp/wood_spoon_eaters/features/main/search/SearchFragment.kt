@@ -20,15 +20,16 @@ import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.segment.analytics.Analytics
-import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
+class SearchFragment : Fragment(R.layout.fragment_search), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
     FilterFragment.FilterFragmentListener, CookProfileDialog.CookProfileDialogListener {
 
+    lateinit var binding: FragmentSearchBinding
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     companion object {
@@ -43,13 +44,10 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     private lateinit var adapter: SearchAdapter
     val viewModel: SearchViewModel by viewModel<SearchViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentSearchBinding.bind(view)
         Analytics.with(requireContext()).screen("Search")
 
         initUi()
@@ -59,7 +57,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     private fun initObservers() {
         viewModel.searchEvent.observe(viewLifecycleOwner, { event ->
             if(event != null){
-                searchFragPb.hide()
+                binding.searchFragPb.hide()
                 if(event.isSuccess){
                     var haveCooks = false
                     var haveDishes = false
@@ -83,7 +81,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
 
         viewModel.nextSearchEvent.observe(viewLifecycleOwner, { event ->
             if(event != null){
-                searchFragPb.hide()
+                binding.searchFragPb.hide()
                 if(event.isSuccess){
                     if(event.searchResponse != null){
 //                        ingredientsAdapter.updateSearchData(event.searchId, event.searchResponse)
@@ -122,14 +120,16 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
 
 
     private fun initUi() {
-        itemDecor = GridItemDecoration(15.dpToPx(), 2)
-        searchFragList.addItemDecoration(itemDecor)
-        adapter = SearchAdapter(requireContext(), viewModel.getCuisineLabels(), this)
-        searchFragList.adapter = adapter
-        showListLayout(SEARCH_LIST_TYPE_CUISINE)
+        with(binding){
+            itemDecor = GridItemDecoration(15.dpToPx(), 2)
+            searchFragList.addItemDecoration(itemDecor)
+            adapter = SearchAdapter(requireContext(), viewModel.getCuisineLabels(), this@SearchFragment)
+            searchFragList.adapter = adapter
+            showListLayout(SEARCH_LIST_TYPE_CUISINE)
 
-        searchFragSoundsGood.setOnClickListener {
-            NewDishSuggestionDialog(this, query).show(childFragmentManager, Constants.OFFER_DISH_TAG)
+            searchFragSoundsGood.setOnClickListener {
+                NewDishSuggestionDialog(this@SearchFragment, query).show(childFragmentManager, Constants.OFFER_DISH_TAG)
+            }
         }
     }
 
@@ -138,25 +138,27 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     }
 
     private fun showListLayout(type: Int) {
-        searchFragList.visibility = View.VISIBLE
-        searchFragEmptyLayout.visibility = View.GONE
-        when(type){
-            SEARCH_LIST_TYPE_CUISINE -> {
-                searchFragList.layoutManager = GridLayoutManager(context,2)
-                itemDecor.setDecorType(0)
-                searchFragList.requestLayout()
-            }
-            SEARCH_LIST_TYPE_RESULT -> {
-                searchFragList.layoutManager = LinearLayoutManager(context)
-                itemDecor.setDecorType(1)
-                searchFragList.requestLayout()
+        with(binding){
+            searchFragList.visibility = View.VISIBLE
+            searchFragEmptyLayout.visibility = View.GONE
+            when(type){
+                SEARCH_LIST_TYPE_CUISINE -> {
+                    searchFragList.layoutManager = GridLayoutManager(context,2)
+                    itemDecor.setDecorType(0)
+                    searchFragList.requestLayout()
+                }
+                SEARCH_LIST_TYPE_RESULT -> {
+                    searchFragList.layoutManager = LinearLayoutManager(context)
+                    itemDecor.setDecorType(1)
+                    searchFragList.requestLayout()
+                }
             }
         }
     }
 
     private fun showEmptyLayout() {
-        searchFragList.visibility = View.GONE
-        searchFragEmptyLayout.visibility = View.VISIBLE
+        binding.searchFragList.visibility = View.GONE
+        binding.searchFragEmptyLayout.visibility = View.VISIBLE
     }
 
     fun onSearchInputChanged(str: String) {
@@ -167,7 +169,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
             showListLayout(SEARCH_LIST_TYPE_CUISINE)
             viewModel.clearSearchQuery()
         }else{
-            searchFragPb.show()
+            binding.searchFragPb.show()
             viewModel.search(query)
         }
     }
@@ -202,7 +204,7 @@ class SearchFragment : Fragment(), SearchAdapter.SearchAdapterListener, NewDishS
     }
 
     override fun onFilterDone(isFiltered: Boolean) {
-        searchFragPb.show()
+        binding.searchFragPb.show()
         (activity as MainActivity).updateFilterUi(isFiltered)
         viewModel.search(query)
     }

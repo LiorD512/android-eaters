@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.logout_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.ContactUsDialogBinding
+import com.bupp.wood_spoon_eaters.databinding.LogoutDialogBinding
 
 class LogoutDialog(val listener: LogoutDialogListener) : DialogFragment(){
 
+    lateinit var binding: LogoutDialogBinding
     interface LogoutDialogListener{
         fun logout()
     }
@@ -29,16 +31,20 @@ class LogoutDialog(val listener: LogoutDialogListener) : DialogFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = LogoutDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        logoutDialogBkg.setOnClickListener{
-            dismiss()}
-        logoutDialogLogout.setOnClickListener{
-            listener.logout()}
-        logoutDialogCancel.setOnClickListener{
-            dismiss()}
+        with(binding){
+            logoutDialogBkg.setOnClickListener{
+                dismiss()}
+            logoutDialogLogout.setOnClickListener{
+                listener.logout()}
+            logoutDialogCancel.setOnClickListener{
+                dismiss()}
+        }
 
     }
 

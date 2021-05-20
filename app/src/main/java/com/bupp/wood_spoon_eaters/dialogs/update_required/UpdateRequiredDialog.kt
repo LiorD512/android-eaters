@@ -10,12 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.update_required_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.UpdateRequiredDialogBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class UpdateRequiredDialog : DialogFragment() {
 
+    lateinit var binding: UpdateRequiredDialogBinding
     val viewModel by viewModel<UpdateRequiredViewModel>()
     interface UpdateRequiredDialogListener {
         fun onUpdateApp(url: String)
@@ -33,27 +34,26 @@ class UpdateRequiredDialog : DialogFragment() {
         setStyle(STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
     }
 
-    private fun initUi() {
-        viewModel.getDialogData()
-
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initUi()
+
+        binding = UpdateRequiredDialogBinding.bind(view)
+
         initObserver()
+        viewModel.getDialogData()
     }
 
     private fun initObserver() {
-        viewModel.updateRequiredEvent.observe(this, Observer{event ->
-            updateDialogTitle.text = event.title
-            updateDialogBody.text = event.body
+        with(binding){
+            viewModel.updateRequiredEvent.observe(this@UpdateRequiredDialog, {event ->
+                updateDialogTitle.text = event.title
+                updateDialogBody.text = event.body
 
-            updateDialogBtn.setOnClickListener {
-                listener?.onUpdateApp(event.redirectUrl)
-            }
-        })
+                updateDialogBtn.setOnClickListener {
+                    listener?.onUpdateApp(event.redirectUrl)
+                }
+            })
+        }
     }
 
     override fun onAttach(context: Context) {

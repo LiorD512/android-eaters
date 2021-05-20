@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.OrderDetailsFragmentBinding
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import kotlinx.android.synthetic.main.order_details_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OrderDetailsFragment() : Fragment() {
+class OrderDetailsFragment : Fragment(R.layout.order_details_fragment) {
 
+    lateinit var binding: OrderDetailsFragmentBinding
     private lateinit var adapter: OrderDetailsAdapter
     val viewModel by viewModel<OrderDetailsViewModel>()
     private var orderId: Long = -1
@@ -39,80 +40,81 @@ class OrderDetailsFragment() : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.order_details_fragment, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = OrderDetailsFragmentBinding.bind(view)
 
         initUi()
     }
 
     private fun initUi() {
+        with(binding){
+            viewModel.orderDetails.observe(this@OrderDetailsFragment, Observer { orderDetails ->
+                orderHistoryPb.hide()
+                if (orderDetails.isSuccess) {
+                    handleOrderItems(orderDetails.order!!)
+                }
+            })
 
-        viewModel.orderDetails.observe(this, Observer { orderDetails ->
-            orderHistoryPb.hide()
-            if (orderDetails.isSuccess) {
-                handleOrderItems(orderDetails.order!!)
-            }
-        })
-
-        orderHistoryPb.show()
-        viewModel.getOrderDetails(orderId)
+            orderHistoryPb.show()
+            viewModel.getOrderDetails(orderId)
+        }
 
     }
 
     private fun handleOrderItems(curOrder: Order) {
-        orderDetailsFragDishesRecycler.layoutManager = LinearLayoutManager(context)
-        adapter = OrderDetailsAdapter(requireContext(), curOrder.orderItems!!)
+        with(binding){
+            orderDetailsFragDishesRecycler.layoutManager = LinearLayoutManager(context)
+            adapter = OrderDetailsAdapter(requireContext(), curOrder.orderItems!!)
 
 
-        var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
-        orderDetailsFragDishesRecycler.addItemDecoration(divider)
+            var divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
+            orderDetailsFragDishesRecycler.addItemDecoration(divider)
 
-        orderDetailsFragDishesRecycler.adapter = adapter
+            orderDetailsFragDishesRecycler.adapter = adapter
 
-        val firstOrderItem = curOrder.orderItems.first()
-        Glide.with(requireContext()).load(firstOrderItem.dish.thumbnail).into(orderDetailsFragDishImage)
+            val firstOrderItem = curOrder.orderItems.first()
+            Glide.with(requireContext()).load(firstOrderItem.dish.thumbnail).into(orderDetailsFragDishImage)
 
-        val tax: Double? = curOrder.tax?.value
-        val serviceFee = curOrder.serviceFee?.value
-        val deliveryFee = curOrder.deliveryFee?.value
-        val discount = curOrder.discount?.value
-        val smallOrderFee = curOrder.minPrice?.value
+            val tax: Double? = curOrder.tax?.value
+            val serviceFee = curOrder.serviceFee?.value
+            val deliveryFee = curOrder.deliveryFee?.value
+            val discount = curOrder.discount?.value
+            val smallOrderFee = curOrder.minPrice?.value
 
-        orderDetailsFragTax.text = "$$tax"
-        orderDetailsFragServiceFee.text = "$$serviceFee"
-        orderDetailsFragDeliveryFee.text = "$$deliveryFee"
+            orderDetailsFragTax.text = "$$tax"
+            orderDetailsFragServiceFee.text = "$$serviceFee"
+            orderDetailsFragDeliveryFee.text = "$$deliveryFee"
 
-        smallOrderFee?.let{
-            if(it > 0){
-                orderDetailsSmallOrderFeeLayout.visibility = View.VISIBLE
-                orderDetailsSmallOrderFeeSep.visibility = View.VISIBLE
-                orderDetailsSmallOrderFee.text = "$$it"
+            smallOrderFee?.let{
+                if(it > 0){
+                    orderDetailsSmallOrderFeeLayout.visibility = View.VISIBLE
+                    orderDetailsSmallOrderFeeSep.visibility = View.VISIBLE
+                    orderDetailsSmallOrderFee.text = "$$it"
+                }
             }
-        }
 
-        orderDetailsFragPromoDiscount.text = "$$discount" //todo - add this when server ready
-        orderDetailsFragOrderId.text = "${curOrder.orderNumber}"
+            orderDetailsFragPromoDiscount.text = "$$discount" //todo - add this when server ready
+            orderDetailsFragOrderId.text = "${curOrder.orderNumber}"
 
-        orderDetailsFragCookName.text = "By cook ${curOrder.cook?.getFullName()}"
+            orderDetailsFragCookName.text = "By cook ${curOrder.cook?.getFullName()}"
 
-        if(curOrder.estDeliveryTime != null){
-            val date = DateUtils.parseDateToUsDate(curOrder.estDeliveryTime)
-            val time = DateUtils.parseDateToUsTime(curOrder.estDeliveryTime)
-            orderDetailsFragOrderDate.text = "$date at $time"
-        }else{
-            orderDetailsFragOrderDate.text = "${curOrder.estDeliveryTimeText}"
-        }
+            if(curOrder.estDeliveryTime != null){
+                val date = DateUtils.parseDateToUsDate(curOrder.estDeliveryTime)
+                val time = DateUtils.parseDateToUsTime(curOrder.estDeliveryTime)
+                orderDetailsFragOrderDate.text = "$date at $time"
+            }else{
+                orderDetailsFragOrderDate.text = "${curOrder.estDeliveryTimeText}"
+            }
 
-        orderDetailsFragTotalPrice.text = curOrder.total?.formatedValue
+            orderDetailsFragTotalPrice.text = curOrder.total?.formatedValue
 
-        if(curOrder.status.equals("cancelled")){
-            orderDetailsStatus.text = "Order Cancelled"
-            orderDetailsStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            if(curOrder.status.equals("cancelled")){
+                orderDetailsStatus.text = "Order Cancelled"
+                orderDetailsStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            }
         }
 
 

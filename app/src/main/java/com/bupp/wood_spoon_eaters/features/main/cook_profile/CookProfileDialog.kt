@@ -19,8 +19,8 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.CookProfileDialogBinding
 import com.bupp.wood_spoon_eaters.views.UserImageView
-import kotlinx.android.synthetic.main.cook_profile_dialog.*
 import kotlinx.android.synthetic.main.cook_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,6 +31,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
         fun onDishClick(menuItemId: Long)
     }
 
+    lateinit var binding: CookProfileDialogBinding
     private var dishAdapter: CooksProfileDishesAdapter? = null
     val viewModel by viewModel<CookProfileViewModel>()
 
@@ -49,12 +50,14 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = CookProfileDialogBinding.bind(view)
         initObservers()
     }
 
     private fun initObservers() {
         viewModel.getReviewsEvent.observe(viewLifecycleOwner,  { reviews ->
-            cookProfilePb.hide()
+            binding.cookProfilePb.hide()
                 reviews?.let{
                     RatingsDialog(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
                 }
@@ -66,72 +69,75 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if(it){
-                cookProfilePb.show()
+                binding.cookProfilePb.show()
             }else{
-                cookProfilePb.hide()
+                binding.cookProfilePb.hide()
             }
         })
     }
 
     private fun initCook(cook: Cook) {
-        cookProfileFragBackBtn.visibility = View.VISIBLE
-        cookProfileFragBackBtn.setOnClickListener { dismiss() }
+        with(binding.cookProfileFrag){
+            cookProfileFragBackBtn.visibility = View.VISIBLE
+            cookProfileFragBackBtn.setOnClickListener { dismiss() }
 
-        cookProfileImageView.setUser(cook)
-        cookProfileImageView.setUserImageViewListener(this)
-        cookProfileFragNameAndAge.text = "${cook.getFullName()}"//, ${cook.getAge()}"
+            cookProfileImageView.setUser(cook)
+            cookProfileImageView.setUserImageViewListener(this@CookProfileDialog)
+            cookProfileFragNameAndAge.text = "${cook.getFullName()}"//, ${cook.getAge()}"
 
 //        var profession = cook.profession
-        var country = ""
-        cook.country?.let{
+            var country = ""
+            cook.country?.let{
 //            it.name?.let{
 //                country = ", ${it}"
 //            }
-            Glide.with(requireContext()).load(it.flagUrl).into(cookProfileFragFlag)
-        }
+                Glide.with(requireContext()).load(it.flagUrl).into(cookProfileFragFlag)
+            }
 //        cookProfileFragProfession.text = "$profession"// $country"
-        cookProfileFragRating.text = cook.rating.toString()
+            cookProfileFragRating.text = cook.rating.toString()
 
-        //cuisine
-        if(cook?.cuisines.isNotEmpty()){
-            cookProfileFragCuisineLayout.visibility = View.VISIBLE
+            //cuisine
+            if(cook?.cuisines.isNotEmpty()){
+                cookProfileFragCuisineLayout.visibility = View.VISIBLE
 //            cookProfileFragCuisineGrid.clear()
-            cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
-        }else{
-            cookProfileFragCuisineLayout.visibility = View.GONE
-        }
+                cookProfileFragCuisineGrid.initStackableView(cook.cuisines as ArrayList<SelectableIcon>)
+            }else{
+                cookProfileFragCuisineLayout.visibility = View.GONE
+            }
 
-        //dietry
-        if(cook.diets.isNotEmpty()){
-            cookProfileFragDietaryLayout.visibility = View.VISIBLE
+            //dietry
+            if(cook.diets.isNotEmpty()){
+                cookProfileFragDietaryLayout.visibility = View.VISIBLE
 //            cookProfileFragDietryGrid.clear()
-            cookProfileFragDietryGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
-        }else{
-            cookProfileFragDietaryLayout.visibility = View.GONE
+                cookProfileFragDietryGrid.initStackableView(cook.diets as ArrayList<SelectableIcon>)
+            }else{
+                cookProfileFragDietaryLayout.visibility = View.GONE
+            }
+
+            //Certificates
+            val certificates = cook.certificates
+            if (certificates.isNotEmpty()) {
+                cookProfileFragCertificateLayout.visibility = View.VISIBLE
+                cookProfileFragCertificateGrid.initStackableViewWith(certificates)
+            } else {
+                cookProfileFragCertificateLayout.visibility = View.GONE
+            }
+
+            cookProfileFragStoryName.text = "${cook.firstName}'s Story"
+            cookProfileFragStory.text = "${cook.about}"
+            cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
+
+            cookProfileFragDishList.layoutManager = LinearLayoutManager(context)
+            dishAdapter = CooksProfileDishesAdapter(requireContext(), cook.dishes, this@CookProfileDialog)
+            cookProfileFragDishList.adapter = dishAdapter
+            val divider = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
+            cookProfileFragDishList.addItemDecoration(divider)
+
+            cookProfileFragRating.setOnClickListener { onRatingClick() }
+
+            cookProfileFragReviews.text = "${cook.reviewCount} Reviews"
         }
 
-        //Certificates
-        val certificates = cook.certificates
-        if (certificates.isNotEmpty()) {
-            cookProfileFragCertificateLayout.visibility = View.VISIBLE
-            cookProfileFragCertificateGrid.initStackableViewWith(certificates)
-        } else {
-            cookProfileFragCertificateLayout.visibility = View.GONE
-        }
-
-        cookProfileFragStoryName.text = "${cook.firstName}'s Story"
-        cookProfileFragStory.text = "${cook.about}"
-        cookProfileFragDishBy.text = "Dishes By ${cook.firstName}"
-
-        cookProfileFragDishList.layoutManager = LinearLayoutManager(context)
-        dishAdapter = CooksProfileDishesAdapter(requireContext(), cook.dishes, this)
-        cookProfileFragDishList.adapter = dishAdapter
-        val divider = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
-        cookProfileFragDishList.addItemDecoration(divider)
-
-        cookProfileFragRating.setOnClickListener { onRatingClick() }
-
-        cookProfileFragReviews.text = "${cook.reviewCount} Reviews"
     }
 
 //    private fun openCertificatesDialog(certificates: ArrayList<String>) {
@@ -145,7 +151,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
     }
 
     private fun onRatingClick() {
-        cookProfilePb.show()
+        binding.cookProfilePb.show()
         viewModel.getDishReview()
     }
 

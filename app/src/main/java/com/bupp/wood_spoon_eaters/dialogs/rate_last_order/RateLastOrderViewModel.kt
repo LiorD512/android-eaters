@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.rate_last_order
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

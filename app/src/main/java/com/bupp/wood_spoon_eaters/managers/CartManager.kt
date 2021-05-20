@@ -601,8 +601,10 @@ class CartManager(
     private fun getCurrentOrderChefCuisine(): List<String> {
         val cuisine = mutableSetOf<String>()
         currentOrderResponse?.orderItems?.forEach {
-            it.dish.cuisines?.get(0)?.let {
-                cuisine.add(it.name)
+            if(!it.dish.cuisines.isNullOrEmpty()){
+                it.dish.cuisines[0]?.let {
+                    cuisine.add(it.name)
+                }
             }
         }
         return cuisine.toList()

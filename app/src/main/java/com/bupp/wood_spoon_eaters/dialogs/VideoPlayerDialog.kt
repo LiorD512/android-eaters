@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.databinding.VideoPlayerDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -24,6 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
 
+    lateinit var binding: VideoPlayerDialogBinding
     private var player: SimpleExoPlayer? = null
     val viewModel by viewModel<WebDocsViewModel>()
 
@@ -33,7 +35,7 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.video_player_dialog, null)
+        val view = inflater.inflate(R.layout.video_player_dialog, null)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -41,18 +43,27 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        videoPlayerHeaderView.setHeaderViewListener(this)
+        binding = VideoPlayerDialogBinding.bind(view)
 
-        player = ExoPlayerFactory.newSimpleInstance(requireContext())
-        videoPlayer.setPlayer(player)
+        initUi()
 
-        val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(requireContext(), "XRHealth"))
-        val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
-        player?.prepare(videoSource)
-        player?.playWhenReady = true
 
-        player?.addListener(this)
+    }
 
+    private fun initUi() {
+        with(binding){
+            videoPlayerHeaderView.setHeaderViewListener(this@VideoPlayerDialog)
+
+            player = ExoPlayerFactory.newSimpleInstance(requireContext())
+            videoPlayer.setPlayer(player)
+
+            val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(requireContext(), "XRHealth"))
+            val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
+            player?.prepare(videoSource)
+            player?.playWhenReady = true
+
+            player?.addListener(this@VideoPlayerDialog)
+        }
     }
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {

@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomShee
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+import com.bupp.wood_spoon_eaters.databinding.FragmentSingleDishInfoBinding
 import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.dialogs.VideoPlayerDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
@@ -22,7 +23,6 @@ import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.segment.analytics.Analytics
-import kotlinx.android.synthetic.main.fragment_single_dish_info.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -31,6 +31,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener,
     WSCounterEditText.WSCounterListener {
 
+    lateinit var binding: FragmentSingleDishInfoBinding
     private val viewModel by viewModel<SingleDishInfoViewModel>()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
@@ -39,6 +40,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentSingleDishInfoBinding.bind(view)
         Analytics.with(requireContext()).screen("dishInfo")
 
         initUi()
@@ -48,17 +50,20 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     private fun initUi() {
-        singleDishPlusMinus.setViewEnabled(true)
-        singleDishInfoCook.setUserImageViewListener(this)
-        singleDishInfoRating.setOnClickListener { onRatingClick() }
+        with(binding){
+            singleDishPlusMinus.setViewEnabled(true)
+            singleDishInfoCook.setUserImageViewListener(this@SingleDishInfoFragment)
+            singleDishInfoRating.setOnClickListener { onRatingClick() }
 
-        dishMediaPagerAdapter = DishMediaAdapter(this)
-        singleDishInfoImagePager.adapter = dishMediaPagerAdapter
+            dishMediaPagerAdapter = DishMediaAdapter(this@SingleDishInfoFragment)
+            singleDishInfoImagePager.adapter = dishMediaPagerAdapter
 
-        singleDishChangeTimeBtn.setOnClickListener {
-            viewModel.onTimeChangeClick()
+            singleDishChangeTimeBtn.setOnClickListener {
+                viewModel.onTimeChangeClick()
+            }
+            singleDishNote.setWSCounterListener(this@SingleDishInfoFragment)
         }
-        singleDishNote.setWSCounterListener(this)
+
     }
 
     private fun initObserver() {
@@ -87,51 +92,53 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     private fun updateDishInfoUi(fullDish: FullDish) {
         initOrderDate(fullDish)
 
-        singleDishInfoCook.setUser(fullDish.cook)
-        singleDishInfoFavorite.setIsFav(fullDish.isFavorite)
-        singleDishInfoFavorite.setDishId(fullDish.id)
-        singleDishInfoName.text = fullDish.name
-        singleDishInfoCookName.text = "By ${fullDish.cook.getFullName()}"
-        singleDishInfoDescription.text = fullDish.description
-        singleDishInfoPrice.text = fullDish.getPriceObj().formatedValue
+        with(binding){
+            singleDishInfoCook.setUser(fullDish.cook)
+            singleDishInfoFavorite.setIsFav(fullDish.isFavorite)
+            singleDishInfoFavorite.setDishId(fullDish.id)
+            singleDishInfoName.text = fullDish.name
+            singleDishInfoCookName.text = "By ${fullDish.cook.getFullName()}"
+            singleDishInfoDescription.text = fullDish.description
+            singleDishInfoPrice.text = fullDish.getPriceObj().formatedValue
 
-        singleDishInfoImagePager.offscreenPageLimit = fullDish.getMediaList().size
-        dishMediaPagerAdapter.submitList(fullDish.getMediaList())
-        if (fullDish.getMediaList().size > 1) {
-            singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
-        }
+            singleDishInfoImagePager.offscreenPageLimit = fullDish.getMediaList().size
+            dishMediaPagerAdapter.submitList(fullDish.getMediaList())
+            if (fullDish.getMediaList().size > 1) {
+                singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
+            }
 
-        fullDish.cook.country?.let{
-            Glide.with(requireContext()).load(fullDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
-        }
+            fullDish.cook.country?.let{
+                Glide.with(requireContext()).load(fullDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
+            }
 
-        val menuItem = fullDish.menuItem
-        if (menuItem != null) {
-            singleDishQuantityView.initQuantityView(menuItem)
-            val quantityLeft = menuItem.getQuantityCount()
-            val currentCounter = singleDishCount.text.toString()
-            singleDishPlusMinus.setPlusMinusListener(this, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft, canReachZero = false)
-        }
+            val menuItem = fullDish.menuItem
+            if (menuItem != null) {
+                singleDishQuantityView.initQuantityView(menuItem)
+                val quantityLeft = menuItem.getQuantityCount()
+                val currentCounter = singleDishCount.text.toString()
+                singleDishPlusMinus.setPlusMinusListener(this@SingleDishInfoFragment, initialCounter = currentCounter.toInt(), quantityLeft = quantityLeft, canReachZero = false)
+            }
 
-        singleDishInfoRatingVal.text = fullDish.rating.toString()
+            singleDishInfoRatingVal.text = fullDish.rating.toString()
 
-        fullDish.portionSize?.let{
-            singleDisInfoPortion.setBody(it)
-            singleDisInfoPortion.visibility = View.VISIBLE
-        }
-//        if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {
-//            singleDishInstructionsLayout.visibility = View.VISIBLE
-//            singleDishInstructionsBody.text = fullDish.cooksInstructions
-//        } else {
-//            singleDishInstructionsLayout.visibility = View.GONE
-//        }
+            fullDish.portionSize?.let{
+                singleDisInfoPortion.setBody(it)
+                singleDisInfoPortion.visibility = View.VISIBLE
+            }
+    //        if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {
+    //            singleDishInstructionsLayout.visibility = View.VISIBLE
+    //            singleDishInstructionsBody.text = fullDish.cooksInstructions
+    //        } else {
+    //            singleDishInstructionsLayout.visibility = View.GONE
+    //        }
 
-        val isNationwide = fullDish.menuItem?.cookingSlot?.isNationwide
-        if(isNationwide != null && isNationwide){
-            singleDishInfoDeliveryTimeLayout.visibility = View.GONE
-        }
-        else{
-            singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
+            val isNationwide = fullDish.menuItem?.cookingSlot?.isNationwide
+            if(isNationwide != null && isNationwide){
+                singleDishInfoDeliveryTimeLayout.visibility = View.GONE
+            }
+            else{
+                singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -174,25 +181,27 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     private fun initOrderDate(currentDish: FullDish) {
-        if(currentDish.isNationwide){
-            singleDishInfoDeliveryTimeLayout.visibility = View.GONE
-        }else {
-            singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
-            if(currentDish.menuItem?.orderAt == null){
-                //Dish is offered today.
-                singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
-            }else{
-                currentDish.menuItem?.orderAt?.let{
-                    //Dish is offered in the future.
-                    if(DateUtils.isToday(it)){
-                        singleDishInfoDate.text = "Today, ${DateUtils.parseDateHalfHourInterval(it)}"
-                    }else{
-                        singleDishInfoDate.text = "${DateUtils.parseDateToDayDateAndTime(it)}"
+        with(binding){
+            if(currentDish.isNationwide){
+                singleDishInfoDeliveryTimeLayout.visibility = View.GONE
+            }else {
+                singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE
+                if(currentDish.menuItem?.orderAt == null){
+                    //Dish is offered today.
+                    singleDishInfoDate.text = "ASAP, ${currentDish.doorToDoorTime}"
+                }else{
+                    currentDish.menuItem?.orderAt?.let{
+                        //Dish is offered in the future.
+                        if(DateUtils.isToday(it)){
+                            singleDishInfoDate.text = "Today, ${DateUtils.parseDateHalfHourInterval(it)}"
+                        }else{
+                            singleDishInfoDate.text = "${DateUtils.parseDateToDayDateAndTime(it)}"
+                        }
                     }
-                }
 
+                }
+                singleDishInfoDelivery.text = "${viewModel.getDropOffLocation()}"
             }
-            singleDishInfoDelivery.text = "${viewModel.getDropOffLocation()}"
         }
     }
 
@@ -209,7 +218,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     override fun onDestroyView() {
-        singleDishInfoImagePager?.let {
+        binding.singleDishInfoImagePager.let {
             it.adapter = null
         }
         super.onDestroyView()

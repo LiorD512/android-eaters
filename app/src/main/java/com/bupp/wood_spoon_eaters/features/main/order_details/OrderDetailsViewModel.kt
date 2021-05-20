@@ -2,12 +2,8 @@ package com.bupp.wood_spoon_eaters.features.main.order_details
 
 import android.util.Log
 import androidx.lifecycle.ViewModel;
-import com.bupp.wood_spoon_eaters.dialogs.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.OrderManager
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.model.OrderItem
-import com.bupp.wood_spoon_eaters.model.Price
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import retrofit2.Call

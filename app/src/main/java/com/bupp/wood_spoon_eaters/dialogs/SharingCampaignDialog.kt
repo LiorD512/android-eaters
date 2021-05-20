@@ -10,13 +10,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.SharingCampaignDialogBinding
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.google.android.material.shape.CornerFamily
-import kotlinx.android.synthetic.main.sharing_campaign_dialog.*
 
 
 class SharingCampaignDialog() : DialogFragment(){
 
+    lateinit var binding: SharingCampaignDialogBinding
     var curCampaign: Campaign? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,35 +47,39 @@ class SharingCampaignDialog() : DialogFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = SharingCampaignDialogBinding.bind(view)
+
         initUi()
 }
 
     private fun initUi() {
-        sharingCampaignDialogShareBtn.setOnClickListener{
-            shareText(getShareText())
-            dismiss()
-        }
-        sharingCampaignDialogCloseBtn.setOnClickListener{
-            dismiss()}
-//        dialogBkg.setOnClickListener{
-//            dismiss()}
-
-        curCampaign?.let{
-            val radius = resources.getDimension(R.dimen.default_corner_radius)
-            sharingCampaignDialogCover.setShapeAppearanceModel(
-                sharingCampaignDialogCover.getShapeAppearanceModel()
-                    .toBuilder()
-                    .setTopRightCorner(CornerFamily.ROUNDED, radius)
-                    .setTopLeftCorner(CornerFamily.ROUNDED, radius)
-                    .build()
-            )
-            Glide.with(requireContext()).load(it.thumbnail).into(sharingCampaignDialogCover)
-
-            sharingCampaignDialogBody.text = it.description
-            it.shareBtnText?.let{
-                sharingCampaignDialogShareBtn.text = it
+        with(binding){
+            sharingCampaignDialogShareBtn.setOnClickListener{
+                shareText(getShareText())
+                dismiss()
             }
+            sharingCampaignDialogCloseBtn.setOnClickListener{
+                dismiss()}
+    //        dialogBkg.setOnClickListener{
+    //            dismiss()}
 
+            curCampaign?.let{
+                val radius = resources.getDimension(R.dimen.default_corner_radius)
+                sharingCampaignDialogCover.setShapeAppearanceModel(
+                    sharingCampaignDialogCover.getShapeAppearanceModel()
+                        .toBuilder()
+                        .setTopRightCorner(CornerFamily.ROUNDED, radius)
+                        .setTopLeftCorner(CornerFamily.ROUNDED, radius)
+                        .build()
+                )
+                Glide.with(requireContext()).load(it.thumbnail).into(sharingCampaignDialogCover)
+
+                sharingCampaignDialogBody.text = it.description
+                it.shareBtnText?.let{
+                    sharingCampaignDialogShareBtn.text = it
+                }
+            }
         }
 
     }
@@ -93,9 +98,5 @@ class SharingCampaignDialog() : DialogFragment(){
         shareIntent.putExtra(Intent.EXTRA_TEXT, text)
         startActivity(Intent.createChooser(shareIntent, "Share"))
     }
-
-
-
-
 
 }

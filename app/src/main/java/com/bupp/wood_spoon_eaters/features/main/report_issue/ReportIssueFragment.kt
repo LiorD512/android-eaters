@@ -9,16 +9,17 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.databinding.ReportIssueFragmentBinding
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.Reports
-import kotlinx.android.synthetic.main.report_issue_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ReportIssueFragment(val orderId: Long) : Fragment(), InputTitleView.InputTitleViewListener,
+class ReportIssueFragment(val orderId: Long) : Fragment(R.layout.report_issue_fragment), InputTitleView.InputTitleViewListener,
     ReportIssueAdapter.ReportIssueAdapterListener {
 
+    lateinit var binding: ReportIssueFragmentBinding
     private lateinit var adapter: ReportIssueAdapter
     private var reportRequests: ArrayList<ReportRequest> = arrayListOf()
 
@@ -28,46 +29,45 @@ class ReportIssueFragment(val orderId: Long) : Fragment(), InputTitleView.InputT
 
     val viewModel by viewModel<ReportIssueViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.report_issue_fragment, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = ReportIssueFragmentBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        val reportTopics = viewModel.getReportTopics()
-        reportIssueList.layoutManager = LinearLayoutManager(context)
-        adapter = ReportIssueAdapter(requireContext(), reportTopics, this)
-        reportIssueList.adapter = adapter
+        with(binding) {
+            val reportTopics = viewModel.getReportTopics()
+            reportIssueList.layoutManager = LinearLayoutManager(context)
+            adapter = ReportIssueAdapter(requireContext(), reportTopics, this@ReportIssueFragment)
+            reportIssueList.adapter = adapter
 
-        reportFragReportBtn.setBtnEnabled(false)
-        reportFragReportBtn.setOnClickListener { sendReport() }
+            reportFragReportBtn.setBtnEnabled(false)
+            reportFragReportBtn.setOnClickListener { sendReport() }
 
-        viewModel.postReport.observe(this, Observer{ event ->
-            reportIssuePb.hide()
-            if(event.isSuccess){
-                (activity as MainActivity).onReportIssueDone()
-            }
-        })
+            viewModel.postReport.observe(this@ReportIssueFragment, Observer { event ->
+                reportIssuePb.hide()
+                if (event.isSuccess) {
+                    (activity as MainActivity).onReportIssueDone()
+                }
+            })
+        }
     }
 
     override fun onReportChange(reportRequest: ReportRequest) {
-//        reportRequests.add(reportRequest)
-        reportFragReportBtn.setBtnEnabled(true)
-        reportFragReportBtn.alpha = 1f
+        with(binding) {
+            reportFragReportBtn.setBtnEnabled(true)
+            reportFragReportBtn.alpha = 1f
+        }
     }
 
     private fun sendReport() {
-        reportIssuePb.show()
+        binding.reportIssuePb.show()
         val reports = Reports(adapter.getReportsRequestArray()!!)
         viewModel.postReport(orderId, reports)
     }
-
-
 
 
 }

@@ -14,11 +14,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
+import com.bupp.wood_spoon_eaters.databinding.OrderDateChooserDialogBinding
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import kotlinx.android.synthetic.main.order_date_chooser_dialog.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,6 +27,7 @@ import kotlin.collections.ArrayList
 class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: ArrayList<MenuItem>, val listener: OrderDateChooserDialogListener) : DialogFragment(),
     OrderDateChooserAdapter.OrderDateChooserAdapterListener, TimePickerDialog.OnTimeSetListener {
 
+    lateinit var binding: OrderDateChooserDialogBinding
     private var newSelectedMenuItem: MenuItem? = null
     private lateinit var addressAdapter: OrderDateChooserAdapter
 
@@ -47,23 +48,28 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = OrderDateChooserDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        orderDateChooserDialogBkg.setOnClickListener {
-            dismiss()
+        with(binding){
+            orderDateChooserDialogBkg.setOnClickListener {
+                dismiss()
+            }
+
+            addressAdapter = OrderDateChooserAdapter(requireContext(), allMenuItems, this@OrderDateChooserDialog)
+            orderDateChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
+            val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
+            orderDateChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
+            orderDateChooserDialogRecycler.adapter = addressAdapter
+
+            if(currentMenuItem != null){
+                addressAdapter.setSelected(currentMenuItem)
+            }
         }
 
-        addressAdapter = OrderDateChooserAdapter(requireContext(), allMenuItems, this)
-        orderDateChooserDialogRecycler.layoutManager = LinearLayoutManager(context)
-        val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
-        orderDateChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
-        orderDateChooserDialogRecycler.adapter = addressAdapter
-
-        if(currentMenuItem != null){
-            addressAdapter.setSelected(currentMenuItem)
-        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -107,33 +113,33 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
 
     }
 
-    fun openDatePicker(calStart: Calendar, calEnd: Calendar){
-        val c = Calendar.getInstance()
-        val year = calStart.get(Calendar.YEAR)
-        val month = calStart.get(Calendar.MONTH)
-        val day = calStart.get(Calendar.DAY_OF_MONTH)
+//    fun openDatePicker(calStart: Calendar, calEnd: Calendar){
+//        val c = Calendar.getInstance()
+//        val year = calStart.get(Calendar.YEAR)
+//        val month = calStart.get(Calendar.MONTH)
+//        val day = calStart.get(Calendar.DAY_OF_MONTH)
+//
+//        val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+//            val selectedDate = Calendar.getInstance()
+//            selectedDate.set(year, monthOfYear, dayOfMonth)
+//            if(DateUtils.isSameDay(selectedDate, calStart)){
+//                selectedDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59)
+//                openTimePicker(calStart, selectedDate)
+//            }else{
+//                selectedDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
+//                openTimePicker(selectedDate, calEnd)
+//            }
+//
+//
+//        }, year, month, day)
+//
+//        dpd.datePicker.minDate = calStart.timeInMillis
+//        dpd.datePicker.maxDate = calEnd.timeInMillis
+//
+//        dpd.show()
+//    }
 
-        val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year, monthOfYear, dayOfMonth)
-            if(DateUtils.isSameDay(selectedDate, calStart)){
-                selectedDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59)
-                openTimePicker(calStart, selectedDate)
-            }else{
-                selectedDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0)
-                openTimePicker(selectedDate, calEnd)
-            }
-
-
-        }, year, month, day)
-
-        dpd.datePicker.minDate = calStart.timeInMillis
-        dpd.datePicker.maxDate = calEnd.timeInMillis
-
-        dpd.show()
-    }
-
-    fun openTimePicker(calStart: Calendar, calEnd: Calendar) {
+    private fun openTimePicker(calStart: Calendar, calEnd: Calendar) {
         val dpd = TimePickerDialog.newInstance(this, calStart.get(Calendar.HOUR_OF_DAY), calStart.get(Calendar.MINUTE), false)
 
         dpd.show(childFragmentManager, "Datepickerdialog")
@@ -154,9 +160,4 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         dismiss()
     }
 
-
-
-//    fun addAddress(selected: Address) {
-//        addressAdapter.addAddress(selected)
-//    }
 }

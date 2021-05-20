@@ -9,21 +9,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
-import com.bupp.wood_spoon_eaters.dialogs.NoDishesAvailableDialog
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.segment.analytics.Analytics
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_feed.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListener,
+class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.MultiSectionFeedViewListener,
     CookProfileDialog.CookProfileDialogListener {
 
 
@@ -38,16 +36,15 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         const val TAG = "wowFeedFragment"
     }
 
-
+lateinit var binding: FragmentFeedBinding
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_feed, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentFeedBinding.bind(view)
 
         Analytics.with(requireContext()).screen("Feed")
         initUi()
@@ -55,12 +52,12 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
         initObservers()
 
         viewModel.initFeed()
-        feedFragPb.show()
+        binding.feedFragPb.show()
     }
 
 
     private fun initUi() {
-        feedFragSectionsView.setMultiSectionFeedViewListener(this)
+        binding.feedFragSectionsView.setMultiSectionFeedViewListener(this)
     }
 
     private fun initObservers() {
@@ -85,13 +82,13 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
             }
         })
         viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            feedFragSectionsView.initFavorites(it)
+            binding.feedFragSectionsView.initFavorites(it)
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if(it){
-                feedFragPb.show()
+                binding.feedFragPb.show()
             }else{
-                feedFragPb.hide()
+                binding.feedFragPb.hide()
             }
         })
     }
@@ -131,21 +128,23 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
 //            showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         }else{
-            feedFragEmptyLayout.visibility = View.GONE
-            feedFragListLayout.visibility = View.VISIBLE
-            feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
+            binding.feedFragEmptyLayout.visibility = View.GONE
+            binding.feedFragListLayout.visibility = View.VISIBLE
+            binding.feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
         }
-        feedFragPb.hide()
+        binding.feedFragPb.hide()
     }
 
 
     @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
-        feedFragListLayout.visibility = View.GONE
-        feedFragEmptyLayout.visibility = View.VISIBLE
-        feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
-        feedFragEmptyLayout.setOnClickListener {
-            mainViewModel.startLocationAndAddressAct()
+        with(binding){
+            feedFragListLayout.visibility = View.GONE
+            feedFragEmptyLayout.visibility = View.VISIBLE
+            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
+            feedFragEmptyLayout.setOnClickListener {
+                mainViewModel.startLocationAndAddressAct()
+            }
         }
     }
 
@@ -154,7 +153,7 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
             Log.d(TAG, "handleBannerEvent: $bannerType")
             when(bannerType){
                 Constants.NO_BANNER -> {
-                    feedFragHeaderError.visibility = View.GONE
+                    binding.feedFragHeaderError.visibility = View.GONE
                 }
                 Constants.BANNER_KNOWN_ADDRESS -> {
                     showBanner(getString(R.string.banner_known_address))
@@ -174,10 +173,12 @@ class FeedFragment : Fragment(), MultiSectionFeedView.MultiSectionFeedViewListen
     }
 
     private fun showBanner(text: String) {
-        feedFragHeaderError.text = text
-        feedFragHeaderError.visibility = View.VISIBLE
-        feedFragHeaderError.setOnClickListener {
-            feedFragHeaderError.visibility = View.GONE
+        with(binding){
+            feedFragHeaderError.text = text
+            feedFragHeaderError.visibility = View.VISIBLE
+            feedFragHeaderError.setOnClickListener {
+                feedFragHeaderError.visibility = View.GONE
+            }
         }
 //        tooltip = Tooltip.Builder(this)
 //            .anchor(headerCard, 0, -30, true)

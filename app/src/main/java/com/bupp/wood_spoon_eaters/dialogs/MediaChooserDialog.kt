@@ -9,10 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import kotlinx.android.synthetic.main.media_chooser_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.MediaChooserDialogBinding
 
 class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() {
 
+    lateinit var binding: MediaChooserDialogBinding
     interface MediaChooserListener {
         fun onMediaChoose(mediaType: Int)
     }
@@ -30,23 +31,27 @@ class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = MediaChooserDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        mediaChooserDialogBkg.setOnClickListener {
-            dismiss()
-        }
-        mediaChooserDialogClose.setOnClickListener {
-            dismiss()
-        }
-        mediaChooserDialogCamera.setOnClickListener {
-            listener.onMediaChoose(Constants.MEDIA_TYPE_CAMERA)
-            dismiss()
-        }
-        mediaChooserDialogGallery.setOnClickListener {
-            listener.onMediaChoose(Constants.MEDIA_TYPE_GALLERY)
-            dismiss()
+        with(binding){
+            mediaChooserDialogBkg.setOnClickListener {
+                dismiss()
+            }
+            mediaChooserDialogClose.setOnClickListener {
+                dismiss()
+            }
+            mediaChooserDialogCamera.setOnClickListener {
+                listener.onMediaChoose(Constants.MEDIA_TYPE_CAMERA)
+                dismiss()
+            }
+            mediaChooserDialogGallery.setOnClickListener {
+                listener.onMediaChoose(Constants.MEDIA_TYPE_GALLERY)
+                dismiss()
+            }
         }
     }
 

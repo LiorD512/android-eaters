@@ -18,6 +18,8 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
+import com.bupp.wood_spoon_eaters.databinding.ActivityLoginBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.login.fragments.WelcomeFragmentDirections
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
@@ -29,11 +31,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModel<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initUi()
         initObservers()

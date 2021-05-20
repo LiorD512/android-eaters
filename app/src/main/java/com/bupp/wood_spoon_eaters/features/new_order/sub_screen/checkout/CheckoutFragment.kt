@@ -1,12 +1,10 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
@@ -36,7 +34,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
     HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
-    OrderUpdateErrorDialog.updateErrorDialogListener,
+    OrderUpdateErrorDialog.UpdateErrorDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener {
 
     private var binding: CheckoutFragmentBinding? = null

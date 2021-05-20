@@ -9,11 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.model.Cook
-import kotlinx.android.synthetic.main.start_new_cart_dialog_layout.*
+import com.bupp.wood_spoon_eaters.databinding.StartNewCartDialogLayoutBinding
 
 class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragment() {
 
+    lateinit var binding: StartNewCartDialogLayoutBinding
     private var cookInCartName = ""
     private var currentCookName = ""
 
@@ -40,22 +40,26 @@ class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = StartNewCartDialogLayoutBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        startNewCartDialogNewCartBtn.setOnClickListener {
-            listener.onNewCartClick()
-            dismiss()
-        }
-        startNewCartDialogCloseBtn.setOnClickListener { dismiss()}
-        startNewCartDialogCancelBtn.setOnClickListener {
-            listener.onCancelClick()
-            dismiss()
-        }
+        with(binding){
+            startNewCartDialogNewCartBtn.setOnClickListener {
+                listener.onNewCartClick()
+                dismiss()
+            }
+            startNewCartDialogCloseBtn.setOnClickListener { dismiss()}
+            startNewCartDialogCancelBtn.setOnClickListener {
+                listener.onCancelClick()
+                dismiss()
+            }
 
 
-        startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCartName, currentCookName)
+            startNewCartDialogText.text = getString(R.string.start_new_cart_dialog_your_cart_already_contains, cookInCartName, currentCookName)
+        }
     }
 
 }

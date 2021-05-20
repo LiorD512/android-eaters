@@ -1,80 +1,84 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code
 
 import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.dialogs.ErrorDialog
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
-import kotlinx.android.synthetic.main.promo_code_fragment.*
+import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.HeaderViewListener {
 
+    lateinit var binding: PromoCodeFragmentBinding
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = PromoCodeFragmentBinding.bind(view)
+
+        initUi()
+        initObservers()
 
 
-        promoCodeFragHeaderView.setHeaderViewListener(this)
-        promoCodeFragHeaderView.setSaveButtonClickable(false)
 
-        promoCodeFragCodeInput.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun afterTextChanged(s: Editable) {
-                if (!s.isNullOrBlank()) {
-                    promoCodeFragHeaderView.setSaveButtonClickable(true)
-                } else {
-                    promoCodeFragHeaderView.setSaveButtonClickable(false)
-                }
+    }
 
-            }
-        })
-
-        viewModel.promoCodeEvent.observe(this, { event ->
-            promoCodeFragPb.hide()
-            if(event.isSuccess){
+    private fun initObservers() {
+        with(binding){
+            viewModel.promoCodeEvent.observe(this@PromoCodeFragment, { event ->
+                promoCodeFragPb.hide()
+                if(event.isSuccess){
 //                listener.onPromoCodeDone()
 //                (activity as NewOrderActivity).onCheckout()//ny !!!
-            }
-        })
-        viewModel.errorEvent.observe(this, {
-            promoCodeFragPb.hide()
-            it?.let{
-                var errorStr = ""
-                it.forEach {
-                    errorStr += "${it.msg} \n"
                 }
-                showWrongPromoCodeNotification(errorStr)
-//                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
-//                WSErrorDialog(it.msg).show(childFragmentManager, Constants.ERROR_DIALOG)
-//                showWrongPromoCodeNotification()
-            }
-        })
+            })
+            viewModel.errorEvent.observe(this@PromoCodeFragment, {
+                promoCodeFragPb.hide()
+                it?.let{
+                    var errorStr = ""
+                    it.forEach {
+                        errorStr += "${it.msg} \n"
+                    }
+                    showWrongPromoCodeNotification(errorStr)
+                }
+            })
+        }
+    }
 
-        openKeyboard(promoCodeFragCodeInput)
+    private fun initUi() {
+        with(binding){
+            promoCodeFragHeaderView.setHeaderViewListener(this@PromoCodeFragment)
+            promoCodeFragHeaderView.setSaveButtonClickable(false)
+
+            promoCodeFragCodeInput.addTextChangedListener(object : SimpleTextWatcher() {
+                override fun afterTextChanged(s: Editable) {
+                    if (!s.isNullOrBlank()) {
+                        promoCodeFragHeaderView.setSaveButtonClickable(true)
+                    } else {
+                        promoCodeFragHeaderView.setSaveButtonClickable(false)
+                    }
+
+                }
+            })
+
+            openKeyboard(promoCodeFragCodeInput)
+        }
     }
 
     private fun showWrongPromoCodeNotification(msg: String?) {
-        snackbar = TSnackbar.make(promoCodeFragmentLayout,
+        snackbar = TSnackbar.make(binding.promoCodeFragmentLayout,
             msg ?: "The promo code seems to be invalid. \nplease check again",
             TSnackbar.LENGTH_LONG)
         val snackBarView = snackbar.view
@@ -94,8 +98,8 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.Hea
     }
 
     override fun onHeaderSaveClick() {
-        promoCodeFragPb.show()
-        viewModel.savePromoCode(promoCodeFragCodeInput.text.toString())
+        binding.promoCodeFragPb.show()
+        viewModel.savePromoCode(binding.promoCodeFragCodeInput.text.toString())
     }
 
     override fun onHeaderBackClick() {

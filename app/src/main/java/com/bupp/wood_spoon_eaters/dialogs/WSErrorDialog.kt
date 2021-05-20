@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.logout_dialog.*
-import kotlinx.android.synthetic.main.ws_error_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.WsErrorDialogBinding
 
 class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogFragment(){
 
+    lateinit var binding: WsErrorDialogBinding
     interface WSErrorListener{
         fun onWSErrorDone()
     }
@@ -23,23 +23,27 @@ class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogF
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.ws_error_dialog, null)
-        getDialog()!!.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
+        val view = inflater.inflate(R.layout.ws_error_dialog, null)
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = WsErrorDialogBinding.bind(view)
         initUi()
 }
 
     private fun initUi() {
-        body?.let{
-            errorDialogBody.text = it
-        }
-        errorDialogClose.setOnClickListener{
-            dismiss()
-            listener?.onWSErrorDone()
+        with(binding){
+            body?.let{
+                errorDialogBody.text = it
+            }
+            errorDialogClose.setOnClickListener{
+                dismiss()
+                listener?.onWSErrorDone()
+            }
         }
     }
 

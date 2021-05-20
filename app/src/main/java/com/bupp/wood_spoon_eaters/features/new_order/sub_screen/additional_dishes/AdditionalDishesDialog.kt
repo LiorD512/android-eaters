@@ -19,7 +19,7 @@ import com.bupp.wood_spoon_eaters.model.OrderItem
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class AdditionalDishesDialog : DialogFragment(),
+class AdditionalDishesDialog : DialogFragment(R.layout.additional_dishes_dialog),
     ClearCartDialog.ClearCartDialogListener, AdditionalDishesAdapter.AdditionalDishesAdapterListener {
 
     //    private var mainAdapter: AdditionalDishMainAdapter? = null
@@ -28,11 +28,6 @@ class AdditionalDishesDialog : DialogFragment(),
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
     var isDismissed = true // if true - redirects to cook's profile and lock header when dismissed.
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.additional_dishes_dialog, container, false)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

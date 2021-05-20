@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.custom_views.PriceRangeView
 import com.bupp.wood_spoon_eaters.custom_views.RatingStarsView
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.common.Constants
-import kotlinx.android.synthetic.main.filters_fragment.*
+import com.bupp.wood_spoon_eaters.databinding.FiltersFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), IconsGridView.IconsGridViewListener, PriceRangeView.PriceRangeViewListener,RatingStarsView.RatingStarsViewListener,
@@ -26,6 +26,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
     }
 
     val viewModel by viewModel<PickFiltersViewModel>()
+    lateinit var binding: FiltersFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,46 +41,51 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        filterFragPriceRangeView.setPriceRangeViewListener(this)
-        pickFiltersFragRatingStarsView.setRatingStarsViewListener(this)
-        filterFragDietaryIcons.setIconsGridViewListener(this)
+        binding = FiltersFragmentBinding.bind(view)
 
-        filterFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.ENDLESS_SELECTION)
-
-        filterFragHeader.setHeaderViewListener(this)
-        filterFragClearAllBtn.setOnClickListener { clearAllFilters() }
-        disableClearBtn()
-
-        initTimeArrivalUi()
-
+        initUi()
         getCurrentFilterParam()
     }
 
-    private fun initTimeArrivalUi() {
-        filterFragArraivalAsap.setOnClickListener {
-            isAsap = true
-            unSelectAll()
-            filterFragArraivalAsap.isSelected = true
-            it?.isSelected = true
-            validateFields()
-        }
-        filterFragArraivalLater.setOnClickListener {
-            isAsap = false
-            unSelectAll()
-            filterFragArraivalLater.isSelected = true
-            validateFields()
+    private fun initUi() {
+        with(binding){
+            filterFragPriceRangeView.setPriceRangeViewListener(this@FilterFragment)
+            pickFiltersFragRatingStarsView.setRatingStarsViewListener(this@FilterFragment)
+            filterFragDietaryIcons.setIconsGridViewListener(this@FilterFragment)
 
+            filterFragDietaryIcons.initIconsGrid(viewModel.getDietaryList(), Constants.ENDLESS_SELECTION)
+
+            filterFragHeader.setHeaderViewListener(this@FilterFragment)
+            filterFragClearAllBtn.setOnClickListener { clearAllFilters() }
+            disableClearBtn()
+
+            initTimeArrivalUi()
+
+        }
+    }
+
+    private fun initTimeArrivalUi() {
+        with(binding){
+            filterFragArraivalAsap.setOnClickListener {
+                isAsap = true
+                unSelectAll()
+                filterFragArraivalAsap.isSelected = true
+                it?.isSelected = true
+                validateFields()
+            }
+            filterFragArraivalLater.setOnClickListener {
+                isAsap = false
+                unSelectAll()
+                filterFragArraivalLater.isSelected = true
+                validateFields()
+            }
         }
 
     }
 
-//    private fun setArrivalTimeSelected(it: View?) {
-//        it?.isSelected = true
-//    }
-
     private fun unSelectAll() {
-        filterFragArraivalAsap.isSelected = false
-        filterFragArraivalLater.isSelected = false
+        binding.filterFragArraivalAsap.isSelected = false
+        binding.filterFragArraivalLater.isSelected = false
 
     }
 
@@ -89,16 +95,16 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
             if(event != null){
                 if(event.hasParmas){
                     if(event.currentDiets != null && event.currentDiets!!.size > 0){
-                        filterFragDietaryIcons.setSelectedItems(event.currentDiets)
+                        binding.filterFragDietaryIcons.setSelectedItems(event.currentDiets)
                     }
                     if(event.minPrice != null){
-                        filterFragPriceRangeView.setSelectedRange(event.minPrice!!)
+                        binding.filterFragPriceRangeView.setSelectedRange(event.minPrice!!)
                     }
                     if(event.isAsap != null){
                         isAsap = event.isAsap
                         when(isAsap){
-                            true -> filterFragArraivalAsap.performClick()
-                            false -> filterFragArraivalLater.performClick()
+                            true -> binding.filterFragArraivalAsap.performClick()
+                            false -> binding.filterFragArraivalLater.performClick()
 
                         }
                     }
@@ -112,17 +118,17 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
 
 
     private fun disableClearBtn(){
-        filterFragClearAllBtn.alpha = 0.5f
+        binding.filterFragClearAllBtn.alpha = 0.5f
 
-        filterFragClearAllBtn.isClickable = false
+        binding.filterFragClearAllBtn.isClickable = false
     }
 
 
     private fun clearAllFilters() {
         unSelectAll()
-        filterFragPriceRangeView.reset()
-        pickFiltersFragRatingStarsView.setRating(0)
-        filterFragDietaryIcons.setSelectedItems(arrayListOf())
+        binding.filterFragPriceRangeView.reset()
+        binding.pickFiltersFragRatingStarsView.setRating(0)
+        binding.filterFragDietaryIcons.setSelectedItems(arrayListOf())
         isAsap = null
         disableClearBtn()
         viewModel.clearSearchParams()
@@ -141,16 +147,18 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
     }
 
     private fun validateFields() {
-        if (filterFragPriceRangeView.getSelectedRange() != Constants.PRICE_NOT_SELECTED
-            || estimatedTimeArrivalId != null
-            || pickFiltersFragRatingStarsView.getRating() > 0
-            || filterFragDietaryIcons.getSelectedItems().isNotEmpty()
-            || isAsap != null
-        ) {
-            filterFragClearAllBtn.alpha = 1f
-            filterFragClearAllBtn.isClickable = true
-        } else {
-            disableClearBtn()
+        with(binding){
+            if (filterFragPriceRangeView.getSelectedRange() != Constants.PRICE_NOT_SELECTED
+                || estimatedTimeArrivalId != null
+                || pickFiltersFragRatingStarsView.getRating() > 0
+                || filterFragDietaryIcons.getSelectedItems().isNotEmpty()
+                || isAsap != null
+            ) {
+                filterFragClearAllBtn.alpha = 1f
+                filterFragClearAllBtn.isClickable = true
+            } else {
+                disableClearBtn()
+            }
         }
     }
 
@@ -161,20 +169,22 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
     }
 
     override fun onHeaderDoneClick() {
-        var isFiltered = false
-        var price: Pair<Double?, Double?>? = null
-        var dietsIds: ArrayList<Long>? = null
-        if (filterFragPriceRangeView.getSelectedRange() != Constants.PRICE_NOT_SELECTED){
-            price = filterFragPriceRangeView.getMinMax()
-            isFiltered = true
+        with(binding){
+            var isFiltered = false
+            var price: Pair<Double?, Double?>? = null
+            var dietsIds: ArrayList<Long>? = null
+            if (filterFragPriceRangeView.getSelectedRange() != Constants.PRICE_NOT_SELECTED){
+                price = filterFragPriceRangeView.getMinMax()
+                isFiltered = true
+            }
+            if(filterFragDietaryIcons.getSelectedItems().isNotEmpty()){
+                dietsIds = filterFragDietaryIcons.getSelectedItemsIds()
+                isFiltered = true
+            }
+            viewModel.updateSearchParams(price, dietsIds, isAsap)//, estimatedTimeArrivalId)
+            listener.onFilterDone(isFiltered)
+            dismiss()
         }
-        if(filterFragDietaryIcons.getSelectedItems().isNotEmpty()){
-            dietsIds = filterFragDietaryIcons.getSelectedItemsIds()
-            isFiltered = true
-        }
-        viewModel.updateSearchParams(price, dietsIds, isAsap)//, estimatedTimeArrivalId)
-        listener.onFilterDone(isFiltered)
-        dismiss()
     }
 
 }

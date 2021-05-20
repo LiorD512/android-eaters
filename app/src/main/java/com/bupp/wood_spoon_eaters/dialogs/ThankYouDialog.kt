@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.thank_you_dialog_layout.*
+import com.bupp.wood_spoon_eaters.databinding.ThankYouDialogLayoutBinding
 
 class ThankYouDialog : DialogFragment() {
 
+    lateinit var binding: ThankYouDialogLayoutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
@@ -25,11 +26,15 @@ class ThankYouDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = ThankYouDialogLayoutBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        thankYouDialogCloseBtn.setOnClickListener { dismiss() }
-        thankYouDialogLayout.setOnClickListener { dismiss() }
+        with(binding) {
+            thankYouDialogCloseBtn.setOnClickListener { dismiss() }
+            thankYouDialogLayout.setOnClickListener { dismiss() }
+        }
     }
 }

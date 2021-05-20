@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.dialogs
+package com.bupp.wood_spoon_eaters.dialogs.rate_last_order
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -14,9 +14,9 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
 import com.bupp.wood_spoon_eaters.custom_views.metrics_view.MetricsViewAdapter
+import com.bupp.wood_spoon_eaters.databinding.RateLastOrderDialogBinding
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ReviewRequest
-import kotlinx.android.synthetic.main.rate_last_order_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -35,6 +35,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
     private lateinit var adapter: RateLastOrderAdapter
     val viewModel by viewModel<RateLastOrderViewModel>()
 
+    lateinit var binding: RateLastOrderDialogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,60 +43,65 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.rate_last_order_dialog, null)
+        val view = inflater.inflate(R.layout.rate_last_order_dialog, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = RateLastOrderDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        rateLastOrderNotes.setInputTitleViewListener(this)
-        rateLastOrderCloseBtn.setOnClickListener { dismiss() }
-        rateLastOrderDoneBtn.setBtnEnabled(false)
-//        rateLastOrderTipPercentView.setTipPercentViewListener(this)
+        with(binding){
+            rateLastOrderNotes.setInputTitleViewListener(this@RateLastOrderDialog)
+            rateLastOrderCloseBtn.setOnClickListener { dismiss() }
+            rateLastOrderDoneBtn.setBtnEnabled(false)
 
-        rateLastOrderDoneBtn.setOnClickListener {
-            onDoneClick()
+            rateLastOrderDoneBtn.setOnClickListener {
+                onDoneClick()
+            }
+
+            rateLastOrderAccuracyNegative.setOnCheckedChangeListener(this@RateLastOrderDialog)
+            rateLastOrderAccuracyPositive.setOnCheckedChangeListener(this@RateLastOrderDialog)
+            rateLastOrderDeliveryNegative.setOnCheckedChangeListener(this@RateLastOrderDialog)
+            rateLastOrderDeliveryPositive.setOnCheckedChangeListener(this@RateLastOrderDialog)
+
+            viewModel.getLastOrder.observe(this@RateLastOrderDialog, Observer { orderEvent ->
+                rateLastOrderPb.hide()
+                if (orderEvent.isSuccess) {
+                    handleOrderDetails(orderEvent.order!!)
+                }
+            })
+
+            viewModel.postRating.observe(this@RateLastOrderDialog, Observer { postRatingEvent ->
+                rateLastOrderPb.hide()
+                if (postRatingEvent.isSuccess) {
+                    listener.onRatingDone()
+                    dismiss()
+                }
+            })
+
+            rateLastOrderPb.show()
+            viewModel.getLastOrder(orderId)
         }
-
-        rateLastOrderAccuracyNegative.setOnCheckedChangeListener(this)
-        rateLastOrderAccuracyPositive.setOnCheckedChangeListener(this)
-        rateLastOrderDeliveryNegative.setOnCheckedChangeListener(this)
-        rateLastOrderDeliveryPositive.setOnCheckedChangeListener(this)
-
-        viewModel.getLastOrder.observe(this, Observer { orderEvent ->
-            rateLastOrderPb.hide()
-            if (orderEvent.isSuccess) {
-                handleOrderDetails(orderEvent.order!!)
-            }
-        })
-
-        viewModel.postRating.observe(this, Observer { postRatingEvent ->
-            rateLastOrderPb.hide()
-            if (postRatingEvent.isSuccess) {
-                listener.onRatingDone()
-                dismiss()
-            }
-        })
-
-        rateLastOrderPb.show()
-        viewModel.getLastOrder(orderId)
     }
 
     private fun handleOrderDetails(order: Order) {
-        rateLastOrderDishesRecyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = RateLastOrderAdapter(requireContext(), order.orderItems, this)
-        rateLastOrderDishesRecyclerView.adapter = adapter
+        with(binding){
+            rateLastOrderDishesRecyclerView.layoutManager = LinearLayoutManager(context)
+            adapter = RateLastOrderAdapter(requireContext(), order.orderItems, this@RateLastOrderDialog)
+            rateLastOrderDishesRecyclerView.adapter = adapter
 
 
-        rateLastOrderUserImage.setImage(order.cook!!.thumbnail!!)
-        rateLastOrderUserName.text = "Made by ${order.cook!!.getFullName()}"
+            rateLastOrderUserImage.setImage(order.cook!!.thumbnail!!)
+            rateLastOrderUserName.text = "Made by ${order.cook!!.getFullName()}"
 
-        rateLastOrderNotes.setInputTitleViewListener(this)
+            rateLastOrderNotes.setInputTitleViewListener(this@RateLastOrderDialog)
+        }
 
     }
 
@@ -107,7 +113,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
     override fun onRate() {
         if(allFieldsRated()){
-            rateLastOrderDoneBtn.setBtnEnabled(true)
+            binding.rateLastOrderDoneBtn.setBtnEnabled(true)
         }
     }
 
@@ -130,7 +136,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
     }
 
     private fun onDoneClick() {
-        rateLastOrderPb.show()
+        binding.rateLastOrderPb.show()
         val reviewRequest = ReviewRequest()
         var metricsArr = adapter.getRatedDishes()
 
@@ -138,23 +144,10 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
         reviewRequest.deliveryRating = deliveryRating
 
         reviewRequest.dishMetrics = metricsArr
-        reviewRequest.body = rateLastOrderNotes.getText()
+        reviewRequest.body = binding.rateLastOrderNotes.getText()
 
         viewModel.postRating(orderId, reviewRequest)
 
     }
 
-//    override fun onTipIconClick(tipSelection: Int) {
-//        if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-//            TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
-//        } else {
-////            ordersViewModel.updateTip(tipPercentage = tipSelection)
-////            Toast.makeText(context, "Tip selected is $tipSelection", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//
-//    override fun onTipDone(tipAmount: Int) {
-//        rateLastOrderTipPercentView.setCustomTipValue(tipAmount)
-////        ordersViewModel.updateTip(tipInCents = tipAmount)
-//    }
 }

@@ -11,11 +11,12 @@ import android.widget.TextView.BufferType
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.share_dialog.*
+import com.bupp.wood_spoon_eaters.databinding.ShareDialogBinding
 
 
 class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
 
+    lateinit var binding: ShareDialogBinding
     interface ShareDialogListener{
         fun onShareClick()
     }
@@ -33,21 +34,25 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = ShareDialogBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        shareDialogCloseBtn.setOnClickListener { dismiss() }
-        shareDialogShareBtn.setOnClickListener {
-            listener.onShareClick()
-            dismiss()
-        }
-        shareDialogLayout.setOnClickListener { dismiss() }
+        with(binding){
+            shareDialogCloseBtn.setOnClickListener { dismiss() }
+            shareDialogShareBtn.setOnClickListener {
+                listener.onShareClick()
+                dismiss()
+            }
+            shareDialogLayout.setOnClickListener { dismiss() }
 
-        shareDialogText.setText(getString(R.string.share_dialog_share_text), BufferType.SPANNABLE)
-        val s = shareDialogText.text as Spannable
-        val start = 0
-        val end = "Share ".length
-        s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.teal_blue)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            shareDialogText.setText(getString(R.string.share_dialog_share_text), BufferType.SPANNABLE)
+            val s = shareDialogText.text as Spannable
+            val start = 0
+            val end = "Share ".length
+            s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.teal_blue)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
     }
 }

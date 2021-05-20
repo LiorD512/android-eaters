@@ -20,6 +20,8 @@ import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
+import com.bupp.wood_spoon_eaters.databinding.ActivityNewOrderBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
@@ -50,11 +52,15 @@ class NewOrderActivity : BaseActivity(),
         }
     }
 
+    lateinit var binding: ActivityNewOrderBinding
     val viewModel by viewModel<NewOrderMainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_order)
+
+        binding = ActivityNewOrderBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_new_order)
 
         initUi()
         initObservers()

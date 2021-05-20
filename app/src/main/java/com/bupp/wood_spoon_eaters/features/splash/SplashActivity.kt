@@ -12,6 +12,8 @@ import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.ActivityNewOrderBinding
+import com.bupp.wood_spoon_eaters.databinding.ActivitySplashBinding
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import io.branch.referral.Branch
@@ -20,6 +22,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 
 class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, WSErrorDialog.WSErrorListener {
 
+    private lateinit var binding: ActivitySplashBinding
     private var cookId: String? = null
     private var menuItemId: String? = null
     val viewModel: SplashViewModel by viewModel()
@@ -27,7 +30,10 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_splash)
 
         FirebaseAnalytics.getInstance(this)
 
