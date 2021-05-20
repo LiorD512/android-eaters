@@ -33,15 +33,15 @@ class UserRepository(
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","initUserRepo - NetworkError")
+                    Log.d(TAG,"initUserRepo - NetworkError")
                     this.currentUser = null
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","initUserRepo - GenericError")
+                    Log.d(TAG,"initUserRepo - GenericError")
                     this.currentUser = null
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","initUserRepo - Success")
+                    Log.d(TAG,"initUserRepo - Success")
                     this.currentUser = result.value.data?.copy()
                 }
                 is ResultHandler.WSCustomError -> {
@@ -69,15 +69,15 @@ class UserRepository(
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","sendPhoneVerification - NetworkError")
+                    Log.d(TAG,"sendPhoneVerification - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","sendPhoneVerification - GenericError")
+                    Log.d(TAG,"sendPhoneVerification - GenericError")
                     UserRepoResult(UserRepoStatus.INVALID_PHONE)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","sendPhoneVerification - Success")
+                    Log.d(TAG,"sendPhoneVerification - Success")
                     UserRepoResult(UserRepoStatus.SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
@@ -94,15 +94,15 @@ class UserRepository(
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","sendCodeAndPhoneVerification - NetworkError")
+                    Log.d(TAG,"sendCodeAndPhoneVerification - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","sendCodeAndPhoneVerification - GenericError")
+                    Log.d(TAG,"sendCodeAndPhoneVerification - GenericError")
                     UserRepoResult(UserRepoStatus.WRONG_PASSWORD)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","sendCodeAndPhoneVerification - Success")
+                    Log.d(TAG,"sendCodeAndPhoneVerification - Success")
                     val eater = result.value.data
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
@@ -121,15 +121,42 @@ class UserRepository(
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","updateEater - NetworkError")
+                    Log.d(TAG,"updateEater - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","updateEater - GenericError")
+                    Log.d(TAG,"updateEater - GenericError")
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","updateEater - Success")
+                    Log.d(TAG,"updateEater - Success")
+                    val eater = result.value.data
+                    this.currentUser = eater
+                    UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
+                }
+                is ResultHandler.WSCustomError -> {
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+    suspend fun updateNotificationsGroup(notifications: List<Long>): UserRepoResult {
+        val result = withContext(Dispatchers.IO){
+            apiService.updateNotificationGroup(notifications)
+        }
+        result.let{
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"updateNotificationsGroup - NetworkError")
+                    UserRepoResult(UserRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"updateNotificationsGroup - GenericError")
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"updateNotificationsGroup - Success")
                     val eater = result.value.data
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
@@ -150,15 +177,15 @@ class UserRepository(
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d("wowUserRepository","addNewAddress - NetworkError")
+                    Log.d(TAG,"addNewAddress - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d("wowUserRepository","addNewAddress - GenericError")
+                    Log.d(TAG,"addNewAddress - GenericError")
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d("wowUserRepository","addNewAddress - Success")
+                    Log.d(TAG,"addNewAddress - Success")
                     initUserRepo()
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
                 }
@@ -177,15 +204,15 @@ class UserRepository(
             result.let {
                 return when (result) {
                     is ResultHandler.NetworkError -> {
-                        Log.d("wowUserRepository", "deleteAddress - NetworkError")
+                        Log.d(TAG, "deleteAddress - NetworkError")
                         UserRepoResult(UserRepoStatus.SERVER_ERROR)
                     }
                     is ResultHandler.GenericError -> {
-                        Log.d("wowUserRepository", "deleteAddress - GenericError")
+                        Log.d(TAG, "deleteAddress - GenericError")
                         UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                     }
                     is ResultHandler.Success -> {
-                        Log.d("wowUserRepository", "deleteAddress - Success")
+                        Log.d(TAG, "deleteAddress - Success")
                         initUserRepo()
                         UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
                     }
@@ -193,13 +220,13 @@ class UserRepository(
                         UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                     }
                     else -> {
-                        Log.d("wowUserRepository", "deleteAddress - addressId is null")
+                        Log.d(TAG, "deleteAddress - addressId is null")
                         UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                     }
                 }
             }
         }catch (ex: Exception){
-            Log.d("wowUserRepository", "deleteAddress - addressId is null")
+            Log.d(TAG, "deleteAddress - addressId is null")
         }
         return UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
     }
@@ -214,6 +241,10 @@ class UserRepository(
 
     fun getUser(): Eater? {
         return this.currentUser
+    }
+
+    companion object{
+        const val TAG = "wowUserRepository"
     }
 
 

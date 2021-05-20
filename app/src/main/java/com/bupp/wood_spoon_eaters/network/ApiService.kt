@@ -98,7 +98,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("eaters/me")
-    fun postEaterNotificationGroup(@Field("notification_group_ids") notificationGroupIds: Array<Long>): Call<ServerResponse<Eater>>
+    suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>): ServerResponse<Eater>
 
     @POST("eaters/me/searches")
     suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>

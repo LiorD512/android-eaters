@@ -11,13 +11,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
+import com.bupp.wood_spoon_eaters.databinding.FragmentSettingsBinding
 import com.segment.analytics.Analytics
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener {
+class SettingsFragment : Fragment(R.layout.fragment_settings), NotificationsGroupAdapter.NotificationsGroupAdapterListener {
 
+    lateinit var binding: FragmentSettingsBinding
     private lateinit var adapter: NotificationsGroupAdapter
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
     var lastClickedSwitchId: Long = -1
@@ -26,16 +29,14 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
         fun newInstance() = SettingsFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentSettingsBinding.bind(view)
         Analytics.with(requireContext()).screen("Communication settings")
 
-        settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationSetting(isChecked)
         }
 
@@ -53,16 +54,15 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
     }
 
     private fun initNotificationGroup() {
-        settingsFragNotificationGroupList.layoutManager = LinearLayoutManager(context)
-//        var divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
-//        divider.setDrawable(resources.getDrawable(R.drawable.chooser_divider, null))
-//        settingsFragNotificationGroupList.addItemDecoration(divider)
-        val notificationGroupList = viewModel.getNotificationsGroup()
-        val userSettings = viewModel.getEaterNotificationsGroup()
-        Log.d("wowSettings","userSettings ids: $userSettings")
+        with(binding){
+            settingsFragNotificationGroupList.layoutManager = LinearLayoutManager(context)
+            val notificationGroupList = viewModel.getNotificationsGroup()
+            val userSettings = viewModel.getEaterNotificationsGroup()
+            Log.d("wowSettings","userSettings ids: $userSettings")
 
-        adapter = NotificationsGroupAdapter(requireContext(), notificationGroupList, userSettings!!, this)
-        settingsFragNotificationGroupList.adapter = adapter
+            adapter = NotificationsGroupAdapter(requireContext(), notificationGroupList, userSettings!!, this@SettingsFragment)
+            settingsFragNotificationGroupList.adapter = adapter
+        }
     }
 
     override fun onNotificationChange(notificationGroupId: Long) {
@@ -72,7 +72,7 @@ class SettingsFragment() : Fragment(), NotificationsGroupAdapter.NotificationsGr
 
 
     private fun loadSettings(settings: SettingsViewModel.SettingsDetails) {
-        settingsFragLocationSwitch.isChecked = settings.enableUserLocation
+        binding.settingsFragLocationSwitch.isChecked = settings.enableUserLocation
     }
 
 }

@@ -13,6 +13,7 @@ interface UserRepository {
 
     suspend fun getMe(): ResultHandler<ServerResponse<Eater>>
     suspend fun postMe(eater: EaterRequest): ResultHandler<ServerResponse<Eater>>
+    suspend fun updateNotificationGroup(notifications: List<Long>): ResultHandler<ServerResponse<Eater>>
 
     suspend fun postNewAddress(addressRequest: AddressRequest): ResultHandler<ServerResponse<Address>>
     suspend fun deleteAddress(addressId: Long): ResultHandler<ServerResponse<Void>>
@@ -35,6 +36,10 @@ class UserRepositoryImpl(private val service: ApiService) : UserRepository {
 
     override suspend fun postMe(eater: EaterRequest): ResultHandler<ServerResponse<Eater>> {
         return safeApiCall { service.postMe(eater) }
+    }
+
+    override suspend fun updateNotificationGroup(notifications: List<Long>): ResultHandler<ServerResponse<Eater>> {
+        return safeApiCall { service.postEaterNotificationGroup(notifications) }
     }
 
     override suspend fun postNewAddress(addressRequest: AddressRequest): ResultHandler<ServerResponse<Address>> {
