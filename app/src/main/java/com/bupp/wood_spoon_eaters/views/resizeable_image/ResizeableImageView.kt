@@ -11,7 +11,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.ResizeableImageViewBinding
 import com.bupp.wood_spoon_eaters.model.CloudinaryTransformationsType
-import kotlinx.android.synthetic.main.user_image_view.view.*
 
 class ResizeableImageView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -71,7 +70,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 }
             }
             if(isRound){
-                Glide.with(context).load(finalUrl).transform(CircleCrop()).into(cookImageView)
+                Glide.with(context).load(finalUrl).transform(CircleCrop()).into(binding.resizeableImageView)
             }else{
                 Glide.with(context).load(finalUrl).into(binding.resizeableImageView)
             }

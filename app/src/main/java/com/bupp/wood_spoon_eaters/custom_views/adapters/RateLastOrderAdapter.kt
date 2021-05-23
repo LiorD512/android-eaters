@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.custom_views.adapters
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
@@ -11,12 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.RateDishItemViewBinding
 import com.bupp.wood_spoon_eaters.model.DishMetricsRequest
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import kotlinx.android.synthetic.main.order_item_view.view.orderItemImage
-import kotlinx.android.synthetic.main.order_item_view.view.orderItemName
-import kotlinx.android.synthetic.main.rate_dish_item_view.view.*
 
 class RateLastOrderAdapter(val context: Context, private var orderItems: List<OrderItem>?, val listener: RateOrderAdapterListener) : RecyclerView.Adapter<RateLastOrderAdapter.DishViewHolder>() {
 
@@ -28,7 +24,7 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: List<Or
         fun onRate()
     }
 
-    class DishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class DishViewHolder(view: RateDishItemViewBinding) : RecyclerView.ViewHolder(view.root) {
         val image: ImageView = view.orderItemImage
         val name: TextView = view.orderItemName
         val positiveBtn: RadioButton = view.rateDishItemPositive
@@ -36,7 +32,8 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: List<Or
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DishViewHolder {
-        return DishViewHolder(LayoutInflater.from(context).inflate(R.layout.rate_dish_item_view, parent, false))
+        val binding = RateDishItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DishViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

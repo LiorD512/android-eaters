@@ -2,29 +2,22 @@ package com.bupp.wood_spoon_eaters.views.ws_range_time_picker
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerDateItemBinding
 import com.bupp.wood_spoon_eaters.model.WSRangeTimePickerHours
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import kotlinx.android.synthetic.main.ws_range_time_picker_item.view.*
 import java.util.*
 
 class WSRangeTimePickerDateAdapter :
     ListAdapter<WSRangeTimePickerHours, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.ws_range_time_picker_date_item,
-                parent,
-                false
-            )
-        )
+        val binding = WsRangeTimePickerDateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -35,7 +28,7 @@ class WSRangeTimePickerDateAdapter :
         Log.d("wowWSRangeAdapter","onBind $position, $itemCount")
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: WsRangeTimePickerDateItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val itemText: TextView = view.wsRangeTimePickerItem
 
         fun bindItem(date: Date) {

@@ -6,24 +6,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.blue_btn.view.*
+import com.bupp.wood_spoon_eaters.databinding.BlueBtnBinding
 
 
-class BlueBtn : FrameLayout {
+class BlueBtn @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) {
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.blue_btn, this, true)
+    private var binding: BlueBtnBinding = BlueBtnBinding.inflate(LayoutInflater.from(context), this, true)
 
+    init{
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.BlueBtnAttrs)
             if (a.hasValue(R.styleable.BlueBtnAttrs_title)) {
                 var title = a.getString(R.styleable.BlueBtnAttrs_title)
-                blueBtnText.text = title
+                binding.blueBtnText.text = title
             }
-
-
             a.recycle()
         }
     }
@@ -32,13 +30,13 @@ class BlueBtn : FrameLayout {
         Log.d("wowBlue", "isEnabled: $isEnabled")
         this.isEnabled = isEnabled
         if (isEnabled) {
-            blueBtnBackground.alpha = 1f
+            binding.blueBtnBackground.alpha = 1f
         } else {
-            blueBtnBackground.alpha = 0.5f
+            binding. blueBtnBackground.alpha = 0.5f
         }
     }
 
     fun setTitle(title: String) {
-        blueBtnText.text = title
+        binding.blueBtnText.text = title
     }
 }

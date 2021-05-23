@@ -8,7 +8,6 @@
 //import android.widget.FrameLayout
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.common.Constants
-//import kotlinx.android.synthetic.main.status_bottom_bar.view.*
 //import java.text.DecimalFormat
 //
 //

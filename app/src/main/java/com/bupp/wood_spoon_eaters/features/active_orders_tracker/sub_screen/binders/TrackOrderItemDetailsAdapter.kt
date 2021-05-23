@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
+import com.bupp.wood_spoon_eaters.databinding.TrackOrderItemDetailsViewBinding
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import kotlinx.android.synthetic.main.track_order_item_details_view.view.*
 
 class TrackOrderItemDetailsAdapter(val context: Context) :
     ListAdapter<OrderItem, RecyclerView.ViewHolder>(TrackOrderItemDetailsDiffCallback()){
@@ -27,7 +26,7 @@ class TrackOrderItemDetailsAdapter(val context: Context) :
         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: TrackOrderItemDetailsViewBinding) : RecyclerView.ViewHolder(view.root) {
         val img = view.trackOrderItemImage
         val title = view.trackOrderItemName
         val price = view.trackOrderItemPrice
@@ -36,9 +35,8 @@ class TrackOrderItemDetailsAdapter(val context: Context) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.track_order_item_details_view, parent, false)
-        )
+        val binding = TrackOrderItemDetailsViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

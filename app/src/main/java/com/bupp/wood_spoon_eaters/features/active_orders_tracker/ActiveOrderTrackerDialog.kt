@@ -19,8 +19,6 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.Trac
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.fragment_active_order_tracker.*
-import kotlinx.android.synthetic.main.sharing_campaign_dialog.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 

@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
+import com.bupp.wood_spoon_eaters.databinding.OrderItemViewBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import kotlinx.android.synthetic.main.order_item_view.view.*
 import java.text.DecimalFormat
 
 class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener)  :
@@ -40,7 +39,8 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return OrderItemViewHolder(LayoutInflater.from(context).inflate(R.layout.order_item_view, parent, false))
+        val binding = OrderItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OrderItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -59,7 +59,7 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
         holder.bindItem(context, orderItem, itemCount, listener, position)
     }
 
-    class OrderItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class OrderItemViewHolder(view: OrderItemViewBinding) : RecyclerView.ViewHolder(view.root) {
         private lateinit var adapter: IngredientsCheckoutAdapter
         private val layout: LinearLayout = view.orderItemLayout
         private val priceView: TextView = view.orderItemPrice

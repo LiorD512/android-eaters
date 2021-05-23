@@ -124,6 +124,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
             fullDish.portionSize?.let{
                 singleDisInfoPortion.setBody(it)
                 singleDisInfoPortion.visibility = View.VISIBLE
+                singleDisInfoPortionSep.visibility = View.VISIBLE
             }
     //        if (fullDish.cooksInstructions != null && fullDish.cooksInstructions.isNotEmpty()) {
     //            singleDishInstructionsLayout.visibility = View.VISIBLE

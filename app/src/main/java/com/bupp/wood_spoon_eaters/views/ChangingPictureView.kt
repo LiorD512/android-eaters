@@ -13,7 +13,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.ChangingPictureViewBinding
 import com.bupp.wood_spoon_eaters.model.WelcomeScreen
-import kotlinx.android.synthetic.main.changing_picture_view.view.*
 
 
 class ChangingPictureView @JvmOverloads

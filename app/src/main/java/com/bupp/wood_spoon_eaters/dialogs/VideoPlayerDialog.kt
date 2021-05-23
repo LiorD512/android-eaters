@@ -13,13 +13,11 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.VideoPlayerDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import kotlinx.android.synthetic.main.video_player_dialog.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -54,10 +52,11 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
         with(binding){
             videoPlayerHeaderView.setHeaderViewListener(this@VideoPlayerDialog)
 
-            player = ExoPlayerFactory.newSimpleInstance(requireContext())
+            player = SimpleExoPlayer.Builder(requireContext()).build()
+//            player = ExoPlayerFactory.newSimpleInstance(requireContext())
             videoPlayer.setPlayer(player)
 
-            val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(requireContext(), "XRHealth"))
+            val dataSourceFactory = DefaultDataSourceFactory(requireContext(), Util.getUserAgent(requireContext(), "XRHealth"))
             val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
             player?.prepare(videoSource)
             player?.playWhenReady = true

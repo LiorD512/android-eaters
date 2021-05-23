@@ -2,25 +2,22 @@ package com.bupp.wood_spoon_eaters.custom_views.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.DishIngredient
+import com.bupp.wood_spoon_eaters.databinding.RemovedIngredientViewBinding
 import com.bupp.wood_spoon_eaters.model.Ingredient
-import kotlinx.android.synthetic.main.order_item_view.view.*
-import kotlinx.android.synthetic.main.removed_ingredient_view.view.*
 
 class IngredientsCheckoutAdapter(val context: Context, private val ingredients: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsCheckoutAdapter.RemovedIngredientViewHolder>() {
 
-    class RemovedIngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class RemovedIngredientViewHolder(view: RemovedIngredientViewBinding) : RecyclerView.ViewHolder(view.root) {
         val name: TextView = view.removedIngredientName
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RemovedIngredientViewHolder {
-        return RemovedIngredientViewHolder(LayoutInflater.from(context).inflate(R.layout.removed_ingredient_view,parent,false))
+        val binding = RemovedIngredientViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return RemovedIngredientViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

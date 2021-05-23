@@ -15,7 +15,6 @@ import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.NationwideShippingChooserDialogBinding
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.nationwide_shipping_chooser_dialog.*
 
 
 class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {

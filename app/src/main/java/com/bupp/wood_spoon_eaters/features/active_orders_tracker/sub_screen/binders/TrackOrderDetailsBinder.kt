@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders
 
+import android.view.LayoutInflater
 import android.view.View
 import mva2.adapter.ItemViewHolder
 import android.view.ViewGroup
@@ -7,18 +8,20 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
+import com.bupp.wood_spoon_eaters.databinding.CooksProfileDishItemBinding
+import com.bupp.wood_spoon_eaters.databinding.TrackOrderDetailsSectionBinding
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetails
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CooksDishesAdapter
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.track_order_details_section.view.*
-import kotlinx.android.synthetic.main.track_order_item_details_view.view.*
 import mva2.adapter.ItemBinder
 
 
 class TrackOrderDetailsBinder() : ItemBinder<OrderTrackDetails, TrackOrderDetailsBinder.TrackOrderDetailsViewHolder>() {
 
     override fun createViewHolder(parent: ViewGroup): TrackOrderDetailsViewHolder {
-        return TrackOrderDetailsViewHolder(inflate(parent, R.layout.track_order_details_section))
+        val binding = TrackOrderDetailsSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TrackOrderDetailsViewHolder(binding)
     }
 
     override fun canBindData(item: Any): Boolean {
@@ -29,43 +32,43 @@ class TrackOrderDetailsBinder() : ItemBinder<OrderTrackDetails, TrackOrderDetail
         holder.bindItems(items)
     }
 
-    inner class TrackOrderDetailsViewHolder(itemView: View) : ItemViewHolder<OrderTrackDetails>(itemView) {
+    inner class TrackOrderDetailsViewHolder(val binding: TrackOrderDetailsSectionBinding) : ItemViewHolder<OrderTrackDetails>(binding.root) {
         fun bindItems(item: OrderTrackDetails) {
 
             val order = item.order
             val userInfo = item.orderUserInfo
 
             val adapter = TrackOrderItemDetailsAdapter(itemView.context)
-            itemView.trackOrderDetailsSectionOrderItemList.layoutManager = LinearLayoutManager(itemView.context)
-            itemView.trackOrderDetailsSectionOrderItemList.adapter = adapter
+            binding.trackOrderDetailsSectionOrderItemList.layoutManager = LinearLayoutManager(itemView.context)
+            binding.trackOrderDetailsSectionOrderItemList.adapter = adapter
             val divider = DividerItemDecorator(ContextCompat.getDrawable(itemView.context, R.drawable.divider))
-            itemView.trackOrderDetailsSectionOrderItemList.addItemDecoration(divider)
+            binding.trackOrderDetailsSectionOrderItemList.addItemDecoration(divider)
             adapter.submitList(order.orderItems)
 
-            itemView.trackOrderDetailsSectionSubTotal.text = order.subtotal?.formatedValue ?: ""
-            itemView.trackOrderDetailsSectionServiceFee.text = order.serviceFee?.formatedValue ?: ""
-            itemView.trackOrderDetailsSectionDeliveryFee.text = order.deliveryFee?.formatedValue ?: ""
-            itemView.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
-            itemView.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
+            binding.trackOrderDetailsSectionSubTotal.text = order.subtotal?.formatedValue ?: ""
+            binding.trackOrderDetailsSectionServiceFee.text = order.serviceFee?.formatedValue ?: ""
+            binding.trackOrderDetailsSectionDeliveryFee.text = order.deliveryFee?.formatedValue ?: ""
+            binding.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
+            binding.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
 
             order.tip?.let{
-                itemView.trackOrderDetailsSectionTipLayout.visibility = View.VISIBLE
-                itemView.trackOrderDetailsSectionTip.text = it.formatedValue
+                binding.trackOrderDetailsSectionTipLayout.visibility = View.VISIBLE
+                binding.trackOrderDetailsSectionTip.text = it.formatedValue
 
             }
 //
-            itemView.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
-            itemView.trackOrderDetailsSectionPayment.text = userInfo?.paymentMethod
-            itemView.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
-            itemView.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
+            binding.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
+            binding.trackOrderDetailsSectionPayment.text = userInfo?.paymentMethod
+            binding.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
+            binding.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
             val address = userInfo?.userLocation
             address?.let{
-                itemView.trackOrderDetailsSectionLocation1.text = "${it.streetLine1}, #${it.streetLine2}"
-                itemView.trackOrderDetailsSectionLocation2.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
+                binding.trackOrderDetailsSectionLocation1.text = "${it.streetLine1}, #${it.streetLine2}"
+                binding.trackOrderDetailsSectionLocation2.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
             }
 
             userInfo?.note?.let{
-                itemView.trackOrderItemNote.text = it
+                binding.trackOrderDetailsSectionNote.text = it
             }
         }
     }

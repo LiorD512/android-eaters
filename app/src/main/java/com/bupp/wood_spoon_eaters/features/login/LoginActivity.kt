@@ -1,31 +1,17 @@
 package com.bupp.wood_spoon_eaters.features.login
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
 import com.bupp.wood_spoon_eaters.databinding.ActivityLoginBinding
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
-import com.bupp.wood_spoon_eaters.features.login.fragments.WelcomeFragmentDirections
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
-import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.hideKeyboard
-import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -128,9 +114,9 @@ class LoginActivity : BaseActivity() {
 
     private fun handlePb(shouldShow: Boolean) {
         if (shouldShow) {
-            loginActPb.show()
+            binding.loginActPb.show()
         } else {
-            loginActPb.hide()
+            binding.loginActPb.hide()
         }
     }
 

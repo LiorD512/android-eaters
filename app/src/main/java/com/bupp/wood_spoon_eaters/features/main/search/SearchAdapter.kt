@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
+import com.bupp.wood_spoon_eaters.databinding.SearchCuisineItemBinding
+import com.bupp.wood_spoon_eaters.databinding.SearchDishCooksItemBinding
+import com.bupp.wood_spoon_eaters.databinding.SearchDishItemBinding
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.search_cuisine_item.view.*
-import kotlinx.android.synthetic.main.search_dish_cooks_item.view.*
-import kotlinx.android.synthetic.main.search_dish_item.view.*
-import kotlin.collections.ArrayList
 
 
 class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>, val listener: SearchAdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(),ManyCooksView.ManyCooksViewListener {
@@ -99,11 +96,14 @@ class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == ViewType.CUISINE) {
-            return CuisineItemViewHolder(LayoutInflater.from(context).inflate(R.layout.search_cuisine_item, parent, false))
+            val binding = SearchCuisineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return CuisineItemViewHolder(binding)
         }else if (viewType == ViewType.COOKS_VIEW) {
-            return CooksViewItemViewHolder(LayoutInflater.from(context).inflate(R.layout.search_dish_cooks_item, parent, false))
+            val binding = SearchDishCooksItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return CooksViewItemViewHolder(binding)
         }else{
-            return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.search_dish_item, parent, false))
+            val binding = SearchDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return DishItemViewHolder(binding)
         }
     }
 
@@ -161,16 +161,16 @@ class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>,
 
 }
 
-class CuisineItemViewHolder(view: View): RecyclerView.ViewHolder(view){
+class CuisineItemViewHolder(view: SearchCuisineItemBinding): RecyclerView.ViewHolder(view.root){
     val cuisineBkg = view.searchCuisineItemBkg
     val cuisineName = view.searchCuisineItemName
 }
 
-class CooksViewItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class CooksViewItemViewHolder(view: SearchDishCooksItemBinding) : RecyclerView.ViewHolder(view.root) {
     val manyCooksView: ManyCooksView = view.searchDishCooksItem
 }
 
-class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class DishItemViewHolder(view: SearchDishItemBinding) : RecyclerView.ViewHolder(view.root) {
     val mainLayout = view.searchDishItemLayout
     val bkgImg = view.searchDishItemBkg
     val cookImg = view.searchDishItemUserImg

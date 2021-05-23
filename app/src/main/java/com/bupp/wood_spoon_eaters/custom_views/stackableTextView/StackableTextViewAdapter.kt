@@ -5,26 +5,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.StackableTextViewItemBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import kotlinx.android.synthetic.main.stackable_text_view_item.view.*
 
 class StackableTextViewAdapter(val context: Context) :
     ListAdapter<SelectableIcon, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.stackable_text_view_item,
-                parent,
-                false
-            )
-        )
+        val binding = StackableTextViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -35,7 +28,7 @@ class StackableTextViewAdapter(val context: Context) :
         Log.d("wowWSRangeAdapter","onBind $position, $itemCount")
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: StackableTextViewItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val stackableViewItem: TextView = view.stackableViewItem
         private val divider: View = view.stackableViewItemDivider
 

@@ -10,7 +10,6 @@
 //
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-//import kotlinx.android.synthetic.main.certificates_dialog.*
 //
 //
 //class CertificatesDialog(val certificates: ArrayList<String>) : DialogFragment(), HeaderView.HeaderViewListener {

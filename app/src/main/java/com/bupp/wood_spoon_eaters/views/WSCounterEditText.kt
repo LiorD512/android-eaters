@@ -16,8 +16,6 @@ import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsCounterEditTextBinding
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.input_title_view.view.*
-import kotlinx.android.synthetic.main.ws_counter_edit_text.view.*
 
 class WSCounterEditText @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -110,8 +108,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun setTitle(title: String) {
-        counterEditTextTitle.text = title
-        counterEditTextTitle.visibility = View.VISIBLE
+        with(binding){
+            counterEditTextTitle.text = title
+            counterEditTextTitle.visibility = View.VISIBLE
+        }
     }
 
 

@@ -1,22 +1,15 @@
 package com.bupp.wood_spoon_eaters.views
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieDrawable
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WoodspoonProgressBarBinding
-import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
-import kotlinx.android.synthetic.main.lottie_animation_view.view.*
-import kotlinx.android.synthetic.main.woodspoon_progress_bar.view.*
 
 
 class WSProgressBar @JvmOverloads

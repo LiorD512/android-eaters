@@ -1,21 +1,21 @@
 package com.bupp.wood_spoon_eaters.custom_views.stackableTextView
 
-import android.R.drawable
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
-import com.bupp.wood_spoon_eaters.R
+import android.widget.LinearLayout
+import com.bupp.wood_spoon_eaters.databinding.StackableTextViewBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxItemDecoration
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import kotlinx.android.synthetic.main.stackable_text_view.view.*
 
+class StackableTextView @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr){
 
-class StackableTextView : FrameLayout {
+    private var binding: StackableTextViewBinding = StackableTextViewBinding.inflate(LayoutInflater.from(context), this, true)
+
 
     data class StackablesBundle(
         val stackables: ArrayList<SelectableIcon>
@@ -23,24 +23,22 @@ class StackableTextView : FrameLayout {
 
     private lateinit var adapter: StackableTextViewAdapter
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.stackable_text_view, this, true)
-
+    init{
         initUi()
     }
 
     fun initUi() {
-        adapter = StackableTextViewAdapter(context)
+        with(binding){
+            adapter = StackableTextViewAdapter(context)
 
-        val layoutManager = FlexboxLayoutManager(context)
+            val layoutManager = FlexboxLayoutManager(context)
 
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.FLEX_START
-        stackableTextViewList.layoutManager = layoutManager
+            layoutManager.flexDirection = FlexDirection.ROW
+            layoutManager.justifyContent = JustifyContent.FLEX_START
+            stackableTextViewList.layoutManager = layoutManager
 
-        stackableTextViewList.adapter = adapter
+            stackableTextViewList.adapter = adapter
+        }
     }
 
     fun initStackableView(icons: List<SelectableIcon>){

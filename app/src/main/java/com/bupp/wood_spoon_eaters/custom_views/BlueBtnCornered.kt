@@ -4,37 +4,37 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.blue_btn_cornered.view.*
+import com.bupp.wood_spoon_eaters.databinding.BlueBtnCorneredBinding
 
 
-class BlueBtnCornered : FrameLayout {
+class BlueBtnCornered @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr){
 
-    constructor(context: Context) : this(context, null)
+    private var binding: BlueBtnCorneredBinding = BlueBtnCorneredBinding.inflate(LayoutInflater.from(context), this, true)
 
-    constructor(context: Context, attrs: AttributeSet?) :
-            this(context, attrs, 0)
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.blue_btn_cornered, this, true)
-
+    init{
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.BlueBtnAttrs)
             if (a.hasValue(R.styleable.BlueBtnAttrs_title)) {
                 var title = a.getString(R.styleable.BlueBtnAttrs_title)
-                blueBtnText.text = title
+                binding.blueBtnText.text = title
             }
             a.recycle()
         }
     }
 
-    public fun setBtnEnabled(isEnabled: Boolean) {
-        blueBtnBackground.isEnabled = isEnabled;
-        blueBtnText.isEnabled = isEnabled;
-        if (isEnabled) {
-            blueBtnBackground.alpha = 1f
-        } else {
-            blueBtnBackground.alpha = 0.5f
+    fun setBtnEnabled(isEnabled: Boolean) {
+        with(binding){
+            blueBtnBackground.isEnabled = isEnabled;
+            blueBtnText.isEnabled = isEnabled;
+            if (isEnabled) {
+                blueBtnBackground.alpha = 1f
+            } else {
+                blueBtnBackground.alpha = 0.5f
+            }
         }
 
     }

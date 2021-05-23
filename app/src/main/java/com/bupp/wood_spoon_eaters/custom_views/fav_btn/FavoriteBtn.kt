@@ -7,24 +7,22 @@ import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.FrameLayout
-import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.favorite_btn.view.*
+import com.bupp.wood_spoon_eaters.databinding.FavoriteBtnBinding
 
 
-class FavoriteBtn : FrameLayout, FavoriteBtnViewModel.FavVMListener {
+class FavoriteBtn @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr), FavoriteBtnViewModel.FavVMListener {
 
     var dishId: Long? = null
     val viewModel = FavoriteBtnViewModel()
     var isFavSelected = false
 
+    private var binding: FavoriteBtnBinding = FavoriteBtnBinding.inflate(LayoutInflater.from(context), this, true)
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.favorite_btn, this, true)
-
+    init {
         viewModel.setFavListener(this)
-        favBtn.setOnClickListener {
+        binding.favBtn.setOnClickListener {
             animateView()
             onClick()
         }
@@ -58,17 +56,17 @@ class FavoriteBtn : FrameLayout, FavoriteBtnViewModel.FavVMListener {
         anim.duration = 150
         anim.repeatMode = ScaleAnimation.REVERSE
         anim.interpolator = OvershootInterpolator()
-        favBtn.startAnimation(anim)
+        binding.favBtn.startAnimation(anim)
     }
 
     private fun updateUi() {
         isFavSelected = !isFavSelected
-        favBtn.isSelected = isFavSelected
+        binding.favBtn.isSelected = isFavSelected
     }
 
     fun setIsFav(isFavorite: Boolean) {
         isFavSelected = isFavorite
-        favBtn.isSelected = isFavorite
+        binding.favBtn.isSelected = isFavorite
     }
 
 

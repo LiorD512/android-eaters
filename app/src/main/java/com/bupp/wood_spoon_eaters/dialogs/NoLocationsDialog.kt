@@ -10,9 +10,6 @@
 //import androidx.core.content.ContextCompat
 //import androidx.fragment.app.DialogFragment
 //import com.bupp.wood_spoon_eaters.R
-//import kotlinx.android.synthetic.main.no_location_dialog.*
-//import kotlinx.android.synthetic.main.thank_you_dialog_layout.*
-//import kotlinx.android.synthetic.main.thank_you_dialog_layout.thankYouDialogLayout
 //
 //class NoLocationsDialog : DialogFragment() {
 //

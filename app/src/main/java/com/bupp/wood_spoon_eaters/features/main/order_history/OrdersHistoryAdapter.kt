@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.features.main.order_history
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryItemBinding
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.orders_history_item.view.*
 
 class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<Order>, val listener: OrdersHistoryAdapterListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -38,22 +36,23 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
             holder.rateBtn.isClickable = true
             holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue))
             holder.rateBtn.setOnClickListener {
-                listener?.onRateClick(order.id!!)
+                listener.onRateClick(order.id!!)
             }
         }
 
         holder.reportIssue.setOnClickListener {
-            listener?.onReportClick(order.id!!)
+            listener.onReportClick(order.id!!)
         }
 
         holder.mainLayout.setOnClickListener {
-            listener?.onOrderClick(order.id!!)
+            listener.onOrderClick(order.id!!)
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.orders_history_item, parent, false))
+        val binding = OrdersHistoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +65,7 @@ class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<O
     }
 }
 
-class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class ItemViewHolder(view: OrdersHistoryItemBinding) : RecyclerView.ViewHolder(view.root) {
     fun initItem(context: Context, order: Order) {
         Glide.with(context).load(order.cook?.thumbnail).apply(RequestOptions.circleCropTransform()).into(img)
         title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook?.firstName}"

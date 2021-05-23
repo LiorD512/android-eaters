@@ -2,15 +2,12 @@ package com.bupp.wood_spoon_eaters.features.main.report_issue
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.report_issues.ReportIssueView
-import com.bupp.wood_spoon_eaters.model.ReportIssue
+import com.bupp.wood_spoon_eaters.databinding.ReportIssueItemBinding
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.ReportTopic
-import kotlinx.android.synthetic.main.report_issue_item.view.*
 
 class ReportIssueAdapter constructor(val context: Context, private var reportTopics: List<ReportTopic>, val listener: ReportIssueAdapterListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), ReportIssueView.ReportIssueViewListener {
@@ -27,7 +24,8 @@ class ReportIssueAdapter constructor(val context: Context, private var reportTop
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.report_issue_item, parent, false))
+        val binding = ReportIssueItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -54,7 +52,7 @@ class ReportIssueAdapter constructor(val context: Context, private var reportTop
 
 }
 
-class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class ItemViewHolder(view: ReportIssueItemBinding) : RecyclerView.ViewHolder(view.root) {
     val reportIssueView: ReportIssueView = view.reportIssueView
 
 }

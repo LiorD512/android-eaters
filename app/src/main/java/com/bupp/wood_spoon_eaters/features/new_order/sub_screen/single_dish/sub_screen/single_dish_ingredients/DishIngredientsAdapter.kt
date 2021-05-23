@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.DishIngredientItemBinding
 import com.bupp.wood_spoon_eaters.model.DishIngredient
-import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
 
 class DishIngredientsAdapter(private val listener: DishIngredientsAdapterListener?) :
     ListAdapter<DishIngredient, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -22,13 +21,15 @@ class DishIngredientsAdapter(private val listener: DishIngredientsAdapterListene
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DishIngredientViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.dish_ingredient_item,
-                parent,
-                false
-            )
-        )
+        val binding = DishIngredientItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DishIngredientViewHolder(binding)
+//        return DishIngredientViewHolder(
+//            LayoutInflater.from(parent.context).inflate(
+//                R.layout.dish_ingredient_item,
+//                parent,
+//                false
+//            )
+//        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -66,7 +67,7 @@ class DishIngredientsAdapter(private val listener: DishIngredientsAdapterListene
         }
     }
 
-    class DishIngredientViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class DishIngredientViewHolder(view: DishIngredientItemBinding) : RecyclerView.ViewHolder(view.root) {
         val title: TextView = view.dishIngredientItemTitle
         val remove: TextView = view.dishIngredientItemRemove
         val layout: LinearLayout = view.dishIngredientItemLayout

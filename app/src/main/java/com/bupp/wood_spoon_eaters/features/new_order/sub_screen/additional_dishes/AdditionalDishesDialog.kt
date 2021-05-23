@@ -100,7 +100,7 @@ class AdditionalDishesDialog : DialogFragment(R.layout.additional_dishes_dialog)
     }
 
     override fun onAddBtnClick(dish: Dish) {
-        mainViewModel.addNewDishToCart(dish.id, 1)
+        mainViewModel.addNewDishToCart(dish, 1)
     }
 
     override fun onDishClick(dish: Dish) {

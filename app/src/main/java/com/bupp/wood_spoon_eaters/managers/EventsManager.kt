@@ -19,7 +19,7 @@ import kotlin.math.log
 
 class EventsManager(val context: Context, private val sharedPreferences: SharedPreferences){
 
-    private val shouldFireEvent = BuildConfig.BUILD_TYPE.equals("release", true)
+    private val shouldFireEvent = true//BuildConfig.BUILD_TYPE.equals("release", true)
     private var isFirstPurchase: Boolean
         get() = sharedPreferences.getBoolean(IS_FIRST_PURCHASE, true)
         set(isFirstTime) = sharedPreferences.edit().putBoolean(IS_FIRST_PURCHASE, isFirstTime).apply()

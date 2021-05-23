@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.NewSuggestionSuccessDialogBinding
-import kotlinx.android.synthetic.main.new_suggestion_success_dialog.*
 
 class NewSuggestionSuccessDialog : DialogFragment() {
 

@@ -2,14 +2,11 @@ package com.bupp.wood_spoon_eaters.dialogs.order_date_chooser
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.OrderDateChooserItemBinding
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.order_date_chooser_item.view.*
 
 class OrderDateChooserAdapter(val context: Context, private val menuItems: ArrayList<MenuItem>, val listener: OrderDateChooserAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -20,14 +17,13 @@ class OrderDateChooserAdapter(val context: Context, private val menuItems: Array
         fun onOrderDateClick(selected: MenuItem)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: OrderDateChooserItemBinding) : RecyclerView.ViewHolder(view.root) {
         var item = view.orderDateItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.order_date_chooser_item, parent, false)
-        )
+        val binding = OrderDateChooserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

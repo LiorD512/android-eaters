@@ -10,9 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.SelectAddressItemBinding
 import com.bupp.wood_spoon_eaters.model.Address
-import kotlinx.android.synthetic.main.select_address_item.view.*
 
 class SelectAddressAdapter(private val listener: SelectAddressAdapterListener?) :
     ListAdapter<Address, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -25,13 +24,8 @@ class SelectAddressAdapter(private val listener: SelectAddressAdapterListener?) 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.select_address_item,
-                parent,
-                false
-            )
-        )
+        val binding = SelectAddressItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -53,7 +47,7 @@ class SelectAddressAdapter(private val listener: SelectAddressAdapterListener?) 
         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: SelectAddressItemBinding) : RecyclerView.ViewHolder(view.root) {
         val layout: LinearLayout = view.selectAddressItemLayout
         private val streetText: TextView = view.selectAddressItemStreet
         private val stateText: TextView = view.selectAddressItemState

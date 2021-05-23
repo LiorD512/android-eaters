@@ -10,7 +10,6 @@ import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.databinding.FavoriteViewBinding
 import com.bupp.wood_spoon_eaters.databinding.OrdersBottomBarBinding
 import com.bupp.wood_spoon_eaters.model.Dish
-import kotlinx.android.synthetic.main.favorite_view.view.*
 
 
 class FavoritesView @JvmOverloads

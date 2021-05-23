@@ -32,15 +32,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                <include
-                        android:id="@+id/multiSectionViewShareView"
-                        layout="@layout/feed_view_sharing_stub"
-                        android:visibility="gone" />
+                <FrameLayout
+                        android:id="@+id/multiSectionViewShareViewLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <include
+                            android:id="@+id/multiSectionViewShareView"
+                            layout="@layout/feed_view_sharing_stub"
+                            android:visibility="gone" />
+                </FrameLayout>
 
-                <include
-                        android:id="@+id/multiSectionViewLogo"
-                        layout="@layout/feed_view_logo_stub"
-                        android:visibility="gone" />
+                <FrameLayout
+                        android:id="@+id/multiSectionViewLogoLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <include
+                            android:id="@+id/multiSectionViewLogo"
+                            layout="@layout/feed_view_logo_stub"
+                            android:visibility="gone" />
+                </FrameLayout>
 
 
                 <com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView

@@ -2,23 +2,22 @@ package com.bupp.wood_spoon_eaters.features.main.order_details
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.OrderDetailsDishItemViewBinding
 import com.bupp.wood_spoon_eaters.model.OrderItem
-import kotlinx.android.synthetic.main.order_details_dish_item_view.view.*
 
 class OrderDetailsAdapter(val context: Context, private var dishes: List<OrderItem>) : RecyclerView.Adapter<OrderDetailsAdapter.DishViewHolder>() {
 
-    class DishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class DishViewHolder(view: OrderDetailsDishItemViewBinding) : RecyclerView.ViewHolder(view.root) {
         val name: TextView = view.orderDetailsDishName
         val price: TextView = view.orderDetailsDishPrice
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DishViewHolder {
-        return DishViewHolder(LayoutInflater.from(context).inflate(R.layout.order_details_dish_item_view, parent, false))
+        val binding = OrderDetailsDishItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DishViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

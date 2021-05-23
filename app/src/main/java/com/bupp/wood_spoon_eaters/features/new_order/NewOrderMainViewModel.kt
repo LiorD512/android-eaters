@@ -260,8 +260,8 @@ class NewOrderMainViewModel(
         additionalDishesEvent.postValue(AdditionalDishesEvent(orderItems, additionalDishes))
     }
 
-    fun addNewDishToCart(dishId: Long, quantity: Int) {
-        val newOrderItem = OrderItemRequest(dishId = dishId, quantity = quantity)
+    fun addNewDishToCart(dish: Dish, quantity: Int) {
+        val newOrderItem = OrderItemRequest(dishId = dish.id, quantity = quantity)
         Log.d(TAG, "addNewDishToCart: $newOrderItem")
         viewModelScope.launch {
             val result = cartManager.addNewOrderItemToCart(newOrderItem)
@@ -269,7 +269,7 @@ class NewOrderMainViewModel(
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
-                        cartManager.sendFBAdditioanlDishEvent(dishId)
+                        cartManager.sendFBAdditioanlDishEvent(dish)
                         initAdditionalDishes()
                     }
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {

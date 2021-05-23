@@ -6,19 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.DishIngredient
+import com.bupp.wood_spoon_eaters.databinding.DishMediaItemBinding
 import com.bupp.wood_spoon_eaters.model.MediaList
-import kotlinx.android.synthetic.main.dish_ingredient_item.view.*
-import kotlinx.android.synthetic.main.dish_media_item.view.*
 
 class DishMediaAdapter(val listener: DishMediaAdapterListener): ListAdapter<MediaList, RecyclerView.ViewHolder>(DiffCallback()) {
 
@@ -28,13 +23,15 @@ class DishMediaAdapter(val listener: DishMediaAdapterListener): ListAdapter<Medi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MediaViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.dish_media_item,
-                parent,
-                false
-            )
-        )
+        val binding = DishMediaItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MediaViewHolder(binding)
+//        return MediaViewHolder(
+//            LayoutInflater.from(parent.context).inflate(
+//                R.layout.dish_media_item,
+//                parent,
+//                false
+//            )
+//        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -56,7 +53,7 @@ class DishMediaAdapter(val listener: DishMediaAdapterListener): ListAdapter<Medi
         }
     }
 
-    class MediaViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MediaViewHolder constructor(itemView: DishMediaItemBinding) : RecyclerView.ViewHolder(itemView.root) {
         val img: ImageView = itemView.mediaItemImg
         val playBtn: ImageView = itemView.mediaItemPlay
     }

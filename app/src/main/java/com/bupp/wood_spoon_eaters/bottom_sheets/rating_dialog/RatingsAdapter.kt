@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,19 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.DishRatingItemViewBinding
 import com.bupp.wood_spoon_eaters.model.Comment
-import kotlinx.android.synthetic.main.dish_rating_item_view.view.*
 
 class RatingsAdapter(val context: Context, private var comments: ArrayList<Comment>) :RecyclerView.Adapter<RatingsAdapter.DishViewHolder>() {
 
-    class DishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class DishViewHolder(view: DishRatingItemViewBinding) : RecyclerView.ViewHolder(view.root) {
         val image: ImageView = view.dishRatingItemImage
         val name: TextView = view.dishRatingItemName
         val review: TextView = view.dishRatingItemReview
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DishViewHolder {
-        return DishViewHolder(LayoutInflater.from(context).inflate(R.layout.dish_rating_item_view, parent, false))
+        val binding = DishRatingItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DishViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

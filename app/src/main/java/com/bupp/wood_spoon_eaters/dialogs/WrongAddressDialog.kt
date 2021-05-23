@@ -9,9 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WrongAddressDialogBinding
-import kotlinx.android.synthetic.main.error_dialog.*
-import kotlinx.android.synthetic.main.error_dialog.errorDialogBkg
-import kotlinx.android.synthetic.main.wrong_address_dialog.*
 
 class WrongAddressDialog: DialogFragment(){
 

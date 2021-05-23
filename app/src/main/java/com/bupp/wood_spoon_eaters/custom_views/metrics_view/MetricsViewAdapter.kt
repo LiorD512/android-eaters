@@ -3,13 +3,11 @@ package com.bupp.wood_spoon_eaters.custom_views.metrics_view
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.Metrics
+import com.bupp.wood_spoon_eaters.databinding.MetricsViewItemBinding
 import com.bupp.wood_spoon_eaters.model.DishMetricsRequest
-import kotlinx.android.synthetic.main.metrics_view_item.view.*
+import com.bupp.wood_spoon_eaters.model.Metrics
 
 class MetricsViewAdapter(val context: Context, val metrics: ArrayList<Metrics>, val listener: MetricsViewAdapterListener) : RecyclerView.Adapter<MetricsViewAdapter.ViewHolder>() {
 
@@ -23,7 +21,7 @@ class MetricsViewAdapter(val context: Context, val metrics: ArrayList<Metrics>, 
 //    val hashSet = hashSetOf<DishMetricsRequest>()
     val hashSet = hashMapOf<Long, DishMetricsRequest>()
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: MetricsViewItemBinding) : RecyclerView.ViewHolder(view.root) {
         val title = view.metricsViewTitle
         val description = view.metricsViewDescription
         val positiveBtn = view.metricsViewPositive
@@ -31,7 +29,8 @@ class MetricsViewAdapter(val context: Context, val metrics: ArrayList<Metrics>, 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.metrics_view_item, parent, false))
+        val binding = MetricsViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

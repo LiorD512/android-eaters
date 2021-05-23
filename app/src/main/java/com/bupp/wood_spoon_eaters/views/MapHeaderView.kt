@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.databinding.MapHeaderViewLayoutBinding
-import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
 import render.animations.Render
 import render.animations.Slide
 

@@ -8,15 +8,20 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.GridItemDecoration
+import com.bupp.wood_spoon_eaters.databinding.IconsGridViewBinding
+import com.bupp.wood_spoon_eaters.databinding.WsSelectableBtnBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import kotlinx.android.synthetic.main.icons_grid_view.view.*
 
-class EmptyIconsGridView : FrameLayout, EmptyIconsGridViewAdapter.EmptyIconGridViewAdapterListener{
+class EmptyIconsGridView @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) , EmptyIconsGridViewAdapter.EmptyIconGridViewAdapterListener{
 
     private val SPAN_COUNT = 5
     private lateinit var adapter: EmptyIconsGridViewAdapter
     private var selectedItemPosition : Int = -1
     private lateinit var listener : OnItemSelectedListener
+
+    private var binding: IconsGridViewBinding = IconsGridViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     interface OnItemSelectedListener{
         fun OnEmptyItemSelected()
@@ -26,46 +31,46 @@ class EmptyIconsGridView : FrameLayout, EmptyIconsGridViewAdapter.EmptyIconGridV
         this.listener = listener
     }
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.icons_grid_view, this, true)
+    init {
+        with(binding){
+            if (attrs != null) {
+                val a = context.obtainStyledAttributes(attrs, R.styleable.EmptyIconsGridView)
+                if (a.hasValue(R.styleable.EmptyIconsGridView_title)) {
+                    var title = a.getString(R.styleable.EmptyIconsGridView_title)
+                    title?.let{
+                        if(title.isBlank()){
+                            iconsGridViewTitle.visibility = View.GONE
+                        }else{
+                            iconsGridViewTitle.text = title
+                        }
+                    }
 
-        if (attrs != null) {
-            val a = context.obtainStyledAttributes(attrs, R.styleable.EmptyIconsGridView)
-            if (a.hasValue(R.styleable.EmptyIconsGridView_title)) {
-                var title = a.getString(R.styleable.EmptyIconsGridView_title)
-                title?.let{
-                    if(title.isBlank()){
-                        iconsGridViewTitle.visibility = View.GONE
-                    }else{
-                        iconsGridViewTitle.text = title
+                    var subTitle = a.getString(R.styleable.EmptyIconsGridView_subTitle)
+                    subTitle?.let{
+                        if(subTitle.isBlank()){
+                            iconsGridViewSubTitle.visibility = View.GONE
+                        }else{
+                            iconsGridViewSubTitle.text = subTitle
+                        }
                     }
                 }
-
-                var subTitle = a.getString(R.styleable.EmptyIconsGridView_subTitle)
-                subTitle?.let{
-                    if(subTitle.isBlank()){
-                        iconsGridViewSubTitle.visibility = View.GONE
-                    }else{
-                        iconsGridViewSubTitle.text = subTitle
-                    }
-                }
+                a.recycle()
             }
-            a.recycle()
         }
 
         initIconsGrid(arrayListOf())
     }
 
     fun initIconsGrid(icons: ArrayList<SelectableIcon>) {
-        iconsGridViewList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+        with(binding){
+            iconsGridViewList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
 
-        //This will for default android divider
-        iconsGridViewList.addItemDecoration(GridItemDecoration(2, 2))
+            //This will for default android divider
+            iconsGridViewList.addItemDecoration(GridItemDecoration(2, 2))
 
-        adapter = EmptyIconsGridViewAdapter(context, icons,this)
-        iconsGridViewList.adapter = adapter
+            adapter = EmptyIconsGridViewAdapter(context, icons,this@EmptyIconsGridView)
+            iconsGridViewList.adapter = adapter
+        }
     }
 
     override fun onItemSelected(itemPosition: Int) {

@@ -8,8 +8,6 @@
 //import androidx.core.content.ContextCompat
 //import androidx.fragment.app.DialogFragment
 //import com.bupp.wood_spoon_eaters.R
-//import kotlinx.android.synthetic.main.dish_sold_out_dialog.*
-//import kotlinx.android.synthetic.main.dish_unavailable_dialog.*
 //
 //class DishUnAvailableDialog : DialogFragment() {
 //

@@ -2,15 +2,13 @@ package com.bupp.wood_spoon_eaters.features.main.cook_profile
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.CooksProfileDishItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
-import kotlinx.android.synthetic.main.cooks_profile_dish_item.view.*
 
 class CooksDishesAdapter(private val listener: CooksProfileDishesListener?) :
     ListAdapter<Dish, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -20,13 +18,15 @@ class CooksDishesAdapter(private val listener: CooksProfileDishesListener?) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.cooks_profile_dish_item,
-                parent,
-                false
-            )
-        )
+        val binding = CooksProfileDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+//        return ViewHolder(
+//            LayoutInflater.from(parent.context).inflate(
+//                R.layout.cooks_profile_dish_item,
+//                parent,
+//                false
+//            )
+//        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -36,7 +36,7 @@ class CooksDishesAdapter(private val listener: CooksProfileDishesListener?) :
         itemViewHolder.bindItem(listener, item)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: CooksProfileDishItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val mainLayout = view.cooksDishItemLayout
         private val title = view.cooksDishItemTitle
         private val description = view.cooksDishItemDescription

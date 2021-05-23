@@ -27,8 +27,6 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-
         return when (viewType) {
             VIEW_TYPE_ADDITIONAL_HEADER -> {
                 val binding = AdditionalDishItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)

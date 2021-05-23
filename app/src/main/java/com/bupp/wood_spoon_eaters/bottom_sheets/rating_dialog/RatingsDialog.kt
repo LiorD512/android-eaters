@@ -9,11 +9,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.RatingsDialogBinding
 import com.bupp.wood_spoon_eaters.model.Review
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.ratings_dialog.*
 
 class RatingsDialog(val ratings: Review) : BottomSheetDialogFragment() {
 

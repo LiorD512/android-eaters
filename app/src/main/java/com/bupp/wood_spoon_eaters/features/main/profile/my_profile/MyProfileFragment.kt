@@ -16,7 +16,6 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
-import kotlinx.android.synthetic.main.my_profile_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.content.Intent
 import android.net.Uri
@@ -38,7 +37,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
     FavoritesView.FavoritesViewListener, EmptyIconsGridView.OnItemSelectedListener, CuisinesChooserDialog.CuisinesChooserListener,
     IconsGridView.IconsGridViewListener {
 
-    private var binding: MyProfileFragmentBinding? = null
+    lateinit var binding: MyProfileFragmentBinding
     private val viewModel by viewModel<MyProfileViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -47,7 +46,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         Analytics.with(requireContext()).screen("Profile page")
 
         binding = MyProfileFragmentBinding.bind(view)
-        binding!!.myProfileFragEditPayment.setDeliveryDetailsViewListener(this)
+        binding.myProfileFragEditPayment.setDeliveryDetailsViewListener(this)
 
         initClicks()
         initProfileData()
@@ -71,7 +70,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
 
     override fun OnEmptyItemSelected() {
         var cuisineFragment = CuisinesChooserDialog(this, viewModel.getCuisineList(), Constants.MULTI_SELECTION)
-        cuisineFragment.setSelectedCuisine(myProfileFragCuisineIcons.getSelectedCuisines())
+        cuisineFragment.setSelectedCuisine(binding.myProfileFragCuisineIcons.getSelectedCuisines())
         cuisineFragment.show(childFragmentManager, "CookingCuisine")
     }
 
@@ -94,13 +93,13 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
             }
         })
         viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            myProfileFragFavorites.setFavoritesViewData(it, this)
+            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if(it){
-                binding!!.myProfileFragPb.show()
+                binding.myProfileFragPb.show()
             }else{
-                binding!!.myProfileFragPb.hide()
+                binding.myProfileFragPb.hide()
             }
         })
 
@@ -108,7 +107,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
 
 
     private fun handleUserDetails(eater: Eater) {
-        with(binding!!){
+        with(binding){
             myProfileFragUserName.text = eater.getFullName()
 
             myProfileFragUserPhoto.setImage(eater.thumbnail)
@@ -200,15 +199,15 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         val card = paymentMethod.card
         if(card != null){
             Log.d("wowMyProfile","updateCustomerPaymentMethod: ${paymentMethod.id}")
-            myProfileFragEditPayment.updateDeliveryDetails("Selected Card: (${card.brand} ${card.last4})")
-            myProfileFragEditPayment.setChangeable(true)
+            binding.myProfileFragEditPayment.updateDeliveryDetails("Selected Card: (${card.brand} ${card.last4})")
+            binding.myProfileFragEditPayment.setChangeable(true)
             viewModel.updateUserCustomerCard(paymentMethod)
         }
     }
 
     private fun setEmptyPaymentMethod() {
-        myProfileFragEditPayment.updateDeliveryDetails("Insert payment method")
-        myProfileFragEditPayment.setChangeable(true)
+        binding.myProfileFragEditPayment.updateDeliveryDetails("Insert payment method")
+        binding.myProfileFragEditPayment.setChangeable(true)
     }
 
     fun onAddressChooserSelected() {

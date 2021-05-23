@@ -6,7 +6,6 @@
 //import androidx.recyclerview.widget.LinearSnapHelper
 //import androidx.recyclerview.widget.SnapHelper
 //import com.bupp.wood_spoon_eaters.R
-//import kotlinx.android.synthetic.main.ws_range_time_picker_recycler_item.view.*
 //import mva2.adapter.ItemBinder
 //import mva2.adapter.ItemViewHolder
 //

@@ -19,7 +19,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
-import kotlinx.android.synthetic.main.user_image_view.view.*
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -64,115 +63,117 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun initUi(attrs: AttributeSet? = null) {
-        attrs?.let {
+        with(binding){
+            attrs?.let {
 
-            with(binding) {
+                with(binding) {
 
-                val a = context.obtainStyledAttributes(attrs, R.styleable.UserImageView)
+                    val a = context.obtainStyledAttributes(attrs, R.styleable.UserImageView)
 
-                imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.SMALL_IMAGE_SIZE)
-                placeHolder = a.getDrawable(R.styleable.UserImageView_placeHolder)
-                isWithStroke = a.getBoolean(R.styleable.UserImageView_isWithStroke, false)
-                isWithShadow = a.getBoolean(R.styleable.UserImageView_isWithShadow, false)
-                a.recycle()
-
-            }
-        }
-
-        if (placeHolder != null) {
-            cookImageView.setImageDrawable(placeHolder)
-        }
-        cookImageView.setOnClickListener {
-            listener?.onUserImageClick(curCook)
-        }
-
-        when (imageSize) {
-            Constants.HEADER_IMAGE_SIZE -> {
-                val bkgLayout = LayoutParams(Utils.toPx(40), Utils.toPx(40))
-                cookImageViewLayout.layoutParams = bkgLayout
-
-                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(39), Utils.toPx(39))
-                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                cookImageView.layoutParams = imageLayout
-            }
-            Constants.SMALL_IMAGE_SIZE -> {
-                val bkgLayout = LayoutParams(Utils.toPx(50), Utils.toPx(50))
-                cookImageViewLayout.layoutParams = bkgLayout
-
-                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(48), Utils.toPx(48))
-                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                cookImageView.layoutParams = imageLayout
-                if (isWithBkg)
-                    cookImageView.setPadding(10, 10, 10, 10)
-            }
-            Constants.BIG_IMAGE_SIZE -> {
-                val bkgLayout = LayoutParams(Utils.toPx(80), Utils.toPx(80))
-                cookImageViewLayout.layoutParams = bkgLayout
-
-//                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(65), Utils.toPx(65))
-//                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-//                cookImageView.layoutParams = imageLayout
-
-                if (isWithBkg){
-                    val param = cookImageViewLayoutCardView.layoutParams as ViewGroup.MarginLayoutParams
-                    param.setMargins(28,0,0,0)
-                    cookImageViewLayoutCardView.layoutParams = param
-
-                    cookImageView.setPadding(10, 10, 10, 10)
-
-                    val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(65), Utils.toPx(65))
-                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-                    cookImageView.layoutParams = imageLayout
-                }else{
-                    val param = cookImageViewLayoutCardView.layoutParams as ViewGroup.MarginLayoutParams
-                    param.setMargins(18,10,10,10)
-                    cookImageViewLayoutCardView.layoutParams = param
-
-                    val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(75), Utils.toPx(75))
-                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-                    cookImageView.layoutParams = imageLayout
-//                    cookImageView.setPadding(10, 10, 10, 10)
+                    imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.SMALL_IMAGE_SIZE)
+                    placeHolder = a.getDrawable(R.styleable.UserImageView_placeHolder)
+                    isWithStroke = a.getBoolean(R.styleable.UserImageView_isWithStroke, false)
+                    isWithShadow = a.getBoolean(R.styleable.UserImageView_isWithShadow, false)
+                    a.recycle()
 
                 }
-                if(isWithStroke){
-                    cookImageViewPlay.visibility = View.VISIBLE
-                    cookImageViewPlay.elevation = dpToPx(8F).toFloat()
-                }else{
-                    cookImageViewPlay.visibility = View.GONE
+            }
+
+            if (placeHolder != null) {
+                cookImageView.setImageDrawable(placeHolder)
+            }
+            cookImageView.setOnClickListener {
+                listener?.onUserImageClick(curCook)
+            }
+
+            when (imageSize) {
+                Constants.HEADER_IMAGE_SIZE -> {
+                    val bkgLayout = LayoutParams(Utils.toPx(40), Utils.toPx(40))
+                    cookImageViewLayout.layoutParams = bkgLayout
+
+                    val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(39), Utils.toPx(39))
+                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    cookImageView.layoutParams = imageLayout
+                }
+                Constants.SMALL_IMAGE_SIZE -> {
+                    val bkgLayout = LayoutParams(Utils.toPx(50), Utils.toPx(50))
+                    cookImageViewLayout.layoutParams = bkgLayout
+
+                    val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(48), Utils.toPx(48))
+                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                    cookImageView.layoutParams = imageLayout
+                    if (isWithBkg)
+                        cookImageView.setPadding(10, 10, 10, 10)
+                }
+                Constants.BIG_IMAGE_SIZE -> {
+                    val bkgLayout = LayoutParams(Utils.toPx(80), Utils.toPx(80))
+                    cookImageViewLayout.layoutParams = bkgLayout
+
+    //                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(65), Utils.toPx(65))
+    //                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+    //                cookImageView.layoutParams = imageLayout
+
+                    if (isWithBkg){
+                        val param = cookImageViewLayoutCardView.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(28,0,0,0)
+                        cookImageViewLayoutCardView.layoutParams = param
+
+                        cookImageView.setPadding(10, 10, 10, 10)
+
+                        val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(65), Utils.toPx(65))
+                        imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+                        cookImageView.layoutParams = imageLayout
+                    }else{
+                        val param = cookImageViewLayoutCardView.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(18,10,10,10)
+                        cookImageViewLayoutCardView.layoutParams = param
+
+                        val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(75), Utils.toPx(75))
+                        imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+                        cookImageView.layoutParams = imageLayout
+    //                    cookImageView.setPadding(10, 10, 10, 10)
+
+                    }
+                    if(isWithStroke){
+                        cookImageViewPlay.visibility = View.VISIBLE
+                        cookImageViewPlay.elevation = dpToPx(8F).toFloat()
+                    }else{
+                        cookImageViewPlay.visibility = View.GONE
+                    }
+                }
+                Constants.BIGGEST_IMAGE_SIZE -> {
+                    val bkgLayout = LayoutParams(Utils.toPx(90), Utils.toPx(90))
+                    cookImageViewLayout.layoutParams = bkgLayout
+
+                    val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(90), Utils.toPx(90))
+                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+                    cookImageView.layoutParams = imageLayout
+                }
+                Constants.MANY_COOKS_VIEW -> {
+                    val bkgLayout = LayoutParams(Utils.toPx(76), Utils.toPx(76))
+                    cookImageViewLayout.layoutParams = bkgLayout
+
+                    val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(76), Utils.toPx(76))
+                    imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+                    cookImageView.setPadding(0,0,0,0)
+                    cookImageView.layoutParams = imageLayout
+
+                    isWithBkg = false
                 }
             }
-            Constants.BIGGEST_IMAGE_SIZE -> {
-                val bkgLayout = LayoutParams(Utils.toPx(90), Utils.toPx(90))
-                cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(90), Utils.toPx(90))
-                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-                cookImageView.layoutParams = imageLayout
+            if(isWithStroke){
+                cookImageView.background = ContextCompat.getDrawable(context, R.drawable.blue_circle)
+    //            cookImageViewPlay.visibility = View.VISIBLE
+            }else{
+                cookImageView.background = null
             }
-            Constants.MANY_COOKS_VIEW -> {
-                val bkgLayout = LayoutParams(Utils.toPx(76), Utils.toPx(76))
-                cookImageViewLayout.layoutParams = bkgLayout
 
-                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(76), Utils.toPx(76))
-                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-                cookImageView.setPadding(0,0,0,0)
-                cookImageView.layoutParams = imageLayout
-
-                isWithBkg = false
+            if(isWithShadow){
+                cookImageViewLayoutCardView.elevation = dpToPx(8F).toFloat()
+            }else{
+                cookImageViewLayoutCardView.elevation = 0F
             }
-        }
-
-        if(isWithStroke){
-            cookImageView.background = ContextCompat.getDrawable(context, R.drawable.blue_circle)
-//            cookImageViewPlay.visibility = View.VISIBLE
-        }else{
-            cookImageView.background = null
-        }
-
-        if(isWithShadow){
-            cookImageViewLayoutCardView.elevation = dpToPx(8F).toFloat()
-        }else{
-            cookImageViewLayoutCardView.elevation = 0F
         }
     }
 
@@ -182,12 +183,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             loadSmallImage(imageStr)
 //            Glide.with(context).load(imageStr).transform(CircleCrop()).into(cookImageView)
         } else if (placeHolder != null) {
-            cookImageView.setImageDrawable(placeHolder)
+            binding.cookImageView.setImageDrawable(placeHolder)
         }
     }
 
     fun setImage(imageUri: Uri) {
-        Glide.with(context).load(imageUri).transform(CircleCrop()).into(cookImageView)
+        Glide.with(context).load(imageUri).transform(CircleCrop()).into(binding.cookImageView)
     }
 
     fun setCookFromCooksView(cook: Cook) {
@@ -218,6 +219,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun loadSmallImage(imageUrl: String){
         Log.d("wowUserImageView","loadSmallImage")
         val smallThumbnail = imageUrl.replace("t_medium", "t_small")
-        Glide.with(context).load(smallThumbnail).transform(CircleCrop()).into(cookImageView)
+        Glide.with(context).load(smallThumbnail).transform(CircleCrop()).into(binding.cookImageView)
     }
 }

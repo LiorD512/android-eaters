@@ -30,7 +30,6 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.stripe.android.view.PaymentMethodsActivityStarter
-import kotlinx.android.synthetic.main.activity_new_order.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -69,7 +68,7 @@ class NewOrderActivity : BaseActivity(),
     }
 
     private fun initUi() {
-        singleDishStatusBar.setCartBottomBarListener(this)
+        binding.singleDishStatusBar.setCartBottomBarListener(this)
     }
 
     private fun initObservers() {
@@ -115,9 +114,9 @@ class NewOrderActivity : BaseActivity(),
         viewModel.progressData.observe(this, {
             Log.d(TAG, "progressData observer: $it")
             if (it) {
-                newOrderActPb.show()
+                binding.newOrderActPb.show()
             } else {
-                newOrderActPb.hide()
+                binding.newOrderActPb.hide()
             }
         })
     }
@@ -135,10 +134,10 @@ class NewOrderActivity : BaseActivity(),
 
     private fun updateStatusBottomBar(bottomBarEvent: NewOrderMainViewModel.CartBottomBarTypeEvent) {
         Log.d(TAG, "updateStatusBottomBar type: ${bottomBarEvent.type}")
-        if (singleDishStatusBar.visibility != View.VISIBLE) {
-            singleDishStatusBar.visibility = View.VISIBLE
+        if (binding.singleDishStatusBar.visibility != View.VISIBLE) {
+            binding.singleDishStatusBar.visibility = View.VISIBLE
         }
-        singleDishStatusBar.updateStatusBottomBarByType(
+        binding.singleDishStatusBar.updateStatusBottomBarByType(
             type = bottomBarEvent.type,
             price = bottomBarEvent.price,
             itemCount = bottomBarEvent.itemCount,

@@ -13,7 +13,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="1"
-                    android:id="@+id/numpad_btn_1"
+                    android:id="@+id/numPadBtn1"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -41,7 +41,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="2"
-                    android:id="@+id/numpad_btn_2"
+                    android:id="@+id/numPadBtn2"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -70,7 +70,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="3"
-                    android:id="@+id/numpad_btn_3"
+                    android:id="@+id/numPadBtn3"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -103,7 +103,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="4"
-                    android:id="@+id/numpad_btn_4"
+                    android:id="@+id/numPadBtn4"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -132,7 +132,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="5"
-                    android:id="@+id/numpad_btn_5"
+                    android:id="@+id/numPadBtn5"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -161,7 +161,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="6"
-                    android:id="@+id/numpad_btn_6"
+                    android:id="@+id/numPadBtn6"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -194,7 +194,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="7"
-                    android:id="@+id/numpad_btn_7"
+                    android:id="@+id/numPadBtn7"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -223,7 +223,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="8"
-                    android:id="@+id/numpad_btn_8"
+                    android:id="@+id/numPadBtn8"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -252,7 +252,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="9"
-                    android:id="@+id/numpad_btn_9"
+                    android:id="@+id/numPadBtn9"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -314,7 +314,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="0"
-                    android:id="@+id/numpad_btn_0"
+                    android:id="@+id/numPadBtn0"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -343,7 +343,7 @@
             <LinearLayout
                     android:layout_margin="0.25dp"
                     android:tag="#"
-                    android:id="@+id/numpad_btn_backspace"
+                    android:id="@+id/numPadBtnbackspace"
                     android:clickable="true"
                     android:background="@color/white"
                     android:gravity="center"
@@ -356,7 +356,7 @@
                 <!--android:src="@drawable/ic_close"-->
                 <ImageView
                         android:src="@drawable/icons_keyboard_delete"
-                        android:id="@+id/back_space_btn"
+                        android:id="@+id/numPadBtnDeleteBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 

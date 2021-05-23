@@ -6,10 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.databinding.PlusMinusViewBinding
-import kotlinx.android.synthetic.main.plus_minus_view.view.*
 
 
-class PlusMinusView@JvmOverloads
+class PlusMinusView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
 
@@ -46,7 +45,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun updateCounterUiOnly(count: Int) {
         counter = count
-        plusMinusCounter.text = "$counter"
+        binding.plusMinusCounter.text = "$counter"
     }
 
     fun setViewEnabled(isEnabled: Boolean) {

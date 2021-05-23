@@ -9,13 +9,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.databinding.FragmentCuisinesChooserBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import kotlinx.android.synthetic.main.fragment_cuisines_chooser.*
 import kotlin.collections.ArrayList
 
 class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: List<SelectableIcon>, val choiceCount: Int) : DialogFragment(), HeaderView.HeaderViewListener {
 
     private var selectedCuisine: ArrayList<SelectableIcon>? = null
+    lateinit var binding: FragmentCuisinesChooserBinding
 
     interface CuisinesChooserListener{
         fun onCuisineChoose(selectedCuisines: List<SelectableIcon>)
@@ -28,17 +29,19 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_cuisines_chooser, null)
-        getDialog()?.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cuisineChooserFragHeader.setHeaderViewListener(this)
-        cuisineChooserFragGrid.initIconsGrid(cuisine, choiceCount)
+        binding = FragmentCuisinesChooserBinding.bind(view)
+
+        binding.cuisineChooserFragHeader.setHeaderViewListener(this)
+        binding.cuisineChooserFragGrid.initIconsGrid(cuisine, choiceCount)
         if (selectedCuisine != null) {
-            cuisineChooserFragGrid.loadSelectedIcons(selectedCuisine)
+            binding.cuisineChooserFragGrid.loadSelectedIcons(selectedCuisine)
         }
 }
 
@@ -60,7 +63,7 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
     }
 
     override fun onHeaderDoneClick() {
-        listener.onCuisineChoose(cuisineChooserFragGrid.getSelectedItems())
+        listener.onCuisineChoose(binding.cuisineChooserFragGrid.getSelectedItems())
         dismiss()
     }
 

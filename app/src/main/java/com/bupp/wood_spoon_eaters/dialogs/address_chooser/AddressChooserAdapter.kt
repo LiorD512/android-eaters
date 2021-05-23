@@ -10,7 +10,6 @@
 //import androidx.recyclerview.widget.RecyclerView
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.model.Address
-//import kotlinx.android.synthetic.main.address_list_item.view.*
 //
 //class AddressChooserAdapter(
 //    val context: Context,

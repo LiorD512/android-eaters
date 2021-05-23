@@ -14,7 +14,6 @@
 //import com.bupp.wood_spoon_eaters.dialogs.PaymentMethodAcceptedDialog
 //import com.bupp.wood_spoon_eaters.common.Constants
 //import com.stripe.android.Stripe
-//import kotlinx.android.synthetic.main.payment_methods_dialog.*
 //import org.koin.androidx.viewmodel.ext.android.viewModel
 //import com.stripe.android.CustomerSession
 //import android.R.string

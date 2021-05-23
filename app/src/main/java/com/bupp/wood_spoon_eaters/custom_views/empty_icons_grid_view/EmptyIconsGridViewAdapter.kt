@@ -8,8 +8,11 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.DishMediaItemBinding
+import com.bupp.wood_spoon_eaters.databinding.IconsGridViewBinding
+import com.bupp.wood_spoon_eaters.databinding.IconsGridViewItemBinding
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.DishMediaAdapter
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import kotlinx.android.synthetic.main.icons_grid_view_item.view.*
 
 class EmptyIconsGridViewAdapter(val context: Context, val icons: ArrayList<SelectableIcon>, val listener: EmptyIconGridViewAdapterListener): RecyclerView.Adapter<EmptyIconsGridViewAdapter.ViewHolder>() {
 
@@ -25,14 +28,16 @@ class EmptyIconsGridViewAdapter(val context: Context, val icons: ArrayList<Selec
         fun onItemSelected(itemPosition : Int)
     }
 
-    class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder (view: IconsGridViewItemBinding) : RecyclerView.ViewHolder(view.root) {
         val background = view.iconsGridBackground
         val iconView = view.iconsGridItem
         val name = view.iconsGridName
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmptyIconsGridViewAdapter.ViewHolder {
-        return EmptyIconsGridViewAdapter.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.icons_grid_view_item, parent, false))
+        val binding = IconsGridViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+//        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.icons_grid_view_item, parent, false))
     }
 
     override fun getItemCount(): Int {

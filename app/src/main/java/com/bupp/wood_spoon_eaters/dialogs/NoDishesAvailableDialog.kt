@@ -8,7 +8,6 @@
 //import androidx.core.content.ContextCompat
 //import androidx.fragment.app.DialogFragment
 //import com.bupp.wood_spoon_eaters.R
-//import kotlinx.android.synthetic.main.no_dishes_available_dialog.*
 //
 //class NoDishesAvailableDialog : DialogFragment() {
 //

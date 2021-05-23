@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
 import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+import com.bupp.wood_spoon_eaters.databinding.FeedDishItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.feed_dish_item.view.*
 
 
 class SingleFeedAdapter(
@@ -150,7 +149,8 @@ class SingleFeedAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.feed_dish_item, parent, false))
+        val binding = FeedDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DishItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -160,7 +160,7 @@ class SingleFeedAdapter(
 }
 
 
-class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class DishItemViewHolder(view: FeedDishItemBinding) : RecyclerView.ViewHolder(view.root) {
     val mainLayout: RelativeLayout = view.feedDishItemLayout
     val bottomLayout: RelativeLayout = view.feedDishItemBottomLayout
     val nationwideDate: AutofitTextView = view.feedDishItemNationwideDate

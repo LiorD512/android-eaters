@@ -1,14 +1,10 @@
 package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.text.Editable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WsSelectableBtnBinding
 

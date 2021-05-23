@@ -13,7 +13,6 @@
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 //import com.bupp.wood_spoon_eaters.model.Address
-//import kotlinx.android.synthetic.main.address_chooser_dialog.*
 //
 //class AddressChooserDialog(val listener: AddressChooserDialogListener, private val addresses: ArrayList<Address>?, var lastOrderAddress: Address?) : DialogFragment(),
 //    AddressChooserAdapter.AddressChooserAdapterListener {

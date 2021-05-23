@@ -2,13 +2,11 @@ package com.bupp.wood_spoon_eaters.features.main.cook_profile
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.CooksProfileDishItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
-import kotlinx.android.synthetic.main.cooks_profile_dish_item.view.*
 
 
 class CooksProfileDishesAdapter(
@@ -58,7 +56,9 @@ class CooksProfileDishesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.cooks_profile_dish_item, parent, false))
+        val binding = CooksProfileDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return DishItemViewHolder(binding)
+//        return DishItemViewHolder(LayoutInflater.from(context).inflate(R.layout.cooks_profile_dish_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +66,7 @@ class CooksProfileDishesAdapter(
     }
 }
 
-class DishItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class DishItemViewHolder(view: CooksProfileDishItemBinding) : RecyclerView.ViewHolder(view.root) {
     val mainLayout = view.cooksDishItemLayout
     val title = view.cooksDishItemTitle
     val description = view.cooksDishItemDescription

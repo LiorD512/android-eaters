@@ -23,7 +23,6 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.promo_code_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 

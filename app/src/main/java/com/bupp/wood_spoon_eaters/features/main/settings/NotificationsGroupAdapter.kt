@@ -3,20 +3,14 @@ package com.bupp.wood_spoon_eaters.features.main.settings
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CompoundButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.NotificationGroupItemBinding
 import com.bupp.wood_spoon_eaters.model.NotificationGroup
-import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.utils.Utils
-import kotlinx.android.synthetic.main.notification_group_item.view.*
-import kotlinx.android.synthetic.main.orders_history_item.view.*
 
 class NotificationsGroupAdapter(val context: Context, private var notificationsGroup: List<NotificationGroup>, private var eaterPrefs: MutableList<Long>, val listener: NotificationsGroupAdapterListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -53,7 +47,8 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.notification_group_item, parent, false))
+        val binding = NotificationGroupItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -74,7 +69,7 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
     }
 }
 
-class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class ItemViewHolder(view: NotificationGroupItemBinding) : RecyclerView.ViewHolder(view.root) {
     val mainLayout: LinearLayout = view.NotificationGroupMainLayout
     val name: TextView = view.NotificationGroupName
     val description: TextView = view.NotificationGroupDescription

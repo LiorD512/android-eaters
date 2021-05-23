@@ -235,8 +235,8 @@ class CartManager(
 
     suspend fun updateInCartOrderItem(updatedOrderItem: OrderItem): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "updateInCartOrderItem")
-        //this method used to update orderItems in AdditionalDishesDialog and checkout.
-        // get specific orderItem from response and update cart with new orderItemRequest
+        //this method used to update orderItems that changed in AdditionalDishesDialog and checkout.
+        //get specific orderItem from response and update cart with new orderItemRequest
         for (item in currentOrderResponse?.orderItems ?: arrayListOf()) {
             if (item.id == updatedOrderItem.id) {
                 cart.find { it.dishId == item.dish.id }?.apply {
@@ -544,13 +544,13 @@ class CartManager(
         return dishNames.toList()
     }
 
-    private fun getAddDishData(id: Long? = null): Map<String, String> {
-        val currentDishName = getCurrentDishName()
+    private fun getAddDishData(id: Long? = null, dish: Dish? = null): Map<String, String> {
+        val currentDishName = getCurrentDishName(dish)
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
         val cuisine = getCurrentOrderChefCuisine()
-        val dishId = getCurrentDishId()
-        val dishPrice = getCurrentDishPrice()
+        val dishId = getCurrentDishId(dish)
+        val dishPrice = getCurrentDishPrice(dish)
         val data = mutableMapOf<String, String>("cook_name" to chefsName)
 
         data["cook_id"] = chefsId
@@ -567,15 +567,18 @@ class CartManager(
         return data
     }
 
-    private fun getCurrentDishName(): String {
+    private fun getCurrentDishName(dish: Dish? = null): String {
+        dish?.name?.let{
+            return it
+        }
         currentShowingDish?.name?.let {
             return it
         }
         return ""
     }
 
-    fun sendFBAdditioanlDishEvent(dishId: Long) {
-        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(dishId))
+    fun sendFBAdditioanlDishEvent(dish: Dish) {
+        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(dish = dish))
     }
 
     private fun getCurrentOrderChefId(): String {
@@ -584,14 +587,20 @@ class CartManager(
         }
     }
 
-    private fun getCurrentDishPrice(): Double? {
+    private fun getCurrentDishPrice(dish: Dish? = null): Double? {
+        dish?.let{
+            return it.price.value
+        }
         currentShowingDish?.let {
             return it.price.value
         }
         return null
     }
 
-    private fun getCurrentDishId(): Long {
+    private fun getCurrentDishId(dish: Dish? = null): Long {
+        dish?.let{
+            return it.id
+        }
         currentShowingDish?.let {
             return it.id
         }

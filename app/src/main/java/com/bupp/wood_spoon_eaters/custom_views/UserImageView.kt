@@ -17,7 +17,6 @@
 //import com.bupp.wood_spoon_eaters.model.Cook
 //import com.bupp.wood_spoon_eaters.model.Eater
 //import com.bupp.wood_spoon_eaters.common.Constants
-//import kotlinx.android.synthetic.main.user_image_view.view.*
 //import com.bumptech.glide.load.engine.DiskCacheStrategy
 //import com.bumptech.glide.load.resource.bitmap.CenterCrop
 //import com.bumptech.glide.load.resource.bitmap.CircleCrop

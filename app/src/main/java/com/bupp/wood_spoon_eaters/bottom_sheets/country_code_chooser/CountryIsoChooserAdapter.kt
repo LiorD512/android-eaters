@@ -9,9 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.CountryChooserItemBinding
 import com.bupp.wood_spoon_eaters.model.CountriesISO
-import kotlinx.android.synthetic.main.country_chooser_item.view.*
 
 class CountryIsoChooserAdapter(private val listener: AddressChooserAdapterListener?) :
     ListAdapter<CountriesISO, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -23,13 +22,15 @@ class CountryIsoChooserAdapter(private val listener: AddressChooserAdapterListen
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.country_chooser_item,
-                parent,
-                false
-            )
-        )
+        val binding = CountryChooserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+//        return ViewHolder(
+//            LayoutInflater.from(parent.context).inflate(
+//                R.layout.country_chooser_item,
+//                parent,
+//                false
+//            )
+//        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -42,7 +43,7 @@ class CountryIsoChooserAdapter(private val listener: AddressChooserAdapterListen
         this.selectedCountry = selectedCountry
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: CountryChooserItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val mainLayout: FrameLayout = view.countryChooserLayout
         private val countryText: TextView = view.countryChooserItem
         private val selectedView: ImageView = view.countryChooserSelected

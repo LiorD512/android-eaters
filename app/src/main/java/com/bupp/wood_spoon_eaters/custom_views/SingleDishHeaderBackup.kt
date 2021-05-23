@@ -7,7 +7,6 @@
 //import android.widget.FrameLayout
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-//import kotlinx.android.synthetic.main.single_dish_header_view.view.*
 //
 //
 //class SingleDishHeaderBackup : FrameLayout {

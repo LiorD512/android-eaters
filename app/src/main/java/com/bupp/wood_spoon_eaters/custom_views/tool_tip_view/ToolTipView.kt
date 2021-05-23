@@ -10,18 +10,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.StackableTextViewBinding
+import com.bupp.wood_spoon_eaters.databinding.ToolTipViewBinding
 import com.daasuu.bl.ArrowDirection
 import com.daasuu.bl.BubbleLayout
 import com.daasuu.bl.BubblePopupHelper
 import com.example.matthias.mvvmcustomviewexample.custom.ToolTipViewModel
-import kotlinx.android.synthetic.main.tool_tip_view.view.*
 
 
-class ToolTipView : FrameLayout {
+class ToolTipView @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) {
+
+    private var binding: ToolTipViewBinding = ToolTipViewBinding.inflate(LayoutInflater.from(context), this, true)
+
 
     private var type: Int = 0
     private var attr: TypedArray? = null
@@ -33,35 +40,30 @@ class ToolTipView : FrameLayout {
 
     val viewModel = ToolTipViewModel()
 
-    constructor(context: Context) : this(context, null)
-
-    constructor(context: Context, attrs: AttributeSet?) :
-            this(context, attrs, 0)
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.tool_tip_view, this, true)
-
+    init {
         initUi(context, attrs)
     }
 
     private fun initUi(context: Context, attrs: AttributeSet?) {
-        bubbleLayout = LayoutInflater.from(context).inflate(R.layout.layout_tool_tip, null) as BubbleLayout
-        popupWindow = BubblePopupHelper.create(context, bubbleLayout)
-        popupWindow!!.animationStyle = R.style.ToolTipAnimation
-        popupWindow!!.isFocusable = true
+        with(binding) {
+            bubbleLayout = LayoutInflater.from(context).inflate(R.layout.layout_tool_tip, null) as BubbleLayout
+            popupWindow = BubblePopupHelper.create(context, bubbleLayout)
+            popupWindow!!.animationStyle = R.style.ToolTipAnimation
+            popupWindow!!.isFocusable = true
 
-        popupWindow!!.setOnDismissListener { isShowing = false }
+            popupWindow!!.setOnDismissListener { isShowing = false }
 
-        attr = context.obtainStyledAttributes(attrs, R.styleable.ToolTipView)
-        type = attr!!.getInt(R.styleable.ToolTipView_tip_type, 0)
-        attr!!.recycle()
+            attr = context.obtainStyledAttributes(attrs, R.styleable.ToolTipView)
+            type = attr!!.getInt(R.styleable.ToolTipView_tip_type, 0)
+            attr!!.recycle()
 
-        toolTipBtn.setOnClickListener(OnClickListener { v ->
-            if (popupWindow == null)
-                return@OnClickListener
-            showTooltip(v)
-            isShowing = true
-        })
+            toolTipBtn.setOnClickListener(OnClickListener { v ->
+                if (popupWindow == null)
+                    return@OnClickListener
+                showTooltip(v)
+                isShowing = true
+            })
+        }
     }
 
     fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
@@ -89,7 +91,8 @@ class ToolTipView : FrameLayout {
             }
             Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
                 titleText = resources.getString(R.string.tool_tip_min_order_fee_title)
-                bodyText = "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
+                bodyText =
+                    "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 95.toPx().toFloat()
             }
@@ -97,41 +100,34 @@ class ToolTipView : FrameLayout {
     }
 
     private fun showTooltip(view: View?) {
+        with(binding) {
+            customBubble()
 
-        customBubble()
+            val title = bubbleLayout.findViewById<TextView>(R.id.toolTipTextTitle)
+            val body = bubbleLayout.findViewById<TextView>(R.id.toolTipText)
+            title.text = titleText
+            body.text = bodyText
 
-        val title = bubbleLayout.findViewById<TextView>(R.id.toolTipTextTitle)
-        val body = bubbleLayout.findViewById<TextView>(R.id.toolTipText)
-        title.text = titleText
-        body.text = bodyText
+            val location = locateView(view)
 
-        val location = locateView(view)
-
-        when (type) {
-            Constants.TOOL_TIP_SERVICE_FEE -> {
-                val marginLeft = 23.toPx()
-                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+            when (type) {
+                Constants.TOOL_TIP_SERVICE_FEE -> {
+                    val marginLeft = 23.toPx()
+                    popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+                }
+                Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
+                    val marginLeft = 2.toPx()
+                    popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+                }
+                Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
+                    val marginLeft = 8.toPx()
+                    popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+                }
+                Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
+                    val marginLeft = 23.toPx()
+                    popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+                }
             }
-            Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
-                val marginLeft = 2.toPx()
-                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
-            }
-            Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
-                val marginLeft = 8.toPx()
-                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
-            }
-            Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
-                val marginLeft = 23.toPx()
-                popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
-            }
-//            REGISTRATION -> {
-//                val topOffset2 = DpUtils.getPixelsFromDP(context, 53)
-//                popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location.right, location.bottom - topOffset2)
-//            }
-//            else -> {
-//                val leftOffset = DpUtils.getPixelsFromDP(context, 20)
-//                popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location.left - leftOffset, location.bottom)
-//            }
         }
     }
 

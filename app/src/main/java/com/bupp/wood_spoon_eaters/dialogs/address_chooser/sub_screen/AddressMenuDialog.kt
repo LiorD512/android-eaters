@@ -14,7 +14,6 @@
 //import com.bupp.wood_spoon_eaters.dialogs.address_chooser.AddressChooserAdapter
 //import com.bupp.wood_spoon_eaters.model.Address
 //import com.example.matthias.mvvmcustomviewexample.custom.AddressMenuViewModel
-//import kotlinx.android.synthetic.main.address_menu_dialog.*
 //
 //class AddressMenuDialog(val curAddress: Address, val listener: EditAddressDialogListener) : DialogFragment(),
 //    AddressMenuViewModel.EditAddressVMListener {

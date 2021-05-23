@@ -8,9 +8,8 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.NationwideShippingChooserItemBinding
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
-import kotlinx.android.synthetic.main.nationwide_shipping_chooser_item.view.*
 
 class NationwideShippingChooserAdapter(val context: Context, val listener: NationwideShippingAdapterListener) : ListAdapter<ShippingMethod, RecyclerView.ViewHolder>(
     NationwideShippingChooserDiffCallback()
@@ -33,7 +32,7 @@ class NationwideShippingChooserAdapter(val context: Context, val listener: Natio
         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: NationwideShippingChooserItemBinding) : RecyclerView.ViewHolder(view.root) {
         var bkg = view.nationwideShippingBkg
         var cb = view.nationwideShippingCb
         var title = view.nationwideShippingTitle
@@ -42,9 +41,8 @@ class NationwideShippingChooserAdapter(val context: Context, val listener: Natio
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.nationwide_shipping_chooser_item, parent, false)
-        )
+        val binding = NationwideShippingChooserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

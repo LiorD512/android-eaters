@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import com.bupp.wood_spoon_eaters.R
-import kotlinx.android.synthetic.main.rating_stars_view.view.*
+import com.bupp.wood_spoon_eaters.databinding.RatingStarsViewBinding
 
 
-class RatingStarsView : LinearLayout, View.OnClickListener {
+class RatingStarsView @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr), View.OnClickListener {
+
+    private var binding: RatingStarsViewBinding = RatingStarsViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     interface RatingStarsViewListener {
         fun onRatingClick()
@@ -24,42 +27,42 @@ class RatingStarsView : LinearLayout, View.OnClickListener {
     private var arrayOfStars: ArrayList<ImageView>
     private var listener: RatingStarsViewListener? = null
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.rating_stars_view, this, true)
+    init{
+        with(binding){
+            this@RatingStarsView.arrayOfStars =
+                arrayListOf<ImageView>(ratingStarNum1, ratingStarNum2, ratingStarNum3, ratingStarNum4, ratingStarNum5)
 
-        this.arrayOfStars =
-            arrayListOf<ImageView>(ratingStarNum1, ratingStarNum2, ratingStarNum3, ratingStarNum4, ratingStarNum5)
+            ratingStarNum1.setOnClickListener(this@RatingStarsView)
+            ratingStarNum2.setOnClickListener(this@RatingStarsView)
+            ratingStarNum3.setOnClickListener(this@RatingStarsView)
+            ratingStarNum4.setOnClickListener(this@RatingStarsView)
+            ratingStarNum5.setOnClickListener(this@RatingStarsView)
 
-        ratingStarNum1.setOnClickListener(this)
-        ratingStarNum2.setOnClickListener(this)
-        ratingStarNum3.setOnClickListener(this)
-        ratingStarNum4.setOnClickListener(this)
-        ratingStarNum5.setOnClickListener(this)
-
-        reset()
+            reset()
+        }
     }
 
     override fun onClick(v: View?) {
-        when (v) {
-            ratingStarNum1 -> {
-                setRating(1)
+        with(binding){
+            when (v) {
+                ratingStarNum1 -> {
+                    setRating(1)
+                }
+                ratingStarNum2 -> {
+                    setRating(2)
+                }
+                ratingStarNum3 -> {
+                    setRating(3)
+                }
+                ratingStarNum4 -> {
+                    setRating(4)
+                }
+                ratingStarNum5 -> {
+                    setRating(5)
+                }
             }
-            ratingStarNum2 -> {
-                setRating(2)
-            }
-            ratingStarNum3 -> {
-                setRating(3)
-            }
-            ratingStarNum4 -> {
-                setRating(4)
-            }
-            ratingStarNum5 -> {
-                setRating(5)
-            }
+            listener?.onRatingClick()
         }
-        listener?.onRatingClick()
     }
 
     fun setRating(rating: Int) {

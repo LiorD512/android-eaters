@@ -5,28 +5,26 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.MetricsViewBinding
 import com.bupp.wood_spoon_eaters.model.Metrics
-import kotlinx.android.synthetic.main.metrics_view.view.*
 
-class MetricsView: LinearLayout{
+class MetricsView @JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr){
 
-
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        LayoutInflater.from(context).inflate(R.layout.metrics_view, this, true)
-    }
+    private var binding: MetricsViewBinding = MetricsViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     interface MetricsViewListener{
         fun onRate()
     }
 
     fun initMetricsView(metrics: ArrayList<Metrics>, listener: MetricsViewAdapter.MetricsViewAdapterListener) {
-        metricsViewList.layoutManager = LinearLayoutManager(context)
-        metricsViewList.isNestedScrollingEnabled = false
-        val adapter = MetricsViewAdapter(context, metrics, listener)
-        metricsViewList.adapter = adapter
+        with(binding){
+            metricsViewList.layoutManager = LinearLayoutManager(context)
+            metricsViewList.isNestedScrollingEnabled = false
+            val adapter = MetricsViewAdapter(context, metrics, listener)
+            metricsViewList.adapter = adapter
+        }
     }
 
 

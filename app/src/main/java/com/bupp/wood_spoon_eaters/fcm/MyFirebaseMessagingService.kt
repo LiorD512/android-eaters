@@ -11,9 +11,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.iid.InstanceIdResult
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.ArrayList

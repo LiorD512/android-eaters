@@ -7,6 +7,9 @@ import com.appsflyer.AppsFlyerLib
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
+import com.facebook.FacebookSdk
+import com.facebook.LoggingBehavior
+import com.facebook.appevents.AppEventsLogger
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
@@ -38,6 +41,9 @@ class WoodSpoonApplication : Application() {
             androidLogger()
             modules(listOf(appModule, networkModule))
         }
+
+//        FacebookSdk.setIsDebugEnabled(true)
+//        FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
 
         AppCenter.start(
             this, "1995d4eb-7e59-44b8-8832-6550bd7752ff",

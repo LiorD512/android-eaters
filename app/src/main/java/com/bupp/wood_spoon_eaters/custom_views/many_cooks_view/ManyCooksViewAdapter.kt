@@ -2,16 +2,11 @@ package com.bupp.wood_spoon_eaters.custom_views.many_cooks_view
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.databinding.ManyCooksViewItemBinding
 import com.bupp.wood_spoon_eaters.model.Cook
-import kotlinx.android.synthetic.main.many_cooks_view_item.view.*
+import com.bupp.wood_spoon_eaters.views.UserImageView
 
 class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>, val listener: ManyCooksViewListener): RecyclerView.Adapter<ManyCooksViewAdapter.ViewHolder>(),
     UserImageView.UserImageViewListener {
@@ -21,7 +16,7 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
         fun onCookViewClick(selected: Cook)
     }
 
-    class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder (view: ManyCooksViewItemBinding) : RecyclerView.ViewHolder(view.root) {
 //        val CooksViewBkg = view.manyCooksViewBkg
         val cookImageView = view.manyCooksViewItem
         val cookFirstName = view.manyCooksViewName
@@ -29,7 +24,8 @@ class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.many_cooks_view_item, parent, false))
+        val binding = ManyCooksViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

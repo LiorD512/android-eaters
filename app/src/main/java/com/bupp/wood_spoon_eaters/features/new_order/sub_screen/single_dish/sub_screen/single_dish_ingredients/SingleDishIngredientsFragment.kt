@@ -1,23 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
-import androidx.fragment.app.Fragment
-import android.annotation.SuppressLint
-import android.util.Log
-import androidx.core.content.ContextCompat
-import com.bupp.wood_spoon_eaters.model.FullDish
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.DividerItemDecoration
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentSingleDishIngredientsBinding
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import kotlinx.android.synthetic.main.fragment_single_dish_ingredients.*
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoFragment
+import com.bupp.wood_spoon_eaters.model.FullDish
 import com.segment.analytics.Analytics
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ingredients), DishIngredientsAdapter.DishIngredientsAdapterListener {
