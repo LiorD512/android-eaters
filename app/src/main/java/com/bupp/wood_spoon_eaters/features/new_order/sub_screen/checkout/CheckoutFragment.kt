@@ -37,7 +37,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener {
 
-    private var binding: CheckoutFragmentBinding? = null
+    private lateinit var binding: CheckoutFragmentBinding
 
     private var hasPaymentMethod: Boolean = false
 
@@ -63,9 +63,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
-                binding!!.checkoutFragmentPb.show()
+                binding.checkoutFragmentPb.show()
             } else {
-                binding!!.checkoutFragmentPb.hide()
+                binding.checkoutFragmentPb.hide()
             }
         })
         mainViewModel.orderData.observe(viewLifecycleOwner, { orderData ->
@@ -77,9 +77,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 openOrderTimeBottomSheet(it)
             }
         })
-//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-//
-//        })
         viewModel.getStripeCustomerCards.observe(viewLifecycleOwner) { cardsEvent ->
             Log.d("wowCheckoutFrag", "getStripeCustomerCards()")
             if (cardsEvent != null) {
@@ -109,7 +106,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     viewModel.onNationwideShippingSelectClick()
                 }
                 NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
-                    binding!!.checkoutFragChangePaymentLayout.performClick()
+                    binding.checkoutFragChangePaymentLayout.performClick()
                 }
             }
         })
@@ -125,11 +122,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
 
     private fun initUi() {
-        binding!!.checkoutFragTipPercentView.setTipPercentViewListener(this)
-        binding!!.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
-        binding!!.checkoutFragHeaderView.setHeaderViewListener(this)
-        binding!!.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
-        with(binding!!) {
+        binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
+        binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragHeaderView.setHeaderViewListener(this)
+        binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
+        with(binding) {
 
             checkoutFragAddPromoCodeBtn.setOnClickListener {
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
@@ -169,7 +166,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun setEmptyPaymentMethod() {
-        with(binding!!) {
+        with(binding) {
             hasPaymentMethod = false
             checkoutFragChangePaymentTitle.text = "Insert payment method"
             checkoutFragChangePaymentChangeBtn.alpha = 1f
@@ -177,16 +174,16 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
-        if (paymentMethods?.size!! > 0) {
+        if (paymentMethods.isNullOrEmpty()) {
+            setEmptyPaymentMethod()
+        } else {
             val defaultPayment = paymentMethods[0]
             updateCustomerPaymentMethod(defaultPayment)
-        } else {
-            setEmptyPaymentMethod()
         }
     }
 
     private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
-        with(binding!!) {
+        with(binding) {
             val card = paymentMethod.card
             card?.let {
                 hasPaymentMethod = true
@@ -199,7 +196,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     private fun handleOrderDetails(order: Order?) {
         order?.let {
-            with(binding!!) {
+            with(binding) {
 
                 if (!it.orderItems.isNullOrEmpty()) {
                     var cook = it.cook
@@ -248,7 +245,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     @SuppressLint("SetTextI18n")
     private fun updatePriceUi(curOrder: Order) {
-        with(binding!!) {
+        with(binding) {
 
             val tax: Double? = curOrder.tax?.value
             val serviceFee = curOrder.serviceFee?.value
@@ -315,7 +312,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
         viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
-        binding!!.checkoutFragNationwideSelect.updateNationwideShippingDetails(chosenShippingMethod.name)
+        binding.checkoutFragNationwideSelect.updateNationwideShippingDetails(chosenShippingMethod.name)
     }
 
     override fun onClearCart() {
@@ -338,7 +335,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onTipDone(tipAmount: Int) {
-        binding!!.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
+        binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
         viewModel.simpleUpdateOrder(OrderRequest(tipAmount = tipAmount.toString()), Constants.EVENT_TIP)
     }
 

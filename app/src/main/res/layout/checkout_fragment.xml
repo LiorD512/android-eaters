@@ -511,9 +511,8 @@
 
             </LinearLayout>
 
-
-
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
