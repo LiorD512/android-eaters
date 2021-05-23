@@ -28,14 +28,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        MTLogger().mt("BaseActivity","onCreate")
-
-
-
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-//        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!
-//                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
         acceleration = 10f
         currentAcceleration = SensorManager.GRAVITY_EARTH
         lastAcceleration = SensorManager.GRAVITY_EARTH

@@ -14,13 +14,13 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
-    private var binding: FragmentWelcomeBinding? = null
+    private lateinit var binding: FragmentWelcomeBinding
     private val viewModel: LoginViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentWelcomeBinding.bind(view)
-        binding!!.welcomeFragmentLogin.setOnClickListener { onLoginClick() }
+        binding.welcomeFragmentLogin.setOnClickListener { onLoginClick() }
 
         Analytics.with(requireContext()).screen("onboarding")
     }
@@ -29,10 +29,6 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         viewModel.directToPhoneFrag()
     }
 
-    override fun onDestroy() {
-        binding = null
-        super.onDestroy()
-    }
 
 
 }

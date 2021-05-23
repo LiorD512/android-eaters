@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification),
     InputTitleView.InputTitleViewListener{
 
-    var binding: FragmentPhoneVerificationBinding? = null
+    lateinit var binding: FragmentPhoneVerificationBinding
     private val viewModel: LoginViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer {
             when (it) {
                 ErrorEventType.PHONE_EMPTY -> {
-                    binding!!.verificationFragmentInput.showError()
+                    binding.verificationFragmentInput.showError()
                 }
                 else -> {
                 }
@@ -49,13 +49,13 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         })
         viewModel.countryCodeEvent.observe(viewLifecycleOwner, {
             viewModel.setUserPhonePrefix("${it.country_code}")
-            binding!!.verificationFragmentInput.setPrefix("+${it.country_code}")
-            binding!!.verificationFragFlag.text = it.flag
+            binding.verificationFragmentInput.setPrefix("+${it.country_code}")
+            binding.verificationFragFlag.text = it.flag
         })
     }
 
     private fun initUi() {
-        with(binding!!){
+        with(binding){
             val deviceCountryCode = CountryCodeUtils.getCountryCodeData(requireContext())
             deviceCountryCode.let{
                 verificationFragmentInput.setPrefix("+${it.countryCodeIso}")
@@ -84,7 +84,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
     }
 
     private fun sendCode() {
-        val phoneStr = binding!!.verificationFragmentInput.getText()
+        val phoneStr = binding.verificationFragmentInput.getText()
         if(CountryCodeUtils.isPhoneValid(phoneStr)){
             phoneStr!!.let{
                 val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
@@ -94,14 +94,10 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
                 }
             }
         }else{
-            binding!!.verificationFragmentInput.showError()
+            binding.verificationFragmentInput.showError()
         }
     }
 
-    override fun onDestroy() {
-        binding = null
-        super.onDestroy()
-    }
 
     companion object{
         const val TAG = "wowPhoneVerification"

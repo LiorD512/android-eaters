@@ -25,11 +25,8 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
         Analytics.with(requireContext()).screen("create_account")
 
-
         binding = FragmentCreateAccountBinding.bind(view)
         initUi()
-
-
     }
 
     private fun initUi() {

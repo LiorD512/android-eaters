@@ -51,11 +51,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener {
 
-//    private var tooltip: Tooltip? = null
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
 
-    //    private lateinit var gpsBroadcastReceiver: GPSBroadcastReceiver
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
     val viewModel by viewModel<MainViewModel>()
