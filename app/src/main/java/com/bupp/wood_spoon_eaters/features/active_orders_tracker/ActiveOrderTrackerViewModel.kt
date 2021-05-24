@@ -60,10 +60,10 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
         }
     }
 
-    private fun getOrderUserInfo(): OrderUserInfo? {
+    private fun getOrderUserInfo(): OrderUserInfo {
         var paymentString = "Fetching data...."
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()
-        if (paymentMethod != null) {
+        paymentMethod?.let{
             paymentString = "${paymentMethod.card?.brand} ending in ${paymentMethod.card?.last4}"
         }
 

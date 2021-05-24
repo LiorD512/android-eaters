@@ -114,7 +114,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             intent.putExtra("menu_item_id", it.toLong())
         }
         startActivity(intent)
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
     }
 

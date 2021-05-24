@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderProgressBinder
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.TrackOrderFragmentBinding
@@ -27,21 +26,19 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
-    CancelOrderDialog.CancelOrderDialogListener, TrackOrderProgressBinder.TrackOrderProgressListener, OnMapReadyCallback {
+    CancelOrderDialog.CancelOrderDialogListener, OnMapReadyCallback,
+    TrackOrderNewAdapter.TrackOrderNewAdapterListener {
 
     lateinit var binding: TrackOrderFragmentBinding
     private var mMap: GoogleMap? = null
     var curOrderId: Long? = null
     var listener: TrackOrderDialogListener? = null
 
-//    val binding: FragmentTrackOrderBinding? = null
     var currentBoundSize = 100
 
-
-    private lateinit var mainAdapter: TrackOrderMainAdapter
+    private lateinit var adapter: TrackOrderNewAdapter
+//    private lateinit var mainAdapter: TrackOrderMainAdapter
     val viewModel by viewModel<ActiveOrderTrackerViewModel>()
-
-    private lateinit var progressList: ArrayList<CheckBox>
 
     interface TrackOrderDialogListener {
         fun onContactUsClick(order: Order)
@@ -230,7 +227,16 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     private fun updateOrderUi(
         order: Order,
         userInfo: OrderUserInfo?){
-        mainAdapter.updateUi(order, userInfo)
+        val adapterHeader = OrderTrackHeader(order.orderNumber)
+        val adapterDetails = OrderTrackDetails(order, userInfo)
+        val adapterProgress = OrderTrackProgress(order)
+
+        val data = mutableListOf<TrackOrderData<Any>>(
+            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
+            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false),
+        )
+        adapter.submitList(data)
+//        mainAdapter.updateUi(order, userInfo)
         binding.trackOrderDialogList.scrollToPosition(0)
     }
 
@@ -241,9 +247,10 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     private fun initUi() {
         with(binding){
             Log.d("wowTrackOrderFragment","initUing now")
-            mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this@TrackOrderFragment)
+//            mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this@TrackOrderFragment)
+            adapter = TrackOrderNewAdapter(requireContext(), this@TrackOrderFragment)
             trackOrderDialogList.layoutManager = LinearLayoutManager(requireContext())
-            trackOrderDialogList.adapter = mainAdapter
+            trackOrderDialogList.adapter = adapter
 
             trackOrderDialogCloseBtn.setOnClickListener { listener?.onCloseClick() }
         }

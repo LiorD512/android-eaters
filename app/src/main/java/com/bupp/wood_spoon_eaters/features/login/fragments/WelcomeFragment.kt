@@ -30,5 +30,4 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     }
 
 
-
 }
