@@ -4,22 +4,41 @@ import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.network.base_repos.MetaDataRepositoryImpl
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class MetaDataRepository(private val apiService: ApiService) {
+class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
 
     private var metaDataObject: MetaDataModel = MetaDataModel(null, null)
 
 
     suspend fun initMetaData() {
         val result = withContext(Dispatchers.IO){
-            apiService.getMetaData().data
+            apiService.getMetaData()
         }
-        result?.let{
-            this.metaDataObject = it.copy()
+        result.let{
+            when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"initMetaData - NetworkError")
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"initMetaData - GenericError")
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"initMetaData - Success")
+                    val metaData = result.value.data?.copy()
+                    metaData?.let{
+                        this.metaDataObject = it
+                    }
+                }
+                is ResultHandler.WSCustomError -> {
+                }
+            }
         }
+
     }
 
     private fun getMetaDataObject(): MetaDataModel? {
@@ -270,6 +289,10 @@ class MetaDataRepository(private val apiService: ApiService) {
             }
         }
         return null
+    }
+
+    companion object{
+        const val TAG = "wowMetaDataRepo"
     }
 
 

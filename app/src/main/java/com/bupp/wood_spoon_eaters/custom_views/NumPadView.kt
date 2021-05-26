@@ -17,7 +17,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var binding: NumpadViewBinding = NumpadViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-     lateinit var inputEditText: EditText
+     var inputEditText: EditText = EditText(context)
 
     fun getInputText(): EditText {
         return inputEditText
@@ -28,7 +28,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
 
-    fun init() {
+    init{
         with(binding){
             inputEditText = EditText(context)
 

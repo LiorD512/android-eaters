@@ -45,7 +45,7 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
     }
 }
 
-private fun convertErrorBody(throwable: HttpException): String? {
+private fun convertErrorBody(throwable: HttpException): String {
     return "errorrrrrrrrrrrrrrrrrrrrr"
 //    return try {
 //        throwable.response()?.errorBody()?.source()?.let {

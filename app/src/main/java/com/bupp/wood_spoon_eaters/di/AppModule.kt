@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_eaters.di
 
-import com.bupp.wood_spoon_chef.dialogs.super_user.SuperUserViewModel
+import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
@@ -40,6 +40,7 @@ import com.bupp.wood_spoon_eaters.network.base_repos.*
 import com.bupp.wood_spoon_eaters.repositories.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -51,9 +52,10 @@ val appModule = module {
     //global
     single { FcmManager(get()) }
     single { AppSettings(get(), get()) }
-    single { MetaDataRepository(get()) }
 
     //repos
+    single { MetaDataRepository(get()) }
+    single { MetaDataRepositoryImpl(get()) }
     single { FeedRepository(get()) }
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
@@ -107,7 +109,7 @@ val appModule = module {
 
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { FeedLoaderViewModel(get()) }
     viewModel { FeedViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }

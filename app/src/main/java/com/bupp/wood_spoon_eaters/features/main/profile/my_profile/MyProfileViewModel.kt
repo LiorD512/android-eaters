@@ -181,9 +181,9 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
     }
 
     fun getShareText(): String {
-        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
         val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-        return "$text \n $inviteUrl"
+        return "$text \n"
     }
 
     fun getCuisineList(): List<SelectableIcon> {

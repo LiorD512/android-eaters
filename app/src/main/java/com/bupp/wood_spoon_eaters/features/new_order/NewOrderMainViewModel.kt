@@ -525,30 +525,13 @@ class NewOrderMainViewModel(
         }
     }
 
-//    fun checkIfFutureOrder(fullDish: FullDish) {
-//        if(fullDish.menuItem?.orderAt == null){
-//            //Dish is offered today.
-//        }else{
-//            fullDish.menuItem?.orderAt?.let{
-//                //Dish is offered in the future.
-//                if(Date().after(it)){
-//
-//                }else{
-//                    //order stating in the future. needs to update order delivery time to "orderAt"
-//                    deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
-//                }
-//            }
-//
-//        }
-//    }
 
     fun refreshPaymentsMethod(context: Context) {
         paymentManager.getStripeCustomerCards(context, true)
     }
 
-    fun sendClickOnDishEvent() {
-        val dishId = cartManager.currentShowingDish?.id
-        eventsManager.logOnDishClickEvent(dishId.toString())
+    private fun sendClickOnDishEvent() {
+        cartManager.sendClickOnDishEvent()
     }
 
     fun proceedToCheckoutEvent() {

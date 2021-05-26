@@ -45,7 +45,9 @@ class UserRepositoryImpl(private val service: ApiService) : UserRepository {
     override suspend fun postNewAddress(addressRequest: AddressRequest): ResultHandler<ServerResponse<Address>> {
         return safeApiCall { service.postNewAddress(addressRequest) }
     }
+
     override suspend fun deleteAddress(addressId: Long): ResultHandler<ServerResponse<Void>> {
         return safeApiCall { service.deleteAddress(addressId) }
     }
+
 }

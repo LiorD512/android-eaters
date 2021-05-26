@@ -27,6 +27,9 @@ class EaterDataRepository(
         CANCEL_ORDER_SUCCESS,
         CANCEL_ORDER_FAILED,
 
+        GET_CAMPAIGN_SUCCESS,
+        GET_CAMPAIGN_FAILED,
+
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
         WS_ERROR
@@ -134,6 +137,31 @@ class EaterDataRepository(
                 is ResultHandler.WSCustomError -> {
                     MTLogger.c(OrderRepository.TAG,"cancelOrder - wsError ${result.errors?.get(0)?.msg}")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun checkForCampaign(): EaterDataRepoResult<List<Campaign>> {
+        val result = withContext(Dispatchers.IO){
+            apiService.checkForCampaigns()
+        }
+        result.let{
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"checkForCampaigns - NetworkError")
+                    EaterDataRepoResult(EaterDataRepoStatus.GET_CAMPAIGN_FAILED)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"checkForCampaigns - GenericError")
+                    EaterDataRepoResult(EaterDataRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"checkForCampaigns - Success")
+                    EaterDataRepoResult(EaterDataRepoStatus.GET_CAMPAIGN_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+                    EaterDataRepoResult(EaterDataRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
         }

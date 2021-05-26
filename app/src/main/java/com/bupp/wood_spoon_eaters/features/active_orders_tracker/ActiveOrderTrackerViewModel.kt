@@ -24,9 +24,9 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
 
     fun getShareText(): String {
-        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
         val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-        return "$text \n $inviteUrl"
+        return "$text \n "
     }
 
     val getCurrentOrderDetails: MutableLiveData<GetActiveOrdersEvent> = MutableLiveData()

@@ -42,8 +42,8 @@ class WoodSpoonApplication : Application() {
             modules(listOf(appModule, networkModule))
         }
 
-//        FacebookSdk.setIsDebugEnabled(true)
-//        FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
+        FacebookSdk.setIsDebugEnabled(true)
+        FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
 
         AppCenter.start(
             this, "1995d4eb-7e59-44b8-8832-6550bd7752ff",

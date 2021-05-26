@@ -31,7 +31,7 @@ class UserRepository(
             apiService.getMe()
         }
         result.let{
-            return when (result) {
+            when (result) {
                 is ResultHandler.NetworkError -> {
                     Log.d(TAG,"initUserRepo - NetworkError")
                     this.currentUser = null

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.bupp.wood_spoon_chef.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.DialogSuperUserBinding

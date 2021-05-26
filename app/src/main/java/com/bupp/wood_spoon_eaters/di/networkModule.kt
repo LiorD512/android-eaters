@@ -1,5 +1,8 @@
 package com.bupp.wood_spoon_eaters.di
 
+import `in`.co.ophio.secure.core.KeyStoreKeyGenerator
+import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.bupp.wood_spoon_eaters.FlavorConfig
@@ -17,6 +20,7 @@ import com.bupp.wood_spoon_eaters.managers.PutActionManager
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -27,12 +31,12 @@ val networkModule = module {
 
     single { PutActionManager(get()) }
     single { FlavorConfigManager(get()) }
-    single { provideSharedPreferences(get()) }
+    single { provideEncryptedSharedPreferences(get(), androidApplication()) }
     factory { ApiSettings(get()) }
     single { provideGoogleApi() }
 
     single { provideDefaultOkhttpClient(get()) }
-    single { provideRetrofit(get()) }
+    single { provideRetrofit(get(), get()) }
     single { provideApiService(get()) }
 
 //    factory { TestPresenter(get()) }
@@ -43,11 +47,18 @@ fun provideGoogleApi(): GoogleApi {
     return GoogleRetrofitFactory.createGoogleRetrofitInstance(GoogleApi.BASE_URL).create(GoogleApi::class.java)
 }
 
-const val DEFAULT_NAMESPACE = "default"
-//const val SERVER_BASE_URL = FlavorConfig.BASE_URL
-
-fun provideSharedPreferences(context: Context): SharedPreferences {
-    return context.getSharedPreferences("User", android.content.Context.MODE_PRIVATE)
+fun provideEncryptedSharedPreferences(
+    context: Context,
+    application: Application
+): SharedPreferences {
+    val key = KeyStoreKeyGenerator.get(application, context.packageName).loadOrGenerateKeys()
+    return ObscuredPreferencesBuilder()
+        .setApplication(application)
+        .obfuscateValue(true)
+        .obfuscateKey(true)
+        .setSharePrefFileName("ws_eaters_encrypted_prefs")
+        .setSecret(key)
+        .createSharedPrefs()
 }
 
 fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
@@ -60,7 +71,7 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
     return httpClient.build()
 }
 
-fun provideRetrofit(client: OkHttpClient): Retrofit {
+fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Retrofit {
 
     val gson = GsonBuilder()
         .registerTypeAdapter(Search::class.java, DeserializerJsonSearch())
@@ -68,7 +79,7 @@ fun provideRetrofit(client: OkHttpClient): Retrofit {
         .create()
 
     return Retrofit.Builder()
-        .baseUrl(FlavorConfig.BASE_URL)
+        .baseUrl(flavorConfig.getBaseUrl())
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

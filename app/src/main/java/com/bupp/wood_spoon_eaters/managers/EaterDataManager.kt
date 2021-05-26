@@ -231,6 +231,10 @@ class EaterDataManager(
         eventsManager.initSegment(currentEater, curAddress)
     }
 
+    suspend fun checkForCampaign() {
+        eaterDataRepository.checkForCampaign()
+    }
+
 
     /////////////////////////////////////////
     ////////         Events         /////////
@@ -239,6 +243,7 @@ class EaterDataManager(
     fun logUxCamEvent(eventName: String, params: Map<String, String>? = null){
         eventsManager.logEvent(eventName, params)
     }
+
 
 
 

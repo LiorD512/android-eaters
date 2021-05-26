@@ -544,7 +544,7 @@ class CartManager(
         return dishNames.toList()
     }
 
-    private fun getAddDishData(id: Long? = null, dish: Dish? = null): Map<String, String> {
+    fun getAddDishData(id: Long? = null, dish: Dish? = null): Map<String, String> {
         val currentDishName = getCurrentDishName(dish)
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
@@ -635,6 +635,11 @@ class CartManager(
 
     fun onDishChangeEvent() = deliveryTimeManager.getTempDeliveryTimeStamp()
 
+    fun sendClickOnDishEvent() {
+        val dishId = currentShowingDish?.id
+        val param = getAddDishData(dishId)
+        eventsManager.logOnDishClickEvent(param)
+    }
 
 
 //    fun checkoutOrder(orderId: Long) {

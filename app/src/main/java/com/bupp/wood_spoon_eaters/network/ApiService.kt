@@ -74,6 +74,11 @@ interface ApiService {
     fun getCurrentShareCampaign(): Call<ServerResponse<Campaign>>
 
 
+    @GET("eaters/me/campaigns/active")
+    suspend fun getUserCampaign(): ServerResponse<List<Campaign>>
+
+
+
     //Utils
     @POST("eaters/me/presigned_urls")
     suspend fun postEaterPreSignedUrl(): ServerResponse<PreSignedUrl>

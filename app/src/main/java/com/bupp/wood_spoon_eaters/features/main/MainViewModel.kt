@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager, private val fcmManager: FcmManager, private val deliveryTimeManager: DeliveryTimeManager
+    val eaterDataManager: EaterDataManager,  private val deliveryTimeManager: DeliveryTimeManager
 ) : ViewModel() {
 
 //    val progressData = ProgressData()
@@ -50,6 +50,15 @@ class MainViewModel(
     fun startLocationAndAddressAct(){
         mainNavigationEvent.postValue(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
+
+
+    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+    fun checkForCampaign(){
+        viewModelScope.launch {
+            eaterDataManager.checkForCampaign()
+        }
+    }
+
 
 //    val bannerEvent = MutableLiveData<Int>()
 //    fun showBanner(bannerType: Int) {
@@ -97,9 +106,10 @@ class MainViewModel(
     }
 
     fun getShareText(): String {
-        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
-        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-        return "$text \n $inviteUrl"
+//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+//        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
+//        return "$text \n $inviteUrl"
+        return ""
     }
 
 //    fun startLocationUpdates() {
@@ -254,85 +264,84 @@ class MainViewModel(
     }
 
 
-    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
-    fun checkForCampaignReferrals() {
-        //checks if user have an active campaign coupon prize
-        val sid = eaterDataManager.sid
-        val cid = eaterDataManager.cid
-        if(sid != null){
-            Log.d("wowMainVM", "init start")
-            var serverCallMap = mutableMapOf<Int, Observable<*>>()
-            serverCallMap.put(0, api.postCampaignReferrals(sid, cid))
-//            serverCallMap.put(1, api.getMe()) //restore this ny.
-            val requests = ArrayList<Observable<*>>()
-            for (call in serverCallMap) {
-                requests.add(call.value)
-            }
-
-            Observable.zip(requests) { objects ->
-                Log.d("wowMainVM", "Observable success")
-
-                //parse client
-                val eaterServerResponse = objects[1] as ServerResponse<Eater>
-                val eater: Eater? = eaterServerResponse.data
-//                eaterDataManager.currentEater = eater // ny delete
-                eater?.activeCampaign?.let{
-                    activeCampaignEvent.postValue(it)
-                    eaterDataManager.sid = null
-                    eaterDataManager.cid = null
-                }
-
-                Log.d("wowMainVM", "eater parsing success: " + eater?.id)
-
-
-                Any()
-            }.timeout(55000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    object : Consumer<Any> {
-                        override fun accept(p0: Any) {
-                            Log.d("wowSplash", "Observable accept success")
-                        }
-                    }
-                }, { result -> Log.d("wowSplash", "wowException $result") })
-        }else{
-            eaterDataManager.currentEater?.activeCampaign.let{
-                activeCampaignEvent.postValue(it)
-            }
-        }
-    }
-
-    fun refreshUserData() {
-        api.getMeCall().enqueue(object : Callback<ServerResponse<Eater>> {
-            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-                if (response.isSuccessful) {
-                    Log.d(TAG, "on success! ")
-                    var eater = response.body()?.data!!
-//                    eaterDataManager.currentEater = eater //ny delete
-                    checkForCampaignReferrals()
-                } else {
-                    Log.d(TAG, "on Failure! ")
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-                Log.d(TAG, "on big Failure! " + t.message)
-            }
-        })
-    }
-
-    fun resetOrderTimeIfNeeded() {
-        deliveryTimeManager.setNewDeliveryTime(null)
-    }
-
-    val refreshAppDataEvent = SingleLiveEvent<Boolean>()
-    fun checkIfMemoryCleaned() {
-        if(eaterDataManager.currentEater == null){
-            refreshAppDataEvent.postValue(true)
-        }
-    }
-
+//    fun checkForCampaignReferrals() {
+//        //checks if user have an active campaign coupon prize
+//        val sid = eaterDataManager.sid
+//        val cid = eaterDataManager.cid
+//        if(sid != null){
+//            Log.d("wowMainVM", "init start")
+//            var serverCallMap = mutableMapOf<Int, Observable<*>>()
+//            serverCallMap.put(0, api.postCampaignReferrals(sid, cid))
+////            serverCallMap.put(1, api.getMe()) //restore this ny.
+//            val requests = ArrayList<Observable<*>>()
+//            for (call in serverCallMap) {
+//                requests.add(call.value)
+//            }
+//
+//            Observable.zip(requests) { objects ->
+//                Log.d("wowMainVM", "Observable success")
+//
+//                //parse client
+//                val eaterServerResponse = objects[1] as ServerResponse<Eater>
+//                val eater: Eater? = eaterServerResponse.data
+////                eaterDataManager.currentEater = eater // ny delete
+//                eater?.activeCampaign?.let{
+//                    activeCampaignEvent.postValue(it)
+//                    eaterDataManager.sid = null
+//                    eaterDataManager.cid = null
+//                }
+//
+//                Log.d("wowMainVM", "eater parsing success: " + eater?.id)
+//
+//
+//                Any()
+//            }.timeout(55000, TimeUnit.MILLISECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({
+//                    object : Consumer<Any> {
+//                        override fun accept(p0: Any) {
+//                            Log.d("wowSplash", "Observable accept success")
+//                        }
+//                    }
+//                }, { result -> Log.d("wowSplash", "wowException $result") })
+//        }else{
+//            eaterDataManager.currentEater?.activeCampaign.let{
+//                activeCampaignEvent.postValue(it)
+//            }
+//        }
+//    }
+//
+//    fun refreshUserData() {
+//        api.getMeCall().enqueue(object : Callback<ServerResponse<Eater>> {
+//            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
+//                if (response.isSuccessful) {
+//                    Log.d(TAG, "on success! ")
+//                    var eater = response.body()?.data!!
+////                    eaterDataManager.currentEater = eater //ny delete
+//                    checkForCampaignReferrals()
+//                } else {
+//                    Log.d(TAG, "on Failure! ")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
+//                Log.d(TAG, "on big Failure! " + t.message)
+//            }
+//        })
+//    }
+//
+//    fun resetOrderTimeIfNeeded() {
+//        deliveryTimeManager.setNewDeliveryTime(null)
+//    }
+//
+//    val refreshAppDataEvent = SingleLiveEvent<Boolean>()
+//    fun checkIfMemoryCleaned() {
+//        if(eaterDataManager.currentEater == null){
+//            refreshAppDataEvent.postValue(true)
+//        }
+//    }
+//
 //    fun initGpsStatus(activity: Activity) {
 //        eaterDataManager.initGpsStatus(activity)
 //    }

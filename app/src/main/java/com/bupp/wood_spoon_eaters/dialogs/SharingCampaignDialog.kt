@@ -41,7 +41,7 @@ class SharingCampaignDialog() : DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.sharing_campaign_dialog, null)
-        getDialog()!!.getWindow()?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
         return view
     }
 
@@ -54,42 +54,42 @@ class SharingCampaignDialog() : DialogFragment(){
 }
 
     private fun initUi() {
-        with(binding){
-            sharingCampaignDialogShareBtn.setOnClickListener{
-                shareText(getShareText())
-                dismiss()
-            }
-            sharingCampaignDialogCloseBtn.setOnClickListener{
-                dismiss()}
-    //        dialogBkg.setOnClickListener{
-    //            dismiss()}
-
-            curCampaign?.let{
-                val radius = resources.getDimension(R.dimen.default_corner_radius)
-                sharingCampaignDialogCover.setShapeAppearanceModel(
-                    sharingCampaignDialogCover.getShapeAppearanceModel()
-                        .toBuilder()
-                        .setTopRightCorner(CornerFamily.ROUNDED, radius)
-                        .setTopLeftCorner(CornerFamily.ROUNDED, radius)
-                        .build()
-                )
-                Glide.with(requireContext()).load(it.thumbnail).into(sharingCampaignDialogCover)
-
-                sharingCampaignDialogBody.text = it.description
-                it.shareBtnText?.let{
-                    sharingCampaignDialogShareBtn.text = it
-                }
-            }
-        }
+//        with(binding){
+//            sharingCampaignDialogShareBtn.setOnClickListener{
+//                shareText(getShareText())
+//                dismiss()
+//            }
+//            sharingCampaignDialogCloseBtn.setOnClickListener{
+//                dismiss()}
+//    //        dialogBkg.setOnClickListener{
+//    //            dismiss()}
+//
+//            curCampaign?.let{
+//                val radius = resources.getDimension(R.dimen.default_corner_radius)
+//                sharingCampaignDialogCover.setShapeAppearanceModel(
+//                    sharingCampaignDialogCover.getShapeAppearanceModel()
+//                        .toBuilder()
+//                        .setTopRightCorner(CornerFamily.ROUNDED, radius)
+//                        .setTopLeftCorner(CornerFamily.ROUNDED, radius)
+//                        .build()
+//                )
+//                Glide.with(requireContext()).load(it.thumbnail).into(sharingCampaignDialogCover)
+//
+//                sharingCampaignDialogBody.text = it.description
+//                it.shareBtnText?.let{
+//                    sharingCampaignDialogShareBtn.text = it
+//                }
+//            }
+//        }
 
     }
 
-    fun getShareText(): String {
-        val inviteUrl = curCampaign?.inviteUrl
-//        val text = curCampaign?.description
-        val text = "${curCampaign?.shareText}"// \n ${curCampaign?.description}"
-        return "$text \n $inviteUrl"
-    }
+//    fun getShareText(): String {
+//        val inviteUrl = curCampaign?.inviteUrl
+////        val text = curCampaign?.description
+//        val text = "${curCampaign?.shareText}"// \n ${curCampaign?.description}"
+//        return "$text \n $inviteUrl"
+//    }
 
     fun shareText(text: String) {
         val shareIntent = Intent()

@@ -30,7 +30,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
 
     fun getBaseUrl(): String {
         val baseUrl = if(curEnvironment.isNotEmpty()){
-            "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/"
+            "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v1/"
         }else{
             FlavorConfig.BASE_URL
         }

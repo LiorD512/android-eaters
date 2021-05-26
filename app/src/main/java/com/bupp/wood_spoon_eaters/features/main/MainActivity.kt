@@ -142,7 +142,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun initUiRelatedProcesses() {
         checkForBranchIntent()
-        viewModel.checkForCampaignReferrals()
+//        viewModel.checkForCampaign()
         viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
     }
@@ -260,11 +260,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //            }
         })
 
-        viewModel.refreshAppDataEvent.observe(this, Observer {
-            Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
-            startActivity(Intent(this, SplashActivity::class.java))
-            finishAffinity()
-        })
+//        viewModel.refreshAppDataEvent.observe(this, Observer {
+//            Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
+//            startActivity(Intent(this, SplashActivity::class.java))
+//            finishAffinity()
+//        })
 
         viewModel.navigationEvent.observe(this, {
             when(it){
