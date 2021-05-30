@@ -53,11 +53,12 @@ data class ReportTopic(
     @SerializedName("report_issues") val reportIssues: java.util.ArrayList<ReportIssue>
 )
 
+@Parcelize
 data class NotificationGroup(
     @SerializedName("id") val id: Long,
     @SerializedName("name") val name: String,
     @SerializedName("description") val description: String
-)
+): Parcelable
 
 data class ReportIssue(
     @SerializedName("id") val id: Long,

@@ -1,11 +1,13 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.net.Uri
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+@Parcelize
 data class Eater(
     @SerializedName("id") val id: Long,
     @SerializedName("phone_number") val phoneNumber: String,
@@ -20,10 +22,9 @@ data class Eater(
     @SerializedName("addresses") val addresses: List<Address>,
     @SerializedName("cuisines") var cuisines: List<CuisineLabel>? = null,
     @SerializedName("diets") var diets: List<DietaryIcon>? = null,
-    @SerializedName("active_campaign") val activeCampaign: ActiveCampaign? = null,
     @SerializedName("share_campaign") val shareCampaign: Campaign? = null,
-    @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>
-){
+    @SerializedName("notification_groups") val notificationsGroup: List<NotificationGroup>
+): Parcelable{
     fun getFullName(): String{
         var first = "Anonymous"
         var last = ""

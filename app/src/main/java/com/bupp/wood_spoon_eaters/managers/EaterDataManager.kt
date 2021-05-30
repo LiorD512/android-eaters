@@ -231,9 +231,7 @@ class EaterDataManager(
         eventsManager.initSegment(currentEater, curAddress)
     }
 
-    suspend fun checkForCampaign() {
-        eaterDataRepository.checkForCampaign()
-    }
+
 
 
     /////////////////////////////////////////

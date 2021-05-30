@@ -22,21 +22,52 @@ data class Event(
 @Parcelize
 data class Campaign(
     @SerializedName("user_interaction_id") val userInteractionId: Long,
-    @SerializedName("user_interaction_status") val status: String,
+    @SerializedName("user_interaction_status") val status: UserInteractionStatus,
     @SerializedName("name") val name: String,
-    @SerializedName("show_after") val showAfter: String,
-    @SerializedName("view_types") val viewTypes: String,
+    @SerializedName("show_after") val showAfter: CampaignShowAfter,
+    @SerializedName("view_types") val viewTypes: List<CampaignViewStatus>,
     @SerializedName("header") val header: String?,
     @SerializedName("photo_small") val photoSmall: String?,
     @SerializedName("photo_large") val photoLarge: String?,
     @SerializedName("body_text1") val bodyText1: String?,
     @SerializedName("body_text2") val bodyText2: String?,
     @SerializedName("button_text") val buttonText: String?,
-    @SerializedName("button_action") val buttonAction: String?,
+    @SerializedName("button_action") val buttonAction: CampaignButtonAction?,
     @SerializedName("share_text") val shareText: String?,
     @SerializedName("banner_color") val bannerColor: String?,
     @SerializedName("terms_and_conditions") val termsAndConditions: String?
 ):Parcelable
+
+@Parcelize
+data class CampaignData(val eater: Eater?, val campaign: Campaign):Parcelable
+
+
+enum class UserInteractionStatus{
+    @SerializedName("idle") IDLE,
+    @SerializedName("seen") SEEN,
+    @SerializedName("engaged ") ENGAGED,
+}
+
+enum class CampaignShowAfter{
+    @SerializedName("homepage_visit") VISIT_HOME_PAGE,
+    @SerializedName("feed_visit") VISIT_FEED,
+    @SerializedName("add_to_cart_action ") ACTION_ADD_TO_CART,
+    @SerializedName("purchase_action ") ACTION_PURCHASE,
+    @SerializedName("rate_your_order_action ") ACTION_RATE_ORDER,
+    @SerializedName("clear_your_cart_action  ") ACTION_CLEAR_CART,
+}
+
+enum class CampaignViewStatus{
+    @SerializedName("banner") BANNER,
+    @SerializedName("popup") POPUP,
+    @SerializedName("feed") FEED,
+}
+
+enum class CampaignButtonAction{
+    @SerializedName("share") SHARE,
+    @SerializedName("acknowledge") ACKNOWLEDGE,
+    @SerializedName("jump_to_link ") JUMP_TO_LINK,
+}
 
 //@Parcelize
 //data class Campaign(

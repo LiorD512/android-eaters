@@ -36,6 +36,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 blueBtnBackground.alpha = 0.5f
             }
         }
+    }
 
+    fun setBtnText(btnText: String?){
+        btnText?.let{
+            binding.blueBtnText.text = btnText
+        }
     }
 }

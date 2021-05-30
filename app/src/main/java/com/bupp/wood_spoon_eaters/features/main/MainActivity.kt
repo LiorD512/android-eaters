@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MediaUtils
@@ -33,8 +34,13 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
+import com.bupp.wood_spoon_eaters.managers.CampaignManager
+import com.bupp.wood_spoon_eaters.model.Campaign
+import com.bupp.wood_spoon_eaters.model.CampaignData
+import com.bupp.wood_spoon_eaters.model.CampaignViewStatus
+import com.bupp.wood_spoon_eaters.model.UserInteractionStatus
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
@@ -49,7 +55,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener {
+    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener {
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -142,7 +148,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun initUiRelatedProcesses() {
         checkForBranchIntent()
-//        viewModel.checkForCampaign()
         viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
     }
@@ -232,32 +237,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 SharingCampaignDialog.newInstance(it).show(supportFragmentManager, Constants.SHARE_CAMPAIGN_DIALOG)
             }
         })
-        viewModel.activeCampaignEvent.observe(this, Observer {
-//            val activeCampaign = it
-//            if (activeCampaign != null) {
-//                mainActCampaignHeader.visibility = View.VISIBLE
-//                mainActCampaignTitle.text = it.title
-//                mainActCampaignSubTitle.text = it.terms
-//                it.image?.let {
-//                    Glide.with(this).load(it).into(mainActCampaignImg)
-//                }
-//
-//                it.color?.let {
-//                    mainActCampaignHeader.setBackgroundColor(Color.parseColor(it))
-//                }
-//
-//                mainActCampaignHeader.setOnClickListener {
-//                    if (mainActCampaignImg.visibility == View.VISIBLE) {
-//                        mainActCampaignImg.visibility = View.GONE
-//                        mainActCampaignSubTitle.visibility = View.GONE
-//                    } else {
-//                        mainActCampaignImg.visibility = View.VISIBLE
-//                        mainActCampaignSubTitle.visibility = View.VISIBLE
-//                    }
-//                }
-//            } else {
-//                mainActCampaignHeader.visibility = View.GONE
-//            }
+        viewModel.campaignLiveData.observe(this, {
+            Log.d(FeedFragment.TAG, "campaign: $it")
+            it?.let{
+                handleCampaignData(it)
+            }
         })
 
 //        viewModel.refreshAppDataEvent.observe(this, Observer {
@@ -273,6 +257,30 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
             }
         })
+    }
+
+    private fun handleCampaignData(campaignData: CampaignData) {
+        val campaign = campaignData.campaign
+        if(campaign.status == UserInteractionStatus.IDLE){
+            campaign.viewTypes.forEach {
+                when(it){
+                    CampaignViewStatus.BANNER -> {
+                        binding.mainActCampaignBanner.initCampaignHeader(campaignData, this)
+                    }
+                    CampaignViewStatus.POPUP -> {
+
+                    }
+                    CampaignViewStatus.FEED -> {
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    override fun onCampaignDetailsClick(campaign: CampaignData) {
+        CampaignBottomSheet.newInstance(campaign).show(supportFragmentManager, Constants.CAMPAIGN_BOTTOM_SHEET)
     }
 
     private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {
@@ -615,6 +623,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onCameraUtilResult(result)
         }
     }
+
 
 
 }

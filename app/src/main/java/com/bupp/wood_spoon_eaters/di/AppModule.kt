@@ -76,6 +76,7 @@ val appModule = module {
     single { EventsManager(get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get(), get()) }
+    single { CampaignManager(get(), get()) }
 
 
 
@@ -85,7 +86,7 @@ val appModule = module {
     viewModel { AddressMenuViewModel(get(), get(), get()) }
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SuperUserViewModel(get()) }
 
     //login

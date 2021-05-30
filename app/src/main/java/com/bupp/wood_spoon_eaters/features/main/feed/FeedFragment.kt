@@ -53,6 +53,8 @@ lateinit var binding: FragmentFeedBinding
 
         viewModel.initFeed()
         binding.feedFragPb.show()
+
+        mainViewModel.checkCampaignForFeed()
     }
 
 

@@ -199,7 +199,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
                             singleDishInfoDate.text = "${DateUtils.parseDateToDayDateAndTime(it)}"
                         }
                     }
-
                 }
                 singleDishInfoDelivery.text = "${viewModel.getDropOffLocation()}"
             }

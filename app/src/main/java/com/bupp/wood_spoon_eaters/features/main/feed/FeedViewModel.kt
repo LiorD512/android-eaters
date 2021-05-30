@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
@@ -32,7 +33,6 @@ class FeedViewModel(
         viewModelScope.launch {
             feedDataManager.refreshFavorites()
         }
-//        progressData.endProgress()
     }
 
 
@@ -88,9 +88,7 @@ class FeedViewModel(
             feedResultData.postValue(OldFeedEvent(false,null))
             progressData.endProgress()
         }
-
     }
-
 
     private fun validFeedRequest(feedRequest: FeedRequest): Boolean {
         return (feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null
@@ -99,18 +97,6 @@ class FeedViewModel(
     fun getEaterFirstName(): String?{
         return feedDataManager.getUser()?.firstName
     }
-
-
-
-
-
-
-
-//    fun getShareText(): String {
-//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
-//        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-//        return "$text \n $inviteUrl"
-//    }
 
 
 
