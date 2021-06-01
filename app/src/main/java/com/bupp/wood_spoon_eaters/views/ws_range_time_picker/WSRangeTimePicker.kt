@@ -139,7 +139,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         dates.let {
             it.forEachIndexed { index, date ->
                 val currentMenuItem = menuItems[index]
-                datesAndHours.add(WSRangeTimePickerHours(dates[index], getHoursForMenuItem(currentMenuItem.cookingSlot.orderFrom, currentMenuItem.cookingSlot.endsAt)))
+                currentMenuItem.cookingSlot?.let{
+                    datesAndHours.add(WSRangeTimePickerHours(dates[index], getHoursForMenuItem(it.orderFrom, it.endsAt)))
+                }
             }
         }
         initDateAndHoursUi()
@@ -147,9 +149,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun getDaysForMenuItems(menuItems: List<MenuItem>): List<Date> {
         val dates = mutableListOf<Date>()
-        menuItems.forEach {
-            val menuItemDate = it.cookingSlot.orderFrom
-            dates.add(menuItemDate)
+        menuItems.forEach { item ->
+            item.cookingSlot?.orderFrom?.let{
+                dates.add(it)
+            }
         }
         return dates
     }

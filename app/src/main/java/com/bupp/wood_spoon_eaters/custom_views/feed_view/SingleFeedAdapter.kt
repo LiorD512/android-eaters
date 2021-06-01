@@ -46,14 +46,14 @@ class SingleFeedAdapter(
 //        (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
 
         val name = dish.name
-        val price = dish.getPriceObj().formatedValue
+        val price = dish.getPriceObj()?.formatedValue
         holder.name.text = "$name"
         holder.price.text = "$price"
-        holder.cookName.text = "By ${dish.cook.getFullName()}"
+        holder.cookName.text = "By ${dish.cook?.getFullName()}"
         holder.rating.text = "${dish.rating}"
 
-        Glide.with(context).load(dish.cook.thumbnail).circleCrop().into(holder.cookImg)
-        Glide.with(context).load(dish.cook.country?.flagUrl).into(holder.cookFlag)
+        Glide.with(context).load(dish.cook?.thumbnail).circleCrop().into(holder.cookImg)
+        Glide.with(context).load(dish.cook?.country?.flagUrl).into(holder.cookFlag)
 
         Log.d("wowSingleFeed","isNationwide: ${dish.menuItem?.cookingSlot?.isNationwide}")
         dish.menuItem?.cookingSlot?.isNationwide?.let{
@@ -105,10 +105,14 @@ class SingleFeedAdapter(
                     if(DateUtils.isTodayOrTomorrow(dish.menuItem.orderAt)){
                         //Dish is offered today or tomorrow.
 //                        holder.date.text = Utils.parseDateToStartToEnd(dish.menuItem.cookingSlot.startsAt, dish.menuItem.cookingSlot.endsAt)
-                        holder.date.text = DateUtils.parseDateToStartToEnd(dish.menuItem.cookingSlot.orderFrom, dish.menuItem.cookingSlot.endsAt)
+                        dish.menuItem.cookingSlot?.let{
+                            holder.date.text = DateUtils.parseDateToStartToEnd(it.orderFrom, it.endsAt)
+                        }
                     }else{
                         //Dish is offered later this week and beyond
-                        holder.date.text = DateUtils.parseDateToFromStartingDate(dish.menuItem.cookingSlot.orderFrom)
+                        dish.menuItem.cookingSlot?.let{
+                            holder.date.text = DateUtils.parseDateToFromStartingDate(it.orderFrom)
+                        }
                     }
 //                }
             }
@@ -117,7 +121,7 @@ class SingleFeedAdapter(
             }
 
             val upcomingSlot = dish.menuItem.cookingSlot
-            val deliveryFee = upcomingSlot.deliveryFee?.cents
+            val deliveryFee = upcomingSlot?.deliveryFee?.cents
             upcomingSlot?.let {
                 if(it.freeDelivery){
                     holder.freeDelivery.text = "Free Delivery"

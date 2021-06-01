@@ -5,26 +5,31 @@ import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.bupp.wood_spoon_eaters.FlavorConfig
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
-import com.bupp.wood_spoon_eaters.network.abs.DeserializerJsonAppSetting
-import com.bupp.wood_spoon_eaters.network.abs.DeserializerJsonSearch
-import com.bupp.wood_spoon_eaters.model.AppSetting
-import com.bupp.wood_spoon_eaters.model.Search
+import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
+import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_FACTORY
+import com.bupp.wood_spoon_eaters.di.abs.UriAdapter
 import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
 import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.bupp.wood_spoon_eaters.managers.PutActionManager
-import com.google.gson.GsonBuilder
+import com.bupp.wood_spoon_eaters.model.*
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.moshi.*
+import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.*
 
 
 val networkModule = module {
@@ -38,8 +43,6 @@ val networkModule = module {
     single { provideDefaultOkhttpClient(get()) }
     single { provideRetrofit(get(), get()) }
     single { provideApiService(get()) }
-
-//    factory { TestPresenter(get()) }
 
 }
 
@@ -73,17 +76,28 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
 
 fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Retrofit {
 
-    val gson = GsonBuilder()
-        .registerTypeAdapter(Search::class.java, DeserializerJsonSearch())
-        .registerTypeAdapter(AppSetting::class.java, DeserializerJsonAppSetting())
-        .create()
+    val moshi = Moshi.Builder()
+        .add(
+            PolymorphicJsonAdapterFactory.of(Search::class.java, "resource")
+                .withSubtype(CookSection::class.java, Constants.RESOURCE_TYPE_COOK)
+                .withSubtype(DishSection::class.java, Constants.RESOURCE_TYPE_DISH)
+        )
+        .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+        .add(JSON_ADAPTER_FACTORY)
+        .add(UriAdapter())
+        .add(AppSettingAdapter())
+        .addLast(KotlinJsonAdapterFactory())
+    .build()
 
     return Retrofit.Builder()
         .baseUrl(flavorConfig.getBaseUrl())
         .client(client)
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 }
 
 fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+

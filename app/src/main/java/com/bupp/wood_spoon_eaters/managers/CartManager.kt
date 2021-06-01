@@ -406,15 +406,15 @@ class CartManager(
 
     fun calcTotalDishesPrice(): Double {
         var total = 0.0
-        currentOrderResponse?.total?.let {
-            total = it.value
+        currentOrderResponse?.total?.value?.let {
+            total = it
         }
         return total
     }
 
     fun getTotalPriceForDishQuantity(counter: Int): Double {
-        currentShowingDish?.let {
-            return it.price.value * counter
+        currentShowingDish?.price?.value?.let {
+            return it * counter
         }
         return 0.0
     }
@@ -589,7 +589,7 @@ class CartManager(
 
     private fun getCurrentDishPrice(dish: Dish? = null): Double? {
         dish?.let{
-            return it.price.value
+            return it.price?.value
         }
         currentShowingDish?.let {
             return it.price.value

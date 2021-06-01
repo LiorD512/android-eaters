@@ -68,14 +68,6 @@ class CampaignBottomSheet(val listener: TimePickerListener? = null) : BottomShee
 
 
         binding = CampaignBottomSheetBinding.bind(view)
-
-        initUi()
-    }
-//
-    private fun initUi() {
-        with(binding!!){
-
-        }
     }
 
 }

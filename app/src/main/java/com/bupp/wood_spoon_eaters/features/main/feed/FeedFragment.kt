@@ -78,7 +78,7 @@ lateinit var binding: FragmentFeedBinding
         })
         viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
             if(event.isSuccess){
-                initFeed(event.feedArr!!)
+                event.feedArr?.let { initFeed(it) }
             }
         })
         viewModel.favoritesLiveData.observe(viewLifecycleOwner, {

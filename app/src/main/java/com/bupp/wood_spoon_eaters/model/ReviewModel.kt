@@ -1,39 +1,43 @@
 package com.bupp.wood_spoon_eaters.model
 
 import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.ArrayList
 
-
+@JsonClass(generateAdapter = true)
 data class Review(
-    @SerializedName("avg_accuracy_rating")  val accuracyRating: Double,
-    @SerializedName("avg_delivery_rating")  val deliveryRating: Double,
-    @SerializedName("avg_dish_rating")  val dishRating: Double,
-    @SerializedName("reviews") val comments: ArrayList<Comment>
+    @Json(name = "avg_accuracy_rating")  val accuracyRating: Double,
+    @Json(name = "avg_delivery_rating")  val deliveryRating: Double,
+    @Json(name = "avg_dish_rating")  val dishRating: Double,
+    @Json(name = "reviews") val comments: List<Comment>
 )
 
+@JsonClass(generateAdapter = true)
 data class Metrics(
-    @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String,
-    @SerializedName("description") val description: String,
-    @SerializedName("rating") val rating: Double
+    @Json(name = "id") val id: Long,
+    @Json(name = "name") val name: String,
+    @Json(name = "description") val description: String,
+    @Json(name = "rating") val rating: Double
 )
 
+@JsonClass(generateAdapter = true)
 data class Comment(
-    @SerializedName("id") val id: Long,
-    @SerializedName("body") val body: String,
-    @SerializedName("eater") val eater: Eater
+    @Json(name = "id") val id: Long,
+    @Json(name = "body") val body: String,
+    @Json(name = "eater") val eater: Eater
 )
 
-
-
+@JsonClass(generateAdapter = true)
 data class ReviewRequest(
-    @SerializedName("accuracy_rating")  var accuracyRating: Int? = null,
-    @SerializedName("delivery_rating")  var deliveryRating: Int? = null,
-    @SerializedName("dish_ratings") var dishMetrics: ArrayList<DishMetricsRequest>? = null,
-    @SerializedName("body")  var body: String? = null
+    @Json(name = "accuracy_rating")  var accuracyRating: Int? = null,
+    @Json(name = "delivery_rating")  var deliveryRating: Int? = null,
+    @Json(name = "dish_ratings") var dishMetrics: List<DishMetricsRequest>? = null,
+    @Json(name = "body")  var body: String? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class DishMetricsRequest(
-    @SerializedName("dish_id")  val id: Long,
-    @SerializedName("rating")  val rating: Int //values possible : 1, 0
+    @Json(name = "dish_id")  val id: Long,
+    @Json(name = "rating")  val rating: Int //values possible : 1, 0
 )

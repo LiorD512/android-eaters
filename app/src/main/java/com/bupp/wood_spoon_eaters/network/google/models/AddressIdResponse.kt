@@ -1,25 +1,22 @@
-package com.taliazhealth.predictix.network_google.models.google_api
+package com.bupp.wood_spoon_eaters.network.google.models
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 class AddressIdResponse {
 
-    @SerializedName("predictions")
     var predictions: List<PredictionsItem>? = null
 
-    @SerializedName("status")
     var status: String? = null
 
 
     inner class PredictionsItem {
 
-        @SerializedName("description")
         var description: String? = null
 
-        @SerializedName("id")
         var id: String? = null
 
-        @SerializedName("place_id")
+        @Json(name = "place_id")
         var placeId: String? = null
 
     }

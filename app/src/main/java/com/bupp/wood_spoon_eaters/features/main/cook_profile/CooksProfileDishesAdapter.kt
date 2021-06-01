@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 
 class CooksProfileDishesAdapter(
     val context: Context,
-    val dishes: ArrayList<Dish>,
+    val dishes: MutableList<Dish>,
     val listener: CooksProfileDishesListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {//}, FavoriteBtn.FavoriteBtnListener {
@@ -29,7 +29,7 @@ class CooksProfileDishesAdapter(
         holder as DishItemViewHolder
 
         val title = dish.name
-        val price = dish.getPriceObj().formatedValue
+        val price = dish.getPriceObj()?.formatedValue
         val description = dish.description.replace("\n", ". ")
         holder.title.text = "$title"
         holder.price.text = "$price"

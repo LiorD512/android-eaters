@@ -15,11 +15,11 @@ class OrdersHistoryViewModel(val api: ApiService) : ViewModel() {
 
     val TAG = "wowOrderHistoryVM"
     val getOrdersEvent: SingleLiveEvent<OrderHistoryEvent> = SingleLiveEvent()
-    data class OrderHistoryEvent(val isSuccess: Boolean, val orderHistory: ArrayList<Order>? = null)
+    data class OrderHistoryEvent(val isSuccess: Boolean, val orderHistory: List<Order>? = null)
 
     fun getOrderHistory(){
-        api.getOrders().enqueue(object: Callback<ServerResponse<ArrayList<Order>>>{
-            override fun onResponse(call: Call<ServerResponse<ArrayList<Order>>>, response: Response<ServerResponse<ArrayList<Order>>>) {
+        api.getOrders().enqueue(object: Callback<ServerResponse<List<Order>>>{
+            override fun onResponse(call: Call<ServerResponse<List<Order>>>, response: Response<ServerResponse<List<Order>>>) {
                 if(response.isSuccessful){
                     Log.d(TAG, "getOrders success")
                     val orderHistory = response.body()?.data
@@ -30,7 +30,7 @@ class OrdersHistoryViewModel(val api: ApiService) : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<ArrayList<Order>>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<List<Order>>>, t: Throwable) {
                 Log.d(TAG, "getOrders big fail")
                 getOrdersEvent.postValue(OrderHistoryEvent(false))
             }

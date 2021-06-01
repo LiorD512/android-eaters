@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.DishRatingItemViewBinding
 import com.bupp.wood_spoon_eaters.model.Comment
 
-class RatingsAdapter(val context: Context, private var comments: ArrayList<Comment>) :RecyclerView.Adapter<RatingsAdapter.DishViewHolder>() {
+class RatingsAdapter(val context: Context, private var comments: List<Comment>) :RecyclerView.Adapter<RatingsAdapter.DishViewHolder>() {
 
     class DishViewHolder(view: DishRatingItemViewBinding) : RecyclerView.ViewHolder(view.root) {
         val image: ImageView = view.dishRatingItemImage

@@ -21,9 +21,9 @@ class ReportIssueViewModel(val api: ApiService, val metaDataRepository: MetaData
     val postReport: SingleLiveEvent<PostReport> = SingleLiveEvent()
     data class PostReport(val isSuccess: Boolean = false)
     fun postReport(orderId: Long, reports: Reports){
-        api.postReport(orderId, reports).enqueue(object : Callback<ServerResponse<Void>>{
+        api.postReport(orderId, reports).enqueue(object : Callback<ServerResponse<Any>>{
 
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 if(response.isSuccessful){
                     Log.d("wowReportsVM","postReport success")
                     postReport.postValue(PostReport(true))
@@ -33,7 +33,7 @@ class ReportIssueViewModel(val api: ApiService, val metaDataRepository: MetaData
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowReportsVM","postReport big fail")
                 postReport.postValue(PostReport(false))
             }

@@ -35,15 +35,15 @@ class FavoriteBtnViewModel: KoinComponent {
     }
 
     fun likeDish(id: Long) {
-        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>> {
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        api.likeDish(id).enqueue(object: Callback<ServerResponse<Any>> {
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 Log.d("wowFavVM","likeDish success: ${response.isSuccessful}")
                 if(!response.isSuccessful){
                     listener?.onFail()
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowFavVM","likeDish failed: ${t.message}")
                 listener?.onFail()
             }
@@ -51,15 +51,15 @@ class FavoriteBtnViewModel: KoinComponent {
     }
 
     fun unlikeDish(id: Long) {
-        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>> {
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Any>> {
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 Log.d("wowFavVM","unlikeDish success: ${response.isSuccessful}")
                 if(!response.isSuccessful){
                     listener?.onFail()
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowFavVM","unlikeDish failed: ${t.message}")
                 listener?.onFail()
             }

@@ -3,9 +3,9 @@ package com.bupp.wood_spoon_eaters.repositories
 import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.base_repos.MetaDataRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
+import com.google.gson.internal.LinkedHashTreeMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -279,11 +279,9 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
     fun getCloudinaryTransformations(): CloudinaryTransformations? {
         for (settings in getSettings()){
             if(settings.key == "cloudinary_transformations"){
-                val cloudinaryMap = settings.value as HashMap<CloudinaryTransformationsType, String>?
+                val cloudinaryMap = settings.value as Map<*, *>?
                 cloudinaryMap?.let{
-
-//                    val aaa = it.map { CloudinaryTransformationsType.valueOf(it.key.toString().toUpperCase()) to it.value }
-                    val cloudinary = CloudinaryTransformations(cloudinaryMap)
+                    val cloudinary = CloudinaryTransformations(cloudinaryMap as Map<CloudinaryTransformationsType, String>?)
                     return cloudinary
                 }
             }

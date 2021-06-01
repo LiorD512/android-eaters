@@ -18,7 +18,7 @@ interface ApiService {
     //Login end-points
     @FormUrlEncoded
     @POST("eaters/auth/get_code")
-    suspend fun getCode(@Field("phone_number") phone: String): ServerResponse<Void>
+    suspend fun getCode(@Field("phone_number") phone: String): ServerResponse<Any>
 
     @FormUrlEncoded
     @POST("eaters/auth/validate_code")
@@ -34,18 +34,18 @@ interface ApiService {
 
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
-    suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Void>
+    suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
 
 
 
     //Feed
-    @GET("eaters/me/feed")
-    suspend fun getFeedFlow(
-        @Query("page") page: Int = 1,
-        @Query("limit") limit: Int = 20,
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): ServerResponse<List<FeedFlow>>
+//    @GET("eaters/me/feed")
+//    suspend fun getFeedFlow(
+//        @Query("page") page: Int = 1,
+//        @Query("limit") limit: Int = 20,
+//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): ServerResponse<List<FeedFlow>>
 
     @GET("eaters/me/feed")
     suspend fun getFeed(
@@ -55,7 +55,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
-    fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Void>>
+    fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Any>>
 
     @GET("eaters/me/triggers")
     suspend fun getTriggers(): ServerResponse<Trigger>
@@ -68,7 +68,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("eaters/me/referrals")
-    fun postCampaignReferrals(@Field("sid") sid: String, @Field("cid") cid: String? = null): Observable<ServerResponse<Void>>
+    fun postCampaignReferrals(@Field("sid") sid: String, @Field("cid") cid: String? = null): Observable<ServerResponse<Any>>
 
     @GET("eaters/me/campaigns/current")
     fun getCurrentShareCampaign(): Call<ServerResponse<Campaign>>
@@ -99,7 +99,7 @@ interface ApiService {
 
 
     @POST("eaters/me")
-    suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Void>
+    suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Any>
 
     @FormUrlEncoded
     @POST("eaters/me")
@@ -149,13 +149,13 @@ interface ApiService {
     suspend fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): ServerResponse<Order>
 
     @POST("eaters/me/orders/{order_id}/checkout")
-    suspend fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): ServerResponse<Void>
+    suspend fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): ServerResponse<Any>
 
 //    @POST("eaters/me/orders/{order_id}/finalize")
 //    fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
 
     @DELETE("eaters/me/orders/{order_id}/")
-    suspend fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): ServerResponse<Void>
+    suspend fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): ServerResponse<Any>
 
     @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
     suspend fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<ShippingMethod>>
@@ -175,7 +175,7 @@ interface ApiService {
 //    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
 
     @GET("eaters/me/orders")
-    fun getOrders(): Call<ServerResponse<ArrayList<Order>>>
+    fun getOrders(): Call<ServerResponse<List<Order>>>
 
     @GET("eaters/me/orders/{order_id}")
     fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Order>>
@@ -205,20 +205,20 @@ interface ApiService {
 
     //dish likes
     @POST("dishes/{dish_id}/likes")
-    fun likeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Void>>
+    fun likeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Any>>
 
     @DELETE("dishes/{dish_id}/likes")
-    fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Void>>
+    fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Any>>
 
     //Reports
 
     //Post Report
     @POST("eaters/me/orders/{order_id}/reports")
-    fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): Call<ServerResponse<Void>>
+    fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): Call<ServerResponse<Any>>
 
     //Post Review
     @POST("eaters/me/orders/{order_id}/reviews")
-    fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): Call<ServerResponse<Void>>
+    fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): Call<ServerResponse<Any>>
 
     @GET("eaters/me/events/{event_id}")
     fun getEventById(@Path(value = "event_id", encoded = true) eventId: String): Call<ServerResponse<Event>>
