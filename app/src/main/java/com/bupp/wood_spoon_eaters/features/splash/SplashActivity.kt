@@ -140,12 +140,12 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             if (it.has("menu_item_id")) {
                 menuItemId = it.get("menu_item_id") as String
             }
-            if(it.has("referal")){
-                val sid = it.get("sid") as String
-                val cid = it.get("cid") as String
+            if(it.has("referal")){//token
+                val token = it.get("token") as String
+//                val cid = it.get("cid") as String
 
-                Log.d("wowSplash", "sid: $sid cid: $cid")
-                viewModel.setUserCampaignParam(sid, cid)
+                Log.d("wowSplash", "token: $token")
+                viewModel.setUserCampaignParam(token)
             }
         }
     }

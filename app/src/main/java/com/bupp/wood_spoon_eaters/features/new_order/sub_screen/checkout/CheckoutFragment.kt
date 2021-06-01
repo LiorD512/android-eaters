@@ -226,7 +226,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 }
                 checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide)
                 it.tipPercentage?.let{ tip ->
-                    checkoutFragTipPercentView.selectDefaultTip(tip)
+                    if(tip != 0){
+                        checkoutFragTipPercentView.selectDefaultTip(tip)
+                    }
                 }
             }
             updatePriceUi(it)
@@ -253,7 +255,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             val discount = curOrder.discount?.value
             curOrder.minPrice?.let {
                 val minPrice = it.value
-                if (minPrice > 0.0) {
+                if (minPrice != null && minPrice > 0.0) {
                     checkoutFragMinPriceText.text = "$$minPrice"
                     checkoutFragMinPriceLayout.visibility = View.VISIBLE
                     checkoutFragMinPriceSep.visibility = View.VISIBLE
@@ -325,7 +327,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.refreshUi()
     }
 
-
     override fun onTipIconClick(tipSelection: Int?) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
@@ -336,7 +337,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onTipDone(tipAmount: Int) {
         binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.simpleUpdateOrder(OrderRequest(tipAmount = tipAmount.toString()), Constants.EVENT_TIP)
+        viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = tipAmount*100), Constants.EVENT_TIP)
     }
 
     override fun onChangeLocationClick() {
@@ -361,7 +362,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }else{
             activity?.onBackPressed()
         }
-
     }
 
 

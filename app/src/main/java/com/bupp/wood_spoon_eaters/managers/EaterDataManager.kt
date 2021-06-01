@@ -92,7 +92,7 @@ class EaterDataManager(
         }
     }
 
-    suspend fun cancelOrder(orderId: Long?, note: String?): EaterDataRepository.EaterDataRepoResult<Void>? {
+    suspend fun cancelOrder(orderId: Long?, note: String?): EaterDataRepository.EaterDataRepoResult<Any>? {
         orderId?.let{
             val result = eaterDataRepository.cancelOrder(it, note)
             when (result.type) {
@@ -215,14 +215,10 @@ class EaterDataManager(
     ///////         Referrals         ///////
     /////////////////////////////////////////
 
-    var sid: String? = null
-    var cid: String? = null
-    fun setUserCampaignParam(sid: String? = null, cid: String? = null) {
-        sid?.let {
-            this.sid = it
-        }
-        cid?.let {
-            this.cid = it
+    var token: String? = null
+    fun setUserCampaignParam(token: String? = null) {
+        token?.let {
+            this.token = it
         }
     }
 

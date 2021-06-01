@@ -49,7 +49,7 @@ class CooksDishesAdapter(private val listener: CooksProfileDishesListener?) :
         fun bindItem(listener: CooksProfileDishesListener?, dish: Dish) {
 
             title.text = dish.name
-            price.text = dish.getPriceObj().formatedValue
+            price.text = dish.getPriceObj()?.formatedValue
             description.text = dish.description.replace("\n", ". ")
 
             Glide.with(itemView.context).load(dish.thumbnail).centerCrop().into(dishImg)

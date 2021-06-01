@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AddressMenuBottomSheetBinding
@@ -40,8 +41,7 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
         val resources = resources
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            assert(view != null)
-            val parent = view?.parent as View
+            val parent = view.parent as View
             val layoutParams = parent.layoutParams as CoordinatorLayout.LayoutParams
             layoutParams.setMargins(
                 resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT 16dp
@@ -54,7 +54,7 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
         }
 
         val address = requireArguments().getParcelable<Address>("address")
-        address?.let{
+        address?.let {
             viewModel.setCurrentAddress(it)
         }
 
@@ -68,16 +68,18 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
             binding.addressMenuSubtitle.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
         })
 
-        viewModel.navigationEvent.observe(viewLifecycleOwner, {
-            when(it){
-                AddressMenuViewModel.NavigationEventType.ADDRESS_MENU_DONE -> {
-                    mainViewModel.updateMyAddresses()
-                    dismiss()
+        viewModel.navigationEvent.observe(viewLifecycleOwner, { it ->
+            it?.let {
+                when (it) {
+                    AddressMenuViewModel.NavigationEventType.ADDRESS_MENU_DONE -> {
+                        mainViewModel.updateMyAddresses()
+                        dismiss()
+                    }
                 }
             }
         })
         viewModel.errorEvents.observe(viewLifecycleOwner, {
-            when(it){
+            when (it) {
                 ErrorEventType.INVALID_PHONE -> {
                     WSErrorDialog(getString(R.string.login_error_wrong_phone), null).show(childFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
@@ -90,7 +92,8 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
                 ErrorEventType.SOMETHING_WENT_WRONG -> {
                     WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(childFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
-                else -> {}
+                else -> {
+                }
             }
         })
     }

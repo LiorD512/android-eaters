@@ -55,9 +55,9 @@ class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>,
                 }
                 val dish: Dish = dishes[curPosition]
                 Glide.with(context).load(dish.thumbnail).into((holder as DishItemViewHolder).bkgImg)
-                (holder as DishItemViewHolder).cookImg.setImage(dish.cook.thumbnail)
+                (holder as DishItemViewHolder).cookImg.setImage(dish.cook?.thumbnail)
                 holder.name.text = dish.name
-                holder.cookName.text = "By ${dish.cook.getFullName()}"
+                holder.cookName.text = "By ${dish.cook?.getFullName()}"
                 holder.rating.text = "${dish.rating}"
 
                 if(dish.menuItem != null){

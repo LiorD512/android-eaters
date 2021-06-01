@@ -24,7 +24,7 @@ class NationwideShippingChooserAdapter(val context: Context, val listener: Natio
 
     class NationwideShippingChooserDiffCallback: DiffUtil.ItemCallback<ShippingMethod>(){
         override fun areItemsTheSame(oldItem: ShippingMethod, newItem: ShippingMethod): Boolean {
-            return oldItem.code.equals(newItem.code)
+            return oldItem.code == newItem.code
         }
 
         override fun areContentsTheSame(oldItem: ShippingMethod, newItem: ShippingMethod): Boolean {
@@ -50,34 +50,23 @@ class NationwideShippingChooserAdapter(val context: Context, val listener: Natio
 
         holder as ViewHolder
         holder.title.text = shippingMethod.name
-        if(shippingMethod.description != null){
-            holder.eta.text = "${shippingMethod.description}"
-            holder.eta.visibility = View.VISIBLE
-        }else{
-            holder.eta.visibility = View.GONE
-        }
+        holder.eta.text = shippingMethod.description
+        holder.eta.visibility = View.VISIBLE
         holder.price.text = shippingMethod.fee.formatedValue
         holder.bkg.setOnClickListener {
             selectedmenuItem = shippingMethod
             listener.onShippingMethodClick(shippingMethod)
         }
 
-        holder.cb.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
-                if(isChecked){
-                    selectedmenuItem = shippingMethod
-                    listener.onShippingMethodClick(shippingMethod)
-                }
+        holder.cb.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedmenuItem = shippingMethod
+                listener.onShippingMethodClick(shippingMethod)
             }
-
-        })
-
-
-        if(selectedmenuItem?.code.equals(shippingMethod.code)){
-            holder.cb.isSelected = true
-        }else{
-            holder.cb.isSelected = false
         }
+
+
+        holder.cb.isSelected = selectedmenuItem?.code.equals(shippingMethod.code)
     }
 
     fun setSelected(shippingMethod: ShippingMethod){

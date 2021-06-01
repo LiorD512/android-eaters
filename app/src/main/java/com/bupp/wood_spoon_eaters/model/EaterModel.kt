@@ -2,27 +2,28 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.net.Uri
 import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.*
-import kotlin.collections.ArrayList
 
-
+@JsonClass(generateAdapter = true)
 data class Eater(
-    @SerializedName("id") val id: Long,
-    @SerializedName("phone_number") val phoneNumber: String,
-    @SerializedName("account_status") val accountStatus: String,
-    @SerializedName("first_name") val firstName: String?,
-    @SerializedName("last_name") val lastName: String?,
-    @SerializedName("thumbnail") val thumbnail: String?,
-    @SerializedName("invite_url") val inviteUrl: String?,
-    @SerializedName("email") val email: String?,
-    @SerializedName("created_at") val createdAt: Date?,
-    @SerializedName("orders_count") val ordersCount: Int = 0,
-    @SerializedName("addresses") val addresses: List<Address>,
-    @SerializedName("cuisines") var cuisines: List<CuisineLabel>? = null,
-    @SerializedName("diets") var diets: List<DietaryIcon>? = null,
-    @SerializedName("active_campaign") val activeCampaign: ActiveCampaign? = null,
-    @SerializedName("share_campaign") val shareCampaign: Campaign? = null,
-    @SerializedName("notification_groups") val notificationsGroup: ArrayList<NotificationGroup>
+    @Json(name = "id") val id: Long,
+    @Json(name = "phone_number") val phoneNumber: String,
+    @Json(name = "account_status") val accountStatus: String,
+    @Json(name = "first_name") val firstName: String?,
+    @Json(name = "last_name") val lastName: String?,
+    @Json(name = "thumbnail") val thumbnail: String?,
+    @Json(name = "invite_url") val inviteUrl: String?,
+    @Json(name = "email") val email: String?,
+    @Json(name = "created_at") val createdAt: Date?,
+    @Json(name = "orders_count") val ordersCount: Int = 0,
+    @Json(name = "addresses") val addresses: List<Address>,
+    @Json(name = "cuisines") var cuisines: List<CuisineLabel>? = null,
+    @Json(name = "diets") var diets: List<DietaryIcon>? = null,
+    @Json(name = "active_campaign") val activeCampaign: ActiveCampaign? = null,
+    @Json(name = "share_campaign") val shareCampaign: Campaign? = null,
+    @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>
 ){
     fun getFullName(): String{
         var first = "Anonymous"
@@ -43,37 +44,41 @@ data class Eater(
     }
 }
 
+@JsonClass(generateAdapter = true)
 data class EaterRequest(
-    @SerializedName("first_name") var firstName: String? = null,
-    @SerializedName("last_name") var lastName: String? = null,
-    @SerializedName("thumbnail") var thumbnail: String? = null,
-    @SerializedName("email") var email: String? = null,
-    @SerializedName("addresses") var addresses: ArrayList<AddressRequest>? = null,
-    @SerializedName("time_zone") var timezone: String = TimeZone.getDefault().id,
-//    @SerializedName("device") var device: Device? = null,
-    @SerializedName("cuisine_ids") var cuisineIds: ArrayList<Int>? = null,
-    @SerializedName("diet_ids") var dietIds: ArrayList<Int>? = null,
+    @Json(name = "first_name") var firstName: String? = null,
+    @Json(name = "last_name") var lastName: String? = null,
+    @Json(name = "thumbnail") var thumbnail: String? = null,
+    @Json(name = "email") var email: String? = null,
+    @Json(name = "addresses") var addresses: List<AddressRequest>? = null,
+    @Json(name = "time_zone") var timezone: String? = TimeZone.getDefault().id ?: null,
+    @Json(name = "cuisine_ids") var cuisineIds: List<Int>? = null,
+    @Json(name = "diet_ids") var dietIds: List<Int>? = null,
     var tempThumbnail: Uri? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class DeviceDetails(
-    @SerializedName("device") val device: Device? = null
+    @Json(name = "device") val device: Device? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class Device(
-    @SerializedName("device_token") val deviceToken: String = "",
-    @SerializedName("os_type") val osType: Int = 1,
-    @SerializedName("device_type") val deviceType: String = "",
-    @SerializedName("os_version") val osVersion: String = "",
-    @SerializedName("app_version") val appVersion: String = ""
+    @Json(name = "device_token") val deviceToken: String = "",
+    @Json(name = "os_type") val osType: Int = 1,
+    @Json(name = "device_type") val deviceType: String = "",
+    @Json(name = "os_version") val osVersion: String = "",
+    @Json(name = "app_version") val appVersion: String = ""
 )
 
+@JsonClass(generateAdapter = true)
 data class Trigger(
-    @SerializedName("should_rate") var shouldRateOrder: Order?
+    @Json(name = "should_rate") var shouldRateOrder: Order? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class EphemeralKey(
-    @SerializedName("id") var id: String = "",
-    @SerializedName("object") var keyObject: String = "",
-    @SerializedName("secret") var secret: String = ""
+    @Json(name = "id") var id: String = "",
+    @Json(name = "object") var keyObject: String = "",
+    @Json(name = "secret") var secret: String = ""
 )

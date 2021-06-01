@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryItemBinding
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 
-class OrdersHistoryAdapter(val context: Context, private var orders: ArrayList<Order>, val listener: OrdersHistoryAdapterListener) :
+class OrdersHistoryAdapter(val context: Context, private var orders: List<Order>, val listener: OrdersHistoryAdapterListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OrdersHistoryAdapterListener{

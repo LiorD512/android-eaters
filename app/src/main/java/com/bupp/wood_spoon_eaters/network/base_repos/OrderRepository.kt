@@ -9,7 +9,7 @@ interface OrderRepository{
     suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): ResultHandler<ServerResponse<FullDish>>
     suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
     suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
-    suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Void>>
+    suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>>
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
     suspend fun getUpsShippingRates(orderId: Long): ResultHandler<ServerResponse<List<ShippingMethod>>>
 }
@@ -32,7 +32,7 @@ class OrderRepositoryImpl(private val service: ApiService) : OrderRepository {
         return safeApiCall { service.updateOrder(orderId, orderRequest) }
     }
 
-    override suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Void>> {
+    override suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>> {
         return safeApiCall { service.checkoutOrder(orderId, paymentMethodId) }
     }
 
