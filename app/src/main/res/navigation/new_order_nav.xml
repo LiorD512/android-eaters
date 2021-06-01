@@ -18,14 +18,14 @@
                 app:popUpTo="@+id/newOrderMainFragment"
                 android:id="@+id/action_newOrderMainFragment_to_checkoutFragment"
                 app:destination="@id/checkoutFragment" />
-        <action
-                app:enterAnim="@anim/slide_right_enter"
-                app:exitAnim="@anim/slide_right_exit"
-                app:popEnterAnim="@anim/slide_left_enter"
-                app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/newOrderMainFragment"
-                android:id="@+id/action_newOrderMainFragment_to_additionalDishesFragment"
-                app:destination="@id/additionalDishesFragment" />
+<!--        <action-->
+<!--                app:enterAnim="@anim/slide_right_enter"-->
+<!--                app:exitAnim="@anim/slide_right_exit"-->
+<!--                app:popEnterAnim="@anim/slide_left_enter"-->
+<!--                app:popExitAnim="@anim/slide_left_exit"-->
+<!--                app:popUpTo="@+id/newOrderMainFragment"-->
+<!--                android:id="@+id/action_newOrderMainFragment_to_additionalDishesFragment"-->
+<!--                app:destination="@id/additionalDishesFragment" />-->
     </fragment>
 
     <fragment
@@ -44,17 +44,17 @@
                 app:popUpTo="@+id/checkoutFragment"/>
     </fragment>
 
- <fragment
-            android:id="@+id/additionalDishesFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dishes.AdditionalDishesFragment"
-            android:label="fragment_additional_dishes"
-            tools:layout="@layout/additional_dishes_dialog">
+<!-- <fragment-->
+<!--            android:id="@+id/additionalDishesFragment"-->
+<!--            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dishes.AdditionalDishesFragment"-->
+<!--            android:label="fragment_additional_dishes"-->
+<!--            tools:layout="@layout/additional_dishes_dialog">-->
 
 
-     <action
-             android:id="@+id/action_additionalDishesFragment_to_checkoutFragment"
-             app:destination="@id/checkoutFragment" />
- </fragment>
+<!--     <action-->
+<!--             android:id="@+id/action_additionalDishesFragment_to_checkoutFragment"-->
+<!--             app:destination="@id/checkoutFragment" />-->
+<!-- </fragment>-->
 
 
     <fragment

@@ -5,7 +5,7 @@ import androidx.annotation.Nullable
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @JsonClass(generateAdapter = true)

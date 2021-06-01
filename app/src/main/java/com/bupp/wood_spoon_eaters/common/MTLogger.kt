@@ -74,7 +74,7 @@ class MTLogger {
         }
     }
 
-    val stringBuilder = StringBuilder().append("\n")
+    private val stringBuilder = StringBuilder().append("\n")
 
     private fun log(tag: String, msg: String, cacheLog: Boolean) {
         Log.d(tag, msg)

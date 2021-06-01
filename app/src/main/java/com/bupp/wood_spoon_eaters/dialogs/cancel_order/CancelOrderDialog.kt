@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CancelOrderDialogLayoutBinding
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {

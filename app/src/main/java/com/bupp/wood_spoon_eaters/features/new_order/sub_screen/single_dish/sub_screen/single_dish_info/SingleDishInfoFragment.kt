@@ -219,9 +219,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     override fun onDestroyView() {
-        binding.singleDishInfoImagePager.let {
-            it.adapter = null
-        }
+        binding.singleDishInfoImagePager.adapter = null
         super.onDestroyView()
     }
 

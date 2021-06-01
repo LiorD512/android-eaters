@@ -4,7 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 data class FeedUiStatus(val type: FeedUiStatusType)
