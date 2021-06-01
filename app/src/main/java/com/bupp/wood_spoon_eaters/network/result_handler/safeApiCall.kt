@@ -2,12 +2,19 @@ package com.bupp.wood_spoon_eaters.network.result_handler
 
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.ServerResponse
+import com.bupp.wood_spoon_eaters.model.WSError
 import com.google.gson.Gson
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import retrofit2.adapter.rxjava2.Result.response
 import java.io.IOException
+
 
 suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, apiCall: suspend () -> T): ResultHandler<T> {
     return withContext(dispatcher) {
@@ -18,20 +25,24 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
                 is IOException -> ResultHandler.NetworkError
                 is HttpException -> {
                     val code = throwable.code()
-                    when(code){
+                    when (code) {
                         400 -> {
-                            val errorsBody = throwable.response()?.errorBody()
-                            var gson = Gson()
-                            val serverResponse = gson.fromJson(errorsBody?.string(), ServerResponse::class.java)
-                            Log.d("safeApiCall", "safeApiCall serverResponse: $serverResponse")
-                            if(serverResponse.errors.isNullOrEmpty()){
+                            val source = throwable.response()?.errorBody()?.source()
+                            val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+                            val jsonAdapter: JsonAdapter<ServerResponse<Any>> = moshi.adapter(
+                                Types.newParameterizedType(ServerResponse::class.java, WSError::class.java)
+                            )
+                            val serverResponse = jsonAdapter.fromJson(source)
+                            Log.d("wow","wow errors: $serverResponse")
+                            if (serverResponse?.errors == null) {
                                 val errorResponse = convertErrorBody(throwable)
                                 ResultHandler.GenericError(code, errorResponse)
-                            }else{
-                                ResultHandler.WSCustomError(serverResponse.errors)
+                            } else {
+                                ResultHandler.WSCustomError(serverResponse?.errors)
                             }
                         }
-                        else ->{
+                        else -> {
                             val errorResponse = convertErrorBody(throwable)
                             ResultHandler.GenericError(code, errorResponse)
                         }

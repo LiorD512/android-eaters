@@ -14,6 +14,8 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -22,6 +24,7 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.Hea
     lateinit var binding: PromoCodeFragmentBinding
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
+    val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,21 +35,18 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.Hea
         initObservers()
 
 
-
     }
 
     private fun initObservers() {
-        with(binding){
-            viewModel.promoCodeEvent.observe(this@PromoCodeFragment, { event ->
-                promoCodeFragPb.hide()
-                if(event.isSuccess){
-//                listener.onPromoCodeDone()
-//                (activity as NewOrderActivity).onCheckout()//ny !!!
+        with(binding) {
+            viewModel.promoCodeEvent.observe(viewLifecycleOwner, { event ->
+                if (event.isSuccess) {
+                    mainViewModel.onPromoCodeSuccess()
+                    onHeaderBackClick()
                 }
             })
-            viewModel.errorEvent.observe(this@PromoCodeFragment, {
-                promoCodeFragPb.hide()
-                it?.let{
+            viewModel.errorEvent.observe(viewLifecycleOwner, {
+                it?.let {
                     var errorStr = ""
                     it.forEach {
                         errorStr += "${it.msg} \n"
@@ -54,11 +54,20 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.Hea
                     showWrongPromoCodeNotification(errorStr)
                 }
             })
+            viewModel.progressData.observe(viewLifecycleOwner, {
+                if (it) {
+                    promoCodeFragPb.show()
+
+                } else {
+                    promoCodeFragPb.hide()
+                }
+            })
         }
+
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding) {
             promoCodeFragHeaderView.setHeaderViewListener(this@PromoCodeFragment)
             promoCodeFragHeaderView.setSaveButtonClickable(false)
 
@@ -78,9 +87,11 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.Hea
     }
 
     private fun showWrongPromoCodeNotification(msg: String?) {
-        snackbar = TSnackbar.make(binding.promoCodeFragmentLayout,
+        snackbar = TSnackbar.make(
+            binding.promoCodeFragmentLayout,
             msg ?: "The promo code seems to be invalid. \nplease check again",
-            TSnackbar.LENGTH_LONG)
+            TSnackbar.LENGTH_LONG
+        )
         val snackBarView = snackbar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
         val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
@@ -91,19 +102,17 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment), HeaderView.Hea
     }
 
     private fun openKeyboard(view: View) {
-        if(view.requestFocus()){
+        if (view.requestFocus()) {
             val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
     }
 
     override fun onHeaderSaveClick() {
-        binding.promoCodeFragPb.show()
         viewModel.savePromoCode(binding.promoCodeFragCodeInput.text.toString())
     }
 
     override fun onHeaderBackClick() {
-//        (activity as NewOrderActivity).onCheckout() // nyyy
         activity?.onBackPressed()
     }
 }

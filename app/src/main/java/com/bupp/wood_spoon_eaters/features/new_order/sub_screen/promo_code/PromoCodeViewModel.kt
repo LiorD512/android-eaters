@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.OrderManager
@@ -17,13 +18,14 @@ import kotlinx.coroutines.launch
 
 class PromoCodeViewModel(private val cartManager: CartManager) : ViewModel() {
 
-
+    val progressData = ProgressData()
     val promoCodeEvent: SingleLiveEvent<PromoCodeEvent> = SingleLiveEvent()
     val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()
     data class PromoCodeEvent(val isSuccess: Boolean = false)
 
     fun savePromoCode(code: String) {
         viewModelScope.launch {
+            progressData.startProgress()
             val result = cartManager.postUpdateOrder(OrderRequest( promoCode = code))
             when(result?.type){
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -37,6 +39,7 @@ class PromoCodeViewModel(private val cartManager: CartManager) : ViewModel() {
                 }
             }
         }
+        progressData.endProgress()
     }
 
 

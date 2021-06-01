@@ -538,6 +538,10 @@ class NewOrderMainViewModel(
         eventsManager.proceedToCheckoutEvent()
     }
 
+    fun onPromoCodeSuccess(){
+        getLastOrderDetails()
+    }
+
 
     companion object {
         const val TAG = "wowNewOrderVM"
