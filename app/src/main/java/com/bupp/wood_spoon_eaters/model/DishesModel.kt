@@ -2,49 +2,22 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
-@Parcelize
-data class Dish(
-    @SerializedName("id") val id: Long,
-    @SerializedName("cook") val cook: Cook,
-    @SerializedName("name") val name: String,
-    @SerializedName("price") val price: Price,
-    @SerializedName("description") val description: String,
-    @SerializedName("avg_rating") val rating: Double,
-    @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("is_favorite") val isFavorite: Boolean,
-    @SerializedName("nationwide_shipping") val worldwide: Boolean,
-    @SerializedName("is_recurring") val isRecurring: Boolean,
-    @SerializedName("matching_menu") val menuItem: MenuItem?,
-    @SerializedName("matching_slot") val matchingSlot: String,
-    @SerializedName("door_to_door_time") val doorToDoorTime: String?,
-    @SerializedName("cuisines") val cuisines: List<CuisineLabel>?
-): Parcelable {
-    fun getPriceObj(): Price {
-        return if(menuItem?.price != null){
-            menuItem.price
-        }else{
-            price
-        }
-    }
-
-    fun isSoldOut(): Boolean {
-        val quantityLeft = (menuItem?.quantity ?: 0) - (menuItem?.unitsSold ?: 0)
-        return quantityLeft <= 0
-    }
-}
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class MenuItem(
-    @SerializedName("id") val id: Long,
-    @SerializedName("price") val price: Price? = null,
-    @SerializedName("quantity") val quantity: Int = 0,
-    @SerializedName("units_sold") val unitsSold: Int = 0,
-    @SerializedName("order_at") val orderAt: Date? = null,
-    @SerializedName("cooking_slot") val cookingSlot: CookingSlot
+    @Json(name = "id") val id: Long,
+    @Json(name = "price") val price: Price? = null,
+    @Json(name = "quantity") val quantity: Int = 0,
+    @Json(name = "units_sold") val unitsSold: Int = 0,
+    @Json(name = "order_at") val orderAt: Date? = null,
+    @Json(name = "cooking_slot") val cookingSlot: CookingSlot?
 ): Parcelable{
     fun getQuantityLeftString(): String{
         val left = quantity - unitsSold
@@ -56,46 +29,48 @@ data class MenuItem(
 }
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class CookingSlot(
-    @SerializedName("id") val id: Long,
-    @SerializedName("ends_at") val endsAt: Date,
-    @SerializedName("starts_at") val startsAt: Date,
-    @SerializedName("order_from") val orderFrom: Date,
-    @SerializedName("last_call_at") val lastCallAt: Date,
-    @SerializedName("delivery_fee") val deliveryFee: Price?,
-    @SerializedName("free_delivery") val freeDelivery: Boolean,
-    @SerializedName("nationwide_shipping") val isNationwide: Boolean
+    @Json(name = "id") val id: Long,
+    @Json(name = "ends_at") val endsAt: Date,
+    @Json(name = "starts_at") val startsAt: Date,
+    @Json(name = "order_from") val orderFrom: Date,
+    @Json(name = "last_call_at") val lastCallAt: Date?,
+    @Json(name = "delivery_fee") val deliveryFee: Price?,
+    @Json(name = "free_delivery") val freeDelivery: Boolean,
+    @Json(name = "nationwide_shipping") val isNationwide: Boolean?
 ): Parcelable
 
+@JsonClass(generateAdapter = true)
 data class FullDish(
-    @SerializedName("id") val id: Long,
-    @SerializedName("cook") val cook: Cook,
-    @SerializedName("name") val name: String,
-    @SerializedName("price") val price: Price,
-    @SerializedName("avg_rating") val rating: Double,
-    @SerializedName("proteins") val proteins: Double,
-    @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("video") val video: String? = null,
-    @SerializedName("status") var status: String? = null,
-    @SerializedName("is_favorite") val isFavorite: Boolean,
-    @SerializedName("description") val description: String,
-    @SerializedName("matching_menu") var menuItem: MenuItem?,
-    @SerializedName("matching_slot") val matchingSlot: String,
-    @SerializedName("cooking_time") var cookingTime: String = "",
-    @SerializedName("instructions") var instruction: String? = null,
-    @SerializedName("ingredients") var ingredients: String? = null,
-    @SerializedName("carbohydrates") val carbohydrates: Double,
-    @SerializedName("cuisines") val cuisines: List<CuisineLabel>,
-    @SerializedName("calorific_value") val calorificValue: Double,
-    @SerializedName("door_to_door_time") val doorToDoorTime: String,
-    @SerializedName("portion_size") var portionSize: String? = null,
-    @SerializedName("nationwide_shipping") val isNationwide: Boolean,
-    @SerializedName("prep_time_range") val prepTimeRange: PrepTimeRange,
-    @SerializedName("available_at") val availableMenuItems: ArrayList<MenuItem>,
-    @SerializedName("dietary_accommodations") var accommodations: String? = null,
-    @SerializedName("image_gallery") val imageGallery: ArrayList<String>? = null,
-    @SerializedName("cooking_methods") val cookingMethods: ArrayList<CookingMethods>,
-    @SerializedName("dish_ingredients") val dishIngredients: List<DishIngredient>
+    @Json(name = "id") val id: Long,
+    @Json(name = "cook") val cook: Cook,
+    @Json(name = "name") val name: String,
+    @Json(name = "price") val price: Price,
+    @Json(name = "avg_rating") val rating: Double?,
+    @Json(name = "proteins") val proteins: Double,
+    @Json(name = "thumbnail") val thumbnail: String,
+    @Json(name = "video") val video: String? = null,
+    @Json(name = "status") var status: String? = null,
+    @Json(name = "is_favorite") val isFavorite: Boolean?,
+    @Json(name = "description") val description: String,
+    @Json(name = "matching_menu") var menuItem: MenuItem?,
+    @Json(name = "matching_slot") val matchingSlot: String?,
+    @Json(name = "cooking_time") var cookingTime: String = "",
+    @Json(name = "instructions") var instruction: String? = null,
+    @Json(name = "ingredients") var ingredients: String? = null,
+    @Json(name = "carbohydrates") val carbohydrates: Double,
+    @Json(name = "cuisines") val cuisines: List<CuisineLabel>,
+    @Json(name = "calorific_value") val calorificValue: Double,
+    @Json(name = "door_to_door_time") val doorToDoorTime: String,
+    @Json(name = "portion_size") var portionSize: String? = null,
+    @Json(name = "nationwide_shipping") val isNationwide: Boolean?,
+    @Json(name = "prep_time_range") val prepTimeRange: PrepTimeRange,
+    @Json(name = "available_at") val availableMenuItems: List<MenuItem>,
+    @Json(name = "dietary_accommodations") var accommodations: String? = null,
+    @Json(name = "image_gallery") val imageGallery: List<String>? = null,
+    @Json(name = "cooking_methods") val cookingMethods: List<CookingMethods>,
+    @Json(name = "dish_ingredients") val dishIngredients: List<DishIngredient>?
 ){
     fun getPriceObj(): Price {
         if(availableMenuItems?.size > 0 && availableMenuItems[0].price != null){
@@ -139,39 +114,44 @@ data class MediaList(
 
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class DishIngredient(
-    @SerializedName("id") val id: Long? = null,
-    @SerializedName("quantity") val quantity: Double?,
-    @SerializedName("is_adjustable") val isAdjustable: Boolean?,
-    @SerializedName("unit") val unit: WoodUnit?,
-    @SerializedName("ingredient") val ingredient: Ingredient?,
-    @SerializedName("_remove") val _removeId: Long? = null
+    @Json(name = "id") val id: Long? = null,
+    @Json(name = "quantity") val quantity: Double?,
+    @Json(name = "is_adjustable") val isAdjustable: Boolean?,
+    @Json(name = "unit") val unit: WoodUnit?,
+    @Json(name = "ingredient") val ingredient: Ingredient?,
+    @Json(name = "_remove") val _removeId: Long? = null
 ): Parcelable
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class Ingredient(
-    @SerializedName("id") val id: Long? = null,
-    @SerializedName("name") val name: String? = null,
-    @SerializedName("units") val unit: ArrayList<WoodUnit>
+    @Json(name = "id") val id: Long? = null,
+    @Json(name = "name") val name: String? = null,
+    @Json(name = "units") val unit: List<WoodUnit>?
 ): Parcelable
 
+@JsonClass(generateAdapter = true)
 data class CookingMethods(
-    @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String
+    @Json(name = "id") val id: Long,
+    @Json(name = "name") val name: String
 )
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class Price(
-    @SerializedName("cents") val cents: Long,
-    @SerializedName("value") val value: Double,
-    @SerializedName("formatted") val formatedValue: String
+    @Json(name = "cents") val cents: Long?,
+    @Json(name = "value") val value: Double?,
+    @Json(name = "formatted") val formatedValue: String?
 ): Parcelable
 
+@JsonClass(generateAdapter = true)
 data class UpcomingSlot(
-    @SerializedName("id") val id: Long,
-    @SerializedName("status") val status: Int,
-    @SerializedName("quantity") val quantity: Int,
-    @SerializedName("starts_at") val startsAt: Date,
-    @SerializedName("units_sold") val unitSold: Int
+    @Json(name = "id") val id: Long,
+    @Json(name = "status") val status: Int,
+    @Json(name = "quantity") val quantity: Int,
+    @Json(name = "starts_at") val startsAt: Date,
+    @Json(name = "units_sold") val unitSold: Int
 )
 

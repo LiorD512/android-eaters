@@ -116,7 +116,7 @@ class EaterDataRepository(
         }
     }
 
-    suspend fun cancelOrder(orderId: Long, note: String?): EaterDataRepoResult<Void> {
+    suspend fun cancelOrder(orderId: Long, note: String?): EaterDataRepoResult<Any> {
         val result = withContext(Dispatchers.IO){
             apiService.cancelOrder(orderId, note)
         }

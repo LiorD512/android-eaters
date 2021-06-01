@@ -81,7 +81,11 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
             Glide.with(context).load(dish.thumbnail).apply(RequestOptions.circleCropTransform()).into(image)
             name.text = "${dish.name} x${orderItem.quantity}"
 
-            val price = (orderItem.price.value*orderItem.quantity)
+            var price = 0.0
+            orderItem.price.value?.let{
+                price = it*orderItem.quantity
+
+            }
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
 //        counterText.text = "Count: ${orderItem.quantity}"

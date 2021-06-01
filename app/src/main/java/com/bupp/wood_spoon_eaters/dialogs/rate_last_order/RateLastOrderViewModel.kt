@@ -42,8 +42,8 @@ class RateLastOrderViewModel(private val api: ApiService,private val metaDataRep
     val postRating: SingleLiveEvent<PostRatingEvent> = SingleLiveEvent()
     data class PostRatingEvent(val isSuccess: Boolean = false)
     fun postRating(orderId: Long, reviewRequest: ReviewRequest) {
-        api.postReview(orderId, reviewRequest).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        api.postReview(orderId, reviewRequest).enqueue(object: Callback<ServerResponse<Any>>{
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 if(response.isSuccessful){
                     Log.d("wowRateOrderVM","postReview success")
                     postRating.postValue(PostRatingEvent(true))
@@ -53,7 +53,7 @@ class RateLastOrderViewModel(private val api: ApiService,private val metaDataRep
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowRateOrderVM","postReview big fail")
                 postRating.postValue(PostRatingEvent(false))
             }

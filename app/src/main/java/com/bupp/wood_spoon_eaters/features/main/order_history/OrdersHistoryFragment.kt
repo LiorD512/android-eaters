@@ -57,9 +57,9 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         }
     }
 
-    private fun initList(orderHistory: ArrayList<Order>) {
+    private fun initList(orderHistory: List<Order>) {
         with(binding){
-            if(orderHistory.size > 0){
+            if(orderHistory.isNotEmpty()){
                 val adapter = OrdersHistoryAdapter(requireContext(), orderHistory, this@OrdersHistoryFragment)
                 ordersHistoryFragRecyclerView.adapter = adapter
             }else{

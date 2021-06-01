@@ -66,7 +66,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
             }
             VIEW_TYPE_ADDITIONAL_HEADER -> {
                 holder as AdditionalHeaderViewHolder
-                val cooksName = (item.dish as Dish).cook.getFullName()
+                val cooksName = (item.dish as Dish).cook?.getFullName()
                 holder.body.text = "People who order from ${cooksName} usually added the following dishes"
             }
             VIEW_TYPE_ADDITIONAL -> {
@@ -117,7 +117,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         private val img: ResizeableImageView = binding.additionalDishImg
 
         fun bind(dish: Dish, listener: AdditionalDishesAdapterListener){
-            price.text = dish.price.formatedValue
+            price.text = dish.price?.formatedValue
             count.text = "${dish.menuItem?.quantity ?: 0}"
             addBtn.setOnClickListener { listener.onAddBtnClick(dish) }
             img.setOnClickListener { listener.onDishClick(dish) }

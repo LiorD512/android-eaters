@@ -68,8 +68,8 @@ private val deviceDetailsManager: FcmManager
         }
     }
 
-    fun setUserCampaignParam(sid: String?, cid: String?) {
-       eaterDataManager.setUserCampaignParam(sid = sid, cid = cid)
+    fun setUserCampaignParam(token: String?) {
+       eaterDataManager.setUserCampaignParam(token = token)
     }
 
     fun initFCMAndRefreshToken() {

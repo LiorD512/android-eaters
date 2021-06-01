@@ -129,8 +129,8 @@ class SearchViewModel(val api: ApiService, val metaDataRepository: MetaDataRepos
 
 
     fun suggestDish(dishName: String, dishDetails: String) {
-        api.postDishSuggestion(dishName,dishDetails).enqueue(object: Callback<ServerResponse<Void>> {
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        api.postDishSuggestion(dishName,dishDetails).enqueue(object: Callback<ServerResponse<Any>> {
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 if(response.isSuccessful){
                     Log.d("wowSearchVM","suggestDish success")
                     suggestionEvent.postValue(SuggestionEvent(true))
@@ -140,7 +140,7 @@ class SearchViewModel(val api: ApiService, val metaDataRepository: MetaDataRepos
                 }
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowSearchVM","suggestDish big fail")
                 suggestionEvent.postValue(SuggestionEvent(false))
             }
@@ -148,12 +148,12 @@ class SearchViewModel(val api: ApiService, val metaDataRepository: MetaDataRepos
     }
 
     fun likeDish(id: Long) {
-        api.likeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        api.likeDish(id).enqueue(object: Callback<ServerResponse<Any>>{
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 likeEvent.postValue(LikeEvent(response.isSuccessful))
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowSingleDishVM","likeDish big fail")
                 likeEvent.postValue(LikeEvent(false))
             }
@@ -162,12 +162,12 @@ class SearchViewModel(val api: ApiService, val metaDataRepository: MetaDataRepos
     }
 
     fun unlikeDish(id: Long) {
-        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Void>>{
-            override fun onResponse(call: Call<ServerResponse<Void>>, response: Response<ServerResponse<Void>>) {
+        api.unlikeDish(id).enqueue(object: Callback<ServerResponse<Any>>{
+            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
                 likeEvent.postValue(LikeEvent(response.isSuccessful))
             }
 
-            override fun onFailure(call: Call<ServerResponse<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
                 Log.d("wowSingleDishVM","unlikeDish big fail")
                 likeEvent.postValue(LikeEvent(false))
             }

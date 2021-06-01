@@ -183,7 +183,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     private fun initOrderDate(currentDish: FullDish) {
         with(binding){
-            if(currentDish.isNationwide){
+            if(currentDish.isNationwide == true){
                 singleDishInfoDeliveryTimeLayout.visibility = View.GONE
             }else {
                 singleDishInfoDeliveryTimeLayout.visibility = View.VISIBLE

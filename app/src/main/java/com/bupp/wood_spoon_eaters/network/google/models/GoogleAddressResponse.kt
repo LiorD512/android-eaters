@@ -1,74 +1,76 @@
 package com.bupp.wood_spoon_eaters.network.google.models
 
 import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+
 
 class GoogleAddressResponse {
 
-    @SerializedName("result")
+    @Json(name = "result")
     var results: ResultsItem? = null
 
-    @SerializedName("status")
+    @Json(name = "status")
     var status: String? = null
 
     inner class AddressComponentsItem {
 
-        @SerializedName("types")
+        @Json(name = "types")
         var types: List<String>? = null
 
-        @SerializedName("short_name")
+        @Json(name = "short_name")
         var shortName: String? = null
 
-        @SerializedName("long_name")
+        @Json(name = "long_name")
         var longName: String? = null
     }
 
     inner class Geometry {
 
-        @SerializedName("viewport")
+        @Json(name = "viewport")
         var viewport: Viewport? = null
 
-        @SerializedName("location")
+        @Json(name = "location")
         var location: Location? = null
 
-        @SerializedName("location_type")
+        @Json(name = "location_type")
         var locationType: String? = null
     }
 
 
     inner class Location {
 
-        @SerializedName("lng")
+        @Json(name = "lng")
         var lng: Double = 0.toDouble()
 
-        @SerializedName("lat")
+        @Json(name = "lat")
         var lat: Double = 0.toDouble()
     }
 
 
     inner class ResultsItem {
 
-        @SerializedName("formatted_address")
+        @Json(name = "formatted_address")
         var formattedAddress: String? = null
 
-        @SerializedName("types")
+        @Json(name = "types")
         var types: List<String>? = null
 
-        @SerializedName("geometry")
+        @Json(name = "geometry")
         var geometry: Geometry? = null
 
-        @SerializedName("address_components")
+        @Json(name = "address_components")
         var addressComponents: List<AddressComponentsItem>? = null
 
-        @SerializedName("place_id")
+        @Json(name = "place_id")
         var placeId: String? = null
     }
 
     inner class Viewport {
 
-        @SerializedName("southwest")
+        @Json(name = "southwest")
         var southwest: Location? = null
 
-        @SerializedName("northeast")
+        @Json(name = "northeast")
         var northeast: Location? = null
     }
 }

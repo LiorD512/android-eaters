@@ -38,6 +38,7 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
                     }
                 }
                 else -> {
+                    Log.d("safeApiCall", "safeApiCall serverResponse: ${throwable.message}")
                     ResultHandler.GenericError(null, null)
                 }
             }

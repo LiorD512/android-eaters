@@ -1,34 +1,35 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
+@JsonClass(generateAdapter = true)
 data class ServerResponse<T> (
-    @SerializedName("code") var code: Int = 0,
-    @SerializedName("message") var message: String? = null,
-    @SerializedName("data") var data: T? = null,
-    @SerializedName("errors") var errors: List<WSError>? = null,
-    @SerializedName("meta") val meta: Pagination,
+    var code: Int = 0,
+    var message: String? = null,
+    var data: T? = null,
+    var errors: List<WSError>? = null,
+    val meta: Pagination? = null,
 )
 
-    enum class ErrorEventType {
-        PHONE_EMPTY,
-        CODE_EMPTY,
-        INVALID_PHONE,
-        WRONG_PASSWORD,
-        SERVER_ERROR,
-        SOMETHING_WENT_WRONG
-    }
+enum class ErrorEventType {
+    PHONE_EMPTY,
+    CODE_EMPTY,
+    INVALID_PHONE,
+    WRONG_PASSWORD,
+    SERVER_ERROR,
+    SOMETHING_WENT_WRONG
+}
 
+@JsonClass(generateAdapter = true)
 data class WSError(
-    @SerializedName("code") val code: Int?,
-    @SerializedName("message") val msg: String?
+    @Json(name = "code") val code: Int?,
+    @Json(name = "message") val msg: String?
 )
 
+@JsonClass(generateAdapter = true)
 data class CountriesISO(
     val name: String?,
     val value: String,
@@ -36,73 +37,83 @@ data class CountriesISO(
     val flag: String?
 )
 
+@JsonClass(generateAdapter = true)
 data class MetaDataModel(
-    @SerializedName("cuisines") val cuisines: List<CuisineLabel>? = listOf(),
-    @SerializedName("diets") val diets: List<DietaryIcon>? = listOf(),
-    @SerializedName("metrics") val metrics: List<Metrics>? = listOf(),
-    @SerializedName("report_topics") val reportTopic: List<ReportTopic>? = listOf(),
-    @SerializedName("settings") val settings: List<AppSetting>? = listOf(),
-    @SerializedName("notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
-    @SerializedName("states") val states: List<State>? = listOf(),
-    @SerializedName("welcome_screens") val welcome_screens: List<WelcomeScreen>? = listOf(),
+    @Json(name = "cuisines") val cuisines: List<CuisineLabel>? = listOf(),
+    @Json(name = "diets") val diets: List<DietaryIcon>? = listOf(),
+    @Json(name = "metrics") val metrics: List<Metrics>? = listOf(),
+    @Json(name = "report_topics") val reportTopic: List<ReportTopic>? = listOf(),
+    @Json(name = "settings") val settings: List<AppSetting>? = listOf(),
+    @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
+    @Json(name = "states") val states: List<State>? = listOf(),
+    @Json(name = "welcome_screens") val welcome_screens: List<WelcomeScreen>? = listOf(),
 )
 
+@JsonClass(generateAdapter = true)
 data class ReportTopic(
-    @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String,
-    @SerializedName("report_issues") val reportIssues: java.util.ArrayList<ReportIssue>
+    @Json(name = "id") val id: Long,
+    @Json(name = "name") val name: String,
+    @Json(name = "report_issues") val reportIssues: List<ReportIssue>
 )
 
+@JsonClass(generateAdapter = true)
 data class NotificationGroup(
-    @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String,
-    @SerializedName("description") val description: String
+    @Json(name = "id") val id: Long,
+    @Json(name = "name") val name: String,
+    @Json(name = "description") val description: String
 )
 
+@JsonClass(generateAdapter = true)
 data class ReportIssue(
-    @SerializedName("id") val id: Long,
-    @SerializedName("name") val name: String
+    @Json(name = "id") val id: Long,
+    @Json(name = "name") val name: String
 )
 
+@JsonClass(generateAdapter = true)
 data class Reports(
-    @SerializedName("reports") val reviews: ArrayList<ReportRequest>
+    @Json(name = "reports") val reviews: List<ReportRequest>
 )
 
+@JsonClass(generateAdapter = true)
 data class ReportRequest(
-    @SerializedName("topic_id") val topicId: Long? = null,
-    @SerializedName("issue_id") val issueId: Long? = null,
-    @SerializedName("body") val body: String? = null
+    @Json(name = "topic_id") val topicId: Long? = null,
+    @Json(name = "issue_id") val issueId: Long? = null,
+    @Json(name = "body") val body: String? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class PrepTimeRange(
-    @SerializedName("id") val id: Long,
-    @SerializedName("icon") val icon: String,
-    @SerializedName("min_time") val minTime: Int,
-    @SerializedName("max_time") val maxTime: Int
+    @Json(name = "id") val id: Long,
+    @Json(name = "icon") val icon: String,
+    @Json(name = "min_time") val minTime: Int,
+    @Json(name = "max_time") val maxTime: Int
 )
 
+@JsonClass(generateAdapter = true)
 data class AppSetting(
-    @SerializedName("id") var id: Long?,
-    @SerializedName("key") var key: String?,
-    @SerializedName("dataType") var dataType: String?,
-    @SerializedName("value") var value: Any?
+    var id: Long?,
+    var key: String?,
+    var data_type: String?,
+    var value: Any?
 )
 
 enum class CloudinaryTransformationsType{
     SMALL, MEDIUM, LARGE
 }
+
+@JsonClass(generateAdapter = true)
 data class CloudinaryTransformations(
-    var keyValueMap: HashMap<CloudinaryTransformationsType, String>?
+    var keyValueMap: Map<CloudinaryTransformationsType, String>?
 ){
     fun getByType(type: CloudinaryTransformationsType): String?{
         return keyValueMap?.get(type.name.toLowerCase())
     }
 }
 
-
+@JsonClass(generateAdapter = true)
 data class WelcomeScreen(
-    @SerializedName("text") var text: String?,
-    @SerializedName("image_url") var url: String?
+    @Json(name = "text") var text: String?,
+    @Json(name = "image_url") var url: String?
 )
 
 
@@ -111,24 +122,26 @@ interface SelectableIcon {
     val id: Long
     val name: String
     val icon: String
-    val iconSelected: String
+    val iconSelected: String?
 }
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class DietaryIcon(
-    @SerializedName("name") override val name: String,
-    @SerializedName("icon") override val icon: String,
-    @SerializedName("icon_selected") override val iconSelected: String,
-    @SerializedName("id") override val id: Long
+    @Json(name = "name") override val name: String,
+    @Json(name = "icon") override val icon: String,
+    @Json(name = "icon_selected") override val iconSelected: String? = null,
+    @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class CuisineLabel(
-    @SerializedName("name") override val name: String,
-    @SerializedName("icon") override val icon: String,
-    @SerializedName("icon_selected") override val iconSelected: String,
-    @SerializedName("cover") val cover: String,
-    @SerializedName("id") override val id: Long
+    @Json(name = "name") override val name: String,
+    @Json(name = "icon") override val icon: String,
+    @Json(name = "icon_selected") override val iconSelected: String? = null,
+    @Json(name = "cover") val cover: String,
+    @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 
 interface SelectableString {
@@ -136,7 +149,8 @@ interface SelectableString {
     val name: String
 }
 
+@JsonClass(generateAdapter = true)
 data class PreSignedUrl(
-    @SerializedName("key") val key: String,
-    @SerializedName("url") val url: String
+    @Json(name = "key") val key: String,
+    @Json(name = "url") val url: String
 )

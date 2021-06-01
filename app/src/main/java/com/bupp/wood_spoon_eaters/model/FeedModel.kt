@@ -2,23 +2,28 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 data class Feed(
-    @SerializedName("title") var title: String? = null,
-    @SerializedName("subtitle") var subtitle: String? = null,
-    @SerializedName("search") var search: Search? = Search()
+    @Json(name = "title") var title: String? = null,
+    @Json(name = "subtitle") var subtitle: String? = null,
+    @Json(name = "search") var search: Search? = null
 ): Parcelable
 
+@JsonClass(generateAdapter = true)
 data class FeedRequest(
-    @SerializedName("lat") var lat: Double? = null,
-    @SerializedName("lng") var lng: Double? = null,
-    @SerializedName("addressId") var addressId: Long? = null,
-    @SerializedName("timestamp") var timestamp: String? = null
+    @Json(name = "lat") var lat: Double? = null,
+    @Json(name = "lng") var lng: Double? = null,
+    @Json(name = "addressId") var addressId: Long? = null,
+    @Json(name = "timestamp") var timestamp: String? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class WSRangeTimePickerHours(
     val date: Date,
     val hours: List<Date>

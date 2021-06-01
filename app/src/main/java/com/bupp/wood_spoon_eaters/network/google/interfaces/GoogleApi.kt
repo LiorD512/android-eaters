@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.network.google.interfaces
 
 
-import com.taliazhealth.predictix.network_google.models.google_api.AddressIdResponse
+import com.bupp.wood_spoon_eaters.network.google.models.AddressIdResponse
 import com.bupp.wood_spoon_eaters.network.google.models.GoogleAddressResponse
 
 import retrofit2.Call

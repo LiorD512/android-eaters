@@ -64,9 +64,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.favBtn.isSelected = isFavSelected
     }
 
-    fun setIsFav(isFavorite: Boolean) {
-        isFavSelected = isFavorite
-        binding.favBtn.isSelected = isFavorite
+    fun setIsFav(isFavorite: Boolean?) {
+        isFavorite?.let{
+            isFavSelected = isFavorite
+            binding.favBtn.isSelected = isFavorite
+        }
     }
 
 

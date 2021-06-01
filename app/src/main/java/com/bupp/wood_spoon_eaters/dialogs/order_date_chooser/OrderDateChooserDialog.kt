@@ -81,8 +81,8 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
         this.newSelectedMenuItem = selected
 
 //        val startDate: Date = selected.cookingSlot.startsAt
-        val startDate: Date = selected.cookingSlot.orderFrom
-        val endDate: Date = selected.cookingSlot.endsAt
+        val startDate: Date = selected.cookingSlot?.orderFrom ?: Date()
+        val endDate: Date = selected.cookingSlot?.endsAt ?: Date()
 
         val calStart = Calendar.getInstance()
         calStart.time = startDate
@@ -151,7 +151,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
     override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         val newCal = Calendar.getInstance()
 //        newCal.time = newSelectedMenuItem!!.cookingSlot.startsAt
-        newCal.time = newSelectedMenuItem!!.cookingSlot.orderFrom
+        newCal.time = newSelectedMenuItem!!.cookingSlot?.orderFrom ?: Date()
         newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
         newCal.set(Calendar.MINUTE, minute)
         var newChosenDate: Date = Date(newCal.timeInMillis)

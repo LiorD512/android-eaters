@@ -47,7 +47,7 @@ class OrderManager(val api: ApiService, val eaterDataManager: EaterDataManager, 
         if (orderItemRequests != null) currentOrderRequest!!.orderItemRequests = orderItemRequests
         if (tipPercentage != null) currentOrderRequest!!.tipPercentage = tipPercentage
         if (tip != null) currentOrderRequest!!.tip = tip
-        if (tipAmount != null) currentOrderRequest!!.tipAmount = tipAmount
+//        if (tipAmount != null) currentOrderRequest!!.tipAmount = tipAmount
         if (promoCode != null) currentOrderRequest!!.promoCode = promoCode
         if (addUtensils != null) currentOrderRequest!!.addUtensils = addUtensils
     }

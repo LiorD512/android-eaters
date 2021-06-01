@@ -32,18 +32,17 @@ class OrderDateChooserAdapter(val context: Context, private val menuItems: Array
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val menuItem = menuItems[position]
-//        val datePeriod = "${Utils.parseTwoDates(menuItem.cookingSlot.startsAt, menuItem.cookingSlot.endsAt)}"
-        val datePeriod = DateUtils.parseTwoDates(menuItem.cookingSlot.orderFrom, menuItem.cookingSlot.endsAt)
-        (holder as ViewHolder).item.text = "$datePeriod"
+        holder as ViewHolder
+        menuItem.cookingSlot?.let{
+            val datePeriod = DateUtils.parseTwoDates(it.orderFrom, it.endsAt)
+            holder.item.text = "$datePeriod"
+
+        }
         holder.item.setOnClickListener {
             listener?.onOrderDateClick(menuItem)
         }
 
-        if(selectedmenuItem?.id == menuItem.id){
-            holder.item.isSelected = true
-        }else{
-            holder.item.isSelected = false
-        }
+        holder.item.isSelected = selectedmenuItem?.id == menuItem.id
     }
 
     fun setSelected(menuItem: MenuItem){
