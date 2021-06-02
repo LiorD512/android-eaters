@@ -355,5 +355,11 @@ class MainViewModel(
         navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
     }
 
+    fun checkIfHaveReferral() {
+        viewModelScope.launch {
+            eaterDataManager.validateReferral()
+        }
+    }
+
 
 }

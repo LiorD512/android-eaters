@@ -150,6 +150,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         checkForBranchIntent()
         viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
+        viewModel.checkIfHaveReferral()
     }
 
     private fun checkForBranchIntent() {

@@ -11,6 +11,7 @@ interface EaterDataRepository{
     suspend fun getTrigger(): ResultHandler<ServerResponse<Trigger>>
     suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Void>>
     suspend fun checkForCampaigns(): ResultHandler<ServerResponse<List<Campaign>>>
+    suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>>
 
 }
 
@@ -31,6 +32,9 @@ class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataReposi
 
     override suspend fun checkForCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
         return safeApiCall { service.getUserCampaign() }
+    }
+    override suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>> {
+        return safeApiCall { service.validateReferralToken(token) }
     }
 
 

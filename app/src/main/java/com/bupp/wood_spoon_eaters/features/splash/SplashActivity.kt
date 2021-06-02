@@ -12,7 +12,6 @@ import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.databinding.ActivityNewOrderBinding
 import com.bupp.wood_spoon_eaters.databinding.ActivitySplashBinding
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -141,11 +140,10 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                 menuItemId = it.get("menu_item_id") as String
             }
             if(it.has("referal")){
-                val sid = it.get("sid") as String
-                val cid = it.get("cid") as String
+                val token = it.get("token") as String
 
-                Log.d("wowSplash", "sid: $sid cid: $cid")
-                viewModel.setUserCampaignParam(sid, cid)
+                Log.d("wowSplash", "token: $token")
+                viewModel.setUserReferralToken(token)
             }
         }
     }

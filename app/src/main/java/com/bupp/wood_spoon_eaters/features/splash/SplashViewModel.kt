@@ -70,8 +70,8 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
         }
     }
 
-    fun setUserCampaignParam(sid: String?, cid: String?) {
-       eaterDataManager.setUserCampaignParam(sid = sid, cid = cid)
+    fun setUserReferralToken(token: String?) {
+       eaterDataManager.setUserReferralToken(token = token)
     }
 
     fun initFCMAndRefreshToken() {
