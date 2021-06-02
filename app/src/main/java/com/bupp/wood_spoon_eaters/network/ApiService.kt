@@ -81,6 +81,10 @@ interface ApiService {
     @POST("eaters/me/campaigns/interactions/referee")
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
 
+    @FormUrlEncoded
+    @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
+    suspend fun updateCampaignStatus(@Path(value = "user_interaction_id", encoded = true) userInteractionId: Long, @Field("user_interaction_status") status: String): ServerResponse<Any>
+
 
 
     //Utils

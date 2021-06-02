@@ -243,6 +243,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
 
+
 //        viewModel.refreshAppDataEvent.observe(this, Observer {
 //            Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
 //            startActivity(Intent(this, SplashActivity::class.java))
@@ -260,7 +261,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun handleCampaignData(campaignData: CampaignData) {
         val campaign = campaignData.campaign
-        if(campaign.status == UserInteractionStatus.IDLE){
+        if(campaign.status != UserInteractionStatus.ENGAGED){
             campaign.viewTypes?.forEach {
                 when(it){
                     CampaignViewType.BANNER -> {
@@ -275,11 +276,19 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
 
             }
+            viewModel.updateCampaignStatus(campaign, UserInteractionStatus.SEEN)
         }
     }
 
     override fun onCampaignDetailsClick(campaign: CampaignData) {
         CampaignBottomSheet.newInstance(campaign).show(supportFragmentManager, Constants.CAMPAIGN_BOTTOM_SHEET)
+    }
+
+    override fun onCampaignShareClick(campaign: CampaignData) {
+        campaign.campaign.shareUrl?.let{
+            Utils.shareText(this, it)
+            viewModel.updateCampaignStatus(campaign.campaign, UserInteractionStatus.ENGAGED)
+        }
     }
 
     private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {

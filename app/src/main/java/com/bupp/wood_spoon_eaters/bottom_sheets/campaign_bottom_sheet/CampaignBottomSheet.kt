@@ -32,6 +32,7 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     var listener: CampaignBottomSheetListener? = null
     interface CampaignBottomSheetListener{
         fun onCampaignDetailsClick(campaign: CampaignData)
+        fun onCampaignShareClick(campaign: CampaignData)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,7 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
         const val CAMPAIGN_ARGS = "CampaignBottomSheetArgs"
         @JvmStatic
         fun newInstance(campaignData: CampaignData) =
-            NationwideShippingChooserDialog().apply {
+            CampaignBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(CAMPAIGN_ARGS, campaignData)
                 }
@@ -57,44 +58,14 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.campaign_bottom_sheet, container, false)
     }
 
-
-
-    private lateinit var behavior: BottomSheetBehavior<View>
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            val d = it as BottomSheetDialog
-            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isDraggable = false
-        }
-        return dialog
-    }
-//
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val resources = resources
-
-        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            val parent = view.parent as View
-            val layoutParams = parent.layoutParams as CoordinatorLayout.LayoutParams
-            layoutParams.setMargins(
-                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT
-                0,
-                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // RIGHT
-                0
-            )
-            parent.layoutParams = layoutParams
-            parent.setBackgroundResource(R.drawable.floating_bottom_sheet_bkg)
-        }
-
 
         binding = CampaignBottomSheetBinding.bind(view)
 
         initUi()
     }
-//
+
     private fun initUi() {
         with(binding!!){
             campaignBSDetails.setOnClickListener {
@@ -103,10 +74,16 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
                 }
             }
 
+            campaignBSBtn.setOnClickListener {
+                campaignData?.let{
+                    listener?.onCampaignShareClick(it)
+                }
+            }
+
             campaignData?.campaign?.let{
                 campaignBSTitle.text = it.header
                 campaignBSSubTitle.text = it.bodyText1
-                campaignBSBtn.setBtnText(it.bodyText1)
+                campaignBSBtn.setBtnText(it.buttonText)
 
             }
         }

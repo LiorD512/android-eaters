@@ -45,6 +45,7 @@ class MainViewModel(
 
 
     val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
     val campaignLiveData = campaignManager.getCampaignLiveData()
     fun checkCampaignForFeed() {
         campaignManager.checkCampaignFor(CampaignShowAfter.VISIT_FEED)
@@ -357,7 +358,13 @@ class MainViewModel(
 
     fun checkIfHaveReferral() {
         viewModelScope.launch {
-            eaterDataManager.validateReferral()
+            campaignManager.validateReferral()
+        }
+    }
+
+    fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
+        viewModelScope.launch {
+            campaignManager.updateCampaignStatus(campaign.userInteractionId, status)
         }
     }
 

@@ -93,6 +93,10 @@ lateinit var binding: FragmentFeedBinding
                 binding.feedFragPb.hide()
             }
         })
+        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
+            Log.d(TAG, "campaign: $it")
+            mainViewModel.checkCampaignForFeed()
+        })
     }
 
     private fun handleFeedBannerUi(feedUiStatus: FeedUiStatus?) {

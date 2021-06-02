@@ -64,7 +64,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun initCampaignHeader(campaignData: CampaignData, listener: CampaignBannerListener){
         this.listener = listener
-        this.currentCampaign = currentCampaign
+        this.currentCampaign = campaignData
 
         with(binding){
             campaignData.eater?.let{

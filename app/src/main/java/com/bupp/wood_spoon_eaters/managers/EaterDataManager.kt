@@ -220,27 +220,28 @@ class EaterDataManager(
         }
     }
 
-    suspend fun validateReferral() {
+    suspend fun validateReferral(): EaterDataRepository.EaterDataRepoResult<Any>? {
         referralToken?.let{
-            val result = eaterDataRepository.validateReferralToken(it)
-            when (result.type) {
-                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
-                    result.data?.let {
-                        Log.d(TAG, "validateReferral - success")
-                    }
-                }
-                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
-                    Log.d(TAG, "validateReferral - failed")
-                }
-                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-                    Log.d(TAG, "validateReferral - es error")
-
-                }
-                else -> {
-
-                }
-            }
+            return eaterDataRepository.validateReferralToken(it)
+//            when (result.type) {
+//                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
+//                    result.data?.let {
+//                        Log.d(TAG, "validateReferral - success")
+//                    }
+//                }
+//                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
+//                    Log.d(TAG, "validateReferral - failed")
+//                }
+//                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+//                    Log.d(TAG, "validateReferral - es error")
+//
+//                }
+//                else -> {
+//
+//                }
+//            }
         }
+        return null
     }
 
 
