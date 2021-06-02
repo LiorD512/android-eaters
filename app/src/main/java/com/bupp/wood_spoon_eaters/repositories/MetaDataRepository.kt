@@ -14,8 +14,13 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
 
     private var metaDataObject: MetaDataModel = MetaDataModel(null, null)
 
+    enum class MetaDataRepoStatus{
+        SUCCESS,
+        FAILED,
+    }
+    data class MetaDataRepoResult(val status: MetaDataRepoStatus)
 
-    suspend fun initMetaData() {
+    suspend fun initMetaData(): MetaDataRepoResult {
         val result = withContext(Dispatchers.IO){
             apiService.getMetaData()
         }
@@ -23,9 +28,11 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
             when (result) {
                 is ResultHandler.NetworkError -> {
                     Log.d(TAG,"initMetaData - NetworkError")
+                    return MetaDataRepoResult(MetaDataRepoStatus.FAILED)
                 }
                 is ResultHandler.GenericError -> {
                     Log.d(TAG,"initMetaData - GenericError")
+                    return MetaDataRepoResult(MetaDataRepoStatus.FAILED)
                 }
                 is ResultHandler.Success -> {
                     Log.d(TAG,"initMetaData - Success")
@@ -33,8 +40,10 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
                     metaData?.let{
                         this.metaDataObject = it
                     }
+                    return MetaDataRepoResult(MetaDataRepoStatus.SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
+                    return MetaDataRepoResult(MetaDataRepoStatus.FAILED)
                 }
             }
         }
