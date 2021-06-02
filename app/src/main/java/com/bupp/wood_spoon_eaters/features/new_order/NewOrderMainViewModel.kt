@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.stripe.android.view.PaymentMethodsActivityStarter
@@ -67,9 +68,10 @@ class NewOrderMainViewModel(
     enum class NewOrderActionEvent {
         ADD_CURRENT_DISH_TO_CART,
         SHOW_ADDITIONAL_DISH_DIALOG,
-
+        INITIALIZE_STRIPE
     }
 
+    val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
 
     fun initNewOrderActivity(intent: Intent?) {
         //get full dish and check order status prior to dish
@@ -406,8 +408,7 @@ class NewOrderMainViewModel(
                 navigationEvent.postValue(NewOrderNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
             }
             NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY -> {
-                Log.d(TAG, "handleNavigation: START_PAYMENT_METHOD_ACTIVITY")
-                navigationEvent.postValue(NewOrderNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+                //do nothing - startStripeOrReInit instead
             }
             NewOrderScreen.FINISH_ACTIVITY -> {
                 Log.d(TAG, "handleNavigation: FINISH_ACTIVITY")
@@ -525,9 +526,23 @@ class NewOrderMainViewModel(
         }
     }
 
+    fun startStripeOrReInit(){
+        Log.d(TAG, "startStripeOrReInit")
+        if(paymentManager.hasStripeInitialized){
+            navigationEvent.postValue(NewOrderNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+        }else{
+            mainActionEvent.postValue(NewOrderActionEvent.INITIALIZE_STRIPE)
+        }
+    }
 
     fun refreshPaymentsMethod(context: Context) {
         paymentManager.getStripeCustomerCards(context, true)
+    }
+
+    fun reInitStripe(context: Context) {
+        viewModelScope.launch {
+            paymentManager.initPaymentManagerWithListener(context)
+        }
     }
 
     private fun sendClickOnDishEvent() {

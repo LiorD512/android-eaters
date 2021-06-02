@@ -137,7 +137,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
 
             checkoutFragChangePaymentLayout.setOnClickListener {
-                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
+                mainViewModel.startStripeOrReInit()
             }
 
             checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
