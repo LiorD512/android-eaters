@@ -142,7 +142,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun initUiRelatedProcesses() {
         checkForBranchIntent()
-//        viewModel.checkForCampaign()
+        viewModel.checkForCampaign()
         viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
     }
