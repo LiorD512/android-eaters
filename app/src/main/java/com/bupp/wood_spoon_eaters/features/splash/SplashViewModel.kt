@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
+import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, private val paymentManager: PaymentManager,
-private val deviceDetailsManager: FcmManager
+private val deviceDetailsManager: FcmManager, private val campaignManager: CampaignManager
 )
     : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -42,6 +43,7 @@ private val deviceDetailsManager: FcmManager
 
             userRepository.initUserRepo()
             metaDataRepository.initMetaData()
+            campaignManager.fetchCampaigns()
             paymentManager.initPaymentManager(context)
 
             isUserExist = userRepository.isUserValid()
@@ -68,11 +70,17 @@ private val deviceDetailsManager: FcmManager
         }
     }
 
-    fun setUserCampaignParam(token: String?) {
-       eaterDataManager.setUserCampaignParam(token = token)
+    fun setUserReferralToken(token: String?) {
+       eaterDataManager.setUserReferralToken(token = token)
     }
 
     fun initFCMAndRefreshToken() {
         deviceDetailsManager.refreshPushNotificationToken()
+    }
+
+    fun fetchCampaigns(){
+        viewModelScope.launch {
+
+        }
     }
 }

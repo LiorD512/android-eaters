@@ -24,6 +24,9 @@ class EaterDataRepository(
         GET_TRIGGERS_SUCCESS,
         GET_TRIGGERS_FAILED,
 
+        VALIDATE_REFERRAL_TOKEN_SUCCESS,
+        VALIDATE_REFERRAL_TOKEN_FAILED,
+
         CANCEL_ORDER_SUCCESS,
         CANCEL_ORDER_FAILED,
 
@@ -149,19 +152,46 @@ class EaterDataRepository(
         result.let{
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"checkForCampaigns - NetworkError")
+                    MTLogger.d(TAG,"checkForCampaigns - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_CAMPAIGN_FAILED)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"checkForCampaigns - GenericError")
+                    MTLogger.d(TAG,"checkForCampaigns - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"checkForCampaigns - Success")
+                    MTLogger.d(TAG,"checkForCampaigns - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_CAMPAIGN_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
+                    MTLogger.d(TAG,"checkForCampaigns - something went wrong")
                     EaterDataRepoResult(EaterDataRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+    suspend fun validateReferralToken(token: String): EaterDataRepoResult<Any> {
+        val result = withContext(Dispatchers.IO){
+            apiService.validateReferralToken(token)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"validateReferralToken - NetworkError")
+                    EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"validateReferralToken - GenericError")
+                    EaterDataRepoResult(EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"validateReferralToken - Success")
+                    EaterDataRepoResult(EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS)
+                }
+                is ResultHandler.WSCustomError -> {
+                    MTLogger.c(OrderRepository.TAG,"validateReferralToken - wsError ${result.errors?.get(0)?.msg}")
+                    EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
         }

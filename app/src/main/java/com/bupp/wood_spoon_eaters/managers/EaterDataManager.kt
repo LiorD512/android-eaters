@@ -18,7 +18,7 @@ class EaterDataManager(
     val currentEater: Eater?
         get() = userRepository.getUser()
 
-    suspend fun refreshCurrentEater(){
+    suspend fun refreshCurrentEater() {
         userRepository.initUserRepo()
     }
 
@@ -121,7 +121,6 @@ class EaterDataManager(
     }
 
 
-
     /////////////////////////////////////////
     /////////      Favorites         ////////
     /////////////////////////////////////////
@@ -180,7 +179,6 @@ class EaterDataManager(
     }
 
 
-
     /////////////////////////////////////////
     /////////      Triggers         /////////
     /////////////////////////////////////////
@@ -215,20 +213,34 @@ class EaterDataManager(
     ///////         Referrals         ///////
     /////////////////////////////////////////
 
-    var token: String? = null
-    fun setUserCampaignParam(token: String? = null) {
+    var referralToken: String? = null
+    fun setUserReferralToken(token: String? = null) {
         token?.let {
-            this.token = it
+            this.referralToken = it
         }
     }
 
-    fun refreshSegment() {
-        val curAddress = locationManager.getLastChosenAddress()
-        eventsManager.initSegment(currentEater, curAddress)
-    }
+    suspend fun validateReferral() {
+        referralToken?.let{
+            val result = eaterDataRepository.validateReferralToken(it)
+            when (result.type) {
+                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
+                    result.data?.let {
+                        Log.d(TAG, "validateReferral - success")
+                    }
+                }
+                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
+                    Log.d(TAG, "validateReferral - failed")
+                }
+                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+                    Log.d(TAG, "validateReferral - es error")
 
-    suspend fun checkForCampaign() {
-        eaterDataRepository.checkForCampaign()
+                }
+                else -> {
+
+                }
+            }
+        }
     }
 
 
@@ -236,11 +248,15 @@ class EaterDataManager(
     ////////         Events         /////////
     /////////////////////////////////////////
 
-    fun logUxCamEvent(eventName: String, params: Map<String, String>? = null){
-        eventsManager.logEvent(eventName, params)
+
+    fun refreshSegment() {
+        val curAddress = locationManager.getLastChosenAddress()
+        eventsManager.initSegment(currentEater, curAddress)
     }
 
-
+    fun logUxCamEvent(eventName: String, params: Map<String, String>? = null) {
+        eventsManager.logEvent(eventName, params)
+    }
 
 
     companion object {

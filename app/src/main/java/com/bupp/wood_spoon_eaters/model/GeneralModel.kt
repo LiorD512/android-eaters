@@ -56,12 +56,13 @@ data class ReportTopic(
     @Json(name = "report_issues") val reportIssues: List<ReportIssue>
 )
 
+@kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 data class NotificationGroup(
     @Json(name = "id") val id: Long,
     @Json(name = "name") val name: String,
     @Json(name = "description") val description: String
-)
+): Parcelable
 
 @JsonClass(generateAdapter = true)
 data class ReportIssue(

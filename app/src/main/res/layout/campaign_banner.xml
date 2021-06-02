@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:id="@+id/campaignBannerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:animateLayoutChanges="true"
+        android:background="@color/teal_blue"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <com.bupp.wood_spoon_eaters.views.UserImageView
+            app:imageSize="HEADER"
+            app:isWithStroke="true"
+            android:paddingStart="15.4dp"
+            android:layout_gravity="center"
+            android:id="@+id/campaignBannerUserImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/campaignBannerTitle"
+            style="@style/LatoBold15White"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="start|center"
+            android:paddingStart="8dp"
+            tools:text=" Enjoy 30% off your first order" />
+
+    <TextView
+            android:id="@+id/campaignBannerDetails"
+            android:paddingEnd="15.4dp"
+            style="@style/LatoBold11White60"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:letterSpacing="0.03"
+            android:gravity="end|center"
+            android:text="View details"/>
+
+</LinearLayout>

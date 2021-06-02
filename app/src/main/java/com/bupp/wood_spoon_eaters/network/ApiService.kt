@@ -77,6 +77,10 @@ interface ApiService {
     @GET("eaters/me/campaigns/active")
     suspend fun getUserCampaign(): ServerResponse<List<Campaign>>
 
+    @FormUrlEncoded
+    @POST("eaters/me/campaigns/interactions/referee")
+    suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
+
 
 
     //Utils

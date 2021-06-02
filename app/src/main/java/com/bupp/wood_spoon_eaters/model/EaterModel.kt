@@ -1,30 +1,32 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.net.Uri
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 data class Eater(
-    @Json(name = "id") val id: Long,
-    @Json(name = "phone_number") val phoneNumber: String,
-    @Json(name = "account_status") val accountStatus: String,
-    @Json(name = "first_name") val firstName: String?,
-    @Json(name = "last_name") val lastName: String?,
-    @Json(name = "thumbnail") val thumbnail: String?,
-    @Json(name = "invite_url") val inviteUrl: String?,
-    @Json(name = "email") val email: String?,
-    @Json(name = "created_at") val createdAt: Date?,
-    @Json(name = "orders_count") val ordersCount: Int = 0,
-    @Json(name = "addresses") val addresses: List<Address>,
-    @Json(name = "cuisines") var cuisines: List<CuisineLabel>? = null,
-    @Json(name = "diets") var diets: List<DietaryIcon>? = null,
-    @Json(name = "active_campaign") val activeCampaign: ActiveCampaign? = null,
-    @Json(name = "share_campaign") val shareCampaign: Campaign? = null,
-    @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>
-){
+   @Json(name = "id") val id: Long,
+   @Json(name = "phone_number") val phoneNumber: String,
+   @Json(name = "account_status") val accountStatus: String,
+   @Json(name = "first_name") val firstName: String?,
+   @Json(name = "last_name") val lastName: String?,
+   @Json(name = "thumbnail") val thumbnail: String?,
+   @Json(name = "invite_url") val inviteUrl: String?,
+   @Json(name = "email") val email: String?,
+   @Json(name = "created_at") val createdAt: Date?,
+   @Json(name = "orders_count") val ordersCount: Int = 0,
+   @Json(name = "addresses") val addresses: List<Address>,
+   @Json(name = "cuisines") var cuisines: List<CuisineLabel>? = null,
+   @Json(name = "diets") var diets: List<DietaryIcon>? = null,
+   @Json(name = "share_campaign") val shareCampaign: Campaign? = null,
+   @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>
+): Parcelable{
     fun getFullName(): String{
         var first = "Anonymous"
         var last = ""

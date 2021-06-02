@@ -286,7 +286,6 @@ class CartManager(
         return postUpdateOrder(orderRequest)
     }
 
-
     private fun buildOrderRequest(tempCart: List<OrderItemRequest>? = null): OrderRequest {
         Log.d(TAG, "buildOrderRequest withTempCart: ${!tempCart.isNullOrEmpty()}")
         val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
@@ -300,7 +299,6 @@ class CartManager(
             orderItemRequests = tempCart ?: cart
         )
     }
-
 
     suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "postUpdateOrder")

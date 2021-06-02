@@ -27,10 +27,10 @@ data class Event(
 @JsonClass(generateAdapter = true)
 data class Campaign(
     @Json(name = "user_interaction_id") val userInteractionId: Long?,
-    @Json(name = "user_interaction_status") val status: String?,
+    @Json(name = "user_interaction_status") val status: UserInteractionStatus?,
     @Json(name = "name") val name: String?,
-    @Json(name = "show_after") val showAfter: String?,
-    @Json(name = "view_types") val viewTypes: String?,
+    @Json(name = "show_after") val showAfter: CampaignShowAfter?,
+    @Json(name = "view_types") val viewTypes: List<CampaignViewType>?,
     @Json(name = "header") val header: String?,
     @Json(name = "photo_small") val photoSmall: String?,
     @Json(name = "photo_large") val photoLarge: String?,
@@ -43,6 +43,37 @@ data class Campaign(
     @Json(name = "share_url") val shareUrl: String?, //
     @Json(name = "terms_and_conditions") val termsAndConditions: String?
 ):Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class CampaignData(val eater: Eater?, val campaign: Campaign):Parcelable
+
+enum class UserInteractionStatus{
+    @Json(name = "idle") IDLE,
+    @Json(name = "seen") SEEN,
+    @Json(name = "engaged ") ENGAGED,
+}
+
+enum class CampaignShowAfter{
+    @Json(name = "homepage_visit") VISIT_HOME_PAGE,
+    @Json(name = "feed_visit") VISIT_FEED,
+    @Json(name = "add_to_cart_action ") ACTION_ADD_TO_CART,
+    @Json(name = "purchase_action ") ACTION_PURCHASE,
+    @Json(name = "rate_your_order_action ") ACTION_RATE_ORDER,
+    @Json(name = "clear_your_cart_action  ") ACTION_CLEAR_CART,
+}
+
+enum class CampaignViewType{
+    @Json(name = "banner") BANNER,
+    @Json(name = "popup") POPUP,
+    @Json(name = "feed") FEED,
+}
+
+enum class CampaignButtonAction{
+    @Json(name = "share") SHARE,
+    @Json(name = "acknowledge") ACKNOWLEDGE,
+    @Json(name = "jump_to_link ") JUMP_TO_LINK,
+}
 
 //@Parcelize
 //data class Campaign(

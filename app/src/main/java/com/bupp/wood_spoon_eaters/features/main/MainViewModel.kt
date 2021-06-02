@@ -1,32 +1,24 @@
 package com.bupp.wood_spoon_eaters.features.main
 
 import android.util.Log
-import androidx.core.util.Consumer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager,  private val deliveryTimeManager: DeliveryTimeManager
-) : ViewModel() {
+    val eaterDataManager: EaterDataManager,  private val campaignManager: CampaignManager) : ViewModel() {
 
 //    val progressData = ProgressData()
 
@@ -53,10 +45,9 @@ class MainViewModel(
 
 
     val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
-    fun checkForCampaign(){
-        viewModelScope.launch {
-            eaterDataManager.checkForCampaign()
-        }
+    val campaignLiveData = campaignManager.getCampaignLiveData()
+    fun checkCampaignForFeed() {
+        campaignManager.checkCampaignFor(CampaignShowAfter.VISIT_FEED)
     }
 
 
@@ -362,6 +353,12 @@ class MainViewModel(
 
     fun onUserImageClick() {
         navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
+    }
+
+    fun checkIfHaveReferral() {
+        viewModelScope.launch {
+            eaterDataManager.validateReferral()
+        }
     }
 
 
