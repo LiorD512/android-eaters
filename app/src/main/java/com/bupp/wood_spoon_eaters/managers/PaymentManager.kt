@@ -17,8 +17,36 @@ import kotlinx.coroutines.withContext
 
 class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyProvider.EphemeralKeyProviderListener {
 
-    private var hasStripeInitialized: Boolean = false
+    var hasStripeInitialized: Boolean = false
 
+    fun getStripeInitializationEvent() = stripeInitializationEvent
+    private val stripeInitializationEvent = MutableLiveData<StripeInitializationStatus>()
+    enum class StripeInitializationStatus{
+        START,
+        SUCCESS,
+        FAIL
+    }
+
+    suspend fun initPaymentManagerWithListener(context: Context) {
+        //this method is called when user tries to open any stripe activity while stripe isn't initialized
+        //this method fetch metaData if needed and init stripe with LiveData listener.
+        withContext(Dispatchers.IO){
+            stripeInitializationEvent.postValue(StripeInitializationStatus.START)
+            val key = metaDataRepository.getStripePublishableKey()
+            if(key.isNullOrEmpty()){
+                val result = metaDataRepository.initMetaData()
+                when(result.status){
+                    MetaDataRepository.MetaDataRepoStatus.SUCCESS -> {
+                        initStripe(context)
+                        stripeInitializationEvent.postValue(StripeInitializationStatus.SUCCESS)
+                    }
+                    MetaDataRepository.MetaDataRepoStatus.FAILED -> {
+                        stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
+                    }
+                }
+            }
+        }
+    }
     suspend fun initPaymentManager(context: Context) {
         withContext(Dispatchers.IO){
             initStripe(context)
@@ -27,7 +55,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
 
     private fun initStripe(context: Context) {
         val key = metaDataRepository.getStripePublishableKey()
-        Log.d("wowPaymentManager", "initStripe key: $key")
+        Log.d(TAG, "initStripe key: $key")
         key?.let {
             PaymentConfiguration.init(context, key)
             CustomerSession.initCustomerSession(context, EphemeralKeyProvider(this), false)
@@ -38,10 +66,16 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
 
     override fun onEphemeralKeyProviderError() {
         super.onEphemeralKeyProviderError()
-        Log.d("wowPaymentManager", "initStripe failed")
+        Log.d(TAG, "initStripe failed")
         hasStripeInitialized = false
+        stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
     }
 
+    override fun onEphemeralKeyProviderSuccess() {
+        super.onEphemeralKeyProviderSuccess()
+//        Log.d(TAG, "onEphemeralKeyProviderSuccess")
+//        stripeInitializationEvent.postValue(StripeInitializationStatus.SUCCESS)
+    }
 
     val payments = MutableLiveData<List<PaymentMethod>>()
     fun getPaymentsLiveData() = payments
@@ -56,13 +90,13 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
                     PaymentMethod.Type.Card,
                     object : CustomerSession.PaymentMethodsRetrievalListener {
                         override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                            Log.d("wowPaymentManager", "getStripeCustomerCards $paymentMethods")
+                            Log.d(TAG, "getStripeCustomerCards $paymentMethods")
                             payments.value = paymentMethods
                             paymentsLiveData.postValue(paymentMethods)
                         }
 
                         override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-                            Log.d("wowPaymentManager", "getStripeCustomerCards ERROR $errorMessage")
+                            Log.d(TAG, "getStripeCustomerCards ERROR $errorMessage")
                         }
                     })
             }
@@ -78,6 +112,10 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
         } else {
             null
         }
+    }
+
+    companion object{
+        const val TAG = "wowPaymentManager"
     }
 
 }

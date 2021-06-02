@@ -27,6 +27,7 @@ import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddr
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.stripe.android.view.PaymentMethodsActivityStarter
@@ -94,6 +95,9 @@ class NewOrderActivity : BaseActivity(),
                 NewOrderMainViewModel.NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG -> {
                     AdditionalDishesDialog().show(supportFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
                 }
+                NewOrderMainViewModel.NewOrderActionEvent.INITIALIZE_STRIPE -> {
+                    viewModel.reInitStripe(this)
+                }
                 else -> {
                 }
             }
@@ -117,6 +121,20 @@ class NewOrderActivity : BaseActivity(),
                 binding.newOrderActPb.show()
             } else {
                 binding.newOrderActPb.hide()
+            }
+        })
+        viewModel.stripeInitializationEvent.observe(this, {
+            Log.d(TAG, "stripeInitializationEvent status: $it")
+            when (it) {
+                PaymentManager.StripeInitializationStatus.START -> {
+                    binding.newOrderActPb.show()
+                }
+                PaymentManager.StripeInitializationStatus.SUCCESS -> {
+                    binding.newOrderActPb.hide()
+                }
+                PaymentManager.StripeInitializationStatus.FAIL -> {
+                    binding.newOrderActPb.hide()
+                }
             }
         })
     }
