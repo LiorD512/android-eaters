@@ -141,7 +141,7 @@ data class CuisineLabel(
     @Json(name = "name") override val name: String,
     @Json(name = "icon") override val icon: String,
     @Json(name = "icon_selected") override val iconSelected: String? = null,
-    @Json(name = "cover") val cover: String,
+    @Json(name = "cover") val cover: String?,
     @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 

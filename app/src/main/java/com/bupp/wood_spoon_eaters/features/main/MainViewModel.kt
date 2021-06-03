@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -18,7 +20,7 @@ import retrofit2.Response
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager,  private val campaignManager: CampaignManager) : ViewModel() {
+    val eaterDataManager: EaterDataManager,  private val campaignManager: CampaignManager, private val paymentManager: PaymentManager) : ViewModel() {
 
 //    val progressData = ProgressData()
 
@@ -31,6 +33,8 @@ class MainViewModel(
     enum class MainNavigationEvent{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
         OPEN_CAMERA_UTIL,
+        START_PAYMENT_METHOD_ACTIVITY,
+        INITIALIZE_STRIPE
     }
 
 
@@ -73,6 +77,25 @@ class MainViewModel(
     fun onDishClick(menuItemId: Long) {
         dishClickEvent.postRawValue(menuItemId)
     }
+
+
+    //stripe
+    val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
+    fun startStripeOrReInit(){
+        Log.d(NewOrderMainViewModel.TAG, "startStripeOrReInit")
+        if(paymentManager.hasStripeInitialized){
+            mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+        }else{
+            mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
+        }
+    }
+
+    fun reInitStripe(context: Context) {
+        viewModelScope.launch {
+            paymentManager.initPaymentManagerWithListener(context)
+        }
+    }
+    ///////////////////////////////
 
 
     fun getDefaultLocationName(): String{

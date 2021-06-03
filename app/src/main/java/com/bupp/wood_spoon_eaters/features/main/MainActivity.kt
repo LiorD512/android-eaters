@@ -34,6 +34,8 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.CampaignData
 import com.bupp.wood_spoon_eaters.model.CampaignViewType
 import com.bupp.wood_spoon_eaters.model.UserInteractionStatus
@@ -256,6 +258,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
             }
         })
+
     }
 
     private fun handleCampaignData(campaignData: CampaignData) {
@@ -361,8 +364,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
            MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
                 updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
            }
-            MainViewModel.MainNavigationEvent.OPEN_CAMERA_UTIL -> {
-
+            MainViewModel.MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
+                PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
+            }
+            MainViewModel.MainNavigationEvent.INITIALIZE_STRIPE -> {
+                viewModel.reInitStripe(this)
             }
         }
     }

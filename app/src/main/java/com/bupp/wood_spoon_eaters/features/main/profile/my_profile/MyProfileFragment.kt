@@ -26,7 +26,9 @@ import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsG
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -102,6 +104,20 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
                 binding.myProfileFragPb.hide()
             }
         })
+        mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
+            Log.d(NewOrderActivity.TAG, "stripeInitializationEvent status: $it")
+            when (it) {
+                PaymentManager.StripeInitializationStatus.START -> {
+                    binding.myProfileFragPb.show()
+                }
+                PaymentManager.StripeInitializationStatus.SUCCESS -> {
+                    binding.myProfileFragPb.hide()
+                }
+                PaymentManager.StripeInitializationStatus.FAIL -> {
+                    binding.myProfileFragPb.hide()
+                }
+            }
+        })
 
     }
 
@@ -123,7 +139,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
     }
 
     private fun initClicks() {
-        with(binding!!) {
+        with(binding) {
             myProfileFragUserPhoto.setOnClickListener { }
             myProfileFragEditProfileBtn.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }
 
@@ -182,7 +198,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
     }
 
     override fun onChangePaymentClick() {
-        (activity as MainActivity).startPaymentMethodActivity()
+        mainViewModel.startStripeOrReInit()
     }
 
     private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
