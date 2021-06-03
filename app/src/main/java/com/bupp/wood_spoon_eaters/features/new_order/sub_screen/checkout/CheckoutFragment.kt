@@ -105,9 +105,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 NewOrderMainViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING -> {
                     viewModel.onNationwideShippingSelectClick()
                 }
-                NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
-                    binding.checkoutFragChangePaymentLayout.performClick()
-                }
+//                NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
+//                    mainViewModel.startStripeOrReInit()
+//                }
             }
         })
     }

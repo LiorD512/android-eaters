@@ -333,8 +333,9 @@ class NewOrderMainViewModel(
         }
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
         if (paymentMethod == null) {
-            handleNavigation(NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
-//            validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
+            startStripeOrReInit()
+//            handleNavigation(NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
+            validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
             return false
         }
         return true
