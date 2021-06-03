@@ -23,7 +23,7 @@ android {
         applicationId "com.bupp.wood_spoon_eater"
         versionCode 76
         versionName "2.1.6"
-    }:
+    }
 
 //    androidExtensions {
 //        experimental = true
