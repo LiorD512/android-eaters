@@ -21,8 +21,8 @@ android {
         targetSdkVersion 29
 
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 76
-        versionName "2.1.6"
+        versionCode 77
+        versionName "2.1.7"
     }
 
 //    androidExtensions {
@@ -31,9 +31,9 @@ android {
 
     buildTypes {
         release {
-            debuggable true//todo
-//            shrinkResources true
-//            minifyEnabled true
+            debuggable false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signing_config
         }
