@@ -35,11 +35,11 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
                             )
                             val serverResponse = jsonAdapter.fromJson(source)
                             Log.d("wow","wow errors: $serverResponse")
-                            if (serverResponse?.errors == null) {
+                            if (serverResponse?.errors != null) {
+                                    ResultHandler.WSCustomError(serverResponse?.errors)
+                            } else {
                                 val errorResponse = convertErrorBody(throwable)
                                 ResultHandler.GenericError(code, errorResponse)
-                            } else {
-                                ResultHandler.WSCustomError(serverResponse?.errors)
                             }
                         }
                         else -> {

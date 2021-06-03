@@ -85,7 +85,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -112,7 +112,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -138,7 +138,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.CANCEL_ORDER_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"cancelOrder - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"cancelOrder - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
