@@ -34,9 +34,7 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.model.CampaignData
-import com.bupp.wood_spoon_eaters.model.CampaignViewType
-import com.bupp.wood_spoon_eaters.model.UserInteractionStatus
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
@@ -276,7 +274,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
 
             }
-            viewModel.updateCampaignStatus(campaign, UserInteractionStatus.SEEN)
+            if(campaign.status == UserInteractionStatus.IDLE){
+                viewModel.updateCampaignStatus(campaign, UserInteractionStatus.SEEN)
+            }
         }
     }
 
@@ -284,11 +284,22 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         CampaignBottomSheet.newInstance(campaign).show(supportFragmentManager, Constants.CAMPAIGN_BOTTOM_SHEET)
     }
 
-    override fun onCampaignShareClick(campaign: CampaignData) {
-        campaign.campaign.shareUrl?.let{
-            Utils.shareText(this, it)
-            viewModel.updateCampaignStatus(campaign.campaign, UserInteractionStatus.ENGAGED)
+    override fun handleCampaignAction(campaign: Campaign) {
+        when(campaign.buttonAction){
+            CampaignButtonAction.SHARE -> {
+                campaign.shareUrl?.let{
+                    Utils.shareText(this, it)
+                }
+            }
+            CampaignButtonAction.ACKNOWLEDGE -> {
+                //do nothing
+            }
+            CampaignButtonAction.JUMP_TO_LINK -> {
+                //todo = add webView
+            }
         }
+        viewModel.updateCampaignStatus(campaign, UserInteractionStatus.ENGAGED)
+
     }
 
     private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {

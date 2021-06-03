@@ -15,9 +15,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet
 import com.bupp.wood_spoon_eaters.databinding.CampaignBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
-import com.bupp.wood_spoon_eaters.model.CampaignData
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.ShippingMethod
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -32,7 +30,7 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     var listener: CampaignBottomSheetListener? = null
     interface CampaignBottomSheetListener{
         fun onCampaignDetailsClick(campaign: CampaignData)
-        fun onCampaignShareClick(campaign: CampaignData)
+        fun handleCampaignAction(campaign: Campaign)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +74,8 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
 
             campaignBSBtn.setOnClickListener {
                 campaignData?.let{
-                    listener?.onCampaignShareClick(it)
+                    listener?.handleCampaignAction(it.campaign)
+                    dismiss()
                 }
             }
 

@@ -82,7 +82,7 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                     OrderRepoResult(OrderRepoStatus.POST_ORDER_SUCCESS, result.value.data)
                 }
                is ResultHandler.WSCustomError -> {
-                   MTLogger.c(TAG,"postNewOrder - wsError ${result.errors?.get(0)?.msg}")
+                   MTLogger.c(TAG,"postNewOrder - wsError")
                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                }
            }
@@ -134,7 +134,7 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                     OrderRepoResult(OrderRepoStatus.FINALIZE_ORDER_SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(TAG,"finalizeOrder - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(TAG,"finalizeOrder - wsError")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -160,7 +160,7 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                     OrderRepoResult(OrderRepoStatus.GET_SHIPPING_METHOD_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(TAG,"getUpsShippingRates - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(TAG,"getUpsShippingRates - wsError")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

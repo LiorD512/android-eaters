@@ -43,7 +43,7 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
 
             userRepository.initUserRepo()
             metaDataRepository.initMetaData()
-            campaignManager.fetchCampaigns()
+//            campaignManager.fetchCampaigns()
             paymentManager.initPaymentManager(context)
 
             isUserExist = userRepository.isUserValid()

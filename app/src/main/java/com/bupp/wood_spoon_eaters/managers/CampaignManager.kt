@@ -42,8 +42,8 @@ class CampaignManager(private val eaterDataRepository: EaterDataRepository, priv
 
     suspend fun validateReferral() {
         val result = eaterDataManager.validateReferral()
-        result?.let{
-            when (it.type) {
+        if(result != null){
+            when (result.type) {
                 EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
                     Log.d(TAG, "validateReferral - success")
                     fetchCampaigns()
@@ -59,6 +59,8 @@ class CampaignManager(private val eaterDataRepository: EaterDataRepository, priv
 
                 }
             }
+        }else{
+            fetchCampaigns()
         }
     }
 

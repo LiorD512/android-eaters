@@ -88,7 +88,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -115,7 +115,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -141,7 +141,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.CANCEL_ORDER_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"cancelOrder - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"cancelOrder - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -193,7 +193,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"validateReferralToken - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"validateReferralToken - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -219,7 +219,7 @@ class EaterDataRepository(
                     EaterDataRepoResult(EaterDataRepoStatus.UPDATE_CAMPAIGN_STATUS_SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"updateCampaignStatus - wsError ${result.errors?.get(0)?.msg}")
+                    MTLogger.c(OrderRepository.TAG,"updateCampaignStatus - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
