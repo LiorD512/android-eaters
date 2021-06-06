@@ -42,7 +42,7 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
         viewModelScope.launch {
 
             userRepository.initUserRepo()
-//            metaDataRepository.initMetaData() //todo
+            metaDataRepository.initMetaData()
             campaignManager.fetchCampaigns()
             paymentManager.initPaymentManager(context)
 
