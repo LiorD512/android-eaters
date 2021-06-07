@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.RemovedIngredientViewBinding
 import com.bupp.wood_spoon_eaters.model.Ingredient
 
-class IngredientsCheckoutAdapter(val context: Context, private val ingredients: List<Ingredient>) :
+class IngredientsCheckoutAdapter(val context: Context, private val texts: List<String>) :
     RecyclerView.Adapter<IngredientsCheckoutAdapter.RemovedIngredientViewHolder>() {
 
     class RemovedIngredientViewHolder(view: RemovedIngredientViewBinding) : RecyclerView.ViewHolder(view.root) {
@@ -21,12 +21,11 @@ class IngredientsCheckoutAdapter(val context: Context, private val ingredients: 
     }
 
     override fun getItemCount(): Int {
-        return ingredients.size
+        return texts.size
     }
 
     override fun onBindViewHolder(holder: RemovedIngredientViewHolder, position: Int) {
-        val ingredient: Ingredient = ingredients[position]
-
-        holder.name.text = "Without ${ingredient.name}"
+        val text: String = texts[position]
+        holder.name.text = text
     }
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="15.4dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:paddingVertical="14dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <ImageView
+                android:minWidth="24dp"
+                android:id="@+id/customDetailsViewIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="11.6dp"
+                tools:src="@drawable/icons_location" />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/customDetailsViewTitle"
+                    style="@style/LatoBold13Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:lines="1"
+                    tools:text="Delivery Address" />
+
+            <TextView
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/customDetailsViewTSubtitle"
+                    style="@style/LatoReg13MediumGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="Monday, May 24th, 4PM" />
+
+            <TextView
+                    android:visibility="gone"
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/customDetailsViewExtraText"
+                    style="@style/LatoReg13MediumGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="Monday, May 24th, 4PM" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
+                android:id="@+id/customDetailsViewChangeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:title="Change" />
+
+    </LinearLayout>
+
+    <View
+            android:id="@+id/customDetailsViewSep"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle" />
+
+</LinearLayout>

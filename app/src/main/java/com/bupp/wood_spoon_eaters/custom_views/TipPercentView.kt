@@ -49,7 +49,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 selectedTip = Constants.TIP_NOT_SELECTED
             }else {
                 clearAll()
-                v!!.isSelected = true
+                v.isSelected = true
                 when (v.id) {
                     tipPercent10.id -> {
                         selectedTip = Constants.TIP_10_PERCENT_SELECTED
@@ -82,7 +82,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setCustomTipValue(tipValue: Int? = 0){
         val string = "Custom\n$$tipValue"
         var spannableString = Utils.setCustomFontTypeSpan(context, string, 0, 6, R.font.open_sans_semi_bold)
-        binding.tipPercentCustomText.text = spannableString
+        binding.tipPercentCustom.text = spannableString
     }
 
     fun selectDefaultTip(tipPercentage: Int){

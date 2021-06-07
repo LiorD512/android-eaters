@@ -53,7 +53,7 @@ class TrackOrderItemDetailsAdapter(val context: Context) :
         }
 
         holder.ingredientsList.layoutManager = LinearLayoutManager(context)
-        val adapter = IngredientsCheckoutAdapter(context, item.removedIngredients)
+        val adapter = IngredientsCheckoutAdapter(context,  listOfNotNull(item.getRemovedIngredients(), item.getNoteStr()))
         holder.ingredientsList.adapter = adapter
     }
 

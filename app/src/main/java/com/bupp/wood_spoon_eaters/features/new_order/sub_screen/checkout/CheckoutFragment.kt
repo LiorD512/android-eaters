@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
@@ -31,8 +31,8 @@ import kotlin.collections.ArrayList
 
 
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
-    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
-    HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
+    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
+    HeaderView.HeaderViewListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener {
@@ -128,26 +128,23 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         with(binding) {
 
-            checkoutFragAddPromoCodeBtn.setOnClickListener {
-                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-            }
+//            checkoutFragAddPromoCodeBtn.setOnClickListener {
+//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
+//            }
+//
+//            checkoutFragPromoCodeStr.setOnClickListener {
+//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
+//            }
 
-            checkoutFragPromoCodeStr.setOnClickListener {
-                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-            }
 
-            checkoutFragChangePaymentLayout.setOnClickListener {
-                mainViewModel.startStripeOrReInit()
-            }
-
-            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
-                if (isChecked) {
-                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
-                } else {
-                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
-                }
-            }
+//            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
+//                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
+//                if (isChecked) {
+//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
+//                } else {
+//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
+//                }
+//            }
         }
 
         mainViewModel.getLastOrderDetails()
@@ -168,8 +165,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun setEmptyPaymentMethod() {
         with(binding) {
             hasPaymentMethod = false
-            checkoutFragChangePaymentTitle.text = "Insert payment method"
-            checkoutFragChangePaymentChangeBtn.alpha = 1f
+            checkoutFragChangePayment.updateSubTitle("Insert payment method")
         }
     }
 
@@ -188,8 +184,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             card?.let {
                 hasPaymentMethod = true
                 Log.d("wowCheckoutFrag", "updateCustomerPaymentMethod: ${paymentMethod.id}")
-                checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
-                checkoutFragChangePaymentChangeBtn.alpha = 0.3f
+                checkoutFragChangePayment.updateSubTitle("${card.brand} ●●●● ${card.last4}")
             }
         }
     }
@@ -210,8 +205,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragDeliveryTime.updateDeliveryDetails(it.estDeliveryTimeText)
                     }
 
-                    checkoutFragTitle.text = "Your Order From Cook ${cook?.getFullName()}"
-                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems?.toList(), this@CheckoutFragment)
+                    checkoutFragDetailsHeader.text = "Your Order From home chef ${cook?.firstName}"
+                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList())
                 }
 
                 it.cookingSlot?.isNationwide?.let {
@@ -236,14 +231,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
-        if (isCartEmpty) {
-            mainViewModel.showClearCartDialog()
-        } else {
-            mainViewModel.updateOrderItem(updatedOrderItem)
-
-        }
-    }
+//    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
+//        if (isCartEmpty) {
+//            mainViewModel.showClearCartDialog()
+//        } else {
+//            mainViewModel.updateOrderItem(updatedOrderItem)
+//        }
+//    }
 
     @SuppressLint("SetTextI18n")
     private fun updatePriceUi(curOrder: Order) {
@@ -258,9 +252,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 if (minPrice != null && minPrice > 0.0) {
                     checkoutFragMinPriceText.text = "$$minPrice"
                     checkoutFragMinPriceLayout.visibility = View.VISIBLE
-                    checkoutFragMinPriceSep.visibility = View.VISIBLE
                 } else {
-                    checkoutFragMinPriceSep.visibility = View.GONE
                     checkoutFragMinPriceLayout.visibility = View.GONE
                 }
             }
@@ -270,28 +262,28 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             if (!promo.isNullOrEmpty()) {
                 checkoutFragPromoCodeLayout.visibility = View.VISIBLE
                 checkoutFragPromoCodeText.text = "(${curOrder.discount?.formatedValue?.replace("-", "")})"
-                checkoutFragPromoCodeStr.visibility = View.VISIBLE
-                checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
-                checkoutFragAddPromoCodeBtn.visibility = View.GONE
-                checkoutFragPromoCodeSep.visibility = View.VISIBLE
+//                checkoutFragPromoCodeStr.visibility = View.VISIBLE
+//                checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
+//                checkoutFragAddPromoCodeBtn.visibility = View.GONE
+//                checkoutFragPromoCodeSep.visibility = View.VISIBLE
             } else {
-                checkoutFragPromoCodeStr.visibility = View.GONE
-                checkoutFragPromoCodeSep.visibility = View.GONE
-                checkoutFragPromoCodeLayout.visibility = View.GONE
-                checkoutFragAddPromoCodeBtn.visibility = View.VISIBLE
+//                checkoutFragPromoCodeStr.visibility = View.GONE
+//                checkoutFragPromoCodeSep.visibility = View.GONE
+//                checkoutFragPromoCodeLayout.visibility = View.GONE
+//                checkoutFragAddPromoCodeBtn.visibility = View.VISIBLE
             }
 
-            checkoutFragTaxPriceText.text = "$$tax"
-            serviceFee?.let {
-                if (serviceFee > 0.0) {
-                    checkoutFragServiceFeePriceText.text = "$$serviceFee"
-                    checkoutFragServiceFeePriceText.visibility = View.VISIBLE
-                    checkoutFragServiceFeePriceFree.visibility = View.GONE
-                } else {
-                    checkoutFragServiceFeePriceText.visibility = View.GONE
-                    checkoutFragServiceFeePriceFree.visibility = View.VISIBLE
-                }
-            }
+//            checkoutFragTaxPriceText.text = "$$tax"
+//            serviceFee?.let {
+//                if (serviceFee > 0.0) {
+//                    checkoutFragServiceFeePriceText.text = "$$serviceFee"
+//                    checkoutFragServiceFeePriceText.visibility = View.VISIBLE
+//                    checkoutFragServiceFeePriceFree.visibility = View.GONE
+//                } else {
+//                    checkoutFragServiceFeePriceText.visibility = View.GONE
+//                    checkoutFragServiceFeePriceFree.visibility = View.VISIBLE
+//                }
+//            }
             deliveryFee?.let {
                 if (deliveryFee > 0.0) {
                     checkoutFragDeliveryFeePriceText.text = "$$deliveryFee"
@@ -314,7 +306,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
         viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
-        binding.checkoutFragNationwideSelect.updateNationwideShippingDetails(chosenShippingMethod.name)
+        binding.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
     }
 
     override fun onClearCart() {
@@ -340,16 +332,23 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = tipAmount*100), Constants.EVENT_TIP)
     }
 
-    override fun onChangeLocationClick() {
-        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY)
-    }
 
-    override fun onChangeTimeClick() {
-        viewModel.onTimeChangeClick()
-    }
+    override fun onCustomDetailsClick(type: Int) {
+        when (type) {
+            Constants.DELIVERY_DETAILS_LOCATION -> {
+                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY)
+            }
+            Constants.DELIVERY_DETAILS_TIME -> {
+                viewModel.onTimeChangeClick()
+            }
+            Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.startStripeOrReInit()
+            }
+            Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
+                viewModel.onNationwideShippingSelectClick()
 
-    override fun onNationwideShippingChange() {
-        viewModel.onNationwideShippingSelectClick()
+            }
+        }
     }
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {

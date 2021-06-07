@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
@@ -34,7 +34,7 @@ import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetailsView.DeliveryDetailsViewListener,
+class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
     FavoritesView.FavoritesViewListener, EmptyIconsGridView.OnItemSelectedListener, CuisinesChooserDialog.CuisinesChooserListener,
     IconsGridView.IconsGridViewListener {
@@ -197,8 +197,16 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
         (activity as MainActivity).loadOrderHistoryFragment()
     }
 
-    override fun onChangePaymentClick() {
-        mainViewModel.startStripeOrReInit()
+    override fun onCustomDetailsClick(type: Int) {
+        when (type) {
+            Constants.DELIVERY_DETAILS_LOCATION_PROFILE -> {
+                //todo: check this
+            }
+
+            Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.startStripeOrReInit()
+            }
+        }
     }
 
     private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {

@@ -45,6 +45,10 @@
         <attr name="error" />
     </declare-styleable>
 
+    <declare-styleable name="WSSimpleBtn">
+        <attr name="title" />
+    </declare-styleable>
+
     <declare-styleable name="ResizeableImageView">
         <attr name="sizeType" format="enum">
             <enum name="SMALL" value="0" />
@@ -84,7 +88,7 @@
         <attr name="isWithSep" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="DeliveryDetailsAttrs">
+    <declare-styleable name="CustomDetailsAttrs">
         <attr name="detailsType" format="enum">
             <enum name="DELIVERY_DETAILS_LOCATION" value="0" />
             <enum name="DELIVERY_DETAILS_TIME" value="1" />
@@ -92,9 +96,11 @@
             <enum name="DELIVERY_DETAILS_CHECKOUT_DELIVERY" value="3" />
             <enum name="DELIVERY_DETAILS_LOCATION_PROFILE" value="4" />
             <enum name="DELIVERY_DETAILS_NATIONWIDE_SHIPPING" value="5" />
+            <enum name="DELIVERY_DETAILS_PROMO_CODE" value="6" />
         </attr>
         <attr name="changeable" format="boolean" />
         <attr name="isSelectionGray" format="boolean" />
+        <attr name="showSep" format="boolean" />
         <attr name="btnTitle" format="string" />
     </declare-styleable>
 
@@ -162,6 +168,7 @@
             <enum name="CHECKOUT_SERVICE_FEE" value="2" />
             <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
             <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
+            <enum name="CHECKOUT_COURIER_TIP" value="5" />
         </attr>
     </declare-styleable>
 

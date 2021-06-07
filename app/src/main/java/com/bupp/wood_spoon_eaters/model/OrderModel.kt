@@ -95,6 +95,22 @@ data class OrderItem(
             _destroy = _destroy
         )
     }
+    fun getRemovedIngredients(): String?{
+        var removedIngredientsStr: String? = null
+        if(removedIngredients.isNotEmpty()){
+            removedIngredientsStr = "Removed: "
+            removedIngredients.forEach {
+                removedIngredientsStr += "${it.name}"
+            }
+        }
+        return removedIngredientsStr
+    }
+    fun getNoteStr(): String?{
+        if(notes.isNullOrEmpty()){
+            return null
+        }
+        return  "Special requests: $notes"
+    }
 
 }
 

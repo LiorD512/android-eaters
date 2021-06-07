@@ -91,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"/>
 
-            <com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+            <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                     android:id="@+id/myProfileFragEditPayment"
                     app:detailsType="DELIVERY_DETAILS_PAYMENT"
                     app:isSelectionGray="true"

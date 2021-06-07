@@ -93,6 +93,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
         initOrderDate(fullDish)
 
         with(binding){
+            singleDishNote.setText("")
             singleDishInfoCook.setUser(fullDish.cook)
             singleDishInfoFavorite.setIsFav(fullDish.isFavorite)
             singleDishInfoFavorite.setDishId(fullDish.id)

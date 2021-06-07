@@ -27,13 +27,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         with(binding){
             orderItemsViewRecyclerView.layoutManager = LinearLayoutManager(context)
             val divider = DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
-
             orderItemsViewRecyclerView.addItemDecoration(divider)
         }
     }
 
-    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsViewAdapter.OrderItemsViewAdapterListener) {
-        adapter = OrderItemsViewAdapter(context, listener)
+    fun setOrderItems(context: Context, orderItems: List<OrderItem>) {
+        adapter = OrderItemsViewAdapter(context)
         binding.orderItemsViewRecyclerView.adapter = adapter
         adapter!!.submitList(orderItems)
     }

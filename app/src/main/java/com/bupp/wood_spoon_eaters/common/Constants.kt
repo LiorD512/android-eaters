@@ -57,6 +57,7 @@ class Constants {
         const val DELIVERY_DETAILS_CHECKOUT_DELIVERY = 3
         const val DELIVERY_DETAILS_LOCATION_PROFILE = 4
         const val DELIVERY_DETAILS_NATIONWIDE_SHIPPING = 5
+        const val DELIVERY_DETAILS_PROMO_CODE = 6
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0
@@ -115,6 +116,7 @@ class Constants {
         const val TOOL_TIP_CHECKOUT_SERVICE_FEE = 2
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
         const val TOOL_TIP_MINMUM_ORDER_FEE = 4
+        const val TOOL_TIP_COURIER_TIP = 5
 
         //status bottom bar types
         const val CART_BOTTOM_BAR_TYPE_CART = 0
