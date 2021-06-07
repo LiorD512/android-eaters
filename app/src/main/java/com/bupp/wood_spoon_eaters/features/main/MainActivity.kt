@@ -45,6 +45,7 @@ import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
+import com.stripe.android.PaymentSessionData
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -276,7 +277,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
                     }
                 }
-
             }
         }
     }
@@ -300,14 +300,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-
-
     private fun refreshFeedIfNecessary() {
         if (currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
             loadFeed()
         }
     }
-
 
     override fun onCartBottomBarOrdersClick(type: CartBottomBar.BottomBarTypes) {
         when(type){
@@ -321,7 +318,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     override fun onBottomBarCheckoutClick() {
         afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_IS_CHECKOUT, true))
     }
-
 
     override fun onContactUsClick() {
         val phone = viewModel.getContactUsPhoneNumber()
@@ -369,6 +365,19 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
             MainViewModel.MainNavigationEvent.INITIALIZE_STRIPE -> {
                 viewModel.reInitStripe(this)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        //change this to ActivityResultStarterCallback when stripe enables.
+        if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
+            Log.d(NewOrderActivity.TAG, "Stripe on activity result")
+            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+            val paymentMethod = result?.paymentMethod
+            paymentMethod?.let{
+                viewModel.updatePaymentsMethod(it)
             }
         }
     }
@@ -457,9 +466,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    when (requestCode) {
-
-    }
     when (requestCode) {
         Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
 //            invokeLocationAction()
@@ -597,12 +603,12 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         binding.mainActHeaderView.updateSearchTitle(str)
     }
 
-    fun startPaymentMethodActivity() {
-        PaymentMethodsActivityStarter(this).startForResult(
-            PaymentMethodsActivityStarter.Args.Builder()
-                .build()
-        )
-    }
+//    fun startPaymentMethodActivity() {
+//        PaymentMethodsActivityStarter(this).startForResult(
+//            PaymentMethodsActivityStarter.Args.Builder()
+//                .build()
+//        )
+//    }
 
 
     fun updateFilterUi(isFiltered: Boolean) {

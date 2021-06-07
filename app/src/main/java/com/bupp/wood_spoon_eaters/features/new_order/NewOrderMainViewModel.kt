@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.stripe.android.model.PaymentMethod
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.coroutines.launch
 import java.util.*
@@ -536,8 +537,8 @@ class NewOrderMainViewModel(
         }
     }
 
-    fun refreshPaymentsMethod(context: Context) {
-        paymentManager.getStripeCustomerCards(context, true)
+    fun updatePaymentsMethod(paymentMethod: PaymentMethod) {
+        paymentManager.updatePaymentsMethod(paymentMethod)
     }
 
     fun reInitStripe(context: Context) {
