@@ -30,6 +30,8 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -176,7 +178,6 @@ class NewOrderActivity : BaseActivity(),
         viewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.PLACE_AN_ORDER, null, null)
     }
 
-
     override fun onNewCartClick() {
         viewModel.clearCart()
     }
@@ -191,28 +192,26 @@ class NewOrderActivity : BaseActivity(),
         super.onActivityResult(requestCode, resultCode, data)
         //change this to ActivityResultStarterCallback when stripe enables.
         if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
-//            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
             Log.d(TAG, "Stripe on activity result")
-            viewModel.refreshPaymentsMethod(this)
+            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+            val paymentMethod = result?.paymentMethod
+            paymentMethod?.let{
+                viewModel.updatePaymentsMethod(it)
+            }
         }
     }
-
 
     private fun finishNewOrder() {
         viewModel.onNewOrderFinish()
         finish()
     }
 
-
     //Address Missing Dialog interface
     override fun openUpdateAddress() {
         startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java))
     }
 
-
     private fun handleNavigationEvent(event: NewOrderMainViewModel.NewOrderNavigationEvent?) {
-//        val navBuilder = NavOptions.Builder()
-//        navBuilder.setEnterAnim(R.anim.slide_right_enter).setExitAnim(R.anim.slide_right_exit).setPopEnterAnim(R.anim.slide_left_enter).setPopExitAnim(R.anim.slide_left_exit)
         when (event) {
             NewOrderMainViewModel.NewOrderNavigationEvent.SHOW_ADDRESS_MISSING_DIALOG -> {
 //                AddressMissingDialog(this).show(supportFragmentManager, Constants.ADDRESS_MISSING_DIALOG)

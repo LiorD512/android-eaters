@@ -8,9 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.stripe.android.CustomerSession
-import com.stripe.android.PaymentConfiguration
-import com.stripe.android.StripeError
+import com.stripe.android.*
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -63,6 +61,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
             CustomerSession.initCustomerSession(context, EphemeralKeyProvider(this), false)
             hasStripeInitialized = true
             getStripeCustomerCards(context)
+
         }
     }
 
@@ -108,6 +107,11 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
         return paymentsLiveData
     }
 
+
+    fun updatePaymentsMethod(paymentMethod: PaymentMethod) {
+        payments.value = listOf(paymentMethod)
+    }
+
     fun getStripeCurrentPaymentMethod(): PaymentMethod? {
         return if (payments.value != null && payments.value!!.isNotEmpty()) {
             payments.value!![0]
@@ -115,6 +119,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
             null
         }
     }
+
 
     companion object{
         const val TAG = "wowPaymentManager"

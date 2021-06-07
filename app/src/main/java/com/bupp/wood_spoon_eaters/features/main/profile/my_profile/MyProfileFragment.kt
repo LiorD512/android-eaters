@@ -118,9 +118,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), DeliveryDetail
                 }
             }
         })
-
     }
-
 
     private fun handleUserDetails(eater: Eater) {
         with(binding){
