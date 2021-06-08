@@ -355,7 +355,7 @@ class NewOrderMainViewModel(
         START_PAYMENT_METHOD_ACTIVITY,
         LOCATION_AND_ADDRESS_ACTIVITY,
         LOCK_SINGLE_DISH_COOK,
-        ADDITIONAL_DISHES_DISMISS,
+        CHECKOUT_TO_ADD_MORE_DISH,
         BACK_PRESS,
         PROMO_CODE,
         CHECKOUT,
@@ -367,7 +367,7 @@ class NewOrderMainViewModel(
         MAIN_TO_CHECKOUT,
         BACK_TO_PREVIOUS,
         BACK_FROM_CHECKOUT,
-        CHECKOUT_TO_PROMO_CODE,
+        CHECKOUT_TO_ADD_MORE_DISH,
         SHOW_ADDRESS_MISSING_DIALOG,
         REDIRECT_TO_COOK_PROFILE,
         REDIRECT_TO_DISH_INFO,
@@ -407,6 +407,10 @@ class NewOrderMainViewModel(
             NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY -> {
                 Log.d(TAG, "handleNavigation: LOCATION_AND_ADDRESS_ACTIVITY")
                 navigationEvent.postValue(NewOrderNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+            }
+            NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH -> {
+                Log.d(TAG, "handleNavigation: LOCATION_AND_ADDRESS_ACTIVITY")
+                navigationEvent.postValue(NewOrderNavigationEvent.CHECKOUT_TO_ADD_MORE_DISH)
             }
             NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY -> {
                 //do nothing - startStripeOrReInit instead

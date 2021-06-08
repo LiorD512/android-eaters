@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -35,7 +36,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     HeaderView.HeaderViewListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener {
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView.OrderItemsListener {
 
     private lateinit var binding: CheckoutFragmentBinding
 
@@ -128,10 +129,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         with(binding) {
 
-//            checkoutFragAddPromoCodeBtn.setOnClickListener {
-//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-//            }
-//
+            checkoutFragPromoCode.setOnClickListener {
+                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
+            }
+
 //            checkoutFragPromoCodeStr.setOnClickListener {
 //                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
 //            }
@@ -206,7 +207,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     }
 
                     checkoutFragDetailsHeader.text = "Your Order From home chef ${cook?.firstName}"
-                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList())
+                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }
 
                 it.cookingSlot?.isNationwide?.let {
@@ -363,6 +364,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
+    override fun onAddBtnClicked() {
+        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH)
+    }
 
 
 

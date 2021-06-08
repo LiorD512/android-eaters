@@ -16,6 +16,11 @@ class OrderItemsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr){
 
+    lateinit var listener: OrderItemsListener
+    interface OrderItemsListener{
+        fun onAddBtnClicked()
+    }
+
     private var binding: OrderItemsViewBinding = OrderItemsViewBinding.inflate(LayoutInflater.from(context), this, true)
     var adapter: OrderItemsViewAdapter? = null
 
@@ -28,10 +33,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             orderItemsViewRecyclerView.layoutManager = LinearLayoutManager(context)
             val divider = DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
             orderItemsViewRecyclerView.addItemDecoration(divider)
+
+            orderItemsViewAddBtn.setOnClickListener{
+                listener.onAddBtnClicked()
+            }
         }
     }
 
-    fun setOrderItems(context: Context, orderItems: List<OrderItem>) {
+    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsListener) {
+        this.listener = listener
         adapter = OrderItemsViewAdapter(context)
         binding.orderItemsViewRecyclerView.adapter = adapter
         adapter!!.submitList(orderItems)

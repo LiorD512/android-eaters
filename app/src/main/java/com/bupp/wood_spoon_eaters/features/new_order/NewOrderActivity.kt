@@ -244,6 +244,10 @@ class NewOrderActivity : BaseActivity(),
                 setResult(Activity.RESULT_OK, intent)
                 finishNewOrder()
             }
+            NewOrderMainViewModel.NewOrderNavigationEvent.CHECKOUT_TO_ADD_MORE_DISH -> {
+                findNavController(R.id.newOrderContainer).navigateSafe(R.id.action_checkoutFragment_to_newOrderMainFragment)
+                viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCK_SINGLE_DISH_COOK)
+            }
         }
     }
 

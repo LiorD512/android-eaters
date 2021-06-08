@@ -17,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
 
-    var binding: FragmentNewOrderMainBinding? = null
+    lateinit var binding: FragmentNewOrderMainBinding
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
     override fun onResume() {
@@ -30,11 +30,11 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (binding!!.newOrderFragViewPager.currentItem == 0) {
+                if (binding.newOrderFragViewPager.currentItem == 0) {
                     isEnabled = false
                     mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
                 } else {
-                    binding!!.newOrderFragViewPager.currentItem = 0
+                    binding.newOrderFragViewPager.currentItem = 0
                 }
             }
         })
@@ -43,7 +43,7 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentNewOrderMainBinding.bind(view)
 
-        with(binding!!){
+        with(binding){
             val pagerAdapter = ScreenSlidePagerAdapter(requireActivity())
             newOrderFragViewPager.adapter = pagerAdapter
             newOrderFragViewPager.offscreenPageLimit = 2
@@ -61,15 +61,15 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
         mainViewModel.navigationEvent.observe(viewLifecycleOwner, {
             when(it){
                 NewOrderMainViewModel.NewOrderNavigationEvent.REDIRECT_TO_COOK_PROFILE -> {
-                    binding!!.newOrderFragViewPager.currentItem = 2
+                    binding.newOrderFragViewPager.currentItem = 2
                 }
                 NewOrderMainViewModel.NewOrderNavigationEvent.REDIRECT_TO_DISH_INFO -> {
-                    binding!!.newOrderFragViewPager.currentItem = 0
-                    binding!!.newOrderFragHeader.handleTabGestures(false)
+                    binding.newOrderFragViewPager.currentItem = 0
+                    binding.newOrderFragHeader.handleTabGestures(false)
                 }
                 NewOrderMainViewModel.NewOrderNavigationEvent.LOCK_SINGLE_DISH_COOK -> {
-                    binding!!.newOrderFragViewPager.currentItem = 2
-                    binding!!.newOrderFragHeader.handleTabGestures(true)
+                    binding.newOrderFragViewPager.currentItem = 2
+                    binding.newOrderFragHeader.handleTabGestures(true)
                 }
             }
         })
@@ -88,12 +88,6 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
             }
         }
     }
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
-    }
-
 
     companion object{
         const val TAG = "wowNewOrderMainFrag"
