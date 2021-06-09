@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/counterEditTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+
+    <TextView
+            android:id="@+id/wsSimpleBtn"
+            style="@style/LatoBold11Teal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pale_grey_cornered_rect"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:paddingHorizontal="35dp"
+            android:paddingVertical="14dp"
+            android:text="Change" />
+
+</FrameLayout>

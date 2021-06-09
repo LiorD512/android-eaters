@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
@@ -19,14 +17,10 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
-import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsDialog
-import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
+import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.databinding.ActivityNewOrderBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
-import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
@@ -112,7 +106,7 @@ class NewOrderActivity : BaseActivity(),
 
         viewModel.getReviewsEvent.observe(this, Observer {
             it?.let {
-                RatingsDialog(it).show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
+                RatingsBottomSheet(it).show(supportFragmentManager, Constants.RATINGS_DIALOG_TAG)
             }
         })
         viewModel.progressData.observe(this, {

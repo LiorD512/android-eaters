@@ -105,11 +105,11 @@
                         android:id="@+id/checkoutFragGiftSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12.3dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:checked="false"
-                        android:thumb="@drawable/stroked_white_circle"
-                        app:track="@drawable/red_green_switch_track_selector" />
+                        android:thumb="@drawable/switch_toggle_btn"
+                        android:textColor="@color/white"
+                        android:gravity="center|start"
+                        app:track="@drawable/switch_track_selector"/>
+
 
             </LinearLayout>
 
@@ -344,7 +344,7 @@
                         android:id="@+id/checkoutFragCourierTip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:tip_type="CHECKOUT_MINIMUM_FEE" />
+                        app:tip_type="CHECKOUT_COURIER_TIP" />
 
             </LinearLayout>
 

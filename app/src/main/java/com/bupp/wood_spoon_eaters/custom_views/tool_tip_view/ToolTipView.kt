@@ -96,12 +96,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 95.toPx().toFloat()
             }
-            Constants.TOOL_TIP_COURIER_TIP -> { //TODO - ADD COURIER TIP TEXT
-                titleText = resources.getString(R.string.tool_tip_min_order_fee_title)
+            Constants.TOOL_TIP_COURIER_TIP -> {
+                titleText = resources.getString(R.string.tool_tip_courier_title)
                 bodyText =
-                    "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
+                    "${resources.getString(R.string.tool_tip_courier_body)}"
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
-                bubbleLayout.arrowPosition = 95.toPx().toFloat()
+                bubbleLayout.arrowPosition = 135.toPx().toFloat()
             }
         }
     }
@@ -131,6 +131,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
                 }
                 Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
+                    val marginLeft = 23.toPx()
+                    popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+                }
+                Constants.TOOL_TIP_COURIER_TIP -> {
                     val marginLeft = 23.toPx()
                     popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
                 }

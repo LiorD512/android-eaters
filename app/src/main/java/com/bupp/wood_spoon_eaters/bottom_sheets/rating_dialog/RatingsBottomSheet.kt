@@ -9,13 +9,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.RatingsDialogBinding
+import com.bupp.wood_spoon_eaters.databinding.RatingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.Review
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class RatingsDialog(val ratings: Review) : BottomSheetDialogFragment() {
+class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
 
-    private lateinit var binding: RatingsDialogBinding
+    private lateinit var binding: RatingsBottomSheetBinding
     private lateinit var adapter: RatingsAdapter
 
 
@@ -25,7 +25,7 @@ class RatingsDialog(val ratings: Review) : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.ratings_dialog, null)
+        val view = inflater.inflate(R.layout.ratings_bottom_sheet, null)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -33,7 +33,7 @@ class RatingsDialog(val ratings: Review) : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = RatingsDialogBinding.bind(view)
+        binding = RatingsBottomSheetBinding.bind(view)
 
 //        val parent = view.parent as View
 //        parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)

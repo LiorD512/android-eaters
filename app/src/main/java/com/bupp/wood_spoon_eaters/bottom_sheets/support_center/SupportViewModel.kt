@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.support_center
+package com.bupp.wood_spoon_eaters.bottom_sheets.support_center
 
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager

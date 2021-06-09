@@ -213,6 +213,9 @@ class Constants {
         const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
         const val LOCATION_PERMISSION_BOTTOM_SHEET = "location_permission_bottom_sheet"
         const val CAMPAIGN_BOTTOM_SHEET = "campaign_bottom_sheet"
+        const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
+        const val SETTINGS_BOTTOM_SHEET = "settings_bottom_sheet"
+        const val SUPPORT_CENTER_BOTTOM_SHEET = "support_center_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

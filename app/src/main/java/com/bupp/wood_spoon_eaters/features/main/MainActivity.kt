@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MediaUtils
@@ -28,11 +30,11 @@ import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
 import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
+//import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
-import com.bupp.wood_spoon_eaters.features.main.support_center.SupportFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
@@ -389,13 +391,15 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     fun loadEditMyProfile() {
+//        RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         loadFragment(EditMyProfileFragment.newInstance(), Constants.EDIT_MY_PROFILE_TAG)
-        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SAVE, "Hey ${viewModel.getUserName()}!")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Hey ${viewModel.getUserName()}!")
     }
 
     fun loadSupport() {
-        loadFragment(SupportFragment.newInstance(), Constants.SUPPORT_TAG)
-        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
+        SupportCenterBottomSheet().show(supportFragmentManager, Constants.SUPPORT_CENTER_BOTTOM_SHEET)
+//        loadFragment(SupportFragment.newInstance(), Constants.SUPPORT_TAG)
+//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
     }
 
     fun loadReport(orderId: Long) {
@@ -421,8 +425,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     fun loadSettingsFragment() {
-        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
-        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
+        SettingsBottomSheet().show(supportFragmentManager, Constants.SETTINGS_BOTTOM_SHEET)
+//        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
+//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
     }
 
     fun loadOrderHistoryFragment() {

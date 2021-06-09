@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isWithSep="true"
+            app:title="Support center"
+            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle_50" />
+
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <ImageView
+                        android:layout_marginTop="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/illus_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        style="@style/LatoBlack17Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="23dp"
+                        android:paddingHorizontal="15.4dp"
+                        android:text="We’re here to help!" />
+
+                <FrameLayout
+
+                        android:id="@+id/supportDialogQA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="15.4dp">
+
+                    <TextView
+                            style="@style/SemiBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start|center_vertical"
+                            android:text="@string/support_dialog_popular_qa_button" />
+
+                    <ImageView
+                            android:rotation="-90"
+                            android:id="@+id/supportDialogPopularQA"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|center_vertical"
+                            android:background="@drawable/icons_down" />
+
+                </FrameLayout>
+
+                <View
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_periwinkle_50" />
+
+                <LinearLayout
+                        android:paddingBottom="23dp"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.bupp.wood_spoon_eaters.views.WSLargeSimpleBtn
+                            app:title="Call us"
+                            android:id="@+id/supportDialogCallButton"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"/>
+
+                    <com.bupp.wood_spoon_eaters.views.WSLargeSimpleBtn
+                            app:title="Send a text"
+                            android:id="@+id/supportDialogTextButton"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <View
+                        android:background="@color/grey_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="7.7dp"/>
+
+                <com.bupp.wood_spoon_eaters.views.WSCounterEditText
+                        android:id="@+id/supportDialogCommentInput"
+                        android:layout_marginHorizontal="15.4dp"
+                        app:maxLines="6"
+                        app:hint="Help us get better! Send us feedback here."
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:id="@+id/supportDialogNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15.4dp"
+                        android:paddingHorizontal="15.4dp"
+                        app:title="Send" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+        <com.bupp.wood_spoon_eaters.views.WSProgressBar
+                android:id="@+id/supportDialogPb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:visibility="gone" />
+
+
+</LinearLayout>

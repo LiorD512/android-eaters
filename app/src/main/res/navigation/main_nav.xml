@@ -39,6 +39,7 @@
 
     </fragment>
 
+
     <fragment
             android:id="@+id/myProfileFragment"
             android:name="com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment"

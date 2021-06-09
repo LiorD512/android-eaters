@@ -19,6 +19,8 @@ import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.content.Intent
 import android.net.Uri
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
@@ -30,6 +32,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -160,6 +163,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             profileFragLogout.setOnClickListener {
                 LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
             }
+
+
         }
     }
 
