@@ -95,6 +95,15 @@ object DateUtils {
         return ""
     }
 
+    fun parseDateToDate(date: Date?): String {
+        //05.04.19
+        val sdf = SimpleDateFormat("dd.MM.yy")
+        date?.let{
+            return sdf.format(date.time)
+        }
+        return ""
+    }
+
     fun parseDateToDateAndTime(date: Date?): String {
         //05.04.19, 6:10PM
         val sdf = SimpleDateFormat("dd.MM.yy, h:mma")
