@@ -16,7 +16,7 @@ class EaterDataManager(
 ) {
 
     val currentEater: Eater?
-        get() = userRepository.getUser()
+    get() = userRepository.getUser()
 
     suspend fun refreshCurrentEater() {
         userRepository.initUserRepo()
