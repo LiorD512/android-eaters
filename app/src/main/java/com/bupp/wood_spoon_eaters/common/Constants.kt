@@ -58,6 +58,7 @@ class Constants {
         const val DELIVERY_DETAILS_LOCATION_PROFILE = 4
         const val DELIVERY_DETAILS_NATIONWIDE_SHIPPING = 5
         const val DELIVERY_DETAILS_PROMO_CODE = 6
+        const val DELIVERY_DETAILS_ORDER_HISTORY = 7
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0

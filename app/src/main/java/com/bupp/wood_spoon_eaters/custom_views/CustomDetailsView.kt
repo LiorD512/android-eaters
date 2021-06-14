@@ -116,6 +116,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     customDetailsViewTitle.text = "Promo code"
                     customDetailsViewTSubtitle.text = "Enter a WoodSpoon promo code"
                 }
+                Constants.DELIVERY_DETAILS_ORDER_HISTORY -> {
+                    customDetailsViewIcon.setImageResource(R.drawable.icons_promo)
+                    customDetailsViewTitle.text = "Promo code"
+                    customDetailsViewTSubtitle.text = "Enter a WoodSpoon promo code"
+                }
+                Constants.DELIVERY_DETAILS_ORDER_HISTORY -> {
+                    customDetailsViewIcon.setImageResource(R.drawable.icons_orders)
+                    customDetailsViewTitle.text = "View your order history here"
+                    customDetailsViewTSubtitle.visibility = GONE
+                }
             }
         }
     }

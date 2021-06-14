@@ -97,6 +97,7 @@
             <enum name="DELIVERY_DETAILS_LOCATION_PROFILE" value="4" />
             <enum name="DELIVERY_DETAILS_NATIONWIDE_SHIPPING" value="5" />
             <enum name="DELIVERY_DETAILS_PROMO_CODE" value="6" />
+            <enum name="DELIVERY_DETAILS_ORDER_HISTORY" value="7" />
         </attr>
         <attr name="changeable" format="boolean" />
         <attr name="isSelectionGray" format="boolean" />
