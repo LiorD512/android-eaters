@@ -57,10 +57,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         initUi()
         initObservers()
 
-        val x  = 1
-        if(x != 1){
-
-        }
     }
     
     private fun initObservers() {
