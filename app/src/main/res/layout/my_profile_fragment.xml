@@ -28,7 +28,7 @@
                     tools:text="Hey, Alon" />
 
             <LinearLayout
-                    android:paddingStart="15.4dp"
+                    android:paddingStart="8.4dp"
                     android:layout_marginTop="23dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -58,6 +58,7 @@
                             tools:text="Neta Nachmias"/>
 
                     <TextView
+                            android:id="@+id/myProfileFragOrderCount"
                             android:layout_marginTop="5.9dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -93,6 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:detailsType="DELIVERY_DETAILS_ORDER_HISTORY"
+                    app:showSep="false"
                     app:isSelectionGray="true" />
 
             <View
@@ -142,272 +144,66 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-
-
-
-
-
-
-            <com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
-                    android:id="@+id/myProfileFragCuisineIcons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="38.2dp" />
-
-            <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
-                    android:id="@+id/myProfileFragDietaryIcons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15.8dp"
-                    app:subTitle="Pick any that apply"
-                    app:title="Dietary preferences" />
-
-
-
-            <LinearLayout
-                    android:id="@+id/myProfileFragEditLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="34.2dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        style="@style/SemiBold13Dark"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableStart="@drawable/icons_location"
-                        android:drawablePadding="12.7dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20.3dp"
-                        android:paddingTop="17dp"
-                        android:paddingBottom="15.8dp"
-                        android:text="Manage Addresess" />
-
                 <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="11.5dp"
-                        android:src="@drawable/icons_right" />
-
-            </LinearLayout>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="15.8dp"
-                    android:layout_marginEnd="15.8dp"
-                    android:background="@color/silver" />
-
-
-
-            <LinearLayout
-                    android:id="@+id/myProfileFragOrderHistoryBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                <TextView
-                        style="@style/SemiBold13Dark"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableStart="@drawable/icons_order_history"
-                        android:drawablePadding="6.7dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20.3dp"
-                        android:paddingTop="17dp"
-                        android:paddingBottom="15.8dp"
-                        android:text="Order History" />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="11.5dp"
-                        android:src="@drawable/icons_right" />
-
-            </LinearLayout>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="15.8dp"
-                    android:layout_marginEnd="15.8dp"
-                    android:layout_marginBottom="7.7dp"
-                    android:background="@color/silver" />
-
-            <LinearLayout
-                    android:id="@+id/myProfileFragPromoCodesBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                <TextView
-                        style="@style/SemiBold13Dark"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableStart="@drawable/icons_add"
-                        android:drawablePadding="6.7dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="16.3dp"
-                        android:paddingTop="17dp"
-                        android:paddingBottom="15.8dp"
-                        android:text="Promo Codes" />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="11.5dp"
-                        android:src="@drawable/icons_right" />
-
-            </LinearLayout>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="15.8dp"
-                    android:layout_marginEnd="15.8dp"
-                    android:layout_marginBottom="23.5dp"
-                    android:background="@color/silver"
-                    android:visibility="gone" />
-
-
-
-            <ImageView
-                    android:id="@+id/myProfileFragShareBtnLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="35dp"
-                    android:background="@drawable/refferal_banner_pic" />
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="15.4dp"
-                    android:layout_marginTop="23.1dp"
-                    android:layout_marginBottom="23dp"
-                    android:background="@color/light_periwinkle_20" />
-
-            <TextView
-                    style="@style/SemiBold15Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15.8dp"
-                    android:layout_marginTop="38.4dp"
-                    android:text="Your Settings" />
-
-            <LinearLayout
-                    android:id="@+id/myProfileFragLocationSettingsBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="17.4dp"
-                    android:layout_marginTop="9.2dp"
-                    android:layout_marginRight="15.4dp"
-                    android:orientation="vertical">
-
-                <TextView
-                        style="@style/SemiBold15Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:drawableLeft="@drawable/icons_location"
-                        android:drawablePadding="22.2dp"
-                        android:text="Location and Communication settings" />
-
-                <View
+                        android:id="@+id/myProfileFragBanner"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="30dp"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/silver" />
+                        android:layout_height="159dp"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/myProfileFragPrivacyBtn"
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Edit my account"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragEditAccount"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15.4dp"
-                    android:layout_marginRight="15.4dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"/>
 
-                <TextView
-                        style="@style/SemiBold15Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:drawableLeft="@drawable/about"
-                        android:drawablePadding="18.2dp"
-                        android:text="Privacy policy and terms of use" />
-
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/silver" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/myProfileFragSupportBtn"
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Communication settings"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragSettings"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15.4dp"
-                    android:layout_marginRight="15.4dp"
-                    android:layout_marginBottom="23dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"/>
 
-                <TextView
-                        style="@style/SemiBold15Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12.5dp"
-                        android:drawableLeft="@drawable/ic_tooltip"
-                        android:drawablePadding="18.2dp"
-                        android:text="Support center" />
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Support center"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragSupport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/silver" />
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Join WoodSpoon as a Home Chef"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragJoinAsChef"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-                <TextView
-                        android:id="@+id/profileFragLogout"
-                        style="@style/SemiBold15Red"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="15.4dp"
-                        android:paddingBottom="15.4dp"
-                        android:text="Sign Out"
-                        android:textColor="@color/red" />
-
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/silver" />
-
-
-            </LinearLayout>
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Privacy policy and terms of use"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragPrivacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
             <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                    android:id="@+id/myProfileFragJoinBtn"
+                    app:title="Sign out"
+                    app:makeItRed="true"
+                    android:id="@+id/myProfileFragLogout"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:layout_marginHorizontal="15.4dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="23.5dp"
-                    android:paddingHorizontal="25dp"
-                    app:title="Become a Woodspoon Home Chef" />
+                    android:layout_height="wrap_content"/>
 
             <TextView
                     android:id="@+id/myProfileFragVersion"
-                    style="@style/Reg11Dark"
+                    style="@style/LatoReg13Black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15.4dp"
                     android:layout_marginBottom="7.7dp" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

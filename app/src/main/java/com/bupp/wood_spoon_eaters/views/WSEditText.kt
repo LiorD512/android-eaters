@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
+import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Utils
 
 class WSEditText @JvmOverloads
@@ -284,6 +285,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return binding.wsEditTextPrefix.text.toString()
     }
 
+    fun setTextFromList(list: List<SelectableIcon>) {
+        var text = ""
+        if(list.isNotEmpty()){
+            list.forEach {
+                text += "$it, "
+            }
+            text = text.substring(0, text.length - 2)
+        }
+        setText(text) //remove last ","
+    }
 
 
 }

@@ -129,6 +129,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
         loadFeedProgressBarFragment()
         loadFeed()
+
+        Log.d("wowTimeZone","${TimeZone.getDefault().id}")
+//        Log.d("wowTimeZone","${TimeZone.getDefault().displayName}")
     }
 
     private fun loadFeedProgressBarFragment() {
@@ -375,6 +378,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
+    override fun handleHeaderSep(shouldShow: Boolean) {
+        Log.d(TAG, "handleHeaderSep: $shouldShow")
+        binding.headerCard.elevation = if(shouldShow) Utils.toPx(5).toFloat() else 0f
+    }
+
     private fun loadFeed() {
         loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
         binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
@@ -387,7 +395,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     fun loadMyProfile() {
         loadFragment(MyProfileFragment.newInstance(), Constants.MY_PROFILE_TAG)
-        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS, "My Account")
+        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_CLOSE_NO_TITLE)
     }
 
     fun loadEditMyProfile() {

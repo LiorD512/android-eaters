@@ -19,8 +19,13 @@ import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
 import java.util.ArrayList
 
-class MyProfileViewModel(val api: ApiService, private val userRepository: UserRepository, val eaterDataManager: EaterDataManager, val metaDataRepository: MetaDataRepository
-                         , private val paymentManager: PaymentManager) :
+class MyProfileViewModel(
+    val api: ApiService,
+    private val userRepository: UserRepository,
+    val eaterDataManager: EaterDataManager,
+    val metaDataRepository: MetaDataRepository,
+    private val paymentManager: PaymentManager
+) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     val progressData = ProgressData()
@@ -28,15 +33,26 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
 
     val paymentLiveData = paymentManager.getPaymentsLiveData()
     val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
+    val profileData: SingleLiveEvent<ProfileData> = SingleLiveEvent()
 
     val myProfileActionEvent = MutableLiveData<MyProfileActionEvent>()
+
     data class MyProfileActionEvent(val type: MyProfileActionType)
     enum class MyProfileActionType {
         LOGOUT
     }
 
-    init{
+    init {
+        fetchProfileData()
         refreshFavorites()
+    }
+
+    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>)
+
+    fun fetchProfileData() {
+        val eater = getUserDetails()
+        val dietaries = metaDataRepository.getDietaryList()
+        profileData.postValue(ProfileData(eater, dietaries))
     }
 
     private fun refreshFavorites() {
@@ -45,38 +61,14 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
         }
     }
 
-    val TAG = "wowMyProfileVM"
-    data class GetUserDetails(val isSuccess: Boolean, val eater: Eater? = null)
-    val getUserDetails: SingleLiveEvent<Eater> = SingleLiveEvent()
-
-    fun getUserDetails() {
-        if(userRepository.getUser() != null){
-            getUserDetails.postValue(userRepository.getUser())
-        }else{
+    //    val getUserDetails: SingleLiveEvent<Eater> = SingleLiveEvent()
+    fun getUserDetails(): Eater? {
+        if (userRepository.getUser() == null) {
             viewModelScope.launch {
                 userRepository.initUserRepo()
-                getUserDetails.postValue(userRepository.getUser())
             }
         }
-//        api.getMeCall().enqueue(object : Callback<ServerResponse<Eater>> {
-//            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-//                if (response.isSuccessful) {
-//                    val eater = response.body()?.data
-//                    if (eater != null) {
-//                        getUserDetails.postValue(GetUserDetails(true, eater))
-//                    } else {
-//                        getUserDetails.postValue(GetUserDetails(false))
-//                    }
-//                } else {
-//                    getUserDetails.postValue(GetUserDetails(false))
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-//                getUserDetails.postValue(GetUserDetails(false))
-//            }
-//
-//        })
+        return userRepository.getUser()
     }
 
     fun updateClientAccount(cuisineIcons: List<SelectableIcon>? = null, dietaryIcons: List<SelectableIcon>? = null, forceUpdate: Boolean = false) {
@@ -86,13 +78,13 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
         var arrayOfCuisinesIds: ArrayList<Int>? = null
         var arrayOfDietsIds: ArrayList<Int>? = null
 
-        cuisineIcons?.let{
+        cuisineIcons?.let {
             arrayOfCuisinesIds = arrayListOf()
             for (cuisine in cuisineIcons) {
                 arrayOfCuisinesIds!!.add(cuisine.id.toInt())
             }
         }
-        dietaryIcons?.let{
+        dietaryIcons?.let {
             arrayOfDietsIds = arrayListOf()
             for (diet in dietaryIcons) {
                 arrayOfDietsIds!!.add(diet.id.toInt())
@@ -106,62 +98,38 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
 
     private fun postClient(eater: EaterRequest, forceUpdate: Boolean) {
         viewModelScope.launch {
-                val userRepoResult = userRepository.updateEater(eater)
-                when (userRepoResult.type) {
-                    UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                        Log.d("wowLoginVM", "NetworkError")
-                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                    }
-                    UserRepository.UserRepoStatus.SOMETHING_WENT_WRONG -> {
-                        Log.d("wowLoginVM", "GenericError")
-                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-                    }
-                    UserRepository.UserRepoStatus.SUCCESS -> {
-                        Log.d("wowLoginVM", "Success")
-                        if(forceUpdate){
-                            getUserDetails()
-                        }
-                    }
-                    else -> {
-                        Log.d("wowLoginVM", "NetworkError")
-                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+            val userRepoResult = userRepository.updateEater(eater)
+            when (userRepoResult.type) {
+                UserRepository.UserRepoStatus.SERVER_ERROR -> {
+                    Log.d("wowLoginVM", "NetworkError")
+                    errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                }
+                UserRepository.UserRepoStatus.SOMETHING_WENT_WRONG -> {
+                    Log.d("wowLoginVM", "GenericError")
+                    errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
+                }
+                UserRepository.UserRepoStatus.SUCCESS -> {
+                    Log.d("wowLoginVM", "Success")
+                    if (forceUpdate) {
+                        getUserDetails()
                     }
                 }
-                progressData.endProgress()
+                else -> {
+                    Log.d("wowLoginVM", "NetworkError")
+                    errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+                }
             }
+            progressData.endProgress()
         }
-//        api.postMe(eater).enqueue(object : Callback<ServerResponse<Eater>> {
-//            override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-//                if (response.isSuccessful) {
-//                    Log.d("wowCreateAccountVM", "on success! ")
-//                    eaterDataManager.currentEater = response.body()?.data!!
-//                } else {
-//                    Log.d("wowCreateAccountVM", "on Failure! ")
-//                }
-//
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-//                Log.d("wowCreateAccountVM", "on big Failure! " + t.message)
-//            }
-//        })
-
-
-//    fun getDeliveryAddress(): String {//todo - nyc
-//        val streetLine1 = eaterDataManager.getLastChosenAddress()?.streetLine1
-//        return if (streetLine1.isNullOrEmpty()) {
-//            ""
-//        } else {
-//            streetLine1
-//        }
-//    }
+    }
 
     fun logout() {
         val logoutResult = userRepository.logout()
-        if(logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT){
+        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
             myProfileActionEvent.postValue(MyProfileActionEvent(MyProfileActionType.LOGOUT))
         }
     }
+
 
     fun initStripe(activity: Activity) {
         //todo - fix this
@@ -190,10 +158,13 @@ class MyProfileViewModel(val api: ApiService, private val userRepository: UserRe
         return metaDataRepository.getCuisineListSelectableIcons()
     }
 
-    fun getDietaryList(): List<SelectableIcon> {
-        return metaDataRepository.getDietaryList()
-    }
+//    fun getDietaryList(): List<SelectableIcon> {
+//        return metaDataRepository.getDietaryList()
+//    }
 
+    companion object {
+        const val TAG = "wowMyProfileVM"
+    }
 
 
 }
