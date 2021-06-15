@@ -404,11 +404,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Hey ${viewModel.getUserName()}!")
     }
 
-    fun loadSupport() {
-        SupportCenterBottomSheet().show(supportFragmentManager, Constants.SUPPORT_CENTER_BOTTOM_SHEET)
-//        loadFragment(SupportFragment.newInstance(), Constants.SUPPORT_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, getString(R.string.support_dialog_title))
-    }
 
     fun loadReport(orderId: Long) {
         loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
@@ -433,7 +428,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     fun loadSettingsFragment() {
-        SettingsBottomSheet().show(supportFragmentManager, Constants.SETTINGS_BOTTOM_SHEET)
+
 //        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
 //        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
     }
@@ -515,6 +510,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     //HeaderView Listener interface
     override fun onHeaderBackClick() {
+        onBackPressed()
+    }
+
+    override fun onHeaderCloseClick() {
         onBackPressed()
     }
 
@@ -600,6 +599,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             Constants.ORDER_DETAILS_TAG -> {
                 loadOrderHistoryFragment()
             }
+
             else -> {
                 loadFeed()
             }

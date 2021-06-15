@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CustomDetailsViewBinding
 
+@SuppressLint("CustomViewStyleable")
 class CustomDetailsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
@@ -60,8 +62,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         customDetailsViewChangeBtn.setTitle(btnText)
                     }
                 }
+
+                a.recycle()
             }
             customDetailsViewChangeBtn.setOnClickListener { onChange() }
+
         }
     }
 
@@ -115,11 +120,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     customDetailsViewIcon.setImageResource(R.drawable.icons_promo)
                     customDetailsViewTitle.text = "Promo code"
                     customDetailsViewTSubtitle.text = "Enter a WoodSpoon promo code"
-                }
-                Constants.DELIVERY_DETAILS_ORDER_HISTORY -> {
-                    customDetailsViewIcon.setImageResource(R.drawable.icons_orders)
-                    customDetailsViewTitle.text = "View your order history here"
-                    customDetailsViewTSubtitle.visibility = GONE
                 }
             }
         }

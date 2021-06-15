@@ -47,12 +47,13 @@ class MyProfileViewModel(
         refreshFavorites()
     }
 
-    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>)
+    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>, val bannerUrl: String?)
 
     fun fetchProfileData() {
         val eater = getUserDetails()
         val dietaries = metaDataRepository.getDietaryList()
-        profileData.postValue(ProfileData(eater, dietaries))
+        val bannerUrl = metaDataRepository.getProfileBannerUrl()
+        profileData.postValue(ProfileData(eater, dietaries, bannerUrl))
     }
 
     private fun refreshFavorites() {
@@ -75,17 +76,17 @@ class MyProfileViewModel(
         progressData.startProgress()
         val eater = EaterRequest()
 
-        var arrayOfCuisinesIds: ArrayList<Int>? = null
-        var arrayOfDietsIds: ArrayList<Int>? = null
+        var arrayOfCuisinesIds: MutableList<Int>? = null
+        var arrayOfDietsIds: MutableList<Int>? = null
 
         cuisineIcons?.let {
-            arrayOfCuisinesIds = arrayListOf()
+            arrayOfCuisinesIds = mutableListOf()
             for (cuisine in cuisineIcons) {
                 arrayOfCuisinesIds!!.add(cuisine.id.toInt())
             }
         }
         dietaryIcons?.let {
-            arrayOfDietsIds = arrayListOf()
+            arrayOfDietsIds = mutableListOf()
             for (diet in dietaryIcons) {
                 arrayOfDietsIds!!.add(diet.id.toInt())
             }
@@ -111,7 +112,7 @@ class MyProfileViewModel(
                 UserRepository.UserRepoStatus.SUCCESS -> {
                     Log.d("wowLoginVM", "Success")
                     if (forceUpdate) {
-                        getUserDetails()
+                        fetchProfileData()
                     }
                 }
                 else -> {

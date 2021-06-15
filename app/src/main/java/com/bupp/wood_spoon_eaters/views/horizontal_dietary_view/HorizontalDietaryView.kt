@@ -100,8 +100,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         adapter.setSelected(selectedDiets)
     }
 
-//    override fun onDietaryClick(dietary: SelectableIcon) {
-//        listener?.onDietaryClick(dietary)
-//    }
+    override fun onDietaryClick(dietary: SelectableIcon) {
+        listener?.onDietaryClick(dietary)
+    }
 
 }

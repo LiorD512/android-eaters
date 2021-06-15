@@ -21,7 +21,7 @@ class HorizontalDietaryAdapter(val listener: HorizontalDietaryListener) :
     var isSelectEnabled = true
 
     interface HorizontalDietaryListener {
-//        fun onDietaryClick(dietary: SelectableIcon)
+        fun onDietaryClick(dietary: SelectableIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,6 +44,7 @@ class HorizontalDietaryAdapter(val listener: HorizontalDietaryListener) :
                     selectedDiets.add(dietary)
                 }
                 notifyItemChanged(position)
+                listener.onDietaryClick(dietary)
             }
         }
 

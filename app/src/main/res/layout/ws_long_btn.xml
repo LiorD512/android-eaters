@@ -6,6 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+    <ImageView
+            tools:src="@drawable/icons_orders"
+            android:paddingEnd="18dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/longBtnIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     <TextView
             android:id="@+id/longBtnTitle"
             android:paddingVertical="15.4dp"
@@ -15,7 +26,7 @@
             android:letterSpacing="0.03"
             android:lineSpacingExtra="6.7sp"
             app:layout_constraintEnd_toStartOf="@+id/arrow"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/longBtnIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Edit my account"/>
 
@@ -29,6 +40,7 @@
             android:layout_height="wrap_content"/>
 
     <View
+            android:id="@+id/longBtnSep"
             app:layout_constraintTop_toBottomOf="@+id/longBtnTitle"
             android:background="@color/silver"
             android:layout_width="match_parent"

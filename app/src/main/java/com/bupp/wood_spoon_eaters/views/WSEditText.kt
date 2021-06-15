@@ -289,11 +289,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         var text = ""
         if(list.isNotEmpty()){
             list.forEach {
-                text += "$it, "
+                text += "${it.name}, "
             }
-            text = text.substring(0, text.length - 2)
+            text = text.substring(0, text.length - 2) //remove last ", "
         }
-        setText(text) //remove last ","
+        setText(text)
     }
 
 

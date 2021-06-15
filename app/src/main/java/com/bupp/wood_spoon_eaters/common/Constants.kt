@@ -217,6 +217,7 @@ class Constants {
         const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val SETTINGS_BOTTOM_SHEET = "settings_bottom_sheet"
         const val SUPPORT_CENTER_BOTTOM_SHEET = "support_center_bottom_sheet"
+        const val JOIN_AS_CHEF_BOTTOM_SHEET = "join_as_chef_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

@@ -9,6 +9,7 @@
     <attr name="WSicon" format="reference" />
     <attr name="minChar" format="integer" />
     <attr name="maxChar" format="integer" />
+    <attr name="showSep" format="boolean" />
 
     <attr name="inputType" format="enum">
         <enum name="TEXT" value="0" />
@@ -31,6 +32,8 @@
 
     <declare-styleable name="WSLongBtn">
         <attr name="title" />
+        <attr name="WSicon" />
+        <attr name="showSep"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">
@@ -105,7 +108,7 @@
         </attr>
         <attr name="changeable" format="boolean" />
         <attr name="isSelectionGray" format="boolean" />
-        <attr name="showSep" format="boolean" />
+        <attr name="showSep" />
         <attr name="btnTitle" format="string" />
     </declare-styleable>
 
@@ -160,6 +163,7 @@
     <declare-styleable name="BlueBtnAttrs">
         <attr name="title" />
         <attr name="makeItRed" format="boolean"/>
+        <attr name="makeItOrange" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="SelectableBtn">

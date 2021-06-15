@@ -56,7 +56,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
        }
     }
 
-    public fun loadSelectedIcons(icons: ArrayList<SelectableIcon>?) {
+    public fun loadSelectedIcons(icons: MutableList<SelectableIcon>?) {
         if (icons != null) {
             adapter.loadSelectedIcons(icons)
         }
@@ -74,7 +74,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun getSelectedItems(): ArrayList<SelectableIcon> {
+    fun getSelectedItems(): MutableList<SelectableIcon> {
         return adapter.getSelectedIcons()
     }
 

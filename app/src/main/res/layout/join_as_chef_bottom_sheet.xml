@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isWithSep="true"
+            android:id="@+id/joinAsChefHeader"
+            app:title="Join WoodSpoon as a Home Chef!"
+            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle_50" />
+
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <ImageView
+                        android:layout_marginTop="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/illus_chef"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:layout_marginHorizontal="15.4dp"
+                        android:gravity="center"
+                        android:layout_marginTop="45dp"
+                        style="@style/LatoReg15Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        android:lineSpacingExtra="7.7sp"
+                        android:text=" Share your delicious dishes with hungry eaters around you when you become a WoodSpoon Home Chef."/>
+
+                <TextView
+                        android:layout_marginHorizontal="23dp"
+                        android:gravity="center"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginBottom="35dp"
+                        style="@style/LatoReg15Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        android:lineSpacingExtra="7.7sp"
+                        android:text="Download the WoodSpoon Home Chefs app to add your dishes, set your schedule, and receive real-time order updates."/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:id="@+id/joinAsChefNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15.4dp"
+                        android:paddingHorizontal="15.4dp"
+                        app:makeItOrange="true"
+                        app:title="Download now" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+</LinearLayout>

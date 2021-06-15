@@ -29,6 +29,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 binding.blueBtnBackground.setBackgroundResource(R.drawable.rectangle_red_btn_cornered)
                 binding.blueBtnText.setTextColor(ContextCompat.getColor(context, R.color.coral))
             }
+
+            val isOrange = a.getBoolean(R.styleable.BlueBtnAttrs_makeItOrange, false)
+            if(isOrange){
+                binding.blueBtnBackground.setBackgroundResource(R.drawable.rectangle_orange_btn_cornered)
+                binding.blueBtnText.setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+
             a.recycle()
         }
     }

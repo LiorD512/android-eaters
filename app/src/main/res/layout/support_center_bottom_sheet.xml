@@ -72,11 +72,6 @@
 
                 </FrameLayout>
 
-                <View
-                        android:layout_marginHorizontal="15.4dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_periwinkle_50" />
 
                 <LinearLayout
                         android:paddingBottom="23dp"
@@ -87,6 +82,7 @@
 
                     <com.bupp.wood_spoon_eaters.views.WSLargeSimpleBtn
                             app:title="Call us"
+                            android:paddingEnd="11dp"
                             android:id="@+id/supportDialogCallButton"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -94,6 +90,7 @@
 
                     <com.bupp.wood_spoon_eaters.views.WSLargeSimpleBtn
                             app:title="Send a text"
+                            android:paddingStart="11dp"
                             android:id="@+id/supportDialogTextButton"
                             android:layout_weight="1"
                             android:layout_width="0dp"
@@ -129,11 +126,6 @@
         </ScrollView>
 
 
-        <com.bupp.wood_spoon_eaters.views.WSProgressBar
-                android:id="@+id/supportDialogPb"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:visibility="gone" />
 
 
 </LinearLayout>
