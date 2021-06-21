@@ -126,146 +126,38 @@
                         android:background="@color/white"
                         android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                            app:title="Subtotal"
+                            android:id="@+id/singleOrderDetailsSubtotal"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content"/>
 
-                        <TextView
-                                style="@style/LatoReg13Black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Subtotal" />
-
-                        <TextView
-                                android:id="@+id/singleOrderDetailsSubtotalPriceText"
-                                style="@style/LatoReg13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="end|center"
-                                tools:text="$6.6" />
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                            app:title="Delivery fee"
+                            app:tip_type="CHECKOUT_DELIVERY_FEE"
+                            android:id="@+id/singleOrderDetailsDeliveryFee"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content"/>
 
-                        <TextView
-                                style="@style/LatoReg13Black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Delivery fee" />
-
-                        <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:tip_type="CHECKOUT_DELIVERY_FEE" />
-
-                        <TextView
-                                android:id="@+id/singleOrderDetailsDeliveryFeePriceText"
-                                style="@style/LatoReg13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="end|center"
-                                tools:text="$6.6" />
-
-                        <TextView
-                                android:id="@+id/singleOrderDetailsDeliveryFeePriceFree"
-                                style="@style/LatoReg13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="end|center"
-                                android:text="FREE"
-                                android:visibility="gone" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                            android:id="@+id/singleOrderDetailsMinPriceLayout"
+                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                            app:title="Fees &amp; Estimated tax"
+                            app:tip_type="CHECKOUT_MINIMUM_FEE"
+                            android:id="@+id/singleOrderDetailsFees"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content"/>
 
-                        <TextView
-                                style="@style/LatoReg13Black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Fees &amp; Estimated tax" />
-
-                        <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
-                                android:id="@+id/singleOrderDetailsSmallOrderFee"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:tip_type="CHECKOUT_MINIMUM_FEE" />
-
-                        <TextView
-                                android:id="@+id/singleOrderDetailsMinPriceText"
-                                style="@style/LatoReg13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="end|center"
-                                tools:text="$6.6" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                            android:id="@+id/singleOrderDetailsPromoCodeLayout"
+                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                            app:title="Promo code"
+                            app:tip_type="CHECKOUT_MINIMUM_FEE"
+                            android:id="@+id/singleOrderDetailsPromoCode"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:paddingBottom="15dp"
-                            android:visibility="gone">
+                            android:layout_height="wrap_content"/>
 
-                        <TextView
-                                android:id="@+id/singleOrderDetailsPromoCodeTitle"
-                                style="@style/LatoReg13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:text="Promo code" />
-
-                        <TextView
-                                android:id="@+id/singleOrderDetailsPromoCodeText"
-                                style="@style/LatoReg13Black"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                tools:text="($2.0)" />
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                            app:title="Total before tip"
+                            android:id="@+id/singleOrderDetailsTip"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:layout_marginTop="7.7dp"
-                            android:minHeight="25dp"
-                            android:orientation="horizontal"
-                            android:paddingBottom="15dp">
-
-                        <TextView
-                                style="@style/LatoBold13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:text="Total before tip" />
-
-                        <TextView
-                                android:id="@+id/singleOrderDetailsTotalPriceText"
-                                style="@style/LatoBlack13Teal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                tools:text="$6.6" />
-
-                    </LinearLayout>
+                            android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 

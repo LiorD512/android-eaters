@@ -76,8 +76,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
-
-
         initUI()
         initObservers()
     }
@@ -115,8 +113,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
 
 
                 if (!promoCode.isNullOrEmpty()) {
-                    singleOrderDetailsPromoCodeLayout.visibility = View.VISIBLE
-                    singleOrderDetailsPromoCodeText.text = "(${discount?.formatedValue?.replace("-", "")})"
+                    singleOrderDetailsPromoCode.visibility = View.VISIBLE
+                    singleOrderDetailsPromoCode.setValue("(${discount?.formatedValue?.replace("-", "")})")
                 }
 
 //            singleOrderDetailsTaxPriceText.text = "$$tax"
@@ -132,20 +130,20 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
 //            }
                 deliveryFee?.value?.let {
                     if (it > 0.0) {
-                        singleOrderDetailsDeliveryFeePriceText.text = "${deliveryFee.formatedValue}"
-                        singleOrderDetailsDeliveryFeePriceText.visibility = View.VISIBLE
-                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.GONE
+                        singleOrderDetailsDeliveryFee.setValue("${deliveryFee.formatedValue}")
+//                        singleOrderDetailsDeliveryFeePriceText.visibility = View.VISIBLE
+//                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.GONE
                     } else {
-                        singleOrderDetailsDeliveryFeePriceText.visibility = View.GONE
-                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.VISIBLE
+//                        singleOrderDetailsDeliveryFeePriceText.visibility = View.GONE
+//                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.VISIBLE
                     }
                 }
 
                 val allDishSubTotal = subtotal?.value
                 val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
-                singleOrderDetailsSubtotalPriceText.text = "$$allDishSubTotalStr"
-                singleOrderDetailsTotalPriceText.text = totalBeforeTip?.formatedValue ?: ""
+                singleOrderDetailsSubtotal.setValue("$$allDishSubTotalStr")
+                singleOrderDetailsTip.setValue(totalBeforeTip?.formatedValue ?: "")
             }
         }
     }

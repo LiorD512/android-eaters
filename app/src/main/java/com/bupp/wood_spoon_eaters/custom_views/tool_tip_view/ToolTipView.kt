@@ -44,6 +44,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initUi(context, attrs)
     }
 
+    fun customInit(context: Context, attrs: AttributeSet?){
+        initUi(context, attrs)
+    }
+
     private fun initUi(context: Context, attrs: AttributeSet?) {
         with(binding) {
             bubbleLayout = LayoutInflater.from(context).inflate(R.layout.layout_tool_tip, null) as BubbleLayout

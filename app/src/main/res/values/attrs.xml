@@ -23,6 +23,14 @@
         <enum name="PHONE" value="8" />
     </attr>
 
+    <attr name="tip_type" format="enum">
+        <enum name="SERVICE_FEE" value="0" />
+        <enum name="CHECKOUT_SERVICE_FEE" value="2" />
+        <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
+        <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
+        <enum name="CHECKOUT_COURIER_TIP" value="5" />
+    </attr>
+
     <declare-styleable name="WSEditText">
         <attr name="inputType" />
         <attr name="isEditable" />
@@ -39,6 +47,7 @@
     <declare-styleable name="WSTitleValueView">
         <attr name="title" />
         <attr name="subTitle" />
+        <attr name="tip_type"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">
@@ -185,13 +194,7 @@
     </declare-styleable>
 
     <declare-styleable name="ToolTipView">
-        <attr name="tip_type" format="enum">
-            <enum name="SERVICE_FEE" value="0" />
-            <enum name="CHECKOUT_SERVICE_FEE" value="2" />
-            <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
-            <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
-            <enum name="CHECKOUT_COURIER_TIP" value="5" />
-        </attr>
+        <attr name="tip_type" />
     </declare-styleable>
 
     <declare-styleable name="progress_state">

@@ -34,41 +34,31 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
          initUi(attrs)
     }
 
-
     private fun initUi(attrs: AttributeSet?) {
         attrs?.let {
 
             with(binding) {
-                val attr = context.obtainStyledAttributes(attrs, R.styleable.WSLongBtn)
+                val attr = context.obtainStyledAttributes(attrs, R.styleable.WSTitleValueView)
 
-//                val title = attr.getString(R.styleable.WSLongBtn_title)
-//                longBtnTitle.text = title
-//
-//                val icon = attr.getDrawable(R.styleable.WSLongBtn_WSicon)
-//                setIcon(icon)
-//
-//                val showSep = attr.getBoolean(R.styleable.WSLongBtn_showSep, true)
-//                handleSep(showSep)
+                val title = attr.getString(R.styleable.WSTitleValueView_title)
+                titleValueViewTitle.text = title
+
+                val value = attr.getString(R.styleable.WSTitleValueView_subTitle)
+                titleValueViewValue.text = value
+
+                val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
+                if(toolTip != 0){
+                    titleValueViewToolTip.customInit(context, attrs)
+                    titleValueViewToolTip.visibility = View.VISIBLE
+                }
 
                 attr.recycle()
             }
         }
     }
 
-
-    private fun setIcon(icon: Drawable?) {
-//        icon?.let{
-//            binding.longBtnIcon.setImageDrawable(icon)
-//            binding.longBtnIcon.visibility = View.VISIBLE
-//        }
+    fun setValue(value: String) {
+        binding.titleValueViewValue.text = value
     }
-
-
-    private fun handleSep(showSep: Boolean) {
-//        if(!showSep){
-//            binding.longBtnSep.visibility = View.GONE
-//        }
-    }
-
 
 }
