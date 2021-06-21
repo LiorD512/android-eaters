@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.custom_views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -62,11 +63,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         customDetailsViewChangeBtn.setTitle(btnText)
                     }
                 }
+                if (a.hasValue(R.styleable.CustomDetailsAttrs_title)) {
+                    val title = a.getString(R.styleable.CustomDetailsAttrs_title)
+                    title?.let {
+                        customDetailsViewTitle.text = it
+                    }
+                }
+
+                val icon = a.getDrawable(R.styleable.CustomDetailsAttrs_WSicon)
+                setIcon(icon)
 
                 a.recycle()
             }
             customDetailsViewChangeBtn.setOnClickListener { onChange() }
 
+        }
+    }
+
+
+    private fun setIcon(icon: Drawable?) {
+        icon?.let{
+            binding.customDetailsViewIcon.setImageDrawable(icon)
+            binding.customDetailsViewIcon.visibility = View.VISIBLE
         }
     }
 

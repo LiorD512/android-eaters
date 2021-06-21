@@ -1,101 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/orderHistoryMainLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
-
-   <LinearLayout
-           android:layout_marginTop="21dp"
-           android:orientation="horizontal"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
-       
-       <ImageView
-               android:id="@+id/orderHistoryItemImg"
-               android:layout_width="38dp"
-               android:layout_height="38dp"/>
-
-       <LinearLayout
-               android:layout_width="0dp"
-               android:layout_weight="1"
-               android:orientation="vertical"
-               android:layout_marginLeft="8dp"
-               android:layout_height="wrap_content">
-
-           <LinearLayout
-                   android:orientation="horizontal"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content">
-
-               <TextView
-                       style="@style/SemiBold13Dark"
-                       android:id="@+id/orderHistoryItemCookBy"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       tools:text="Your Order by cook Oded"/>
-
-           </LinearLayout>
-
-           <TextView
-                   style="@style/SemiBold13Dark50"
-                   android:layout_gravity="left"
-                   android:id="@+id/orderHistoryItemDate"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   tools:text="05.04.19, 6:10PM"/>
-
-           <TextView
-                   style="@style/SemiBold13Blue"
-                   android:id="@+id/orderHistoryItemPrice"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   tools:text="$6.3"/>
-
-       </LinearLayout>
-
-        <ImageButton
-                android:layout_gravity="center"
-                android:background="@null"
-                android:rotation="-90"
-                android:src="@drawable/icons_down"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-
-   </LinearLayout>
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/orderHistoryMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="15.4dp">
 
     <LinearLayout
-            android:weightSum="2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
         <TextView
-                android:paddingTop="23dp"
-                android:paddingBottom="15.4dp"
-                android:id="@+id/orderHistoryItemReorder"
-                style="@style/SemiBold13Blue"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:id="@+id/orderHistoryItemChef"
+                style="@style/LatoBold13Black"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/order_history_item_reorder"/>
+                tools:text="Home Chef Oded" />
 
         <TextView
-                android:paddingTop="23dp"
-                android:paddingBottom="15.4dp"
-                android:id="@+id/orderHistoryItemReport"
-                style="@style/SemiBold13Blue"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/orderHistoryItemDate"
+                style="@style/LatoReg13PurpelyGrey"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/order_history_item_report"/>
+                android:layout_gravity="left"
+                tools:text="05.04.19, 6:10PM" />
 
     </LinearLayout>
 
-    <View
-            android:background="@color/silver"
-            android:layout_width="match_parent" android:layout_height="1dp"/>
+    <TextView
+            android:id="@+id/orderHistoryItemPrice"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="7.7dp"
+            tools:text="$6.3" />
+
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:src="@drawable/ic_arrow_right_teal" />
 
 </LinearLayout>

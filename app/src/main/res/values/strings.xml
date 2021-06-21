@@ -85,7 +85,7 @@
     <string name="order_history_item_report">
         <u>Report issue</u>
     </string>
-    <string name="order_history_item_by_cook">Your order by cook</string>
+    <string name="order_history_item_by_cook">Home Chef</string>
     <string name="cancel_dialog_stage_1_title">No cancellation fee</string>
     <string name="cancel_dialog_stage_1_body">We are sorry to see you have to cancel your order. Because our cook still didn\'t
         start preparing your dish,

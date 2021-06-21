@@ -24,6 +24,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     lateinit var binding: FragmentOrdersHistoryBinding
     val viewModel by viewModel<OrdersHistoryViewModel>()
+    lateinit var adapter: OrdersHistoryAdapter
 
     companion object{
         fun newInstance() = OrdersHistoryFragment()
@@ -53,6 +54,9 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
                 }
             })
 
+            adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
+            ordersHistoryFragRecyclerView.adapter = adapter
+
             viewModel.getOrderHistory()
         }
     }
@@ -60,8 +64,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     private fun initList(orderHistory: List<Order>) {
         with(binding){
             if(orderHistory.isNotEmpty()){
-                val adapter = OrdersHistoryAdapter(requireContext(), orderHistory, this@OrdersHistoryFragment)
-                ordersHistoryFragRecyclerView.adapter = adapter
+                adapter.submitList(orderHistory)
             }else{
                 ordersHistoryFragEmpty.visibility = View.VISIBLE
                 ordersHistoryFragRecyclerView.visibility = View.GONE
@@ -69,16 +72,8 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         }
     }
 
-
-    override fun onRateClick(orderId: Long) {
-        (activity as MainActivity).loadRateOrder(orderId)
-    }
-
-    override fun onReportClick(orderId: Long) {
-        (activity as MainActivity).loadReport(orderId)
-    }
-
     override fun onOrderClick(orderId: Long) {
+        //todo: fix this with navigation component
         (activity as MainActivity).loadOrderDetails(orderId)
     }
 

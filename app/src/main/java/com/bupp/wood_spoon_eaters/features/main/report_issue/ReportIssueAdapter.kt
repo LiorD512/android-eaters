@@ -46,7 +46,7 @@ class ReportIssueAdapter constructor(val context: Context, private var reportTop
         reportsHash[reportRequest.topicId!!] = reportRequest
     }
 
-    fun getReportsRequestArray(): ArrayList<ReportRequest>? {
+    fun getReportsRequestArray(): ArrayList<ReportRequest> {
         return ArrayList(reportsHash.values)
     }
 

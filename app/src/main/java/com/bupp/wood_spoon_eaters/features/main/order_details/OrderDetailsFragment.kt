@@ -33,8 +33,8 @@ class OrderDetailsFragment : Fragment(R.layout.order_details_fragment) {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         arguments?.getLong("orderId",-1)?.let{
             orderId = it
         }

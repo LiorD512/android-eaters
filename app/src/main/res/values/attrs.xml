@@ -110,6 +110,8 @@
         <attr name="isSelectionGray" format="boolean" />
         <attr name="showSep" />
         <attr name="btnTitle" format="string" />
+        <attr name="WSicon"/>
+        <attr name="title"/>
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">
@@ -160,8 +162,14 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="OrderItemsView">
+       <attr name="showAddBtn" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="BlueBtnAttrs">
         <attr name="title" />
+        <attr name="textColor" format="reference|color"/>
+        <attr name="background" format="reference"/>
         <attr name="makeItRed" format="boolean"/>
         <attr name="makeItOrange" format="boolean"/>
     </declare-styleable>

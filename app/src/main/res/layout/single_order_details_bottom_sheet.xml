@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isWithSep="true"
+            app:title="Support center"
+            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle_50" />
+
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+                        android:id="@+id/singleOrderDetailsLocation"
+                        app:changeable="false"
+                        app:showSep="false"
+                        app:detailsType="DELIVERY_DETAILS_LOCATION_PROFILE"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+                        android:id="@+id/singleOrderDetailsStatus"
+                        app:changeable="false"
+                        app:showSep="false"
+                        app:title="Order status"
+                        app:WSicon="@drawable/icons_check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+                        android:id="@+id/singleOrderDetailsTotal"
+                        app:changeable="false"
+                        app:showSep="false"
+                        app:title="Total"
+                        app:WSicon="@drawable/icons_check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="30dp"
+                        android:id="@+id/singleOrderDetailsOrderAgain"
+                        app:title="Order again"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="15.4dp"
+                        android:id="@+id/singleOrderDetailsRate"
+                        app:textColor="@color/teal_blue"
+                        app:background="@drawable/pale_grey_cornered_rect"
+                        app:title="Rate this order"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="15.4dp"
+                        android:id="@+id/singleOrderDetailsReport"
+                        app:textColor="@color/teal_blue"
+                        app:background="@drawable/pale_grey_cornered_rect"
+                        app:title="Report issue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <View
+                        android:layout_marginTop="22.8dp"
+                        android:background="@color/grey_white"
+                        android:layout_width="match_parent"
+                        android:layout_height="7.7dp"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+                        app:showAddBtn="false"
+                        android:id="@+id/checkoutFragOrderItemsView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingHorizontal="15.4dp" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
+
+</LinearLayout>

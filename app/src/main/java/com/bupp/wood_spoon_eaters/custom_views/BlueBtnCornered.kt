@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.custom_views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
@@ -24,6 +23,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 binding.blueBtnText.text = title
             }
 
+            val color: Int = a.getColor(R.styleable.BlueBtnAttrs_textColor, 0)
+            if (color != 0) binding.blueBtnText.setTextColor(color)
+
+            val background: Int = a.getResourceId(R.styleable.BlueBtnAttrs_background, 0)
+            if (color != 0) binding.blueBtnBackground.setBackgroundResource(background)
+
             val isRed = a.getBoolean(R.styleable.BlueBtnAttrs_makeItRed, false)
             if(isRed){
                 binding.blueBtnBackground.setBackgroundResource(R.drawable.rectangle_red_btn_cornered)
@@ -35,6 +40,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 binding.blueBtnBackground.setBackgroundResource(R.drawable.rectangle_orange_btn_cornered)
                 binding.blueBtnText.setTextColor(ContextCompat.getColor(context, R.color.white))
             }
+
+
 
             a.recycle()
         }

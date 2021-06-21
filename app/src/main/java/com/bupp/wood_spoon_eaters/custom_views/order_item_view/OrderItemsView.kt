@@ -25,6 +25,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     var adapter: OrderItemsViewAdapter? = null
 
     init{
+        if (attrs != null) {
+            val a = context.obtainStyledAttributes(attrs, R.styleable.OrderItemsView)
+
+            val showAddBtn = a.getBoolean(R.styleable.OrderItemsView_showAddBtn, true)
+            if (!showAddBtn) {
+                binding.orderItemsViewAddBtn.visibility = GONE
+            }
+        }
+
         initUi()
     }
 
