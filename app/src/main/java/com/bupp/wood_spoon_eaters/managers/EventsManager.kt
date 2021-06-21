@@ -179,7 +179,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                 Analytics.with(context).track("search", eventData)
             }
             Constants.EVENT_CREATE_ACCOUNT -> {
-                Analytics.with(context).track("search", eventData)
+                Analytics.with(context).track(Constants.EVENT_CREATE_ACCOUNT, eventData)
                 logFBCreateAccount(params)
             }
             else -> {

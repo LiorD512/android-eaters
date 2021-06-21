@@ -42,6 +42,8 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
                         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
                     }
                 }
+            }else{
+                stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
             }
         }
     }
