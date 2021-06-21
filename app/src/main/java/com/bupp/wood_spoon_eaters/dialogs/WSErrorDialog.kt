@@ -10,10 +10,11 @@ import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WsErrorDialogBinding
 
-class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogFragment(){
+class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogFragment() {
 
     lateinit var binding: WsErrorDialogBinding
-    interface WSErrorListener{
+
+    interface WSErrorListener {
         fun onWSErrorDone()
     }
 
@@ -33,14 +34,14 @@ class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogF
 
         binding = WsErrorDialogBinding.bind(view)
         initUi()
-}
+    }
 
     private fun initUi() {
-        with(binding){
-            body?.let{
+        with(binding) {
+            body?.let {
                 errorDialogBody.text = it
             }
-            errorDialogClose.setOnClickListener{
+            errorDialogClose.setOnClickListener {
                 dismiss()
                 listener?.onWSErrorDone()
             }

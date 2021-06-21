@@ -8,9 +8,10 @@
         android:orientation="vertical">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-            android:layout_marginTop="7.7dp"
+            android:id="@+id/singleOrderDetailsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7.7dp"
             app:isWithSep="true"
             app:title="Support center"
             app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
@@ -21,10 +22,14 @@
             android:background="@color/light_periwinkle_50" />
 
 
-        <ScrollView
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+        <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="match_parent">
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -33,78 +38,248 @@
 
                 <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                         android:id="@+id/singleOrderDetailsLocation"
-                        app:changeable="false"
-                        app:showSep="false"
-                        app:detailsType="DELIVERY_DETAILS_LOCATION_PROFILE"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        app:changeable="false"
+                        app:detailsType="DELIVERY_DETAILS_LOCATION_PROFILE"
+                        app:showSep="false" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                         android:id="@+id/singleOrderDetailsStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:WSicon="@drawable/icons_check"
                         app:changeable="false"
                         app:showSep="false"
-                        app:title="Order status"
-                        app:WSicon="@drawable/icons_check"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        app:title="Order status" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                         android:id="@+id/singleOrderDetailsTotal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:WSicon="@drawable/icons_total_price"
                         app:changeable="false"
                         app:showSep="false"
-                        app:title="Total"
-                        app:WSicon="@drawable/icons_check"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        app:title="Total" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:id="@+id/singleOrderDetailsOrderAgain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
                         android:layout_marginTop="30dp"
-                        android:id="@+id/singleOrderDetailsOrderAgain"
-                        app:title="Order again"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        app:title="Order again" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                        android:layout_marginHorizontal="15.4dp"
-                        android:layout_marginTop="15.4dp"
                         android:id="@+id/singleOrderDetailsRate"
-                        app:textColor="@color/teal_blue"
-                        app:background="@drawable/pale_grey_cornered_rect"
-                        app:title="Rate this order"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
                         android:layout_marginTop="15.4dp"
-                        android:id="@+id/singleOrderDetailsReport"
-                        app:textColor="@color/teal_blue"
                         app:background="@drawable/pale_grey_cornered_rect"
-                        app:title="Report issue"
+                        app:textColor="@color/teal_blue"
+                        app:title="Rate this order" />
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:id="@+id/singleOrderDetailsReport"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="15.4dp"
+                        app:background="@drawable/pale_grey_cornered_rect"
+                        app:textColor="@color/teal_blue"
+                        app:title="Report issue" />
 
                 <View
-                        android:layout_marginTop="22.8dp"
-                        android:background="@color/grey_white"
                         android:layout_width="match_parent"
-                        android:layout_height="7.7dp"/>
+                        android:layout_height="7.7dp"
+                        android:layout_marginTop="22.8dp"
+                        android:background="@color/grey_white" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
-                        app:showAddBtn="false"
-                        android:id="@+id/checkoutFragOrderItemsView"
+                        android:id="@+id/singleOrderDetailsOrderItemsView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:paddingHorizontal="15.4dp" />
+                        android:paddingHorizontal="15.4dp"
+                        app:showAddBtn="false" />
 
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="7.7dp"
+                        android:layout_marginTop="22.8dp"
+                        android:background="@color/grey_white" />
+
+                <TextView
+                        style="@style/LatoBlack17Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15.4dp"
+                        android:letterSpacing="0.03"
+                        android:paddingVertical="15.4dp"
+                        android:text="Summary" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:orientation="horizontal">
+
+                        <TextView
+                                style="@style/LatoReg13Black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Subtotal" />
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsSubtotalPriceText"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                tools:text="$6.6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                        <TextView
+                                style="@style/LatoReg13Black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Delivery fee" />
+
+                        <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:tip_type="CHECKOUT_DELIVERY_FEE" />
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsDeliveryFeePriceText"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                tools:text="$6.6" />
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsDeliveryFeePriceFree"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                android:text="FREE"
+                                android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/singleOrderDetailsMinPriceLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                        <TextView
+                                style="@style/LatoReg13Black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Fees &amp; Estimated tax" />
+
+                        <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+                                android:id="@+id/singleOrderDetailsSmallOrderFee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:tip_type="CHECKOUT_MINIMUM_FEE" />
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsMinPriceText"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="end|center"
+                                tools:text="$6.6" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/singleOrderDetailsPromoCodeLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp"
+                            android:visibility="gone">
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsPromoCodeTitle"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Promo code" />
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsPromoCodeText"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                tools:text="($2.0)" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="7.7dp"
+                            android:minHeight="25dp"
+                            android:orientation="horizontal"
+                            android:paddingBottom="15dp">
+
+                        <TextView
+                                style="@style/LatoBold13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Total before tip" />
+
+                        <TextView
+                                android:id="@+id/singleOrderDetailsTotalPriceText"
+                                style="@style/LatoBlack13Teal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                tools:text="$6.6" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </ScrollView>
+            <com.bupp.wood_spoon_eaters.views.WSProgressBar
+                    tools:visibility="gone"
+                    android:id="@+id/singleOrderDetailsPb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
+        </FrameLayout>
 
+    </ScrollView>
 
 
 </LinearLayout>

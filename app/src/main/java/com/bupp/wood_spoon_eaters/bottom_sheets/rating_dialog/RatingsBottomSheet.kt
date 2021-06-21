@@ -35,9 +35,6 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
 
         binding = RatingsBottomSheetBinding.bind(view)
 
-//        val parent = view.parent as View
-//        parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
-
         initUi()
     }
 

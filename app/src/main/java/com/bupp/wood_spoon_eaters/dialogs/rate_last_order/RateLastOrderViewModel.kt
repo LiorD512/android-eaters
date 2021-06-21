@@ -15,27 +15,27 @@ class RateLastOrderViewModel(private val api: ApiService,private val metaDataRep
     val getLastOrder: SingleLiveEvent<LastOrderEvent> = SingleLiveEvent()
     data class LastOrderEvent(val isSuccess: Boolean = false, val order: Order? = null)
 
-    fun getLastOrder(orderId: Long) {
-        api.getOrderById(orderId).enqueue(object: Callback<ServerResponse<Order>> {
-            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
-                if(response.isSuccessful){
-                    val order = response.body()?.data
-                    if(order != null){
-                        getLastOrder.postValue(LastOrderEvent(true, order))
-                    }else{
-                        getLastOrder.postValue(LastOrderEvent(false,null))
-                    }
-                }else{
-                    Log.d("wowFeedVM","postOrder fail")
-                    getLastOrder.postValue(LastOrderEvent(false,null))
-                }
-            }
-
-            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                Log.d("wowFeedVM","postOrder big fail")
-                getLastOrder.postValue(LastOrderEvent(false,null))
-            }
-        })
+    fun getLastOrder(orderId: Long) { //todo !
+//        api.getOrderById(orderId).enqueue(object: Callback<ServerResponse<Order>> {
+//            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
+//                if(response.isSuccessful){
+//                    val order = response.body()?.data
+//                    if(order != null){
+//                        getLastOrder.postValue(LastOrderEvent(true, order))
+//                    }else{
+//                        getLastOrder.postValue(LastOrderEvent(false,null))
+//                    }
+//                }else{
+//                    Log.d("wowFeedVM","postOrder fail")
+//                    getLastOrder.postValue(LastOrderEvent(false,null))
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
+//                Log.d("wowFeedVM","postOrder big fail")
+//                getLastOrder.postValue(LastOrderEvent(false,null))
+//            }
+//        })
     }
 
 

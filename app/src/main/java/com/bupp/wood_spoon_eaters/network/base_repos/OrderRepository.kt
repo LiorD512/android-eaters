@@ -12,6 +12,7 @@ interface OrderRepository{
     suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>>
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
     suspend fun getUpsShippingRates(orderId: Long): ResultHandler<ServerResponse<List<ShippingMethod>>>
+    suspend fun getOrderById(orderId: Long): ResultHandler<ServerResponse<Order>>
 }
 
 class OrderRepositoryImpl(private val service: ApiService) : OrderRepository {
@@ -42,6 +43,10 @@ class OrderRepositoryImpl(private val service: ApiService) : OrderRepository {
 
     override suspend fun getUpsShippingRates(orderId: Long): ResultHandler<ServerResponse<List<ShippingMethod>>>{
         return safeApiCall { service.getUpsShippingRates(orderId) }
+    }
+
+    override suspend fun getOrderById(orderId: Long): ResultHandler<ServerResponse<Order>>{
+        return safeApiCall { service.getOrderById(orderId) }
     }
 
 }

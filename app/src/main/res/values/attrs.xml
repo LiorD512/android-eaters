@@ -36,6 +36,11 @@
         <attr name="showSep"/>
     </declare-styleable>
 
+    <declare-styleable name="WSTitleValueView">
+        <attr name="title" />
+        <attr name="subTitle" />
+    </declare-styleable>
+
     <declare-styleable name="TitleBodyView">
         <attr name="title" />
         <attr name="body" format="string" />

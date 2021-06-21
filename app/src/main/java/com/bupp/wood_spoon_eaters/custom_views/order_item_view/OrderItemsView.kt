@@ -16,13 +16,13 @@ class OrderItemsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr){
 
-    lateinit var listener: OrderItemsListener
+    private var listener: OrderItemsListener? = null
     interface OrderItemsListener{
         fun onAddBtnClicked()
     }
 
     private var binding: OrderItemsViewBinding = OrderItemsViewBinding.inflate(LayoutInflater.from(context), this, true)
-    var adapter: OrderItemsViewAdapter? = null
+    private var adapter: OrderItemsViewAdapter? = null
 
     init{
         if (attrs != null) {
@@ -44,12 +44,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             orderItemsViewRecyclerView.addItemDecoration(divider)
 
             orderItemsViewAddBtn.setOnClickListener{
-                listener.onAddBtnClicked()
+                listener?.onAddBtnClicked()
             }
         }
     }
 
-    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsListener) {
+    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsListener? = null) {
         this.listener = listener
         adapter = OrderItemsViewAdapter(context)
         binding.orderItemsViewRecyclerView.adapter = adapter

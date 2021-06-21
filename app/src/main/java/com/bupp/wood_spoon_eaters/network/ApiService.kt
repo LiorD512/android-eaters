@@ -182,7 +182,7 @@ interface ApiService {
     fun getOrders(): Call<ServerResponse<List<Order>>>
 
     @GET("eaters/me/orders/{order_id}")
-    fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Order>>
+    suspend fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Order>
 
 
     //Profile data

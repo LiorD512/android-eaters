@@ -263,15 +263,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             if (!promo.isNullOrEmpty()) {
                 checkoutFragPromoCodeLayout.visibility = View.VISIBLE
                 checkoutFragPromoCodeText.text = "(${curOrder.discount?.formatedValue?.replace("-", "")})"
-//                checkoutFragPromoCodeStr.visibility = View.VISIBLE
-//                checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
-//                checkoutFragAddPromoCodeBtn.visibility = View.GONE
-//                checkoutFragPromoCodeSep.visibility = View.VISIBLE
-            } else {
-//                checkoutFragPromoCodeStr.visibility = View.GONE
-//                checkoutFragPromoCodeSep.visibility = View.GONE
-//                checkoutFragPromoCodeLayout.visibility = View.GONE
-//                checkoutFragAddPromoCodeBtn.visibility = View.VISIBLE
             }
 
 //            checkoutFragTaxPriceText.text = "$$tax"

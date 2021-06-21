@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.address_menu.AddressMenuViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsViewModel
 //import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
@@ -20,7 +21,6 @@ import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
-import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
@@ -106,7 +106,7 @@ val appModule = module {
     viewModel { SingleDishInfoViewModel(get(), get()) }
     viewModel { SingleDishIngredientViewModel(get()) }
     viewModel { CheckoutViewModel(get(), get(), get(), get()) }
-    viewModel { PromoCodeViewModel(get())}
+    viewModel { PromoCodeViewModel(get()) }
 
 
     //main
@@ -117,7 +117,6 @@ val appModule = module {
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get(),get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
-    viewModel { OrderDetailsViewModel(get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
@@ -129,6 +128,7 @@ val appModule = module {
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get()) }
     viewModel { EditMyProfileViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get()) }
+    viewModel { SingleOrderDetailsViewModel(get(), get()) }
 
     //support
     viewModel { SupportViewModel(get(), get()) }

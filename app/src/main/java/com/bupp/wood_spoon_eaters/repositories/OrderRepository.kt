@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 
 class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager: EaterDataManager) {
 
-
     data class OrderRepoResult<T>(val type: OrderRepoStatus, val data: T? = null, val wsError: List<WSError>? = null)
     enum class OrderRepoStatus {
         FULL_DISH_SUCCESS,
@@ -19,6 +18,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         POST_ORDER_SUCCESS,
         UPDATE_ORDER_FAILED,
         UPDATE_ORDER_SUCCESS,
+        GET_ORDER_BY_ID_FAILED,
+        GET_ORDER_BY_ID_SUCCESS,
         FINALIZE_ORDER_FAILED,
         FINALIZE_ORDER_SUCCESS,
         GET_SHIPPING_METHOD_FAILED,
@@ -57,11 +58,6 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         }
     }
 
-//    suspend fun getDishReview(dishId: Long): Review? {
-//        return withContext(Dispatchers.IO) {
-//            apiService.getDishReview(dishId).data
-//        }
-//    }
     
     suspend fun postNewOrder(orderRequest: OrderRequest): OrderRepoResult<Order>{
         val result = withContext(Dispatchers.IO){
@@ -167,6 +163,30 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         }
     }
 
+    suspend fun getOrderById(orderId: Long): OrderRepoResult<Order> {
+        val result = withContext(Dispatchers.IO){
+            apiService.getOrderById(orderId)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"getOrderById - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"getOrderById - GenericError")
+                    OrderRepoResult(OrderRepoStatus.GET_ORDER_BY_ID_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"getOrderById - Success")
+                    OrderRepoResult(OrderRepoStatus.GET_ORDER_BY_ID_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
 
     companion object{
         const val TAG = "wowOrderRepo"

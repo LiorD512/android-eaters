@@ -28,7 +28,6 @@ class WoodSpoonApplication : Application() {
 
     companion object {
         private lateinit var instance: WoodSpoonApplication
-
         fun getInstance(): WoodSpoonApplication = instance
     }
 

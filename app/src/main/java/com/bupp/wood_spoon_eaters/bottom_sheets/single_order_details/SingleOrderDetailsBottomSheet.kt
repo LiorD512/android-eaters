@@ -9,30 +9,47 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.DecimalFormat
 
-class SingleOrderDetailsBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener {
+class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: SupportCenterBottomSheetBinding
-    private val viewModel: SupportViewModel by viewModel()
+    private lateinit var binding: SingleOrderDetailsBottomSheetBinding
+    private val viewModel: SingleOrderDetailsViewModel by viewModel()
 
+    companion object {
+        private const val SINGLE_ORDER_ARGS = "single_order_args"
+        fun newInstance(orderId: Long): SingleOrderDetailsBottomSheet {
+            return SingleOrderDetailsBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putLong(SINGLE_ORDER_ARGS, orderId)
+                }
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.support_center_bottom_sheet, container, false)
+        return inflater.inflate(R.layout.single_order_details_bottom_sheet, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+        arguments?.let {
+            viewModel.initSingleOrder(it.getLong(SINGLE_ORDER_ARGS))
+        }
     }
 
     private lateinit var behavior: BottomSheetBehavior<View>
@@ -54,59 +71,91 @@ class SingleOrderDetailsBottomSheet: BottomSheetDialogFragment(), WSCounterEditT
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = SupportCenterBottomSheetBinding.bind(view)
+        binding = SingleOrderDetailsBottomSheetBinding.bind(view)
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
-        Analytics.with(requireContext()).screen("Support center")
+
 
         initUI()
+        initObservers()
     }
 
     private fun initUI() {
-        with(binding){
-            supportDialogNext.setBtnEnabled(false)
-            supportDialogCommentInput.setWSCounterListener(this@SingleOrderDetailsBottomSheet)
+        with(binding) {
 
-            supportDialogCallButton.setOnClickListener {
-                (activity as MainActivity).onContactUsClick()
-            }
-            supportDialogTextButton.setOnClickListener {
-                (activity as MainActivity).sendSmsText()
-            }
-            supportDialogQA.setOnClickListener{ openQaUrl()}
-            supportDialogNext.setOnClickListener { sendMail() }
         }
     }
 
-    private fun openQaUrl() {
-        WebDocsDialog(Constants.WEB_DOCS_QA).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
+    private fun initObservers() {
+        viewModel.singleOrderLiveData.observe(viewLifecycleOwner, {
+            handleOrder(it)
+        })
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            handlePb(it)
+        })
     }
 
-    private fun sendMail() {
-        val text = binding.supportDialogCommentInput.getText()
-        val address = viewModel.getAdminMailAddress()
+    private fun handleOrder(order: Order) {
+        with(binding) {
+            order.apply {
+                cook?.apply {
+                    singleOrderDetailsHeader.setTitle("Home chef $firstName")
+                }
+                deliveryAddress?.apply{
+                    singleOrderDetailsLocation.updateDeliveryFullDetails(this)
+                }
+                singleOrderDetailsStatus.updateDeliveryDetails(status ?: "N/A")
+                singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
+                orderItems?.let{
+                    singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
+                }
 
-        val selectorIntent = Intent(Intent.ACTION_SENDTO)
-        selectorIntent.data = Uri.parse("mailto:")
 
-        val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, viewModel.getEmailSubject())
-        emailIntent.putExtra(Intent.EXTRA_TEXT, text)
-        emailIntent.selector = selectorIntent
 
-        activity?.startActivity(Intent.createChooser(emailIntent, "Send email..."))
+                if (!promoCode.isNullOrEmpty()) {
+                    singleOrderDetailsPromoCodeLayout.visibility = View.VISIBLE
+                    singleOrderDetailsPromoCodeText.text = "(${discount?.formatedValue?.replace("-", "")})"
+                }
+
+//            singleOrderDetailsTaxPriceText.text = "$$tax"
+//            serviceFee?.let {
+//                if (serviceFee > 0.0) {
+//                    singleOrderDetailsServiceFeePriceText.text = "$$serviceFee"
+//                    singleOrderDetailsServiceFeePriceText.visibility = View.VISIBLE
+//                    singleOrderDetailsServiceFeePriceFree.visibility = View.GONE
+//                } else {
+//                    singleOrderDetailsServiceFeePriceText.visibility = View.GONE
+//                    singleOrderDetailsServiceFeePriceFree.visibility = View.VISIBLE
+//                }
+//            }
+                deliveryFee?.value?.let {
+                    if (it > 0.0) {
+                        singleOrderDetailsDeliveryFeePriceText.text = "${deliveryFee.formatedValue}"
+                        singleOrderDetailsDeliveryFeePriceText.visibility = View.VISIBLE
+                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.GONE
+                    } else {
+                        singleOrderDetailsDeliveryFeePriceText.visibility = View.GONE
+                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.VISIBLE
+                    }
+                }
+
+                val allDishSubTotal = subtotal?.value
+                val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
+
+                singleOrderDetailsSubtotalPriceText.text = "$$allDishSubTotalStr"
+                singleOrderDetailsTotalPriceText.text = totalBeforeTip?.formatedValue ?: ""
+            }
+        }
     }
 
-
-    override fun onInputTitleChange(str: String?) {
+    private fun handlePb(showPb: Boolean) {
         with(binding){
-            if (str.isNullOrEmpty()) {
-                supportDialogNext.setBtnEnabled(false)
-            } else {
-                supportDialogNext.setBtnEnabled(true)
+            if(showPb){
+                singleOrderDetailsPb.show()
+            }else{
+                singleOrderDetailsPb.hide()
             }
         }
     }

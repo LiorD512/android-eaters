@@ -32,7 +32,7 @@ class PromoCodeViewModel(private val cartManager: CartManager) : ViewModel() {
                     promoCodeEvent.postValue(PromoCodeEvent(true))
                 }
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
-                    errorEvent.postValue(listOf(WSError(code = null, msg = "promo doe failed")))
+                    errorEvent.postValue(listOf(WSError(code = null, msg = "promo code failed")))
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
                     errorEvent.postValue(result.wsError)

@@ -165,9 +165,9 @@ dependencies {
     implementation 'com.facebook.android:facebook-applinks:5.15.3'
     implementation 'com.android.installreferrer:installreferrer:2.2'
 
-    implementation 'com.segment.analytics.android:analytics:4.9.3'
-    implementation 'com.segment.analytics.android.integrations:mixpanel:2.3.0'
-    implementation 'com.appsflyer:segment-android-integration:6.1.4'
+    implementation 'com.segment.analytics.android:analytics:4.9.4'
+    implementation 'com.segment.analytics.android.integrations:mixpanel:2.3.2'
+    implementation 'com.appsflyer:segment-android-integration:6.3.0'
     implementation 'com.android.installreferrer:installreferrer:2.2'
 
     //location

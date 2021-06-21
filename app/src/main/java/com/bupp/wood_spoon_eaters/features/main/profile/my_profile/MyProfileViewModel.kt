@@ -49,7 +49,7 @@ class MyProfileViewModel(
 
     data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>, val bannerUrl: String?)
 
-    fun fetchProfileData() {
+    private fun fetchProfileData() {
         val eater = getUserDetails()
         val dietaries = metaDataRepository.getDietaryList()
         val bannerUrl = metaDataRepository.getProfileBannerUrl()
