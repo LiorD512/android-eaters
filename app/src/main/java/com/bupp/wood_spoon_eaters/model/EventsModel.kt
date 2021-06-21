@@ -40,7 +40,7 @@ data class Campaign(
     @Json(name = "button_action") val buttonAction: CampaignButtonAction?,
     @Json(name = "share_text") val shareText: String?,
     @Json(name = "banner_color") val bannerColor: String?,
-    @Json(name = "share_url") val shareUrl: String?, //
+    @Json(name = "share_url") val shareUrl: String?,
     @Json(name = "terms_and_conditions") val termsAndConditions: String?
 ):Parcelable
 
