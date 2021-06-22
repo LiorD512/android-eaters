@@ -176,7 +176,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                 logFBAddToCart(params)
             }
             Constants.EVENT_SEARCHED_ITEM -> {
-                Analytics.with(context).track("search", eventData)
+                Analytics.with(context).track(Constants.EVENT_SEARCH, eventData)
             }
             Constants.EVENT_CREATE_ACCOUNT -> {
                 Analytics.with(context).track(Constants.EVENT_CREATE_ACCOUNT, eventData)
@@ -187,7 +187,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             }
         }
     }
-
 
     companion object{
         const val IS_FIRST_PURCHASE = "is_first_purchase"
