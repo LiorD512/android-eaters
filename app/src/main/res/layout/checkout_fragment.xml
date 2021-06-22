@@ -105,10 +105,10 @@
                         android:id="@+id/checkoutFragGiftSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:thumb="@drawable/switch_toggle_btn"
-                        android:textColor="@color/white"
                         android:gravity="center|start"
-                        app:track="@drawable/switch_track_selector"/>
+                        android:textColor="@color/white"
+                        android:thumb="@drawable/switch_toggle_btn"
+                        app:track="@drawable/switch_track_selector" />
 
 
             </LinearLayout>
@@ -174,150 +174,50 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15.4dp"
                     android:background="@color/white"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="23dp">
 
-                <LinearLayout
+                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                        android:id="@+id/checkoutFragSubtotal"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        app:title="Subtotal" />
 
-                    <TextView
-                            android:gravity="center"
-                            style="@style/LatoReg13Black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="Subtotal" />
-
-                    <TextView
-                            android:id="@+id/checkoutFragSubtotalPriceText"
-                            style="@style/LatoReg13Black"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="end|center"
-                            tools:text="$6.6" />
-                </LinearLayout>
-
-                <LinearLayout
+                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                        android:id="@+id/checkoutFragDeliveryFee"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        app:tip_type="CHECKOUT_DELIVERY_FEE"
+                        app:title="Delivery fee" />
 
-                    <TextView
-                            style="@style/LatoReg13Black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="Delivery fee" />
-
-                    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:tip_type="CHECKOUT_DELIVERY_FEE" />
-
-                    <TextView
-                            android:id="@+id/checkoutFragDeliveryFeePriceText"
-                            style="@style/LatoReg13Black"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="end|center"
-                            tools:text="$6.6" />
-
-                    <TextView
-                            android:id="@+id/checkoutFragDeliveryFeePriceFree"
-                            style="@style/LatoReg13Black"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="end|center"
-                            android:text="FREE"
-                            android:visibility="gone" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:id="@+id/checkoutFragMinPriceLayout"
+                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                        android:id="@+id/checkoutFragFees"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        app:tip_type="CHECKOUT_MINIMUM_FEE"
+                        app:title="Fees &amp; Estimated tax" />
 
-                    <TextView
-                            style="@style/LatoReg13Black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="Fees &amp; Estimated tax" />
-
-                    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
-                            android:id="@+id/checkoutFragSmallOrderFee"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:tip_type="CHECKOUT_MINIMUM_FEE" />
-
-                    <TextView
-                            android:id="@+id/checkoutFragMinPriceText"
-                            style="@style/LatoReg13Black"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="end|center"
-                            tools:text="$6.6" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:id="@+id/checkoutFragPromoCodeLayout"
+                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                        android:id="@+id/checkoutFragPromoCode2"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingBottom="15dp"
-                        android:visibility="gone">
+                        android:layout_height="wrap_content"
+                        app:title="Promo code" />
 
-                    <TextView
-                            android:id="@+id/checkoutFragPromoCodeTitle"
-                            style="@style/LatoReg13Black"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Promo code" />
-
-                    <TextView
-                            android:id="@+id/checkoutFragPromoCodeText"
-                            style="@style/LatoReg13Black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            tools:text="($2.0)" />
-                </LinearLayout>
-
-                <LinearLayout
-                        android:layout_marginTop="7.7dp"
-                        android:minHeight="25dp"
+                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                        android:id="@+id/checkoutFragTotalBeforeTip"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:orientation="horizontal"
-                        android:paddingBottom="15dp">
+                        android:layout_height="wrap_content"
+                        app:title="Total before tip" />
 
-                    <TextView
-                            style="@style/LatoBold13Black"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Total before tip" />
-
-                    <TextView
-                            android:id="@+id/checkoutFragTotalPriceText"
-                            style="@style/LatoBlack13Teal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            tools:text="$6.6" />
-
-                </LinearLayout>
+                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                        android:id="@+id/checkoutFragTotal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:title="Total" />
 
             </LinearLayout>
+
 
             <View
                     android:layout_width="match_parent"
@@ -325,10 +225,10 @@
                     android:background="@color/light_periwinkle_50" />
 
             <LinearLayout
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="15.4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15.4dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                 <TextView
@@ -344,6 +244,7 @@
                         android:id="@+id/checkoutFragCourierTip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
                         app:tip_type="CHECKOUT_COURIER_TIP" />
 
             </LinearLayout>

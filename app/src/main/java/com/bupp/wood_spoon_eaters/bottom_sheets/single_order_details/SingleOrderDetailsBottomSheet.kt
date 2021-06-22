@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -28,6 +29,14 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: SingleOrderDetailsBottomSheetBinding
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
+    private var curOrderId: Long = -1
+
+    var listener: SingleOrderDetailsListener? = null
+    interface SingleOrderDetailsListener{
+        fun onOrderAgainClick(orderId: Long)
+        fun onRateOrderClick(orderId: Long)
+        fun onReportOrderClick(orderId: Long)
+    }
 
     companion object {
         private const val SINGLE_ORDER_ARGS = "single_order_args"
@@ -48,7 +57,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
         arguments?.let {
-            viewModel.initSingleOrder(it.getLong(SINGLE_ORDER_ARGS))
+            curOrderId = it.getLong(SINGLE_ORDER_ARGS)
+            viewModel.initSingleOrder(curOrderId)
         }
     }
 
@@ -82,7 +92,18 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
 
     private fun initUI() {
         with(binding) {
-
+            singleOrderDetailsOrderAgain.setOnClickListener {
+                listener?.onOrderAgainClick(curOrderId)
+                dismiss()
+            }
+            singleOrderDetailsRate.setOnClickListener {
+                listener?.onRateOrderClick(curOrderId)
+                dismiss()
+            }
+            singleOrderDetailsReport.setOnClickListener {
+                listener?.onReportOrderClick(curOrderId)
+                dismiss()
+            }
         }
     }
 
@@ -110,32 +131,25 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
                 }
 
-
-
                 if (!promoCode.isNullOrEmpty()) {
                     singleOrderDetailsPromoCode.visibility = View.VISIBLE
+                    singleOrderDetailsPromoCode.setTitle("Promo code $promoCode")
                     singleOrderDetailsPromoCode.setValue("(${discount?.formatedValue?.replace("-", "")})")
                 }
 
-//            singleOrderDetailsTaxPriceText.text = "$$tax"
-//            serviceFee?.let {
-//                if (serviceFee > 0.0) {
-//                    singleOrderDetailsServiceFeePriceText.text = "$$serviceFee"
-//                    singleOrderDetailsServiceFeePriceText.visibility = View.VISIBLE
-//                    singleOrderDetailsServiceFeePriceFree.visibility = View.GONE
-//                } else {
-//                    singleOrderDetailsServiceFeePriceText.visibility = View.GONE
-//                    singleOrderDetailsServiceFeePriceFree.visibility = View.VISIBLE
-//                }
-//            }
+                var feeAndTax = 0.0
+                serviceFee?.value?.let{
+                    feeAndTax += it
+                }
+                tax?.value?.let{
+                    feeAndTax += it
+                }
+                val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
+                singleOrderDetailsFees.setValue("$$feeAndTaxStr")
+
                 deliveryFee?.value?.let {
                     if (it > 0.0) {
                         singleOrderDetailsDeliveryFee.setValue("${deliveryFee.formatedValue}")
-//                        singleOrderDetailsDeliveryFeePriceText.visibility = View.VISIBLE
-//                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.GONE
-                    } else {
-//                        singleOrderDetailsDeliveryFeePriceText.visibility = View.GONE
-//                        singleOrderDetailsDeliveryFeePriceFree.visibility = View.VISIBLE
                     }
                 }
 
@@ -143,7 +157,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
                 val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
                 singleOrderDetailsSubtotal.setValue("$$allDishSubTotalStr")
-                singleOrderDetailsTip.setValue(totalBeforeTip?.formatedValue ?: "")
+                singleOrderDetailsTotalBeforeTip.setValue(totalBeforeTip?.formatedValue ?: "")
+                singleOrderDetailsTotal2.setValue(total?.formatedValue ?: "N/A")
             }
         }
     }
@@ -156,6 +171,24 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
                 singleOrderDetailsPb.hide()
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SingleOrderDetailsListener) {
+            listener = context
+        }
+        else if (parentFragment is SingleOrderDetailsListener){
+            this.listener = parentFragment as SingleOrderDetailsListener
+        }
+        else {
+            throw RuntimeException("$context must implement SingleOrderDetailsListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
 

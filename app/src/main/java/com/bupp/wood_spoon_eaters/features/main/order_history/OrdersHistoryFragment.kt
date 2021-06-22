@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderView.HeaderViewListener,
-    OrdersHistoryAdapter.OrdersHistoryAdapterListener {
+    OrdersHistoryAdapter.OrdersHistoryAdapterListener, SingleOrderDetailsBottomSheet.SingleOrderDetailsListener {
 
     lateinit var binding: FragmentOrdersHistoryBinding
     val viewModel by viewModel<OrdersHistoryViewModel>()
@@ -80,6 +81,18 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     fun onRatingDone() {
         initUi()
+    }
+
+    override fun onOrderAgainClick(orderId: Long) {
+        Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onRateOrderClick(orderId: Long) {
+        (activity as MainActivity).loadRateOrder(orderId)
+    }
+
+    override fun onReportOrderClick(orderId: Long) {
+        (activity as MainActivity).loadReport(orderId)
     }
 
 }

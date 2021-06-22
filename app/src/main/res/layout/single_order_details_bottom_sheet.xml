@@ -22,7 +22,7 @@
             android:background="@color/light_periwinkle_50" />
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -123,6 +123,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
+                        android:paddingBottom="23dp"
                         android:background="@color/white"
                         android:orientation="vertical">
 
@@ -148,14 +149,20 @@
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             app:title="Promo code"
-                            app:tip_type="CHECKOUT_MINIMUM_FEE"
+                            android:visibility="gone"
                             android:id="@+id/singleOrderDetailsPromoCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             app:title="Total before tip"
-                            android:id="@+id/singleOrderDetailsTip"
+                            android:id="@+id/singleOrderDetailsTotalBeforeTip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                            app:title="Total"
+                            android:id="@+id/singleOrderDetailsTotal2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
@@ -171,7 +178,7 @@
 
         </FrameLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>

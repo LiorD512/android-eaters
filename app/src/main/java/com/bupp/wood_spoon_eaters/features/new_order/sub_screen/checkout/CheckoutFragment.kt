@@ -220,7 +220,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragNationwideSelect.visibility = View.GONE
                     }
                 }
-                checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide)
+//                checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide) //fix this
                 it.tipPercentage?.let{ tip ->
                     if(tip != 0){
                         checkoutFragTipPercentView.selectDefaultTip(tip)
@@ -248,50 +248,44 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             val serviceFee = curOrder.serviceFee?.value
             val deliveryFee = curOrder.deliveryFee?.value
             val discount = curOrder.discount?.value
-            curOrder.minPrice?.let {
-                val minPrice = it.value
-                if (minPrice != null && minPrice > 0.0) {
-                    checkoutFragMinPriceText.text = "$$minPrice"
-                    checkoutFragMinPriceLayout.visibility = View.VISIBLE
-                } else {
-                    checkoutFragMinPriceLayout.visibility = View.GONE
-                }
-            }
+//            curOrder.minPrice?.let {
+//                val minPrice = it.value
+//                if (minPrice != null && minPrice > 0.0) {
+//                    checkoutFragMinPriceText.text = "$$minPrice"
+//                    checkoutFragMinPriceLayout.visibility = View.VISIBLE
+//                } else {
+//                    checkoutFragMinPriceLayout.visibility = View.GONE
+//                }
+//            }
 
             val promo = curOrder.promoCode
 
             if (!promo.isNullOrEmpty()) {
-                checkoutFragPromoCodeLayout.visibility = View.VISIBLE
-                checkoutFragPromoCodeText.text = "(${curOrder.discount?.formatedValue?.replace("-", "")})"
+                checkoutFragPromoCode2.visibility = View.VISIBLE
+                checkoutFragPromoCode2.setTitle("Promo code $promo")
+                checkoutFragPromoCode2.setValue("(${curOrder.discount?.formatedValue?.replace("-", "")})")
             }
 
-//            checkoutFragTaxPriceText.text = "$$tax"
-//            serviceFee?.let {
-//                if (serviceFee > 0.0) {
-//                    checkoutFragServiceFeePriceText.text = "$$serviceFee"
-//                    checkoutFragServiceFeePriceText.visibility = View.VISIBLE
-//                    checkoutFragServiceFeePriceFree.visibility = View.GONE
-//                } else {
-//                    checkoutFragServiceFeePriceText.visibility = View.GONE
-//                    checkoutFragServiceFeePriceFree.visibility = View.VISIBLE
-//                }
-//            }
-            deliveryFee?.let {
-                if (deliveryFee > 0.0) {
-                    checkoutFragDeliveryFeePriceText.text = "$$deliveryFee"
-                    checkoutFragDeliveryFeePriceText.visibility = View.VISIBLE
-                    checkoutFragDeliveryFeePriceFree.visibility = View.GONE
-                } else {
-                    checkoutFragDeliveryFeePriceText.visibility = View.GONE
-                    checkoutFragDeliveryFeePriceFree.visibility = View.VISIBLE
-                }
+            var feeAndTax = 0.0
+            curOrder.serviceFee?.value?.let{
+                feeAndTax += it
             }
+            curOrder.tax?.value?.let{
+                feeAndTax += it
+            }
+            val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
+            checkoutFragFees.setValue("$$feeAndTaxStr")
+
+
+            checkoutFragDeliveryFee.setValue("$$deliveryFee")
+
 
             val allDishSubTotal = curOrder.subtotal?.value
             val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
-            checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
-            checkoutFragTotalPriceText.text = curOrder.totalBeforeTip?.formatedValue ?: ""
+            checkoutFragSubtotal.setValue("$$allDishSubTotalStr")
+            checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
+            checkoutFragTotal.setValue(curOrder.total?.formatedValue ?: "N/A")
         }
 
     }

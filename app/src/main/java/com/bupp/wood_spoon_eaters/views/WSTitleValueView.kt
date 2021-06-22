@@ -41,10 +41,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val attr = context.obtainStyledAttributes(attrs, R.styleable.WSTitleValueView)
 
                 val title = attr.getString(R.styleable.WSTitleValueView_title)
-                titleValueViewTitle.text = title
+                setTitle(title)
 
                 val value = attr.getString(R.styleable.WSTitleValueView_subTitle)
-                titleValueViewValue.text = value
+                setValue(value)
 
                 val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
                 if(toolTip != 0){
@@ -57,8 +57,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setValue(value: String) {
-        binding.titleValueViewValue.text = value
+    fun setValue(value: String?) {
+        value?.let{
+            binding.titleValueViewValue.text = it
+        }
+    }
+
+    fun setTitle(title: String?) {
+        title?.let{
+            binding.titleValueViewTitle.text = it
+        }
     }
 
 }

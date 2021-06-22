@@ -65,7 +65,7 @@ class ReportIssueFragment(val orderId: Long) : Fragment(R.layout.report_issue_fr
 
     private fun sendReport() {
         binding.reportIssuePb.show()
-        val reports = Reports(adapter.getReportsRequestArray()!!)
+        val reports = Reports(adapter.getReportsRequestArray())
         viewModel.postReport(orderId, reports)
     }
 

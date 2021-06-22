@@ -54,21 +54,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
-//    fun sendAddToCart(orderId: Long?) {
-//        if(shouldFireEvent) {
-//            orderId?.let {
-//                if (isFirstPurchase) {
-//                    Log.d(TAG, "sendAddToCart")
-//                    val bundle = Bundle()
-//                    bundle.putString("OrderId", orderId.toString())
-//
-//                    val logger = AppEventsLogger.newLogger(context)
-//                    logger.logEvent(Constants.EVENT_ADD_DISH, bundle)
-//                    isFirstPurchase = false
-//                }
-//            }
-//        }
-//    }
 
     fun sendPurchaseEvent(orderId: Long?, purchaseCost: Double) {
         if(shouldFireEvent){
