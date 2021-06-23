@@ -1,85 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainLayout"
-            app:layout_constraintBottom_toBottomOf="parent"
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/freeTextBottomSheetHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15.4dp"
-            android:background="@drawable/top_cornered_bkg"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            android:layout_marginTop="7.7dp"
+            app:isWithSep="true"
+            app:title="Terms of use"
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
-        <TextView
-                android:id="@+id/campaignBSTitle"
-                style="@style/LatoBlack15Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
-                android:gravity="center_horizontal"
-                android:letterSpacing="0.03"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text=" Enjoy 30% off your first order" />
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle_50" />
 
-        <TextView
-                android:id="@+id/campaignBSSubTitle"
-                style="@style/LatoReg13Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15.4dp"
-                android:gravity="center_horizontal"
-                android:letterSpacing="0.03"
-                android:lineSpacingExtra="6.7sp"
-                android:paddingHorizontal="47dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/campaignBSTitle"
-                tools:text="You got 30% off your first order with WoodSpoon, Enjoy!" />
 
-        <TextView
-                android:visibility="gone"
-                android:id="@+id/campaignBSDetails"
-                style="@style/LatoBold11Teal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:background="@drawable/teal_10_cornered_rect"
-                android:gravity="center_horizontal"
-                android:letterSpacing="0.03"
-                android:lineSpacingExtra="8.6sp"
-                android:padding="7.7dp"
-                android:text="More details"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/campaignBSSubTitle" />
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                android:id="@+id/campaignBSBtn"
+        <FrameLayout
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginVertical="23dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:padding="7.7dp"
-                app:layout_constraintTop_toBottomOf="@+id/campaignBSDetails"
-                app:title="Great, thanks!" />
+                android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                    android:id="@+id/freeTextBottomSheet"
+                    style="@style/LatoReg13Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="6.7sp"
+                    tools:text="trilili tralala trilili tralala trilili tralala trilili tralala trilili tralala trilili tralala trilili tralala trilili tralala trilili tralala "/>
 
-    <com.bupp.wood_spoon_eaters.views.UserImageView
-            app:layout_constraintBottom_toTopOf="@+id/mainLayout"
-            app:layout_constraintTop_toTopOf="@+id/mainLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:imageSize="BIG"
-            app:isWithShadow="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+
+
+
+

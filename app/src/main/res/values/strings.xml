@@ -145,5 +145,6 @@
     <string name="rate_popup_ok">Rate it now</string>
     <string name="rate_popup_later">Remind me later</string>
     <string name="rate_popup_no">No, thanks</string>
+    <string name="campaign_full_details_title">Terms of use</string>
 
 </resources>

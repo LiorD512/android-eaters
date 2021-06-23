@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet
 
+import FreeTextBottomSheet
 import android.app.Dialog
 import android.content.Context
 import android.content.res.Configuration
@@ -12,6 +13,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CampaignBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
@@ -28,7 +30,8 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     private var campaignData: CampaignData? = null
 
     var listener: CampaignBottomSheetListener? = null
-    interface CampaignBottomSheetListener{
+
+    interface CampaignBottomSheetListener {
         fun handleCampaignAction(campaign: Campaign)
     }
 
@@ -42,6 +45,7 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
 
     companion object {
         const val CAMPAIGN_ARGS = "CampaignBottomSheetArgs"
+
         @JvmStatic
         fun newInstance(campaignData: CampaignData) =
             CampaignBottomSheet().apply {
@@ -64,26 +68,26 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun initUi() {
-        with(binding!!){
+        with(binding!!) {
             campaignBSBtn.setOnClickListener {
-                campaignData?.let{
+                campaignData?.let {
                     listener?.handleCampaignAction(it.campaign)
                     dismiss()
                 }
             }
 
-            campaignData?.campaign?.let{
+            campaignData?.campaign?.let {
                 campaignBSTitle.text = it.header
                 campaignBSSubTitle.text = it.bodyText1
                 campaignBSBtn.setBtnText(it.buttonText)
             }
 
-            campaignData?.campaign?.termsAndConditions?.let{
+            campaignData?.campaign?.termsAndConditions?.let { campaignConditions ->
                 campaignBSDetails.visibility = View.VISIBLE
                 campaignBSDetails.setOnClickListener {
-
-                    }
+                    FreeTextBottomSheet.newInstance(getString(R.string.campaign_full_details_title), campaignConditions).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
                 }
+            }
         }
     }
 
@@ -91,11 +95,9 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
         super.onAttach(context)
         if (context is CampaignBottomSheetListener) {
             listener = context
-        }
-        else if (parentFragment is CampaignBottomSheetListener){
+        } else if (parentFragment is CampaignBottomSheetListener) {
             this.listener = parentFragment as CampaignBottomSheetListener
-        }
-        else {
+        } else {
             throw RuntimeException("$context must implement CampaignBottomSheetListener")
         }
     }
@@ -104,7 +106,6 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
         super.onDetach()
         listener = null
     }
-
 
 
 }
