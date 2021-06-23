@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet
+package com.bupp.wood_spoon_eaters.bottom_sheets.free_text_bottom_sheet
 
 import android.app.Dialog
 import android.content.Context
@@ -22,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CampaignBottomSheet() : BottomSheetDialogFragment() {
+class FreeTextBottomSheet() : BottomSheetDialogFragment() {
 
     private var binding: CampaignBottomSheetBinding? = null
     private var campaignData: CampaignData? = null
@@ -44,7 +44,7 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
         const val CAMPAIGN_ARGS = "CampaignBottomSheetArgs"
         @JvmStatic
         fun newInstance(campaignData: CampaignData) =
-            CampaignBottomSheet().apply {
+            FreeTextBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(CAMPAIGN_ARGS, campaignData)
                 }

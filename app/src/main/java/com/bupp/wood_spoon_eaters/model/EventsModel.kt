@@ -35,7 +35,6 @@ data class Campaign(
     @Json(name = "photo_small") val photoSmall: String?,
     @Json(name = "photo_large") val photoLarge: String?,
     @Json(name = "body_text1") val bodyText1: String?,
-    @Json(name = "body_text2") val bodyText2: String?,
     @Json(name = "button_text") val buttonText: String?,
     @Json(name = "button_action") val buttonAction: CampaignButtonAction?,
     @Json(name = "share_text") val shareText: String?,
