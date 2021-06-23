@@ -175,21 +175,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
                     4 -> {binding.trackOrderProgressCb4.setTypeface(typeface)}
                 }
 
-                val today = Calendar.getInstance()
-                today.time = Date()
-
-                if(order.estDeliveryTime != null){
-                    val deliveryTime = Calendar.getInstance()
-                    deliveryTime.time = order.estDeliveryTime
-
-                    if (DateUtils.isSameDay(today, deliveryTime)) {
-                        binding.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateHalfHourInterval(order.estDeliveryTime)}"
-                    } else {
-                        binding.trackOrderProgressArrivalTime.text = "Estimated arrival - ${DateUtils.parseDateToDayDateAndTime(order.estDeliveryTime)}"
-                    }
-                }else{
-                    binding.trackOrderProgressArrivalTime.text = "${order.estDeliveryTimeText}"
-                }
+                binding.trackOrderProgressArrivalTime.text = "Estimated arrival - ${order.etaToDisplay}"
 
                 binding.trackOrderBottomContactUsBtn.setOnClickListener {
                     listener.onContactUsClick(order)
