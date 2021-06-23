@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
@@ -33,9 +34,9 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
 
     var listener: SingleOrderDetailsListener? = null
     interface SingleOrderDetailsListener{
-        fun onOrderAgainClick(orderId: Long)
-        fun onRateOrderClick(orderId: Long)
-        fun onReportOrderClick(orderId: Long)
+        fun onOrderAgainClick(orderId: Long){}
+        fun onRateOrderClick(orderId: Long){}
+        fun onReportOrderClick(orderId: Long){}
     }
 
     companion object {
@@ -101,8 +102,9 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
                 dismiss()
             }
             singleOrderDetailsReport.setOnClickListener {
-                listener?.onReportOrderClick(curOrderId)
-                dismiss()
+//                listener?.onReportOrderClick(curOrderId)
+                ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
+//                dismiss()
             }
         }
     }

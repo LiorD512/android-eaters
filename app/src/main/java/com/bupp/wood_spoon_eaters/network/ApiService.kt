@@ -218,7 +218,7 @@ interface ApiService {
 
     //Post Report
     @POST("eaters/me/orders/{order_id}/reports")
-    fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): Call<ServerResponse<Any>>
+    suspend fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): ServerResponse<Any>
 
     //Post Review
     @POST("eaters/me/orders/{order_id}/reviews")

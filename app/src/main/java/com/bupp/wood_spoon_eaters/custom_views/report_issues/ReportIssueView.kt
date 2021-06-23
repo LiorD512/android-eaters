@@ -16,11 +16,13 @@ import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.databinding.ReportIssueViewBinding
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.ReportTopic
+import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 
 
 class ReportIssueView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr), CompoundButton.OnCheckedChangeListener, InputTitleView.InputTitleViewListener {
+    LinearLayout(context, attrs, defStyleAttr), CompoundButton.OnCheckedChangeListener, InputTitleView.InputTitleViewListener,
+    WSCounterEditText.WSCounterListener {
 
     private var binding: ReportIssueViewBinding = ReportIssueViewBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -61,7 +63,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 reportIssueRadioGroup.addView(sep)
             }
 
-            reportIssueNotes.setInputTitleViewListener(this@ReportIssueView)
+            reportIssueNotes.setWSCounterListener(this@ReportIssueView)
         }
     }
 
@@ -76,38 +78,33 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         if(isChecked){
             issueId = buttonView!!.id.toLong()
             listener?.onReportIssueChange(reportRequest)
+
+            if(buttonView.text == "something else..."){
+                binding.reportIssueNotes.visibility = View.VISIBLE
+                binding.reportIssueNotes.requestFocus()
+            }else{
+                binding.reportIssueNotes.visibility = View.GONE
+            }
         }
     }
 
-    private var firstName: String? = null
-    private var lastName: String? = null
-    var name: String
-        get() = firstName + " " + lastName
-        set(value) {
-            val nameArray = value.split(" ".toRegex())
-            firstName = nameArray[0]
-            lastName = nameArray[1]
-        }
+//    private var firstName: String? = null
+//    private var lastName: String? = null
+//    var name: String
+//        get() = "$firstName $lastName"
+//        set(value) {
+//            val nameArray = value.split(" ".toRegex())
+//            firstName = nameArray[0]
+//            lastName = nameArray[1]
+//        }
 
 
     private var topicId: Long? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
     private var issueId: Long? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
     private var body: String? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
-    val reportRequest: ReportRequest
+    private val reportRequest: ReportRequest
         get() = ReportRequest(topicId, issueId, body)
 }

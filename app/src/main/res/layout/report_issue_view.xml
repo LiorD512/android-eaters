@@ -25,12 +25,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+    <com.bupp.wood_spoon_eaters.views.WSCounterEditText
+            android:visibility="gone"
             android:id="@+id/reportIssueNotes"
-            app:lines="4"
-            app:inputType="LONG_TEXT"
-            app:title=""
-            app:hint="Something else…"
+            app:maxLines="6"
+            app:hint="Describe your issue here…"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

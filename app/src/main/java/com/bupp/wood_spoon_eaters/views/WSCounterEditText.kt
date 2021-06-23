@@ -44,6 +44,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         attrs?.let {
 
             with(binding) {
+                val face = ResourcesCompat.getFont(context, R.font.lato_italic)
+                counterEditTextInput.typeface = face
+
                 val attr = context.obtainStyledAttributes(attrs, R.styleable.WSCounterEditText)
 
                 val hint = attr.getString(R.styleable.WSCounterEditText_hint)

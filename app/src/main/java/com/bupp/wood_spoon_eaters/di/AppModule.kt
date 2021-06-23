@@ -24,7 +24,7 @@ import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
-import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel

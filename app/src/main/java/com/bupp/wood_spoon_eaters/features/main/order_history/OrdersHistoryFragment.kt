@@ -49,7 +49,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
             ordersHistoryFragRecyclerView.addItemDecoration(decoration)
 
-            viewModel.getOrdersEvent.observe(this@OrdersHistoryFragment, Observer { event ->
+            viewModel.getOrdersEvent.observe(this@OrdersHistoryFragment, { event ->
                 if(event != null){
                     if(event.isSuccess){
                         initList(event.orderHistory!!)
