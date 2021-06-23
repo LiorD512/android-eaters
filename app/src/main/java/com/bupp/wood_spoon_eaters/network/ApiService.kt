@@ -222,7 +222,7 @@ interface ApiService {
 
     //Post Review
     @POST("eaters/me/orders/{order_id}/reviews")
-    fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): Call<ServerResponse<Any>>
+    suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
 
     @GET("eaters/me/events/{event_id}")
     fun getEventById(@Path(value = "event_id", encoded = true) eventId: String): Call<ServerResponse<Event>>

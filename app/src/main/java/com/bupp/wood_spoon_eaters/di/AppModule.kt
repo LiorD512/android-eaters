@@ -115,7 +115,7 @@ val appModule = module {
     viewModel { FeedViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
-    viewModel { RateLastOrderViewModel(get(),get()) }
+    viewModel { RateLastOrderViewModel(get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
 

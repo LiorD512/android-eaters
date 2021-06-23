@@ -201,6 +201,7 @@ class Constants {
         const val WRONG_ADDRESS_DIALOG = "wrong_address_dialog"
         const val SUPER_USER_DIALOG = "super_user_dialog"
         const val MEDIA_CHOOSER_DIALOG = "media_chooser_dialog"
+        const val TITLE_BODY_DIALOG = "title_body_dialog"
 
         //start new cart dialog
         const val START_NEW_CART_IN_CART_COOK_NAME_ARG = "in_cart_cook_name"

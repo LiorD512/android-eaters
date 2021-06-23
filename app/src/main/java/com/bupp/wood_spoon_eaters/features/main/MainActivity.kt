@@ -54,9 +54,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
      TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
-    RateLastOrderDialog.RateDialogListener, ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
-    SingleOrderDetailsBottomSheet.SingleOrderDetailsListener {
+    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
+    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener{
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -232,7 +231,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             triggerEvent?.let {
                 it.shouldRateOrder?.id?.let {
                     Log.d(TAG, "found should rate id !: ${triggerEvent.shouldRateOrder}")
-                    RateLastOrderDialog(it, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+                    RateLastOrderDialog(it).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
                 }
             }
         })
@@ -404,27 +403,27 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun loadReport(orderId: Long) {
-//        loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Report issue")
-    }
-
-    fun loadRateOrder(orderId: Long) {
-        RateLastOrderDialog(orderId, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
-    }
-
-    override fun onRatingDone() {
-//        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
-        if (getFragmentByTag(Constants.ORDER_HISTORY_TAG) != null) {
-            (getFragmentByTag(Constants.ORDER_HISTORY_TAG) as OrdersHistoryFragment).onRatingDone()
-        }
-    }
-
-    fun loadSettingsFragment() {
-
-//        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
-    }
+//    fun loadReport(orderId: Long) {
+////        loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
+////        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Report issue")
+//    }
+//
+//    fun loadRateOrder(orderId: Long) {
+////        RateLastOrderDialog(orderId, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+//    }
+//
+////    override fun onRatingDone() {
+//////        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
+////        if (getFragmentByTag(Constants.ORDER_HISTORY_TAG) != null) {
+////            (getFragmentByTag(Constants.ORDER_HISTORY_TAG) as OrdersHistoryFragment).onRatingDone()
+////        }
+////    }
+//
+//    fun loadSettingsFragment() {
+//
+////        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
+////        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
+//    }
 
     fun loadOrderHistoryFragment() {
         loadFragment(OrdersHistoryFragment.newInstance(), Constants.ORDER_HISTORY_TAG)
@@ -515,7 +514,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onHeaderSettingsClick() {
-        loadSettingsFragment()
+//        loadSettingsFragment()
     }
 
     override fun onHeaderFilterClick() {

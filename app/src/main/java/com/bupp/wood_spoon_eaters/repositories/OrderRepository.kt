@@ -26,6 +26,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         GET_SHIPPING_METHOD_SUCCESS,
         REPORT_ISSUE_FAILED,
         REPORT_ISSUE_SUCCESS,
+        POST_REVIEW_FAILED,
+        POST_REVIEW_SUCCESS,
         POST_ORDER_FAILED,
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
@@ -205,6 +207,31 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                 is ResultHandler.Success -> {
                     MTLogger.c(TAG,"postReportIssue - Success")
                     OrderRepoResult(OrderRepoStatus.REPORT_ISSUE_SUCCESS)
+                }
+                is ResultHandler.WSCustomError -> {
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun postReview(orderId: Long, reviewRequest: ReviewRequest): OrderRepoResult<Order> {
+        val result = withContext(Dispatchers.IO){
+            apiService.postReview(orderId, reviewRequest)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"postReview - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"postReview - GenericError")
+                    OrderRepoResult(OrderRepoStatus.POST_REVIEW_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"postReview - Success")
+                    OrderRepoResult(OrderRepoStatus.POST_REVIEW_SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)

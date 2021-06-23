@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderView.HeaderViewListener,
-    OrdersHistoryAdapter.OrdersHistoryAdapterListener, SingleOrderDetailsBottomSheet.SingleOrderDetailsListener {
+    OrdersHistoryAdapter.OrdersHistoryAdapterListener {
 
     lateinit var binding: FragmentOrdersHistoryBinding
     val viewModel by viewModel<OrdersHistoryViewModel>()
@@ -49,7 +49,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
             ordersHistoryFragRecyclerView.addItemDecoration(decoration)
 
-            viewModel.getOrdersEvent.observe(this@OrdersHistoryFragment, { event ->
+            viewModel.getOrdersEvent.observe(viewLifecycleOwner, { event ->
                 if(event != null){
                     if(event.isSuccess){
                         initList(event.orderHistory!!)
@@ -79,20 +79,5 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         SingleOrderDetailsBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.SINGLE_ORDER_DETAILS_BOTTOM_SHEET)
     }
 
-    fun onRatingDone() {
-        initUi()
-    }
-
-    override fun onOrderAgainClick(orderId: Long) {
-        Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onRateOrderClick(orderId: Long) {
-        (activity as MainActivity).loadRateOrder(orderId)
-    }
-
-    override fun onReportOrderClick(orderId: Long) {
-        (activity as MainActivity).loadReport(orderId)
-    }
 
 }

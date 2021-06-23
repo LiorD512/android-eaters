@@ -2,42 +2,37 @@ package com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
-import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
-import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
+import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
-class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
+class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(){
 
     private lateinit var binding: SingleOrderDetailsBottomSheetBinding
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
     private var curOrderId: Long = -1
 
-    var listener: SingleOrderDetailsListener? = null
-    interface SingleOrderDetailsListener{
-        fun onOrderAgainClick(orderId: Long){}
-        fun onRateOrderClick(orderId: Long){}
-        fun onReportOrderClick(orderId: Long){}
-    }
+//    var listener: SingleOrderDetailsListener? = null
+//    interface SingleOrderDetailsListener{
+//        fun onOrderAgainClick(orderId: Long){}
+//        fun onRateOrderClick(orderId: Long){}
+//        fun onReportOrderClick(orderId: Long){}
+//    }
 
     companion object {
         private const val SINGLE_ORDER_ARGS = "single_order_args"
@@ -94,17 +89,13 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
     private fun initUI() {
         with(binding) {
             singleOrderDetailsOrderAgain.setOnClickListener {
-                listener?.onOrderAgainClick(curOrderId)
-                dismiss()
+                Toast.makeText(requireContext(), "Coming soon..", Toast.LENGTH_SHORT).show()
             }
             singleOrderDetailsRate.setOnClickListener {
-                listener?.onRateOrderClick(curOrderId)
-                dismiss()
+                RateLastOrderDialog(curOrderId).show(childFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
             }
             singleOrderDetailsReport.setOnClickListener {
-//                listener?.onReportOrderClick(curOrderId)
                 ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
-//                dismiss()
             }
         }
     }
@@ -161,6 +152,12 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
                 singleOrderDetailsSubtotal.setValue("$$allDishSubTotalStr")
                 singleOrderDetailsTotalBeforeTip.setValue(totalBeforeTip?.formatedValue ?: "")
                 singleOrderDetailsTotal2.setValue(total?.formatedValue ?: "N/A")
+
+                if(wasRated == true){
+                    singleOrderDetailsRate.setBtnEnabled(false)
+                    singleOrderDetailsRate.setOnClickListener(null)
+
+                }
             }
         }
     }
@@ -175,23 +172,27 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is SingleOrderDetailsListener) {
-            listener = context
-        }
-        else if (parentFragment is SingleOrderDetailsListener){
-            this.listener = parentFragment as SingleOrderDetailsListener
-        }
-        else {
-            throw RuntimeException("$context must implement SingleOrderDetailsListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if (context is SingleOrderDetailsListener) {
+//            listener = context
+//        }
+//        else if (parentFragment is SingleOrderDetailsListener){
+//            this.listener = parentFragment as SingleOrderDetailsListener
+//        }
+//        else {
+//            throw RuntimeException("$context must implement SingleOrderDetailsListener")
+//        }
+//    }
+//
+//    override fun onDetach() {
+//        super.onDetach()
+//        listener = null
+//    }
+//
+//    override fun onRatingDone() {
+//        TitleBodyDialog.newInstance(getString(R.string.thank_you), getString(R.string.rate_order_done_body)).show(childFragmentManager, Constants.TITLE_BODY_DIALOG)
+//    }
 
 
 }

@@ -11,27 +11,28 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
 import com.bupp.wood_spoon_eaters.custom_views.metrics_view.MetricsViewAdapter
 import com.bupp.wood_spoon_eaters.databinding.RateLastOrderDialogBinding
+import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) : DialogFragment(),
-    InputTitleView.InputTitleViewListener, RateLastOrderAdapter.RateOrderAdapterListener,
-    MetricsViewAdapter.MetricsViewAdapterListener, CompoundButton.OnCheckedChangeListener{
+class RateLastOrderDialog(val orderId: Long) : DialogFragment(),
+    RateLastOrderAdapter.RateOrderAdapterListener,
+    MetricsViewAdapter.MetricsViewAdapterListener, CompoundButton.OnCheckedChangeListener, TitleBodyDialog.TitleBodyDialogListener {
 
-    interface RateDialogListener{
-        fun onRatingDone()
-    }
+//    interface RateDialogListener {
+//        fun onRatingDone()
+//    }
 
     private var accuracyRating: Int? = null
     private var deliveryRating: Int? = null
 
-    private var isRated: Boolean = false
     private lateinit var adapter: RateLastOrderAdapter
     val viewModel by viewModel<RateLastOrderViewModel>()
 
@@ -53,11 +54,11 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
         binding = RateLastOrderDialogBinding.bind(view)
         initUi()
+        initObservers()
     }
 
     private fun initUi() {
-        with(binding){
-            rateLastOrderNotes.setInputTitleViewListener(this@RateLastOrderDialog)
+        with(binding) {
             rateLastOrderCloseBtn.setOnClickListener { dismiss() }
             rateLastOrderDoneBtn.setBtnEnabled(false)
 
@@ -70,49 +71,44 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
             rateLastOrderDeliveryNegative.setOnCheckedChangeListener(this@RateLastOrderDialog)
             rateLastOrderDeliveryPositive.setOnCheckedChangeListener(this@RateLastOrderDialog)
 
-            viewModel.getLastOrder.observe(this@RateLastOrderDialog, Observer { orderEvent ->
-                rateLastOrderPb.hide()
-                if (orderEvent.isSuccess) {
-                    handleOrderDetails(orderEvent.order!!)
-                }
-            })
-
-            viewModel.postRating.observe(this@RateLastOrderDialog, Observer { postRatingEvent ->
-                rateLastOrderPb.hide()
-                if (postRatingEvent.isSuccess) {
-                    listener.onRatingDone()
-                    dismiss()
-                }
-            })
-
-            rateLastOrderPb.show()
             viewModel.getLastOrder(orderId)
         }
     }
 
+    private fun initObservers() {
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            if (it) {
+                binding.rateLastOrderPb.show()
+            } else {
+                binding.rateLastOrderPb.hide()
+            }
+        })
+        viewModel.getLastOrder.observe(viewLifecycleOwner, { order ->
+            handleOrderDetails(order)
+        })
+
+        viewModel.postRating.observe(viewLifecycleOwner, {
+            TitleBodyDialog.newInstance(getString(R.string.thank_you), getString(R.string.rate_order_done_body)).show(childFragmentManager, Constants.TITLE_BODY_DIALOG)
+        })
+    }
+
     private fun handleOrderDetails(order: Order) {
-        with(binding){
+        with(binding) {
             rateLastOrderDishesRecyclerView.layoutManager = LinearLayoutManager(context)
             adapter = RateLastOrderAdapter(requireContext(), order.orderItems, this@RateLastOrderDialog)
             rateLastOrderDishesRecyclerView.adapter = adapter
 
 
-            rateLastOrderUserImage.setImage(order.cook!!.thumbnail!!)
+            rateLastOrderUserImage.setImage(order.cook!!.thumbnail)
             rateLastOrderUserName.text = "Made by ${order.cook!!.getFullName()}"
 
-            rateLastOrderNotes.setInputTitleViewListener(this@RateLastOrderDialog)
         }
 
     }
 
-    override fun onInputTitleChange(str: String?){
-//        if(str != null){
-//            onRate()
-//        }
-    }
 
     override fun onRate() {
-        if(allFieldsRated()){
+        if (allFieldsRated()) {
             binding.rateLastOrderDoneBtn.setBtnEnabled(true)
         }
     }
@@ -122,7 +118,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        when(buttonView?.id){
+        when (buttonView?.id) {
             R.id.rateLastOrderAccuracyNegative ->
                 accuracyRating = 0
             R.id.rateLastOrderAccuracyPositive ->
@@ -148,6 +144,10 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener) :
 
         viewModel.postRating(orderId, reviewRequest)
 
+    }
+
+    override fun onTitleBodyDialogDismiss() {
+        dismiss()
     }
 
 }

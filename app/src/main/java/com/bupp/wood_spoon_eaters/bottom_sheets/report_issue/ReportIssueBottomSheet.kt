@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.databinding.ReportIssueFragmentBinding
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.Reports
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -21,7 +21,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.InputTitleViewListener,
-    ReportIssueAdapter.ReportIssueAdapterListener {
+    ReportIssueAdapter.ReportIssueAdapterListener, TitleBodyDialog.TitleBodyDialogListener {
 
     lateinit var binding: ReportIssueFragmentBinding
     private lateinit var adapter: ReportIssueAdapter
@@ -91,7 +91,7 @@ class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.Inp
     private fun initObservers() {
         viewModel.postReport.observe(viewLifecycleOwner,  { event ->
             if (event.isSuccess) {
-                (activity as MainActivity).onReportIssueDone()
+                TitleBodyDialog.newInstance(getString(R.string.thank_you), getString(R.string.report_issue_done_body)).show(childFragmentManager, Constants.TITLE_BODY_DIALOG)
             }
         })
 
@@ -119,6 +119,10 @@ class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.Inp
     private fun sendReport() {
         val reports = Reports(adapter.getReportsRequestArray())
         viewModel.postReport(reports)
+    }
+
+    override fun onTitleBodyDialogDismiss() {
+        dismiss()
     }
 
 

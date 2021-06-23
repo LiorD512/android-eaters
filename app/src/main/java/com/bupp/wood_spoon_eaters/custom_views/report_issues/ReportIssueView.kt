@@ -88,17 +88,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-//    private var firstName: String? = null
-//    private var lastName: String? = null
-//    var name: String
-//        get() = "$firstName $lastName"
-//        set(value) {
-//            val nameArray = value.split(" ".toRegex())
-//            firstName = nameArray[0]
-//            lastName = nameArray[1]
-//        }
-
-
     private var topicId: Long? = null
 
     private var issueId: Long? = null
