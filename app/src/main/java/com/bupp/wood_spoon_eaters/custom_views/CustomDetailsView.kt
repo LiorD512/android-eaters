@@ -54,7 +54,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_isSelectionGray)) {
                     isGrey = a.getBoolean(R.styleable.CustomDetailsAttrs_isSelectionGray, false)
                     if (isGrey) {
-                        customDetailsViewTSubtitle.setTextColor(ContextCompat.getColor(context, R.color.dark_50))
+                        customDetailsViewSubtitle.setTextColor(ContextCompat.getColor(context, R.color.dark_50))
                     }
                 }
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_btnTitle)) {
@@ -120,7 +120,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_time)
                     customDetailsViewTitle.text = "Nationwide delivery time"
-                    customDetailsViewTSubtitle.text = "Select delivery method"
+                    customDetailsViewSubtitle.text = "Select delivery method"
                 }
                 Constants.DELIVERY_DETAILS_TIME -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_time)
@@ -137,7 +137,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 Constants.DELIVERY_DETAILS_PROMO_CODE -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_promo)
                     customDetailsViewTitle.text = "Promo code"
-                    customDetailsViewTSubtitle.text = "Enter a WoodSpoon promo code"
+                    customDetailsViewSubtitle.text = "Enter a WoodSpoon promo code"
                 }
             }
         }
@@ -150,20 +150,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun updateSubTitle(input: String) {
-        binding.customDetailsViewTSubtitle.text = input
+        binding.customDetailsViewSubtitle.text = input
     }
 
     fun updateDeliveryDetails(input: String) {
         binding.customDetailsViewTitle.text = "Delivery Address"
-        binding.customDetailsViewTSubtitle.text = input
+        binding.customDetailsViewSubtitle.text = input
     }
 
     fun updateDeliveryFullDetails(address: Address?) {
         with(binding){
             address?.let {
                 val floor = address.addressSlug
-                customDetailsViewTSubtitle.text = "${it.streetLine1}, #${it.streetLine2}"
-                customDetailsViewTSubtitle.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""}, ${it.zipCode}"
+                customDetailsViewTitle.text = "${it.streetLine1}, #${it.streetLine2}"
+                val city = it.city?.name?.let{"${it},"} ?: ""
+                val state = it.state?.name?.let{"${it},"} ?: ""
+                customDetailsViewSubtitle.text = "$city $state ${it.zipCode ?: ""}"
                 address.notes?.let {
                     customDetailsViewExtraText.text = address.notes
                     customDetailsViewExtraText.visibility = View.VISIBLE

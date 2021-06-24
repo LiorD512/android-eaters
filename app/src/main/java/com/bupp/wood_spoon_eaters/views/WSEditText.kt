@@ -223,6 +223,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             Constants.INPUT_TYPE_FULL_NAME -> {
                 binding.wsEditTextInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
             }
+            Constants.INPUT_TYPE_CAPITAL_TEXT -> {
+                binding.wsEditTextInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            }
             Constants.INPUT_TYPE_TEXT -> {
                 binding.wsEditTextInput.inputType = InputType.TYPE_CLASS_TEXT
             }

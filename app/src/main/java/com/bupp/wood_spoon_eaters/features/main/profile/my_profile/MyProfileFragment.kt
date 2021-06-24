@@ -151,7 +151,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 }
             }
         })
-
+        mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+            binding.myProfileFragAddress.updateDeliveryFullDetails(it.address)
+        })
     }
 
 
@@ -181,8 +183,10 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             myProfileFragLogout.setOnClickListener {
                 LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
             }
-
-
+            myProfileFragAddress.setDeliveryDetailsViewListener(this@MyProfileFragment)
+            myProfileFragPayment.setDeliveryDetailsViewListener(this@MyProfileFragment)
+            myProfileFragAddress.setChangeable(true)
+            myProfileFragPayment.setChangeable(true)
 
         }
     }
@@ -217,8 +221,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     override fun onCustomDetailsClick(type: Int) {
         when (type) {
-            Constants.DELIVERY_DETAILS_LOCATION_PROFILE -> {
-                //todo: check this
+            Constants.DELIVERY_DETAILS_LOCATION -> {
+                mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
             }
 
             Constants.DELIVERY_DETAILS_PAYMENT -> {
@@ -241,15 +245,13 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         val card = paymentMethod.card
         if(card != null){
             Log.d("wowMyProfile","updateCustomerPaymentMethod: ${paymentMethod.id}")
-            binding.myProfileFragPayment.updateDeliveryDetails("Selected Card: (${card.brand} ${card.last4})")
-            binding.myProfileFragPayment.setChangeable(true)
+            binding.myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
             viewModel.updateUserCustomerCard(paymentMethod)
         }
     }
 
     private fun setEmptyPaymentMethod() {
         binding.myProfileFragPayment.updateDeliveryDetails("Insert payment method")
-        binding.myProfileFragPayment.setChangeable(true)
     }
 
     fun onAddressChooserSelected() {
@@ -259,7 +261,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onWorldwideInfoClick() {
         NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
     }
-
 
     companion object {
         fun newInstance() = MyProfileFragment()

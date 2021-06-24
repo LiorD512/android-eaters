@@ -207,14 +207,14 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             binding.mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
         })
 
-        viewModel.dishClickEvent.observe(this, Observer {
+        viewModel.dishClickEvent.observe(this, {
             val event = it.getContentIfNotHandled()
             event?.let {
                 afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_MENU_ITEM_ID, event))
             }
         })
 
-        viewModel.addressUpdateEvent.observe(this, Observer { newAddressEvent ->
+        viewModel.addressUpdateEvent.observe(this, { newAddressEvent ->
             if (newAddressEvent != null) {
                 if (newAddressEvent.currentAddress != null) {
                     refreshFeedIfNecessary()
@@ -227,7 +227,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.getTraceableOrder.observe(this, { traceableOrders ->
             viewModel.refreshMainBottomBarUi()
         })
-        viewModel.getTriggers.observe(this, Observer { triggerEvent ->
+        viewModel.getTriggers.observe(this, { triggerEvent ->
             triggerEvent?.let {
                 it.shouldRateOrder?.id?.let {
                     Log.d(TAG, "found should rate id !: ${triggerEvent.shouldRateOrder}")
@@ -236,7 +236,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
 
-        viewModel.getShareCampaignEvent.observe(this, Observer {
+        viewModel.getShareCampaignEvent.observe(this, {
             it?.let {
                 SharingCampaignDialog.newInstance(it).show(supportFragmentManager, Constants.SHARE_CAMPAIGN_DIALOG)
             }

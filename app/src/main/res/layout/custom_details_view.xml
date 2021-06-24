@@ -43,7 +43,7 @@
 
             <TextView
                     android:layout_marginTop="3dp"
-                    android:id="@+id/customDetailsViewTSubtitle"
+                    android:id="@+id/custom_details_view_subtitle"
                     style="@style/LatoReg13MediumGrey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

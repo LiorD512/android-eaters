@@ -21,6 +21,7 @@
         <enum name="INPUT_TYPE_DONE_BTN" value="6" />
         <enum name="INPUT_TYPE_TEXT_WITH_NUMBER" value="7" />
         <enum name="PHONE" value="8" />
+        <enum name="INPUT_TYPE_CAPITAL_TEXT" value="9" />
     </attr>
 
     <attr name="tip_type" format="enum">

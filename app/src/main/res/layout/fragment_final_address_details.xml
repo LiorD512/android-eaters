@@ -99,6 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
+                        app:inputType="INPUT_TYPE_CAPITAL_TEXT"
                         app:error="Please enter your details"
                         app:hint="Details (Apt./ Suite/ Floor)"
                         app:isEditable="true" />
@@ -126,6 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
                             android:layout_weight="1"
+                            app:inputType="INPUT_TYPE_CAPITAL_TEXT"
                             app:hint="State" />
 
                     <com.bupp.wood_spoon_eaters.views.WSEditText
@@ -147,6 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         app:hint="Additional instructions for the courier"
+                        app:inputType="INPUT_TYPE_CAPITAL_TEXT"
                         app:isEditable="true" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
