@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -20,7 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener {
+class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
     private lateinit var binding: SupportCenterBottomSheetBinding
     private val viewModel: SupportViewModel by viewModel()
@@ -66,6 +67,7 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
 
     private fun initUI() {
         with(binding){
+            supportDialogHeader.setHeaderViewListener(this@SupportCenterBottomSheet)
             supportDialogNext.setBtnEnabled(false)
             supportDialogCommentInput.setWSCounterListener(this@SupportCenterBottomSheet)
 
@@ -109,6 +111,10 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
                 supportDialogNext.setBtnEnabled(true)
             }
         }
+    }
+
+    override fun onHeaderBackClick() {
+        dismiss()
     }
 
 

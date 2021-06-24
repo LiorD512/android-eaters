@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SettingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.settings.NotificationsGroupAdapter
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
@@ -15,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener {
+class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener, HeaderView.HeaderViewListener {
 
     private lateinit var binding: SettingsBottomSheetBinding
     private lateinit var adapter: NotificationsGroupAdapter
@@ -42,6 +43,8 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
         parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
 
         Analytics.with(requireContext()).screen("Communication settings")
+
+        binding.settingsFragHeader.setHeaderViewListener(this)
 
         binding.settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setLocationSetting(isChecked)
@@ -80,6 +83,10 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
 
     private fun loadSettings(settings: SettingsViewModel.SettingsDetails) {
         binding.settingsFragLocationSwitch.isChecked = settings.enableUserLocation
+    }
+
+    override fun onHeaderBackClick() {
+        dismiss()
     }
 
 
