@@ -67,7 +67,7 @@ val appModule = module {
 
     //managers
     single { DeliveryTimeManager() }
-    single { PaymentManager(get()) }
+    single { PaymentManager(get(), get()) }
     single { MediaUploadManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }

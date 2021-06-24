@@ -127,6 +127,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
         binding.checkoutFragHeaderView.setHeaderViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
         with(binding) {
 
             checkoutFragPromoCode.setOnClickListener {
@@ -170,12 +171,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-    private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
-        if (paymentMethods.isNullOrEmpty()) {
-            setEmptyPaymentMethod()
+    private fun handleCustomerCards(paymentMethods: PaymentMethod?) {
+        if (paymentMethods != null) {
+            updateCustomerPaymentMethod(paymentMethods)
         } else {
-            val defaultPayment = paymentMethods[0]
-            updateCustomerPaymentMethod(defaultPayment)
+            setEmptyPaymentMethod()
         }
     }
 
@@ -324,7 +324,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
             Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
                 viewModel.onNationwideShippingSelectClick()
-
             }
         }
     }

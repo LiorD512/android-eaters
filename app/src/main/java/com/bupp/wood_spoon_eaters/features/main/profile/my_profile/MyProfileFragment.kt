@@ -231,11 +231,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         }
     }
 
-    private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
-        if(!paymentMethods.isNullOrEmpty()){
-            val defaultPayment = paymentMethods[0]
-            updateCustomerPaymentMethod(defaultPayment)
-//            viewModel.attachCardToCustomer(defaultPayment.id!!)
+    private fun handleCustomerCards(paymentMethods: PaymentMethod?) {
+        if(paymentMethods != null){
+            updateCustomerPaymentMethod(paymentMethods)
         }else{
             setEmptyPaymentMethod()
         }

@@ -18,9 +18,11 @@ import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityNewOrderBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
@@ -181,17 +183,6 @@ class NewOrderActivity : BaseActivity(),
         redirectToCheckout()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //change this to ActivityResultStarterCallback when stripe enables.
-        if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
-//            val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
-            Log.d(TAG, "Stripe on activity result")
-            viewModel.refreshPaymentsMethod(this)
-        }
-    }
-
-
     private fun finishNewOrder() {
         viewModel.onNewOrderFinish()
         finish()
@@ -241,6 +232,24 @@ class NewOrderActivity : BaseActivity(),
             NewOrderMainViewModel.NewOrderNavigationEvent.CHECKOUT_TO_ADD_MORE_DISH -> {
                 findNavController(R.id.newOrderContainer).navigateSafe(R.id.action_checkoutFragment_to_newOrderMainFragment)
                 viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCK_SINGLE_DISH_COOK)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                    MTLogger.d(MainActivity.TAG, "Stripe")
+                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+
+                    result?.let {
+                        MTLogger.d(MainActivity.TAG, "payment method success")
+                        viewModel.updatePaymentMethod(result.paymentMethod)
+                    }
+                }
+
             }
         }
     }
