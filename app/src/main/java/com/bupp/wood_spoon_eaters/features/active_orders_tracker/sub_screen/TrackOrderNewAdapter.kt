@@ -166,13 +166,13 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
                 }
 
 
-                val typeface = Typeface.createFromAsset(itemView.context.getAssets(),"font/open_sans_bold.ttf")
+                val typeface = Typeface.createFromAsset(itemView.context.assets,"font/open_sans_bold.ttf")
                 setFontTypeDefault(binding, itemView.context)
                 when(curOrderStage){
-                    1 -> {binding.trackOrderProgressCb1.setTypeface(typeface)}
-                    2 -> {binding.trackOrderProgressCb2.setTypeface(typeface)}
-                    3 -> {binding.trackOrderProgressCb3.setTypeface(typeface)}
-                    4 -> {binding.trackOrderProgressCb4.setTypeface(typeface)}
+                    1 -> { binding.trackOrderProgressCb1.typeface = typeface }
+                    2 -> { binding.trackOrderProgressCb2.typeface = typeface }
+                    3 -> { binding.trackOrderProgressCb3.typeface = typeface }
+                    4 -> { binding.trackOrderProgressCb4.typeface = typeface }
                 }
 
                 binding.trackOrderProgressArrivalTime.text = "Estimated arrival - ${order.etaToDisplay}"
@@ -194,11 +194,11 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     private fun setFontTypeDefault(binding: TrackOrderProgressSectionBinding, context: Context) {
-        val regTypeface = Typeface.createFromAsset(context.getAssets(),"font/open_sans_reg.ttf")
-        binding.trackOrderProgressCb1.setTypeface(regTypeface)
-        binding.trackOrderProgressCb2.setTypeface(regTypeface)
-        binding.trackOrderProgressCb3.setTypeface(regTypeface)
-        binding.trackOrderProgressCb4.setTypeface(regTypeface)
+        val regTypeface = Typeface.createFromAsset(context.assets,"font/open_sans_reg.ttf")
+        binding.trackOrderProgressCb1.typeface = regTypeface
+        binding.trackOrderProgressCb2.typeface = regTypeface
+        binding.trackOrderProgressCb3.typeface = regTypeface
+        binding.trackOrderProgressCb4.typeface = regTypeface
     }
 
     class AdditionalDishesDiffCallback : DiffUtil.ItemCallback<TrackOrderData<Any>>() {
