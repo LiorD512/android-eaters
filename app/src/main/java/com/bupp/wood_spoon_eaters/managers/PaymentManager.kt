@@ -114,6 +114,10 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
         }
     }
 
+    fun updateSelectedPaymentMethod(paymentMethod: PaymentMethod) {
+        payments.value = listOf(paymentMethod)
+    }
+
     companion object{
         const val TAG = "wowPaymentManager"
     }

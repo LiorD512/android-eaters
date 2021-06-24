@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrder
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
@@ -45,17 +46,19 @@ import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
 class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
-     TipCourierDialog.TipCourierDialogListener,
+    TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener{
+    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener {
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -76,7 +79,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         Log.d("wowMain", "Activity For Result - new order")
 //        if (result.resultCode == Activity.RESULT_OK) {
 //            val data = result.data
-            //check if has order and refresh ui
+        //check if has order and refresh ui
         viewModel.refreshMainBottomBarUi()
         result.data?.let {
             if (it.getBooleanExtra("isAfterPurchase", false)) {
@@ -128,7 +131,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         loadFeedProgressBarFragment()
         loadFeed()
 
-        Log.d("wowTimeZone","${TimeZone.getDefault().id}")
+        Log.d("wowTimeZone", "${TimeZone.getDefault().id}")
 //        Log.d("wowTimeZone","${TimeZone.getDefault().displayName}")
     }
 
@@ -143,7 +146,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ////////////////////////////////////////////////
 
     private fun initUi() {
-        with(binding){
+        with(binding) {
             mainActHeaderView.setHeaderViewListener(this@MainActivity, viewModel.getCurrentEater())
             mainActOrdersBB.setCartBottomBarListener(this@MainActivity)
         }
@@ -185,7 +188,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ////////////////////////////////////////////////
     ///////        Ui processes - end        ///////
     ////////////////////////////////////////////////
-
 
 
     private fun checkForCampaignReferrals() {
@@ -243,7 +245,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         })
         viewModel.campaignLiveData.observe(this, {
             Log.d(FeedFragment.TAG, "campaign: $it")
-            it?.let{
+            it?.let {
                 handleCampaignData(it)
             }
         })
@@ -255,7 +257,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //        })
 
         viewModel.navigationEvent.observe(this, {
-            when(it){
+            when (it) {
                 MainViewModel.NavigationEventType.OPEN_CAMERA_UTIL_IMAGE -> {
                     mediaUtil.startPhotoFetcher()
                 }
@@ -266,9 +268,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun handleCampaignData(campaignData: CampaignData) {
         val campaign = campaignData.campaign
-        if(campaign.status == UserInteractionStatus.IDLE){
+        if (campaign.status == UserInteractionStatus.IDLE) {
             campaign.viewTypes?.forEach {
-                when(it){
+                when (it) {
                     CampaignViewType.BANNER -> {
                         binding.mainActCampaignBanner.initCampaignHeader(campaignData, this)
                     }
@@ -289,20 +291,19 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {
-        if(bottomBarEvent?.hasBoth == true){
+        if (bottomBarEvent?.hasBoth == true) {
             val totalPrice = bottomBarEvent.totalPrice
             binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT, price = totalPrice)
-        }else{
-            bottomBarEvent?.activeOrders?.let{
+        } else {
+            bottomBarEvent?.activeOrders?.let {
                 binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, itemCount = it.size)
             }
-            if(bottomBarEvent?.hasPendingOrder == true){
+            if (bottomBarEvent?.hasPendingOrder == true) {
                 val totalPrice = bottomBarEvent.totalPrice
                 binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = totalPrice)
             }
         }
     }
-
 
 
     private fun refreshFeedIfNecessary() {
@@ -313,7 +314,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     override fun onCartBottomBarOrdersClick(type: CartBottomBar.BottomBarTypes) {
-        when(type){
+        when (type) {
             CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT -> {
                 //show track your order dialog
                 ActiveOrderTrackerDialog().show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
@@ -363,10 +364,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     //fragment and sub features
 
     private fun handleNavigation(mainNavigationEvent: MainViewModel.MainNavigationEvent) {
-        when(mainNavigationEvent){
-           MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
+        when (mainNavigationEvent) {
+            MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
                 updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
-           }
+            }
             MainViewModel.MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
                 PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
             }
@@ -378,7 +379,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun handleHeaderSep(shouldShow: Boolean) {
         Log.d(TAG, "handleHeaderSep: $shouldShow")
-        binding.headerCard.elevation = if(shouldShow) Utils.toPx(5).toFloat() else 0f
+        binding.headerCard.elevation = if (shouldShow) Utils.toPx(5).toFloat() else 0f
     }
 
     private fun loadFeed() {
@@ -400,6 +401,24 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //        RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         loadFragment(EditMyProfileFragment.newInstance(), Constants.EDIT_MY_PROFILE_TAG)
         binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Hey ${viewModel.getUserName()}!")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                    MTLogger.d(TAG, "Stripe")
+                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+
+                    result?.let {
+                        MTLogger.d(TAG, "payment method success")
+                        viewModel.updatePaymentMethod(result.paymentMethod)
+                    }
+                }
+
+            }
+        }
     }
 
 
@@ -456,14 +475,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    when (requestCode) {
-
-    }
-    when (requestCode) {
-        Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
 //            invokeLocationAction()
-        }
+            }
 //            Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
 //                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
 //                if(grantResults.isNotEmpty()){
@@ -474,18 +490,18 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //                    }
 //                }
 //            }
-        Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {
-            Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // permission was granted, yay!
-                val phone = viewModel.getContactUsPhoneNumber()
-                Utils.callPhone(this, phone)
-            } else {
-                // permission denied, boo! Disable the
-                // functionality
+            Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {
+                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission was granted, yay!
+                    val phone = viewModel.getContactUsPhoneNumber()
+                    Utils.callPhone(this, phone)
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality
+                }
+                return
             }
-            return
-        }
         }
     }
 
@@ -624,7 +640,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         binding.mainActHeaderView.refreshUserUi(viewModel.getCurrentEater())
     }
 
-    companion object{
+    companion object {
         const val TAG = "wowMainAct"
     }
 
@@ -633,7 +649,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onCameraUtilResult(result)
         }
     }
-
 
 
 }

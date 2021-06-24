@@ -232,14 +232,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-//    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
-//        if (isCartEmpty) {
-//            mainViewModel.showClearCartDialog()
-//        } else {
-//            mainViewModel.updateOrderItem(updatedOrderItem)
-//        }
-//    }
-
     @SuppressLint("SetTextI18n")
     private fun updatePriceUi(curOrder: Order) {
         with(binding) {

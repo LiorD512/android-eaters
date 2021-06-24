@@ -13,6 +13,8 @@ import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.stripe.android.model.PaymentMethod
+import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -381,6 +383,12 @@ class MainViewModel(
     fun checkIfHaveReferral() {
         viewModelScope.launch {
             eaterDataManager.validateReferral()
+        }
+    }
+
+    fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
+        paymentMethod?.let{
+            paymentManager.updateSelectedPaymentMethod(it)
         }
     }
 
