@@ -58,6 +58,13 @@ class AdditionalDishesDialog : DialogFragment(R.layout.additional_dishes_dialog)
                 ClearCartDialog(this@AdditionalDishesDialog).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
             }
         })
+        mainViewModel.progressData.observe(viewLifecycleOwner, {
+            if(it){
+                binding.additionalDishDialogPb.show()
+            }else{
+                binding.additionalDishDialogPb.hide()
+            }
+        })
     }
 
     private fun handleData(data: NewOrderMainViewModel.AdditionalDishesEvent) {
