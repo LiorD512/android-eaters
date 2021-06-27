@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
@@ -21,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
-class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(){
+class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener {
 
     private lateinit var binding: SingleOrderDetailsBottomSheetBinding
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
@@ -97,6 +98,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(){
             singleOrderDetailsReport.setOnClickListener {
                 ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
             }
+            singleOrderDetailsHeader.setHeaderViewListener(this@SingleOrderDetailsBottomSheet)
         }
     }
 
@@ -170,6 +172,10 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(){
                 singleOrderDetailsPb.hide()
             }
         }
+    }
+
+    override fun onHeaderBackClick() {
+        dismiss()
     }
 
 //    override fun onAttach(context: Context) {
