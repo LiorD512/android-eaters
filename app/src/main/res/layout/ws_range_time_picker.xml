@@ -21,7 +21,7 @@
                 android:id="@+id/wsRangeTimePickerDateList"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.9" />
+                android:layout_weight="0.8" />
 
         <androidx.recyclerview.widget.RecyclerView
                 android:clipToPadding="false"
@@ -30,7 +30,7 @@
                 android:id="@+id/wsRangeTimePickerHoursList"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.1" />
+                android:layout_weight="1.2" />
 
     </LinearLayout>
 
