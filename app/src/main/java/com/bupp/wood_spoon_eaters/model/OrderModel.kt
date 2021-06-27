@@ -53,6 +53,7 @@ data class Order (
     @Json(name = "tip_percentage") val tipPercentage: Int?,
     @Json(name = "notes") val notes: String?,
     @Json(name = "total") val total: Price?,
+    @Json(name = "eta_to_display") val etaToDisplay: String?,
     @Json(name = "total_before_tip") val totalBeforeTip: Price?,
     @Json(name = "cook") val cook: Cook?,
     @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
