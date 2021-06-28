@@ -6,6 +6,14 @@ on: pull_request
 
 
 jobs:
+
+  say_hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Hello ${{ github.event.inputs.name }}!"
+          echo "- in ${{ github.event.inputs.home }}!"
+
   build:
 
     runs-on: ubuntu-latest
@@ -23,3 +31,4 @@ jobs:
 
       - name: Build Project
         run: ./gradlew assemble
+

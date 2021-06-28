@@ -26,7 +26,6 @@ class WSKeyStore {
 
         keyGenerator.init(keyParameterSpec)
         keyGenerator.generateKey()
-
 //        val pair = encryptData("Test this encryption")
 //
 //        val decryptedData = decryptData(pair.first, pair.second)
