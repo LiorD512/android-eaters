@@ -14,7 +14,7 @@ android {
         release {
             keyAlias keystoreProperties['releaseKeyAlias']
             keyPassword keystoreProperties['releaseKeyPassword']
-            storeFile file(rootDir.getCanonicalPath() + '/' + keystoreProperties['releaseKeyStore'])
+            storeFile file(keystoreProperties['releaseKeyStore'])
             storePassword keystoreProperties['releaseStorePassword']
         }
 
