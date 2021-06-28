@@ -7,6 +7,7 @@ import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.segment.analytics.Analytics
@@ -37,6 +38,12 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                 , null
             )
 
+            UXCam.setUserIdentity(user.id.toString())
+            UXCam.setUserProperty("email", user.email ?: "N/A")
+            UXCam.setUserProperty("name", user.getFullName() ?: "N/A")
+            UXCam.setUserProperty("phone",user.phoneNumber ?: "N/A")
+            UXCam.setUserProperty("created_at", DateUtils.parseDateToDate(user.createdAt))
+
             Log.d(TAG, "address: $address")
             address?.let{
                 Analytics.with(context).identify(
@@ -53,22 +60,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             }
         }
     }
-
-//    fun sendAddToCart(orderId: Long?) {
-//        if(shouldFireEvent) {
-//            orderId?.let {
-//                if (isFirstPurchase) {
-//                    Log.d(TAG, "sendAddToCart")
-//                    val bundle = Bundle()
-//                    bundle.putString("OrderId", orderId.toString())
-//
-//                    val logger = AppEventsLogger.newLogger(context)
-//                    logger.logEvent(Constants.EVENT_ADD_DISH, bundle)
-//                    isFirstPurchase = false
-//                }
-//            }
-//        }
-//    }
 
     fun sendPurchaseEvent(orderId: Long?, purchaseCost: Double) {
         if(shouldFireEvent){
@@ -185,10 +176,10 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                 logFBAddToCart(params)
             }
             Constants.EVENT_SEARCHED_ITEM -> {
-                Analytics.with(context).track("search", eventData)
+                Analytics.with(context).track(Constants.EVENT_SEARCH, eventData)
             }
             Constants.EVENT_CREATE_ACCOUNT -> {
-                Analytics.with(context).track("search", eventData)
+                Analytics.with(context).track(Constants.EVENT_CREATE_ACCOUNT, eventData)
                 logFBCreateAccount(params)
             }
             else -> {
@@ -196,7 +187,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             }
         }
     }
-
 
     companion object{
         const val IS_FIRST_PURCHASE = "is_first_purchase"

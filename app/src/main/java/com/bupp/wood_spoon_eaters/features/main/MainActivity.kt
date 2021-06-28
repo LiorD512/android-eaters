@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -48,7 +50,13 @@ import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.PaymentSessionData
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.nio.charset.Charset
+import java.security.KeyStore
 import java.util.*
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
 
 class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
@@ -121,6 +129,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         setContentView(binding.root)
 //        setContentView(R.layout.activity_main)
 
+
         initObservers()
         initUi()
 
@@ -129,6 +138,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         loadFeedProgressBarFragment()
         loadFeed()
     }
+
+
 
     private fun loadFeedProgressBarFragment() {
 //        loadFragment(FeedLoaderFragment(), Constants.FEED_LOADER_TAG)
