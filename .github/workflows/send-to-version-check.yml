@@ -1,0 +1,26 @@
+name: Build, code quality, tests
+
+on: pull_request
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: build release
+      run: ./gradlew assembleRelease
+    - name: App Center
+      uses: wzieba/AppCenter-Github-Action@v1.3.2
+      with:
+        appName: WoodSpoonEaters
+        token: ${{secrets.APP_CENTER_TOKEN}}
+        group: WoodsPoons
+        file: app/build/outputs/apk/release/app-release-unsigned.apk
+        notifyTesters: true
+        debug: true
