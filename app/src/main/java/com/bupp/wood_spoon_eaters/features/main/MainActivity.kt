@@ -129,6 +129,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         setContentView(binding.root)
 //        setContentView(R.layout.activity_main)
 
+
         initObservers()
         initUi()
 
