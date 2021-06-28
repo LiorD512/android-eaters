@@ -140,9 +140,9 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                 menuItemId = it.get("menu_item_id") as String
             }
             if(it.has("referral")){
-                val token = it.get("token") as String
+                val token = it.get("referral_token") as String
 
-                Log.d("wowSplash", "token: $token")
+                Log.d("wowSplash", "referral_token: $token")
                 viewModel.setUserReferralToken(token)
             }
         }

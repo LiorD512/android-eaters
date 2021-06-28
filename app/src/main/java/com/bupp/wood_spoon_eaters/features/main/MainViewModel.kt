@@ -234,26 +234,7 @@ class MainViewModel(
 
     //move to eater data manager
     val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
-    fun checkForShareCampaign() {
-        api.getCurrentShareCampaign().enqueue(object : Callback<ServerResponse<Campaign>> {
-            //check server for active sharing campaign for eater
-            override fun onResponse(call: Call<ServerResponse<Campaign>>, response: Response<ServerResponse<Campaign>>) {
-                if (response.isSuccessful) {
-                    val campaign = response.body()?.data
-                    Log.d("wowMainVM", "getCurrentShareCampaign success: ")
-                    getShareCampaignEvent.postValue(campaign)
-                } else {
-                    Log.d("wowMainVM", "getCurrentShareCampaign fail")
-                    getShareCampaignEvent.postValue(null)
-                }
-            }
 
-            override fun onFailure(call: Call<ServerResponse<Campaign>>, t: Throwable) {
-                Log.d("wowMainVM", "getCurrentShareCampaign big fail")
-                getShareCampaignEvent.postValue(null)
-            }
-        })
-    }
 
 
 //    fun checkForCampaignReferrals() {
