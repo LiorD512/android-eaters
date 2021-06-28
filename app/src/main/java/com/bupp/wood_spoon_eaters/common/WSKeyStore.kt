@@ -19,8 +19,7 @@ class WSKeyStore {
 
     private fun keyStore() {
         val keyGenerator: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KEY_PROVIDER)
-        val keyParameterSpec = KeyGenParameterSpec.Builder(KEY_ALIAS,
-            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+        val keyParameterSpec = KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
             .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .build()
@@ -37,7 +36,7 @@ class WSKeyStore {
 //        Log.d("wowKeyStore","decryptedData: $decryptedData")
     }
 
-    fun getKey(): SecretKey {
+    private fun getKey(): SecretKey {
         val keyStore: KeyStore = KeyStore.getInstance(KEY_PROVIDER)
         keyStore.load(null)
 
