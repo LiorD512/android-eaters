@@ -125,8 +125,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        keyStore()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //        setContentView(R.layout.activity_main)
