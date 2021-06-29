@@ -16,9 +16,9 @@ jobs:
 
 #      - name: Run Tests
 #        run: ./gradlew test
-      -
-      - uses: r0adkll/sign-android-release@v1
-          name: Sign app APK
+
+      - name: Sign app APK
+        uses: r0adkll/sign-android-release@v1
           # ID used to access action output
           id: sign_app
           with:
