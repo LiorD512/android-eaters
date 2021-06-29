@@ -24,7 +24,7 @@ jobs:
     - name: Publish To App Center
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
-        appName: WoodSpoon-Android
+        appName: Monkeytech/WoodSpoon-Android
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
         file:  app/build/outputs/apk/prodFlavor/release/app-prodFlavor-release-unsigned.apk
