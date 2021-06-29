@@ -19,7 +19,7 @@ jobs:
         java-version: 1.8
 
     - name: Building staging version
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleRelease
 
 #    - name: Sign APK
 #        uses: r0adkll/sign-android-release@v1
