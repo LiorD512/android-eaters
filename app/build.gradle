@@ -14,7 +14,7 @@ android {
         release {
             keyAlias keystoreProperties['releaseKeyAlias']
             keyPassword keystoreProperties['releaseKeyPassword']
-            storeFile file(keystoreProperties['releaseKeyStore'])
+            storeFile file('D:/Monkeytech/Keys/WoodSpoon/Eaters/woodSpoonEaters.jks')
             storePassword keystoreProperties['releaseStorePassword']
         }
 
