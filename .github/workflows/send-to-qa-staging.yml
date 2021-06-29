@@ -35,7 +35,7 @@ jobs:
     - name: App Center
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
-        appName: Monkeytech/WoodSpoon_Eaters
+        appName: Monkeytech/WoodSpoon_Chefs #its -> Monkeytech/WoodSpoon_Eaters
         token: '${{ secrets.APP_CENTER_TOKEN_2 }}'
         group: WoodsPoons
         file:  app/build/outputs/apk/prodFlavor/release/app-prodFlavor-release-unsigned.apk
