@@ -1,3 +1,7 @@
+name: Android Build
+
+on: pull_request
+
 jobs:
   build:
     needs: [ unit_tests, android_tests ]
