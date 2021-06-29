@@ -10,16 +10,16 @@ jobs:
       # 1
       - name: Checkout code
         uses: actions/checkout@v2
-      # 2
-      - name: Generate Release APK
-        run: ./gradlew assembleRelease
+#      # 2
+#      - name: Generate Release APK
+#        run: ./gradlew assembleRelease
       # 3
       - name: Sign APK
         uses: r0adkll/sign-android-release@v1
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: app/build/outputs/prodFlavor/release
           signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
           alias: ${{ secrets.GOOGLE_PLAY_ALIAS }}
           keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
