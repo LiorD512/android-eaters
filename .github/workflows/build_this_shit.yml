@@ -19,7 +19,7 @@ jobs:
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: app\build\outputs\apk\prodFlavor\release
+          releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
           alias: ${{ secrets.GOOGLE_PLAY_ALIAS }}
           keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
