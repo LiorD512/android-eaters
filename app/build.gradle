@@ -10,15 +10,15 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['releaseKeyAlias']
-            keyPassword keystoreProperties['releaseKeyPassword']
-            storeFile ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
-            storePassword keystoreProperties['releaseStorePassword']
-        }
-
-    }
+//    signingConfigs {
+//        release {
+//            keyAlias keystoreProperties['releaseKeyAlias']
+//            keyPassword keystoreProperties['releaseKeyPassword']
+//            storeFile file(keystoreProperties['releaseKeyStore'])
+//            storePassword keystoreProperties['releaseStorePassword']
+//        }
+//
+//    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 23
@@ -39,7 +39,7 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
         debug {
             debuggable true
