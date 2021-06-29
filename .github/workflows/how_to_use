@@ -1,0 +1,7 @@
+to send version to qa (staging version)
+
+git add .
+git commit -am "msg"
+git tag -a sendToQa-staging -m "tag msg" / git tag -a sendToQa-prod -m "tag msg" / git tag -a sendToQa-prod-signed -m "tag msg"
+git push --tags origin master
+
