@@ -1,8 +1,8 @@
 to send version to qa (staging version)
 
 git add .
-git commit -am "msg"
-git tag -a v2.2.0 -m "my tag msg"
+git commit -am "commit msg"
+git tag -a v2.2.0 -m "tag msg"
 git push --tags origin master
 
 

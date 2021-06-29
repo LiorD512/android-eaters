@@ -21,23 +21,12 @@ jobs:
     - name: Building staging version
       run: ./gradlew assembleRelease
 
-#    - name: Sign APK
-#        uses: r0adkll/sign-android-release@v1
-#        # ID used to access action output
-#        id: sign_app
-#        with:
-#          releaseDirectory: app/build/outputs/apk/prodFlavor/release/
-#          signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
-#          alias: ${{ secrets.GOOGLE_PLAY_ALIAS }}
-#          keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
-#          keyPassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
-
-    - name: App Center
+    - name: Publish To App Center
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
-        appName: Monkeytech/WoodSpoon_Chefs #its -> Monkeytech/WoodSpoon_Eaters
-        token: '${{ secrets.APP_CENTER_TOKEN_2 }}'
-        group: WoodsPoons
+        appName: WoodSpoon-Android
+        token: ${{ secrets.APP_CENTER_TOKEN }}
+        group: WoodSpoon Android Testers
         file:  app/build/outputs/apk/prodFlavor/release/app-prodFlavor-release-unsigned.apk
         notifyTesters: true
         debug: true
