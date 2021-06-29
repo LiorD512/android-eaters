@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   build:
-    needs: [ unit_tests, android_tests ]
+#    needs: [ unit_tests, android_tests ]
     runs-on: ubuntu-latest
     steps:
       # 1
