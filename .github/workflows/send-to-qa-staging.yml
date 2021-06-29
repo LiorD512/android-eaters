@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: build staging
+    - name: Building staging version
       run: ./gradlew assembleDebug
 
 #    - name: Sign APK
@@ -36,6 +36,6 @@ jobs:
         appName: Monkeytech/WoodSpoon_Eaters
         token: ${{secrets.APP_CENTER_TOKEN}}
         group: WoodsPoons
-        file:  app/build/outputs/apk/stagingFlavor/release/app-stagingFlavor-release-unsigned.apk
+        file:  app/build/outputs/apk/release/app-release-unsigned.apk
         notifyTesters: true
         debug: true
