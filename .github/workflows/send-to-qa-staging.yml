@@ -36,7 +36,7 @@ jobs:
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
         appName: Monkeytech/WoodSpoon_Eaters
-        token: 'e02db2f2889f974116de1671b06e684f472ced65'
+        token: '${{ secrets.APP_CENTER_TOKEN_2 }}'
         group: WoodsPoons
         file:  app/build/outputs/apk/prodFlavor/release/app-prodFlavor-release-unsigned.apk
         notifyTesters: true
