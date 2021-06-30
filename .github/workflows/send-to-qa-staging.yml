@@ -26,11 +26,11 @@ jobs:
       run: echo ::set-output name=tag::${ GITHUB_REF#refs/*/ }
 
     - name: Set output - commit
-      id: vars
+      id: vars2
       run: echo ::set-output name=commit::${{ github.event.head_commit.message }}}
 
     - name: Set output - event
-      id: vars
+      id: vars3
       run: echo ::set-output name=event::${{toJSON(github.event)}}
 
     - name: Check output
@@ -39,8 +39,8 @@ jobs:
       run: |
         echo $RELEASE_VERSION
         echo ${{ steps.vars.outputs.tag }}
-        echo ${{ steps.vars.outputs.commit }}
-        echo ${{ steps.vars.outputs.event }}
+        echo ${{ steps.vars2.outputs.commit }}
+        echo ${{ steps.vars3.outputs.event }}
 
 #    - name: Publish To App Center
 #      uses: wzieba/AppCenter-Github-Action@v1.3.2
