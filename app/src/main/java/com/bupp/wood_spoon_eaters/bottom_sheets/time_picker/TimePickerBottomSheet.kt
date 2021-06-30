@@ -34,7 +34,7 @@ class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FloatingBottomSheetStyle)
     }
 
 

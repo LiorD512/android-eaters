@@ -26,6 +26,7 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragmentDirections
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
@@ -201,10 +202,6 @@ class NewOrderActivity : BaseActivity(),
         }
     }
 
-    private fun finishNewOrder() {
-        viewModel.onNewOrderFinish()
-        finish()
-    }
 
     //Address Missing Dialog interface
     override fun openUpdateAddress() {
@@ -223,6 +220,7 @@ class NewOrderActivity : BaseActivity(),
             NewOrderMainViewModel.NewOrderNavigationEvent.REDIRECT_TO_SELECT_PROMO_CODE -> {
                 val promoCodeBottomSheet = PromoCodeBottomSheet()
                 promoCodeBottomSheet.show(supportFragmentManager, Constants.COUNTRY_CODE_BOTTOM_SHEET)
+//                binding.singleDishStatusBar.hide()
 //                val action = CheckoutFragmentDirections.actionCheckoutFragmentToPromoCodeFragment()
 //                findNavController(R.id.newOrderContainer).navigate(action)
             }
@@ -249,19 +247,25 @@ class NewOrderActivity : BaseActivity(),
     private fun handleBackPressed(force: Boolean = false) {
         if (force) {
             onBackPressed()
-        } else {
-            viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.BACK_PRESS)
         }
+//        else {
+//            viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.BACK_PRESS)
+//        }
     }
 
     override fun onBackPressed() {
         if (viewModel.isCheckout) {
-            viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
+            finishNewOrder()
+//            viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
         } else {
             super.onBackPressed()
         }
     }
 
+    private fun finishNewOrder() {
+        viewModel.onNewOrderFinish()
+        finish()
+    }
 
 
 
