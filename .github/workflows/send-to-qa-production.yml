@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.APP_CENTER_TOKEN }}
           group: WoodSpoon Android Testers
           file:  app/build/outputs/apk/prodFlavor/release/app-prodFlavor-release-unsigned.apk
-          releaseNotes: 'Production version'
+          releaseNotes: Production version
           notifyTesters: true
           debug: true
 
@@ -37,5 +37,5 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: androidRulez
-          SLACK_TITLE: 'New version is out! - PRODUCTION'
-          SLACK_MESSAGE: 'Check out this new version'
+          SLACK_TITLE: New version is out! - PRODUCTION
+          SLACK_MESSAGE: Check out this new version

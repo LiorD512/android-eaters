@@ -28,7 +28,7 @@ jobs:
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
         file:  app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
-        releaseNotes: 'Staging version'
+        releaseNotes: Staging version
         notifyTesters: true
         debug: true
 
@@ -37,5 +37,5 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_USERNAME: androidRulez
-        SLACK_TITLE: 'New version is out! - STAGING'
-        SLACK_MESSAGE: 'Check out this new version'
+        SLACK_TITLE: New version is out! - STAGING
+        SLACK_MESSAGE: Check out this new version
