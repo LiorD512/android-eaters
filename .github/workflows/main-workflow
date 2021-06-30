@@ -9,5 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: ./send-to-qa/send-to-qa-production.yml
-      - uses: ./slack-notifier/slack-notify.yml
+      - uses: ./send-to-qa/
+      - uses: ./slack-notifier/
