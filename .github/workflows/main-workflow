@@ -4,8 +4,7 @@ on:
     tags:
       - 'prod-v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
-
-name: send to qa (staging)
+name: send to qa (prod) and notify slack
 jobs:
   build:
 
@@ -13,5 +12,5 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - uses: ./send-to-qa/
-      - uses: ./slack-notifier/
+      - uses: ./.github/workflows/send-to-qa/
+      - uses: ./.github/workflows/slack-notifier/
