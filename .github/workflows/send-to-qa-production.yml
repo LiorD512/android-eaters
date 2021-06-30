@@ -18,7 +18,7 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Building staging version
+      - name: Building production version
         run: ./gradlew assembleRelease
 
       - name: Publish To App Center
@@ -28,5 +28,7 @@ jobs:
           token: ${{ secrets.APP_CENTER_TOKEN }}
           group: WoodSpoon Android Testers
           file:  app/build/outputs/apk/prodFlavor/release/app-prodFlavor-release-unsigned.apk
+          releaseNotes: 'Production version'
+          gitReleaseNotes: true
           notifyTesters: true
           debug: true
