@@ -38,10 +38,9 @@ jobs:
         RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
       run: |
         echo $RELEASE_VERSION
-        echo ${{ steps.vars.outputs.tag }}
-        echo ${{ steps.vars2.outputs.commit }}
-        echo ${{ steps.vars2.outputs.commit.name }}
-        echo ${{ steps.vars.outputs.tag.name }}
+        echo 1 - ${{ steps.vars.outputs.tag }}
+        echo 2 - ${{ steps.vars2.outputs.commit }}
+        echo 3 - ${{ steps.vars2.outputs.commit.name }}
 #        echo ${{ steps.vars3.outputs.event }}
 
 #    - name: Publish To App Center
