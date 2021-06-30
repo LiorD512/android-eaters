@@ -12,5 +12,5 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - uses: ./.github/workflows/send-to-qa/
+      - uses: ./.github/workflows/send-to-qa/send-to-qa-production.yml
       - uses: ./.github/workflows/slack-notifier/
