@@ -28,7 +28,7 @@ jobs:
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
         file:  app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
-        releaseNotes: Staging version
+        releaseNotes: Staging version \n ${{ steps.vars.outputs.tag }}
         notifyTesters: true
         debug: true
 
