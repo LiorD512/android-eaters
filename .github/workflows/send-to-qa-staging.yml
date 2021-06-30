@@ -23,7 +23,7 @@ jobs:
 
     - name: Set output - tag
       id: vars
-      run: echo ::set-output name=tag::${ GITHUB_REF#refs/*/ }
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
     - name: Set output - commit
       id: vars2
