@@ -13,33 +13,40 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
+#    - name: set up JDK 1.8
+#      uses: actions/setup-java@v1
+#      with:
+#        java-version: 1.8
 
-    - name: Building staging version
-      run: ./gradlew assembleDebug
+#    - name: Building staging version
+#      run: ./gradlew assembleDebug
 
     - name: Set output
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
-    - name: Publish To App Center
-      uses: wzieba/AppCenter-Github-Action@v1.3.2
-      with:
-        appName: Monkeytech/WoodSpoon-Android
-        token: ${{ secrets.APP_CENTER_TOKEN }}
-        group: WoodSpoon Android Testers
-        file:  app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
-        releaseNotes: Staging version \n ${{ steps.vars.outputs.tag }}
-        notifyTesters: true
-        debug: true
+    - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
 
-    - name: Slack Notify
-      uses: rtCamp/action-slack-notify@v2.2.0
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_USERNAME: androidRulez
-        SLACK_TITLE: New version is out! - STAGING
-        SLACK_MESSAGE: Check out this new version
+#    - name: Publish To App Center
+#      uses: wzieba/AppCenter-Github-Action@v1.3.2
+#      with:
+#        appName: Monkeytech/WoodSpoon-Android
+#        token: ${{ secrets.APP_CENTER_TOKEN }}
+#        group: WoodSpoon Android Testers
+#        file:  app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
+#        releaseNotes: Staging version \n ${{ steps.vars.outputs.tag }}
+#        notifyTesters: true
+#        debug: true
+#
+#    - name: Slack Notify
+#      uses: rtCamp/action-slack-notify@v2.2.0
+#      env:
+#        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#        SLACK_USERNAME: androidRulez
+#        SLACK_TITLE: New version is out! - STAGING
+#        SLACK_MESSAGE: Check out this new version
