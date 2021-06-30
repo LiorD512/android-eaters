@@ -1,8 +1,8 @@
-#on:
-#  push:
-#    # Sequence of patterns matched against refs/tags
-#    tags:
-#      - 'staging-v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'staging-v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 name: send to qa (staging)
 jobs:
@@ -31,3 +31,11 @@ jobs:
         releaseNotes: 'Staging version'
         notifyTesters: true
         debug: true
+
+    - name: Slack Notify
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: androidRulez
+          SLACK_TITLE: 'New version is out! - STAGING'
+          SLACK_MESSAGE: 'Check out this new version'
