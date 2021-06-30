@@ -22,8 +22,8 @@ jobs:
 #      run: ./gradlew assembleDebug
 
     - name: Set output
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
     - name: Check output
         env:
