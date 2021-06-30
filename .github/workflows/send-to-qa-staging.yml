@@ -21,6 +21,10 @@ jobs:
     - name: Building staging version
       run: ./gradlew assembleDebug
 
+    - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
     - name: Publish To App Center
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
