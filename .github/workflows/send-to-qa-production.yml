@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: set up JDK 1.8
         uses: actions/setup-java@v1
@@ -32,14 +32,10 @@ jobs:
           notifyTesters: true
           debug: true
 
-      - name: Slack Notification
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v2
-          - name: Slack Notify
-            uses: rtCamp/action-slack-notify@v2.2.0
-            env:
-              SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-              SLACK_USERNAME: androidRulez
-              SLACK_TITLE: 'New version is out! - PRODUCTION'
-              SLACK_MESSAGE: 'Check out this new version'
+      - name: Slack Notify
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: androidRulez
+          SLACK_TITLE: 'New version is out! - PRODUCTION'
+          SLACK_MESSAGE: 'Check out this new version'
