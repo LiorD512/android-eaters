@@ -32,10 +32,14 @@ jobs:
           notifyTesters: true
           debug: true
 
-      - name: Slack Notify
-          uses: rtCamp/action-slack-notify@v2.2.0
-          env:
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-            SLACK_USERNAME: androidRulez
-            SLACK_TITLE: 'New version is out! - PRODUCTION'
-            SLACK_MESSAGE: 'Check out this new version'
+      - name: Slack Notification
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+          - name: Slack Notify
+            uses: rtCamp/action-slack-notify@v2.2.0
+            env:
+              SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+              SLACK_USERNAME: androidRulez
+              SLACK_TITLE: 'New version is out! - PRODUCTION'
+              SLACK_MESSAGE: 'Check out this new version'
