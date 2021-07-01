@@ -236,19 +236,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun updatePriceUi(curOrder: Order) {
         with(binding) {
 
-            val tax: Double? = curOrder.tax?.value
-            val serviceFee = curOrder.serviceFee?.value
             val deliveryFee = curOrder.deliveryFee?.value
-            val discount = curOrder.discount?.value
-//            curOrder.minPrice?.let {
-//                val minPrice = it.value
-//                if (minPrice != null && minPrice > 0.0) {
-//                    checkoutFragMinPriceText.text = "$$minPrice"
-//                    checkoutFragMinPriceLayout.visibility = View.VISIBLE
-//                } else {
-//                    checkoutFragMinPriceLayout.visibility = View.GONE
-//                }
-//            }
 
             val promo = curOrder.promoCode
 
@@ -277,7 +265,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
             checkoutFragSubtotal.setValue("$$allDishSubTotalStr")
             checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
-            checkoutFragTotal.setValue(curOrder.total?.formatedValue ?: "N/A")
         }
 
     }

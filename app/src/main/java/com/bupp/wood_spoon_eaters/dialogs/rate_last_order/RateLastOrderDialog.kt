@@ -22,13 +22,14 @@ import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class RateLastOrderDialog(val orderId: Long) : DialogFragment(),
+class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? = null) : DialogFragment(),
     RateLastOrderAdapter.RateOrderAdapterListener,
     MetricsViewAdapter.MetricsViewAdapterListener, CompoundButton.OnCheckedChangeListener, TitleBodyDialog.TitleBodyDialogListener {
 
-//    interface RateDialogListener {
-//        fun onRatingDone()
-//    }
+
+    interface RateDialogListener {
+        fun onRatingDone(isSuccess: Boolean)
+    }
 
     private var accuracyRating: Int? = null
     private var deliveryRating: Int? = null
@@ -147,6 +148,7 @@ class RateLastOrderDialog(val orderId: Long) : DialogFragment(),
     }
 
     override fun onTitleBodyDialogDismiss() {
+        listener?.onRatingDone(true)
         dismiss()
     }
 

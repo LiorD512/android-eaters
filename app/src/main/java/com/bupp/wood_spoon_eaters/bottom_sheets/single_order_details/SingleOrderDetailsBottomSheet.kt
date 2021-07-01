@@ -22,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
-class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener {
+class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, RateLastOrderDialog.RateDialogListener {
 
     private lateinit var binding: SingleOrderDetailsBottomSheetBinding
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
@@ -93,7 +93,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 Toast.makeText(requireContext(), "Coming soon..", Toast.LENGTH_SHORT).show()
             }
             singleOrderDetailsRate.setOnClickListener {
-                RateLastOrderDialog(curOrderId).show(childFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+                RateLastOrderDialog(curOrderId, this@SingleOrderDetailsBottomSheet).show(childFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
             }
             singleOrderDetailsReport.setOnClickListener {
                 ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
@@ -176,6 +176,10 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
 
     override fun onHeaderBackClick() {
         dismiss()
+    }
+
+    override fun onRatingDone(isSuccess: Boolean) {
+        viewModel.initSingleOrder(curOrderId)
     }
 
 //    override fun onAttach(context: Context) {

@@ -49,6 +49,10 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                     MetaDataRepository.MetaDataRepoStatus.FAILED -> {
                         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
                     }
+                    else -> {
+                        stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
+                    }
+
                 }
             }
         }

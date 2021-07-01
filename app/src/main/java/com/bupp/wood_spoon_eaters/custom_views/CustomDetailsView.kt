@@ -154,7 +154,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun updateDeliveryDetails(input: String) {
-        binding.customDetailsViewTitle.text = "Delivery Address"
+        binding.customDetailsViewTitle.text = "Delivery Time"
         binding.customDetailsViewSubtitle.text = input
     }
 

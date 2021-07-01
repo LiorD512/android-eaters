@@ -230,6 +230,9 @@ class NewOrderActivity : BaseActivity(),
                 finishNewOrder()
             }
             NewOrderMainViewModel.NewOrderNavigationEvent.CHECKOUT_TO_ADD_MORE_DISH -> {
+                val args = Bundle().apply {
+                    putInt("startScreen", 2)
+                }
                 findNavController(R.id.newOrderContainer).navigateSafe(R.id.action_checkoutFragment_to_newOrderMainFragment)
                 viewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCK_SINGLE_DISH_COOK)
             }

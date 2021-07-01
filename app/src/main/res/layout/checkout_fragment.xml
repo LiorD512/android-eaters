@@ -210,12 +210,6 @@
                         android:layout_height="wrap_content"
                         app:title="Total before tip" />
 
-                <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                        android:id="@+id/checkoutFragTotal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:title="Total" />
-
             </LinearLayout>
 
 

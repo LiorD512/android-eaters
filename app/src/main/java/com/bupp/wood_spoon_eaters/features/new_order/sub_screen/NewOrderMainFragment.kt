@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -46,7 +47,7 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
         with(binding){
             val pagerAdapter = ScreenSlidePagerAdapter(requireActivity())
             newOrderFragViewPager.adapter = pagerAdapter
-            newOrderFragViewPager.offscreenPageLimit = 2
+            newOrderFragViewPager.offscreenPageLimit = 3
             newOrderFragViewPager.isUserInputEnabled = false
             newOrderFragViewPager.setPageTransformer(DepthPageTransformer())
 
@@ -55,10 +56,19 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
             NewOrderTabBack.setOnClickListener {
                 activity?.onBackPressed()
             }
+
+//            val startScreen = arguments?.getInt("startScreen") ?: 0
+//            if(startScreen != 0){
+//                Log.d(TAG, "startScreen: $startScreen")
+//                binding.newOrderFragViewPager.post {
+//                    binding.newOrderFragViewPager.setCurrentItem(startScreen, true)
+//                }
+//            }
         }
 
 
         mainViewModel.navigationEvent.observe(viewLifecycleOwner, {
+            Log.d(TAG, "navigationEvent: $it")
             when(it){
                 NewOrderMainViewModel.NewOrderNavigationEvent.REDIRECT_TO_COOK_PROFILE -> {
                     binding.newOrderFragViewPager.currentItem = 2
@@ -68,11 +78,15 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
                     binding.newOrderFragHeader.handleTabGestures(false)
                 }
                 NewOrderMainViewModel.NewOrderNavigationEvent.LOCK_SINGLE_DISH_COOK -> {
-                    binding.newOrderFragViewPager.currentItem = 2
-                    binding.newOrderFragHeader.handleTabGestures(true)
+                    binding.newOrderFragViewPager.post {
+                        binding.newOrderFragViewPager.currentItem = 2
+                        binding.newOrderFragHeader.handleTabGestures(true)
+                    }
                 }
+                else -> {}
             }
         })
+
     }
 
 
@@ -80,11 +94,12 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
         override fun getItemCount(): Int = NUM_PAGES
 
         override fun createFragment(position: Int): Fragment{
+            Log.d(TAG, "createFragment: $position")
             return when(position) {
                 0 -> {SingleDishInfoFragment()}
                 1 -> {SingleDishIngredientsFragment()}
                 2 -> {SingleDishCookFragment()}
-                else -> {SingleDishInfoFragment()}
+                else -> {SingleDishCookFragment()}
             }
         }
     }

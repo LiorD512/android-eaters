@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -84,10 +85,12 @@ class MainViewModel(
     //stripe
     val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
     fun startStripeOrReInit(){
-        Log.d(NewOrderMainViewModel.TAG, "startStripeOrReInit")
+        MTLogger.d(NewOrderMainViewModel.TAG, "startStripeOrReInit")
         if(paymentManager.hasStripeInitialized){
+            Log.d(NewOrderMainViewModel.TAG, "start payment method")
             mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         }else{
+            MTLogger.d(NewOrderMainViewModel.TAG, "re init stripe")
             mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
         }
     }
