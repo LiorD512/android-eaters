@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.DeliveryDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
@@ -17,6 +17,8 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
+import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -31,11 +33,11 @@ import kotlin.collections.ArrayList
 
 
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
-    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, DeliveryDetailsView.DeliveryDetailsViewListener,
-    HeaderView.HeaderViewListener, OrderItemsViewAdapter.OrderItemsViewAdapterListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
+    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
+    HeaderView.HeaderViewListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener {
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView.OrderItemsListener {
 
     private lateinit var binding: CheckoutFragmentBinding
 
@@ -126,28 +128,26 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
         binding.checkoutFragHeaderView.setHeaderViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
         with(binding) {
 
-            checkoutFragAddPromoCodeBtn.setOnClickListener {
+            checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
             }
 
-            checkoutFragPromoCodeStr.setOnClickListener {
-                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-            }
+//            checkoutFragPromoCodeStr.setOnClickListener {
+//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
+//            }
 
-            checkoutFragChangePaymentLayout.setOnClickListener {
-                mainViewModel.startStripeOrReInit()
-            }
 
-            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
-                if (isChecked) {
-                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
-                } else {
-                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
-                }
-            }
+//            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
+//                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
+//                if (isChecked) {
+//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
+//                } else {
+//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
+//                }
+//            }
         }
 
         mainViewModel.getLastOrderDetails()
@@ -168,17 +168,15 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun setEmptyPaymentMethod() {
         with(binding) {
             hasPaymentMethod = false
-            checkoutFragChangePaymentTitle.text = "Insert payment method"
-            checkoutFragChangePaymentChangeBtn.alpha = 1f
+            checkoutFragChangePayment.updateSubTitle("Insert payment method")
         }
     }
 
-    private fun handleCustomerCards(paymentMethods: List<PaymentMethod>?) {
-        if (paymentMethods.isNullOrEmpty()) {
-            setEmptyPaymentMethod()
+    private fun handleCustomerCards(paymentMethods: PaymentMethod?) {
+        if (paymentMethods != null) {
+            updateCustomerPaymentMethod(paymentMethods)
         } else {
-            val defaultPayment = paymentMethods[0]
-            updateCustomerPaymentMethod(defaultPayment)
+            setEmptyPaymentMethod()
         }
     }
 
@@ -188,8 +186,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             card?.let {
                 hasPaymentMethod = true
                 Log.d("wowCheckoutFrag", "updateCustomerPaymentMethod: ${paymentMethod.id}")
-                checkoutFragChangePaymentTitle.text = "Selected Card: (${card.brand} ${card.last4})"
-                checkoutFragChangePaymentChangeBtn.alpha = 0.3f
+                checkoutFragChangePayment.updateSubTitle("${card.brand} ●●●● ${card.last4}")
             }
         }
     }
@@ -210,8 +207,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragDeliveryTime.updateDeliveryDetails(it.estDeliveryTimeText)
                     }
 
-                    checkoutFragTitle.text = "Your Order From Cook ${cook?.getFullName()}"
-                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems?.toList(), this@CheckoutFragment)
+                    checkoutFragDetailsHeader.text = "Your Order From home chef ${cook?.firstName}"
+                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }
 
                 it.cookingSlot?.isNationwide?.let {
@@ -224,7 +221,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragNationwideSelect.visibility = View.GONE
                     }
                 }
-                checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide)
+//                checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide) //fix this
                 it.tipPercentage?.let{ tip ->
                     if(tip != 0){
                         checkoutFragTipPercentView.selectDefaultTip(tip)
@@ -236,85 +233,46 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
-        if (isCartEmpty) {
-            mainViewModel.showClearCartDialog()
-        } else {
-            mainViewModel.updateOrderItem(updatedOrderItem)
-
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun updatePriceUi(curOrder: Order) {
         with(binding) {
 
-            val tax: Double? = curOrder.tax?.value
-            val serviceFee = curOrder.serviceFee?.value
             val deliveryFee = curOrder.deliveryFee?.value
-            val discount = curOrder.discount?.value
-            curOrder.minPrice?.let {
-                val minPrice = it.value
-                if (minPrice != null && minPrice > 0.0) {
-                    checkoutFragMinPriceText.text = "$$minPrice"
-                    checkoutFragMinPriceLayout.visibility = View.VISIBLE
-                    checkoutFragMinPriceSep.visibility = View.VISIBLE
-                } else {
-                    checkoutFragMinPriceSep.visibility = View.GONE
-                    checkoutFragMinPriceLayout.visibility = View.GONE
-                }
-            }
 
             val promo = curOrder.promoCode
 
             if (!promo.isNullOrEmpty()) {
-                checkoutFragPromoCodeLayout.visibility = View.VISIBLE
-                checkoutFragPromoCodeText.text = "(${curOrder.discount?.formatedValue?.replace("-", "")})"
-                checkoutFragPromoCodeStr.visibility = View.VISIBLE
-                checkoutFragPromoCodeStr.text = "Promo Code - ${curOrder.promoCode}"
-                checkoutFragAddPromoCodeBtn.visibility = View.GONE
-                checkoutFragPromoCodeSep.visibility = View.VISIBLE
-            } else {
-                checkoutFragPromoCodeStr.visibility = View.GONE
-                checkoutFragPromoCodeSep.visibility = View.GONE
-                checkoutFragPromoCodeLayout.visibility = View.GONE
-                checkoutFragAddPromoCodeBtn.visibility = View.VISIBLE
+                checkoutFragPromoCode2.visibility = View.VISIBLE
+                checkoutFragPromoCode2.setTitle("Promo code $promo")
+                checkoutFragPromoCode2.setValue("(${curOrder.discount?.formatedValue?.replace("-", "")})")
             }
 
-            checkoutFragTaxPriceText.text = "$$tax"
-            serviceFee?.let {
-                if (serviceFee > 0.0) {
-                    checkoutFragServiceFeePriceText.text = "$$serviceFee"
-                    checkoutFragServiceFeePriceText.visibility = View.VISIBLE
-                    checkoutFragServiceFeePriceFree.visibility = View.GONE
-                } else {
-                    checkoutFragServiceFeePriceText.visibility = View.GONE
-                    checkoutFragServiceFeePriceFree.visibility = View.VISIBLE
-                }
+            var feeAndTax = 0.0
+            curOrder.serviceFee?.value?.let{
+                feeAndTax += it
             }
-            deliveryFee?.let {
-                if (deliveryFee > 0.0) {
-                    checkoutFragDeliveryFeePriceText.text = "$$deliveryFee"
-                    checkoutFragDeliveryFeePriceText.visibility = View.VISIBLE
-                    checkoutFragDeliveryFeePriceFree.visibility = View.GONE
-                } else {
-                    checkoutFragDeliveryFeePriceText.visibility = View.GONE
-                    checkoutFragDeliveryFeePriceFree.visibility = View.VISIBLE
-                }
+            curOrder.tax?.value?.let{
+                feeAndTax += it
             }
+            val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
+            checkoutFragFees.setValue("$$feeAndTaxStr")
+
+
+            checkoutFragDeliveryFee.setValue("$$deliveryFee")
+
 
             val allDishSubTotal = curOrder.subtotal?.value
             val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
-            checkoutFragSubtotalPriceText.text = "$$allDishSubTotalStr"
-            checkoutFragTotalPriceText.text = curOrder.totalBeforeTip?.formatedValue ?: ""
+            checkoutFragSubtotal.setValue("$$allDishSubTotalStr")
+            checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
         }
 
     }
 
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
         viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
-        binding.checkoutFragNationwideSelect.updateNationwideShippingDetails(chosenShippingMethod.name)
+        binding.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
     }
 
     override fun onClearCart() {
@@ -331,7 +289,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
+            if(tipSelection == TIP_NOT_SELECTED){
+                viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = 0), Constants.EVENT_TIP) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
+            }else{
+                viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
+            }
         }
     }
 
@@ -340,16 +302,22 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = tipAmount*100), Constants.EVENT_TIP)
     }
 
-    override fun onChangeLocationClick() {
-        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY)
-    }
 
-    override fun onChangeTimeClick() {
-        viewModel.onTimeChangeClick()
-    }
-
-    override fun onNationwideShippingChange() {
-        viewModel.onNationwideShippingSelectClick()
+    override fun onCustomDetailsClick(type: Int) {
+        when (type) {
+            Constants.DELIVERY_DETAILS_LOCATION -> {
+                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY)
+            }
+            Constants.DELIVERY_DETAILS_TIME -> {
+                viewModel.onTimeChangeClick()
+            }
+            Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.startStripeOrReInit()
+            }
+            Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
+                viewModel.onNationwideShippingSelectClick()
+            }
+        }
     }
 
     override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
@@ -364,6 +332,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
+    override fun onAddBtnClicked() {
+        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH)
+    }
 
 
 

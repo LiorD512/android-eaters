@@ -1,15 +1,16 @@
 package com.bupp.wood_spoon_eaters.dialogs.web_docs
 
 import android.annotation.SuppressLint
+import android.net.http.SslError
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.WebDocsDialogBinding
 import com.segment.analytics.Analytics
@@ -82,12 +83,29 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
                 view?.loadUrl(url)
                 return true
             }
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError?) {
+                MTLogger.d(TAG, "onReceivedSslError")
+                handler.proceed() // Ignore SSL certificate errors
+            }
+
+            override fun onPageFinished(view: WebView, url: String) {
+                MTLogger.d(TAG, "\"onPageFinished: $url\"")
+                if ("about:blank" == url && view.tag != null) {
+                    view.loadUrl(view.tag.toString())
+                } else {
+                    view.tag = url
+                }
+            }
         }
         binding.webDocsWebView.loadUrl(link)
     }
 
     override fun onHeaderBackClick() {
         dismiss()
+    }
+
+    companion object{
+        const val TAG = "wowWebDocsDialog"
     }
 
 }

@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -13,41 +15,22 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryItemBinding
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.bupp.wood_spoon_eaters.views.gridStackableTextView.CertificatesAdapter
 
-class OrdersHistoryAdapter(val context: Context, private var orders: List<Order>, val listener: OrdersHistoryAdapterListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdapterListener) :
+    ListAdapter<Order, RecyclerView.ViewHolder>(DiffCallback()) {
 
-    interface OrdersHistoryAdapterListener{
+    interface OrdersHistoryAdapterListener {
         fun onOrderClick(orderId: Long)
-        fun onRateClick(reportId: Long)
-        fun onReportClick(reportId: Long)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val order = orders[position]
-        (holder as ItemViewHolder).initItem(context,order )
-
-        if(order?.wasRated == true || order.status.equals("cancelled")){
-            holder.rateBtn.isEnabled = false
-            holder.rateBtn.setOnClickListener(null)
-            holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue_50))
-        }else{
-            holder.rateBtn.isEnabled = true
-            holder.rateBtn.isClickable = true
-            holder.rateBtn.setTextColor(ContextCompat.getColor(context, R.color.teal_blue))
-            holder.rateBtn.setOnClickListener {
-                listener.onRateClick(order.id!!)
-            }
-        }
-
-        holder.reportIssue.setOnClickListener {
-            listener.onReportClick(order.id!!)
-        }
+        val order = getItem(position)
+        (holder as ItemViewHolder).initItem(context, order)
 
         holder.mainLayout.setOnClickListener {
             listener.onOrderClick(order.id!!)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -55,35 +38,34 @@ class OrdersHistoryAdapter(val context: Context, private var orders: List<Order>
         return ItemViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return orders.size
-    }
 
-    fun setOrders(orders: ArrayList<Order>) {
-        this.orders = orders
-        notifyDataSetChanged()
-    }
-}
+    class DiffCallback : DiffUtil.ItemCallback<Order>() {
 
-class ItemViewHolder(view: OrdersHistoryItemBinding) : RecyclerView.ViewHolder(view.root) {
-    fun initItem(context: Context, order: Order) {
-        Glide.with(context).load(order.cook?.thumbnail).apply(RequestOptions.circleCropTransform()).into(img)
-        title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook?.firstName}"
-        price.text = "Total: ${order.total?.formatedValue}"
-        if(order.estDeliveryTime != null){
-            date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
-        }else{
-            date.text = "${order.estDeliveryTimeText}"
+        override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
+            return oldItem == newItem
         }
 
+        override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
+            return oldItem == newItem
+        }
     }
 
-    private val img: ImageView = view.orderHistoryItemImg
-    private val title: TextView = view.orderHistoryItemCookBy
-    private val price: TextView = view.orderHistoryItemPrice
-    private val date: TextView = view.orderHistoryItemDate
-    var rateBtn: TextView = view.orderHistoryItemReorder
-    var reportIssue: TextView = view.orderHistoryItemReport
-    val mainLayout = view.orderHistoryMainLayout
+    inner class ItemViewHolder(view: OrdersHistoryItemBinding) : RecyclerView.ViewHolder(view.root) {
+        fun initItem(context: Context, order: Order) {
+            title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook?.firstName}"
+            price.text = "Total: ${order.total?.formatedValue}"
+            if (order.estDeliveryTime != null) {
+                date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
+            } else {
+                date.text = "${order.estDeliveryTimeText}"
+            }
 
+        }
+
+        private val title: TextView = view.orderHistoryItemChef
+        private val price: TextView = view.orderHistoryItemPrice
+        private val date: TextView = view.orderHistoryItemDate
+        val mainLayout = view.orderHistoryMainLayout
+
+    }
 }

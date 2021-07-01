@@ -182,7 +182,7 @@ interface ApiService {
     fun getOrders(): Call<ServerResponse<List<Order>>>
 
     @GET("eaters/me/orders/{order_id}")
-    fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Order>>
+    suspend fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Order>
 
 
     //Profile data
@@ -218,11 +218,11 @@ interface ApiService {
 
     //Post Report
     @POST("eaters/me/orders/{order_id}/reports")
-    fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): Call<ServerResponse<Any>>
+    suspend fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): ServerResponse<Any>
 
     //Post Review
     @POST("eaters/me/orders/{order_id}/reviews")
-    fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): Call<ServerResponse<Any>>
+    suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
 
     @GET("eaters/me/events/{event_id}")
     fun getEventById(@Path(value = "event_id", encoded = true) eventId: String): Call<ServerResponse<Event>>

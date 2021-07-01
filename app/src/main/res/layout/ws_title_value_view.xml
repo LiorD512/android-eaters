@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="3.5dp">
+
+    <TextView
+            android:id="@+id/titleValueViewTitle"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Total before tip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+            android:visibility="invisible"
+            android:paddingStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/titleValueViewTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/titleValueViewToolTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tip_type="CHECKOUT_MINIMUM_FEE" />
+
+    <TextView
+            android:id="@+id/titleValueViewValue"
+            style="@style/LatoBlack13Teal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$6.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

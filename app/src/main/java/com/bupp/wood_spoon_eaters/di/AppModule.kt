@@ -10,6 +10,8 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.address_menu.AddressMenuViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsViewModel
+//import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
@@ -19,14 +21,13 @@ import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
-import com.bupp.wood_spoon_eaters.features.main.order_details.OrderDetailsViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
-import com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
-import com.bupp.wood_spoon_eaters.features.main.support_center.SupportViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
@@ -37,7 +38,6 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.base_repos.*
-import com.bupp.wood_spoon_eaters.repositories.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -67,7 +67,7 @@ val appModule = module {
 
     //managers
     single { DeliveryTimeManager() }
-    single { PaymentManager(get()) }
+    single { PaymentManager(get(), get()) }
     single { MediaUploadManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }
@@ -106,7 +106,7 @@ val appModule = module {
     viewModel { SingleDishInfoViewModel(get(), get()) }
     viewModel { SingleDishIngredientViewModel(get()) }
     viewModel { CheckoutViewModel(get(), get(), get(), get()) }
-    viewModel { PromoCodeViewModel(get())}
+    viewModel { PromoCodeViewModel(get()) }
 
 
     //main
@@ -115,9 +115,8 @@ val appModule = module {
     viewModel { FeedViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
-    viewModel { RateLastOrderViewModel(get(),get()) }
+    viewModel { RateLastOrderViewModel(get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
-    viewModel { OrderDetailsViewModel(get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
@@ -129,9 +128,10 @@ val appModule = module {
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get()) }
     viewModel { EditMyProfileViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get()) }
+    viewModel { SingleOrderDetailsViewModel(get(), get()) }
 
     //support
-    viewModel { SupportViewModel(get(), get())}
+    viewModel { SupportViewModel(get(), get()) }
     viewModel { WebDocsViewModel(get()) }
 
 

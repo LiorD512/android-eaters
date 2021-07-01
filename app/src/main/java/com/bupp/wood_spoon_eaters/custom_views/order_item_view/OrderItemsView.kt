@@ -16,10 +16,24 @@ class OrderItemsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr){
 
+    private var listener: OrderItemsListener? = null
+    interface OrderItemsListener{
+        fun onAddBtnClicked()
+    }
+
     private var binding: OrderItemsViewBinding = OrderItemsViewBinding.inflate(LayoutInflater.from(context), this, true)
-    var adapter: OrderItemsViewAdapter? = null
+    private var adapter: OrderItemsViewAdapter? = null
 
     init{
+        if (attrs != null) {
+            val a = context.obtainStyledAttributes(attrs, R.styleable.OrderItemsView)
+
+            val showAddBtn = a.getBoolean(R.styleable.OrderItemsView_showAddBtn, true)
+            if (!showAddBtn) {
+                binding.orderItemsViewAddBtn.visibility = GONE
+            }
+        }
+
         initUi()
     }
 
@@ -27,13 +41,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         with(binding){
             orderItemsViewRecyclerView.layoutManager = LinearLayoutManager(context)
             val divider = DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
-
             orderItemsViewRecyclerView.addItemDecoration(divider)
+
+            orderItemsViewAddBtn.setOnClickListener{
+                listener?.onAddBtnClicked()
+            }
         }
     }
 
-    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsViewAdapter.OrderItemsViewAdapterListener) {
-        adapter = OrderItemsViewAdapter(context, listener)
+    fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsListener? = null) {
+        this.listener = listener
+        adapter = OrderItemsViewAdapter(context)
         binding.orderItemsViewRecyclerView.adapter = adapter
         adapter!!.submitList(orderItems)
     }

@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -24,6 +27,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     lateinit var binding: FragmentOrdersHistoryBinding
     val viewModel by viewModel<OrdersHistoryViewModel>()
+    lateinit var adapter: OrdersHistoryAdapter
 
     companion object{
         fun newInstance() = OrdersHistoryFragment()
@@ -45,13 +49,16 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
             ordersHistoryFragRecyclerView.addItemDecoration(decoration)
 
-            viewModel.getOrdersEvent.observe(this@OrdersHistoryFragment, Observer { event ->
+            viewModel.getOrdersEvent.observe(viewLifecycleOwner, { event ->
                 if(event != null){
                     if(event.isSuccess){
                         initList(event.orderHistory!!)
                     }
                 }
             })
+
+            adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
+            ordersHistoryFragRecyclerView.adapter = adapter
 
             viewModel.getOrderHistory()
         }
@@ -60,8 +67,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     private fun initList(orderHistory: List<Order>) {
         with(binding){
             if(orderHistory.isNotEmpty()){
-                val adapter = OrdersHistoryAdapter(requireContext(), orderHistory, this@OrdersHistoryFragment)
-                ordersHistoryFragRecyclerView.adapter = adapter
+                adapter.submitList(orderHistory)
             }else{
                 ordersHistoryFragEmpty.visibility = View.VISIBLE
                 ordersHistoryFragRecyclerView.visibility = View.GONE
@@ -69,21 +75,9 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         }
     }
 
-
-    override fun onRateClick(orderId: Long) {
-        (activity as MainActivity).loadRateOrder(orderId)
-    }
-
-    override fun onReportClick(orderId: Long) {
-        (activity as MainActivity).loadReport(orderId)
-    }
-
     override fun onOrderClick(orderId: Long) {
-        (activity as MainActivity).loadOrderDetails(orderId)
+        SingleOrderDetailsBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.SINGLE_ORDER_DETAILS_BOTTOM_SHEET)
     }
 
-    fun onRatingDone() {
-        initUi()
-    }
 
 }

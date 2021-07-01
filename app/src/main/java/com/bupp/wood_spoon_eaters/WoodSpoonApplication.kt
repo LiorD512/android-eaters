@@ -28,7 +28,6 @@ class WoodSpoonApplication : Application() {
 
     companion object {
         private lateinit var instance: WoodSpoonApplication
-
         fun getInstance(): WoodSpoonApplication = instance
     }
 
@@ -37,9 +36,9 @@ class WoodSpoonApplication : Application() {
 
         // start Koin context
         startKoin {
-            androidContext(this@WoodSpoonApplication)
             androidLogger()
-            modules(listOf(appModule, networkModule))
+            androidContext(this@WoodSpoonApplication)
+            koin.loadModules(listOf(appModule, networkModule))
         }
 
         FacebookSdk.setIsDebugEnabled(true)

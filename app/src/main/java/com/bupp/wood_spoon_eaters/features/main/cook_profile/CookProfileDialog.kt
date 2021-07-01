@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
-import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
@@ -58,7 +57,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
         viewModel.getReviewsEvent.observe(viewLifecycleOwner,  { reviews ->
             binding.cookProfilePb.hide()
                 reviews?.let{
-                    RatingsDialog(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+                    RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
                 }
         })
         viewModel.getCookEvent.observe(viewLifecycleOwner,{

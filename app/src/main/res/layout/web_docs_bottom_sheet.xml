@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:background="@color/black_50"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/top_cornered_bkg"
+            android:orientation="vertical">
+
+        <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+                android:id="@+id/webDocsHeaderView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isWithSep="false"
+                app:title="Privacy policy and terms of use"
+                app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+
+        <LinearLayout
+                android:id="@+id/webDocsBtnsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+            <TextView
+                    android:id="@+id/webDocsPrivacy"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="7.7dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/web_docs_title_selector"
+                    android:gravity="center"
+                    android:text="Privacy policy"
+                    android:textColor="@color/white_to_blue_20_selector" />
+
+            <TextView
+                    android:id="@+id/webDocsTerms"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="7.7dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/web_docs_title_selector"
+                    android:gravity="center"
+                    android:text="Terms"
+                    android:textColor="@color/white_to_blue_20_selector" />
+
+
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15.4dp"
+                android:background="@color/silver" />
+
+        <WebView
+                android:id="@+id/webDocsWebView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            android:id="@+id/webDocsPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+</FrameLayout>

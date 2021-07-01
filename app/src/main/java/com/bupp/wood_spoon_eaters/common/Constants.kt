@@ -57,6 +57,8 @@ class Constants {
         const val DELIVERY_DETAILS_CHECKOUT_DELIVERY = 3
         const val DELIVERY_DETAILS_LOCATION_PROFILE = 4
         const val DELIVERY_DETAILS_NATIONWIDE_SHIPPING = 5
+        const val DELIVERY_DETAILS_PROMO_CODE = 6
+        const val DELIVERY_DETAILS_ORDER_HISTORY = 7
 
         //headerView types
         const val HEADER_VIEW_TYPE_FEED = 0
@@ -67,7 +69,7 @@ class Constants {
         const val HEADER_VIEW_TYPE_BACK_TITLE_DONE = 4
         const val HEADER_VIEW_TYPE_BACK_TITLE_SAVE = 5
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_SAVE = 6
-        const val HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS = 7
+        const val HEADER_VIEW_TYPE_CLOSE_NO_TITLE = 7
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_DONE = 8
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT = 9
         const val HEADER_VIEW_TYPE_EVENT = 10
@@ -93,6 +95,7 @@ class Constants {
         const val INPUT_TYPE_TEXT_NO_TITLE = 5
         const val INPUT_TYPE_DONE_BTN = 6
         const val INPUT_TYPE_PHONE = 8
+        const val INPUT_TYPE_CAPITAL_TEXT = 9
 
 
 
@@ -115,6 +118,7 @@ class Constants {
         const val TOOL_TIP_CHECKOUT_SERVICE_FEE = 2
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
         const val TOOL_TIP_MINMUM_ORDER_FEE = 4
+        const val TOOL_TIP_COURIER_TIP = 5
 
         //status bottom bar types
         const val CART_BOTTOM_BAR_TYPE_CART = 0
@@ -198,6 +202,7 @@ class Constants {
         const val WRONG_ADDRESS_DIALOG = "wrong_address_dialog"
         const val SUPER_USER_DIALOG = "super_user_dialog"
         const val MEDIA_CHOOSER_DIALOG = "media_chooser_dialog"
+        const val TITLE_BODY_DIALOG = "title_body_dialog"
 
         //start new cart dialog
         const val START_NEW_CART_IN_CART_COOK_NAME_ARG = "in_cart_cook_name"
@@ -211,6 +216,12 @@ class Constants {
         const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
         const val LOCATION_PERMISSION_BOTTOM_SHEET = "location_permission_bottom_sheet"
         const val CAMPAIGN_BOTTOM_SHEET = "campaign_bottom_sheet"
+        const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
+        const val SETTINGS_BOTTOM_SHEET = "settings_bottom_sheet"
+        const val SUPPORT_CENTER_BOTTOM_SHEET = "support_center_bottom_sheet"
+        const val JOIN_AS_CHEF_BOTTOM_SHEET = "join_as_chef_bottom_sheet"
+        const val SINGLE_ORDER_DETAILS_BOTTOM_SHEET = "single_order_details_bottom_sheet"
+        const val REPORT_ISSUE_BOTTOM_SHEET = "report_issue_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

@@ -77,6 +77,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         fun onHeaderAddressClick() {}
         fun onHeaderTimeClick() {}
         fun onHeaderSettingsClick() {}
+        fun handleHeaderSep(shouldShow: Boolean){}
     }
 
     fun setType(type: Int?, title: String? = "") {
@@ -199,10 +200,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     headerViewSaveBtn.visibility = View.VISIBLE
                     headerViewCloseBtn.visibility = View.VISIBLE
                 }
-                Constants.HEADER_VIEW_TYPE_BACK_TITLE_SETTINGS -> {
-                    headerViewTitle.visibility = VISIBLE
+                Constants.HEADER_VIEW_TYPE_CLOSE_NO_TITLE -> {
+//                    headerViewTitle.visibility = VISIBLE
 //                headerViewSettingsBtn.visibility = View.VISIBLE
-                    headerViewBackBtn.visibility = View.VISIBLE
+                    headerViewCloseBtn.visibility = View.VISIBLE
+                    listener?.handleHeaderSep(false)
+
                 }
                 Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_DONE -> {
                     headerViewTitle.visibility = VISIBLE
@@ -222,6 +225,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     headerViewNextBtn.visibility = View.VISIBLE
                     headerViewCloseBtn.visibility = View.VISIBLE
                 }
+                else -> {}
             }
         }
     }
@@ -238,6 +242,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 //        headerViewSettingsBtn.visibility = View.GONE
             headerViewFeedLayout.visibility = View.GONE
             headerViewSearchLayout.visibility = View.GONE
+            listener?.handleHeaderSep(true)
         }
     }
 

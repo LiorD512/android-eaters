@@ -31,20 +31,22 @@
             <TextView
                     android:id="@+id/NotificationGroupDescription"
                     style="@style/Reg13Dark_50"
+                    android:paddingEnd="22dp"
                     android:text="Receive order status alerts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
-
         <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/NotificationGroupSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12.3dp"
-                android:thumb="@drawable/white_circle"
+                android:thumb="@drawable/switch_toggle_btn"
+                android:textColor="@color/white"
+                android:gravity="center|start"
                 app:track="@drawable/switch_track_selector"/>
+
     </LinearLayout>
 
     <View

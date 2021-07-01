@@ -2,63 +2,69 @@ package com.bupp.wood_spoon_eaters.dialogs.rate_last_order
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RateLastOrderViewModel(private val api: ApiService,private val metaDataRepository: MetaDataRepository) : ViewModel() {
+class RateLastOrderViewModel(private val orderRepository: OrderRepository) : ViewModel() {
 
-    val getLastOrder: SingleLiveEvent<LastOrderEvent> = SingleLiveEvent()
-    data class LastOrderEvent(val isSuccess: Boolean = false, val order: Order? = null)
+    val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()
+    val progressData = ProgressData()
+    val getLastOrder: SingleLiveEvent<Order> = SingleLiveEvent()
 
-    fun getLastOrder(orderId: Long) {
-        api.getOrderById(orderId).enqueue(object: Callback<ServerResponse<Order>> {
-            override fun onResponse(call: Call<ServerResponse<Order>>, response: Response<ServerResponse<Order>>) {
-                if(response.isSuccessful){
-                    val order = response.body()?.data
-                    if(order != null){
-                        getLastOrder.postValue(LastOrderEvent(true, order))
-                    }else{
-                        getLastOrder.postValue(LastOrderEvent(false,null))
+    fun getLastOrder(orderId: Long) { //todo !
+        viewModelScope.launch {
+            progressData.startProgress()
+            val result = orderRepository.getOrderById(orderId)
+            when (result.type) {
+                OrderRepository.OrderRepoStatus.GET_ORDER_BY_ID_SUCCESS -> {
+                    result.data?.let {
+                        getLastOrder.postValue(it)
                     }
-                }else{
-                    Log.d("wowFeedVM","postOrder fail")
-                    getLastOrder.postValue(LastOrderEvent(false,null))
+                }
+                OrderRepository.OrderRepoStatus.GET_ORDER_BY_ID_FAILED -> {
+                    errorEvent.postValue(listOf(WSError(code = null, msg = "Error loading order...")))
+                }
+                OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                    errorEvent.postValue(result.wsError)
+                }
+                else -> {
+
                 }
             }
-
-            override fun onFailure(call: Call<ServerResponse<Order>>, t: Throwable) {
-                Log.d("wowFeedVM","postOrder big fail")
-                getLastOrder.postValue(LastOrderEvent(false,null))
-            }
-        })
+            progressData.endProgress()
+        }
     }
 
-
-    val postRating: SingleLiveEvent<PostRatingEvent> = SingleLiveEvent()
-    data class PostRatingEvent(val isSuccess: Boolean = false)
+    val postRating: SingleLiveEvent<Boolean> = SingleLiveEvent()
     fun postRating(orderId: Long, reviewRequest: ReviewRequest) {
-        api.postReview(orderId, reviewRequest).enqueue(object: Callback<ServerResponse<Any>>{
-            override fun onResponse(call: Call<ServerResponse<Any>>, response: Response<ServerResponse<Any>>) {
-                if(response.isSuccessful){
-                    Log.d("wowRateOrderVM","postReview success")
-                    postRating.postValue(PostRatingEvent(true))
-                }else{
-                    Log.d("wowRateOrderVM","postReview fail")
-                    postRating.postValue(PostRatingEvent(false))
+        viewModelScope.launch {
+            progressData.startProgress()
+            val result = orderRepository.postReview(orderId, reviewRequest)
+            when (result.type) {
+                OrderRepository.OrderRepoStatus.POST_REVIEW_SUCCESS -> {
+                    postRating.postValue(true)
+                }
+                OrderRepository.OrderRepoStatus.POST_ORDER_FAILED -> {
+                    errorEvent.postValue(listOf(WSError(code = null, msg = "Error loading order...")))
+                }
+                OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                    errorEvent.postValue(result.wsError)
+                }
+                else -> {
+
                 }
             }
-
-            override fun onFailure(call: Call<ServerResponse<Any>>, t: Throwable) {
-                Log.d("wowRateOrderVM","postReview big fail")
-                postRating.postValue(PostRatingEvent(false))
-            }
-
-        })
+            progressData.endProgress()
+        }
     }
 
 }

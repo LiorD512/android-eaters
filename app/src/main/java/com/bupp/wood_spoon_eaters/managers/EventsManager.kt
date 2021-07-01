@@ -61,6 +61,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
+
     fun sendPurchaseEvent(orderId: Long?, purchaseCost: Double) {
         if(shouldFireEvent){
             orderId?.let{

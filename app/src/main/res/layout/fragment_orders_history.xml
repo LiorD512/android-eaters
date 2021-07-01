@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-              android:background="@color/white"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/white"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <FrameLayout
             android:layout_width="match_parent"
@@ -18,11 +19,15 @@
                 android:layout_height="match_parent" />
 
         <TextView
+                android:gravity="center"
+                android:drawablePadding="22dp"
+                android:drawableTop="@drawable/illus_orders"
+                tools:visibility="visible"
                 android:visibility="gone"
-                style="@style/SemiBold13Dark"
+                style="@style/LatoReg13Black"
                 android:id="@+id/ordersHistoryFragEmpty"
                 android:layout_gravity="center"
-                android:text="No Orders yet..."
+                android:text="Your order history will be shown here"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

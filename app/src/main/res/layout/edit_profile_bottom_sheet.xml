@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".features.main.profile.edit_my_profile.EditMyProfileFragment">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="15.4dp"
+            android:paddingRight="15.4dp">
+
+        <com.bupp.wood_spoon_eaters.views.UserImageView
+                android:id="@+id/editMyProfileFragUserImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                app:imageSize="BIGGEST"
+                app:placeHolder="@drawable/profile_pic_placeholder_plus" />
+
+        <LinearLayout
+                android:id="@+id/name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="37.14dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtitle">
+
+            <com.bupp.wood_spoon_eaters.views.WSEditText
+                    android:id="@+id/editMyProfileFragFirstName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15.4dp"
+                    android:layout_weight="1"
+                    app:error="Please enter your name"
+                    app:hint="First name"
+                    app:inputType="INPUT_TYPE_FULL_NAME" />
+
+            <com.bupp.wood_spoon_eaters.views.WSEditText
+                    android:id="@+id/editMyProfileFragLastName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:error="Please enter your last name"
+                    app:hint="Last name"
+                    app:inputType="INPUT_TYPE_FULL_NAME" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:id="@+id/editMyProfileFragEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="31dp"
+                app:error="Please enter your email"
+                app:hint="Email address"
+                app:inputType="MAIL"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_layout" />
+
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:id="@+id/editMyProfileFragPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="31dp"
+                app:hint="Mobile number"
+                app:inputType="PHONE"
+                app:isEditable="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_layout" />
+
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            android:id="@+id/editMyProfileFragPb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</FrameLayout>

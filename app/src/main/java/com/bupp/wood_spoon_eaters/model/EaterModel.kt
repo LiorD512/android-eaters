@@ -44,6 +44,10 @@ data class Eater(
         }
         return array
     }
+
+    fun getSelectedCuisines(): List<SelectableIcon>{
+        return cuisines as List<SelectableIcon>
+    }
 }
 
 @JsonClass(generateAdapter = true)

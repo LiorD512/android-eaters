@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
+import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Utils
 
 class WSEditText @JvmOverloads
@@ -222,6 +223,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             Constants.INPUT_TYPE_FULL_NAME -> {
                 binding.wsEditTextInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
             }
+            Constants.INPUT_TYPE_CAPITAL_TEXT -> {
+                binding.wsEditTextInput.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            }
             Constants.INPUT_TYPE_TEXT -> {
                 binding.wsEditTextInput.inputType = InputType.TYPE_CLASS_TEXT
             }
@@ -284,6 +288,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return binding.wsEditTextPrefix.text.toString()
     }
 
+    fun setTextFromList(list: List<SelectableIcon>) {
+        var text = ""
+        if(list.isNotEmpty()){
+            list.forEach {
+                text += "${it.name}, "
+            }
+            text = text.substring(0, text.length - 2) //remove last ", "
+        }
+        setText(text)
+    }
 
 
 }

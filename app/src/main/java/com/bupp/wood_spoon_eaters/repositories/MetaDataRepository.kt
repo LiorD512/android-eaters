@@ -285,6 +285,14 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return ""
     }
 
+    fun getProfileBannerUrl(): String? {
+        for (settings in getSettings()){
+            if(settings.key == "profile_banner_url")
+                return (settings.value) as String
+        }
+        return null
+    }
+
     fun getCloudinaryTransformations(): CloudinaryTransformations? {
         for (settings in getSettings()){
             if(settings.key == "cloudinary_transformations"){

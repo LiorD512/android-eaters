@@ -44,6 +44,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initUi(context, attrs)
     }
 
+    fun customInit(context: Context, attrs: AttributeSet?){
+        initUi(context, attrs)
+    }
+
     private fun initUi(context: Context, attrs: AttributeSet?) {
         with(binding) {
             bubbleLayout = LayoutInflater.from(context).inflate(R.layout.layout_tool_tip, null) as BubbleLayout
@@ -96,6 +100,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 95.toPx().toFloat()
             }
+            Constants.TOOL_TIP_COURIER_TIP -> {
+                titleText = resources.getString(R.string.tool_tip_courier_title)
+                bodyText =
+                    "${resources.getString(R.string.tool_tip_courier_body)}"
+                bubbleLayout.arrowDirection = ArrowDirection.TOP
+                bubbleLayout.arrowPosition = 135.toPx().toFloat()
+            }
         }
     }
 
@@ -124,6 +135,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
                 }
                 Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
+                    val marginLeft = 23.toPx()
+                    popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
+                }
+                Constants.TOOL_TIP_COURIER_TIP -> {
                     val marginLeft = 23.toPx()
                     popupWindow!!.showAtLocation(view, Gravity.NO_GRAVITY, marginLeft, location!!.bottom)
                 }

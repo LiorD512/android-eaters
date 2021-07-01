@@ -1,15 +1,22 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentAddressVerificationMapBinding
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.MapHeaderView
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,19 +24,22 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verification_map), OnMapReadyCallback {
 
-    private var zoomLevel: Float = 18f
     private var binding: FragmentAddressVerificationMapBinding? = null
-    val viewModel by viewModel<AddressMapVerificationViewModel>()
-    val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
+    private val viewModel by viewModel<AddressMapVerificationViewModel>()
+    private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
+    private val checkoutViewModel by sharedViewModel<NewOrderMainViewModel>()
+
     private var googleMap: GoogleMap? = null
+    private var currentBoundSize = 100
+    private var zoomLevel: Float = 18f
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,12 +48,17 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
         zoomLevel = requireArguments().getString("zoomLevel", "18").toFloat()
         val shouldShowBtn = requireArguments().getBoolean("showBtns")
+        val isCheckout = requireArguments().getBoolean("isCheckout", false)
+
 
         Log.d(TAG, "zoomLevel: $zoomLevel")
         initUi(shouldShowBtn)
         initObservers()
 
-        mainViewModel.initMapLocation()
+        if(!isCheckout){
+            mainViewModel.initMapLocation()
+        }
+
         binding!!.addressMapFragPb.show()
 
     }
@@ -99,6 +114,9 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     }
 
     private fun initObservers() {
+        checkoutViewModel.orderData.observe(viewLifecycleOwner, { orderData ->
+            updateCheckoutMap(orderData)
+        })
         mainViewModel.newAddressLiveData.observe(viewLifecycleOwner, {
             it?.let { address ->
                 viewModel.setAnchorLocation(address)
@@ -178,6 +196,68 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
         }
 
     }
+
+    private fun updateCheckoutMap(curOrderData: Order) {
+        googleMap?.setOnMapLoadedCallback {
+            val curCourierData  = curOrderData.courier
+            val builder = LatLngBounds.Builder()
+
+            googleMap?.clear()
+
+            val chefLat = curOrderData.cook?.pickupAddress?.lat
+            val chefLng = curOrderData.cook?.pickupAddress?.lng
+            chefLat?.let{
+                chefLng?.let{
+                    val chefLocation = LatLng(chefLat, chefLng)
+                    googleMap?.addMarker(MarkerOptions().position(chefLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_cook_marker)))
+                    builder.include(chefLocation)
+                    Log.d("wowMapBinder","chefLocation $chefLocation")
+                }
+            }
+            val myLat = curOrderData.deliveryAddress?.lat
+            val myLng = curOrderData.deliveryAddress?.lng
+            myLat?.let{
+                myLng?.let{
+                    val myLocation = LatLng(myLat, myLng)
+                    googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_my_marker)))
+                    builder.include(myLocation)
+                    Log.d("wowMapBinder","myLocation $myLocation")
+                }
+            }
+            val bounds = builder.build()
+            //change mechnic to monig map by scroll and target bound on the courer or chef location
+            animateCamera(bounds)
+            binding!!.addressMapFragPb.hide()
+        }
+    }
+
+    private fun animateCamera(bounds: LatLngBounds?) {
+        bounds?.let{
+            try{
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, currentBoundSize), 150, null)
+                Log.d("wowTrackOrder","bound size: $currentBoundSize")
+            }catch (ex: Exception){
+                if(currentBoundSize > 100){
+                    currentBoundSize -= 50
+                    Log.d("wowTrackOrder","changing bound size: $currentBoundSize")
+                    animateCamera(bounds)
+                }else{
+                    Log.d("wowTrackOrder","map ex: $ex")
+
+                }
+            }
+        }
+    }
+
+    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+        return ContextCompat.getDrawable(context, vectorResId)?.run {
+            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+            val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+            draw(Canvas(bitmap))
+            BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
+    }
+
 
     override fun onDestroy() {
         googleMap?.clear()

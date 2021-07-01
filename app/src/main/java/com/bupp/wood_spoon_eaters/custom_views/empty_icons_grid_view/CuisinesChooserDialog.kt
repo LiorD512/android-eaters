@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 
 class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: List<SelectableIcon>, val choiceCount: Int) : DialogFragment(), HeaderView.HeaderViewListener {
 
-    private var selectedCuisine: ArrayList<SelectableIcon>? = null
+    private var selectedCuisine: MutableList<SelectableIcon>? = null
     lateinit var binding: FragmentCuisinesChooserBinding
 
     interface CuisinesChooserListener{
@@ -45,8 +45,8 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
         }
 }
 
-    public fun setSelectedCuisine(selectedCuisine: ArrayList<SelectableIcon>?){
-        this.selectedCuisine = selectedCuisine
+    public fun setSelectedCuisine(selectedCuisine: List<SelectableIcon>?){
+        this.selectedCuisine = selectedCuisine?.toMutableList()
     }
 
 

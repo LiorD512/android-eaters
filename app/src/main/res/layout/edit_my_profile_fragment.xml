@@ -21,7 +21,15 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
                 app:imageSize="BIGGEST"
-                app:placeHolder="@drawable/profile_pic_placeholder_plus" />
+                app:placeHolder="@drawable/profile_pic_placeholder_big" />
+
+        <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
+                android:layout_marginTop="7.7dp"
+                android:layout_gravity="center"
+                android:id="@+id/editMyProfileFragUserImageBtn"
+                app:title="Add photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <LinearLayout
                 android:id="@+id/name_layout"
@@ -76,6 +84,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name_layout" />
 
+        <View
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="0dp"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                app:title="Save"
+                android:id="@+id/editMyProfileFragSave"
+                android:layout_marginBottom="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
