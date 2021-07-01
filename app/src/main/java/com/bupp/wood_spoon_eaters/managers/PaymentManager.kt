@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.network.ApiSettings
@@ -67,19 +68,18 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 
     private fun initStripe(context: Context) {
         val key = metaDataRepository.getStripePublishableKey()
-        Log.d(TAG, "initStripe key: $key")
+        MTLogger.d(TAG, "initStripe key: $key")
         key?.let {
             PaymentConfiguration.init(context, key)
             CustomerSession.initCustomerSession(context, EphemeralKeyProvider(this), false)
             hasStripeInitialized = true
             getStripeCustomerCards(context)
-
         }
     }
 
     override fun onEphemeralKeyProviderError() {
         super.onEphemeralKeyProviderError()
-        Log.d(TAG, "initStripe failed")
+        MTLogger.d(TAG, "initStripe failed")
         hasStripeInitialized = false
         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
     }
@@ -93,7 +93,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
     val payments = MutableLiveData<PaymentMethod>()
     fun getPaymentsLiveData() = payments
 
-    fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false){
+    private fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false){
 //        val paymentsLiveData = SingleLiveEvent<List<PaymentMethod>>()
         if (hasStripeInitialized) {
 //            if (this.payments.value != null && !forceRefresh) {
@@ -103,7 +103,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                     PaymentMethod.Type.Card,
                     object : CustomerSession.PaymentMethodsRetrievalListener {
                         override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                            Log.d(TAG, "getStripeCustomerCards $paymentMethods")
+                            MTLogger.d(TAG, "getStripeCustomerCards $paymentMethods")
                             if(lastSelectedCardIdRes != null){
                                 val lastSelectedCard = paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
                                 lastSelectedCard?.let{
@@ -117,7 +117,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                         }
 
                         override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-                            Log.d(TAG, "getStripeCustomerCards ERROR $errorMessage")
+                            MTLogger.d(TAG, "getStripeCustomerCards ERROR $errorMessage")
                         }
                     })
 //            }
@@ -127,10 +127,6 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 //        return paymentsLiveData
     }
 
-
-    fun updatePaymentsMethod(paymentMethod: PaymentMethod) {
-        payments.value = listOf(paymentMethod)
-    }
 
     fun getStripeCurrentPaymentMethod(): PaymentMethod? {
         return if (payments.value != null) {
