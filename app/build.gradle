@@ -5,28 +5,16 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs"
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-//    signingConfigs {
-//        release {
-//            keyAlias keystoreProperties['releaseKeyAlias']
-//            keyPassword keystoreProperties['releaseKeyPassword']
-//            storeFile file(keystoreProperties['releaseKeyStore'])
-//            storePassword keystoreProperties['releaseStorePassword']
-//        }
-//
-//    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 29
 
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 80
-        versionName "2.2.0"
+        versionCode 82
+        versionName "2.2.2"
     }
 
 //    androidExtensions {
@@ -39,7 +27,6 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
         }
         debug {
             debuggable true
