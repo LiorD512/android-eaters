@@ -17,6 +17,7 @@
 <!--        <item name="android:windowTranslucentNavigation">true</item>-->
 
         <item name="android:windowActivityTransitions">true</item>
+
     </style>
 
 
@@ -138,6 +139,11 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoReg13MediumGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/medium_grey</item>
+    </style>
     <style name="LatoReg13Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
@@ -160,6 +166,11 @@
     </style>
     <style name="LatoBold13Teal">
         <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+    <style name="LatoBlack13Teal">
+        <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
@@ -595,10 +606,16 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="FloatingBottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="BottomSheetTransparentStyle" parent="Theme.Design.Light.BottomSheetDialog">
@@ -622,4 +639,5 @@
     </style>
 
 
+    <color name="medium_grey">#929092</color>
 </resources>

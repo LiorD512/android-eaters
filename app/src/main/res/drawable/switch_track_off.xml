@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/track_off"/>
+    <item
+            android:width="70dp"
+            android:drawable="@drawable/switch_toggle_no"/>
 </layer-list>

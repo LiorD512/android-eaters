@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
-import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AddressMenuBottomSheetBinding
@@ -31,7 +30,7 @@ class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FloatingBottomSheetStyle)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

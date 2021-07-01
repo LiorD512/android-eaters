@@ -1,19 +1,28 @@
 package com.bupp.wood_spoon_eaters.managers
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
+import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.stripe.android.*
+import com.stripe.android.CustomerSession
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.StripeError
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyProvider.EphemeralKeyProviderListener {
+class PaymentManager(val metaDataRepository: MetaDataRepository, private val sharedPreferences: SharedPreferences) : EphemeralKeyProvider.EphemeralKeyProviderListener {
+
+    var lastSelectedCardIdRes: String?
+        get() = sharedPreferences.getString(LAST_SELECTED_CARD_ID, null)
+        set(selectedCardId) = sharedPreferences.edit().putString(LAST_SELECTED_CARD_ID, selectedCardId).apply()
 
     var hasStripeInitialized: Boolean = false
 
@@ -41,6 +50,10 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
                     MetaDataRepository.MetaDataRepoStatus.FAILED -> {
                         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
                     }
+                    else -> {
+                        stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
+                    }
+
                 }
             }else{
                 stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
@@ -55,19 +68,18 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
 
     private fun initStripe(context: Context) {
         val key = metaDataRepository.getStripePublishableKey()
-        Log.d(TAG, "initStripe key: $key")
+        MTLogger.d(TAG, "initStripe key: $key")
         key?.let {
             PaymentConfiguration.init(context, key)
             CustomerSession.initCustomerSession(context, EphemeralKeyProvider(this), false)
             hasStripeInitialized = true
             getStripeCustomerCards(context)
-
         }
     }
 
     override fun onEphemeralKeyProviderError() {
         super.onEphemeralKeyProviderError()
-        Log.d(TAG, "initStripe failed")
+        MTLogger.d(TAG, "initStripe failed")
         hasStripeInitialized = false
         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
     }
@@ -78,51 +90,60 @@ class PaymentManager(val metaDataRepository: MetaDataRepository) : EphemeralKeyP
 //        stripeInitializationEvent.postValue(StripeInitializationStatus.SUCCESS)
     }
 
-    val payments = MutableLiveData<List<PaymentMethod>>()
+    val payments = MutableLiveData<PaymentMethod>()
     fun getPaymentsLiveData() = payments
 
-    fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false): SingleLiveEvent<List<PaymentMethod>> {
-        val paymentsLiveData = SingleLiveEvent<List<PaymentMethod>>()
+    private fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false){
+//        val paymentsLiveData = SingleLiveEvent<List<PaymentMethod>>()
         if (hasStripeInitialized) {
-            if (this.payments.value != null && !forceRefresh) {
-                paymentsLiveData.postValue(payments.value)
-            } else {
+//            if (this.payments.value != null && !forceRefresh) {
+//                paymentsLiveData.postValue(payments.value)
+//            } else {
                 CustomerSession.getInstance().getPaymentMethods(
                     PaymentMethod.Type.Card,
                     object : CustomerSession.PaymentMethodsRetrievalListener {
                         override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                            Log.d(TAG, "getStripeCustomerCards $paymentMethods")
-                            payments.value = paymentMethods
-                            paymentsLiveData.postValue(paymentMethods)
+                            MTLogger.d(TAG, "getStripeCustomerCards $paymentMethods")
+                            if(lastSelectedCardIdRes != null){
+                                val lastSelectedCard = paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
+                                lastSelectedCard?.let{
+                                    payments.value = it
+                                }
+                            }else{
+                                paymentMethods.isNotEmpty().let {
+                                    payments.value = paymentMethods[0]
+                                }
+                            }
                         }
 
                         override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-                            Log.d(TAG, "getStripeCustomerCards ERROR $errorMessage")
+                            MTLogger.d(TAG, "getStripeCustomerCards ERROR $errorMessage")
                         }
                     })
-            }
+//            }
         } else {
             initStripe(context)
         }
-        return paymentsLiveData
+//        return paymentsLiveData
     }
 
-
-    fun updatePaymentsMethod(paymentMethod: PaymentMethod) {
-        payments.value = listOf(paymentMethod)
-    }
 
     fun getStripeCurrentPaymentMethod(): PaymentMethod? {
-        return if (payments.value != null && payments.value!!.isNotEmpty()) {
-            payments.value!![0]
+        return if (payments.value != null) {
+            payments.value!!
         } else {
             null
         }
     }
 
+    fun updateSelectedPaymentMethod(paymentMethod: PaymentMethod) {
+        payments.value = paymentMethod
+        lastSelectedCardIdRes = paymentMethod.card?.last4
+    }
 
     companion object{
         const val TAG = "wowPaymentManager"
+        const val LAST_SELECTED_CARD_ID = "lastSelectedCard"
     }
 
 }

@@ -1,21 +1,18 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile
 
-import android.app.Activity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.databinding.EditMyProfileFragmentBinding
-import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,13 +42,19 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
 
     private fun initUi() {
         binding.editMyProfileFragUserImageView.setUserImageViewListener(this)
+        binding.editMyProfileFragUserImageBtn.setOnClickListener{
+            mainViewModel.onUserImageClick()
+        }
+        binding.editMyProfileFragSave.setOnClickListener{
+            saveEaterDetails()
+        }
         (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
     }
 
     private fun initObservers() {
-        viewModel.userDetails.observe(this, Observer { eater -> setEaterDetails(eater) })
+        viewModel.userDetails.observe(viewLifecycleOwner, { eater -> setEaterDetails(eater) })
 
-        viewModel.refreshThumbnailEvent.observe(this, Observer { event -> handleSaveResponse(event) })
+        viewModel.refreshThumbnailEvent.observe(viewLifecycleOwner,  { event -> handleSaveResponse(event) })
 
         viewModel.getEaterProfile()
 
@@ -62,7 +65,6 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
                 binding.editMyProfileFragPb.hide()
             }
         })
-
     }
 
     private fun handleSaveResponse(event: EditMyProfileViewModel.NavigationEvent?) {
@@ -77,7 +79,12 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
     private fun setEaterDetails(eater: Eater?) {
         with(binding) {
             if (eater != null) {
-                editMyProfileFragUserImageView.setImage(eater.thumbnail)
+                if(eater.thumbnail != null){
+                    editMyProfileFragUserImageView.setImage(eater.thumbnail)
+                    editMyProfileFragUserImageBtn.setTitle("Change photo")
+                }else{
+                    editMyProfileFragUserImageBtn.setTitle("Add photo")
+                }
 
                 eater.firstName?.let {
                     editMyProfileFragFirstName.setText(it)
@@ -92,6 +99,7 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
 
                 eater.phoneNumber.let {
                     editMyProfileFragPhone.setText(it)
+                    editMyProfileFragPhone.alpha = 0.5f
                 }
 
             }

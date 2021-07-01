@@ -49,11 +49,12 @@
                 android:id="@+id/wsEditTextInput"
                 style="@style/LatoReg13Dark"
                 android:paddingStart="5dp"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
                 android:textColorHint="@color/purpley_grey"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/wsEditTextCheck"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="hint here" />
 

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.text.Editable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +15,10 @@ import androidx.fragment.app.DialogFragment
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -27,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
-class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener {
+class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, WSEditText.WSEditTextListener {
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
@@ -52,9 +51,7 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
             behavior.isFitToContents = false
             behavior.isDraggable = true
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            behavior.expandedOffset = Utils.toPx(230)
         }
-
         return dialog
     }
 
@@ -77,50 +74,45 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
 
             promoCodeFragHeaderView.setHeaderViewListener(this@PromoCodeBottomSheet)
             promoCodeFragHeaderView.setSaveButtonClickable(false)
+            promoCodeFragCodeInput.setWSEditTextListener(this@PromoCodeBottomSheet)
 
-            promoCodeFragCodeInput.addTextChangedListener(object : SimpleTextWatcher() {
-                override fun afterTextChanged(s: Editable) {
-                    if (!s.isNullOrBlank()) {
-                        promoCodeFragHeaderView.setSaveButtonClickable(true)
-                    } else {
-                        promoCodeFragHeaderView.setSaveButtonClickable(false)
-                    }
-
-                }
-            })
             openKeyboard(promoCodeFragCodeInput)
+
+            promoCodeFragSubmit.setOnClickListener { submitPromoCode() }
         }
 
     }
 
     private fun initObservers() {
         viewModel.promoCodeEvent.observe(viewLifecycleOwner, { event ->
-//            promoCodeFragPb.hide()
-            if(event.isSuccess){
+            if (event.isSuccess) {
                 activity?.let { Utils.hideKeyBoard(it) }
                 dismiss()
-//                listener.onPromoCodeDone()
-//                (activity as NewOrderActivity).onCheckout()//ny !!!
             }
         })
         viewModel.errorEvent.observe(viewLifecycleOwner, {
-//            promoCodeFragPb.hide()
-            it?.let{
+            it?.let {
                 var errorStr = ""
                 it.forEach {
                     errorStr += "${it.msg} \n"
                 }
                 showWrongPromoCodeNotification(errorStr)
-//                ErrorDialog.newInstance(errorStr).show(childFragmentManager, Constants.ERROR_DIALOG)
-//                WSErrorDialog(it.msg).show(childFragmentManager, Constants.ERROR_DIALOG)
-//                showWrongPromoCodeNotification()
+            }
+        })
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            if (it) {
+                binding.promoCodeFragPb.show()
+            } else {
+                binding.promoCodeFragPb.hide()
             }
         })
     }
     private fun showWrongPromoCodeNotification(msg: String?) {
-        snackbar = TSnackbar.make(binding.promoCodeFragHeaderView,
+        snackbar = TSnackbar.make(
+            binding.promoCodeFragHeaderView,
             msg ?: "The promo code seems to be invalid. \nplease check again",
-            TSnackbar.LENGTH_LONG).apply {
+            TSnackbar.LENGTH_LONG
+        ).apply {
             view.elevation = 1000F
         }
         val snackBarView = snackbar.view
@@ -139,9 +131,16 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
         }
     }
 
-    override fun onHeaderSaveClick() {
-//        promoCodeFragPb.show()
-        viewModel.savePromoCode(binding.promoCodeFragCodeInput.text.toString())
+    private fun submitPromoCode() {
+        with(binding){
+            if(promoCodeFragCodeInput.validateIsNotEmpty()){
+                viewModel.savePromoCode(binding.promoCodeFragCodeInput.getText() ?: "")
+            }
+        }
+    }
+
+    override fun onWSEditTextActionDone() {
+        submitPromoCode()
     }
 
     override fun onHeaderBackClick() {

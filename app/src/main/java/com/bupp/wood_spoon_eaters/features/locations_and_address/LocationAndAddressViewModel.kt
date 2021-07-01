@@ -154,7 +154,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
         }
     }
 
-    fun saveNewAddress(note: String?, apt: String?, city: String?, state: String?) {
+    fun saveNewAddress(note: String?, apt: String?, city: String?, state: String?, zipCode: String?) {
         progressData.startProgress()
         unsavedNewAddress?.let{
             it.streetLine1 = "${it.streetNumber} ${it.streetLine1}"
@@ -165,6 +165,9 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
             }
             if(it.stateIso == null){
                 it.stateIso = state
+            }
+            if(it.zipCode == null){
+                it.zipCode = zipCode
             }
             viewModelScope.launch {
                 val userRepoResult = userRepository.addNewAddress(it)

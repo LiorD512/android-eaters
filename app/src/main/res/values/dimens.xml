@@ -17,4 +17,5 @@
     <dimen name="ws_marker_small_circle_height">20.6dp</dimen>
     <dimen name="bottom_sheet_horizontal_margin">15.4dp</dimen>
     <dimen name="single_dish_info_media_layout_height">268dp</dimen>
+    <dimen name="tip_percent_view_item_horizontal_padding">16.7dp</dimen>
 </resources>

@@ -15,30 +15,50 @@
 
         <com.bupp.wood_spoon_eaters.custom_views.HeaderView
                 android:id="@+id/promoCodeFragHeaderView"
-                app:type="HEADER_VIEW_TYPE_BACK_TITLE_SAVE"
-                app:title="Promo code"
+                app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+                app:title="Enter promo code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
         <TextView
-                android:paddingStart="15.4dp"
-                android:paddingEnd="15.4dp"
-                style="@style/SemiBold13Dark"
-                android:layout_marginTop="26.9dp"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your promo code"/>
+                style="@style/LatoReg13Black"
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginTop="30dp"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="6.7sp"
+                android:text="If you have a WoodSpoon promo code, enter it below to claim your benefits"/>
 
-        <EditText
-                android:layout_marginRight="15.4dp"
-                android:layout_marginLeft="15.4dp"
-                android:paddingLeft="15.4dp"
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+                app:hint="Enter promo code"
+                app:error="Please enter promo code"
                 android:id="@+id/promoCodeFragCodeInput"
-                style="@style/Reg15Dark"
-                android:background="@drawable/title_input_view_input_bkg"
-                android:layout_marginTop="4.1dp"
+                android:layout_marginTop="30.7dp"
+                android:layout_marginHorizontal="15.4dp"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"/>
+                android:layout_height="wrap_content"/>
+
+       <View
+               android:layout_weight="1"
+               android:layout_width="1dp"
+               android:layout_height="0dp"/>
+
+        <ImageView
+                android:layout_marginBottom="26.8dp"
+                android:layout_gravity="center"
+                android:src="@drawable/illus_gift"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:layout_marginBottom="15.4dp"
+                android:layout_marginHorizontal="15.4dp"
+                app:title="Submit"
+                android:id="@+id/promoCodeFragSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

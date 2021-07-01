@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
-        tools:context="com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context="com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment">
 
-        <LinearLayout
-                android:orientation="vertical"
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reportIssueList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                        android:background="@color/white"
-                        android:id="@+id/reportIssueList"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="0dp"/>
-
-                <com.bupp.wood_spoon_eaters.custom_views.BlueBtn
-                        android:id="@+id/reportFragReportBtn"
-                        android:layout_marginRight="15.4dp"
-                        android:layout_marginLeft="15.4dp"
-                        android:layout_marginTop="23dp"
-                        android:layout_marginBottom="23.1dp"
-                        app:title="Report"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-
-
-        </LinearLayout>
-
-        <com.bupp.wood_spoon_eaters.views.WSProgressBar
-                android:id="@+id/reportIssuePb"
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:id="@+id/reportFragReportBtn"
                 android:layout_width="match_parent"
-                                                                      android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginBottom="23.1dp"
+                app:title="Report" />
+
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            android:id="@+id/reportIssuePb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 </FrameLayout>
 

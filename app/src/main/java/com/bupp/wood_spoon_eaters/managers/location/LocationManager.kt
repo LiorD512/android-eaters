@@ -59,6 +59,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
 
 
     data class FinalAddressParam(
+        val address: Address? = null,
         val id: Long? = null,
         val lat: Double? = null,
         val lng: Double? = null,
@@ -76,6 +77,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
             lastChosenAddress = selectedAddress.copy()
             finalAddressLiveDataParam.postValue(
                 FinalAddressParam(
+                    selectedAddress,
                     selectedAddress.id,
                     selectedAddress.lat,
                     selectedAddress.lng,

@@ -49,7 +49,7 @@
     <string name="code_fragment_help">Haven’t received the code?</string>
     <string name="code_fragment_resend_btn">Resend</string>
     <string name="code_fragment_next_btn">Next</string>
-    <string name="support_dialog_popular_qa_button"><![CDATA[Popular Q&A]]></string>
+    <string name="support_dialog_popular_qa_button">Frequently asked questions</string>
     <string name="support_dialog_contuct_us_button">Contact us</string>
     <string name="support_dialog_title">Support center</string>
     <string name="support_frag_sms_sentence"></string>
@@ -85,7 +85,7 @@
     <string name="order_history_item_report">
         <u>Report issue</u>
     </string>
-    <string name="order_history_item_by_cook">Your order by cook</string>
+    <string name="order_history_item_by_cook">Home Chef</string>
     <string name="cancel_dialog_stage_1_title">No cancellation fee</string>
     <string name="cancel_dialog_stage_1_body">We are sorry to see you have to cancel your order. Because our cook still didn\'t
         start preparing your dish,
@@ -145,5 +145,10 @@
     <string name="rate_popup_ok">Rate it now</string>
     <string name="rate_popup_later">Remind me later</string>
     <string name="rate_popup_no">No, thanks</string>
+    <string name="tool_tip_courier_title">Tip your service providers</string>
+    <string name="tool_tip_courier_body">100% of your tip goes to the courier</string>
+    <string name="thank_you">Thank You!</string>
+    <string name="report_issue_done_body">Your report has been submitted to our customer service team.  WoodSpoon is working hard to resolve this issue!</string>
+    <string name="rate_order_done_body">Your rating has been submitted!</string>
 
 </resources>

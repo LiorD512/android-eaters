@@ -17,7 +17,7 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     WSEditText.WSEditTextListener {
 
     val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
-    var binding: FragmentFinalAddressDetailsBinding? = null
+    lateinit var binding: FragmentFinalAddressDetailsBinding
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
 
 
     private fun initUi() {
-        with(binding!!){
+        with(binding){
             addressDetailsDeliverToDoor.setOnClickListener{
                 onDeliverToDoorClick()
             }
@@ -41,11 +41,12 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
             }
             addressDetailsSaveBtn.setOnClickListener {
                 if(validateFields()){
-                    val apt = binding!!.addressDetailsApt.getText()
-                    val note = binding!!.addressDetailsNote.getText()
-                    val city = binding!!.addressDetailsCity.getText()
-                    val state = binding!!.addressDetailsState.getText()
-                    mainViewModel.saveNewAddress(note, apt, city, state)
+                    val apt = addressDetailsApt.getText()
+                    val note = addressDetailsNote.getText()
+                    val city = addressDetailsCity.getText()
+                    val state = addressDetailsState.getText()
+                    val zipCode = addressDetailsZipcode.getText()
+                    mainViewModel.saveNewAddress(note, apt, city, state, zipCode)
                 }
             }
             addressDetailsEditBtn.setOnClickListener {
@@ -58,9 +59,9 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
 
     private fun validateFields(): Boolean {
         var isValid = true
-        if(binding!!.addressDetailsApt.getText().isNullOrEmpty()){
+        if(binding.addressDetailsApt.getText().isNullOrEmpty()){
             isValid = false
-            binding!!.addressDetailsApt.showError()
+            binding.addressDetailsApt.showError()
         }
         return isValid
     }
@@ -72,7 +73,7 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     }
 
     private fun updateAddressUi(address: AddressRequest) {
-        with(binding!!){
+        with(binding){
             addressDetailsStreet.setText("${address.streetNumber} ${address.streetLine1}")
             address.cityName?.let{
                 addressDetailsCity.setIsEditable(false, this@FinalAddressDetailsFragment)
@@ -93,14 +94,14 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
 
     private fun onDeliverToDoorClick() {
         mainViewModel.updateDeliveryMethod(getString(R.string.delivery_method_deliver_to_door))
-        binding!!.addressDetailsDeliverToDoor.setBtnSelected(true)
-        binding!!.addressDetailsPickOutside.setBtnSelected(false)
+        binding.addressDetailsDeliverToDoor.setBtnSelected(true)
+        binding.addressDetailsPickOutside.setBtnSelected(false)
     }
 
     private fun onPickupOutsideClick() {
         mainViewModel.updateDeliveryMethod(getString(R.string.delivery_method_pickup_outside))
-        binding!!.addressDetailsPickOutside.setBtnSelected(true)
-        binding!!.addressDetailsDeliverToDoor.setBtnSelected(false)
+        binding.addressDetailsPickOutside.setBtnSelected(true)
+        binding.addressDetailsDeliverToDoor.setBtnSelected(false)
     }
 
     override fun onReEnterAddressClick() {
@@ -110,6 +111,7 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     override fun onWSEditUnEditableClick() {
         WrongAddressDialog().setWrongAddressDialogListener(this).show(childFragmentManager, Constants.WRONG_ADDRESS_DIALOG)
     }
+
 
 
 }

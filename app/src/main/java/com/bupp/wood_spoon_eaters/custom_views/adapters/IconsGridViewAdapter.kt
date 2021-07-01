@@ -10,9 +10,9 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.IconsGridViewItemBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
-class IconsGridViewAdapter(val context: Context, val icons: List<SelectableIcon>, val listener: IconGridViewAdapterListener, val choiceCount: Int) : RecyclerView.Adapter<IconsGridViewAdapter.ViewHolder>() {
+class IconsGridViewAdapter(val context: Context, private val icons: List<SelectableIcon>, val listener: IconGridViewAdapterListener, private val choiceCount: Int) : RecyclerView.Adapter<IconsGridViewAdapter.ViewHolder>() {
 
-    var selectedList: ArrayList<SelectableIcon> = arrayListOf()
+    var selectedList: MutableList<SelectableIcon> = mutableListOf()
 //    var lastSelectedItem: String = ""
 //    var query: String = ""
 
@@ -36,9 +36,9 @@ class IconsGridViewAdapter(val context: Context, val icons: List<SelectableIcon>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val icon: SelectableIcon? = icons.get(position)
+        val icon: SelectableIcon = icons.get(position)
 
-        Glide.with(context).load(icon!!.icon).into(holder.iconView)
+        Glide.with(context).load(icon.icon).into(holder.iconView)
         holder.name.text = icon.name
 
         holder.background.setOnClickListener {
@@ -62,16 +62,16 @@ class IconsGridViewAdapter(val context: Context, val icons: List<SelectableIcon>
 
     }
 
-    fun getSelectedIcons(): ArrayList<SelectableIcon> {
+    fun getSelectedIcons(): MutableList<SelectableIcon> {
         return selectedList
     }
 
-    fun setSelectedIcons(selectedIcons : ArrayList<SelectableIcon>) {
+    fun setSelectedIcons(selectedIcons : MutableList<SelectableIcon>) {
         selectedList = selectedIcons
         notifyDataSetChanged()
     }
 
-    fun loadSelectedIcons(icons: ArrayList<SelectableIcon>) {
+    fun loadSelectedIcons(icons: MutableList<SelectableIcon>) {
         selectedList = icons
         notifyDataSetChanged()
     }

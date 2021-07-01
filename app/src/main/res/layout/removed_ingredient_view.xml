@@ -10,10 +10,7 @@
             android:drawablePadding="7.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15.4dp"
-            android:layout_marginTop="5dp"
-            style="@style/Reg13Dark"
+            style="@style/LatoReg13MediumGrey"
             tools:text="Without Garlic"/>
-
 
 </LinearLayout>

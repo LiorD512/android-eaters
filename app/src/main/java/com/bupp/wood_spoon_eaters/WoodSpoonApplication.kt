@@ -28,7 +28,6 @@ class WoodSpoonApplication : Application() {
 
     companion object {
         private lateinit var instance: WoodSpoonApplication
-
         fun getInstance(): WoodSpoonApplication = instance
     }
 
@@ -37,16 +36,16 @@ class WoodSpoonApplication : Application() {
 
         // start Koin context
         startKoin {
-            androidContext(this@WoodSpoonApplication)
             androidLogger()
-            modules(listOf(appModule, networkModule))
+            androidContext(this@WoodSpoonApplication)
+            koin.loadModules(listOf(appModule, networkModule))
         }
 
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
 
         AppCenter.start(
-            this, "1995d4eb-7e59-44b8-8832-6550bd7752ff",
+            this, "2e7fd22f-de2c-45c4-8a8a-e0051cfaf152",
             com.microsoft.appcenter.analytics.Analytics::class.java, Crashes::class.java, Distribute::class.java
         )
 
