@@ -19,8 +19,10 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.Utils
+
 
 class WSEditText @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -30,18 +32,20 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var isEditable = false
 
     init {
-         initUi(attrs)
+        initUi(attrs)
     }
 
     var listener: WSEditTextListener? = null
-    interface WSEditTextListener{
-        fun onWSEditUnEditableClick()
+
+    interface WSEditTextListener {
+        fun onWSEditUnEditableClick(){}
+        fun onWSEditTextActionDone(){}
     }
 
     private fun initUi(attrs: AttributeSet?) {
-        attrs?.let{
+        attrs?.let {
 
-            with(binding){
+            with(binding) {
                 val attr = context.obtainStyledAttributes(attrs, R.styleable.WSEditText)
 
                 val hint = attr.getString(R.styleable.WSEditText_hint)
@@ -54,11 +58,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setInputType(inputType)
 
                 val isEditable = attr.getBoolean(R.styleable.WSEditText_isEditable, true)
-               setIsEditable(isEditable, null)
-
+                setIsEditable(isEditable, null)
 
                 attr.recycle()
-
 
                 wsEditTextInput.addTextChangedListener(object : SimpleTextWatcher() {
                     override fun afterTextChanged(s: Editable) {
@@ -67,7 +69,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                             val face = ResourcesCompat.getFont(context, R.font.lato_reg)
                             wsEditTextInput.typeface = face
                             wsEditTextPrefix.typeface = face
-                        }else{
+                        } else {
                             val face = ResourcesCompat.getFont(context, R.font.lato_bold)
                             wsEditTextInput.typeface = face
                             wsEditTextPrefix.typeface = face
@@ -76,27 +78,44 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     }
                 })
                 wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
-                    if(hasFocus){
+                    if (hasFocus) {
                         wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.greyish_brown))
-                    }else{
+                    } else {
                         wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.light_periwinkle))
                     }
                 }
+                wsEditTextInput.setOnEditorActionListener { v, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        if(validateIsNotEmpty()){
+                            listener?.onWSEditTextActionDone()
+                        }
+                        true
+                    } else {
+                        false
+                    }
+                }
             }
-
         }
     }
 
+    fun validateIsNotEmpty(): Boolean {
+        if (getText().isNullOrEmpty()) {
+            showError()
+            return false
+        }
+        return true
+    }
 
 
     private var inputType: Int = 0
 
     fun showError() {
-        with(binding){
+        with(binding) {
             Utils.vibrate(context)
-            if(wsEditTextErrorIcon.alpha > 0){
+            AnimationUtil().shakeView(wsEditTextInput)
+            if (wsEditTextErrorIcon.alpha > 0) {
                 animateErrorIconBounce()
-            }else{
+            } else {
                 animateErrorIconEntrance()
                 animateErrorTextEntrance()
             }
@@ -183,7 +202,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun hideError() {
-        if(binding.wsEditTextErrorIcon.alpha > 0){
+        if (binding.wsEditTextErrorIcon.alpha > 0) {
             ObjectAnimator.ofFloat(
                 binding.wsEditTextErrorIcon, "alpha",
                 1f, 0f,
@@ -252,23 +271,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun getText(): String? {
         var textOrNull: String? = null
-        if(!binding.wsEditTextInput.text.isEmpty()){
+        if (!binding.wsEditTextInput.text.isEmpty()) {
             textOrNull = binding.wsEditTextInput.text.toString()
         }
         return textOrNull
     }
 
     fun setText(text: String?) {
-        text?.let{
+        text?.let {
             binding.wsEditTextInput.setText(text)
-            if(!isEditable){
+            if (!isEditable) {
                 animateVerifiedIcon()
             }
         }
     }
+
+    fun setWSEditTextListener(listener: WSEditTextListener?) {
+        this.listener = listener
+    }
+
     fun setIsEditable(editable: Boolean, listener: WSEditTextListener?) {
         this.listener = listener
-        with(binding){
+        with(binding) {
             wsEditTextInput.isFocusable = editable
             wsEditTextInput.isClickable = editable
             this@WSEditText.isEditable = editable
@@ -298,6 +322,5 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
         setText(text)
     }
-
 
 }

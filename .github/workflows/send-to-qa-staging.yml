@@ -21,6 +21,14 @@ jobs:
     - name: Building staging version
       run: ./gradlew assembleDebug
 
+    - name: Set output - tag
+      id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+    - name: Set output - commit
+      id: vars2
+      run: echo ::set-output name=commit::${{ github.event.head_commit.message }}}
+
     - name: Publish To App Center
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
@@ -28,7 +36,7 @@ jobs:
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
         file:  app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
-        releaseNotes: Staging version
+        releaseNotes: "Staging version -\n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
         notifyTesters: true
         debug: true
 
@@ -38,4 +46,4 @@ jobs:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_USERNAME: androidRulez
         SLACK_TITLE: New version is out! - STAGING
-        SLACK_MESSAGE: Check out this new version
+        SLACK_MESSAGE: "Check out this new version \n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"

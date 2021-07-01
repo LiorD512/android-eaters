@@ -16,7 +16,6 @@ import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -37,7 +36,7 @@ class CountryChooserBottomSheet() : BottomSheetDialogFragment(), CountryIsoChoos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FloatingBottomSheetStyle)
     }
 
     private lateinit var behavior: BottomSheetBehavior<View>
