@@ -56,7 +56,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 
                 }
             }else{
-                stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
+                initStripe(context)
             }
         }
     }
