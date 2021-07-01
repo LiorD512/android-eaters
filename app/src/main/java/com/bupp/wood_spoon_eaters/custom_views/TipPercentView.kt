@@ -46,7 +46,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         with(binding){
             if(v!!.isSelected){
                 v.isSelected = false
-                selectedTip = null
+                selectedTip = Constants.TIP_NOT_SELECTED
             }else {
                 clearAll()
                 v.isSelected = true

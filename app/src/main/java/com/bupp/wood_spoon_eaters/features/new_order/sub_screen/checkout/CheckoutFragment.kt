@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.model.*
@@ -288,7 +289,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
+            if(tipSelection == TIP_NOT_SELECTED){
+                viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = 0), Constants.EVENT_TIP) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
+            }else{
+                viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
+            }
         }
     }
 
