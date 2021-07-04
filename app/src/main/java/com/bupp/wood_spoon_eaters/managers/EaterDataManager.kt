@@ -213,36 +213,6 @@ class EaterDataManager(
     ///////         Referrals         ///////
     /////////////////////////////////////////
 
-    var referralToken: String? = null
-    fun setUserReferralToken(token: String? = null) {
-        token?.let {
-            this.referralToken = it
-        }
-    }
-
-    suspend fun validateReferral(): EaterDataRepository.EaterDataRepoResult<Any>? {
-        referralToken?.let{
-            return eaterDataRepository.validateReferralToken(it)
-//            when (result.type) {
-//                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
-//                    result.data?.let {
-//                        Log.d(TAG, "validateReferral - success")
-//                    }
-//                }
-//                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
-//                    Log.d(TAG, "validateReferral - failed")
-//                }
-//                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-//                    Log.d(TAG, "validateReferral - es error")
-//
-//                }
-//                else -> {
-//
-//                }
-//            }
-        }
-        return null
-    }
 
 
     /////////////////////////////////////////

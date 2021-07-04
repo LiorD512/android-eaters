@@ -2,8 +2,8 @@ package com.bupp.wood_spoon_eaters.managers
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
 
@@ -16,9 +16,23 @@ class CampaignManager(private val eaterDataRepository: EaterDataRepository, priv
     private val campaignLiveData = MutableLiveData<CampaignData>()
     fun getCampaignLiveData() = campaignLiveData
 
-    suspend fun fetchCampaigns() {
+    private var userDidDismissBanner = false
+
+    var referralToken: String? = null
+    fun setUserReferralToken(token: String? = null) {
+        this.referralToken = token
+    }
+
+
+    suspend fun onFlowEventFired(curEvent: FlowEventsManager.FlowEvents) {
+        //every time we are checking a campaign, we first check if user have a deepLink token. if have we will update server before re-fetching active campaigns
+        validateReferral()
+
+    }
+
+    private suspend fun fetchCampaigns() {
         val result = eaterDataRepository.checkForCampaign()
-        when(result.type){
+        when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_CAMPAIGN_SUCCESS -> {
                 MTLogger.d(TAG, "fetchCampaigns - success")
                 this.currentCampaigns = result.data
@@ -30,22 +44,24 @@ class CampaignManager(private val eaterDataRepository: EaterDataRepository, priv
         }
     }
 
-    fun checkCampaignFor(showAfter: CampaignShowAfter){
-        currentCampaigns?.let{
+    fun checkCampaignFor(showAfter: CampaignShowAfter) {
+        currentCampaigns?.let {
             val campaign = it.find { it.showAfter == showAfter }
-            campaign?.let{ currentCampaign ->
+            campaign?.let { currentCampaign ->
                 val eater = eaterDataManager.currentEater
                 campaignLiveData.postValue(CampaignData(eater, currentCampaign))
             }
         }
     }
 
-    suspend fun validateReferral() {
-        val result = eaterDataManager.validateReferral()
-        if(result != null){
+
+    private suspend fun validateReferral() {
+        if (referralToken != null) {
+            val result = eaterDataRepository.validateReferralToken(referralToken!!)
             when (result.type) {
                 EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
                     Log.d(TAG, "validateReferral - success")
+                    referralToken = null
                     fetchCampaigns()
                 }
                 EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
@@ -55,19 +71,17 @@ class CampaignManager(private val eaterDataRepository: EaterDataRepository, priv
                     Log.d(TAG, "validateReferral - es error")
 
                 }
-                else -> {
-
-                }
             }
-        }else{
+        } else {
             fetchCampaigns()
         }
     }
 
+
     suspend fun updateCampaignStatus(userInteractionId: Long?, status: UserInteractionStatus) {
-        userInteractionId?.let{
+        userInteractionId?.let {
             val result = eaterDataRepository.updateCampaignStatus(it, status)
-            when(result.type){
+            when (result.type) {
                 EaterDataRepository.EaterDataRepoStatus.UPDATE_CAMPAIGN_STATUS_SUCCESS -> {
                     MTLogger.d(TAG, "updateCampaignStatus - success")
                     fetchCampaigns()
@@ -79,7 +93,8 @@ class CampaignManager(private val eaterDataRepository: EaterDataRepository, priv
         }
     }
 
-    companion object{
+
+    companion object {
         const val TAG = "wowCampaignManager"
     }
 

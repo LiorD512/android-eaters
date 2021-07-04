@@ -71,16 +71,11 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
     }
 
     fun setUserReferralToken(token: String?) {
-       eaterDataManager.setUserReferralToken(token = token)
+        campaignManager.setUserReferralToken(token = token)
     }
 
     fun initFCMAndRefreshToken() {
         deviceDetailsManager.refreshPushNotificationToken()
     }
 
-    fun fetchCampaigns(){
-        viewModelScope.launch {
-
-        }
-    }
 }

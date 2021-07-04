@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.address_menu.AddressMenuViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerViewModel
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressMapVerificationViewModel
 import com.bupp.wood_spoon_eaters.features.locations_and_address.select_address.SelectAddressViewModel
@@ -37,7 +38,6 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.base_repos.*
-import com.bupp.wood_spoon_eaters.repositories.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -52,6 +52,7 @@ val appModule = module {
     //global
     single { FcmManager(get()) }
     single { AppSettings(get(), get()) }
+    single { FlowEventsManager(get(),get()) }
 
     //repos
     single { MetaDataRepository(get()) }
@@ -112,7 +113,7 @@ val appModule = module {
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { FeedLoaderViewModel(get()) }
-    viewModel { FeedViewModel(get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get(),get()) }

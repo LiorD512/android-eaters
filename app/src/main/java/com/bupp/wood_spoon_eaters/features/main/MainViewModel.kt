@@ -12,9 +12,6 @@ import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
@@ -336,12 +333,12 @@ class MainViewModel(
     fun onUserImageClick() {
         navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
     }
-
-    fun checkIfHaveReferral() {
-        viewModelScope.launch {
-            campaignManager.validateReferral()
-        }
-    }
+//
+//    fun checkIfHaveReferral() {
+//        viewModelScope.launch {
+//            campaignManager.validateReferral()
+//        }
+//    }
 
     fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
         viewModelScope.launch {
