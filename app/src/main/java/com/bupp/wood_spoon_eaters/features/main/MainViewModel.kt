@@ -9,6 +9,8 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
@@ -41,12 +43,12 @@ class MainViewModel(
     }
 
 
-    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
-    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
+//    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+//    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
     val campaignLiveData = campaignManager.getCampaignLiveData()
-    fun checkCampaignForFeed() {
-        campaignManager.checkCampaignFor(CampaignShowAfter.VISIT_FEED)
-    }
+//    fun checkCampaignForFeed() {
+//        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)
+//    }
 
 
 //    val bannerEvent = MutableLiveData<Int>()

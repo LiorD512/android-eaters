@@ -9,6 +9,7 @@ import com.squareup.moshi.Json
 class FlowEventsManager(private val campaignManager: CampaignManager, private val eventsManager: EventsManager) {
 
     enum class FlowEvents{
+        DEEP_LINK_TOKEN_UPDATED,
         VISIT_FEED,
         ACTION_ADD_TO_CART,
         ACTION_PURCHASE,

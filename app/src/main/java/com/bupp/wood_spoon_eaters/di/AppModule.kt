@@ -77,7 +77,7 @@ val appModule = module {
     single { EventsManager(get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get(), get()) }
-    single { CampaignManager(get(), get()) }
+    single { CampaignManager(get(), get(), get()) }
 
 
 

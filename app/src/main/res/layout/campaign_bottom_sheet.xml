@@ -72,6 +72,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.bupp.wood_spoon_eaters.views.UserImageView
+            android:id="@+id/campaignBSImage"
             app:layout_constraintBottom_toTopOf="@+id/mainLayout"
             app:layout_constraintTop_toTopOf="@+id/mainLayout"
             app:layout_constraintEnd_toEndOf="parent"
