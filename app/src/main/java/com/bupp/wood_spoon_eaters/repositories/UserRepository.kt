@@ -144,8 +144,12 @@ class UserRepository(
     }
 
     suspend fun updateNotificationsGroup(notifications: List<Long>): UserRepoResult {
+        var notificationsData: List<Long>? = notifications
+        if(notifications.isEmpty()){
+            notificationsData = null
+        }
         val result = withContext(Dispatchers.IO){
-            apiService.updateNotificationGroup(notifications)
+            apiService.updateNotificationGroup(notificationsData)
         }
         result.let{
             return when (result) {

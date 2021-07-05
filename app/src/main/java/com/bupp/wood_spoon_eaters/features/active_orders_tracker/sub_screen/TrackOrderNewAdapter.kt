@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderItemDetailsAdapter
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import mva2.adapter.ItemViewHolder
 import java.util.*
@@ -84,14 +85,16 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
                 isExpended = !isExpended
                 Log.d("wowTrackOrderHeader", "on Title Click: $isExpended")
                 if (isExpended) {
-                    binding.trackOrderDetailsSectionMainLayout.visibility = View.VISIBLE
+                    AnimationUtil().scaleToZero(context, binding.trackOrderDetailsSectionMainLayout)
+//                    binding.trackOrderDetailsSectionMainLayout.visibility = View.VISIBLE
                     val rotateClock = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
                     rotateClock.fillAfter = true
                     rotateClock.repeatCount = 0
                     rotateClock.duration = 500
                     binding.trackOrderDetailsHeaderArrow.startAnimation(rotateClock)
                 } else {
-                    binding.trackOrderDetailsSectionMainLayout.visibility = View.GONE
+                    AnimationUtil().scaleToWrapContent(context, binding.trackOrderDetailsSectionMainLayout)
+//                    binding.trackOrderDetailsSectionMainLayout.visibility = View.GONE
                     val rotateAntiClock = RotateAnimation(180f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
                     rotateAntiClock.fillAfter = true
                     rotateAntiClock.repeatCount = 0

@@ -25,8 +25,6 @@ class SettingsViewModel(private val appSettings: AppSettings, val userRepository
 
     data class SettingsDetails(
         val enableUserLocation: Boolean = false,
-        val enableOrderStatusAlert: Boolean = false,
-        val enableCommercialEmails: Boolean = false
     )
 
     val settingsDetails: SingleLiveEvent<SettingsDetails> = SingleLiveEvent()
@@ -35,20 +33,9 @@ class SettingsViewModel(private val appSettings: AppSettings, val userRepository
         appSettings.shouldEnabledUserLocation = isEnabled
     }
 
-    fun setAlertsSetting(isEnabled: Boolean) {
-        appSettings.shouldEnabledOrderStatusAlerts = isEnabled
-    }
-
-    fun setEmailSetting(isEnabled: Boolean) {
-        appSettings.shouldEnabledCommercialEmails = isEnabled
-    }
-
     fun loadSettings() {
         val useLocation = appSettings.shouldEnabledUserLocation
-        val sendAlerts = appSettings.shouldEnabledOrderStatusAlerts
-        val sendEmails = appSettings.shouldEnabledCommercialEmails
-
-        settingsDetails.postValue(SettingsDetails(useLocation, sendAlerts, sendEmails))
+        settingsDetails.postValue(SettingsDetails(useLocation))
     }
 
     fun getNotificationsGroup(): List<NotificationGroup> {
@@ -58,19 +45,17 @@ class SettingsViewModel(private val appSettings: AppSettings, val userRepository
     data class PostNotificationGroupEvent(val isSuccessful: Boolean = false)
     val postNotificationGroup: SingleLiveEvent<PostNotificationGroupEvent> = SingleLiveEvent()
 
-    fun updateEaterNotificationGroup(notificationGroupId: Long) {
-        val eater = eaterDataManager.currentEater
-        if(eater != null){
-            val idsList = eater.getNotificationGroupIds()
-            Log.d("wowSettings","current ids: $idsList")
-            if(idsList.contains(notificationGroupId)){
-                idsList.remove(notificationGroupId)
-            }else{
-                idsList.add(notificationGroupId)
-            }
-//            val array = arrayOf<Long>()
-//            val list = idsList.toArray(array)
-//            Log.d("wowSettings","sending ids: ${list.asList()}")
+    fun updateEaterNotificationGroup(idsList: List<Long>) {
+
+//        val eater = eaterDataManager.currentEater
+//        eater?.let{
+//            val idsList = eater.getNotificationGroupIds()
+//            Log.d("wowSettings","current ids: $idsList")
+//            if(idsList.contains(notificationGroupId)){
+//                idsList.remove(notificationGroupId)
+//            }else{
+//                idsList.add(notificationGroupId)
+//            }
             viewModelScope.launch {
                 val userRepoResult = userRepository.updateNotificationsGroup(idsList)
                 when (userRepoResult.type) {
@@ -84,7 +69,6 @@ class SettingsViewModel(private val appSettings: AppSettings, val userRepository
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d("updateNotifications", "Success")
-                        val eater = userRepoResult.eater
                         postNotificationGroup.postValue(PostNotificationGroupEvent(true))
                     }
                     else -> {
@@ -92,35 +76,16 @@ class SettingsViewModel(private val appSettings: AppSettings, val userRepository
                         postNotificationGroup.postValue(PostNotificationGroupEvent(false))
                     }
                 }
-            }
-//            api.postEaterNotificationGroup(list).enqueue(object : Callback<ServerResponse<Eater>> {
-//                override fun onResponse(call: Call<ServerResponse<Eater>>, response: Response<ServerResponse<Eater>>) {
-//                    if (response.isSuccessful) {
-//                        Log.d("wowSettingsVM", "postEaterNotificationGroup on success! ")
-//                        val eater = response.body()?.data!!
-////                        eaterDataManager.currentEater = eater // ny delete
-//                        Log.d("wowSettings","current ids: ${eater.notificationsGroup}")
-//                        postNotificationGroup.postValue(PostNotificationGroupEvent(true))
-//                    } else {
-//                        Log.d("wowSettingsVM", "postEaterNotificationGroupon Failure! ")
-//                        postNotificationGroup.postValue(PostNotificationGroupEvent(false))
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ServerResponse<Eater>>, t: Throwable) {
-//                    Log.d("wowSettingsVM", "postEaterNotificationGroup on big Failure! " + t.message)
-//                    postNotificationGroup.postValue(PostNotificationGroupEvent(false))
-//                }
-//            })
+//            }
         }
     }
 
     fun getEaterNotificationsGroup(): ArrayList<Long>? {
         val eater = eaterDataManager.currentEater
-        if(eater != null){
-            return  eaterDataManager.currentEater?.getNotificationGroupIds()
+        return if(eater != null){
+            eaterDataManager.currentEater?.getNotificationGroupIds()
         }else{
-            return arrayListOf()
+            arrayListOf()
         }
     }
 }

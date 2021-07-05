@@ -110,7 +110,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                                     payments.value = it
                                 }
                             }else{
-                                paymentMethods.isNotEmpty().let {
+                                if(paymentMethods.isNotEmpty()) {
                                     payments.value = paymentMethods[0]
                                 }
                             }

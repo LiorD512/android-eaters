@@ -3,7 +3,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
     <LinearLayout
@@ -26,6 +25,7 @@
                 tools:text="Order #12345678" />
 
         <ImageView
+                android:rotation="180"
                 android:id="@+id/trackOrderDetailsHeaderArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

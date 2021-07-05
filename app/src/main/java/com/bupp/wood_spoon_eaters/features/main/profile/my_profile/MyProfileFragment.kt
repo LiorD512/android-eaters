@@ -30,6 +30,7 @@ import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ShareBanner
+import com.bupp.wood_spoon_eaters.views.UserImageView
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.bupp.wood_spoon_eaters.views.horizontal_dietary_view.HorizontalDietaryView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -38,7 +39,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
     FavoritesView.FavoritesViewListener, CuisinesChooserDialog.CuisinesChooserListener,
-    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener {
+    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageView.UserImageViewListener {
 
     lateinit var binding: MyProfileFragmentBinding
     private val viewModel by viewModel<MyProfileViewModel>()
@@ -75,6 +76,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 }
 
                 myProfileFragUserImageView.setImage(eater.thumbnail)
+                myProfileFragUserImageView.setUserImageViewListener(this@MyProfileFragment)
+
 
                 //load selected cuisines and dietary
                 eater.cuisines?.let {
@@ -182,7 +185,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             myProfileFragJoinAsChef.setOnClickListener {
                 JoinAsChefBottomSheet().show(childFragmentManager, Constants.JOIN_AS_CHEF_BOTTOM_SHEET)
             }
-//            myProfileFragBanner.setOnClickListener { share() }
 
             myProfileFragOrderHistory.setOnClickListener { openOrderHistoryDialog() }
 
@@ -267,6 +269,10 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     override fun onShareBannerClick(campaign: Campaign?) {
         viewModel.onShareCampaignClick(campaign)
+    }
+
+    override fun onUserImageClick(cook: Cook?) {
+        (activity as MainActivity).loadEditMyProfile()
     }
 
     companion object {
