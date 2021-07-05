@@ -233,7 +233,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
         val data = mutableListOf<TrackOrderData<Any>>(
             TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
-            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false),
+            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false)
         )
         adapter.submitList(data)
 //        mainAdapter.updateUi(order, userInfo)

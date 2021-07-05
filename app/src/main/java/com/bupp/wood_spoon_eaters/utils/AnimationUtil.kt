@@ -24,34 +24,5 @@ class AnimationUtil {
         }
     }
 
-    fun scaleToWrapContent(context: Context, view: View) {
-        val animShow = AnimationUtils.loadAnimation(context, R.anim.view_show)
-        view.visibility = View.VISIBLE
-        view.startAnimation(animShow)
-//        ObjectAnimator.ofFloat(
-//            view, "translationY",
-//            0f, 1f,
-//        ).apply {
-//            duration = 500
-//            interpolator = AccelerateDecelerateInterpolator()
-//            repeatCount = 0
-//            start()
-//        }
-    }
-
-    fun scaleToZero(context: Context, view: View) {
-        val animHide = AnimationUtils.loadAnimation(context, R.anim.view_hide)
-        view.visibility = View.GONE
-        view.startAnimation(animHide)
-//        ObjectAnimator.ofFloat(
-//            view, "translationY",
-//            1f, 0f,
-//        ).apply {
-//            duration = 500
-//            interpolator = AccelerateDecelerateInterpolator()
-//            repeatCount = 0
-//            start()
-//        }
-    }
 
 }
