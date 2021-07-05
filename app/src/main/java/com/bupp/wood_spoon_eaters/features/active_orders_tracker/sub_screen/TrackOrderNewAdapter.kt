@@ -2,14 +2,9 @@ package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen
 
 import android.content.Context
 import android.graphics.Typeface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
-import android.view.animation.ScaleAnimation
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,9 +16,7 @@ import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderItemDetailsAdapter
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.SlideAnimation
 import mva2.adapter.ItemViewHolder
-import java.util.*
 
 
 class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener):
