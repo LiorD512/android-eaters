@@ -285,7 +285,7 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return ""
     }
 
-    fun getProfileBannerUrl(): String? {
+    fun getShareCampaignUrl(): String? {
         for (settings in getSettings()){
             if(settings.key == "profile_banner_url")
                 return (settings.value) as String

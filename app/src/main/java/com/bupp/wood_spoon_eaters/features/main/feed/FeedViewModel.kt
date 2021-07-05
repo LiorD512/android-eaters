@@ -4,21 +4,25 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
-    private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository): ViewModel() {
+    private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager
+): ViewModel() {
 
     val progressData = ProgressData()
 
     fun initFeed(){
         feedDataManager.initFeedDataManager()
+
+        viewModelScope.launch {
+            flowEventsManager.fireEvent(FlowEventsManager.FlowEvents.VISIT_FEED)
+        }
     }
 
 

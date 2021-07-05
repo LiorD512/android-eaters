@@ -11,13 +11,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:layout_marginHorizontal="15.4dp"
             android:background="@drawable/top_cornered_bkg"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="220dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
 
         <TextView
                 android:id="@+id/campaignBSTitle"
@@ -48,6 +44,7 @@
                 tools:text="You got 30% off your first order with WoodSpoon, Enjoy!" />
 
         <TextView
+                android:visibility="gone"
                 android:id="@+id/campaignBSDetails"
                 style="@style/LatoBold11Teal"
                 android:layout_width="wrap_content"
@@ -74,15 +71,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.bupp.wood_spoon_eaters.views.UserImageView
+    <ImageView
+            android:id="@+id/campaignBSImage"
             app:layout_constraintBottom_toTopOf="@+id/mainLayout"
             app:layout_constraintTop_toTopOf="@+id/mainLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:imageSize="BIG"
-            app:isWithShadow="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

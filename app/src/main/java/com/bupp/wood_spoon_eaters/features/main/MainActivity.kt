@@ -5,8 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -15,9 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
@@ -35,31 +30,17 @@ import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragm
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
-import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.CampaignData
-import com.bupp.wood_spoon_eaters.model.CampaignViewType
-import com.bupp.wood_spoon_eaters.model.UserInteractionStatus
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivity
-import com.stripe.android.PaymentSessionData
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.nio.charset.Charset
-import java.security.KeyStore
 import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
-import javax.crypto.spec.IvParameterSpec
 
 
 class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
@@ -168,7 +149,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         checkForBranchIntent()
         viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
-        viewModel.checkIfHaveReferral()
     }
 
     private fun checkForBranchIntent() {
@@ -262,6 +242,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
 
+
 //        viewModel.refreshAppDataEvent.observe(this, Observer {
 //            Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
 //            startActivity(Intent(this, SplashActivity::class.java))
@@ -278,27 +259,58 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     }
 
-    private fun handleCampaignData(campaignData: CampaignData) {
-        val campaign = campaignData.campaign
-        if (campaign.status == UserInteractionStatus.IDLE) {
-            campaign.viewTypes?.forEach {
-                when (it) {
+    private fun handleCampaignData(campaigns: List<Campaign>) {
+        campaigns.forEach { campaign ->
+            campaign.viewTypes?.forEach { viewType ->
+                when (viewType) {
                     CampaignViewType.BANNER -> {
-                        binding.mainActCampaignBanner.initCampaignHeader(campaignData, this)
-                    }
-                    CampaignViewType.POPUP -> {
-
-                    }
-                    CampaignViewType.FEED -> {
-
+                        binding.mainActCampaignBanner.initCampaignHeader(campaign, this)
                     }
                 }
             }
         }
+//        val campaign = campaignData.campaign
+//        if(campaign.status != UserInteractionStatus.ENGAGED){
+//            campaign.viewTypes?.forEach {
+//                when(it){
+//                    CampaignViewType.BANNER -> {
+//                        binding.mainActCampaignBanner.initCampaignHeader(campaignData, this)
+//                    }
+//                    CampaignViewType.POPUP -> {
+//
+//                    }
+//                    CampaignViewType.FEED -> {
+//
+//                    }
+//                }
+//
+//            }
+//            if(campaign.status == UserInteractionStatus.IDLE){
+//                viewModel.updateCampaignStatus(campaign, UserInteractionStatus.SEEN)
+//            }
+//        }
     }
 
-    override fun onCampaignDetailsClick(campaign: CampaignData) {
+    override fun onCampaignDetailsClick(campaign: Campaign) {
         CampaignBottomSheet.newInstance(campaign).show(supportFragmentManager, Constants.CAMPAIGN_BOTTOM_SHEET)
+    }
+
+    override fun handleCampaignAction(campaign: Campaign) {
+        when(campaign.buttonAction){
+            CampaignButtonAction.SHARE -> {
+                campaign.shareUrl?.let{
+                    Utils.shareText(this, it)
+                }
+            }
+            CampaignButtonAction.ACKNOWLEDGE -> {
+                //do nothing
+            }
+            CampaignButtonAction.JUMP_TO_LINK -> {
+                //todo = add webView
+            }
+        }
+        viewModel.updateCampaignStatus(campaign, UserInteractionStatus.ENGAGED)
+
     }
 
     private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {

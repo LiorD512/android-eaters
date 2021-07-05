@@ -222,6 +222,7 @@ class Constants {
         const val JOIN_AS_CHEF_BOTTOM_SHEET = "join_as_chef_bottom_sheet"
         const val SINGLE_ORDER_DETAILS_BOTTOM_SHEET = "single_order_details_bottom_sheet"
         const val REPORT_ISSUE_BOTTOM_SHEET = "report_issue_bottom_sheet"
+        const val FREE_TEXT_BOTTOM_SHEET = "free_text_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

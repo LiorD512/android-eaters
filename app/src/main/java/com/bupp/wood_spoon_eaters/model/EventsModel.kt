@@ -35,7 +35,6 @@ data class Campaign(
     @Json(name = "photo_small") val photoSmall: String?,
     @Json(name = "photo_large") val photoLarge: String?,
     @Json(name = "body_text1") val bodyText1: String?,
-    @Json(name = "body_text2") val bodyText2: String?,
     @Json(name = "button_text") val buttonText: String?,
     @Json(name = "button_action") val buttonAction: CampaignButtonAction?,
     @Json(name = "share_text") val shareText: String?,
@@ -44,9 +43,9 @@ data class Campaign(
     @Json(name = "terms_and_conditions") val termsAndConditions: String?
 ):Parcelable
 
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class CampaignData(val eater: Eater?, val campaign: Campaign):Parcelable
+//@Parcelize
+//@JsonClass(generateAdapter = true)
+//data class CampaignData(val campaigns: List<Campaign>):Parcelable
 
 enum class UserInteractionStatus{
     @Json(name = "idle") IDLE,
@@ -67,6 +66,7 @@ enum class CampaignViewType{
     @Json(name = "banner") BANNER,
     @Json(name = "popup") POPUP,
     @Json(name = "feed") FEED,
+    @Json(name = "profile") PROFILE,
 }
 
 enum class CampaignButtonAction{

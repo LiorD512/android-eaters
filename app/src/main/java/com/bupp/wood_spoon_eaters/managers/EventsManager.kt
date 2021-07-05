@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.facebook.appevents.AppEventsConstants
@@ -185,6 +186,17 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             }
             else -> {
                 Analytics.with(context).track(eventName, eventData)
+            }
+        }
+    }
+
+    fun onFlowEventFired(curEvent: FlowEventsManager.FlowEvents) {
+        when(curEvent){
+            FlowEventsManager.FlowEvents.VISIT_FEED -> {
+                Analytics.with(context).screen("Feed")
+            }
+            FlowEventsManager.FlowEvents.VISIT_PROFILE -> {
+                Analytics.with(context).screen("Profile page")
             }
         }
     }

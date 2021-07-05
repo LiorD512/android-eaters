@@ -36,7 +36,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
-lateinit var binding: FragmentFeedBinding
+    lateinit var binding: FragmentFeedBinding
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -46,7 +46,6 @@ lateinit var binding: FragmentFeedBinding
 
         binding = FragmentFeedBinding.bind(view)
 
-        Analytics.with(requireContext()).screen("Feed")
         initUi()
 
         initObservers()
@@ -54,7 +53,6 @@ lateinit var binding: FragmentFeedBinding
         viewModel.initFeed()
         binding.feedFragPb.show()
 
-        mainViewModel.checkCampaignForFeed()
     }
 
 
@@ -79,7 +77,7 @@ lateinit var binding: FragmentFeedBinding
             viewModel.refreshFavorites()
         })
         viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
-            if(event.isSuccess){
+            if (event.isSuccess) {
                 event.feedArr?.let { initFeed(it) }
             }
         })
@@ -87,18 +85,22 @@ lateinit var binding: FragmentFeedBinding
             binding.feedFragSectionsView.initFavorites(it)
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
-            if(it){
+            if (it) {
                 binding.feedFragPb.show()
-            }else{
+            } else {
                 binding.feedFragPb.hide()
             }
         })
+//        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
+//            Log.d(TAG, "campaign: $it")
+//            mainViewModel.checkCampaignForFeed()
+//        })
     }
 
     private fun handleFeedBannerUi(feedUiStatus: FeedUiStatus?) {
-        feedUiStatus?.let{
+        feedUiStatus?.let {
             Log.d(TAG, "handleFeedUi: ${it.type}")
-            when(it.type){
+            when (it.type) {
                 FeedUiStatusType.CURRENT_LOCATION, FeedUiStatusType.KNOWN_ADDRESS, FeedUiStatusType.HAS_LOCATION -> {
                     handleBannerEvent(Constants.NO_BANNER)
                 }
@@ -111,7 +113,8 @@ lateinit var binding: FragmentFeedBinding
                 FeedUiStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
                     handleBannerEvent(Constants.BANNER_NO_GPS)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -126,10 +129,10 @@ lateinit var binding: FragmentFeedBinding
     }
 
     private fun initFeed(feedArr: List<Feed>) {
-        if(feedArr.isEmpty()){
+        if (feedArr.isEmpty()) {
 //            showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-        }else{
+        } else {
             binding.feedFragEmptyLayout.visibility = View.GONE
             binding.feedFragListLayout.visibility = View.VISIBLE
             binding.feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
@@ -140,7 +143,7 @@ lateinit var binding: FragmentFeedBinding
 
     @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
-        with(binding){
+        with(binding) {
             feedFragListLayout.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
             feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
@@ -151,9 +154,9 @@ lateinit var binding: FragmentFeedBinding
     }
 
     private fun handleBannerEvent(bannerType: Int) {
-        bannerType.let{
+        bannerType.let {
             Log.d(TAG, "handleBannerEvent: $bannerType")
-            when(bannerType){
+            when (bannerType) {
                 Constants.NO_BANNER -> {
                     binding.feedFragHeaderError.visibility = View.GONE
                 }
@@ -169,13 +172,14 @@ lateinit var binding: FragmentFeedBinding
                 Constants.BANNER_NO_AVAILABLE_DISHES -> {
                     showBanner(getString(R.string.banner_no_available_dishes))
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
 
     private fun showBanner(text: String) {
-        with(binding){
+        with(binding) {
             feedFragHeaderError.text = text
             feedFragHeaderError.visibility = View.VISIBLE
             feedFragHeaderError.setOnClickListener {
@@ -201,7 +205,7 @@ lateinit var binding: FragmentFeedBinding
 
 
     override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let{
+        dish.menuItem?.let {
             mainViewModel.onDishClick(it.id)
         }
     }
@@ -225,7 +229,7 @@ lateinit var binding: FragmentFeedBinding
     }
 
     fun silentRefresh() {
-        Log.d("wowFeedFrag","silentRefresh")
+        Log.d("wowFeedFrag", "silentRefresh")
 //        viewModel.getFeed()
     }
 

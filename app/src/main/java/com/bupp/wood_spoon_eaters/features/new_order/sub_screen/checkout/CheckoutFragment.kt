@@ -60,8 +60,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         initObservers()
 
     }
-
-
+    
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {

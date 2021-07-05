@@ -6,7 +6,7 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
 
 
-interface UserRepository {
+interface UserRepositoryInterface {
 
     suspend fun getCode(phone: String): ResultHandler<String>
     suspend fun validateCode(phone: String, code: String): ResultHandler<ServerResponse<Eater>>
@@ -20,7 +20,7 @@ interface UserRepository {
 
 }
 
-class UserRepositoryImpl(private val service: ApiService) : UserRepository {
+class UserRepositoryImpl(private val service: ApiService) : UserRepositoryInterface {
 
     override suspend fun getCode(phone: String): ResultHandler<String> {
         return safeApiCall { service.getCode(phone).toString() }

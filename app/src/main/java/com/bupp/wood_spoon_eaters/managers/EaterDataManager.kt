@@ -16,7 +16,7 @@ class EaterDataManager(
 ) {
 
     val currentEater: Eater?
-        get() = userRepository.getUser()
+    get() = userRepository.getUser()
 
     suspend fun refreshCurrentEater() {
         userRepository.initUserRepo()
@@ -213,35 +213,6 @@ class EaterDataManager(
     ///////         Referrals         ///////
     /////////////////////////////////////////
 
-    var referralToken: String? = null
-    fun setUserReferralToken(token: String? = null) {
-        token?.let {
-            this.referralToken = it
-        }
-    }
-
-    suspend fun validateReferral() {
-        referralToken?.let{
-            val result = eaterDataRepository.validateReferralToken(it)
-            when (result.type) {
-                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
-                    result.data?.let {
-                        Log.d(TAG, "validateReferral - success")
-                    }
-                }
-                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
-                    Log.d(TAG, "validateReferral - failed")
-                }
-                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-                    Log.d(TAG, "validateReferral - es error")
-
-                }
-                else -> {
-
-                }
-            }
-        }
-    }
 
 
     /////////////////////////////////////////

@@ -11,18 +11,16 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager,  private val campaignManager: CampaignManager, private val paymentManager: PaymentManager) : ViewModel() {
+    val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager): ViewModel()  {
 
 //    val progressData = ProgressData()
 
@@ -50,11 +48,12 @@ class MainViewModel(
     }
 
 
-    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+//    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+//    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
     val campaignLiveData = campaignManager.getCampaignLiveData()
-    fun checkCampaignForFeed() {
-        campaignManager.checkCampaignFor(CampaignShowAfter.VISIT_FEED)
-    }
+//    fun checkCampaignForFeed() {
+//        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)
+//    }
 
 
 //    val bannerEvent = MutableLiveData<Int>()
@@ -260,26 +259,7 @@ class MainViewModel(
 
     //move to eater data manager
     val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
-    fun checkForShareCampaign() {
-        api.getCurrentShareCampaign().enqueue(object : Callback<ServerResponse<Campaign>> {
-            //check server for active sharing campaign for eater
-            override fun onResponse(call: Call<ServerResponse<Campaign>>, response: Response<ServerResponse<Campaign>>) {
-                if (response.isSuccessful) {
-                    val campaign = response.body()?.data
-                    Log.d("wowMainVM", "getCurrentShareCampaign success: ")
-                    getShareCampaignEvent.postValue(campaign)
-                } else {
-                    Log.d("wowMainVM", "getCurrentShareCampaign fail")
-                    getShareCampaignEvent.postValue(null)
-                }
-            }
 
-            override fun onFailure(call: Call<ServerResponse<Campaign>>, t: Throwable) {
-                Log.d("wowMainVM", "getCurrentShareCampaign big fail")
-                getShareCampaignEvent.postValue(null)
-            }
-        })
-    }
 
 
 //    fun checkForCampaignReferrals() {
@@ -381,10 +361,18 @@ class MainViewModel(
     fun onUserImageClick() {
         navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
     }
+//
+//    fun checkIfHaveReferral() {
+//        viewModelScope.launch {
+//            campaignManager.validateReferral()
+//        }
+//    }
 
-    fun checkIfHaveReferral() {
+    fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
         viewModelScope.launch {
-            eaterDataManager.validateReferral()
+            campaign.userInteractionId?.let{
+                campaignManager.updateCampaignStatus(it, status)
+            }
         }
     }
 

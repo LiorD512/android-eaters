@@ -145,21 +145,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            <androidx.cardview.widget.CardView
-                    app:cardElevation="8dp"
-                    android:visibility="gone"
-                    android:layout_marginHorizontal="15.4dp"
-                    android:layout_marginTop="30dp"
-                    android:id="@+id/myProfileFragBannerLayout"
+            <com.bupp.wood_spoon_eaters.views.ShareBanner
+                    android:id="@+id/myProfileFragShareBanner"
                     android:layout_width="match_parent"
-                    android:layout_height="159dp">
-
-                <ImageView
-                        android:id="@+id/myProfileFragBanner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"/>
 
             <com.bupp.wood_spoon_eaters.views.WSLongBtn
                     app:title="Edit my account"
