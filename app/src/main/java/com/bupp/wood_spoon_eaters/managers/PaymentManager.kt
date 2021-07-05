@@ -90,7 +90,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 //        stripeInitializationEvent.postValue(StripeInitializationStatus.SUCCESS)
     }
 
-    val payments = MutableLiveData<PaymentMethod>()
+    val payments = MutableLiveData<PaymentMethod?>()
     fun getPaymentsLiveData() = payments
 
     private fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false){
@@ -139,6 +139,10 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
     fun updateSelectedPaymentMethod(paymentMethod: PaymentMethod) {
         payments.value = paymentMethod
         lastSelectedCardIdRes = paymentMethod.card?.last4
+    }
+
+    fun clearPaymentMethods(){
+        payments.postValue(null)
     }
 
     companion object{

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiSettings
@@ -13,7 +14,8 @@ import java.lang.Exception
 class UserRepository(
     private val apiService: UserRepositoryImpl,
     private val apiSettings: ApiSettings,
-    private val locationManager: LocationManager
+    private val locationManager: LocationManager,
+    private val paymentManager: PaymentManager
 ) {
 
     private var currentUser: Eater? = null
@@ -242,6 +244,7 @@ class UserRepository(
     fun logout(): UserRepoResult{
         locationManager.setDefaultAddress()
         apiSettings.clearSharedPrefs()
+        paymentManager.clearPaymentMethods()
         this.currentUser = null
         return UserRepoResult(UserRepoStatus.LOGGED_OUT)
     }

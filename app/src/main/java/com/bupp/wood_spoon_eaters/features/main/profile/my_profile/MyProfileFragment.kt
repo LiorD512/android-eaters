@@ -252,11 +252,12 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             Log.d("wowMyProfile", "updateCustomerPaymentMethod: ${paymentMethod.id}")
             binding.myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
             viewModel.updateUserCustomerCard(paymentMethod)
+            binding.myProfileFragPb.hide()
         }
     }
 
     private fun setEmptyPaymentMethod() {
-        binding.myProfileFragPayment.updateDeliveryDetails("Insert payment method")
+        binding.myProfileFragPayment.updateSubTitle("Insert payment method")
     }
 
     fun onAddressChooserSelected() {
