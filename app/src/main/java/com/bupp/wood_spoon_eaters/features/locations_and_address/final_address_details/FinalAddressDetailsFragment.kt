@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFinalAddressDetailsBinding
@@ -17,13 +18,11 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     WSEditText.WSEditTextListener {
 
     val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
-    lateinit var binding: FragmentFinalAddressDetailsBinding
+    val binding: FragmentFinalAddressDetailsBinding by viewBinding()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentFinalAddressDetailsBinding.bind(view)
 
         initUi()
         initObserver()

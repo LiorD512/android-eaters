@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
@@ -19,9 +20,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {
 
-    private lateinit var binding: NationwideShippingChooserDialogBinding
+    private val binding: NationwideShippingChooserDialogBinding by viewBinding()
     private var newSelectedItem: ShippingMethod? = null
-    private lateinit var adapter: NationwideShippingChooserAdapter
+    private var adapter: NationwideShippingChooserAdapter? = null
     private var listener: NationwideShippingChooserListener? = null
 
     interface NationwideShippingChooserListener {
@@ -59,8 +60,6 @@ class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), Nationwi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = NationwideShippingChooserDialogBinding.bind(view)
-
 //        val parent = view.parent as View
 //        parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
 
@@ -83,7 +82,7 @@ class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), Nationwi
             nationwideShippingChooserDialogRecycler.adapter = adapter
 
             shippingMethods?.let{
-                adapter.submitList(it.toList())
+                adapter?.submitList(it.toList())
             }
         }
 
@@ -110,6 +109,11 @@ class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), Nationwi
     override fun onShippingMethodClick(selected: ShippingMethod) {
         listener?.onShippingMethodChoose(selected)
         dismiss()
+    }
+
+    override fun onDestroyView() {
+    adapter = null
+    super.onDestroyView()
     }
 
 }

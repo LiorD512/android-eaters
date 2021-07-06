@@ -19,6 +19,7 @@ import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.content.Intent
 import android.net.Uri
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -51,7 +52,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     FavoritesView.FavoritesViewListener, CuisinesChooserDialog.CuisinesChooserListener,
      HorizontalDietaryView.HorizontalDietaryViewListener {
 
-    lateinit var binding: MyProfileFragmentBinding
+    val binding: MyProfileFragmentBinding by viewBinding()
     private val viewModel by viewModel<MyProfileViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -59,11 +60,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         super.onViewCreated(view, savedInstanceState)
         Analytics.with(requireContext()).screen("Profile page")
 
-        binding = MyProfileFragmentBinding.bind(view)
-
         initClicks()
         initObservers()
-
     }
 
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {

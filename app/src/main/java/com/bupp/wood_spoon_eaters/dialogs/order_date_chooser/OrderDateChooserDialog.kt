@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.OrderDateChooserDialogBinding
@@ -27,9 +28,9 @@ import kotlin.collections.ArrayList
 class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: ArrayList<MenuItem>, val listener: OrderDateChooserDialogListener) : DialogFragment(),
     OrderDateChooserAdapter.OrderDateChooserAdapterListener, TimePickerDialog.OnTimeSetListener {
 
-    lateinit var binding: OrderDateChooserDialogBinding
+    val binding: OrderDateChooserDialogBinding by viewBinding()
     private var newSelectedMenuItem: MenuItem? = null
-    private lateinit var addressAdapter: OrderDateChooserAdapter
+    private var addressAdapter: OrderDateChooserAdapter? = null
 
     interface OrderDateChooserDialogListener {
         fun onDateChoose(menuItem: MenuItem, newChosenDate: Date)
@@ -41,7 +42,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.order_date_chooser_dialog, null)
+        val view = inflater.inflate(R.layout.order_date_chooser_dialog, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -49,7 +50,6 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = OrderDateChooserDialogBinding.bind(view)
         initUi()
     }
 
@@ -66,7 +66,7 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
             orderDateChooserDialogRecycler.adapter = addressAdapter
 
             if(currentMenuItem != null){
-                addressAdapter.setSelected(currentMenuItem)
+                addressAdapter?.setSelected(currentMenuItem)
             }
         }
 
@@ -158,6 +158,11 @@ class OrderDateChooserDialog(val currentMenuItem: MenuItem?, val allMenuItems: A
 
         listener.onDateChoose(newSelectedMenuItem!!, newChosenDate)
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        addressAdapter = null
+        super.onDestroyView()
     }
 
 }

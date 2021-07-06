@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -30,7 +31,7 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
-    private lateinit var binding: PromoCodeFragmentBinding
+    private val binding: PromoCodeFragmentBinding by viewBinding()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.promo_code_fragment, container, false)
@@ -57,7 +58,6 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = PromoCodeFragmentBinding.bind(view)
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)

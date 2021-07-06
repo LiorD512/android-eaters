@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -25,14 +26,12 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDishesAdapter.CooksProfileDishesListener,
     UserImageView.UserImageViewListener {
 
-    lateinit var binding: CookProfileFragmentBinding
+    val binding: CookProfileFragmentBinding by viewBinding()
     val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
     private lateinit var dishAdapter: CooksDishesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = CookProfileFragmentBinding.bind(view)
 
         Analytics.with(requireContext()).screen("dishHomeChef")
 

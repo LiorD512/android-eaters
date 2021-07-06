@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -29,7 +30,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
         fun onDishClick(menuItemId: Long)
     }
 
-    lateinit var binding: CookProfileDialogBinding
+    val binding: CookProfileDialogBinding by viewBinding()
     private var dishAdapter: CooksProfileDishesAdapter? = null
     val viewModel by viewModel<CookProfileViewModel>()
 
@@ -49,7 +50,6 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = CookProfileDialogBinding.bind(view)
         initObservers()
     }
 

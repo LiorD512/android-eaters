@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.databinding.EditMyProfileFragmentBinding
@@ -23,7 +24,7 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
         fun newInstance() = EditMyProfileFragment()
     }
 
-    lateinit var binding: EditMyProfileFragmentBinding
+    val binding: EditMyProfileFragmentBinding by viewBinding()
     private var photoUploaded: Boolean = false
     private var hasUpdated: Boolean = false
     val viewModel by viewModel<EditMyProfileViewModel>()
@@ -33,7 +34,6 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = EditMyProfileFragmentBinding.bind(view)
         Analytics.with(requireContext()).screen("Profile edit")
 
         initUi()

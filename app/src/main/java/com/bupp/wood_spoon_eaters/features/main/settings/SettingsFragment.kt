@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentSettingsBinding
 import com.segment.analytics.Analytics
@@ -14,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment(R.layout.fragment_settings), NotificationsGroupAdapter.NotificationsGroupAdapterListener {
 
-    lateinit var binding: FragmentSettingsBinding
+    val binding: FragmentSettingsBinding by viewBinding()
     private lateinit var adapter: NotificationsGroupAdapter
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
     var lastClickedSwitchId: Long = -1
@@ -27,7 +28,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), NotificationsGrou
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentSettingsBinding.bind(view)
         Analytics.with(requireContext()).screen("Communication settings")
 
         binding.settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->

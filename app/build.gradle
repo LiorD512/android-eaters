@@ -203,6 +203,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.0.1'
     testImplementation 'junit:junit:4.13.2'
+
+    //view binding
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.6'
 }
 
 apply plugin: 'com.google.gms.google-services'
