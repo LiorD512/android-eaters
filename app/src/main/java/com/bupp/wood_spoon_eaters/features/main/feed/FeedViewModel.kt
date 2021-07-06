@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
-    private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager
+    private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager,
+    private val campaignManager: CampaignManager
 ): ViewModel() {
 
     val progressData = ProgressData()
@@ -31,6 +33,7 @@ class FeedViewModel(
     fun getDeliveryTimeLiveData() = feedDataManager.getDeliveryTimeLiveData()
 
     val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
+    val campaignLiveData = campaignManager.getCampaignLiveData()
 
     val favoritesLiveData = feedDataManager.getFavoritesLiveData
     fun refreshFavorites() {

@@ -31,6 +31,7 @@ import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyPr
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
@@ -39,6 +40,7 @@ import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
+import io.branch.referral.validators.IntegrationValidator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -127,7 +129,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
 
-
     private fun loadFeedProgressBarFragment() {
 //        loadFragment(FeedLoaderFragment(), Constants.FEED_LOADER_TAG)
         FeedLoaderDialog().show(supportFragmentManager, Constants.FEED_LOADER_TAG)
@@ -143,6 +144,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             mainActHeaderView.setHeaderViewListener(this@MainActivity, viewModel.getCurrentEater())
             mainActOrdersBB.setCartBottomBarListener(this@MainActivity)
         }
+
+        //TODO - REMOVE THIS (BRANCH TEST)
+        IntegrationValidator.validate(this)
     }
 
     private fun initUiRelatedProcesses() {
@@ -241,7 +245,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 handleCampaignData(it)
             }
         })
-
+        viewModel.shareEvent.observe(this, {
+            sendShareCampaign(it)
+        })
 
 //        viewModel.refreshAppDataEvent.observe(this, Observer {
 //            Log.d("wowMainAct", "refreshAppDataEvent !!!!!")
@@ -249,13 +255,13 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //            finishAffinity()
 //        })
 
-        viewModel.navigationEvent.observe(this, {
-            when (it) {
-                MainViewModel.NavigationEventType.OPEN_CAMERA_UTIL_IMAGE -> {
-                    mediaUtil.startPhotoFetcher()
-                }
-            }
-        })
+//        viewModel.navigationEvent.observe(this, {
+//            when (it) {
+//                MainViewModel.NavigationEventType.OPEN_CAMERA_UTIL_IMAGE -> {
+//                    mediaUtil.startPhotoFetcher()
+//                }
+//            }
+//        })
 
     }
 
@@ -269,26 +275,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
             }
         }
-//        val campaign = campaignData.campaign
-//        if(campaign.status != UserInteractionStatus.ENGAGED){
-//            campaign.viewTypes?.forEach {
-//                when(it){
-//                    CampaignViewType.BANNER -> {
-//                        binding.mainActCampaignBanner.initCampaignHeader(campaignData, this)
-//                    }
-//                    CampaignViewType.POPUP -> {
-//
-//                    }
-//                    CampaignViewType.FEED -> {
-//
-//                    }
-//                }
-//
-//            }
-//            if(campaign.status == UserInteractionStatus.IDLE){
-//                viewModel.updateCampaignStatus(campaign, UserInteractionStatus.SEEN)
-//            }
-//        }
+    }
+
+    private fun sendShareCampaign(shareText: String) {
+        Utils.shareText(this, shareText)
     }
 
     override fun onCampaignDetailsClick(campaign: Campaign) {
@@ -296,9 +286,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun handleCampaignAction(campaign: Campaign) {
-        when(campaign.buttonAction){
+        when (campaign.buttonAction) {
             CampaignButtonAction.SHARE -> {
-                campaign.shareUrl?.let{
+                campaign.shareUrl?.let {
                     Utils.shareText(this, it)
                 }
             }
@@ -394,6 +384,15 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
             MainViewModel.MainNavigationEvent.INITIALIZE_STRIPE -> {
                 viewModel.reInitStripe(this)
+            }
+            MainViewModel.MainNavigationEvent.LOGOUT -> {
+                val intent = Intent(this, SplashActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                finish()
+            }
+            MainViewModel.MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE -> {
+                mediaUtil.startPhotoFetcher()
             }
         }
     }

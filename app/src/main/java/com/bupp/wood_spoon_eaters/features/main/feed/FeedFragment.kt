@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
@@ -81,6 +82,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
                 event.feedArr?.let { initFeed(it) }
             }
         })
+        viewModel.campaignLiveData.observe(viewLifecycleOwner, { campaigns ->
+            handleShareCampaign(campaigns)
+        })
         viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
             binding.feedFragSectionsView.initFavorites(it)
         })
@@ -95,6 +99,20 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 //            Log.d(TAG, "campaign: $it")
 //            mainViewModel.checkCampaignForFeed()
 //        })
+    }
+
+    private fun handleShareCampaign(campaigns: List<Campaign>?) {
+        campaigns?.let{
+            campaigns.forEach { campaign ->
+                campaign.viewTypes?.forEach { viewType ->
+                    when (viewType) {
+                        CampaignViewType.FEED -> {
+                            binding.feedFragSectionsView.initShareCampaign(campaign)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun handleFeedBannerUi(feedUiStatus: FeedUiStatus?) {
@@ -219,9 +237,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
     }
 
-    override fun onShareClick() {
-        val text = mainViewModel.getShareText()
-        activity?.let { Utils.shareText(it, text) }
+    override fun onShareClick(campaign: Campaign) {
+        mainViewModel.onShareCampaignClick(campaign)
     }
 
     override fun onWorldwideInfoClick() {

@@ -13,14 +13,17 @@ import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager): ViewModel()  {
+    val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
+    private val userRepository: UserRepository): ViewModel()  {
 
 //    val progressData = ProgressData()
 
@@ -32,9 +35,10 @@ class MainViewModel(
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
     enum class MainNavigationEvent{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
-        OPEN_CAMERA_UTIL,
         START_PAYMENT_METHOD_ACTIVITY,
-        INITIALIZE_STRIPE
+        INITIALIZE_STRIPE,
+        LOGOUT,
+        OPEN_CAMERA_UTIL_IMAGE
     }
 
 
@@ -69,10 +73,10 @@ class MainViewModel(
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
     fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
-    val navigationEvent = MutableLiveData<NavigationEventType>()
-    enum class NavigationEventType{
-        OPEN_CAMERA_UTIL_IMAGE
-    }
+//    val navigationEvent = MutableLiveData<NavigationEventType>()
+//    enum class NavigationEventType{
+//        OPEN_CAMERA_UTIL_IMAGE,
+//    }
 
     val dishClickEvent = LiveEventData<Long>()
     fun onDishClick(menuItemId: Long) {
@@ -359,7 +363,7 @@ class MainViewModel(
     }
 
     fun onUserImageClick() {
-        navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
+        mainNavigationEvent.postValue(MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE)
     }
 //
 //    fun checkIfHaveReferral() {
@@ -379,6 +383,20 @@ class MainViewModel(
     fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
         paymentMethod?.let{
             paymentManager.updateSelectedPaymentMethod(it)
+        }
+    }
+
+    val shareEvent = MutableLiveData<String>()
+    fun onShareCampaignClick(campaign: Campaign?) {
+        val shareUrl = campaign?.shareUrl
+        val shareText = campaign?.shareText ?: ""
+        shareEvent.postValue("$shareText \n $shareUrl")
+    }
+
+    fun logout() {
+        val logoutResult = userRepository.logout()
+        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
+            mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
         }
     }
 

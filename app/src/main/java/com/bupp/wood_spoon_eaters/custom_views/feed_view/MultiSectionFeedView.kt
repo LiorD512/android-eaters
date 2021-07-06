@@ -10,19 +10,17 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
-import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Feed
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FavoriteBtnBinding
 import com.bupp.wood_spoon_eaters.databinding.MultiSectionFeedViewBinding
-
+import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.views.ShareBanner
 
 
 class MultiSectionFeedView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr), SearchAdapter.SearchAdapterListener, ManyCooksView.ManyCooksViewListener,
-    SingleFeedListView.SingleFeedListViewListener, FavoritesView.FavoritesViewListener {
+    SingleFeedListView.SingleFeedListViewListener, FavoritesView.FavoritesViewListener, ShareBanner.WSCustomBannerListener {
 
     private var binding: MultiSectionFeedViewBinding = MultiSectionFeedViewBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -33,8 +31,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         fun refreshList(){}
         fun onEmptyhDishList(){}
         fun onWorldwideInfoClick()
-//        fun onFavClick(dishId: Long, isFavorite: Boolean)
-        fun onShareClick()
+        fun onShareClick(campaign: Campaign)
     }
 
     private lateinit var adapter: SearchAdapter
@@ -57,7 +54,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun initFeed(feedArr: List<Feed>, isWithFavorites: Boolean = true, stubView: Int, isPullToRefreshEnabled: Boolean = true, isEvent: Boolean = false) {
         with(binding){
             clearFeed()
-            multiSectionViewRefreshLayout.setRefreshing(false)
+            multiSectionViewRefreshLayout.isRefreshing = false
             val dishArr: ArrayList<Feed> = arrayListOf()
             val cooksArr: ArrayList<Cook> = arrayListOf()
             var cooksTitle: String = ""
@@ -84,17 +81,18 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
 
 
-            when(stubView){
-                Constants.FEED_VIEW_STUB_SHARE -> {
-                    multiSectionViewShareViewLayout.visibility = View.VISIBLE
-                    multiSectionViewLogoLayout.visibility = View.GONE
-                    multiSectionViewShareViewLayout.setOnClickListener { listener.onShareClick() }
-                }
-                Constants.FEED_VIEW_STUB_PROMO -> {
-                    multiSectionViewShareViewLayout.visibility = View.GONE
-                    multiSectionViewLogoLayout.visibility = View.VISIBLE
-                }
-            }
+//            when(stubView){
+//                Constants.FEED_VIEW_STUB_SHARE -> {
+//                    multiSectionViewShareViewLayout.visibility = View.VISIBLE
+//                    multiSectionViewLogoLayout.visibility = View.GONE
+//                    multiSectionViewShareViewLayout.setOnClickListener { listener.onShareClick() }
+//                }
+//                Constants.FEED_VIEW_STUB_PROMO -> {
+//                    multiSectionViewShareViewLayout.visibility = View.GONE
+//                    multiSectionViewLogoLayout.visibility = View.VISIBLE
+//                }
+//            }
+
 
             if(!isPullToRefreshEnabled){
                 multiSectionViewRefreshLayout.isEnabled = false
@@ -149,6 +147,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     override fun onWorldwideInfoClick() {
         if(::listener.isInitialized){
             listener.onWorldwideInfoClick()
+        }
+    }
+
+    fun initShareCampaign(campaign: Campaign){
+        binding.multiSectionViewShareBanner.initCustomBanner(campaign, this)
+    }
+
+    override fun onShareBannerClick(campaign: Campaign?) {
+        campaign?.let{
+            listener.onShareClick(it)
         }
     }
 

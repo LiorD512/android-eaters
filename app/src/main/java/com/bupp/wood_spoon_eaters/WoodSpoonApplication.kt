@@ -24,7 +24,6 @@ import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration;
 
 
 class WoodSpoonApplication : Application() {
-    private val devKey  = "pdDuzVhDY8UpBHir8tgvKc"
 
     companion object {
         private lateinit var instance: WoodSpoonApplication
@@ -49,35 +48,10 @@ class WoodSpoonApplication : Application() {
             com.microsoft.appcenter.analytics.Analytics::class.java, Crashes::class.java, Distribute::class.java
         )
 
-        // Branch logging for debugging
         Branch.enableLogging()
-
-        // Branch object initialization
         Branch.getAutoInstance(this)
+        Branch.enableTestMode()
 
-
-        val conversionDataListener  = object : AppsFlyerConversionListener{
-            override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
-
-            }
-
-            override fun onConversionDataFail(p0: String?) {
-
-            }
-
-            override fun onAppOpenAttribution(data: MutableMap<String, String>?) {
-                data?.map {
-//                    Log.d("wowApplication", "onAppOpen_attribute: ${it.key} = ${it.value}")
-                }
-            }
-
-            override fun onAttributionFailure(error: String?) {
-//                Log.e("wowApplication", "error onAttributionFailure :  $error")
-            }
-        }
-
-        AppsFlyerLib.getInstance().init(devKey, conversionDataListener, applicationContext)
-        AppsFlyerLib.getInstance().start(this)
 
         if(BuildConfig.BUILD_TYPE.equals("release", true)) {
             Log.d("wowApplication", "uxcam is on!")

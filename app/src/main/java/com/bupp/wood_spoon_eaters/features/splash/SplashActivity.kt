@@ -12,11 +12,14 @@ import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivitySplashBinding
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
+import io.branch.referral.BranchError
+import org.json.JSONObject
 
 
 class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, WSErrorDialog.WSErrorListener {
@@ -103,7 +106,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun redirectToMain() {
-        Log.d("wowSplash", "redirectToMain")
+        Log.d(TAG, "redirectToMain")
         viewModel.initFCMAndRefreshToken()
         val intent = Intent(this, MainActivity::class.java)
         cookId?.let {
@@ -125,24 +128,21 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        // if activity is in foreground (or in backstack but partially visible) launching the same
-        // activity will skip onStart, handle this case with reInitSession
         Branch.sessionBuilder(this).withCallback(callback).reInit()
     }
 
     private val callback = Branch.BranchReferralInitListener { linkProperties, _ ->
         linkProperties?.let {
-            Log.d("wowSplash", "Branch.io intent $linkProperties")
+            Log.d(TAG, "Branch.io intent $linkProperties")
             if (it.has("cook_id")) {
                 cookId = it.get("cook_id") as String
             }
             if (it.has("menu_item_id")) {
                 menuItemId = it.get("menu_item_id") as String
             }
-            if(it.has("referral")){
+            if(it.has("referral_token")){
                 val token = it.get("referral_token") as String
-
-                Log.d("wowSplash", "referral_token: $token")
+                Log.d(TAG, "referral_token: $token")
                 viewModel.setUserReferralToken(token)
             }
         }
@@ -151,6 +151,10 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     override fun onResume() {
         super.onResume()
         updateScreenUi()
+    }
+
+    companion object{
+        const val TAG = "wowSplash"
     }
 
 }

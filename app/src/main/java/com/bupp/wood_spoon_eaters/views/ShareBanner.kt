@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.ShareBannerBinding
@@ -36,6 +37,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.customBannerLayout.setOnClickListener {
             listener?.onShareBannerClick(curCampaign)
         }
+
+        binding.customBannerLayout.visibility = View.VISIBLE
     }
 
 }

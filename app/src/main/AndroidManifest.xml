@@ -52,13 +52,13 @@
                 android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
                 android:value="true" />
 
-        <receiver
-                android:name="com.appsflyer.SingleInstallBroadcastReceiver"
-                android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver-->
+<!--                android:name="com.appsflyer.SingleInstallBroadcastReceiver"-->
+<!--                android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.android.vending.INSTALL_REFERRER" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <service
                 android:name=".fcm.MyFirebaseMessagingService"
@@ -86,18 +86,18 @@
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"
                 android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
                 android:name=".features.splash.SplashActivity"
                 android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <!-- Branch URI Scheme -->
             <intent-filter>
-                <data android:scheme="woodspoon" />
+                <data android:scheme="woodspooneaters" android:host="open" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -108,9 +108,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!--<data android:scheme="https" android:host="woodspoon.app.link" />-->
                 <data android:scheme="https" android:host="woodspoon.app.link" />
                 <data android:scheme="https" android:host="woodspoon.test-app.link" />
+                <data android:scheme="https" android:host="woodspoon-alternate.test-app.link" />
             </intent-filter>
         </activity> <!-- Branch init -->
         <meta-data
@@ -118,10 +118,11 @@
                 android:value="key_live_ejLPSCmaw2jZxm2hDlPK1hjluDl92rWc" />
         <meta-data
                 android:name="io.branch.sdk.BranchKey.test"
-                android:value="key_test_hlxrWC5Zx16DkYmWu4AHiimdqugRYMr" />
+                android:value="key_test_caHOMCbetYp9Eh0jucUXgejbBsj45D9u" />
         <meta-data
                 android:name="io.branch.sdk.TestMode"
-                android:value="false" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+                android:value="true" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+
         <activity
                 android:name=".features.login.LoginActivity"
                 android:screenOrientation="portrait"
