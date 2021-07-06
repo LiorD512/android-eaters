@@ -9,7 +9,7 @@
             app:cardUseCompatPadding="true"
             android:id="@+id/customBannerLayout"
             android:layout_width="match_parent"
-            android:layout_height="159dp"
+            android:layout_height="179dp"
             android:visibility="gone"
             app:cardElevation="8dp"
             app:cardCornerRadius="7.7dp"

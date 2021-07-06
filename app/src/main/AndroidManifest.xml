@@ -111,6 +111,7 @@
                 <data android:scheme="https" android:host="woodspoon.app.link" />
                 <data android:scheme="https" android:host="woodspoon.test-app.link" />
                 <data android:scheme="https" android:host="woodspoon-alternate.test-app.link" />
+                <data android:scheme="https" android:host="woodspoon-alternate.app.link" />
             </intent-filter>
         </activity> <!-- Branch init -->
         <meta-data

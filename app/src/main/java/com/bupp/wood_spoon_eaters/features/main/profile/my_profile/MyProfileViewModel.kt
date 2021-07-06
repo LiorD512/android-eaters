@@ -60,7 +60,7 @@ class MyProfileViewModel(
     }
 
     private fun setVersionData() {
-        val versionData = "Version: ${BuildConfig.VERSION_NAME} (pr-${flavorConfigManager.curEnvironment})"
+        val versionData = "Version: ${BuildConfig.VERSION_NAME} ${flavorConfigManager.getEnvName()}"
         versionLiveData.postValue(versionData)
     }
 

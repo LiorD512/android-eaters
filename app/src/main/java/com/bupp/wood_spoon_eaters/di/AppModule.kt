@@ -87,7 +87,7 @@ val appModule = module {
 
     //splash
     viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { SuperUserViewModel(get()) }
+    viewModel { SuperUserViewModel(get(), get()) }
 
     //login
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }

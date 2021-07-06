@@ -77,6 +77,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             if (it.getBooleanExtra("isAfterPurchase", false)) {
                 showRateTheAppDialog()
                 viewModel.checkForActiveOrder()
+                //todo - refresh active campaigns after purchase
+//                viewModel.
 //                    checkForSharingCampaign()
 //                    refreshUser()
             }

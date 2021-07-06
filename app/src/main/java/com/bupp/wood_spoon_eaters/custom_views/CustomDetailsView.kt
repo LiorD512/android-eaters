@@ -80,7 +80,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-
     private fun setIcon(icon: Drawable?) {
         icon?.let{
             binding.customDetailsViewIcon.setImageDrawable(icon)
@@ -133,6 +132,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 Constants.DELIVERY_DETAILS_PAYMENT -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_credit_card)
                     customDetailsViewTitle.text = "Payment method"
+                    customDetailsViewSubtitle.text = "Insert payment method"
                 }
                 Constants.DELIVERY_DETAILS_PROMO_CODE -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_promo)

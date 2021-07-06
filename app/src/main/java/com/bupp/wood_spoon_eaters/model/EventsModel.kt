@@ -57,7 +57,7 @@ data class Campaign(
 enum class UserInteractionStatus{
     @Json(name = "idle") IDLE,
     @Json(name = "seen") SEEN,
-    @Json(name = "engaged ") ENGAGED,
+    @Json(name = "engaged") ENGAGED,
 }
 
 enum class CampaignShowAfter{
