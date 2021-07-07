@@ -109,7 +109,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="un_available_dish_alerter_body">This dish is available outside the delivery window you selected</string>
     <string name="device_location_off_alerter_body">You disabled your location services. WoodSpoon is using your last saved address for now.</string>
-    <string name="ux_cam_app_key">cpv4jp007ywix6x</string>
+
     <string name="phone_verification_fragment_phone_error">Please enter a valid phone</string>
     <string name="login_error_wrong_code">Invalid or expired activation code, please try again</string>
     <string name="login_error_wrong_phone">Invalid phone number</string>
