@@ -39,6 +39,10 @@ import kotlin.math.ln
 
 class LocationManager(val context: Context, private val metaDataRepository: MetaDataRepository) {
 
+    fun clearUserAddresses(){
+        finalAddressLiveDataParam.postValue(FinalAddressParam(null))
+        setDefaultAddress()
+    }
 
     fun setDefaultAddress() {
         val lat = metaDataRepository.getDefaultLat()

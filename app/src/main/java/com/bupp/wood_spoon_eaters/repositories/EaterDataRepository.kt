@@ -101,19 +101,19 @@ class EaterDataRepository(private val apiService: EaterDataRepositoryImpl) {
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    MTLogger.c(TAG,"getFavorites - NetworkError")
+                    MTLogger.c(TAG,"getTriggers - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    MTLogger.c(TAG,"getFavorites - GenericError")
+                    MTLogger.c(TAG,"getTriggers - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    MTLogger.c(TAG,"getFavorites - Success")
+                    MTLogger.c(TAG,"getTriggers - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
+                    MTLogger.c(OrderRepository.TAG,"getTriggers - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

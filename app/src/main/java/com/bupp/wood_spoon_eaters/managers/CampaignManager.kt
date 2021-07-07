@@ -21,7 +21,7 @@ import kotlinx.parcelize.Parcelize
 class CampaignManager(private val campaignRepository: CampaignRepository, private val eaterDataManager: EaterDataManager) {
 
 
-    private val campaignLiveData = MutableLiveData<List<Campaign>>()
+    private val campaignLiveData = MutableLiveData<List<Campaign>?>()
     fun getCampaignLiveData() = campaignLiveData
 
     var curCampaigns: List<Campaign>? = null
@@ -63,17 +63,12 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
                         referralToken =  null
                         true
                     }
-                    is ResultHandler.NetworkError -> {
-                        MTLogger.c(TAG, "validateReferralToken - NetworkError")
-                        false
-                    }
-                    is ResultHandler.GenericError -> {
-                        MTLogger.c(TAG, "validateReferralToken - GenericError")
-                        false
-                    }
                     is ResultHandler.WSCustomError -> {
                         MTLogger.c(TAG, "validateReferralToken - wsError")
                         referralToken =  null
+                        false
+                    }
+                    else -> {
                         false
                     }
                 }
@@ -87,23 +82,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
         val result = withContext(Dispatchers.IO) {
             campaignRepository.fetchCampaigns()
         }
-        result.let {
-            when (result) {
-                is ResultHandler.NetworkError -> {
-                    MTLogger.d(TAG, "checkForCampaigns - NetworkError")
-                }
-                is ResultHandler.GenericError -> {
-                    MTLogger.d(TAG, "checkForCampaigns - GenericError")
-                }
-                is ResultHandler.Success -> {
-                    MTLogger.d(TAG, "fetchCampaigns - success")
-                    this.curCampaigns = result.value.data
-                }
-                is ResultHandler.WSCustomError -> {
-                    MTLogger.d(TAG, "checkForCampaigns - something went wrong")
-                }
-            }
-        }
+        this.curCampaigns = result
     }
 
     private suspend fun checkCampaignFor(curEvent: FlowEventsManager.FlowEvents) {
@@ -120,57 +99,18 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
                         updateCampaignStatus(it, UserInteractionStatus.SEEN)
                     }
                 }
+            }else{
+                campaignLiveData.postValue(null)
             }
         }
     }
 
     suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus) {
         MTLogger.d(TAG, "updateCampaignStatus: $userInteractionId")
-        val result = withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             campaignRepository.updateCampaignStatus(userInteractionId, status)
         }
-        result.let {
-            when (result) {
-                is ResultHandler.Success -> {
-                    MTLogger.c(TAG, "updateCampaignStatus - Success")
-                }
-            }
-        }
     }
-
-
-//    suspend fun updateCampaignStatus(userInteractionId: Long?, status: UserInteractionStatus) {
-//        userInteractionId?.let {
-//            val result = updateCampaignStatus(it, status)
-//            when (result.type) {
-//                EaterDataRepository.EaterDataRepoStatus.UPDATE_CAMPAIGN_STATUS_SUCCESS -> {
-//                    MTLogger.d(TAG, "updateCampaignStatus - success")
-////                    fetchCampaigns(curEvent)
-//                }
-//                else -> {
-//                    MTLogger.d(TAG, "updateCampaignStatus - failed")
-//                }
-//            }
-//        }
-//    }
-
-//    override fun handleCampaignAction(campaign: Campaign) {
-//        when(campaign.buttonAction){
-//            CampaignButtonAction.SHARE -> {
-//                campaign.shareUrl?.let{
-//                    Utils.shareText(this, it)
-//                }
-//            }
-//            CampaignButtonAction.ACKNOWLEDGE -> {
-//                //do nothing
-//            }
-//            CampaignButtonAction.JUMP_TO_LINK -> {
-//                //todo = add webView
-//            }
-//        }
-//        viewModel.updateCampaignStatus(campaign, UserInteractionStatus.ENGAGED)
-//
-//    }
 
 
     companion object {

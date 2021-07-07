@@ -53,15 +53,60 @@ class CampaignRepository(private val campaignRepo: CampaignRepositoryImpl, priva
         return result
     }
 
-    suspend fun fetchCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
-        return withContext(Dispatchers.IO){
+    suspend fun fetchCampaigns(): List<Campaign>? {
+        val result = withContext(Dispatchers.IO){
             campaignRepo.getActiveCampaigns()
         }
+        when(result){
+            is ResultHandler.Success -> {
+                return result.value.data
+            }
+            is ResultHandler.NetworkError -> {
+                MTLogger.c(TAG, "validateReferral - NetworkError")
+                globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.NETWORK_ERROR)
+            }
+            is ResultHandler.GenericError -> {
+                MTLogger.c(TAG, "validateReferral - GenericError")
+                globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.GENERIC_ERROR)
+            }
+            is ResultHandler.WSCustomError -> {
+                MTLogger.c(TAG, "validateReferral - wsError")
+                if(result.errors?.isNotEmpty() == true){
+                    globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, wsError = result.errors[0])
+                }
+            }
+        }
+        return null
     }
 
-    suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus): ResultHandler<ServerResponse<Any>> {
-        return withContext(Dispatchers.IO) {
+//    suspend fun fetchCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
+//        return withContext(Dispatchers.IO){
+//            campaignRepo.getActiveCampaigns()
+//        }
+//    }
+
+    suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus) {
+        val result = withContext(Dispatchers.IO){
             campaignRepo.updateCampaignStatus(userInteractionId, status)
+        }
+        when(result){
+            is ResultHandler.Success -> {
+                MTLogger.c(TAG, "updateCampaignStatus - Success")
+            }
+            is ResultHandler.NetworkError -> {
+                MTLogger.c(TAG, "updateCampaignStatus - NetworkError")
+                globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.NETWORK_ERROR)
+            }
+            is ResultHandler.GenericError -> {
+                MTLogger.c(TAG, "updateCampaignStatus - GenericError")
+                globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.GENERIC_ERROR)
+            }
+            is ResultHandler.WSCustomError -> {
+                MTLogger.c(TAG, "updateCampaignStatus - wsError")
+                if(result.errors?.isNotEmpty() == true){
+                    globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, wsError = result.errors[0])
+                }
+            }
         }
     }
 

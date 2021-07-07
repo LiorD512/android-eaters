@@ -10,8 +10,8 @@ import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_FACTORY
 import com.bupp.wood_spoon_eaters.di.abs.UriAdapter
-import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
-import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
+//import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
+//import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
@@ -38,7 +38,6 @@ val networkModule = module {
     single { FlavorConfigManager(get()) }
     single { provideEncryptedSharedPreferences(get(), androidApplication()) }
     factory { ApiSettings(get()) }
-    single { provideGoogleApi() }
 
     single { provideDefaultOkhttpClient(get()) }
     single { provideRetrofit(get(), get()) }
@@ -46,9 +45,6 @@ val networkModule = module {
 
 }
 
-fun provideGoogleApi(): GoogleApi {
-    return GoogleRetrofitFactory.createGoogleRetrofitInstance(GoogleApi.BASE_URL).create(GoogleApi::class.java)
-}
 
 fun provideEncryptedSharedPreferences(
     context: Context,

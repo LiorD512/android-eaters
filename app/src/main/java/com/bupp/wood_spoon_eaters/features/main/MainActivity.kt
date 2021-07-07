@@ -78,10 +78,14 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             if (it.getBooleanExtra("isAfterPurchase", false)) {
                 showRateTheAppDialog()
                 viewModel.checkForActiveOrder()
-                binding.mainActCampaignBanner.hide()
-                viewModel.refreshActiveCampaigns()
+                refreshActiveCampaigns()
             }
         }
+    }
+
+    private fun refreshActiveCampaigns() {
+        binding.mainActCampaignBanner.hide()
+        viewModel.refreshActiveCampaigns()
     }
 
     private fun showRateTheAppDialog() {
@@ -187,9 +191,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ////////////////////////////////////////////////
 
 
-    private fun checkForCampaignReferrals() {
-    }
-
     private fun initObservers() {
 //        viewModel.progressData.observe(this, {
 //            handlePb(it)
@@ -244,8 +245,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
         viewModel.campaignLiveData.observe(this, {
-            Log.d(FeedFragment.TAG, "campaign: $it")
-            it?.let {
+            Log.d(TAG, "campaignLiveData: $it")
+            it?.let{
                 handleCampaignData(it)
             }
         })
@@ -270,13 +271,13 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun handleError(errorData: GlobalErrorManager.GlobalError?) {
-        errorData?.let{
-            when(it.type){
-               GlobalErrorManager.GlobalErrorType.NETWORK_ERROR -> {
-                   Toast.makeText(this, "Network Error", Toast.LENGTH_SHORT).show()
-               }
+        errorData?.let {
+            when (it.type) {
+                GlobalErrorManager.GlobalErrorType.NETWORK_ERROR -> {
+//                    Toast.makeText(this, "Network Error", Toast.LENGTH_SHORT).show()
+                }
                 GlobalErrorManager.GlobalErrorType.GENERIC_ERROR -> {
-                   Toast.makeText(this, "Server Error", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Server Error", Toast.LENGTH_SHORT).show()
                 }
                 GlobalErrorManager.GlobalErrorType.WS_ERROR -> {
                     WSErrorDialog(it.wsError?.msg, null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
