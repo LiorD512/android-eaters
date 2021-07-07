@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
@@ -26,7 +27,7 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
     }
 
     val viewModel by viewModel<PickFiltersViewModel>()
-    lateinit var binding: FiltersFragmentBinding
+    val binding: FiltersFragmentBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +41,6 @@ class FilterFragment(val listener: FilterFragmentListener) : DialogFragment(), I
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FiltersFragmentBinding.bind(view)
 
         initUi()
         getCurrentFilterParam()

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -25,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderView.HeaderViewListener,
     OrdersHistoryAdapter.OrdersHistoryAdapterListener {
 
-    lateinit var binding: FragmentOrdersHistoryBinding
+    val binding: FragmentOrdersHistoryBinding by viewBinding()
     val viewModel by viewModel<OrdersHistoryViewModel>()
     lateinit var adapter: OrdersHistoryAdapter
 
@@ -36,7 +37,6 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentOrdersHistoryBinding.bind(view)
         Analytics.with(requireContext()).screen("Order history")
         initUi()
     }

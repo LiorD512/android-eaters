@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -25,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private lateinit var binding: JoinAsChefBottomSheetBinding
+    private val binding: JoinAsChefBottomSheetBinding by viewBinding()
 //    private val viewModel: SupportViewModel by viewModel()
 
 
@@ -56,8 +57,6 @@ class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = JoinAsChefBottomSheetBinding.bind(view)
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)

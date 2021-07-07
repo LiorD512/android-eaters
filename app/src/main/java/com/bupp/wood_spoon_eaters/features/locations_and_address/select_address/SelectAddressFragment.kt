@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.airbnb.lottie.LottieDrawable
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -30,11 +31,10 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     private var gpsBroadcastReceiver: GPSBroadcastReceiver? = null
     private val viewModel by viewModel<SelectAddressViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
-    private lateinit var binding: FragmentSelectAddressBinding
+    private val binding: FragmentSelectAddressBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSelectAddressBinding.bind(view)
 
         initUi()
         initObservers()

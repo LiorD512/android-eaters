@@ -1,12 +1,15 @@
 package com.bupp.wood_spoon_eaters.dialogs.super_user
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.DialogSuperUserBinding
@@ -20,7 +23,7 @@ class SuperUserDialog : DialogFragment() {
         fun onEnvironmentChanged(forceRestart: Boolean? = false)
     }
 
-    private lateinit var binding: DialogSuperUserBinding
+    private val binding: DialogSuperUserBinding by viewBinding()
     val viewModel: SuperUserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,13 +31,9 @@ class SuperUserDialog : DialogFragment() {
         setStyle(STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        binding = DialogSuperUserBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.dialog_super_user, null)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogBinding
@@ -24,7 +25,7 @@ class AdditionalDishesDialog : DialogFragment(R.layout.additional_dishes_dialog)
 
     //    private var mainAdapter: AdditionalDishMainAdapter? = null
     private var mainAdapter: AdditionalDishesAdapter? = null
-    private lateinit var binding: AdditionalDishesDialogBinding
+    private val binding: AdditionalDishesDialogBinding by viewBinding()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
     var isDismissed = true // if true - redirects to cook's profile and lock header when dismissed.
@@ -37,7 +38,6 @@ class AdditionalDishesDialog : DialogFragment(R.layout.additional_dishes_dialog)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = AdditionalDishesDialogBinding.bind(view)
 
         val parent = view.parent as View
         parent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SettingsBottomSheetBinding
@@ -18,8 +19,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener, HeaderView.HeaderViewListener {
 
-    private lateinit var binding: SettingsBottomSheetBinding
-    private lateinit var adapter: NotificationsGroupAdapter
+    private val binding: SettingsBottomSheetBinding by viewBinding()
+    private var adapter: NotificationsGroupAdapter? = null
     private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
     var lastClickedSwitchId: Long = -1
 
@@ -36,8 +37,6 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = SettingsBottomSheetBinding.bind(view)
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
@@ -59,7 +58,7 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
 
     private fun onUpdateDone(successful: Boolean) {
         if(!successful){
-            adapter.reverseSwitchThis(lastClickedSwitchId)
+            adapter?.reverseSwitchThis(lastClickedSwitchId)
         }
     }
 
@@ -88,6 +87,11 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
 
     override fun onHeaderBackClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 
 

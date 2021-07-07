@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
@@ -37,7 +38,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
-    lateinit var binding: FragmentFeedBinding
+    val binding: FragmentFeedBinding by viewBinding()
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -45,8 +46,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentFeedBinding.bind(view)
-
+        Analytics.with(requireContext()).screen("Feed")
         initUi()
 
         initObservers()
@@ -116,9 +116,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     private fun handleFeedBannerUi(feedUiStatus: FeedUiStatus?) {
-        feedUiStatus?.let {
+        feedUiStatus?.let{
             Log.d(TAG, "handleFeedUi: ${it.type}")
-            when (it.type) {
+            when(it.type){
                 FeedUiStatusType.CURRENT_LOCATION, FeedUiStatusType.KNOWN_ADDRESS, FeedUiStatusType.HAS_LOCATION -> {
                     handleBannerEvent(Constants.NO_BANNER)
                 }
@@ -147,10 +147,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     private fun initFeed(feedArr: List<Feed>) {
-        if (feedArr.isEmpty()) {
+        if(feedArr.isEmpty()){
 //            showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-        } else {
+        }else{
             binding.feedFragEmptyLayout.visibility = View.GONE
             binding.feedFragListLayout.visibility = View.VISIBLE
             binding.feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
@@ -161,7 +161,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
     @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
-        with(binding) {
+        with(binding){
             feedFragListLayout.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
             feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
@@ -172,9 +172,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     private fun handleBannerEvent(bannerType: Int) {
-        bannerType.let {
+        bannerType.let{
             Log.d(TAG, "handleBannerEvent: $bannerType")
-            when (bannerType) {
+            when(bannerType){
                 Constants.NO_BANNER -> {
                     binding.feedFragHeaderError.visibility = View.GONE
                 }
@@ -190,14 +190,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
                 Constants.BANNER_NO_AVAILABLE_DISHES -> {
                     showBanner(getString(R.string.banner_no_available_dishes))
                 }
-                else -> {
-                }
+                else -> {}
             }
         }
     }
 
     private fun showBanner(text: String) {
-        with(binding) {
+        with(binding){
             feedFragHeaderError.text = text
             feedFragHeaderError.visibility = View.VISIBLE
             feedFragHeaderError.setOnClickListener {
@@ -223,7 +222,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
 
     override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let {
+        dish.menuItem?.let{
             mainViewModel.onDishClick(it.id)
         }
     }

@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WsErrorDialogBinding
 
 class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogFragment() {
 
-    lateinit var binding: WsErrorDialogBinding
+    val binding: WsErrorDialogBinding by viewBinding()
 
     interface WSErrorListener {
         fun onWSErrorDone()
@@ -32,7 +33,6 @@ class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogF
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = WsErrorDialogBinding.bind(view)
         initUi()
     }
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentCuisinesChooserBinding
@@ -16,7 +17,7 @@ import kotlin.collections.ArrayList
 class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: List<SelectableIcon>, val choiceCount: Int) : DialogFragment(), HeaderView.HeaderViewListener {
 
     private var selectedCuisine: MutableList<SelectableIcon>? = null
-    lateinit var binding: FragmentCuisinesChooserBinding
+    val binding: FragmentCuisinesChooserBinding by viewBinding()
 
     interface CuisinesChooserListener{
         fun onCuisineChoose(selectedCuisines: List<SelectableIcon>)
@@ -35,8 +36,6 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener, val cuisine: 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentCuisinesChooserBinding.bind(view)
 
         binding.cuisineChooserFragHeader.setHeaderViewListener(this)
         binding.cuisineChooserFragGrid.initIconsGrid(cuisine, choiceCount)
