@@ -1,40 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layoutDescription="@xml/track_order_section_change_animation"
+        app:showPaths="false">
 
-    <LinearLayout
-            android:id="@+id/trackOrderDetailsHeaderLayout"
+    <View
+            app:layout_constraintTop_toTopOf="@+id/trackOrderDetailsHeaderTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/trackOrderDetailsHeaderTitle"
+            android:id="@+id/trackOrderDetailsHeaderSpace"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="0dp"/>
 
         <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/trackOrderDetailsHeaderTitle"
                 style="@style/SemiBold15Dark"
+                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
                 android:letterSpacing="0.03"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingVertical="15dp"
                 tools:text="Order #12345678" />
 
         <ImageView
+                app:layout_constraintTop_toTopOf="@+id/trackOrderDetailsHeaderTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/trackOrderDetailsHeaderTitle"
+                app:layout_constraintStart_toEndOf="@+id/trackOrderDetailsHeaderTitle"
                 android:id="@+id/trackOrderDetailsHeaderArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="7dp"
                 android:src="@drawable/icons_down" />
 
-    </LinearLayout>
 
     <LinearLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trackOrderDetailsHeaderTitle"
             android:id="@+id/trackOrderDetailsSectionMainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -421,4 +430,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

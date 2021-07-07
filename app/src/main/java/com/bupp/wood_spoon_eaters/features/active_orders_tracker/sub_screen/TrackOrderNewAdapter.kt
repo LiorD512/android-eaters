@@ -2,12 +2,9 @@ package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen
 
 import android.content.Context
 import android.graphics.Typeface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +17,6 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.bind
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import mva2.adapter.ItemViewHolder
-import java.util.*
 
 
 class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener):
@@ -76,29 +72,15 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 //    }
 
     inner class TrackOrderDetailsViewHolder(val binding: TrackOrderDetailsSectionBinding) : ItemViewHolder<OrderTrackDetails>(binding.root) {
+
+        private var sectionHeight = 0
+        init {
+//            sectionHeight = binding.trackOrderDetailsHeaderLayout.
+        }
+
         fun bindItems(item: OrderTrackDetails) {
 
             binding.trackOrderDetailsHeaderTitle.text = "Order #${item.order.orderNumber}"
-            binding.trackOrderDetailsHeaderLayout.setOnClickListener {
-//                toggleItemExpansion()
-                isExpended = !isExpended
-                Log.d("wowTrackOrderHeader", "on Title Click: $isExpended")
-                if (isExpended) {
-                    binding.trackOrderDetailsSectionMainLayout.visibility = View.VISIBLE
-                    val rotateClock = RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-                    rotateClock.fillAfter = true
-                    rotateClock.repeatCount = 0
-                    rotateClock.duration = 500
-                    binding.trackOrderDetailsHeaderArrow.startAnimation(rotateClock)
-                } else {
-                    binding.trackOrderDetailsSectionMainLayout.visibility = View.GONE
-                    val rotateAntiClock = RotateAnimation(180f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-                    rotateAntiClock.fillAfter = true
-                    rotateAntiClock.repeatCount = 0
-                    rotateAntiClock.duration = 500
-                    binding.trackOrderDetailsHeaderArrow.startAnimation(rotateAntiClock)
-                }
-            }
 
             val order = item.order
             val userInfo = item.orderUserInfo
@@ -166,13 +148,21 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
                 }
 
 
-                val typeface = Typeface.createFromAsset(itemView.context.assets,"font/open_sans_bold.ttf")
+                val typeface = Typeface.createFromAsset(itemView.context.assets, "font/open_sans_bold.ttf")
                 setFontTypeDefault(binding, itemView.context)
                 when(curOrderStage){
-                    1 -> { binding.trackOrderProgressCb1.typeface = typeface }
-                    2 -> { binding.trackOrderProgressCb2.typeface = typeface }
-                    3 -> { binding.trackOrderProgressCb3.typeface = typeface }
-                    4 -> { binding.trackOrderProgressCb4.typeface = typeface }
+                    1 -> {
+                        binding.trackOrderProgressCb1.typeface = typeface
+                    }
+                    2 -> {
+                        binding.trackOrderProgressCb2.typeface = typeface
+                    }
+                    3 -> {
+                        binding.trackOrderProgressCb3.typeface = typeface
+                    }
+                    4 -> {
+                        binding.trackOrderProgressCb4.typeface = typeface
+                    }
                 }
 
                 binding.trackOrderProgressArrivalTime.text = "Estimated arrival - ${order.etaToDisplay}"
@@ -194,7 +184,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     private fun setFontTypeDefault(binding: TrackOrderProgressSectionBinding, context: Context) {
-        val regTypeface = Typeface.createFromAsset(context.assets,"font/open_sans_reg.ttf")
+        val regTypeface = Typeface.createFromAsset(context.assets, "font/open_sans_reg.ttf")
         binding.trackOrderProgressCb1.typeface = regTypeface
         binding.trackOrderProgressCb2.typeface = regTypeface
         binding.trackOrderProgressCb3.typeface = regTypeface

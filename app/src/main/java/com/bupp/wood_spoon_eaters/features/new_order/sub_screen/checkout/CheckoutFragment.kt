@@ -134,19 +134,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
             }
 
-//            checkoutFragPromoCodeStr.setOnClickListener {
-//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-//            }
-
-
-//            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
-//                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
-//                if (isChecked) {
-//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
-//                } else {
-//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
-//                }
-//            }
         }
 
         mainViewModel.getLastOrderDetails()
@@ -244,6 +231,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 checkoutFragPromoCode2.visibility = View.VISIBLE
                 checkoutFragPromoCode2.setTitle("Promo code $promo")
                 checkoutFragPromoCode2.setValue("(${curOrder.discount?.formatedValue?.replace("-", "")})")
+                checkoutFragPromoCode.updateSubTitle("$promo")
             }
 
             var feeAndTax = 0.0

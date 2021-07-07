@@ -75,14 +75,15 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
         }
     }
 
-    override fun onNotificationChange(notificationGroupId: Long) {
-        this.lastClickedSwitchId = notificationGroupId
-        viewModel.updateEaterNotificationGroup(notificationGroupId)
+    override fun onNotificationChange(notificationGroupIds: List<Long>) {
+//        this.lastClickedSwitchId = notificationGroupId
+        viewModel.updateEaterNotificationGroup(notificationGroupIds)
     }
 
 
     private fun loadSettings(settings: SettingsViewModel.SettingsDetails) {
         binding.settingsFragLocationSwitch.isChecked = settings.enableUserLocation
+        binding.settingsFragLocationSwitch.jumpDrawablesToCurrentState()
     }
 
     override fun onHeaderBackClick() {

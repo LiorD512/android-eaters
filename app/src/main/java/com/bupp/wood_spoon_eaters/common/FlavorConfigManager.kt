@@ -38,4 +38,11 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         return baseUrl
     }
 
+    fun getEnvName(): String{
+        if (curEnvironment.isNotEmpty()){
+            return "(pr-$curEnvironment)"
+        }
+        return ""
+    }
+
 }

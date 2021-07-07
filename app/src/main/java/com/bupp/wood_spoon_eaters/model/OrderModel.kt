@@ -99,12 +99,12 @@ data class OrderItem(
     fun getRemovedIngredients(): String?{
         var removedIngredientsStr: String? = null
         if(removedIngredients.isNotEmpty()){
-            removedIngredientsStr = "Removed: "
+            removedIngredientsStr = "Without: "
             removedIngredients.forEach {
-                removedIngredientsStr += "${it.name}"
+                removedIngredientsStr += "${it.name}, "
             }
         }
-        return removedIngredientsStr
+        return removedIngredientsStr?.substring(0, removedIngredientsStr.length - 2)
     }
     fun getNoteStr(): String?{
         if(notes.isNullOrEmpty()){

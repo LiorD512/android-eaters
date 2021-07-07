@@ -50,6 +50,7 @@ class WoodSpoonApplication : Application() {
 
         Branch.enableLogging()
         Branch.getAutoInstance(this)
+        Branch.enableTestMode()
 
 
         UXCam.startWithKey(getString(R.string.ux_cam_app_key))

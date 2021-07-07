@@ -116,7 +116,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     }
 
     private fun sendCode() {
-        viewModel.sendPhoneAndCodeNumber()
+        viewModel.sendPhoneAndCodeNumber(requireContext())
     }
 
     private fun startResendTimer() {

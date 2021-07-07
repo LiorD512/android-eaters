@@ -6,6 +6,8 @@ import android.content.Context
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
+import android.view.animation.AnimationUtils
+import com.bupp.wood_spoon_eaters.R
 
 class AnimationUtil {
 
@@ -21,5 +23,6 @@ class AnimationUtil {
             start()
         }
     }
+
 
 }

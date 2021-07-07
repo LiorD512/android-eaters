@@ -43,9 +43,9 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
         if (validateReferral()) {
             Log.d(TAG, "validateReferral - success")
             setUserReferralToken(null)
-            fetchCampaigns(curEvent)
+            fetchCampaigns()
         } else {
-            fetchCampaigns(curEvent)
+            fetchCampaigns()
         }
         checkCampaignFor(curEvent)
     }
@@ -81,7 +81,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
     }
 
 
-    private suspend fun fetchCampaigns(curEvent: FlowEventsManager.FlowEvents) {
+    private suspend fun fetchCampaigns() {
         val result = withContext(Dispatchers.IO) {
             campaignRepository.fetchCampaigns()
         }
@@ -108,7 +108,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
         //check if any of the active campaigns is of type "curEvent" - if so, show campaign and update campaign status
         MTLogger.d(TAG, "checkCampaignFor: $curEvent")
         curCampaigns?.let {
-            val campaigns = it.filter { it.showAfter.toString() == curEvent.toString() && it.status == UserInteractionStatus.IDLE }
+            val campaigns = it.filter { it.isMatchingEvent(curEvent) }
             if(campaigns.isNotEmpty()){
                 MTLogger.d(TAG, "checkCampaignFor: $curEvent FOUND!")
                 campaignLiveData.postValue(campaigns)

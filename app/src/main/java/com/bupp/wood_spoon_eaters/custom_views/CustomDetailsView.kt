@@ -80,7 +80,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-
     private fun setIcon(icon: Drawable?) {
         icon?.let{
             binding.customDetailsViewIcon.setImageDrawable(icon)
@@ -133,6 +132,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 Constants.DELIVERY_DETAILS_PAYMENT -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_credit_card)
                     customDetailsViewTitle.text = "Payment method"
+                    customDetailsViewSubtitle.text = "Insert payment method"
                 }
                 Constants.DELIVERY_DETAILS_PROMO_CODE -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_promo)
@@ -161,8 +161,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun updateDeliveryFullDetails(address: Address?) {
         with(binding){
             address?.let {
-                val floor = address.addressSlug
-                customDetailsViewTitle.text = "${it.streetLine1}, #${it.streetLine2}"
+                val street1 = it.streetLine1?.let{"${it},"} ?: ""
+                val street2 = it.streetLine2?.let{"#${it},"} ?: ""
+                customDetailsViewTitle.text = "$street1 $street2"
                 val city = it.city?.name?.let{"${it},"} ?: ""
                 val state = it.state?.name?.let{"${it},"} ?: ""
                 customDetailsViewSubtitle.text = "$city $state ${it.zipCode ?: ""}"

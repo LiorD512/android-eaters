@@ -57,7 +57,7 @@ val appModule = module {
     single { FeedRepository(get()) }
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
-    single { UserRepository(get(), get(), get()) }
+    single { UserRepository(get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get()) }
     single { EaterDataRepository(get()) }
@@ -87,7 +87,7 @@ val appModule = module {
 
     //splash
     viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { SuperUserViewModel(get()) }
+    viewModel { SuperUserViewModel(get(), get()) }
 
     //login
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }
@@ -110,10 +110,10 @@ val appModule = module {
 
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
-    viewModel { FeedViewModel(get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
@@ -125,7 +125,7 @@ val appModule = module {
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
-    viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditMyProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get()) }
     viewModel { OrdersHistoryViewModel(get()) }

@@ -2,10 +2,12 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.net.Uri
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import retrofit2.http.Field
 import java.util.*
 
 @kotlinx.parcelize.Parcelize
@@ -61,6 +63,11 @@ data class EaterRequest(
     @Json(name = "cuisine_ids") var cuisineIds: List<Int>? = null,
     @Json(name = "diet_ids") var dietIds: List<Int>? = null,
     var tempThumbnail: Uri? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class SettingsRequest(
+    @Json(name = "notification_group_ids") @SerializeNulls var notification_group_ids: List<Long>? = null
 )
 
 @JsonClass(generateAdapter = true)

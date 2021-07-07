@@ -95,9 +95,13 @@ interface ApiService {
     @POST("eaters/me")
     suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Any>
 
+
+    @POST("eaters/me")
+    suspend fun postEaterNotificationGroup(@Body eater: SettingsRequest): ServerResponse<Eater>
+
     @FormUrlEncoded
     @POST("eaters/me")
-    suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>): ServerResponse<Eater>
+    suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>?): ServerResponse<Eater>
 
     @POST("eaters/me/searches")
     suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
