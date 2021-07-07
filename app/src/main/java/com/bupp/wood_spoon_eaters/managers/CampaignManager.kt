@@ -60,6 +60,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
                 return when (result) {
                     is ResultHandler.Success -> {
                         MTLogger.c(TAG, "validateReferralToken - Success")
+                        referralToken =  null
                         true
                     }
                     is ResultHandler.NetworkError -> {
@@ -72,6 +73,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
                     }
                     is ResultHandler.WSCustomError -> {
                         MTLogger.c(TAG, "validateReferralToken - wsError")
+                        referralToken =  null
                         false
                     }
                 }
@@ -131,9 +133,6 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
             when (result) {
                 is ResultHandler.Success -> {
                     MTLogger.c(TAG, "updateCampaignStatus - Success")
-//                    EaterDataRepository.EaterDataRepoResult(EaterDataRepository.EaterDataRepoStatus.UPDATE_CAMPAIGN_STATUS_SUCCESS)
-                }
-                else -> {
                 }
             }
         }

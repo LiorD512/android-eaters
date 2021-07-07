@@ -32,6 +32,7 @@ import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFrag
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
+import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
@@ -195,6 +196,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //        viewModel.progressData.observe(this, {
 //            handlePb(it)
 //        })
+        viewModel.globalErrorLiveData.observe(this, {
+            handleError(it)
+        })
         viewModel.mainNavigationEvent.observe(this, {
             handleNavigation(it)
         })
@@ -265,6 +269,22 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //            }
 //        })
 
+    }
+
+    private fun handleError(errorData: GlobalErrorManager.GlobalError?) {
+        errorData?.let{
+            when(it.type){
+               GlobalErrorManager.GlobalErrorType.NETWORK_ERROR -> {
+                   Toast.makeText(this, "Network Error", Toast.LENGTH_SHORT).show()
+               }
+                GlobalErrorManager.GlobalErrorType.GENERIC_ERROR -> {
+                   Toast.makeText(this, "Server Error", Toast.LENGTH_SHORT).show()
+                }
+                GlobalErrorManager.GlobalErrorType.WS_ERROR -> {
+                    WSErrorDialog(it.wsError?.msg, null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+            }
+        }
     }
 
     private fun handleCampaignData(campaigns: List<Campaign>) {

@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
-    private val userRepository: UserRepository): ViewModel()  {
+    private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager): ViewModel()  {
 
 //    val progressData = ProgressData()
 
@@ -54,6 +54,7 @@ class MainViewModel(
 
 //    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
 //    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
+    val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
     val campaignLiveData = campaignManager.getCampaignLiveData()
 //    fun checkCampaignForFeed() {
 //        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)

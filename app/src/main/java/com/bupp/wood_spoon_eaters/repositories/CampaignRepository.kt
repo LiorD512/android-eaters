@@ -1,19 +1,17 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
+import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.model.UserInteractionStatus
-import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.network.base_repos.CampaignRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CampaignRepository(private val campaignRepo: CampaignRepositoryImpl){//}, val repoErrorManager: RepoErrorManager) {
-    //todo - think about adding a global error Handeling Manager - impliment in all repos
+class CampaignRepository(private val campaignRepo: CampaignRepositoryImpl, private val globalErrorManager: GlobalErrorManager) {
 
 //    data class CampaignRepositoryResult<T>(val type: CampaignRepositoryStatus, val data: T? = null, val wsError: List<WSError>? = null)
 //    enum class CampaignRepositoryStatus {
@@ -32,9 +30,27 @@ class CampaignRepository(private val campaignRepo: CampaignRepositoryImpl){//}, 
 //    }
 
     suspend fun validateReferral(token: String): ResultHandler<ServerResponse<Any>> {
-        return withContext(Dispatchers.IO) {
+        val result = withContext(Dispatchers.IO) {
             campaignRepo.validateReferralToken(token)
         }
+        when(result){
+            is ResultHandler.NetworkError -> {
+                MTLogger.c(TAG, "validateReferral - NetworkError")
+                globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.NETWORK_ERROR)
+            }
+            is ResultHandler.GenericError -> {
+                MTLogger.c(TAG, "validateReferral - GenericError")
+                globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.GENERIC_ERROR)
+            }
+            is ResultHandler.WSCustomError -> {
+                MTLogger.c(TAG, "validateReferral - wsError")
+                if(result.errors?.isNotEmpty() == true){
+                    globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, wsError = result.errors[0])
+                }
+            }
+            else -> {}
+        }
+        return result
     }
 
     suspend fun fetchCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
@@ -47,20 +63,6 @@ class CampaignRepository(private val campaignRepo: CampaignRepositoryImpl){//}, 
         return withContext(Dispatchers.IO) {
             campaignRepo.updateCampaignStatus(userInteractionId, status)
         }
-
-        //todo - after adding globalErrorManager add these fields -
-//        is ResultHandler.NetworkError -> {
-//            MTLogger.c(CampaignManager.TAG, "updateCampaignStatus - NetworkError")
-////                    EaterDataRepository.EaterDataRepoResult(EaterDataRepository.EaterDataRepoStatus.SERVER_ERROR)
-//        }
-//        is ResultHandler.GenericError -> {
-//            MTLogger.c(CampaignManager.TAG, "updateCampaignStatus - GenericError")
-////                    EaterDataRepository.EaterDataRepoResult(EaterDataRepository.EaterDataRepoStatus.UPDATE_CAMPAIGN_STATUS_FAILED)
-//        }
-//        is ResultHandler.WSCustomError -> {
-//            MTLogger.c(CampaignManager.TAG, "updateCampaignStatus - wsError")
-////                    EaterDataRepository.EaterDataRepoResult(EaterDataRepository.EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
-//        }
     }
 
 

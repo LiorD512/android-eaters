@@ -62,10 +62,11 @@ val appModule = module {
     single { OrderRepositoryImpl(get()) }
     single { EaterDataRepository(get()) }
     single { EaterDataRepositoryImpl(get()) }
-    single { CampaignRepository(get()) }
+    single { CampaignRepository(get(), get()) }
     single { CampaignRepositoryImpl(get()) }
 
     //managers
+    single { GlobalErrorManager() }
     single { DeliveryTimeManager() }
     single { EventsManager(get(), get()) }
     single { PaymentManager(get(), get()) }
@@ -110,7 +111,7 @@ val appModule = module {
 
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get()) }
