@@ -24,7 +24,7 @@ data class SearchRequest(
 )
 
 sealed class Search(
-    @Json(name = "resource") var resource: String?,
+    @Json(name = "resource") var resource: String?
 ): Parcelable {
     abstract val id: Long?
     abstract val results: List<Parcelable>?

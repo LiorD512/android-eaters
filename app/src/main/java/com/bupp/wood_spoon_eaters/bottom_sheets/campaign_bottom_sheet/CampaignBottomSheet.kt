@@ -69,24 +69,6 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding = CampaignBottomSheetBinding.bind(view)
-
-//        val resources = resources
-//
-//        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            val parent = view.parent as View
-//            val layoutParams = parent.layoutParams as CoordinatorLayout.LayoutParams
-//            layoutParams.setMargins(
-//                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // LEFT
-//                0,
-//                resources.getDimensionPixelSize(R.dimen.bottom_sheet_horizontal_margin), // RIGHT
-//                0
-//            )
-//            parent.layoutParams = layoutParams
-//            parent.setBackgroundResource(R.drawable.floating_bottom_sheet_bkg)
-//        }
-
-
         initUi()
     }
 

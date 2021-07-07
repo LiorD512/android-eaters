@@ -38,5 +38,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    fun hide(){
+        with(binding) {
+            campaignBannerLayout.visibility = View.GONE
+        }
+    }
+
 
 }

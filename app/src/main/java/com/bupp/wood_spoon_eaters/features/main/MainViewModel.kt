@@ -210,6 +210,12 @@ class MainViewModel(
         }
     }
 
+    fun refreshActiveCampaigns(){
+        viewModelScope.launch {
+            campaignManager.onFlowEventFired(FlowEventsManager.FlowEvents.VISIT_FEED)
+        }
+    }
+
     val getTriggers = eaterDataManager.getTriggers()
     fun checkForTriggers() {
         viewModelScope.launch {

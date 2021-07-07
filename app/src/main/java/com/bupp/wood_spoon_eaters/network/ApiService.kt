@@ -180,11 +180,11 @@ interface ApiService {
 
 
     //Profile data
-    @GET("eaters/me/dishes/ordered")
-    fun getEaterOrdered(
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): Call<ServerResponse<Search>>
+//    @GET("eaters/me/dishes/ordered")
+//    fun getEaterOrdered(
+//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): Call<ServerResponse<Search>>
 
 //    @GET("eaters/me/favorites")
 //    fun getEaterFavorites(

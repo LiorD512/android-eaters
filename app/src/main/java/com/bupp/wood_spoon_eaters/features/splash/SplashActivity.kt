@@ -7,19 +7,16 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.ActivitySplashBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.databinding.ActivitySplashBinding
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import io.branch.referral.Branch
 import com.google.firebase.analytics.FirebaseAnalytics
-import io.branch.referral.BranchError
-import org.json.JSONObject
+import io.branch.referral.Branch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, WSErrorDialog.WSErrorListener {
