@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WorldwideShippmentDialogBinding
 
 class NationwideShippmentInfoDialog: DialogFragment(){
 
-lateinit var binding: WorldwideShippmentDialogBinding
+    val binding: WorldwideShippmentDialogBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,6 @@ lateinit var binding: WorldwideShippmentDialogBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = WorldwideShippmentDialogBinding.bind(view)
         initUi()
 }
 

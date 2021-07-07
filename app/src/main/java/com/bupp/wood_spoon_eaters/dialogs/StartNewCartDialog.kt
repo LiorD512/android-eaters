@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.StartNewCartDialogLayoutBinding
 
 class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragment() {
 
-    lateinit var binding: StartNewCartDialogLayoutBinding
+    val binding: StartNewCartDialogLayoutBinding by viewBinding()
     private var cookInCartName = ""
     private var currentCookName = ""
 
@@ -41,7 +42,6 @@ class StartNewCartDialog(val listener: StartNewCartDialogListener) : DialogFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = StartNewCartDialogLayoutBinding.bind(view)
         initUi()
     }
 

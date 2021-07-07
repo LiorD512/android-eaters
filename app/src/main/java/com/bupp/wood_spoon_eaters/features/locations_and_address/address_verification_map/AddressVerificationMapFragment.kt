@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentAddressVerificationMapBinding
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
@@ -31,7 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verification_map), OnMapReadyCallback {
 
-    private var binding: FragmentAddressVerificationMapBinding? = null
+    private val binding: FragmentAddressVerificationMapBinding by viewBinding()
     private val viewModel by viewModel<AddressMapVerificationViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
     private val checkoutViewModel by sharedViewModel<NewOrderMainViewModel>()
@@ -43,8 +44,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentAddressVerificationMapBinding.bind(view)
 
         zoomLevel = requireArguments().getString("zoomLevel", "18").toFloat()
         val shouldShowBtn = requireArguments().getBoolean("showBtns")
@@ -59,13 +58,13 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             mainViewModel.initMapLocation()
         }
 
-        binding!!.addressMapFragPb.show()
+        binding.addressMapFragPb.show()
 
     }
 
     private fun initUi(shouldShowDefaultUi: Boolean) {
         if(shouldShowDefaultUi){
-            with(binding!!){
+            with(binding){
                 addressMapDoneBtn.visibility = View.VISIBLE
                 addressMapFragHeader.visibility = View.VISIBLE
                 addressMapMyLocationBtn.visibility = View.VISIBLE
@@ -227,7 +226,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             val bounds = builder.build()
             //change mechnic to monig map by scroll and target bound on the courer or chef location
             animateCamera(bounds)
-            binding!!.addressMapFragPb.hide()
+            binding.addressMapFragPb.hide()
         }
     }
 
@@ -262,12 +261,11 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     override fun onDestroy() {
         googleMap?.clear()
         googleMap = null
-        binding = null
         super.onDestroy()
     }
 
     override fun onPause() {
-        binding!!.addressMapFragPin.stopAllAnimations()
+        binding.addressMapFragPin.stopAllAnimations()
         super.onPause()
     }
 

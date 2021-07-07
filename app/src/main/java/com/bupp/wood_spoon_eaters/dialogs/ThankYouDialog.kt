@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.ThankYouDialogLayoutBinding
 
 class ThankYouDialog : DialogFragment() {
 
-    lateinit var binding: ThankYouDialogLayoutBinding
+    val binding: ThankYouDialogLayoutBinding by viewBinding()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
@@ -27,7 +29,6 @@ class ThankYouDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = ThankYouDialogLayoutBinding.bind(view)
         initUi()
     }
 

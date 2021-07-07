@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.databinding.CampaignBottomSheetBinding
@@ -26,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CampaignBottomSheet() : BottomSheetDialogFragment() {
 
-    private var binding: CampaignBottomSheetBinding? = null
+    private val binding: CampaignBottomSheetBinding by viewBinding()
     private var campaignData: CampaignData? = null
 
     var listener: CampaignBottomSheetListener? = null
@@ -56,8 +57,6 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.campaign_bottom_sheet, container, false)
     }
-
-
 
     private lateinit var behavior: BottomSheetBehavior<View>
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -89,8 +88,6 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
             parent.setBackgroundResource(R.drawable.floating_bottom_sheet_bkg)
         }
 
-
-        binding = CampaignBottomSheetBinding.bind(view)
 
         initUi()
     }

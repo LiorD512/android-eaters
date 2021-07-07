@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.RatingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.Review
@@ -15,8 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
 
-    private lateinit var binding: RatingsBottomSheetBinding
-    private lateinit var adapter: RatingsAdapter
+    private val binding: RatingsBottomSheetBinding by viewBinding()
+    private var adapter: RatingsAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +33,6 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = RatingsBottomSheetBinding.bind(view)
 
         initUi()
     }

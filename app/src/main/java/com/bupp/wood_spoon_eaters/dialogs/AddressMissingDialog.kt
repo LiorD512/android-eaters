@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.AddressMissingDialogBinding
 
 class AddressMissingDialog(val listener: AddressMissingDialogListener) : DialogFragment() {
 
-    lateinit var binding: AddressMissingDialogBinding
+    val binding: AddressMissingDialogBinding by viewBinding()
+
     interface AddressMissingDialogListener {
         fun openUpdateAddress()
     }
@@ -31,7 +33,6 @@ class AddressMissingDialog(val listener: AddressMissingDialogListener) : DialogF
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = AddressMissingDialogBinding.bind(view)
         initUi()
     }
 

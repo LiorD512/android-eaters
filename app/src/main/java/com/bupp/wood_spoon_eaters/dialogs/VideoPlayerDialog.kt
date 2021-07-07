@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.VideoPlayerDialogBinding
@@ -23,7 +24,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
 
-    lateinit var binding: VideoPlayerDialogBinding
+    val binding: VideoPlayerDialogBinding by viewBinding()
+
     private var player: SimpleExoPlayer? = null
     val viewModel by viewModel<WebDocsViewModel>()
 
@@ -41,11 +43,8 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = VideoPlayerDialogBinding.bind(view)
 
         initUi()
-
-
     }
 
     private fun initUi() {
@@ -70,7 +69,6 @@ class VideoPlayerDialog(val uri: Uri) : DialogFragment(), HeaderView.HeaderViewL
             dismiss()
         }
     }
-    
 
     override fun onHeaderBackClick() {
         dismiss()

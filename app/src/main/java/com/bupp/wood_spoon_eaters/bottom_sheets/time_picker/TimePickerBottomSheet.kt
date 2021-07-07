@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.MenuItem
@@ -23,7 +24,7 @@ class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSh
         fun onTimerPickerChange()
     }
 
-    private var binding: TimePickerBottomSheetBinding? = null
+    private val binding: TimePickerBottomSheetBinding by viewBinding()
     val viewModel by viewModel<TimePickerViewModel>()
     private var menuItems: List<MenuItem>? = null
     private var isTemporary: Boolean = false
@@ -69,13 +70,11 @@ class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSh
         }
 
 
-        binding = TimePickerBottomSheetBinding.bind(view)
-
         initUi()
     }
 
     private fun initUi() {
-        with(binding!!){
+        with(binding){
             timePickerAsapBtn.setOnClickListener {
                 viewModel.setDeliveryTime(null, isTemporary)
                 listener?.onTimerPickerChange()

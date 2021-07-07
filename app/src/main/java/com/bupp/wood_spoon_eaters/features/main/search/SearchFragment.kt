@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.NewDishSuggestionDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -29,7 +30,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class SearchFragment : Fragment(R.layout.fragment_search), SearchAdapter.SearchAdapterListener, NewDishSuggestionDialog.OfferDishDialogListener,
     FilterFragment.FilterFragmentListener, CookProfileDialog.CookProfileDialogListener {
 
-    lateinit var binding: FragmentSearchBinding
+    val binding: FragmentSearchBinding by viewBinding()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     companion object {
@@ -47,7 +48,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchAdapter.SearchA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentSearchBinding.bind(view)
         Analytics.with(requireContext()).screen("Search")
 
         initUi()

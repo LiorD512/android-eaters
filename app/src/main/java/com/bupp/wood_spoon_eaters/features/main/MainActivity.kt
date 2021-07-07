@@ -39,6 +39,7 @@ import com.bupp.wood_spoon_eaters.features.main.settings.SettingsFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.CampaignData
 import com.bupp.wood_spoon_eaters.model.CampaignViewType
 import com.bupp.wood_spoon_eaters.model.UserInteractionStatus

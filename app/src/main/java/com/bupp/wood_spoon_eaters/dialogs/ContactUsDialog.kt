@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.ContactUsDialogBinding
 
 class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() {
 
-    lateinit var binding: ContactUsDialogBinding
+    val binding: ContactUsDialogBinding by viewBinding()
+
     interface ContactUsDialogListener{
         fun onCallSupportClick()
         fun onSmsSupportClick()
@@ -32,7 +34,6 @@ class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = ContactUsDialogBinding.bind(view)
         initUi()
     }
 
