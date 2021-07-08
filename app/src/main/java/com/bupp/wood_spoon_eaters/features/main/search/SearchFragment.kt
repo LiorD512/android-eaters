@@ -205,7 +205,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchAdapter.SearchA
 
     override fun onFilterDone(isFiltered: Boolean) {
         binding.searchFragPb.show()
-        (activity as MainActivity).updateFilterUi(isFiltered)
+//        (activity as MainActivity).updateFilterUi(isFiltered)//todo - fix this feed 2.0
         viewModel.search(query)
     }
 

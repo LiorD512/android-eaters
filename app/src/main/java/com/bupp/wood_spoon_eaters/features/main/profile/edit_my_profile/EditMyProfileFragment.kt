@@ -69,7 +69,7 @@ class EditMyProfileFragment : Fragment(R.layout.edit_my_profile_fragment), UserI
 
     private fun handleSaveResponse(event: EditMyProfileViewModel.NavigationEvent?) {
         if (event!!.isSuccess) {
-            (activity as MainActivity).refreshUserUi()
+//            (activity as MainActivity).refreshUserUi()//todo - fix this feed 2.0
             activity?.onBackPressed()
         } else {
             Toast.makeText(context, "There was a problem accessing the server", Toast.LENGTH_SHORT).show()

@@ -161,7 +161,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     private fun initClicks() {
         with(binding) {
-            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }
+//            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }//todo - fix this feed 2.0
 
             myProfileFragAddress.setOnClickListener {
                 mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
@@ -212,7 +212,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     private fun openOrderHistoryDialog() {
-        (activity as MainActivity).loadOrderHistoryFragment()
+//        (activity as MainActivity).loadOrderHistoryFragment()//todo - fix this feed 2.0
     }
 
     override fun onCustomDetailsClick(type: Int) {
@@ -262,7 +262,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     override fun onUserImageClick(cook: Cook?) {
-        (activity as MainActivity).loadEditMyProfile()
+//        (activity as MainActivity).loadEditMyProfile()//todo - fix this feed 2.0
     }
 
     companion object {

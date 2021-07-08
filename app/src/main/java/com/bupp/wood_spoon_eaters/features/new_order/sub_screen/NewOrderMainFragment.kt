@@ -57,13 +57,6 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
                 activity?.onBackPressed()
             }
 
-//            val startScreen = arguments?.getInt("startScreen") ?: 0
-//            if(startScreen != 0){
-//                Log.d(TAG, "startScreen: $startScreen")
-//                binding.newOrderFragViewPager.post {
-//                    binding.newOrderFragViewPager.setCurrentItem(startScreen, true)
-//                }
-//            }
         }
 
 

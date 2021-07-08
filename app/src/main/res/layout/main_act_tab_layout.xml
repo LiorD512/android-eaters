@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/mainActTabLayout"
+            style="@style/NewOrderTabLayout"
+            app:tabIndicatorHeight="1dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabUnboundedRipple="false"
+            app:tabIndicator="@drawable/main_act_tab_layout_indicator"
+            app:tabMaxWidth="90dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
