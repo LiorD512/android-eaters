@@ -4,4 +4,5 @@
     <string name="segment_jey">dBQhDMRWdKAvkBKC53ind9Pey34RuuQP</string>
     <string name="apps_flayer_key">pdDuzVhDY8UpBHir8tgvKc</string>
     <string name="app_center_key">1995d4eb-7e59-44b8-8832-6550bd7752ff</string>
+    <string name="isBranchTestMode">true</string>
 </resources>

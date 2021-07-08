@@ -16,7 +16,6 @@ android {
 //        }
 //    }
 
-
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 23
@@ -37,10 +36,12 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders["isTestMode"] = "false"
 //            signingConfig signingConfigs.signing_config
         }
         debug {
             debuggable true
+            manifestPlaceholders["isTestMode"] = "true"
         }
     }
 

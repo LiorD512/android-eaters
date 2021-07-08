@@ -123,7 +123,7 @@
                 android:value="key_test_caHOMCbetYp9Eh0jucUXgejbBsj45D9u" />
         <meta-data
                 android:name="io.branch.sdk.TestMode"
-                android:value="true" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+                android:value="${isTestMode}" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
 
         <activity
                 android:name=".features.login.LoginActivity"
