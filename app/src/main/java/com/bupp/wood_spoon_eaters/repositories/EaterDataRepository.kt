@@ -82,8 +82,12 @@ class EaterDataRepository(private val apiService: EaterDataRepositoryImpl) {
                 is ResultHandler.Success -> {
                     MTLogger.c(TAG,"getFavorites - Success")
                     val searchObj = result.value.data
-                    val favOrders = searchObj?.results
-                    EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
+                    if(searchObj?.results != null){
+                        val favOrders = searchObj.results
+                        EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
+                    }else{
+                        EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, listOfNotNull())
+                    }
                 }
                 is ResultHandler.WSCustomError -> {
                     MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")

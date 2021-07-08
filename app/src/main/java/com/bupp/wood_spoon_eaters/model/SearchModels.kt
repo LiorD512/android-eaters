@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -22,6 +23,7 @@ data class SearchRequest(
     @Json(name = "max_price") var maxPrice: Double? = null,
     @Json(name = "asap_only") var isAsap: Boolean? = null
 )
+
 
 sealed class Search(
     @Json(name = "resource") var resource: String?

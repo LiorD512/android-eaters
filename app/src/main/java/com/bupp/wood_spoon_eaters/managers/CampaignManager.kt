@@ -30,7 +30,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
 
     private var referralToken: String? = null
     suspend fun setUserReferralToken(token: String? = null) {
-        MTLogger.d(TAG, "setUserReferralToken: token: $token")
+        MTLogger.c(TAG, "setUserReferralToken: token: $token")
         this.referralToken = token
         token?.let {
             onFlowEventFired(FlowEventsManager.FlowEvents.DEEP_LINK_TOKEN_UPDATED)
@@ -39,7 +39,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
 
     suspend fun onFlowEventFired(curEvent: FlowEventsManager.FlowEvents) {
         //every time we are checking a campaign, we first check if user have a deepLink token. if have we will update server before re-fetching active campaigns
-        MTLogger.d(TAG, "onFlowEventFired: event: $curEvent")
+        MTLogger.c(TAG, "onFlowEventFired: event: $curEvent")
         if (validateReferral()) {
             Log.d(TAG, "validateReferral - success")
             setUserReferralToken(null)
@@ -87,11 +87,11 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
 
     private suspend fun checkCampaignFor(curEvent: FlowEventsManager.FlowEvents) {
         //check if any of the active campaigns is of type "curEvent" - if so, show campaign and update campaign status
-        MTLogger.d(TAG, "checkCampaignFor: $curEvent")
+        MTLogger.c(TAG, "checkCampaignFor: $curEvent")
         curCampaigns?.let {
             val campaigns = it.filter { it.isMatchingEvent(curEvent) }
             if(campaigns.isNotEmpty()){
-                MTLogger.d(TAG, "checkCampaignFor: $curEvent FOUND!")
+                MTLogger.c(TAG, "checkCampaignFor: $curEvent FOUND!")
                 campaignLiveData.postValue(campaigns)
 
                 campaigns.forEach { campaign ->
@@ -106,7 +106,7 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
     }
 
     suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus) {
-        MTLogger.d(TAG, "updateCampaignStatus: $userInteractionId")
+        MTLogger.c(TAG, "updateCampaignStatus: $userInteractionId")
         withContext(Dispatchers.IO) {
             campaignRepository.updateCampaignStatus(userInteractionId, status)
         }

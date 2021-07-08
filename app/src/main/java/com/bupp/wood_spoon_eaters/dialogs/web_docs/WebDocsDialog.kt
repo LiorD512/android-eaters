@@ -83,12 +83,12 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
                 return true
             }
             override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError?) {
-                MTLogger.d(TAG, "onReceivedSslError")
+                MTLogger.c(TAG, "onReceivedSslError")
                 handler.proceed() // Ignore SSL certificate errors
             }
 
             override fun onPageFinished(view: WebView, url: String) {
-                MTLogger.d(TAG, "\"onPageFinished: $url\"")
+                MTLogger.c(TAG, "\"onPageFinished: $url\"")
                 if ("about:blank" == url && view.tag != null) {
                     view.loadUrl(view.tag.toString())
                 } else {

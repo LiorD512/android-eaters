@@ -449,11 +449,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    MTLogger.d(TAG, "Stripe")
+                    MTLogger.c(TAG, "Stripe")
                     val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
 
                     result?.let {
-                        MTLogger.d(TAG, "payment method success")
+                        MTLogger.c(TAG, "payment method success")
                         viewModel.updatePaymentMethod(result.paymentMethod)
                     }
                 }
