@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
@@ -69,21 +70,21 @@ class FeedViewModel(
                 val feedRepository = feedRepository.getFeed(feedRequest)
                 when (feedRepository.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
-                        Log.d(TAG, "NetworkError")
+                        MTLogger.c(TAG, "getFeedWith - NetworkError")
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                         progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
-                        Log.d(TAG, "GenericError")
+                        MTLogger.c(TAG, "getFeedWith - GenericError")
 //                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
                         progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
-                        Log.d(TAG, "Success")
+                        MTLogger.c(TAG, "getFeedWith - Success")
                         feedResultData.postValue(OldFeedEvent(true, feedRepository.feed))
                     }
                     else -> {
-                        Log.d(TAG, "NetworkError")
+                        MTLogger.c(TAG, "getFeedWith - NetworkError")
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                         progressData.endProgress()
                     }
@@ -91,7 +92,7 @@ class FeedViewModel(
 //                progressData.endProgress()
             }
         }else{
-            Log.d("wowFeedVM","getFeed setLocationListener")
+            MTLogger.c("wowFeedVM","getFeed setLocationListener")
             feedResultData.postValue(OldFeedEvent(false,null))
             progressData.endProgress()
         }

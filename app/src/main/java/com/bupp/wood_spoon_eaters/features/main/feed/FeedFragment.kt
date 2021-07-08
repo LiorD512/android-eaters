@@ -148,7 +148,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
     private fun initFeed(feedArr: List<Feed>) {
         if(feedArr.isEmpty()){
-//            showEmptyLayout()
+            showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         }else{
             binding.feedFragEmptyLayout.visibility = View.GONE

@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CustomDetailsViewBinding
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 
 @SuppressLint("CustomViewStyleable")
 class CustomDetailsView @JvmOverloads
@@ -60,7 +61,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_btnTitle)) {
                     val btnText = a.getString(R.styleable.CustomDetailsAttrs_btnTitle)
                     btnText?.let {
-                        customDetailsViewChangeBtn.setTitle(btnText)
+                        setBtnText(it)
                     }
                 }
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_title)) {
@@ -78,6 +79,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             customDetailsViewChangeBtn.setOnClickListener { onChange() }
 
         }
+    }
+
+    private fun setBtnText(btnText: String) {
+        binding.customDetailsViewChangeBtn.setTitle(btnText)
     }
 
     private fun setIcon(icon: Drawable?) {
@@ -156,6 +161,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun updateDeliveryDetails(input: String) {
         binding.customDetailsViewTitle.text = "Delivery Time"
         binding.customDetailsViewSubtitle.text = input
+    }
+
+    fun handleAddressData(address: LocationManager.FinalAddressParam){
+        when(address.addressType){
+            LocationManager.AddressDataType.FULL_ADDRESS -> {
+                updateDeliveryFullDetails(address.address)
+            }
+            LocationManager.AddressDataType.DEVICE_LOCATION -> {
+                updateSubTitle("Select an address")
+                setBtnText("Select")
+            }
+            LocationManager.AddressDataType.DEFAULT -> {
+                updateSubTitle("Add your addresses")
+                setBtnText("Add")
+            }
+        }
     }
 
     fun updateDeliveryFullDetails(address: Address?) {

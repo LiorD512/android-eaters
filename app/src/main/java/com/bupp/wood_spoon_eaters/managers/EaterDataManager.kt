@@ -37,8 +37,8 @@ class EaterDataManager(
     fun getFinalAddressLiveDataParam() = locationManager.getFinalAddressLiveDataParam()
     fun getLocationData() = locationManager.getLocationData()
 
-    fun updateSelectedAddress(selectedAddress: Address?) {
-        locationManager.setSelectedAddressAndUpdateParams(selectedAddress)
+    fun updateSelectedAddress(selectedAddress: Address?, addressType: LocationManager.AddressDataType? = null) {
+        locationManager.setSelectedAddressAndUpdateParams(selectedAddress, addressType)
     }
 
     fun getLastChosenAddress(): Address? {

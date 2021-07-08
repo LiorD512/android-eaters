@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.common.Constants.Companion.EVENT_LOCATION_PERM
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
@@ -47,16 +48,16 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
 
 
     fun onDoneClick(selectedAddress: Address?) {
-        eaterDataManager.updateSelectedAddress(selectedAddress)
         selectedAddress?.let{
+            eaterDataManager.updateSelectedAddress(selectedAddress, LocationManager.AddressDataType.FULL_ADDRESS)
             eaterDataManager.refreshSegment()
         }
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
     }
 
-    fun setTempSelectedAddress(selected: Address) {
-        this.tempSelectAddress =  selected
-    }
+//    fun setTempSelectedAddress(selected: Address) {
+//        this.tempSelectAddress =  selected
+//    }
 
     private var unsavedNewAddress: AddressRequest? = null
     val actionEvent = MutableLiveData<ActionEvent>()
@@ -184,7 +185,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
                         userRepoResult.eater?.addresses?.get(0)?.let{ address ->
-                            eaterDataManager.updateSelectedAddress(address)
+                            eaterDataManager.updateSelectedAddress(address, LocationManager.AddressDataType.FULL_ADDRESS)
                             eaterDataManager.refreshSegment()
                         }
                         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)

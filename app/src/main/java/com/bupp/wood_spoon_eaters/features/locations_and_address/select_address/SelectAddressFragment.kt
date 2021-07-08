@@ -85,12 +85,10 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     private fun initLocationObserver() {
         mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, { result ->
             result?.let {
-                Log.d(TAG, "getLocationLiveData observer called ")
+                Log.d(TAG, "getLocationLiveData observer called")
                 with(binding) {
-                    viewModel.onMyLocationReceived()
+                    viewModel.onMyLocationReceived(it)
                     selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
-                    //                selectAddressFragMyLocationPickup.text = it.getDropoffLocationStr()
-                    //                selectAddressFragMyLocationPickup.visibility = View.VISIBLE
                     hideMyLocationPb()
                 }
             }
