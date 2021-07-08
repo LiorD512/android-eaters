@@ -164,8 +164,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         with(binding){
             feedFragListLayout.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
-            feedFragEmptyLayout.setOnClickListener {
+            feedFragChangeAddress.setOnClickListener {
                 mainViewModel.startLocationAndAddressAct()
             }
         }
