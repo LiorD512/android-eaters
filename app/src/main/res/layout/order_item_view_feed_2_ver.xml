@@ -9,28 +9,40 @@
         android:paddingTop="15.4dp"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-                android:layout_marginStart="7.7dp"
+
+        <TextView
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/orderItemCounter"
+                style="@style/LatoBold13Teal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="6.7sp"
+                tools:text="1X"/>
+
+        <TextView
+                android:layout_marginStart="7.7dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/orderItemCounter"
                 android:id="@+id/orderItemName"
                 style="@style/LatoBold13Black"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                tools:text="Tomato Soup"/>
+                tools:text="Tomato Soup x1"/>
 
-        <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
-                app:layout_constraintTop_toTopOf="@+id/orderItemName"
-                app:layout_constraintBottom_toBottomOf="@+id/orderItemName"
+        <TextView
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/orderItemPlusMinus"
+                android:id="@+id/orderItemPrice"
                 android:layout_marginEnd="7.7dp"
                 style="@style/LatoBlack13Teal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
-                android:lineSpacingExtra="6.7sp"/>
+                android:lineSpacingExtra="6.7sp"
+                tools:text="$7.00"/>
 
 
     <androidx.recyclerview.widget.RecyclerView

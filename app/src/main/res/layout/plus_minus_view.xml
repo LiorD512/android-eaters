@@ -4,20 +4,11 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_gravity="center"
-        android:id="@+id/blueBtnBackground"
+            android:id="@+id/plusMinusView"
         android:background="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-            android:padding="5dp"
-            android:id="@+id/plusMinusView"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="2.9dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -36,7 +27,7 @@
 
             <TextView
                     android:id="@+id/plusMinusCounter"
-                    style="@style/SemiBold17Dark"
+                    style="@style/LatoBold13Teal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
@@ -52,9 +43,6 @@
                     android:layout_height="40dp"/>
 
         </LinearLayout>
-
-
-    </androidx.cardview.widget.CardView>
 
 
 </FrameLayout>

@@ -120,6 +120,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //        ordersViewModel.rollBackToPreviousAddress()
     }
 
+    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
+        if (isCartEmpty) {
+            mainViewModel.showClearCartDialog()
+        } else {
+            mainViewModel.updateOrderItem(updatedOrderItem)
+        }
+    }
 
     private fun initUi() {
         binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
