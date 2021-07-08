@@ -146,8 +146,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         })
     }
 
-    private fun handleCampaign(campaigns: List<Campaign>) {
-        campaigns.forEach { campaign ->
+    private fun handleCampaign(campaigns: List<Campaign>?) {
+        campaigns?.forEach { campaign ->
             campaign.viewTypes?.forEach { viewType ->
                 when (viewType) {
                     CampaignViewType.PROFILE -> {
@@ -188,7 +188,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             myProfileFragPayment.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragAddress.setChangeable(true)
             myProfileFragPayment.setChangeable(true)
-
         }
     }
 

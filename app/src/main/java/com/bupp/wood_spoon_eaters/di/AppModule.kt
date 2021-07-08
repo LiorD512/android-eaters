@@ -57,7 +57,7 @@ val appModule = module {
     single { FeedRepository(get()) }
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
-    single { UserRepository(get(), get(), get(), get()) }
+    single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get()) }
     single { EaterDataRepository(get()) }

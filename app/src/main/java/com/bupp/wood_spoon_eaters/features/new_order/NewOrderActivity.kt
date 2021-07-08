@@ -255,10 +255,10 @@ class NewOrderActivity : BaseActivity(),
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    MTLogger.d(MainActivity.TAG, "Stripe")
+                    MTLogger.c(MainActivity.TAG, "Stripe")
                     val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
                     result?.let {
-                        MTLogger.d(MainActivity.TAG, "payment method success")
+                        MTLogger.c(MainActivity.TAG, "payment method success")
                         viewModel.updatePaymentMethod(result.paymentMethod)
                     }
                 }

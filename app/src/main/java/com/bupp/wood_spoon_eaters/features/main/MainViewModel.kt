@@ -88,12 +88,12 @@ class MainViewModel(
     //stripe
     val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
     fun startStripeOrReInit(){
-        MTLogger.d(NewOrderMainViewModel.TAG, "startStripeOrReInit")
+        MTLogger.c(NewOrderMainViewModel.TAG, "startStripeOrReInit")
         if(paymentManager.hasStripeInitialized){
             Log.d(NewOrderMainViewModel.TAG, "start payment method")
             mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         }else{
-            MTLogger.d(NewOrderMainViewModel.TAG, "re init stripe")
+            MTLogger.c(NewOrderMainViewModel.TAG, "re init stripe")
             mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
         }
     }
