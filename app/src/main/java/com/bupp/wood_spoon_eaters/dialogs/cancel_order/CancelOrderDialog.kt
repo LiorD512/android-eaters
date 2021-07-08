@@ -81,7 +81,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
     private fun cancelOrder() {
         binding.cancelOrderPb.show()
         val note = ""//cancelOrderDialogReason.getText()
-        viewModel.cancelOrder(orderId, note)
+        viewModel.cancelOrder(orderId)
     }
 
     override fun onAttach(context: Context) {
