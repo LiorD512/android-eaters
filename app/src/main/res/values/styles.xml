@@ -449,6 +449,13 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/coral</item>
     </style>
+
+    <style name="Reg12White">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">12.5sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Reg13White">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
