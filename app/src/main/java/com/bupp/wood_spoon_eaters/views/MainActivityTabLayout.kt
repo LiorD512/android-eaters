@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.MainActTabLayoutBinding
-import com.bupp.wood_spoon_eaters.databinding.NewOrderTabLayoutBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -29,8 +29,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setViewPager(viewPager: ViewPager2){
         TabLayoutMediator(binding.mainActTabLayout, viewPager) { tab, position ->
-            tab.text = texts[position]
-            tab.icon = ContextCompat.getDrawable(context, imageResId[position])
+            when(position){
+                0 -> tab.setCustomView(R.layout.feed_tab_home)
+                1 -> tab.setCustomView(R.layout.feed_tab_search)
+                2 -> tab.setCustomView(R.layout.feed_tab_orders)
+                3 -> tab.setCustomView(R.layout.feed_tab_account)
+            }
         }.attach()
     }
 
