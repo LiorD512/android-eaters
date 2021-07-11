@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_gravity="center"
             android:id="@+id/plusMinusView"
-        android:background="@color/white"
+        tools:background="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -13,34 +13,31 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_width="99dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/plusMinusMinus"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_minus"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"/>
+                    android:background="@drawable/plus_minus_minus_selector"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"/>
 
             <TextView
                     android:id="@+id/plusMinusCounter"
                     style="@style/LatoBold13Teal"
+                    android:paddingHorizontal="9dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="center"
                     android:text="0"/>
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/plusMinusPlus"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="16dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"/>
+                    android:background="@drawable/plus_minus_plus_selector"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"/>
 
         </LinearLayout>
 
