@@ -119,6 +119,7 @@ class Constants {
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
         const val TOOL_TIP_MINMUM_ORDER_FEE = 4
         const val TOOL_TIP_COURIER_TIP = 5
+        const val TOOL_TIP_CUSTOM_CLICK = 6
 
         //status bottom bar types
         const val CART_BOTTOM_BAR_TYPE_CART = 0
@@ -223,6 +224,7 @@ class Constants {
         const val SINGLE_ORDER_DETAILS_BOTTOM_SHEET = "single_order_details_bottom_sheet"
         const val REPORT_ISSUE_BOTTOM_SHEET = "report_issue_bottom_sheet"
         const val FREE_TEXT_BOTTOM_SHEET = "free_text_bottom_sheet"
+        const val FEES_AND_tAX_BOTTOM_SHEET = "fees_and_tax_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

@@ -30,6 +30,7 @@
         <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
         <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
         <enum name="CHECKOUT_COURIER_TIP" value="5" />
+        <enum name="CUSTOM_CLICK" value="6" />
     </attr>
 
     <declare-styleable name="WSEditText">
