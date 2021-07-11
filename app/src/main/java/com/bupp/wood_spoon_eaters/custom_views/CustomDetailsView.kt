@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CustomDetailsViewBinding
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 
 @SuppressLint("CustomViewStyleable")
 class CustomDetailsView @JvmOverloads
@@ -60,7 +61,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_btnTitle)) {
                     val btnText = a.getString(R.styleable.CustomDetailsAttrs_btnTitle)
                     btnText?.let {
-                        customDetailsViewChangeBtn.setTitle(btnText)
+                        setBtnText(it)
                     }
                 }
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_title)) {
@@ -80,6 +81,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    private fun setBtnText(btnText: String) {
+        binding.customDetailsViewChangeBtn.setTitle(btnText)
+    }
 
     private fun setIcon(icon: Drawable?) {
         icon?.let{
@@ -133,6 +137,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 Constants.DELIVERY_DETAILS_PAYMENT -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_credit_card)
                     customDetailsViewTitle.text = "Payment method"
+                    customDetailsViewSubtitle.text = "Insert payment method"
                 }
                 Constants.DELIVERY_DETAILS_PROMO_CODE -> {
                     customDetailsViewIcon.setImageResource(R.drawable.icons_promo)
@@ -158,11 +163,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.customDetailsViewSubtitle.text = input
     }
 
+    fun handleAddressData(address: LocationManager.FinalAddressParam){
+        when(address.addressType){
+            LocationManager.AddressDataType.FULL_ADDRESS -> {
+                updateDeliveryFullDetails(address.address)
+            }
+            LocationManager.AddressDataType.DEVICE_LOCATION -> {
+                updateSubTitle("Select an address")
+                setBtnText("Select")
+            }
+            LocationManager.AddressDataType.DEFAULT -> {
+                updateSubTitle("Add your addresses")
+                setBtnText("Add")
+            }
+        }
+    }
+
     fun updateDeliveryFullDetails(address: Address?) {
         with(binding){
             address?.let {
-                val floor = address.addressSlug
-                customDetailsViewTitle.text = "${it.streetLine1}, #${it.streetLine2}"
+                val street1 = it.streetLine1?.let{"${it},"} ?: ""
+                val street2 = it.streetLine2?.let{"#${it},"} ?: ""
+                customDetailsViewTitle.text = "$street1 $street2"
                 val city = it.city?.name?.let{"${it},"} ?: ""
                 val state = it.state?.name?.let{"${it},"} ?: ""
                 customDetailsViewSubtitle.text = "$city $state ${it.zipCode ?: ""}"

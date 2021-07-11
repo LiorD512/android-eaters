@@ -168,7 +168,7 @@ class LoginViewModel(
 
     //code verification methods
 
-    fun sendPhoneAndCodeNumber() {
+    fun sendPhoneAndCodeNumber(context: Context) {
         if (!code.isNullOrEmpty()) {
             phone?.let { phone ->
                 progressData.startProgress()
@@ -189,6 +189,7 @@ class LoginViewModel(
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
                             if (userRepository.isUserSignedUp()) {
+                                paymentManager.initPaymentManager(context)
                                 navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
                             } else {
                                 navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)

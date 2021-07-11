@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
 import com.bupp.wood_spoon_eaters.databinding.FragmentNewOrderMainBinding
@@ -18,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
 
-    lateinit var binding: FragmentNewOrderMainBinding
+    val binding: FragmentNewOrderMainBinding by viewBinding()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
     override fun onResume() {
@@ -42,7 +43,6 @@ class NewOrderMainFragment : Fragment(R.layout.fragment_new_order_main) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentNewOrderMainBinding.bind(view)
 
         with(binding){
             val pagerAdapter = ScreenSlidePagerAdapter(requireActivity())

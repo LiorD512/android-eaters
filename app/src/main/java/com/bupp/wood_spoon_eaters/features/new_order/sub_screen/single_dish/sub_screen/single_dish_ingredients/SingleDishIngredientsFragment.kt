@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentSingleDishIngredientsBinding
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
@@ -15,14 +16,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ingredients), DishIngredientsAdapter.DishIngredientsAdapterListener {
 
-    var binding: FragmentSingleDishIngredientsBinding? = null
+    val binding: FragmentSingleDishIngredientsBinding by viewBinding()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
     private val viewModel by viewModel<SingleDishIngredientViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentSingleDishIngredientsBinding.bind(view)
 
         Analytics.with(requireContext()).screen("dishIngredients")
 
@@ -37,7 +36,7 @@ class SingleDishIngredientsFragment : Fragment(R.layout.fragment_single_dish_ing
 
     @SuppressLint("SetTextI18n")
     private fun initIngredient(currentDish: FullDish) {
-        with(binding!!){
+        with(binding){
             currentDish.accommodations?.let{
                 singleDishIngredientAccommodations.setBody(it)
                 singleDishIngredientAccommodations.visibility = View.VISIBLE

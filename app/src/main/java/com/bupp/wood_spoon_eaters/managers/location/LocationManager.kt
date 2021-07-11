@@ -39,12 +39,16 @@ import kotlin.math.ln
 
 class LocationManager(val context: Context, private val metaDataRepository: MetaDataRepository) {
 
+    fun clearUserAddresses(){
+        finalAddressLiveDataParam.postValue(FinalAddressParam(null))
+        setDefaultAddress()
+    }
 
     fun setDefaultAddress() {
         val lat = metaDataRepository.getDefaultLat()
         val lng = metaDataRepository.getDefaultLng()
         val name = metaDataRepository.getDefaultFeedLocationName()
-        setSelectedAddressAndUpdateParams(Address(lat = lat, lng = lng, streetLine1 = name))
+        setSelectedAddressAndUpdateParams(Address(lat = lat, lng = lng, streetLine1 = name), AddressDataType.DEFAULT)
     }
 
 
@@ -64,13 +68,20 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
         val lat: Double? = null,
         val lng: Double? = null,
         val locationTitle: String? = null,
-        val shortTitle: String? = null
+        val shortTitle: String? = null,
+        val addressType: AddressDataType? = null
     )
+
+    enum class AddressDataType{
+        FULL_ADDRESS,
+        DEVICE_LOCATION,
+        DEFAULT
+    }
 
     fun getFinalAddressLiveDataParam() = finalAddressLiveDataParam
     private val finalAddressLiveDataParam = MutableLiveData<FinalAddressParam>()
 
-    fun setSelectedAddressAndUpdateParams(selectedAddress: Address?) {
+    fun setSelectedAddressAndUpdateParams(selectedAddress: Address?, addressType: AddressDataType? = null) {
         Log.d(TAG, "setSelectedAddressAndUpdateParams: $selectedAddress")
         if(selectedAddress != null) {
             previousChosenAddress = lastChosenAddress
@@ -82,7 +93,8 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
                     selectedAddress.lat,
                     selectedAddress.lng,
                     selectedAddress.getUserLocationStr(),
-                    selectedAddress.getUserShortLocationStr()
+                    selectedAddress.getUserShortLocationStr(),
+                    addressType
                 )
             )
         }else{
@@ -100,7 +112,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
     }
 
     fun rollBackToPreviousAddress() {
-        setSelectedAddressAndUpdateParams(previousChosenAddress)
+        setSelectedAddressAndUpdateParams(previousChosenAddress, AddressDataType.FULL_ADDRESS)
     }
 
     companion object {

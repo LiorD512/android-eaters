@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
@@ -31,7 +32,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener,
     WSCounterEditText.WSCounterListener {
 
-    lateinit var binding: FragmentSingleDishInfoBinding
+    val binding: FragmentSingleDishInfoBinding by viewBinding()
     private val viewModel by viewModel<SingleDishInfoViewModel>()
     private val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
 
@@ -40,7 +41,6 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentSingleDishInfoBinding.bind(view)
         Analytics.with(requireContext()).screen("dishInfo")
 
         initUi()

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedLoaderBinding
 import com.bupp.wood_spoon_eaters.utils.updateScreenUi
@@ -20,7 +21,7 @@ class FeedLoaderDialog : DialogFragment() {
 
     private var timer: CountDownTimer? = null
     val viewModel by viewModel<FeedLoaderViewModel>()
-    var binding: FragmentFeedLoaderBinding? = null
+    val binding: FragmentFeedLoaderBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +38,6 @@ class FeedLoaderDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentFeedLoaderBinding.bind(view)
-
         initUi()
         initObservers()
 
@@ -49,11 +48,11 @@ class FeedLoaderDialog : DialogFragment() {
     private fun handleProgress(imagesCount: Int) {
 
         val totalTime = imagesCount * 2000
-        binding!!.feedLoaderPb.max = totalTime
+        binding.feedLoaderPb.max = totalTime
 
         timer = object : CountDownTimer(totalTime.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding!!.feedLoaderPb.progress = (totalTime - millisUntilFinished).toInt()
+                binding.feedLoaderPb.progress = (totalTime - millisUntilFinished).toInt()
             }
 
             override fun onFinish() {
@@ -70,14 +69,14 @@ class FeedLoaderDialog : DialogFragment() {
     private fun initObservers() {
         viewModel.welcomeScreens.observe(viewLifecycleOwner, {
             it?.let {
-                binding!!.feedLoaderImageView.init(it)
+                binding.feedLoaderImageView.init(it)
                 handleProgress(it.size)
             }
         })
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        binding!!.feedLoaderImageView.stopAnimation()
+        binding.feedLoaderImageView.stopAnimation()
         super.onDismiss(dialog)
     }
 
@@ -85,5 +84,11 @@ class FeedLoaderDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
         updateScreenUi()
+    }
+
+    override fun onDestroyView() {
+        timer?.cancel()
+        timer = null
+        super.onDestroyView()
     }
 }

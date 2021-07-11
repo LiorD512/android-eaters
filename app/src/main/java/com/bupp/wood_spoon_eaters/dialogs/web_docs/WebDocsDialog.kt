@@ -8,6 +8,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
@@ -19,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), HeaderView.HeaderViewListener {
 
-    lateinit var binding: WebDocsDialogBinding
+    val binding: WebDocsDialogBinding by viewBinding()
     val viewModel by viewModel<WebDocsViewModel>()
 
     override fun getTheme(): Int {
@@ -28,8 +29,6 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = WebDocsDialogBinding.bind(view)
 
         initUi()
 
@@ -84,12 +83,12 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
                 return true
             }
             override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError?) {
-                MTLogger.d(TAG, "onReceivedSslError")
+                MTLogger.c(TAG, "onReceivedSslError")
                 handler.proceed() // Ignore SSL certificate errors
             }
 
             override fun onPageFinished(view: WebView, url: String) {
-                MTLogger.d(TAG, "\"onPageFinished: $url\"")
+                MTLogger.c(TAG, "\"onPageFinished: $url\"")
                 if ("about:blank" == url && view.tag != null) {
                     view.loadUrl(view.tag.toString())
                 } else {

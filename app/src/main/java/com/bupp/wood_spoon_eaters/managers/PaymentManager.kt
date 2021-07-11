@@ -56,7 +56,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 
                 }
             }else{
-                stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
+                initStripe(context)
             }
         }
     }
@@ -68,7 +68,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 
     private fun initStripe(context: Context) {
         val key = metaDataRepository.getStripePublishableKey()
-        MTLogger.d(TAG, "initStripe key: $key")
+        MTLogger.c(TAG, "initStripe key: $key")
         key?.let {
             PaymentConfiguration.init(context, key)
             CustomerSession.initCustomerSession(context, EphemeralKeyProvider(this), false)
@@ -79,7 +79,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 
     override fun onEphemeralKeyProviderError() {
         super.onEphemeralKeyProviderError()
-        MTLogger.d(TAG, "initStripe failed")
+        MTLogger.c(TAG, "initStripe failed")
         hasStripeInitialized = false
         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
     }
@@ -90,7 +90,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 //        stripeInitializationEvent.postValue(StripeInitializationStatus.SUCCESS)
     }
 
-    val payments = MutableLiveData<PaymentMethod>()
+    val payments = MutableLiveData<PaymentMethod?>()
     fun getPaymentsLiveData() = payments
 
     private fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false){
@@ -103,21 +103,21 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                     PaymentMethod.Type.Card,
                     object : CustomerSession.PaymentMethodsRetrievalListener {
                         override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                            MTLogger.d(TAG, "getStripeCustomerCards $paymentMethods")
+                            MTLogger.c(TAG, "getStripeCustomerCards $paymentMethods")
                             if(lastSelectedCardIdRes != null){
                                 val lastSelectedCard = paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
                                 lastSelectedCard?.let{
                                     payments.value = it
                                 }
                             }else{
-                                paymentMethods.isNotEmpty().let {
+                                if(paymentMethods.isNotEmpty()) {
                                     payments.value = paymentMethods[0]
                                 }
                             }
                         }
 
                         override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
-                            MTLogger.d(TAG, "getStripeCustomerCards ERROR $errorMessage")
+                            MTLogger.c(TAG, "getStripeCustomerCards ERROR $errorMessage")
                         }
                     })
 //            }
@@ -139,6 +139,10 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
     fun updateSelectedPaymentMethod(paymentMethod: PaymentMethod) {
         payments.value = paymentMethod
         lastSelectedCardIdRes = paymentMethod.card?.last4
+    }
+
+    fun clearPaymentMethods(){
+        payments.postValue(null)
     }
 
     companion object{

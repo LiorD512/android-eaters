@@ -1,58 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/orderItemLayout"
-        android:background="@color/white"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+        android:id="@+id/orderItemLayout"
+        android:paddingVertical="7.7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="15.4dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:background="@color/white"
+        android:orientation="vertical">
 
+    <TextView
+            android:id="@+id/orderItemName"
+            style="@style/LatoBold13Black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7.7dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingVertical="7dp"
+            app:layout_constraintBottom_toTopOf="@+id/orderItemIngredientsRecyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Tomato Soup" />
 
-        <TextView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/orderItemCounter"
-                style="@style/LatoBold13Teal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing="0.03"
-                android:lineSpacingExtra="6.7sp"
-                tools:text="1X"/>
-
-        <TextView
-                android:layout_marginStart="7.7dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/orderItemCounter"
-                android:id="@+id/orderItemName"
-                style="@style/LatoBold13Black"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                tools:text="Tomato Soup x1"/>
-
-        <TextView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/orderItemPrice"
-                android:layout_marginEnd="7.7dp"
-                style="@style/LatoBlack13Teal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing="0.03"
-                android:lineSpacingExtra="6.7sp"
-                tools:text="$7.00"/>
+    <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+            android:id="@+id/orderItemPlusMinus"
+            style="@style/LatoBlack13Teal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7.7dp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/orderItemName" />
 
 
     <androidx.recyclerview.widget.RecyclerView
-            app:layout_constraintStart_toStartOf="@+id/orderItemName"
-            app:layout_constraintTop_toBottomOf="@+id/orderItemName"
-            app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/orderItemIngredientsRecyclerView"
-            android:layout_marginTop="7.7dp"
-            android:paddingBottom="14.4dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/orderItemName"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

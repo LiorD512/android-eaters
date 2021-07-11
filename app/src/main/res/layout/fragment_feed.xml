@@ -23,57 +23,71 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/feedFragEmptyLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="72dp"
-            android:background="@drawable/my_dishes_pic"
+            android:background="@color/white"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderError"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible">
 
-        <LinearLayout
+        <TextView
+                android:id="@+id/emptyStateTitle"
+                android:layout_marginTop="60dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/LatoBlack23Dark"
+                android:paddingHorizontal="66dp"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="11.5sp"
+                android:gravity="center_horizontal"
+                android:text="We aren&apos;t available
+in this area quite yet"/>
+
+        <ImageView
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emptyStateTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/subTitle"
+                android:src="@drawable/illus_feed_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/subTitle"
+                android:layout_marginBottom="67.5dp"
+                android:paddingHorizontal="70dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/feedFragChangeAddress"
+                style="@style/LatoReg13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="6.7sp"
+                android:gravity="center_horizontal"
+                android:text="Stay tuned! We hope to deliver you
+a home cooked meal very soon :)"/>
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:id="@+id/feedFragChangeAddress"
+                android:layout_marginBottom="15.4dp"
+                android:layout_marginHorizontal="15.4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:title="Try a different location"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginTop="63.6dp"
-                android:layout_marginEnd="15.4dp"
-                android:layout_marginBottom="62.6dp"
-                android:background="@color/offwhite_90"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"/>
 
-            <TextView
-                    android:id="@+id/feedFragEmptyFeedTitle"
-                    style="@style/SemiBold15Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    tools:text="Hey Neta" />
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginTop="12.6dp"
-                    android:layout_marginEnd="15.4dp"
-                    android:layout_marginBottom="15.4dp"
-                    android:background="@color/black" />
-
-            <TextView
-                    style="@style/Reg13Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="In order to see the dishes,\nplease enter your address at the top row" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
             android:id="@+id/feedFragListLayout"
@@ -84,7 +98,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderError"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
         <com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
                 android:id="@+id/feedFragSectionsView"

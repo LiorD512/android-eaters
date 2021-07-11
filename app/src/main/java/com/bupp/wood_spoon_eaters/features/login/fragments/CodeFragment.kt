@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
@@ -23,13 +24,12 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CodeFragment() : Fragment(R.layout.fragment_code) {
 
-    var binding: FragmentCodeBinding? = null
+    val binding: FragmentCodeBinding by viewBinding()
     private val viewModel: LoginViewModel by sharedViewModel()
     private var timer: CountDownTimer? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentCodeBinding.bind(view)
 
         initObservers()
         initUi()
@@ -45,18 +45,18 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
         viewModel.errorEvents.observe(viewLifecycleOwner, Observer{
             when(it){
                 ErrorEventType.CODE_EMPTY -> {
-                    binding!!.codeFragInputError.visibility = View.VISIBLE
+                    binding.codeFragInputError.visibility = View.VISIBLE
                 }
             }
         })
         viewModel.userData.observe(viewLifecycleOwner, {
-            binding!!.codeFragNumber.text = "+$it"
+            binding.codeFragNumber.text = "+$it"
         })
     }
 
     @SuppressLint("SetTextI18n")
     private fun initUi() {
-        with(binding!!){
+        with(binding){
 
             codeFragInput.isEnabled = false
             codeFragNext.setOnClickListener {
@@ -116,19 +116,19 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     }
 
     private fun sendCode() {
-        viewModel.sendPhoneAndCodeNumber()
+        viewModel.sendPhoneAndCodeNumber(requireContext())
     }
 
     private fun startResendTimer() {
-        binding?.codeFragResendCode?.setOnClickListener(null)
+        binding.codeFragResendCode.setOnClickListener(null)
         timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding?.codeFragResendCode?.text = "Resend code in: ${millisUntilFinished/1000}"
+                binding.codeFragResendCode.text = "Resend code in: ${millisUntilFinished/1000}"
             }
 
             override fun onFinish() {
-                binding?.codeFragResendCode?.text = "Press here to resend"
-                binding?.codeFragResendCode?.setOnClickListener {
+                binding.codeFragResendCode.text = "Press here to resend"
+                binding.codeFragResendCode.setOnClickListener {
                     resendCode()
                 }
             }
@@ -137,7 +137,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     }
 
     override fun onDestroyView() {
-        binding = null
+        timer?.cancel()
         timer = null
         super.onDestroyView()
     }

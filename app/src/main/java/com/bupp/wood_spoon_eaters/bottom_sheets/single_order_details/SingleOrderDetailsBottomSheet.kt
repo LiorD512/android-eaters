@@ -1,13 +1,13 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -24,7 +24,7 @@ import java.text.DecimalFormat
 
 class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, RateLastOrderDialog.RateDialogListener {
 
-    private lateinit var binding: SingleOrderDetailsBottomSheetBinding
+    private val binding: SingleOrderDetailsBottomSheetBinding by viewBinding()
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
     private var curOrderId: Long = -1
 
@@ -77,8 +77,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = SingleOrderDetailsBottomSheetBinding.bind(view)
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)

@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.OrderUpdateErrorDialogBinding
 
 class OrderUpdateErrorDialog(val listener: UpdateErrorDialogListener) : DialogFragment() {
 
-    lateinit var binding: OrderUpdateErrorDialogBinding
+    val binding: OrderUpdateErrorDialogBinding by viewBinding()
+
     interface UpdateErrorDialogListener {
         fun onClearCart()
         fun onCancelUpdateOrderError(){}
@@ -32,7 +34,6 @@ class OrderUpdateErrorDialog(val listener: UpdateErrorDialogListener) : DialogFr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = OrderUpdateErrorDialogBinding.bind(view)
         initUi()
     }
 

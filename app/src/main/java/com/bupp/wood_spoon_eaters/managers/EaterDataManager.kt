@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.managers
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -16,7 +17,7 @@ class EaterDataManager(
 ) {
 
     val currentEater: Eater?
-        get() = userRepository.getUser()
+    get() = userRepository.getUser()
 
     suspend fun refreshCurrentEater() {
         userRepository.initUserRepo()
@@ -36,8 +37,8 @@ class EaterDataManager(
     fun getFinalAddressLiveDataParam() = locationManager.getFinalAddressLiveDataParam()
     fun getLocationData() = locationManager.getLocationData()
 
-    fun updateSelectedAddress(selectedAddress: Address?) {
-        locationManager.setSelectedAddressAndUpdateParams(selectedAddress)
+    fun updateSelectedAddress(selectedAddress: Address?, addressType: LocationManager.AddressDataType? = null) {
+        locationManager.setSelectedAddressAndUpdateParams(selectedAddress, addressType)
     }
 
     fun getLastChosenAddress(): Address? {
@@ -98,17 +99,17 @@ class EaterDataManager(
             when (result.type) {
                 EaterDataRepository.EaterDataRepoStatus.CANCEL_ORDER_SUCCESS -> {
                     result?.let {
-                        Log.d(TAG, "checkForTraceableOrders - success")
+                        MTLogger.c(TAG, "cancelOrder - success")
                         checkForTraceableOrders()
                         return result
                     }
                 }
                 EaterDataRepository.EaterDataRepoStatus.CANCEL_ORDER_FAILED -> {
-                    Log.d(TAG, "checkForTraceableOrders - failed")
+                    MTLogger.c(TAG, "cancelOrder - failed")
                     return result
                 }
                 EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-                    Log.d(TAG, "checkForTraceableOrders - es error")
+                    MTLogger.c(TAG, "cancelOrder - es error")
                     return result
 
                 }
@@ -213,35 +214,6 @@ class EaterDataManager(
     ///////         Referrals         ///////
     /////////////////////////////////////////
 
-    var referralToken: String? = null
-    fun setUserReferralToken(token: String? = null) {
-        token?.let {
-            this.referralToken = it
-        }
-    }
-
-    suspend fun validateReferral() {
-        referralToken?.let{
-            val result = eaterDataRepository.validateReferralToken(it)
-            when (result.type) {
-                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS -> {
-                    result.data?.let {
-                        Log.d(TAG, "validateReferral - success")
-                    }
-                }
-                EaterDataRepository.EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED -> {
-                    Log.d(TAG, "validateReferral - failed")
-                }
-                EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-                    Log.d(TAG, "validateReferral - es error")
-
-                }
-                else -> {
-
-                }
-            }
-        }
-    }
 
 
     /////////////////////////////////////////

@@ -45,7 +45,7 @@ class NewOrderMainViewModel(
     val clearCartEvent = SingleLiveEvent<Boolean>()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
 
-    val deliveryTimeLiveData = cartManager.onDishChangeEvent()
+//    val deliveryTimeLiveData = cartManager.onDishChangeEvent()
 
     val getReviewsEvent: SingleLiveEvent<Review?> = SingleLiveEvent()
 
@@ -434,7 +434,7 @@ class NewOrderMainViewModel(
 
     fun onLocationChanged() {
         viewModelScope.launch {
-            val result = cartManager.refreshOrderParams()
+            val result = cartManager.updateOrderDeliveryParam()
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {

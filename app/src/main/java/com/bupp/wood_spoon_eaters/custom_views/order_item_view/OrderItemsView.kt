@@ -14,11 +14,12 @@ import com.bupp.wood_spoon_eaters.model.OrderItem
 
 class OrderItemsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr){
+    LinearLayout(context, attrs, defStyleAttr), OrderItemsViewAdapter.OrderItemsViewAdapterListener {
 
     private var listener: OrderItemsListener? = null
     interface OrderItemsListener{
         fun onAddBtnClicked()
+        fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {}
     }
 
     private var binding: OrderItemsViewBinding = OrderItemsViewBinding.inflate(LayoutInflater.from(context), this, true)
@@ -51,9 +52,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsListener? = null) {
         this.listener = listener
-        adapter = OrderItemsViewAdapter(context)
+        adapter = OrderItemsViewAdapter(context, this)
         binding.orderItemsViewRecyclerView.adapter = adapter
         adapter!!.submitList(orderItems)
+    }
+
+    override fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {
+        listener?.onDishCountChange(curOrderItem, isOrderItemsEmpty)
     }
 
 

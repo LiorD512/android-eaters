@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
+import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
@@ -36,15 +38,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
-lateinit var binding: FragmentFeedBinding
+    val binding: FragmentFeedBinding by viewBinding()
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentFeedBinding.bind(view)
 
         Analytics.with(requireContext()).screen("Feed")
         initUi()
@@ -54,7 +54,6 @@ lateinit var binding: FragmentFeedBinding
         viewModel.initFeed()
         binding.feedFragPb.show()
 
-        mainViewModel.checkCampaignForFeed()
     }
 
 
@@ -79,20 +78,41 @@ lateinit var binding: FragmentFeedBinding
             viewModel.refreshFavorites()
         })
         viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
-            if(event.isSuccess){
+            if (event.isSuccess) {
                 event.feedArr?.let { initFeed(it) }
             }
+        })
+        viewModel.campaignLiveData.observe(viewLifecycleOwner, { campaigns ->
+            handleShareCampaign(campaigns)
         })
         viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
             binding.feedFragSectionsView.initFavorites(it)
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
-            if(it){
+            if (it) {
                 binding.feedFragPb.show()
-            }else{
+            } else {
                 binding.feedFragPb.hide()
             }
         })
+//        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
+//            Log.d(TAG, "campaign: $it")
+//            mainViewModel.checkCampaignForFeed()
+//        })
+    }
+
+    private fun handleShareCampaign(campaigns: List<Campaign>?) {
+        campaigns?.let{
+            campaigns.forEach { campaign ->
+                campaign.viewTypes?.forEach { viewType ->
+                    when (viewType) {
+                        CampaignViewType.FEED -> {
+                            binding.feedFragSectionsView.initShareCampaign(campaign)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun handleFeedBannerUi(feedUiStatus: FeedUiStatus?) {
@@ -111,7 +131,8 @@ lateinit var binding: FragmentFeedBinding
                 FeedUiStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
                     handleBannerEvent(Constants.BANNER_NO_GPS)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -127,7 +148,7 @@ lateinit var binding: FragmentFeedBinding
 
     private fun initFeed(feedArr: List<Feed>) {
         if(feedArr.isEmpty()){
-//            showEmptyLayout()
+            showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         }else{
             binding.feedFragEmptyLayout.visibility = View.GONE
@@ -143,8 +164,7 @@ lateinit var binding: FragmentFeedBinding
         with(binding){
             feedFragListLayout.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
-            feedFragEmptyLayout.setOnClickListener {
+            feedFragChangeAddress.setOnClickListener {
                 mainViewModel.startLocationAndAddressAct()
             }
         }
@@ -215,9 +235,8 @@ lateinit var binding: FragmentFeedBinding
         cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
     }
 
-    override fun onShareClick() {
-        val text = mainViewModel.getShareText()
-        activity?.let { Utils.shareText(it, text) }
+    override fun onShareClick(campaign: Campaign) {
+        mainViewModel.onShareCampaignClick(campaign)
     }
 
     override fun onWorldwideInfoClick() {
@@ -225,7 +244,7 @@ lateinit var binding: FragmentFeedBinding
     }
 
     fun silentRefresh() {
-        Log.d("wowFeedFrag","silentRefresh")
+        Log.d("wowFeedFrag", "silentRefresh")
 //        viewModel.getFeed()
     }
 

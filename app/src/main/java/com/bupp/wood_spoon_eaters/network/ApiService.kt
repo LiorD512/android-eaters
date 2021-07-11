@@ -63,17 +63,6 @@ interface ApiService {
     @GET("eaters/me/stripe/ephemeral_key")
     fun getEphemeralKey(): Observable<ResponseBody>
 
-//    @GET("eaters/me/stripe/ephemeral_key")
-//    fun getEphemeralKey2(): Call<ServerResponse<Any>>
-
-    @FormUrlEncoded
-    @POST("eaters/me/referrals")
-    fun postCampaignReferrals(@Field("sid") sid: String, @Field("cid") cid: String? = null): Observable<ServerResponse<Any>>
-
-    @GET("eaters/me/campaigns/current")
-    fun getCurrentShareCampaign(): Call<ServerResponse<Campaign>>
-
-
     @GET("eaters/me/campaigns/active")
     suspend fun getUserCampaign(): ServerResponse<List<Campaign>>
 
@@ -81,12 +70,13 @@ interface ApiService {
     @POST("eaters/me/campaigns/interactions/referee")
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
 
-
+    @FormUrlEncoded
+    @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
+    suspend fun updateCampaignStatus(@Path(value = "user_interaction_id", encoded = true) userInteractionId: Long, @Field("user_interaction_status") status: String): ServerResponse<Any>
 
     //Utils
     @POST("eaters/me/presigned_urls")
     suspend fun postEaterPreSignedUrl(): ServerResponse<PreSignedUrl>
-
 
     //Eater
     @GET("eaters/me")
@@ -105,9 +95,13 @@ interface ApiService {
     @POST("eaters/me")
     suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Any>
 
+
+    @POST("eaters/me")
+    suspend fun postEaterNotificationGroup(@Body eater: SettingsRequest): ServerResponse<Eater>
+
     @FormUrlEncoded
     @POST("eaters/me")
-    suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>): ServerResponse<Eater>
+    suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>?): ServerResponse<Eater>
 
     @POST("eaters/me/searches")
     suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
@@ -186,11 +180,11 @@ interface ApiService {
 
 
     //Profile data
-    @GET("eaters/me/dishes/ordered")
-    fun getEaterOrdered(
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): Call<ServerResponse<Search>>
+//    @GET("eaters/me/dishes/ordered")
+//    fun getEaterOrdered(
+//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): Call<ServerResponse<Search>>
 
 //    @GET("eaters/me/favorites")
 //    fun getEaterFavorites(

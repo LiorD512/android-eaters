@@ -106,12 +106,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         cookImageView.setPadding(10, 10, 10, 10)
                 }
                 Constants.BIG_IMAGE_SIZE -> {
-                    val bkgLayout = LayoutParams(Utils.toPx(80), Utils.toPx(80))
+                    val bkgLayout = LayoutParams(Utils.toPx(85), Utils.toPx(85))
                     cookImageViewLayout.layoutParams = bkgLayout
-
-    //                val imageLayout = RelativeLayout.LayoutParams(Utils.toPx(65), Utils.toPx(65))
-    //                imageLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-    //                cookImageView.layoutParams = imageLayout
 
                     if (isWithBkg){
                         val param = cookImageViewLayoutCardView.layoutParams as ViewGroup.MarginLayoutParams

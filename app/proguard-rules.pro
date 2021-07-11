@@ -49,3 +49,6 @@
 
 #-keep class com.uxcam.** { *; }
 -dontwarn com.uxcam.**
+
+#branch
+-keep class com.google.android.gms.** { *; }

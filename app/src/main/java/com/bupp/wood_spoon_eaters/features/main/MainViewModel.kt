@@ -11,18 +11,19 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
-    val eaterDataManager: EaterDataManager,  private val campaignManager: CampaignManager, private val paymentManager: PaymentManager) : ViewModel() {
+    val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
+    private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager): ViewModel()  {
 
 //    val progressData = ProgressData()
 
@@ -34,9 +35,10 @@ class MainViewModel(
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
     enum class MainNavigationEvent{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
-        OPEN_CAMERA_UTIL,
         START_PAYMENT_METHOD_ACTIVITY,
-        INITIALIZE_STRIPE
+        INITIALIZE_STRIPE,
+        LOGOUT,
+        OPEN_CAMERA_UTIL_IMAGE
     }
 
 
@@ -50,11 +52,13 @@ class MainViewModel(
     }
 
 
-    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+//    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+//    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
+    val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
     val campaignLiveData = campaignManager.getCampaignLiveData()
-    fun checkCampaignForFeed() {
-        campaignManager.checkCampaignFor(CampaignShowAfter.VISIT_FEED)
-    }
+//    fun checkCampaignForFeed() {
+//        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)
+//    }
 
 
 //    val bannerEvent = MutableLiveData<Int>()
@@ -70,10 +74,10 @@ class MainViewModel(
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
     fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
-    val navigationEvent = MutableLiveData<NavigationEventType>()
-    enum class NavigationEventType{
-        OPEN_CAMERA_UTIL_IMAGE
-    }
+//    val navigationEvent = MutableLiveData<NavigationEventType>()
+//    enum class NavigationEventType{
+//        OPEN_CAMERA_UTIL_IMAGE,
+//    }
 
     val dishClickEvent = LiveEventData<Long>()
     fun onDishClick(menuItemId: Long) {
@@ -84,12 +88,12 @@ class MainViewModel(
     //stripe
     val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
     fun startStripeOrReInit(){
-        MTLogger.d(NewOrderMainViewModel.TAG, "startStripeOrReInit")
+        MTLogger.c(NewOrderMainViewModel.TAG, "startStripeOrReInit")
         if(paymentManager.hasStripeInitialized){
             Log.d(NewOrderMainViewModel.TAG, "start payment method")
             mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         }else{
-            MTLogger.d(NewOrderMainViewModel.TAG, "re init stripe")
+            MTLogger.c(NewOrderMainViewModel.TAG, "re init stripe")
             mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
         }
     }
@@ -206,6 +210,12 @@ class MainViewModel(
         }
     }
 
+    fun refreshActiveCampaigns(){
+        viewModelScope.launch {
+            campaignManager.onFlowEventFired(FlowEventsManager.FlowEvents.VISIT_FEED)
+        }
+    }
+
     val getTriggers = eaterDataManager.getTriggers()
     fun checkForTriggers() {
         viewModelScope.launch {
@@ -260,26 +270,7 @@ class MainViewModel(
 
     //move to eater data manager
     val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
-    fun checkForShareCampaign() {
-        api.getCurrentShareCampaign().enqueue(object : Callback<ServerResponse<Campaign>> {
-            //check server for active sharing campaign for eater
-            override fun onResponse(call: Call<ServerResponse<Campaign>>, response: Response<ServerResponse<Campaign>>) {
-                if (response.isSuccessful) {
-                    val campaign = response.body()?.data
-                    Log.d("wowMainVM", "getCurrentShareCampaign success: ")
-                    getShareCampaignEvent.postValue(campaign)
-                } else {
-                    Log.d("wowMainVM", "getCurrentShareCampaign fail")
-                    getShareCampaignEvent.postValue(null)
-                }
-            }
 
-            override fun onFailure(call: Call<ServerResponse<Campaign>>, t: Throwable) {
-                Log.d("wowMainVM", "getCurrentShareCampaign big fail")
-                getShareCampaignEvent.postValue(null)
-            }
-        })
-    }
 
 
 //    fun checkForCampaignReferrals() {
@@ -379,18 +370,40 @@ class MainViewModel(
     }
 
     fun onUserImageClick() {
-        navigationEvent.postValue(NavigationEventType.OPEN_CAMERA_UTIL_IMAGE)
+        mainNavigationEvent.postValue(MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE)
     }
+//
+//    fun checkIfHaveReferral() {
+//        viewModelScope.launch {
+//            campaignManager.validateReferral()
+//        }
+//    }
 
-    fun checkIfHaveReferral() {
+    fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
         viewModelScope.launch {
-            eaterDataManager.validateReferral()
+            campaign.userInteractionId?.let{
+                campaignManager.updateCampaignStatus(it, status)
+            }
         }
     }
 
     fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
         paymentMethod?.let{
             paymentManager.updateSelectedPaymentMethod(it)
+        }
+    }
+
+    val shareEvent = MutableLiveData<String>()
+    fun onShareCampaignClick(campaign: Campaign?) {
+        val shareUrl = campaign?.shareUrl
+        val shareText = campaign?.shareText ?: ""
+        shareEvent.postValue("$shareText \n $shareUrl")
+    }
+
+    fun logout() {
+        val logoutResult = userRepository.logout()
+        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
+            mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
         }
     }
 

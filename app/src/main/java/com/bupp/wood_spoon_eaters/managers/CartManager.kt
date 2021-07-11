@@ -430,6 +430,11 @@ class CartManager(
         return postUpdateOrder(orderRequest)
     }
 
+    suspend fun updateOrderDeliveryParam(): OrderRepository.OrderRepoResult<Order>? {
+        val orderRequest = buildOrderRequest(emptyList())
+        return postUpdateOrder(orderRequest)
+    }
+
     fun onLocationInvalid() {
         //roll back to previous locaiton.. current location doesnt valid for order
         locationManager.rollBackToPreviousAddress()

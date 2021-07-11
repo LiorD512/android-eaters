@@ -7,6 +7,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.text.InputType
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -30,8 +31,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var binding: WsTitleValueViewBinding = WsTitleValueViewBinding.inflate(LayoutInflater.from(context), this, true)
 
+    interface WSTitleValueListener{
+        fun onCustomToolTipClick()
+    }
+
     init {
          initUi(attrs)
+    }
+
+    private var listener: WSTitleValueListener? = null
+    fun setWSTitleValueListener(listener: WSTitleValueListener){
+        this.listener = listener
     }
 
     private fun initUi(attrs: AttributeSet?) {
@@ -50,6 +60,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if(toolTip != 0){
                     titleValueViewToolTip.customInit(context, attrs)
                     titleValueViewToolTip.visibility = View.VISIBLE
+
+                    if(toolTip == Constants.TOOL_TIP_CUSTOM_CLICK){
+                        titleValueViewToolTip.disable()
+                        titleValueViewToolTip.setOnClickListener {
+                            listener?.onCustomToolTipClick()
+                        }
+                    }
                 }
 
                 attr.recycle()

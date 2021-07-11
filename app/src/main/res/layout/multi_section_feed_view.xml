@@ -32,15 +32,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                <FrameLayout
-                        android:id="@+id/multiSectionViewShareViewLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                    <include
-                            android:id="@+id/multiSectionViewShareView"
-                            layout="@layout/feed_view_sharing_stub"
-                            android:visibility="gone" />
-                </FrameLayout>
+
+                <com.bupp.wood_spoon_eaters.views.ShareBanner
+                        android:layout_marginTop="15.4dp"
+                        android:layout_marginHorizontal="7.4dp"
+                        android:id="@+id/multiSectionViewShareBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+<!--                <FrameLayout-->
+<!--                        android:id="@+id/multiSectionViewShareViewLayout"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content">-->
+<!--                    <include-->
+<!--                            android:id="@+id/multiSectionViewShareView"-->
+<!--                            layout="@layout/feed_view_sharing_stub"-->
+<!--                            android:visibility="gone" />-->
+<!--                </FrameLayout>-->
 
                 <FrameLayout
                         android:id="@+id/multiSectionViewLogoLayout"

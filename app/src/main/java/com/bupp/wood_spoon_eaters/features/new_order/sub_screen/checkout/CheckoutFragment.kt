@@ -6,12 +6,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
-import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsViewAdapter
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -37,9 +38,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     HeaderView.HeaderViewListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView.OrderItemsListener {
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView.OrderItemsListener,
+    WSTitleValueView.WSTitleValueListener {
 
-    private lateinit var binding: CheckoutFragmentBinding
+    private val binding: CheckoutFragmentBinding by viewBinding()
 
     private var hasPaymentMethod: Boolean = false
 
@@ -51,8 +53,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = CheckoutFragmentBinding.bind(view)
-
         Analytics.with(requireContext()).screen("Checkout page")
         mainViewModel.proceedToCheckoutEvent()
 
@@ -60,8 +60,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         initObservers()
 
     }
-
-
+    
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
@@ -87,6 +86,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 setEmptyPaymentMethod()
             }
         }
+        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+        })
         mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
             if (emptyCartEvent) {
                 ClearCartDialog(this@CheckoutFragment).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
@@ -122,6 +124,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //        ordersViewModel.rollBackToPreviousAddress()
     }
 
+    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
+        if (isCartEmpty) {
+            mainViewModel.showClearCartDialog()
+        } else {
+            mainViewModel.updateOrderItem(updatedOrderItem)
+        }
+    }
 
     private fun initUi() {
         binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
@@ -129,25 +138,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragHeaderView.setHeaderViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
 
             checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
             }
 
-//            checkoutFragPromoCodeStr.setOnClickListener {
-//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-//            }
-
-
-//            checkoutFragUtensilsSwitch.setOnCheckedChangeListener { _, isChecked ->
-//                viewModel.simpleUpdateOrder(OrderRequest(addUtensils = isChecked))
-//                if (isChecked) {
-//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_on)
-//                } else {
-//                    checkoutFragUtensilsText.text = getString(R.string.checkout_utensils_off)
-//                }
-//            }
         }
 
         mainViewModel.getLastOrderDetails()
@@ -222,8 +219,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     }
                 }
 //                checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide) //fix this
-                it.tipPercentage?.let{ tip ->
-                    if(tip != 0){
+                it.tipPercentage?.let { tip ->
+                    if (tip != 0) {
                         checkoutFragTipPercentView.selectDefaultTip(tip)
                     }
                 }
@@ -245,17 +242,19 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 checkoutFragPromoCode2.visibility = View.VISIBLE
                 checkoutFragPromoCode2.setTitle("Promo code $promo")
                 checkoutFragPromoCode2.setValue("(${curOrder.discount?.formatedValue?.replace("-", "")})")
+                checkoutFragPromoCode.updateSubTitle("$promo")
             }
 
             var feeAndTax = 0.0
-            curOrder.serviceFee?.value?.let{
+            curOrder.serviceFee?.value?.let {
                 feeAndTax += it
             }
-            curOrder.tax?.value?.let{
+            curOrder.tax?.value?.let {
                 feeAndTax += it
             }
             val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
             checkoutFragFees.setValue("$$feeAndTaxStr")
+
 
 
             checkoutFragDeliveryFee.setValue("$$deliveryFee")
@@ -289,9 +288,12 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
-            if(tipSelection == TIP_NOT_SELECTED){
-                viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = 0), Constants.EVENT_TIP) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
-            }else{
+            if (tipSelection == TIP_NOT_SELECTED) {
+                viewModel.simpleUpdateOrder(
+                    OrderRequest(tipPercentage = null, tip = 0),
+                    Constants.EVENT_TIP
+                ) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
+            } else {
                 viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
             }
         }
@@ -299,7 +301,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onTipDone(tipAmount: Int) {
         binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = tipAmount*100), Constants.EVENT_TIP)
+        viewModel.simpleUpdateOrder(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_TIP)
     }
 
 
@@ -325,9 +327,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onHeaderBackClick() {
-        if(mainViewModel.isCheckout){
+        if (mainViewModel.isCheckout) {
             mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
-        }else{
+        } else {
             activity?.onBackPressed()
         }
     }
@@ -336,6 +338,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH)
     }
 
-
-
+    override fun onCustomToolTipClick() {
+        viewModel.onFeesAndTaxInfoClick()
+    }
 }
