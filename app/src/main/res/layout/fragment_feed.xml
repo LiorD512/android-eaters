@@ -27,7 +27,6 @@
             android:id="@+id/feedFragEmptyLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="72dp"
             android:background="@color/white"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,15 +52,16 @@
 in this area quite yet"/>
 
         <ImageView
-                android:layout_marginTop="75dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emptyStateTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/subTitle"
                 android:src="@drawable/illus_feed_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <TextView
+                android:id="@+id/subTitle"
                 android:layout_marginBottom="67.5dp"
                 android:paddingHorizontal="70dp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -50,7 +50,7 @@ class NewOrderActivity : BaseActivity(),
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             viewModel.onLocationChanged()
-            viewModel.handleAddToCartClick()
+//            viewModel.handleAddToCartClick()
         }
     }
 
