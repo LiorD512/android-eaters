@@ -42,35 +42,35 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
         adapter.submitList(list)
 
 
-        binding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
-
-            var isFirst = true
-            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
-
-            }
-
-            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-
-            }
-
-            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-
-            }
-
-            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentState: Int) {
-                if (currentState == R.id.middle) {
-                    if (isFirst) {
-                        binding.motionLayout.setTransition(R.id.middleToEnd)
-                        binding.motionLayout.transitionToEnd()
-                        isFirst = false
-                    } else {
-                        binding.motionLayout.setTransition(R.id.startToMiddle)
-                        binding.motionLayout.transitionToStart()
-                        isFirst = true
-                    }
-                }
-            }
-        })
+//        binding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+//
+//            var isFirst = true
+//            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+//
+//            }
+//
+//            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+//
+//            }
+//
+//            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+//
+//            }
+//
+//            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentState: Int) {
+//                if (currentState == R.id.middle) {
+//                    if (isFirst) {
+//                        binding.motionLayout.setTransition(R.id.middleToEnd)
+//                        binding.motionLayout.transitionToEnd()
+//                        isFirst = false
+//                    } else {
+//                        binding.motionLayout.setTransition(R.id.startToMiddle)
+//                        binding.motionLayout.transitionToStart()
+//                        isFirst = true
+//                    }
+//                }
+//            }
+//        })
 
     }
 

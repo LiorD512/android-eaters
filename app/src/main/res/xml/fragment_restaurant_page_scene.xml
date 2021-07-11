@@ -4,25 +4,8 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-            android:id="@+id/startToMiddle"
-            motion:constraintSetEnd="@+id/middle"
-            motion:constraintSetStart="@id/start"
-            motion:duration="1000">
-        <OnSwipe
-                motion:dragDirection="dragUp"
-                motion:dragScale="1"
-                motion:moveWhenScrollAtTop="true"
-                motion:onTouchUp="stop"
-                motion:touchAnchorId="@id/mainRecyclerView"
-                motion:touchAnchorSide="top"/>
-    </Transition>
-
-    <Transition
-            android:id="@+id/middleToEnd"
-            motion:constraintSetStart="@+id/middle"
             motion:constraintSetEnd="@+id/end"
-            motion:duration="1000">
-
+            motion:constraintSetStart="@id/start">
         <OnSwipe
                 motion:dragDirection="dragUp"
                 motion:dragScale="1"
@@ -31,37 +14,107 @@
                 motion:touchAnchorId="@id/mainRecyclerView"
                 motion:touchAnchorSide="top"/>
 
-        <KeyFrameSet>
-            <KeyAttribute
-                    motion:keyPositionType="pathRelative"
-                    android:alpha="1"
-                    motion:framePosition="40"
-                    motion:motionTarget="@+id/topHeader"/>
-        </KeyFrameSet>
-
+                <KeyFrameSet>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="50"
+                            motion:motionTarget="@+id/shareButton"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="50"
+                            motion:motionTarget="@+id/menuButton"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="50"
+                            motion:motionTarget="@+id/rating"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="50"
+                            motion:motionTarget="@+id/coverPhoto"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="40"
+                            motion:motionTarget="@+id/topHeader"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="1"
+                            motion:framePosition="60"
+                            motion:motionTarget="@+id/topHeader"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="60"
+                            motion:motionTarget="@+id/topHeaderRestaurantName"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="60"
+                            motion:motionTarget="@+id/topHeaderChefName"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="1"
+                            motion:framePosition="90"
+                            motion:motionTarget="@+id/topHeaderRestaurantName"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="1"
+                            motion:framePosition="90"
+                            motion:motionTarget="@+id/topHeaderChefName"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="1"
+                            motion:framePosition="50"
+                            motion:motionTarget="@+id/restaurantHeader"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="70"
+                            motion:motionTarget="@+id/restaurantHeader"/>
+                </KeyFrameSet>
     </Transition>
-
 
     <ConstraintSet android:id="@+id/start">
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/middle">
+    <ConstraintSet android:id="@+id/end">
         <Constraint
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                motion:layout_constraintTop_toBottomOf="@id/topHeader"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="0dp"
-                android:id="@+id/restaurantHeader" />
-        <Constraint
-                android:id="@+id/shareButton"
-                motion:layout_constraintEnd_toStartOf="@id/menuButton"
+                android:id="@+id/topHeaderRestaurantName"
+                motion:layout_constraintStart_toEndOf="@id/backButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="7.4dp"
+                android:layout_marginStart="20dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="15dp"
-                android:visibility="invisible" />
+                android:alpha="1"/>
+        <Constraint
+                android:id="@+id/topHeaderChefName"
+                motion:layout_constraintStart_toEndOf="@id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintTop_toBottomOf="@id/topHeaderRestaurantName"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="3dp"
+                android:alpha="1"/>
+        <Constraint
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="0dp"
+                android:id="@+id/space" />
+        <Constraint
+                android:id="@+id/coverPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                motion:layout_constraintBottom_toTopOf="@id/space"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                android:alpha="0" />
         <Constraint
                 android:id="@+id/menuButton"
                 motion:layout_constraintEnd_toEndOf="parent"
@@ -70,36 +123,7 @@
                 android:layout_marginEnd="15dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="15dp"
-                android:visibility="invisible" />
-
-        <Constraint
-                android:id="@+id/coverPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                motion:layout_constraintBottom_toTopOf="@id/mainRecyclerView"
-                motion:layout_constraintTop_toTopOf="parent"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:visibility="invisible" />
-
-        <Constraint
-                android:id="@+id/rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                motion:layout_constraintBottom_toTopOf="@+id/restaurantHeader"
-                android:layout_marginStart="15dp"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:visibility="invisible" />
-    </ConstraintSet>
-    <ConstraintSet android:id="@+id/end" >
-        <Constraint
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="0dp"
-                android:id="@+id/restaurantHeader"
-                motion:layout_constraintTop_toTopOf="parent"
-                android:visibility="invisible" />
+                android:alpha="0" />
         <Constraint
                 android:id="@+id/shareButton"
                 motion:layout_constraintEnd_toStartOf="@id/menuButton"
@@ -108,24 +132,7 @@
                 android:layout_marginEnd="7.4dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="15dp"
-                android:visibility="invisible" />
-        <Constraint
-                android:id="@+id/menuButton"
-                motion:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                motion:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
-                android:visibility="invisible" />
-        <Constraint
-                android:id="@+id/coverPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                motion:layout_constraintBottom_toTopOf="@id/mainRecyclerView"
-                motion:layout_constraintTop_toTopOf="parent"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:visibility="invisible" />
+                android:alpha="0" />
         <Constraint
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
@@ -134,14 +141,21 @@
                 motion:layout_constraintBottom_toTopOf="@+id/restaurantHeader"
                 android:layout_marginStart="15dp"
                 motion:layout_constraintStart_toStartOf="parent"
-                android:visibility="invisible" />
+                android:alpha="0" />
         <Constraint
                 android:id="@+id/topHeader"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:layout_height="70dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
-                android:alpha="1" />
+                android:alpha="1"/>
+        <Constraint
+                android:id="@+id/restaurantHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                motion:layout_constraintBottom_toTopOf="@id/mainRecyclerView"
+                motion:layout_constraintStart_toStartOf="parent"
+                android:alpha="0" />
     </ConstraintSet>
+
 </MotionScene>
