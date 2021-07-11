@@ -10,7 +10,7 @@
 
     <androidx.cardview.widget.CardView
             app:cardElevation="8dp"
-            android:clipToPadding="false"
+            android:clipToPadding="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -27,6 +27,7 @@
                 app:tabIndicatorAnimationMode="elastic"
                 app:tabIndicatorHeight="3dp"
                 app:tabMode="fixed"
+                app:tabIndicatorGravity="top"
                 app:tabPaddingEnd="-1dp"
                 app:tabPaddingStart="-1dp"
                 app:tabPaddingTop="10dp"
