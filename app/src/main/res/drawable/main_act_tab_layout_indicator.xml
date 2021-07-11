@@ -4,7 +4,6 @@
             android:end="15dp"
             android:start="15dp">
         <shape android:shape="rectangle">
-
             <size android:height="4dp" />
             <corners android:radius="5dp" />
             <solid android:color="@color/dark" />

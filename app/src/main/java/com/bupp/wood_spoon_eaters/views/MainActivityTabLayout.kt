@@ -18,17 +18,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var binding: MainActTabLayoutBinding = MainActTabLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private val imageResId = arrayOf(
-        R.drawable.tab_home_selector,
-        R.drawable.tab_search_selector,
-        R.drawable.tab_orders_selector,
-        R.drawable.tab_account_selector
-    )
-
-    private val texts = arrayOf("Home", "Search", "Orders", "Account")
-
     fun setViewPager(viewPager: ViewPager2){
-        TabLayoutMediator(binding.mainActTabLayout, viewPager) { tab, position ->
+        TabLayoutMediator(binding.mainActTabLayout, viewPager, true, false) { tab, position ->
             when(position){
                 0 -> tab.setCustomView(R.layout.feed_tab_home)
                 1 -> tab.setCustomView(R.layout.feed_tab_search)

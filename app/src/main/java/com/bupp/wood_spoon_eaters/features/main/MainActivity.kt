@@ -11,26 +11,22 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.viewpager2.widget.ViewPager2
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
-import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.common.MediaUtils
+import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
+import com.bupp.wood_spoon_eaters.delete_me.Pager2_PopTransformer
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
-import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
-import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
-import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
 import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
@@ -80,14 +76,13 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private fun initMainViewPager() {
         with(binding){
             val pagerAdapter = MainActPagerAdapter(this@MainActivity)
+//            mainActViewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
             mainActViewPager.adapter = pagerAdapter
             mainActViewPager.offscreenPageLimit = 4
             mainActViewPager.isUserInputEnabled = false
-            mainActViewPager.setPageTransformer(DepthPageTransformer())
+//            mainActViewPager.setPageTransformer()
 
             mainActBottomTabLayout.setViewPager(mainActViewPager)
-
-
         }
     }
 

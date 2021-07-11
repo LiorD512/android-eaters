@@ -8,31 +8,24 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-    <androidx.cardview.widget.CardView
-            app:cardElevation="8dp"
-            android:clipToPadding="true"
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/mainActTabLayout"
+            style="@style/NewOrderTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <com.google.android.material.tabs.TabLayout
-                android:id="@+id/mainActTabLayout"
-                style="@style/NewOrderTabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="33dp"
-                android:paddingTop="-10dp"
-                app:tabGravity="fill"
-                app:tabIndicator="@drawable/main_act_tab_layout_indicator"
-                app:tabIndicatorAnimationMode="elastic"
-                app:tabIndicatorHeight="3dp"
-                app:tabMode="fixed"
-                app:tabIndicatorGravity="top"
-                app:tabPaddingEnd="-1dp"
-                app:tabPaddingStart="-1dp"
-                app:tabPaddingTop="10dp"
-                app:tabRippleColor="@null" />
-
-    </androidx.cardview.widget.CardView>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="27dp"
+            android:paddingTop="-10dp"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/dark"
+            app:tabIndicator="@drawable/main_act_tab_layout_indicator"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabIndicatorGravity="top"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed"
+            app:tabPaddingEnd="-1dp"
+            app:tabPaddingStart="-1dp"
+            app:tabPaddingTop="10dp"
+            app:tabRippleColor="@null" />
 
 </FrameLayout>

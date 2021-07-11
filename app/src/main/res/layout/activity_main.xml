@@ -18,23 +18,30 @@
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/mainActViewPager"
             app:layout_constraintTop_toBottomOf="@+id/mainActCampaignBanner"
-            app:layout_constraintBottom_toTopOf="@+id/mainActBottomTabLayout"
+            app:layout_constraintBottom_toTopOf="@+id/mainActBottomTabMainLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
 
-    <com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
-            android:id="@+id/mainActBottomTabLayout"
-            style="@style/NewOrderTabLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/mainActBottomTabMainLayout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tabGravity="fill"
-            app:tabIndicatorHeight="1dp"
-            app:tabMode="fixed" />
+            app:cardElevation="12dp"
+            android:clipToPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
+            android:id="@+id/mainActBottomTabLayout"
+            style="@style/NewOrderTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
