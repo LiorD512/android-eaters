@@ -26,14 +26,10 @@ class DeliveryTimeManager {
 
     fun setTemporaryDeliveryTimeDate(tempDate: Date?){
         tempDeliveryTimeStamp = DateUtils.parseUnixTimestamp(tempDate)
-//        tempDate?.let{
-//           if(!hasChangedTime){
-//                this.previousDeliveryTime = deliveryTime
-//                hasChangedTime = true
-//            }
-////            this.hasChangedTime = true
-//            setNewDeliveryTime(it)
-//        }
+    }
+
+    fun clearDeliveryTime(){
+        setNewDeliveryTime(null)
     }
 
     fun getDeliveryTimeDate(): Date? {

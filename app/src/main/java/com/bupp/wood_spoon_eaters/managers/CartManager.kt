@@ -363,6 +363,7 @@ class CartManager(
         currentShowingDish = null
         currentOrderResponse = null
         isInCheckout = false
+        deliveryTimeManager.clearDeliveryTime()
     }
 
     fun refreshOrderUi() {
