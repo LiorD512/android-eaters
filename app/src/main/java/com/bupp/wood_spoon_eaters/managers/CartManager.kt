@@ -233,6 +233,11 @@ class CartManager(
         }
     }
 
+    fun removeLastOrderItem() {
+            cart.removeAt(0)
+            Log.d(TAG, "addNewItemToCart: $cart")
+    }
+
     suspend fun updateInCartOrderItem(updatedOrderItem: OrderItem): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "updateInCartOrderItem")
         //this method used to update orderItems that changed in AdditionalDishesDialog and checkout.

@@ -221,7 +221,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
-                            cartManager.clearCart()
+                            cartManager.removeLastOrderItem()
                         }
                     }
                     else -> {
@@ -281,6 +281,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
+                            cartManager.removeLastOrderItem()
                         }
                     }
                     else -> {
