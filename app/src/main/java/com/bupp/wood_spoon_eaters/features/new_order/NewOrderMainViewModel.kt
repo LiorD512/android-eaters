@@ -221,6 +221,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
+                            cartManager.clearCart()
                         }
                     }
                     else -> {
