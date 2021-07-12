@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -101,7 +102,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchAdapter.SearchA
                 }
             }
         })
-
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+            binding.searchFragHeightCorrection.isVisible = isVisible
+        })
 //        viewModel.getCookEvent.observe(viewLifecycleOwner, { event ->
 //            searchFragPb.hide()
 //            if(event != null){

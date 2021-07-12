@@ -165,6 +165,7 @@
 
             <com.bupp.wood_spoon_eaters.views.WSLongBtn
                     app:title="Privacy policy and terms of use"
+                    app:showSep="false"
                     android:layout_marginHorizontal="15.4dp"
                     android:id="@+id/myProfileFragPrivacy"
                     android:layout_width="match_parent"
@@ -175,10 +176,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="8dp"/>
 
-
             <com.bupp.wood_spoon_eaters.views.WSLongBtn
                     app:title="Edit my account"
-                    android:layout_marginTop="15.4dp"
                     android:layout_marginHorizontal="15.4dp"
                     android:id="@+id/myProfileFragEditAccount"
                     android:layout_width="match_parent"
@@ -186,7 +185,6 @@
 
             <com.bupp.wood_spoon_eaters.views.WSLongBtn
                     app:title="Delete account"
-                    android:layout_marginTop="15.4dp"
                     android:layout_marginHorizontal="15.4dp"
                     android:id="@+id/myProfileFragDeleteAccount"
                     android:layout_width="match_parent"

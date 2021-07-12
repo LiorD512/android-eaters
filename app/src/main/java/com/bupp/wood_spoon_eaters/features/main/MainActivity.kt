@@ -82,6 +82,16 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
+    private fun initUi() {
+        with(binding) {
+            mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
+            mainActFloatingCartBtn.updateFloatingCartButton(13.55)
+        }
+
+        //TODO - REMOVE THIS (BRANCH TEST)
+        IntegrationValidator.validate(this)
+    }
+
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
         //this method triggered when Floating cart button is hide or shown - activity related screen need to update their bottom padding.
         viewModel.onFloatingCartStateChanged(isShowing)
@@ -190,17 +200,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ///////       Ui processes - start       ///////
     ////////////////////////////////////////////////
 
-    private fun initUi() {
-        with(binding) {
-//            mainActHeaderView.setHeaderViewListener(this@MainActivity, viewModel.getCurrentEater())
-//            mainActOrdersBB.setCartBottomBarListener(this@MainActivity)
 
-            mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
-        }
-
-        //TODO - REMOVE THIS (BRANCH TEST)
-        IntegrationValidator.validate(this)
-    }
 
     private fun initUiRelatedProcesses() {
         checkForBranchIntent()

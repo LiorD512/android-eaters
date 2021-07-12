@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +20,8 @@ import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.segment.analytics.Analytics
+import it.sephiroth.android.library.xtooltip.ClosePolicy
+import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,6 +41,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
+    private var tooltip: Tooltip? = null
     val binding: FragmentFeedBinding by viewBinding()
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
@@ -94,6 +98,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             } else {
                 binding.feedFragPb.hide()
             }
+        })
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+            binding.feedFragHeightCorrection.isVisible = isVisible
         })
 //        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
 //            Log.d(TAG, "campaign: $it")
@@ -164,7 +171,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         with(binding){
             feedFragListLayout.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
+//            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
             feedFragEmptyLayout.setOnClickListener {
                 mainViewModel.startLocationAndAddressAct()
             }
@@ -176,7 +183,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             Log.d(TAG, "handleBannerEvent: $bannerType")
             when(bannerType){
                 Constants.NO_BANNER -> {
-                    binding.feedFragHeaderError.visibility = View.GONE
+                    //todo: replace with new banner system
+                    tooltip?.dismiss()
                 }
                 Constants.BANNER_KNOWN_ADDRESS -> {
                     showBanner(getString(R.string.banner_known_address))
@@ -197,27 +205,23 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
     private fun showBanner(text: String) {
         with(binding){
-            feedFragHeaderError.text = text
-            feedFragHeaderError.visibility = View.VISIBLE
-            feedFragHeaderError.setOnClickListener {
-                feedFragHeaderError.visibility = View.GONE
-            }
+            tooltip = Tooltip.Builder(requireContext())
+                .anchor(feedFragHeader, 0, -30, true)
+                .text(text)
+                .arrow(true)
+                .floatingAnimation(Tooltip.Animation.SLOW)
+                .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
+                .overlay(false)
+                .maxWidth(feedFragHeader.measuredWidth-50)
+                .create()
+
+            tooltip!!
+                .doOnHidden { }
+                .doOnFailure { }
+                .doOnShown { }
+                .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
         }
-//        tooltip = Tooltip.Builder(this)
-//            .anchor(headerCard, 0, -30, true)
-//            .text(text)
-//            .arrow(true)
-//            .floatingAnimation(Tooltip.Animation.SLOW)
-//            .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
-//            .overlay(false)
-//            .maxWidth(mainActHeaderView.measuredWidth-50)
-//            .create()
-//
-//        tooltip!!
-//            .doOnHidden { }
-//            .doOnFailure { }
-//            .doOnShown { }
-//            .show(headerCard, Tooltip.Gravity.BOTTOM, false)
+
     }
 
 
