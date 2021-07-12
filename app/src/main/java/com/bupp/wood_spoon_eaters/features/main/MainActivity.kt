@@ -31,6 +31,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.bupp.wood_spoon_eaters.views.floating_cart_button.FloatingCartButton
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
@@ -45,7 +46,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
     ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener {
+    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
+    FloatingCartButton.FloatingCartButtonListener {
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -78,6 +80,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
             mainActBottomTabLayout.setViewPager(mainActViewPager)
         }
+    }
+
+    override fun onFloatingCartStateChanged(isShowing: Boolean) {
+        //this method triggered when Floating cart button is hide or shown - activity related screen need to update their bottom padding.
+        viewModel.onFloatingCartStateChanged(isShowing)
     }
 
 
@@ -187,6 +194,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         with(binding) {
 //            mainActHeaderView.setHeaderViewListener(this@MainActivity, viewModel.getCurrentEater())
 //            mainActOrdersBB.setCartBottomBarListener(this@MainActivity)
+
+            mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
         }
 
         //TODO - REMOVE THIS (BRANCH TEST)
@@ -711,6 +720,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     override fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         viewModel.onMediaUtilsResultSuccess(result)
     }
+
+
 
 
 }

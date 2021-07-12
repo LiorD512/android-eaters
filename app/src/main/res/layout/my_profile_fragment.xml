@@ -210,6 +210,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+            <View
+                    android:visibility="gone"
+                    android:id="@+id/myProfileFragHeightCorrection"
+                    android:layout_width="1dp"
+                    android:layout_height="@dimen/floating_cart_btn_height"/>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

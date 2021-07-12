@@ -24,6 +24,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp" />
 
+    <com.bupp.wood_spoon_eaters.views.floating_cart_button.FloatingCartButton
+            android:id="@+id/mainActFloatingCartBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/mainActBottomTabMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <androidx.cardview.widget.CardView
             android:id="@+id/mainActBottomTabMainLayout"

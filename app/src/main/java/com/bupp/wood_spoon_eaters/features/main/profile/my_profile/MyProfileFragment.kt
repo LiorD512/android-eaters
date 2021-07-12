@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
@@ -136,6 +137,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         })
         mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             binding.myProfileFragAddress.updateDeliveryFullDetails(it.address)
+        })
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+            binding.myProfileFragHeightCorrection.isVisible = isVisible
         })
     }
 

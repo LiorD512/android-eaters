@@ -420,5 +420,10 @@ class MainViewModel(
         mediaUtilsResultLiveData.postValue(result)
     }
 
+     val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
+    fun onFloatingCartStateChanged(isShowing: Boolean) {
+        onFloatingBtnHeightChange.postValue(isShowing)
+    }
+
 
 }
