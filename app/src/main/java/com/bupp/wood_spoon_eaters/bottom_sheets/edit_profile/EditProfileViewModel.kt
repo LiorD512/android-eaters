@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile
+package com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile
 
 import android.net.Uri
 import android.util.Log
@@ -11,12 +11,11 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.managers.MediaUploadManager
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
-import com.bupp.wood_spoon_eaters.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class EditMyProfileViewModel(private val userRepository: UserRepository, val eaterDataManager: EaterDataManager, private val mediaUploadManager: MediaUploadManager) : ViewModel(),
+class EditProfileViewModel(private val userRepository: UserRepository, val eaterDataManager: EaterDataManager, private val mediaUploadManager: MediaUploadManager) : ViewModel(),
     MediaUploadManager.UploadManagerListener {
 
     val progressData = ProgressData()
@@ -42,8 +41,8 @@ class EditMyProfileViewModel(private val userRepository: UserRepository, val eat
             email = email
         )
 
-        progressData.startProgress()
         if(uploadedPhoto){
+            progressData.startProgress()
             uploadMediaData()
         }else{
             updateEater()
@@ -61,7 +60,7 @@ class EditMyProfileViewModel(private val userRepository: UserRepository, val eat
             }
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    mediaUploadManager.upload(mediaUploadRequests, this@EditMyProfileViewModel)
+                    mediaUploadManager.upload(mediaUploadRequests, this@EditProfileViewModel)
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 } finally {

@@ -154,7 +154,6 @@ class Constants {
         const val LOCATION_CHOOSER_TAG = "location_chooser_tag"
         const val PICK_FILTERS_TAG = "pick_filters_tag"
         const val MY_PROFILE_TAG = "my_profile_tag"
-        const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
         const val NO_LOCATIONS_AVAILABLE_TAG = "no_locations_available_tag"
 
         const val GET_EVENT_TAG = "get_event_tag"
@@ -216,13 +215,15 @@ class Constants {
         const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
         const val LOCATION_PERMISSION_BOTTOM_SHEET = "location_permission_bottom_sheet"
         const val CAMPAIGN_BOTTOM_SHEET = "campaign_bottom_sheet"
-        const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val SETTINGS_BOTTOM_SHEET = "settings_bottom_sheet"
         const val SUPPORT_CENTER_BOTTOM_SHEET = "support_center_bottom_sheet"
         const val JOIN_AS_CHEF_BOTTOM_SHEET = "join_as_chef_bottom_sheet"
         const val SINGLE_ORDER_DETAILS_BOTTOM_SHEET = "single_order_details_bottom_sheet"
         const val REPORT_ISSUE_BOTTOM_SHEET = "report_issue_bottom_sheet"
         const val FREE_TEXT_BOTTOM_SHEET = "free_text_bottom_sheet"
+        const val DELETE_ACCOUNT_BOTTOM_SHEET = "delete_account_bottom_sheet"
+        const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
+
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.bottom_sheets.support_center
+package com.bupp.wood_spoon_eaters.bottom_sheets.delete_account
 
 import android.app.Dialog
 import android.content.Intent
@@ -12,24 +12,28 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
+import com.bupp.wood_spoon_eaters.databinding.DeleteAccountBottomSheetBinding
+import com.bupp.wood_spoon_eaters.databinding.JoinAsChefBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.segment.analytics.Analytics
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
+class DeleteAccountBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private val binding: SupportCenterBottomSheetBinding by viewBinding()
-    private val viewModel: SupportViewModel by viewModel()
-
+    private val binding: DeleteAccountBottomSheetBinding by viewBinding()
+    private val viewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.support_center_bottom_sheet, container, false)
+        return inflater.inflate(R.layout.delete_account_bottom_sheet, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,60 +63,22 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
-        Analytics.with(requireContext()).screen("Support center")
-
         initUI()
     }
 
     private fun initUI() {
         with(binding){
-            supportDialogHeader.setHeaderViewListener(this@SupportCenterBottomSheet)
-            supportDialogNext.setBtnEnabled(false)
-            supportDialogCommentInput.setWSCounterListener(this@SupportCenterBottomSheet)
-
-            supportDialogCallButton.setOnClickListener {
-                (activity as MainActivity).onContactUsClick()
+            deleteAccountBtn.setOnClickListener {
+                viewModel.deleteAccount()
             }
-            supportDialogTextButton.setOnClickListener {
-                (activity as MainActivity).sendSmsText()
-            }
-            supportDialogQA.setOnClickListener{ openQaUrl()}
-            supportDialogNext.setOnClickListener { sendMail() }
-        }
-    }
 
-    private fun openQaUrl() {
-        WebDocsDialog(Constants.WEB_DOCS_QA).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
-    }
-
-    private fun sendMail() {
-        val text = binding.supportDialogCommentInput.getText()
-        val address = viewModel.getAdminMailAddress()
-
-        val selectorIntent = Intent(Intent.ACTION_SENDTO)
-        selectorIntent.data = Uri.parse("mailto:")
-
-        val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, viewModel.getEmailSubject())
-        emailIntent.putExtra(Intent.EXTRA_TEXT, text)
-        emailIntent.selector = selectorIntent
-
-        activity?.startActivity(Intent.createChooser(emailIntent, "Send email..."))
-    }
-
-
-    override fun onInputTitleChange(str: String?) {
-        with(binding){
-            if (str.isNullOrEmpty()) {
-                supportDialogNext.setBtnEnabled(false)
-            } else {
-                supportDialogNext.setBtnEnabled(true)
-            }
+            deleteAccountHeader.setHeaderViewListener(this@DeleteAccountBottomSheet)
         }
     }
 
     override fun onHeaderCloseClick() {
         dismiss()
     }
+
+
 }

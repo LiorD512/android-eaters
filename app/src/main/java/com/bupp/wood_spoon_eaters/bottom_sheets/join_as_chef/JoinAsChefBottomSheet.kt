@@ -81,7 +81,7 @@ class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
         startActivity(i)
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
 

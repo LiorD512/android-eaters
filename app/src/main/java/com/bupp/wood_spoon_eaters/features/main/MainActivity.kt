@@ -11,14 +11,12 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.viewpager2.widget.ViewPager2
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
-import com.bupp.wood_spoon_eaters.delete_me.Pager2_PopTransformer
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
@@ -26,8 +24,6 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
-import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileFragment
-import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
@@ -76,11 +72,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private fun initMainViewPager() {
         with(binding){
             val pagerAdapter = MainActPagerAdapter(this@MainActivity)
-//            mainActViewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
             mainActViewPager.adapter = pagerAdapter
             mainActViewPager.offscreenPageLimit = 4
             mainActViewPager.isUserInputEnabled = false
-//            mainActViewPager.setPageTransformer()
 
             mainActBottomTabLayout.setViewPager(mainActViewPager)
         }
@@ -393,24 +387,24 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         Utils.callPhone(this, phone)
     }
 
-    private fun loadFragment(fragment: Fragment, tag: String) {
-//        // todo - check status bar status??
-//        lastFragmentTag = currentFragmentTag
-//        currentFragmentTag = tag
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.mainActContainer, fragment, tag)
-//            .commit()
-    }
-
-    private fun getFragmentByTag(tag: String): Fragment? {
-        val fragmentManager = this@MainActivity.supportFragmentManager
-        val fragments = fragmentManager.fragments
-        for (fragment in fragments) {
-            if (fragment.tag == tag)
-                return fragment
-        }
-        return null
-    }
+//    private fun loadFragment(fragment: Fragment, tag: String) {
+////        // todo - check status bar status??
+////        lastFragmentTag = currentFragmentTag
+////        currentFragmentTag = tag
+////        supportFragmentManager.beginTransaction()
+////            .replace(R.id.mainActContainer, fragment, tag)
+////            .commit()
+//    }
+//
+//    private fun getFragmentByTag(tag: String): Fragment? {
+//        val fragmentManager = this@MainActivity.supportFragmentManager
+//        val fragments = fragmentManager.fragments
+//        for (fragment in fragments) {
+//            if (fragment.tag == tag)
+//                return fragment
+//        }
+//        return null
+//    }
 
 
 //    fun handlePb(shouldShow: Boolean) {
@@ -537,11 +531,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun loadDishOfferedDialog() {
-        NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
-        if (getFragmentByTag(Constants.SEARCH_TAG) != null) {
-            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged("")
-        }
+    fun loadDishOfferedDialog() {//todo - fix
+//        NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
+//        if (getFragmentByTag(Constants.SEARCH_TAG) != null) {
+//            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged("")
+//        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -604,9 +598,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onHeaderFilterClick() {
-        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
-            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).openFilterDialog()
-        }
+//        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
+//            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).openFilterDialog()
+//        }
     }
 
     override fun onHeaderTimeClick() {
@@ -621,9 +615,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     override fun onHeaderTextChange(str: String) {
-        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
-            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged(str)
-        }
+//        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
+//            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged(str)
+//        }
     }
 
     fun setHeaderViewSaveBtnClickable(isClickable: Boolean) {
@@ -632,9 +626,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     override fun onHeaderSaveClick() {
-        if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
-            (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
-        }
+//        if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
+//            (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
+//        }
     }
 
     override fun onHeaderProfileClick() {
@@ -715,9 +709,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
-        if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
-            (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).onCameraUtilResult(result)
-        }
+        viewModel.onMediaUtilsResultSuccess(result)
     }
 
 
