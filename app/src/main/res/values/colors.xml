@@ -24,6 +24,7 @@
     <color name="switch_red">#e5455c</color>
     <color name="black">#000000</color>
     <color name="black_50">#80000000</color>
+    <color name="black_60">#99000000</color>
     <color name="black_three">#111111</color>
     <color name="black_two">#030303</color>
     <color name="dark">#252126</color>
@@ -31,6 +32,7 @@
     <color name="dark_43">#2b252126</color>
     <color name="dark_50">#80252126</color>
     <color name="dark_80">#cc252126</color>
+    <color name="dark_grey">#2a2a2c</color>
     <color name="purpley_grey">#929092</color>
     <color name="purpley_grey_two">#918f91</color>
     <color name="silver">#dcdcdf</color>
@@ -38,11 +40,13 @@
     <color name="silver_20">#33dcdcdf</color>
     <color name="silver_50">#80dcdcdf</color>
     <color name="white">#ffffff</color>
+    <color name="white_50">#80ffffff</color>
     <color name="white_60">#99ffffff</color>
     <color name="white_80">#d9ffffff</color>
     <color name="white_95">#f2ffffff</color>
     <color name="teal_blue">#0097a3</color>
     <color name="grey_white">#f1f1f1</color>
+    <color name="nobel_grey">#a19e9e</color>
     <color name="off_white_90">#f2fffaf0</color>
     <color name="switch_green">#26b8a5</color>
     <color name="teal_blue_50">#800097a3</color>
