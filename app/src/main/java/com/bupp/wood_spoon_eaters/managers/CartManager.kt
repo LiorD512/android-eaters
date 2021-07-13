@@ -95,6 +95,7 @@ class CartManager(
                 Log.d(TAG, "checkIfFutureDish - changing delivery time to future order")
             } else {
                 //do nothing. stay with user selected date,
+
             }
         }
 

@@ -29,7 +29,8 @@ class DeliveryTimeManager {
     }
 
     fun clearDeliveryTime(){
-        setNewDeliveryTime(null)
+        tempDeliveryTimeStamp = null
+//        setNewDeliveryTime(null)
     }
 
     fun getDeliveryTimeDate(): Date? {
