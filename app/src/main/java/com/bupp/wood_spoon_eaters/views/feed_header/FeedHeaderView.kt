@@ -24,7 +24,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     interface FeedHeaderViewListener{
         fun onHeaderAddressClick()
-        fun onHeaderTimeClick()
+        fun onHeaderDateClick()
     }
 
     init {
@@ -37,8 +37,21 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             with(binding) {
                 val attr = context.obtainStyledAttributes(attrs, R.styleable.WSLongBtn)
                 attr.recycle()
+
+                feedHeaderAddress.setOnClickListener { listener?.onHeaderAddressClick() }
+                feedHeaderAddressArrow.setOnClickListener { listener?.onHeaderAddressClick() }
+                feedHeaderDate.setOnClickListener { listener?.onHeaderDateClick() }
+                feedHeaderDateArrow.setOnClickListener { listener?.onHeaderDateClick() }
             }
         }
+    }
+
+    fun setAddress(setAddress: String?) {
+        binding.feedHeaderAddress.text = setAddress ?: "Address"
+    }
+
+    fun setDate(date: String?) {
+        binding.feedHeaderDate.text = date ?: "When"
     }
 
 

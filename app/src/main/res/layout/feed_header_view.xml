@@ -31,6 +31,7 @@
             tools:text="828 Broadway, New York" />
 
     <ImageView
+            android:id="@+id/feedHeaderAddressArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -47,12 +48,12 @@
             android:paddingStart="7.7dp"
             android:text="When"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/dateArrow"
+            app:layout_constraintEnd_toStartOf="@+id/feedHeaderDateArrow"
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+            android:id="@+id/feedHeaderDateArrow"
             android:paddingEnd="15.4dp"
-            android:id="@+id/dateArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
