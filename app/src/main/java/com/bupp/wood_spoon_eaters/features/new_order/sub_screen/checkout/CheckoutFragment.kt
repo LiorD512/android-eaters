@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -38,8 +39,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     HeaderView.HeaderViewListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView.OrderItemsListener,
-    WSTitleValueView.WSTitleValueListener {
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView2.OrderItemsListener,
+    WSTitleValueView.WSTitleValueListener, OrderItemsView.OrderItemsListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
 

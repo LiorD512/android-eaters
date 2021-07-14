@@ -8,7 +8,7 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="7.7dp"
             android:background="@drawable/rounded_white_bkg"
@@ -53,11 +53,12 @@
 
         <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             <LinearLayout
+                    android:gravity="top"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                 <FrameLayout
@@ -68,7 +69,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/trackOrderDialogList"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/white" />
 
             </LinearLayout>

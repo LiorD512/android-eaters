@@ -145,20 +145,26 @@
 
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/trackOrderBottomShareImageBtn"
-            android:src="@drawable/refferal_banner_pic"
-            android:scaleType="centerCrop"
+<!--    <ImageView-->
+<!--            android:id="@+id/trackOrderBottomShareImageBtn"-->
+<!--            android:src="@drawable/refferal_banner_pic"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="144dp"/>-->
+
+    <View
+            android:background="@color/light_periwinkle"
             android:layout_width="match_parent"
-            android:layout_height="144dp"/>
+            android:layout_height="1dp"/>
 
     <TextView
+            android:background="@drawable/rounded_white_bkg"
             android:id="@+id/trackOrderBottomCancelBtn"
             style="@style/SemiBold15Dark"
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingTop="22.6dp"
-            android:paddingBottom="23.2dp"
+            android:paddingBottom="22.2dp"
             android:textColor="@color/red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

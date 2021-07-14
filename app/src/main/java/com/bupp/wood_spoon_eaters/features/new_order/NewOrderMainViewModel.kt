@@ -221,6 +221,8 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
+                            handleAddItemToCartError()
+
                         }
                     }
                     else -> {
@@ -228,6 +230,15 @@ class NewOrderMainViewModel(
                 }
                 progressData.endProgress()
             }
+        }
+    }
+
+    private fun handleAddItemToCartError() {
+        val cartStatus = cartManager.getCartStatus()
+        if(cartStatus == CartManager.CartStatus(CartManager.CartStatusEventType.CART_IS_EMPTY)){
+            clearCart()
+        }else{
+            cartManager.removeLastOrderItem()
         }
     }
 
@@ -280,6 +291,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
+                            cartManager.removeLastOrderItem()
                         }
                     }
                     else -> {
