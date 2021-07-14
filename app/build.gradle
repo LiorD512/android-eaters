@@ -16,7 +16,6 @@ android {
 //        }
 //    }
 
-
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 23
