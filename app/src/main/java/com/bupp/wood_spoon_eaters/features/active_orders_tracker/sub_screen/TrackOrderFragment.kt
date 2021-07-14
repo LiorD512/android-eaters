@@ -52,7 +52,6 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
     companion object {
         const val CUR_ORDER_ID_PARAM = "curOrderId"
-
         fun newInstance(curOrderId: Long): TrackOrderFragment {
             val fragment = TrackOrderFragment()
             try {
