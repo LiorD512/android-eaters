@@ -131,6 +131,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
                 }
 
+                singleOrderDetailsTip.setValue(tip?.formatedValue ?: "N/A")
+
                 if (!promoCode.isNullOrEmpty()) {
                     singleOrderDetailsPromoCode.visibility = View.VISIBLE
                     singleOrderDetailsPromoCode.setTitle("Promo code $promoCode")

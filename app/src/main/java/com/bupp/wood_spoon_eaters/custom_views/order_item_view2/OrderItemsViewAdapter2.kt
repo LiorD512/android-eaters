@@ -56,7 +56,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
         fun bindItem(context: Context, orderItem: OrderItem){
             val dish: Dish = orderItem.dish
 
-            counter.text = "x${orderItem.quantity}"
+            counter.text = "${orderItem.quantity}X"
             name.text = "${dish.name} x${orderItem.quantity}"
 
             var price = 0.0

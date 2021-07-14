@@ -122,13 +122,35 @@
 
         </LinearLayout>
 
-        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                android:id="@+id/trackOrderDetailsSectionPromoCode"
+        <LinearLayout
                 android:visibility="gone"
+                android:id="@+id/trackOrderDetailsSectionPromoCodeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="Promo code" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:paddingStart="23dp"
+                android:paddingEnd="23dp">
 
+            <TextView
+                    android:id="@+id/trackOrderDetailsSectionPromoCodeName"
+                    style="@style/Reg13Dark"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:letterSpacing="0.03"
+                    android:text="Promo code" />
+
+            <TextView
+                    android:id="@+id/trackOrderDetailsSectionPromoCode"
+                    style="@style/SemiBold13Dark50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:letterSpacing="0.03"
+                    tools:text="$7" />
+
+        </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"

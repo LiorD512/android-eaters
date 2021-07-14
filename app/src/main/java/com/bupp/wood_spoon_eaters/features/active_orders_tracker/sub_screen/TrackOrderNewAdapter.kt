@@ -99,9 +99,9 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
 
             order.promoCode?.let{
-                binding.trackOrderDetailsSectionPromoCode.visibility = View.VISIBLE
-                binding.trackOrderDetailsSectionPromoCode.setTitle("Promo code $it")
-                binding.trackOrderDetailsSectionPromoCode.setValue("(${order.discount?.formatedValue?.replace("-", "")})")
+                binding.trackOrderDetailsSectionPromoCodeLayout.visibility = View.VISIBLE
+                binding.trackOrderDetailsSectionPromoCodeName.text = "Promo code $it"
+                binding.trackOrderDetailsSectionPromoCode.text = "${order.discount?.formatedValue}"
             }
 
             order.tip?.let{
