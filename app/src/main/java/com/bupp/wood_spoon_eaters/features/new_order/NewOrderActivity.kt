@@ -200,7 +200,7 @@ class NewOrderActivity : BaseActivity(),
 //            }
 //        }
 //    }
-//
+
 
     //Address Missing Dialog interface
     override fun openUpdateAddress() {

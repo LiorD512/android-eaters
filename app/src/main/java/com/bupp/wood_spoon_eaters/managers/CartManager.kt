@@ -95,6 +95,7 @@ class CartManager(
                 Log.d(TAG, "checkIfFutureDish - changing delivery time to future order")
             } else {
                 //do nothing. stay with user selected date,
+
             }
         }
 
@@ -233,6 +234,11 @@ class CartManager(
         }
     }
 
+    fun removeLastOrderItem() {
+            cart.removeAt(0)
+            Log.d(TAG, "addNewItemToCart: $cart")
+    }
+
     suspend fun updateInCartOrderItem(updatedOrderItem: OrderItem): OrderRepository.OrderRepoResult<Order>? {
         Log.d(TAG, "updateInCartOrderItem")
         //this method used to update orderItems that changed in AdditionalDishesDialog and checkout.
@@ -358,6 +364,7 @@ class CartManager(
         currentShowingDish = null
         currentOrderResponse = null
         isInCheckout = false
+        deliveryTimeManager.clearDeliveryTime()
     }
 
     fun refreshOrderUi() {

@@ -316,6 +316,7 @@ class Constants {
         const val EVENT_SEND_OTP = "send_otp"
         const val EVENT_VERIFY_OTP = "verify_otp"
         const val EVENT_CREATE_ACCOUNT = "create_account"
+        const val EVENT_CAMPAIGN_INVITE = "campaign_invite"
         const val EVENT_TIP = "tip"
         const val EVENT_LOCATION_PERMISSION = "location_persuasion"
 
