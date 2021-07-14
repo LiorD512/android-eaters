@@ -77,11 +77,22 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
 
     val moshi = Moshi.Builder()
         .add(
-            PolymorphicJsonAdapterFactory.of(Search::class.java, "resource")
-                .withSubtype(CookSection::class.java, Constants.RESOURCE_TYPE_COOK)
-                .withSubtype(DishSection::class.java, Constants.RESOURCE_TYPE_DISH)
+            PolymorphicJsonAdapterFactory.of(FeedSectionCollectionItem::class.java, "type")
+                .withSubtype(FeedCampaignSection::class.java, FeedModelsViewType.COUPONS.name)
+                .withSubtype(FeedRestaurantSection::class.java, FeedModelsViewType.RESTAURANT.name)
+                .withFallbackJsonAdapter(MoshiNullableSearchAdapter())
+        ).add(
+            PolymorphicJsonAdapterFactory.of(FeedRestaurantSectionItem::class.java, "type")
+                .withSubtype(FeedRestaurantItemTypeDish::class.java, FeedRestaurantSectionItemViewType.DISH.name)
+                .withSubtype(FeedRestaurantItemTypeSeeMore::class.java, FeedRestaurantSectionItemViewType.SEE_MORE.name)
                 .withFallbackJsonAdapter(MoshiNullableSearchAdapter())
         )
+//        .add(
+//            PolymorphicJsonAdapterFactory.of(Search::class.java, "resource")
+//                .withSubtype(CookSection::class.java, Constants.RESOURCE_TYPE_COOK)
+//                .withSubtype(DishSection::class.java, Constants.RESOURCE_TYPE_DISH)
+//                .withFallbackJsonAdapter(MoshiNullableSearchAdapter())
+//        )
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
         .add(JSON_ADAPTER_FACTORY)
         .add(UriAdapter())
