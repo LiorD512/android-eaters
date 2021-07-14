@@ -98,6 +98,12 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
             binding.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
 
+            order.promoCode?.let{
+                binding.trackOrderDetailsSectionPromoCode.visibility = View.VISIBLE
+                binding.trackOrderDetailsSectionPromoCode.setTitle("Promo code $it")
+                binding.trackOrderDetailsSectionPromoCode.setValue("(${order.discount?.formatedValue?.replace("-", "")})")
+            }
+
             order.tip?.let{
                 binding.trackOrderDetailsSectionTipLayout.visibility = View.VISIBLE
                 binding.trackOrderDetailsSectionTip.text = it.formatedValue
@@ -176,9 +182,9 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
                 }
 
-                binding.trackOrderBottomShareImageBtn.setOnClickListener {
-                    listener.onShareImageClick(order)
-                }
+//                binding.trackOrderBottomShareImageBtn.setOnClickListener {
+//                    listener.onShareImageClick(order)
+//                }
             }
         }
     }

@@ -63,6 +63,7 @@
                         app:title="Total" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:visibility="gone"
                         android:id="@+id/singleOrderDetailsOrderAgain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,7 +97,7 @@
                         android:layout_marginTop="22.8dp"
                         android:background="@color/grey_white" />
 
-                <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+                <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
                         android:id="@+id/singleOrderDetailsOrderItemsView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -142,7 +143,7 @@
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             app:title="Fees &amp; Estimated tax"
-                            app:tip_type="CHECKOUT_MINIMUM_FEE"
+                            app:tip_type="CUSTOM_CLICK"
                             android:id="@+id/singleOrderDetailsFees"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>

@@ -145,12 +145,12 @@
 
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/trackOrderBottomShareImageBtn"
-            android:src="@drawable/refferal_banner_pic"
-            android:scaleType="centerCrop"
-            android:layout_width="match_parent"
-            android:layout_height="144dp"/>
+<!--    <ImageView-->
+<!--            android:id="@+id/trackOrderBottomShareImageBtn"-->
+<!--            android:src="@drawable/refferal_banner_pic"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="144dp"/>-->
 
     <TextView
             android:id="@+id/trackOrderBottomCancelBtn"

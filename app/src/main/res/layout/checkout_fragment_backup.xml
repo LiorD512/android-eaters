@@ -74,7 +74,7 @@
 
             </LinearLayout>
 
-            <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+            <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
                     tools:visibility="gone"
                     android:id="@+id/checkoutFragOrderItemsView"
                     android:paddingRight="15.4dp"
