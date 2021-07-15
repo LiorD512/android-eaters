@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.annotation.SuppressLint
+import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDate
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -208,4 +209,9 @@ object DateUtils {
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
     }
+}
+
+/** Compering between 2 dates */
+fun Date?.isSameDateAs(dateSecond: Date?): Boolean {
+    return parseDateToDate(this) == parseDateToDate(dateSecond)
 }

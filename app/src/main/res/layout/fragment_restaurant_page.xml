@@ -36,13 +36,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+    <ImageView
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:elevation="5dp"
+            android:alpha="0"
+            android:src="@drawable/ic_search_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
             android:id="@+id/topHeaderRestaurantName"
-            style="@style/LatoBlack15Dark"
+            style="@style/LatoBlack15DarkGrey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="15.4dp"
             android:alpha="0"
             android:elevation="15dp"
             android:text="Israeli in The Big Apple"
@@ -54,11 +65,12 @@
             style="@style/Reg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="15dp"
+            android:elevation="15.4dp"
             android:paddingTop="3dp"
             android:layout_marginStart="20dp"
             android:text="by Assaf Beer"
             android:alpha="0"
+            android:textColor="@color/very_light_grey"
             android:layout_marginTop="3dp"
             app:layout_constraintTop_toBottomOf="@id/topHeaderRestaurantName"
             app:layout_constraintStart_toEndOf="@id/backButton"/>
@@ -67,7 +79,7 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_margin="15.4dp"
             android:elevation="5dp"
             android:src="@drawable/ic_back_grey"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +89,7 @@
             android:id="@+id/shareButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="15.4dp"
             android:layout_marginEnd="7.4dp"
             android:src="@drawable/ic_share_grey"
             app:layout_constraintEnd_toStartOf="@id/menuButton"
@@ -87,8 +99,8 @@
             android:id="@+id/menuButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginEnd="15.4dp"
             android:src="@drawable/ic_menu_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -98,8 +110,8 @@
             style="@style/Reg12White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginStart="15.4dp"
+            android:layout_marginBottom="15.4dp"
             android:background="@drawable/background_cornered_rect_grey"
             android:drawablePadding="4dp"
             android:paddingVertical="5dp"
@@ -116,16 +128,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_white_cornered"
             android:orientation="horizontal"
-            android:padding="15dp"
+            android:padding="15.4dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/mainRecyclerView">
+            app:layout_constraintBottom_toTopOf="@id/mainList">
 
         <FrameLayout
                 android:layout_width="46dp"
                 android:layout_height="46dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/blue_circle">
 
             <ImageView
+                    android:id="@+id/restHeaderChefThumbnail"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"
@@ -138,19 +152,23 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:orientation="vertical"
+                android:layout_marginBottom="2.5dp"
                 android:paddingStart="5dp">
 
             <TextView
-                    style="@style/LatoBlack15Dark"
+                    android:id="@+id/restHeaderRestName"
+                    style="@style/LatoBlack15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Israeli in The Big Apple" />
 
             <TextView
+                    android:id="@+id/restHeaderChefName"
                     style="@style/Reg13Black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="3dp"
+                    android:textColor="@color/very_light_grey"
                     android:text="by Assaf Beer" />
 
         </LinearLayout>
@@ -165,14 +183,17 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mainRecyclerView"
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainList"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:overScrollMode="never"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/space" />
+            app:layout_constraintTop_toBottomOf="@id/space">
 
+        <include
+                layout="@layout/restaurant_main_list_layout"/>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

@@ -127,7 +127,7 @@ data class Dish(
     @Json(name = "price") val price: Price?,
     @Json(name = "description") val description: String,
     @Json(name = "avg_rating") val rating: Double?,
-    @Json(name = "thumbnail") val thumbnail: String,
+    @Json(name = "thumbnail") val thumbnail: String?,
     @Json(name = "is_favorite") val isFavorite: Boolean?,
     @Json(name = "nationwide_shipping") val worldwide: Boolean?,
     @Json(name = "is_recurring") val isRecurring: Boolean?,

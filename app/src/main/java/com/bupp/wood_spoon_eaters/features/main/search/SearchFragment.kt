@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.search
 
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -182,11 +184,16 @@ class SearchFragment : Fragment(R.layout.fragment_search), SearchAdapter.SearchA
     }
 
     override fun onCookClick(cook: Cook) {
-        val args = Bundle()
-        args.putLong(Constants.ARG_COOK_ID, cook.id)
-        val cookDialog = CookProfileDialog(this)
-        cookDialog.arguments = args
-        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//        val args = Bundle()
+//        args.putLong(Constants.ARG_COOK_ID, cook.id)
+//        val cookDialog = CookProfileDialog(this)
+//        cookDialog.arguments = args
+//        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+
+        startActivity(
+            Intent(requireContext(), RestaurantActivity::class.java)
+                .putExtra(Constants.ARG_RESTAURANT, cook)
+        )
     }
 
     override fun onCuisineClick(cuisine: CuisineLabel) {
