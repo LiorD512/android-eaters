@@ -60,8 +60,8 @@ class FeedViewModel(
         refreshFavorites()
     }
 
-    val feedResultData: MutableLiveData<OldFeedEvent> = MutableLiveData()
-    data class OldFeedEvent(val isSuccess: Boolean = false, val feedArr: List<Feed>?)
+    val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
+    data class FeedLiveData(val feedData: List<FeedAdapterItem>?)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
             viewModelScope.launch {
@@ -80,7 +80,7 @@ class FeedViewModel(
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
-                        feedResultData.postValue(OldFeedEvent(true, feedRepository.feed))
+                        feedResultData.postValue(FeedLiveData(feedRepository.feed))
                     }
                     else -> {
                         Log.d(TAG, "NetworkError")
@@ -92,7 +92,7 @@ class FeedViewModel(
             }
         }else{
             Log.d("wowFeedVM","getFeed setLocationListener")
-            feedResultData.postValue(OldFeedEvent(false,null))
+            feedResultData.postValue(FeedLiveData(null))
             progressData.endProgress()
         }
     }

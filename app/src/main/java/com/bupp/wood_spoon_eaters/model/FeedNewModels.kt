@@ -6,25 +6,23 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
+@JsonClass(generateAdapter = true)
+data class FeedResult (
+    val sections: List<FeedSection>
+)
 
-//@JsonClass(generateAdapter = true)
-//data class ServerResponse<T> (
-//    var code: Int = 0,
-//    var message: String? = null,
-//    var data: T? = null,
-//    var errors: List<WSError>? = null,
-//    val meta: Pagination? = null,
-//)
-
+@Parcelize
+@JsonClass(generateAdapter = true)
 data class FeedSection(
+    val id: Long? = null,
     val title: String? = null,
     val href: String? = null,
     val collections: List<FeedSectionCollectionItem>? = null
-)
+): Parcelable
 
 
 sealed class FeedSectionCollectionItem(
-    var type: FeedModelsViewType?
+    @Json(name = "type") val type: String
 ): Parcelable {
     abstract val items: List<Parcelable>?
     abstract val href: String?
@@ -36,7 +34,7 @@ sealed class FeedSectionCollectionItem(
 data class FeedCampaignSection(
     override val href: String?,
     override val items: List<FeedCampaignSectionItem>?,
-): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.COUPONS)
+): Parcelable, FeedSectionCollectionItem(Constants.FEED_SECTION_TYPE_COUPONS)
 
 
 @Parcelize
@@ -53,27 +51,27 @@ data class FeedCampaignSectionItem(
 data class FeedRestaurantSection(
     override val href: String?,
     override val items: List<FeedRestaurantSectionItem>?,
-    @Json(name = "cook_name") val cookName: String?,
+    @Json(name = "cook_name") val chefName: String?,
     @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "title") val title: String?,
-    @Json(name = "cook_id") val cookId: String?,
-    @Json(name = "cook_thumbnail_url") val cookThumbnailUrl: String?,
+    @Json(name = "cook_id") val chefId: String?,
+    @Json(name = "cook_thumbnail_url") val chefThumbnailUrl: String?,
     @Json(name = "avg_rating") val avgRating: String?,
-): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT)
+): Parcelable, FeedSectionCollectionItem(Constants.FEED_SECTION_TYPE_RESTAURANT)
 
 
 sealed class FeedRestaurantSectionItem(
-    var type: FeedRestaurantSectionItemViewType?
+    @Json(name = "type") val type: String?
 ): Parcelable {
-    abstract val data: List<Parcelable>?
+    abstract val data: Parcelable?
 }
 
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedRestaurantItemTypeDish(
-    override val data: List<FeedRestaurantItemDish>?
-): Parcelable, FeedRestaurantSectionItem(FeedRestaurantSectionItemViewType.DISH)
+    override val data: FeedRestaurantItemDish?
+): Parcelable, FeedRestaurantSectionItem(Constants.RESTAURANT_SECTION_TYPE_DISH)
 
 
 @Parcelize
@@ -82,14 +80,14 @@ data class FeedRestaurantItemDish(
    val id: Long?,
    val name: String?,
    val thumbnail_url: String?,
-   val formatted_price: String,
+   val formatted_price: String?,
 ): Parcelable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedRestaurantItemTypeSeeMore(
-    override val data: List<FeedRestaurantItemDish>?
-): Parcelable, FeedRestaurantSectionItem(FeedRestaurantSectionItemViewType.SEE_MORE)
+    override val data: FeedRestaurantItemDish?
+): Parcelable, FeedRestaurantSectionItem(Constants.RESTAURANT_SECTION_TYPE_SEE_MORE)
 
 
 @Parcelize
@@ -97,7 +95,7 @@ data class FeedRestaurantItemTypeSeeMore(
 data class FeedRestaurantItemSeeMore(
    val title: String?,
    val thumbnail_url: String?,
-   val formatted_price: String,
+   val formatted_price: String?,
 ): Parcelable
 
 
@@ -110,3 +108,28 @@ enum class FeedRestaurantSectionItemViewType{
     @Json(name = "dish") DISH,
     @Json(name = "see_more") SEE_MORE,
 }
+
+sealed class FeedAdapterItem(
+    var type: FeedAdapterViewType?
+): Parcelable
+
+enum class FeedAdapterViewType{
+    TITLE,
+    COUPONS,
+    RESTAURANT
+}
+
+@Parcelize
+data class FeedAdapterTitle(
+    val title: String
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.TITLE)
+
+@Parcelize
+data class FeedAdapterCoupons(
+    val couponSection: FeedCampaignSection
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.COUPONS)
+
+@Parcelize
+data class FeedAdapterRestaurant(
+    val restaurantSection: FeedRestaurantSection
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)

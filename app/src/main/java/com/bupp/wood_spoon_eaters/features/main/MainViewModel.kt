@@ -364,11 +364,11 @@ class MainViewModel(
         return metaDataRepository.getContactUsTextNumber()
     }
 
-    fun test() {
-        val cloudinery = metaDataRepository.getCloudinaryTransformations()
-        val large = cloudinery?.getByType(CloudinaryTransformationsType.LARGE)
-        Log.d(TAG, "coudirery: $cloudinery")
-    }
+//    fun test() {
+//        val cloudinery = metaDataRepository.getCloudinaryTransformations()
+//        val large = cloudinery?.getByType(CloudinaryTransformationsType.LARGE)
+//        Log.d(TAG, "coudirery: $cloudinery")
+//    }
 
     fun onUserImageClick() {
         mainNavigationEvent.postValue(MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE)

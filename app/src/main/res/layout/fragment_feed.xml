@@ -103,11 +103,10 @@ a home cooked meal very soon :)"/>
             app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"
             tools:visibility="visible">
 
-        <com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
-                android:id="@+id/feedFragSectionsView"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedFragList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
+                android:layout_height="match_parent"/>
 
     </LinearLayout>
 

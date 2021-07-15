@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/feedRestaurantDishItem"
+        android:layout_height="179dp"
+        android:layout_width="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+            style="@style/LatoBlack15White"
+            android:id="@+id/feedRestaurantItemTitle"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15.4dp"
+            android:layout_width="wrap_content"
+            android:letterSpacing="-0.01"
+            android:layout_marginBottom="27dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Vegan Health Salad" />
+
+    <TextView
+            style="@style/LatoBlack15White"
+            android:id="@+id/feedRestaurantItemPrice"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15.4dp"
+            android:layout_width="wrap_content"
+            android:letterSpacing="-0.01"
+            app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantItemTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemTitle"
+            tools:text="$10" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

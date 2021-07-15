@@ -5,6 +5,11 @@ import android.Manifest
 class Constants {
     companion object {
 
+        const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
+        const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
+        const val RESTAURANT_SECTION_TYPE_DISH = "dish"
+        const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
+
         //feed banners
         const val NO_BANNER = -1
         const val BANNER_NO_GPS = 0

@@ -130,28 +130,28 @@ class EaterDataManager(
     private val favoritesDishLiveData = MutableLiveData<List<Dish>>()
 
     suspend fun refreshMyFavorites() {
-        val result = eaterDataRepository.getFavorites(getLastFeedRequest())
-        when (result.type) {
-            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_SUCCESS -> {
-                result.data?.let {
-                    Log.d(TAG, "refreshMyFavorites - success")
-                    favoritesDishLiveData.postValue(it)
-                    favoritesDishList = it
-                }
-            }
-            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_FAILED -> {
-                Log.d(TAG, "refreshMyFavorites - failed")
-                favoritesDishLiveData.postValue(listOf())
-                favoritesDishList = null
-            }
-            EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-                Log.d(TAG, "refreshMyFavorites - es error")
-
-            }
-            else -> {
-
-            }
-        }
+//        val result = eaterDataRepository.getFavorites(getLastFeedRequest())
+//        when (result.type) {
+//            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_SUCCESS -> {
+//                result.data?.let {
+//                    Log.d(TAG, "refreshMyFavorites - success")
+//                    favoritesDishLiveData.postValue(it)
+//                    favoritesDishList = it
+//                }
+//            }
+//            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_FAILED -> {
+//                Log.d(TAG, "refreshMyFavorites - failed")
+//                favoritesDishLiveData.postValue(listOf())
+//                favoritesDishList = null
+//            }
+//            EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
+//                Log.d(TAG, "refreshMyFavorites - es error")
+//
+//            }
+//            else -> {
+//
+//            }
+//        }
     }
 
     fun getLastFeedRequest(): FeedRequest {

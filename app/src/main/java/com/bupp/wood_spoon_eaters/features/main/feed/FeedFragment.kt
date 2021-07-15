@@ -3,13 +3,11 @@ package com.bupp.wood_spoon_eaters.features.main.feed
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
@@ -18,8 +16,8 @@ import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import com.segment.analytics.Analytics
 import it.sephiroth.android.library.xtooltip.ClosePolicy
@@ -48,6 +46,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
+    private lateinit var feedAdapter: FeedMainAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,8 +63,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
 
     private fun initUi() {
-        binding.feedFragHeader.setFeedHeaderViewListener(this)
-        binding.feedFragSectionsView.setMultiSectionFeedViewListener(this)
+        with(binding){
+            feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
+            feedAdapter = FeedMainAdapter()
+            feedFragList.layoutManager = LinearLayoutManager(requireContext())
+            feedFragList.adapter = feedAdapter
+        }
+
+
     }
 
     private fun initObservers() {
@@ -101,16 +106,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             viewModel.refreshFavorites()
         })
         viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
-            if (event.isSuccess) {
-                event.feedArr?.let { initFeed(it) }
-            }
+                event.feedData?.let { handleFeedResult(it) }
         })
         viewModel.campaignLiveData.observe(viewLifecycleOwner, { campaigns ->
             handleShareCampaign(campaigns)
         })
-        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            binding.feedFragSectionsView.initFavorites(it)
-        })
+//        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
+//            binding.feedFragSectionsView.initFavorites(it)
+//        })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
                 binding.feedFragPb.show()
@@ -142,7 +145,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
                 campaign.viewTypes?.forEach { viewType ->
                     when (viewType) {
                         CampaignViewType.FEED -> {
-                            binding.feedFragSectionsView.initShareCampaign(campaign)
+//                            binding.feedFragSectionsView.initShareCampaign(campaign)
                         }
                     }
                 }
@@ -181,14 +184,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         mainViewModel.onDishClick(menuItemId)
     }
 
-    private fun initFeed(feedArr: List<Feed>) {
+    private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
         if (feedArr.isEmpty()) {
-//            showEmptyLayout()
+            showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
             binding.feedFragEmptyLayout.visibility = View.GONE
             binding.feedFragListLayout.visibility = View.VISIBLE
-            binding.feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
+            feedAdapter.submitList(feedArr)
         }
         binding.feedFragPb.hide()
     }
