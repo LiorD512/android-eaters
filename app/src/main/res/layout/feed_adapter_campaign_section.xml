@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/feedCampaignSectionLayout"
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutDescription="@xml/feed_adapter_campaign_section_scene">
+
+   <androidx.viewpager2.widget.ViewPager2
+           android:paddingHorizontal="5dp"
+           android:clipChildren="false"
+           android:clipToPadding="false"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           android:id="@+id/feedCampaignSectionViewPager"
+           android:layout_width="match_parent"
+           android:layout_height="199dp"/>
+
+<!--           android:alpha="0"-->
+   <TextView
+           android:layout_marginHorizontal="21dp"
+           android:layout_marginBottom="7.7dp"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintBottom_toTopOf="@+id/feedCampaignSectionSubTitle"
+           android:id="@+id/feedCampaignSectionTitle"
+           style="@style/LatoBold19White"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:letterSpacing="0.03"
+           android:lineSpacingExtra="3.8sp"
+           tools:text="Get 30% off your next order" />
+<!--           android:shadowColor="#cc000000"-->
+<!--           android:shadowRadius="6"-->
+
+   <TextView
+           android:alpha="0"
+           android:paddingHorizontal="21dp"
+           android:layout_marginBottom="30dp"
+           app:layout_constraintStart_toStartOf="@+id/feedCampaignSectionViewPager"
+           app:layout_constraintBottom_toBottomOf="@+id/feedCampaignSectionViewPager"
+           android:id="@+id/feedCampaignSectionSubTitle"
+           style="@style/LatoBold13White"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:letterSpacing="0.03"
+           tools:text="Invite your friends to try WoodSpoon" />
+
+   <me.relex.circleindicator.CircleIndicator3
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/feedCampaignSectionViewPager"
+           android:layout_marginTop="7dp"
+           app:ci_height="10dp"
+           app:ci_width="10dp"
+           tools:visibility="visible"
+           android:visibility="gone"
+           app:ci_animator="@anim/circle_indicator_anim"
+           app:ci_drawable="@drawable/vp_dark_indicator_selected"
+           app:ci_drawable_unselected="@drawable/vp_dark_indicator_unselected"
+           app:ci_gravity="center"
+           android:id="@+id/feedCampaignSectionIndicator"
+           android:layout_width="match_parent"
+           android:layout_height="20dp"/>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

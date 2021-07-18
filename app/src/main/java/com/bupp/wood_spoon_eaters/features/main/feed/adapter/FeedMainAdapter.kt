@@ -22,7 +22,7 @@ class FeedMainAdapter() : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(
                 FeedAdapterTitleViewHolder(binding)
             }
             FeedAdapterViewType.COUPONS.ordinal -> {
-                val binding = FeedAdapterCampaignItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = FeedAdapterCampaignSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterCampaignViewHolder(binding)
             }
             else -> { //FeedAdapterViewType.RESTAURANT.ordinal

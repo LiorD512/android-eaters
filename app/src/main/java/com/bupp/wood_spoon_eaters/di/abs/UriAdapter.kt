@@ -5,15 +5,15 @@ import com.squareup.moshi.*
 
 class UriAdapter : JsonAdapter<Uri>() {
 
-  companion object {
-    val FACTORY = Factory { type, _, _ ->
-      return@Factory if (type === Uri::class.java) {
-        UriAdapter()
-      } else {
-        null
-      }
-    }
-  }
+//  companion object {
+//    val FACTORY = Factory { type, _, _ ->
+//      return@Factory if (type === Uri::class.java) {
+//        UriAdapter()
+//      } else {
+//        null
+//      }
+//    }
+//  }
 
   @FromJson
   override fun fromJson(reader: JsonReader): Uri {

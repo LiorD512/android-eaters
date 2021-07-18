@@ -8,8 +8,18 @@
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/drawable/icon_dislike_selector.xml" value="0.20833333333333334" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/drawable/icon_like_selector.xml" value="0.22135416666666666" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/drawable/rounded_white_bkg.xml" value="0.2796296296296296" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/drawable/transparent_to_black_60_gradient.xml" value="0.275" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/drawable/vp_white_indicator_selected.xml" value="0.22135416666666666" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/drawable/vp_white_indicator_unselected.xml" value="0.22135416666666666" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/blue_btn_cornered.xml" value="0.36666666666666664" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/checkout_fragment.xml" value="0.3098958333333333" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_campaign_item.xml" value="0.20625" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_campaign_section.xml" value="0.22" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_restaurant_dish_item.xml" value="0.2947916666666667" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_restaurant_item.xml" value="0.33466666666666667" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_restaurant_section_item.xml" value="0.33177083333333335" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_restaurant_see_more_item.xml" value="0.3067708333333333" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_title_item.xml" value="0.34270833333333334" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_adapter_title_view.xml" value="0.33177083333333335" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_campaign_section.xml" value="0.3307291666666667" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/feed_restaurant_section.xml" value="0.33125" />
@@ -18,7 +28,7 @@
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/my_profile_fragment.xml" value="0.44427083333333334" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/rate_dish_item_view.xml" value="0.20520833333333333" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/rate_last_order_dialog.xml" value="0.20520833333333333" />
-        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/share_banner.xml" value="0.44427083333333334" />
+        <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/share_banner.xml" value="0.33" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/single_order_details_bottom_sheet.xml" value="0.3098958333333333" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/track_order_details_section.xml" value="0.3098958333333333" />
         <entry key="..\:/Monkeytech/inDEV/WoodSpoon/WoodSpoonEatersNew/app/src/main/res/layout/track_order_fragment.xml" value="0.3098958333333333" />

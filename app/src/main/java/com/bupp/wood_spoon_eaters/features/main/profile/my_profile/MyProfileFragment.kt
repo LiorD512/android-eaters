@@ -148,7 +148,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             campaign.viewTypes?.forEach { viewType ->
                 when (viewType) {
                     CampaignViewType.PROFILE -> {
-                        binding.myProfileFragShareBanner.initCustomBanner(campaign, this)
+                        binding.myProfileFragShareBanner.initCustomBannerByCampaign(campaign, this)
                     }
                 }
             }

@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.di
 
 //import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
 //import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
-import MoshiNullableSearchAdapter
 import `in`.co.ophio.secure.core.KeyStoreKeyGenerator
 import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
@@ -12,9 +11,10 @@ import android.util.Log
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.di.abs.*
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
+//import com.bupp.wood_spoon_eaters.di.abs.FeedRestaurantItemAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_FACTORY
-import com.bupp.wood_spoon_eaters.di.abs.UriAdapter
 import com.bupp.wood_spoon_eaters.managers.PutActionManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
@@ -80,16 +80,19 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
             PolymorphicJsonAdapterFactory.of(FeedRestaurantSectionItem::class.java, "type")
                 .withSubtype(FeedRestaurantItemTypeDish::class.java, Constants.RESTAURANT_SECTION_TYPE_DISH)
                 .withSubtype(FeedRestaurantItemTypeSeeMore::class.java, Constants.RESTAURANT_SECTION_TYPE_SEE_MORE)
+//                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
         )
         .add(
             PolymorphicJsonAdapterFactory.of(FeedSectionCollectionItem::class.java, "type")
                 .withSubtype(FeedCampaignSection::class.java, Constants.FEED_SECTION_TYPE_COUPONS)
                 .withSubtype(FeedRestaurantSection::class.java, Constants.FEED_SECTION_TYPE_RESTAURANT)
+//                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
         )
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
         .add(JSON_ADAPTER_FACTORY)
         .add(UriAdapter())
         .add(AppSettingAdapter())
+//        .add(TestAdapter())
         .addLast(KotlinJsonAdapterFactory())
     .build()
 

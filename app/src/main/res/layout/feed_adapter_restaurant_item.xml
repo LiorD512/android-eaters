@@ -21,10 +21,11 @@
             android:id="@+id/feedRestaurantItemCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            tools:cardBackgroundColor="@color/dark"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="3dp"
+            android:layout_marginHorizontal="5dp"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="7.7dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,26 +41,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="179dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/feedRestaurantItemList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                <View
+                <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/feedRestaurantItemPager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/transparent_to_black_60_gradient"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/feedRestaurantBtnLeft"
+                        android:alpha="0"
+                        android:id="@+id/feedRestaurantItemBtnPrevious"
                         android:layout_width="31dp"
                         android:layout_height="31dp"
                         android:layout_marginStart="15.4dp"
@@ -69,7 +62,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/feedRestaurantItemBtnRight"
+                        android:alpha="0"
+                        android:id="@+id/feedRestaurantItemBtnNext"
                         android:layout_width="31dp"
                         android:layout_height="31dp"
                         android:layout_marginEnd="15.4dp"
@@ -78,19 +72,58 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                        style="@style/LatoBlack15White"
+                        android:alpha="0"
+                        android:id="@+id/feedRestaurantItemDishName"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_width="wrap_content"
+                        android:letterSpacing="-0.01"
+                        app:layout_constraintBottom_toTopOf="@+id/feedRestaurantItemIndicator"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="Vegan Health Salad" />
+
+                <TextView
+                        style="@style/LatoBlack15White"
+                        android:alpha="0"
+                        android:id="@+id/feedRestaurantItemDishPrice"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_width="wrap_content"
+                        android:letterSpacing="-0.01"
+                        app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantItemDishName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemDishName"
+                        tools:text="$10" />
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        app:title="See more"
+                        android:alpha="0"
+                        android:id="@+id/feedRestaurantItemDishSeeMore"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="142dp"
+                        android:layout_height="wrap_content"/>
+
                 <me.relex.circleindicator.CircleIndicator3
+                        tools:background="@color/dark"
                         android:id="@+id/feedRestaurantItemIndicator"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12.4dp"
-                        android:layout_marginTop="9dp"
-                        android:layout_marginBottom="12dp"
+                        android:paddingTop="9dp"
+                        android:paddingBottom="12dp"
                         app:ci_animator="@anim/circle_indicator_anim"
                         app:ci_drawable="@drawable/vp_white_indicator_selected"
                         app:ci_drawable_unselected="@drawable/vp_white_indicator_unselected"
-                        app:ci_gravity="start|center"
-                        app:ci_height="10dp"
-                        app:ci_width="10dp"
+                        app:ci_gravity="start"
+                        app:ci_height="6dp"
+                        app:ci_width="6dp"
+                        app:ci_margin="3dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -140,7 +173,7 @@
                 </LinearLayout>
 
                 <TextView
-                        android:id="@+id/feedRestaurantRating"
+                        android:id="@+id/feedRestaurantItemRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="15.4dp"

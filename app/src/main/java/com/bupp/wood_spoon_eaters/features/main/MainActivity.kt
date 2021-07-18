@@ -192,7 +192,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun loadFeedProgressBarFragment() {
 //        loadFragment(FeedLoaderFragment(), Constants.FEED_LOADER_TAG)
-        FeedLoaderDialog().show(supportFragmentManager, Constants.FEED_LOADER_TAG)
+//        FeedLoaderDialog().show(supportFragmentManager, Constants.FEED_LOADER_TAG)
     }
 
 
