@@ -7,24 +7,25 @@
             motion:constraintSetEnd="@+id/end"
             motion:constraintSetStart="@id/start">
         <OnSwipe
+                motion:maxAcceleration="5"
                 motion:dragDirection="dragUp"
                 motion:dragScale="1"
                 motion:moveWhenScrollAtTop="true"
-                motion:onTouchUp="stop"
+                motion:onTouchUp="autoComplete"
                 motion:touchAnchorId="@id/mainList"
                 motion:touchAnchorSide="top"/>
 
                 <KeyFrameSet>
-                    <KeyAttribute
-                            motion:keyPositionType="pathRelative"
-                            android:alpha="0"
-                            motion:framePosition="50"
-                            motion:motionTarget="@+id/shareButton"/>
-                    <KeyAttribute
-                            motion:keyPositionType="pathRelative"
-                            android:alpha="0"
-                            motion:framePosition="50"
-                            motion:motionTarget="@+id/menuButton"/>
+<!--                    <KeyAttribute-->
+<!--                            motion:keyPositionType="pathRelative"-->
+<!--                            android:alpha="0"-->
+<!--                            motion:framePosition="50"-->
+<!--                            motion:motionTarget="@+id/shareButton"/>-->
+<!--                    <KeyAttribute-->
+<!--                            motion:keyPositionType="pathRelative"-->
+<!--                            android:alpha="0"-->
+<!--                            motion:framePosition="50"-->
+<!--                            motion:motionTarget="@+id/menuButton"/>-->
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
@@ -85,20 +86,7 @@
 
 <!--        <OnSwipe-->
 <!--                motion:dragDirection="dragDown"-->
-<!--                motion:moveWhenScrollAtTop="true"-->
-<!--                motion:onTouchUp="autoCompleteToStart"-->
-<!--                motion:touchAnchorId="@id/mainRecyclerView"-->
-<!--                motion:touchAnchorSide="top"-->
-<!--                motion:dragThreshold ="20"-->
-<!--                motion:maxAcceleration="40"/>-->
-
-<!--        <KeyFrameSet>-->
-<!--            <KeyPosition-->
-<!--                    motion:keyPositionType="pathRelative"-->
-<!--                    motion:percentX="100"-->
-<!--                    motion:framePosition="99"-->
-<!--                    motion:motionTarget="@+id/space"/>-->
-<!--        </KeyFrameSet>-->
+<!--                motion:touchAnchorId="@id/mainList" />-->
 
 <!--    </Transition>-->
 
@@ -139,24 +127,24 @@
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
                 android:alpha="0" />
-        <Constraint
-                android:id="@+id/menuButton"
-                motion:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                motion:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
-                android:alpha="0" />
-        <Constraint
-                android:id="@+id/shareButton"
-                motion:layout_constraintEnd_toStartOf="@id/menuButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="7.4dp"
-                motion:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
-                android:alpha="0" />
+<!--        <Constraint-->
+<!--                android:id="@+id/menuButton"-->
+<!--                motion:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                motion:layout_constraintTop_toTopOf="parent"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:alpha="0" />-->
+<!--        <Constraint-->
+<!--                android:id="@+id/shareButton"-->
+<!--                motion:layout_constraintEnd_toStartOf="@id/menuButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="7.4dp"-->
+<!--                motion:layout_constraintTop_toTopOf="parent"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:alpha="0" />-->
         <Constraint
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"

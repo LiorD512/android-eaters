@@ -60,6 +60,12 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
+    fun parseDateToDayDateSplash(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EE, MM/dd")
+        return sdf.format(date.time)
+    }
+
     fun parseDateToDayDateAndTime(date: Date): String {
         //Fri, Feb 12, 4:30 PM - 5:00 PM
         val sdf = SimpleDateFormat("EE, MMM dd")

@@ -5,7 +5,8 @@
         android:background="@color/white"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:paddingTop="9.4dp">
+        android:paddingTop="9.4dp"
+        android:paddingBottom="14dp">
 
         <TextView
                 android:layout_width="match_parent"
@@ -15,6 +16,6 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="19dp"
                 android:gravity="center"
-                tools:text="AvailableLater"/>
+                android:text="Available Later"/>
 
 </LinearLayout>

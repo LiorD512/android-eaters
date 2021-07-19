@@ -29,11 +29,35 @@ private const val json: String =
            "  \"thumbnail\": \"https://res.cloudinary.com/woodspoon/image/upload/t_small/uploads/dishes/6ac2cd78_7d07_4f6c_b4f3_7a34ec91a132_.jpg\",\n" +
            "  \"avg_rating\": 4.5,\n" +
            "  \"reviews_count\": 415,\n" +
-           "  \"about\": \"Welcome to my kitchen, today and every day...\",\n" +
+           "  \"about\": \"Welcome to my kitchen, today and every day... Welcome to my kitchen, today and every day... Welcome to my kitchen, today and every day... Welcome to my kitchen, today and every day...Welcome to my kitchen, today and every day... Welcome to my kitchen, today and every day...\",\n" +
            "  \"cuisines\": [],\n" +
            "  \"dishes\": [\n" +
            "    {\n" +
            "      \"id\": 332,\n" +
+           "      \"name\": \"Side of Pita\",\n" +
+           "      \"description\": \"Labaneh is soft cheese, similar in texture to cream cheese, made from strained\",\n" +
+           "      \"thumbnail\": \"https://res.cloudinary.com/woodspoon/image/upload/t_small/uploads/dishes/6ac2cd78_7d07_4f6c_b4f3_7a34ec91a132_.jpg\",\n" +
+           "      \"price\": {\n" +
+           "        \"formatted\": \"\$1.5\",\n" +
+           "        \"cents\": 150,\n" +
+           "        \"value\": 1.50\n" +
+           "      },\n" +
+           "      \"cuisines\": []\n" +
+           "    },\n" +
+           "    {\n" +
+           "      \"id\": 338,\n" +
+           "      \"name\": \"Side of Pita\",\n" +
+           "      \"description\": \"Labaneh is soft cheese, similar in texture to cream cheese, made from strained\",\n" +
+           "      \"thumbnail\": \"https://res.cloudinary.com/woodspoon/image/upload/t_small/uploads/dishes/6ac2cd78_7d07_4f6c_b4f3_7a34ec91a132_.jpg\",\n" +
+           "      \"price\": {\n" +
+           "        \"formatted\": \"\$1.5\",\n" +
+           "        \"cents\": 150,\n" +
+           "        \"value\": 1.50\n" +
+           "      },\n" +
+           "      \"cuisines\": []\n" +
+           "    },\n" +
+           "    {\n" +
+           "      \"id\": 339,\n" +
            "      \"name\": \"Side of Pita\",\n" +
            "      \"description\": \"Labaneh is soft cheese, similar in texture to cream cheese, made from strained\",\n" +
            "      \"thumbnail\": \"https://res.cloudinary.com/woodspoon/image/upload/t_small/uploads/dishes/6ac2cd78_7d07_4f6c_b4f3_7a34ec91a132_.jpg\",\n" +
@@ -74,7 +98,7 @@ private const val json: String =
            "        },\n" +
            "        {\n" +
            "          \"id\": 334,\n" +
-           "          \"quantity\": 3,\n" +
+           "          \"quantity\": 2,\n" +
            "          \"units_sold\": 0\n" +
            "        }\n" +
            "      ]\n" +

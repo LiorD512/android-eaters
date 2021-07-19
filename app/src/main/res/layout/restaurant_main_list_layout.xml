@@ -14,8 +14,20 @@
             android:layout_height="wrap_content"
             style="@style/LatoReg13DarkGrey"
             android:paddingHorizontal="15.4dp"
-            android:paddingBottom="15dp"
+            android:paddingBottom="3.8dp"
+            android:ellipsize="end"
             tools:text= "Welcome to my kitchen, todat and every day, fresh food, 100% organic, 100% love. follow me on inst…"/>
+
+    <TextView
+            android:id="@+id/restaurantDescriptionViewMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LatoBold13Dark"
+            android:paddingHorizontal="15.4dp"
+            android:paddingBottom="20dp"
+            android:visibility="gone"
+            android:text= "View More"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/restaurantCuisinesList"
@@ -45,7 +57,8 @@
 
 
   <com.bupp.wood_spoon_eaters.views.DeliveryTimingTabLayout
-          android:layout_width="match_parent"
+          android:id="@+id/restaurantDeliveryTiming"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
 
 
@@ -70,5 +83,12 @@
             android:layout_height="1dp"
             android:layout_marginHorizontal="17.8dp"
             android:background="@color/grey_white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/restaurantDishesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

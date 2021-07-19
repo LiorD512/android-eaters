@@ -7,6 +7,7 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
@@ -20,7 +21,11 @@ class RestaurantPageViewModel(
 
     val restaurantData = MutableLiveData<Cook>()
     val restaurantFullData = MutableLiveData<Restaurant>()
+
+    data class DeliveryDate(val date: Date, val cookingSlots: MutableList<CookingSlot>)
     val deliveryTiming = MutableLiveData<List<DeliveryDate>>()
+
+    val dishesList = MutableLiveData<List<DishSections>>()
 
     val progressData = ProgressData()
 
@@ -37,7 +42,8 @@ class RestaurantPageViewModel(
         restaurant?.let {
             restaurantFullData.postValue(it)
             val restaurantSorted = sortCookingSlotsDishes(it)
-            deliveryTiming.postValue(handleDeliveryTimingSection(restaurantSorted))
+            handleDeliveryTimingSection(restaurantSorted)
+            handleDishesSection(restaurantSorted)
         }
     }
 
@@ -56,7 +62,7 @@ class RestaurantPageViewModel(
         return restaurant
     }
 
-    private fun handleDeliveryTimingSection(restaurant: Restaurant):List<DeliveryDate> {
+    private fun handleDeliveryTimingSection(restaurant: Restaurant) {
         val deliveryDates = mutableListOf<DeliveryDate>()
         var currentDate: Date? = null
         restaurant.cookingSlots.forEach { cookingSlot ->
@@ -66,28 +72,37 @@ class RestaurantPageViewModel(
                 return@forEach
             }
             if (cookingSlot.startsAt.isSameDateAs(currentDate)) {
-                deliveryDates[deliveryDates.lastIndex].cookSlots.add(cookingSlot)
+                deliveryDates[deliveryDates.lastIndex].cookingSlots.add(cookingSlot)
             } else {
                 deliveryDates.add(DeliveryDate(cookingSlot.startsAt, mutableListOf(cookingSlot)))
                 currentDate = cookingSlot.startsAt
             }
         }
-        return deliveryDates
+        deliveryTiming.postValue( deliveryDates)
     }
 
-    private fun handleDishesSection(restaurant: Restaurant): RPSectionDishList {
-        val dishSectionsList = mutableListOf<DishListSections>()
-        val currentCookingSlot = restaurant.cookingSlots.getOrNull(0)
+    private fun handleDishesSection(restaurant: Restaurant) {
+        val dishSectionsList = mutableListOf<DishSections>()
+        val currentCookingSlot = restaurant.cookingSlots.getOrNull(1)
         currentCookingSlot?.let{ cookingSlot->
-            cookingSlot.availableDishes.forEach{
-                dishSectionsList.add(DishSectionSingleDish(it))
+            dishSectionsList.add(DishSectionAvailableHeader(""))
+            cookingSlot.availableDishes.forEachIndexed(){ index, dish ->
+                if( index == cookingSlot.availableDishes.size-1){
+                    dishSectionsList.add(DishSectionSingleDish(dish,true))
+                } else {
+                    dishSectionsList.add(DishSectionSingleDish(dish))
+                }
             }
             dishSectionsList.add(DishSectionUnavailableHeader())
-            cookingSlot.unAvailableDishes.forEach{
-                dishSectionsList.add(DishSectionSingleDish(it))
+            cookingSlot.unAvailableDishes.forEachIndexed(){ index, dish ->
+                if( index == cookingSlot.unAvailableDishes.size-1){
+                    dishSectionsList.add(DishSectionSingleDish(dish,true))
+                } else {
+                    dishSectionsList.add(DishSectionSingleDish(dish))
+                }
             }
         }
-        return RPSectionDishList(dishSectionsList)
+       dishesList.postValue(dishSectionsList)
     }
 
     companion object {

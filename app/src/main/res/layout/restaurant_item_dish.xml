@@ -79,7 +79,8 @@
                 app:layout_constraintTop_toBottomOf="@id/dishDescription"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Only 3 Available" />
+                tools:text="Only 3 Available"
+                android:visibility="invisible"/>
 
 
         <TextView
@@ -95,9 +96,11 @@
                 app:layout_constraintTop_toTopOf="@id/dishTagFirst"
                 app:layout_constraintBottom_toBottomOf="@id/dishTagFirst"
                 app:layout_constraintStart_toEndOf="@id/dishTagFirst"
-                tools:text="Order before Fri 1pm" />
+                tools:text="Order before Fri 1pm"
+                android:visibility="invisible"/>
 
         <View
+                android:id="@+id/dishSeparator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/grey_white_two"

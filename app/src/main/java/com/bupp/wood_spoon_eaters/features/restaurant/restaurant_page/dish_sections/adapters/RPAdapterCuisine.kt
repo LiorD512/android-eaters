@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.sections.adapters;
+package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters;
 
 import android.view.LayoutInflater
 import android.view.View
