@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +42,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
+//    private lateinit var skeletonView: Skeleton
     private var tooltip: Tooltip? = null
     val binding: FragmentFeedBinding by viewBinding()
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
@@ -57,7 +59,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         initObservers()
 
         viewModel.initFeed()
-        binding.feedFragPb.show()
+//        binding.feedFragPb.show()
 
     }
 
@@ -66,11 +68,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         with(binding){
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
             feedAdapter = FeedMainAdapter()
-            feedFragList.layoutManager = LinearLayoutManager(requireContext())
-            feedFragList.adapter = feedAdapter
+            feedFragList.setLayoutManager(LinearLayoutManager(requireContext()))
+            feedFragList.setAdapter(feedAdapter)
+
+//            initSkeletons()
+//            feedFragList.addVeiledItems(15)
+//            feedFragList.veil()
         }
-
-
     }
 
     private fun initObservers() {
@@ -91,14 +95,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
 
         viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
-            handleFeedBannerUi(it)
+//            handleFeedBannerUi(it)
         })
         viewModel.getLocationLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called ")
+            Log.d(TAG, "getLocationLiveData observer called")
             viewModel.refreshFeedByLocationIfNeeded()
         })
         viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called ")
+            Log.d(TAG, "getLocationLiveData observer called")
             viewModel.onPullToRefresh()
         })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
@@ -114,11 +118,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 //        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
 //            binding.feedFragSectionsView.initFavorites(it)
 //        })
-        viewModel.progressData.observe(viewLifecycleOwner, {
-            if (it) {
-                binding.feedFragPb.show()
+        viewModel.progressData.observe(viewLifecycleOwner, { isLoading ->
+            if (isLoading) {
+//                skeletonView.showSkeleton()
             } else {
-                binding.feedFragPb.hide()
+
             }
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
@@ -185,15 +189,31 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
+//        binding.feedFragList.unVeil()
         if (feedArr.isEmpty()) {
             showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
             binding.feedFragEmptyLayout.visibility = View.GONE
-            binding.feedFragListLayout.visibility = View.VISIBLE
+//            binding.feedFragListLayout.visibility = View.VISIBLE
             feedAdapter.submitList(feedArr)
+//            skeletonView.showOriginal()
+//            binding.feedFragList.unVeil()
         }
-        binding.feedFragPb.hide()
+//        binding.feedFragPb.hide()
+    }
+
+    private fun initSkeletons() {
+//        skeletonView = binding.feedFragList.applySkeleton(
+//            R.layout.feed_adapter_restaurant_item_skeleton,
+//            15,
+//            shimmerColor = ContextCompat.getColor(
+//                requireContext(),
+//                R.color.dark_40
+//            ),
+//            showShimmer = true,
+//            shimmerDurationInMillis = 1000L
+//        )
     }
 
 

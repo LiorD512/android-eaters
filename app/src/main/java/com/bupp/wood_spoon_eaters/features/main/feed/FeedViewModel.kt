@@ -81,6 +81,7 @@ class FeedViewModel(
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         Log.d(TAG, "Success")
                         feedResultData.postValue(FeedLiveData(feedRepository.feed))
+                        progressData.endProgress()
                     }
                     else -> {
                         Log.d(TAG, "NetworkError")

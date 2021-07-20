@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bones="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/feedRestaurantItemMainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
+            bones:skeletonBoneColor="@color/grey_white"
+            bones:skeletonBoneCornerRadius="7.7dp"
+            bones:skeletonBoneMaxThickness="12dp"
+            bones:skeletonBoneMinThickness="10dp"
+            bones:skeletonEnabled="true"
+            bones:skeletonShimmerRayColor="@{@color/bone_ray_color}"
+            bones:skeletonShimmerRayCount="@{4}"
+            bones:skeletonShimmerRayInterpolator="@{@android:interpolator/accelerate_quad}"
+            bones:skeletonShimmerRaySharedInterpolator="@{true}"
+            bones:skeletonShimmerRaySpeedMultiplier="@{1f}"
+            bones:skeletonShimmerRayThicknessRatio="@{0.45f}"
+            bones:skeletonShimmerRayTilt="@{-0.2f}"
+            bones:skeletonTransitionDuration="@{250L}"
+            bones:skeletonDissectLargeBones="@{false}"
+            bones:skeletonUseStateTransition="@{true}"
+            bones:skeletonAnimateRestoredBounds="@{true}"
+            bones:skeletonAllowSavedState="@{true}"
             android:id="@+id/feedRestaurantItemCardLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
