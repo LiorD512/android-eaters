@@ -15,6 +15,8 @@
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             app:title="See more"
+            android:alpha="0"
+            android:id="@+id/feedRestaurantSeeMoreItemSeeMore"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,17 +36,17 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:text="11 more Dishes" />
 
-    <TextView
-            style="@style/LatoBlack15White"
-            android:id="@+id/feedRestaurantSeeMoreItemPrice"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="15.4dp"
-            android:layout_width="wrap_content"
-            android:letterSpacing="-0.01"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantSeeMoreItemQuantityLeft"
-            app:layout_constraintTop_toTopOf="@+id/feedRestaurantSeeMoreItemQuantityLeft"
-            tools:text="$$" />
+<!--    <TextView-->
+<!--            style="@style/LatoBlack15White"-->
+<!--            android:id="@+id/feedRestaurantSeeMoreItemPrice"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="15dp"-->
+<!--            android:layout_marginStart="15.4dp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:letterSpacing="-0.01"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantSeeMoreItemQuantityLeft"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/feedRestaurantSeeMoreItemQuantityLeft"-->
+<!--            tools:text="$$" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,8 +88,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             mainActFloatingCartBtn.updateFloatingCartButton(13.55)
         }
 
-        //TODO - REMOVE THIS (BRANCH TEST)
-        IntegrationValidator.validate(this)
+//        //TODO - REMOVE THIS (BRANCH TEST)
+//        IntegrationValidator.validate(this)
     }
 
     override fun onFloatingCartStateChanged(isShowing: Boolean) {

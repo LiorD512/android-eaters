@@ -16,7 +16,7 @@ class FeedMainAdapter() : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return return when (viewType) {
+        return when (viewType) {
             FeedAdapterViewType.TITLE.ordinal -> {
                 val binding = FeedAdapterTitleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterTitleViewHolder(binding)

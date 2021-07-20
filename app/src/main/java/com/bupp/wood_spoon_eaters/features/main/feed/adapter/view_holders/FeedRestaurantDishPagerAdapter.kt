@@ -81,11 +81,11 @@ class FeedRestaurantDishPagerAdapter :
     class FeedDishSeeMoreViewHolder(binding: FeedAdapterRestaurantSeeMoreItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val thumbnail: ImageView = binding.feedRestaurantSeeMoreItemImg
         private val quantityLeft: TextView = binding.feedRestaurantSeeMoreItemQuantityLeft
-        private val price: TextView = binding.feedRestaurantSeeMoreItemPrice
+//        private val price: TextView = binding.feedRestaurantSeeMoreItemPrice
 
         fun bindItem(context: Context, dish: FeedRestaurantItemSeeMore) {
             quantityLeft.text = dish.title
-            price.text = dish.formatted_price
+//            price.text = dish.formatted_price
             Glide.with(context)
                 .asBitmap()
                 .load(dish.thumbnail_url)

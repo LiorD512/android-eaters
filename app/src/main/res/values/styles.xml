@@ -72,6 +72,10 @@
     </style>
 
 
+    <declare-styleable name="WSFeatureProgressBar">
+        <attr name="stepsCount" format="integer"/>
+    </declare-styleable>
+
 
     //fonts and colors
 
@@ -686,6 +690,10 @@
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="roundedCornersImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">7.7dp</item>
+    </style>
 
     <color name="medium_grey">#929092</color>
 </resources>

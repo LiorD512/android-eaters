@@ -90,17 +90,22 @@ a home cooked meal very soon :)"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <LinearLayout
-            android:id="@+id/feedFragListLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:visibility="gone"
+    <androidx.core.widget.NestedScrollView
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+
+    <LinearLayout
+            android:id="@+id/feedFragListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+
             tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -108,17 +113,21 @@ a home cooked meal very soon :)"/>
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
+        <View
+                android:background="@color/transparent"
+                android:id="@+id/feedFragHeightCorrection"
+                android:layout_width="1dp"
+                android:layout_height="@dimen/floating_cart_btn_height"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/feedFragListLayout" />
+
     </LinearLayout>
 
 
-    <View
-            android:id="@+id/feedFragHeightCorrection"
-            android:layout_width="1dp"
-            android:layout_height="@dimen/floating_cart_btn_height"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feedFragListLayout" />
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
@@ -129,5 +138,6 @@ a home cooked meal very soon :)"/>
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
