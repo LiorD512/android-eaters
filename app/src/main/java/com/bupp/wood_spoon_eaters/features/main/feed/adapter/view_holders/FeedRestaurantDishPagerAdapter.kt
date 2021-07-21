@@ -15,10 +15,13 @@ import at.favre.lib.dali.Dali
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantDishItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantSeeMoreItemBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
 
 class FeedRestaurantDishPagerAdapter :
     ListAdapter<FeedRestaurantSectionItem, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -60,8 +63,23 @@ class FeedRestaurantDishPagerAdapter :
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: DishTagsView = binding.feedRestaurantItemTags
 
+        private val shimmer: Shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+            .setDuration(1300) // how long the shimmering animation takes to do one full sweep
+            .setBaseAlpha(0.7f) //the alpha of the underlying children
+            .setHighlightAlpha(0.6f) // the shimmer alpha amount
+            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+            .setAutoStart(true)
+            .build()
+
+        // This is the placeholder for the imageView
+        private val shimmerDrawable = ShimmerDrawable().apply {
+            setShimmer(shimmer)
+        }
+
         fun bindItem(context: Context, dish: FeedRestaurantItemDish) {
-            Glide.with(context).load(dish.thumbnail_url).into(thumbnail)
+
+
+            Glide.with(context).load(dish.thumbnail_url).placeholder(shimmerDrawable).into(thumbnail)
             name.text = dish.name
             price.text = dish.formatted_price
 

@@ -3,113 +3,117 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/feedRestaurantItemMainLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <io.supercharge.shimmerlayout.ShimmerLayout
-            android:layout_marginTop="15.4dp"
-            android:id="@+id/feedRestaurantItemShimmerLayout1"
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            app:shimmer_auto_start="true"
-            app:shimmer_color="@color/white_50"
-            app:shimmer_animation_duration="1500">
+            android:layout_height="199dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15.4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="7.7dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
 
-        <androidx.cardview.widget.CardView
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                android:layout_marginHorizontal="7dp"
-                android:id="@+id/customBannerLayout"
+        <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="199dp"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="7.7dp"
-                tools:visibility="visible">
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_color="@color/white_50"
+                app:shimmer_clip_to_children="true"
+                app:shimmer_colored="false"
+                app:shimmer_duration="1500"
+                app:shimmer_highlight_color="@color/white_50"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="radial"
+                app:shimmer_tilt="30">
 
             <View
-                    android:background="@drawable/skeleton_rect"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/skeleton_rect" />
 
 
-        </androidx.cardview.widget.CardView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </androidx.cardview.widget.CardView>
 
-    </io.supercharge.shimmerlayout.ShimmerLayout>
 
-    <io.supercharge.shimmerlayout.ShimmerLayout
-            android:layout_marginTop="15.4dp"
-            android:id="@+id/feedRestaurantItemShimmerLayout2"
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center_horizontal"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_color="@color/white_50"
+                app:shimmer_clip_to_children="true"
+                app:shimmer_colored="false"
+                app:shimmer_duration="1500"
+                app:shimmer_highlight_color="@color/white_50"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="radial"
+                app:shimmer_tilt="30">
+
+             <View
+                android:layout_width="123dp"
+                android:layout_height="15.4dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="7dp"
+                android:background="@drawable/skeleton_rect" />
+
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            app:shimmer_auto_start="true"
-            app:shimmer_color="@color/white_50"
-            app:shimmer_animation_duration="1500">
+            android:layout_height="247dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15.4dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="7.7dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:elevation="6dp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_color="@color/white_50"
+                app:shimmer_clip_to_children="true"
+                app:shimmer_colored="false"
+                app:shimmer_duration="1500"
+                app:shimmer_highlight_color="@color/white_50"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="radial"
+                app:shimmer_tilt="30">
 
             <View
-                    android:layout_marginVertical="7dp"
-                    android:layout_marginHorizontal="15dp"
-                    android:background="@drawable/skeleton_rect"
-                    android:layout_width="123dp"
-                    android:layout_height="15.4dp" />
-
-    </io.supercharge.shimmerlayout.ShimmerLayout>
-
-    <io.supercharge.shimmerlayout.ShimmerLayout
-            android:layout_marginTop="7.7dp"
-            android:id="@+id/feedRestaurantItemShimmerLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            app:shimmer_auto_start="true"
-            app:shimmer_color="@color/white_50"
-            app:shimmer_animation_duration="1500">
-
-        <androidx.cardview.widget.CardView
-                android:id="@+id/feedRestaurantItemCardLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="7dp"
-                app:cardCornerRadius="7.7dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                    android:background="@drawable/skeleton_rect"
+                    android:id="@+id/feedRestaurantItemCardLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/feedRestaurantItemTopLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="179dp">
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="68dp">
+                    android:layout_height="247dp"
+                    android:background="@color/grey_white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </View>
 
-            </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </androidx.cardview.widget.CardView>
 
-<!--            <View-->
-<!--                    android:layout_marginVertical="7dp"-->
-<!--                    android:layout_marginHorizontal="15dp"-->
-<!--                    android:background="@drawable/skeleton_rect"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="247dp" />-->
 
-    </io.supercharge.shimmerlayout.ShimmerLayout>
+    <!--            <View-->
+    <!--                    android:layout_marginVertical="7dp"-->
+    <!--                    android:layout_marginHorizontal="15dp"-->
+    <!--                    android:background="@drawable/skeleton_rect"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="247dp" />-->
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>

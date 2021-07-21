@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import com.segment.analytics.Analytics
+import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -87,7 +88,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             binding.feedFragHeader.setDate(it?.deliveryDateUi)
         })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
-            it.feedData?.let { skeletons -> handleFeedResult(skeletons) }
+
+            it.feedData?.let { skeletons ->
+//                feedAdapter.submitList(skeletons)
+                handleFeedResult(skeletons)
+            }
         })
 
 
@@ -184,7 +189,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     override fun refreshList() {
-//        binding.feedFragRefreshLayout.isRefreshing = false
         viewModel.onPullToRefresh()
     }
 
@@ -194,18 +198,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
-//        binding.feedFragList.unVeil()
         if (feedArr.isEmpty()) {
             showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
             binding.feedFragRefreshLayout.isRefreshing = false
-//            binding.feedFragRefreshLayout.finishLoadMore(500 /*,false*/)
-//            binding.feedFragRefreshLayout.finishRefresh(500 /*,false*/)
             binding.feedFragEmptyLayout.visibility = View.GONE
             feedAdapter.submitList(feedArr)
         }
-//        binding.feedFragPb.hide()
     }
 
     private fun initSkeletons() {
