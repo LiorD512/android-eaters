@@ -78,12 +78,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             feedAdapter = FeedMainAdapter()
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
             feedFragList.adapter = feedAdapter
-
-            val skeletons = mutableListOf<FeedAdapterSkeleton>()
-            for(i in 0 until 2){
-                skeletons.add(FeedAdapterSkeleton())
-            }
-            feedAdapter.submitList(skeletons as List<FeedAdapterItem>?)
         }
     }
 
@@ -94,7 +88,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
             binding.feedFragHeader.setDate(it?.deliveryDateUi)
         })
-
+        viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
+            it.feedData?.let { skeletons -> handleFeedResult(skeletons) }
+        })
 
 
 

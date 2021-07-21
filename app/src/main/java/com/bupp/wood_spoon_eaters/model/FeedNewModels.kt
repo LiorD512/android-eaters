@@ -145,5 +145,5 @@ data class FeedAdapterRestaurant(
 data class Tag(
     val id: Long?,
     val text: String,
-    val icon_url: String?
+    val icon_url: String? = null
 ): Parcelable

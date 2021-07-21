@@ -182,6 +182,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             myProfileFragDeleteAccount.setOnClickListener {
                 DeleteAccountBottomSheet().show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
             }
+            myProfileFragEditAccount.setOnClickListener { onUserImageClick(null) }
             myProfileFragAddress.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragPayment.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragAddress.setChangeable(true)

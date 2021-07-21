@@ -2,13 +2,9 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +15,8 @@ import at.favre.lib.dali.Dali
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.bupp.wood_spoon_eaters.databinding.*
+import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantDishItemBinding
+import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantSeeMoreItemBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
 
@@ -55,15 +52,6 @@ class FeedRestaurantDishPagerAdapter :
             }
         }
     }
-//
-//    class FeedDishViewHolder(binding: FeedAdapterRestaurantDishItemBinding) : RecyclerView.ViewHolder(binding.root) {
-//        private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
-//
-//        fun bindItem(context: Context, dish: FeedRestaurantItemDish) {
-//            Log.d("wowFeedPager","bindItem: $dish")
-//            Glide.with(context).load(dish.thumbnail_url).into(thumbnail)
-//        }
-//    }
 
     class FeedDishViewHolder(binding: FeedAdapterRestaurantDishItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val layout: ConstraintLayout = binding.feedRestaurantDishItem

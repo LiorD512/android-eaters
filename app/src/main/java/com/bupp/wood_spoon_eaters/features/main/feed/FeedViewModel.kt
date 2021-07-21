@@ -60,10 +60,12 @@ class FeedViewModel(
         refreshFavorites()
     }
 
+    val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
     data class FeedLiveData(val feedData: List<FeedAdapterItem>?)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
+            feedSkeletonEvent.postValue(getSkeletonItems())
             viewModelScope.launch {
                 progressData.startProgress()
                 val feedRepository = feedRepository.getFeed(feedRequest)
@@ -96,6 +98,14 @@ class FeedViewModel(
             feedResultData.postValue(FeedLiveData(null))
             progressData.endProgress()
         }
+    }
+
+    private fun getSkeletonItems(): FeedLiveData? {
+        val skeletons = mutableListOf<FeedAdapterSkeleton>()
+        for(i in 0 until 2){
+            skeletons.add(FeedAdapterSkeleton())
+        }
+        return FeedLiveData(skeletons)
     }
 
     private fun validFeedRequest(feedRequest: FeedRequest): Boolean {
