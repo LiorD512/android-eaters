@@ -53,11 +53,11 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEach { section ->
-            section.title?.let{
+            section.title?.let {
                 feedData.add(FeedAdapterTitle(it))
             }
             section.collections?.forEach { collectionItem ->
-                when(collectionItem){
+                when (collectionItem) {
                     is FeedCampaignSection -> {
                         feedData.add(FeedAdapterCoupons(collectionItem))
                     }

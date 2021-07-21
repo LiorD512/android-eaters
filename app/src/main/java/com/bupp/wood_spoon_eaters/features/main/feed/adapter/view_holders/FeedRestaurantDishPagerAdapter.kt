@@ -91,7 +91,7 @@ class FeedRestaurantDishPagerAdapter :
                 .load(dish.thumbnail_url)
                 .into(object : CustomTarget<Bitmap>(){
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        Dali.create(context).load(resource).blurRadius(12).reScale().into(thumbnail)
+                        Dali.create(context).load(resource).into(thumbnail)
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {
                     }

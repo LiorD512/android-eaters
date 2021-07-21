@@ -2,10 +2,12 @@ package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -19,10 +21,16 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import com.segment.analytics.Analytics
+//import com.skydoves.balloon.BalloonAnimation
+//import com.skydoves.balloon.BalloonSizeSpec
+//import com.skydoves.balloon.createBalloon
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
+import kotlinx.coroutines.delay
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -68,12 +76,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         with(binding){
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
             feedAdapter = FeedMainAdapter()
-            feedFragList.setLayoutManager(LinearLayoutManager(requireContext()))
-            feedFragList.setAdapter(feedAdapter)
+            feedFragList.layoutManager = LinearLayoutManager(requireContext())
+            feedFragList.adapter = feedAdapter
 
-//            initSkeletons()
-//            feedFragList.addVeiledItems(15)
-//            feedFragList.veil()
+            val skeletons = mutableListOf<FeedAdapterSkeleton>()
+            for(i in 0 until 2){
+                skeletons.add(FeedAdapterSkeleton())
+            }
+            feedAdapter.submitList(skeletons as List<FeedAdapterItem>?)
         }
     }
 
@@ -95,7 +105,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
 
         viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
-//            handleFeedBannerUi(it)
+            handleFeedBannerUi(it)
         })
         viewModel.getLocationLiveData().observe(viewLifecycleOwner, {
             Log.d(TAG, "getLocationLiveData observer called")
@@ -126,7 +136,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             }
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.feedFragHeightCorrection.isVisible = isVisible
+            binding.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
         })
 //        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
 //            Log.d(TAG, "campaign: $it")
@@ -195,10 +205,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
             binding.feedFragEmptyLayout.visibility = View.GONE
-//            binding.feedFragListLayout.visibility = View.VISIBLE
             feedAdapter.submitList(feedArr)
-//            skeletonView.showOriginal()
-//            binding.feedFragList.unVeil()
         }
 //        binding.feedFragPb.hide()
     }
@@ -220,7 +227,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
         with(binding) {
-            feedFragListLayout.visibility = View.GONE
+            feedFragList.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
 //            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
             feedFragEmptyLayout.setOnClickListener {
@@ -234,7 +241,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             Log.d(TAG, "handleBannerEvent: $bannerType")
             when (bannerType) {
                 Constants.NO_BANNER -> {
-                    tooltip?.dismiss()
+//                    tooltip?.dismiss()
                 }
                 Constants.BANNER_KNOWN_ADDRESS -> {
                     showBanner(getString(R.string.banner_known_address))
@@ -261,7 +268,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
                 .text(text)
                 .arrow(true)
                 .floatingAnimation(Tooltip.Animation.SLOW)
-                .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
+                .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
+                .fadeDuration(500)
+                .showDuration(10000)
                 .overlay(false)
                 .maxWidth(feedFragHeader.measuredWidth - 50)
                 .create()
@@ -272,7 +281,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
                 .doOnShown { }
                 .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
         }
-
     }
 
 

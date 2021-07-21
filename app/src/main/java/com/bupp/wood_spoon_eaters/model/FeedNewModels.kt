@@ -116,8 +116,14 @@ sealed class FeedAdapterItem(
 enum class FeedAdapterViewType{
     TITLE,
     COUPONS,
-    RESTAURANT
+    RESTAURANT,
+    SKELETON
 }
+
+@Parcelize
+data class FeedAdapterSkeleton(
+    val id: Long? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON)
 
 @Parcelize
 data class FeedAdapterTitle(
