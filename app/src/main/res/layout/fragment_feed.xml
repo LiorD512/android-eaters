@@ -91,17 +91,25 @@ a home cooked meal very soon :)"
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/feedFragList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layoutAnimation="@anim/feed_layout_animation"
-            android:paddingTop="15.4dp"
-            android:clipToPadding="false"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/top_gradient" />
+            app:layout_constraintTop_toTopOf="@+id/top_gradient"
+            android:id="@+id/feedFragRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="none">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedFragList"
+                android:clipToPadding="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/feed_layout_animation"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <View
             android:id="@+id/top_gradient"

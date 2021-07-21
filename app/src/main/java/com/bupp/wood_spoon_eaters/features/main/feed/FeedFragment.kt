@@ -78,6 +78,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             feedAdapter = FeedMainAdapter()
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
             feedFragList.adapter = feedAdapter
+
+            feedFragRefreshLayout.setOnRefreshListener { refreshList() }
         }
     }
 
@@ -109,7 +111,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         })
         viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
             Log.d(TAG, "getLocationLiveData observer called")
-            viewModel.onPullToRefresh()
+            refreshList()
         })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
@@ -186,6 +188,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     override fun refreshList() {
+        binding.feedFragRefreshLayout.isRefreshing = false
         viewModel.onPullToRefresh()
     }
 
