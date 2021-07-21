@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
 
 class FeedRestaurantDishPagerAdapter :
     ListAdapter<FeedRestaurantSectionItem, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -69,11 +70,17 @@ class FeedRestaurantDishPagerAdapter :
         private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
         private val name: TextView = binding.feedRestaurantItemName
         private val price: TextView = binding.feedRestaurantItemPrice
+        private val tagView: DishTagsView = binding.feedRestaurantItemTags
 
         fun bindItem(context: Context, dish: FeedRestaurantItemDish) {
             Glide.with(context).load(dish.thumbnail_url).into(thumbnail)
             name.text = dish.name
             price.text = dish.formatted_price
+
+            //todo - remove this when Tag entity is provided by server
+            val tags = listOf<Tag>(Tag(0, "Vegan"), Tag(1, "sababa achi its gooos and looooooks wellll"), Tag(2, "Kosher"))
+            tagView.initTagView(tags)
+//            tagView.initTagView(dish.tags)
 
         }
     }

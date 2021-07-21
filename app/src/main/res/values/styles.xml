@@ -148,6 +148,11 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoReg15DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
     <style name="LatoReg15Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>

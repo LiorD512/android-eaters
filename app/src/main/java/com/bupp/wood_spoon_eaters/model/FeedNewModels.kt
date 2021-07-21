@@ -81,6 +81,7 @@ data class FeedRestaurantItemDish(
    val name: String?,
    val thumbnail_url: String?,
    val formatted_price: String?,
+   val tags: List<Tag>?
 ): Parcelable
 
 @Parcelize
@@ -139,3 +140,10 @@ data class FeedAdapterCoupons(
 data class FeedAdapterRestaurant(
     val restaurantSection: FeedRestaurantSection
 ): Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)
+
+@Parcelize
+data class Tag(
+    val id: Long?,
+    val text: String,
+    val icon_url: String?
+): Parcelable

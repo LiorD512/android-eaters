@@ -93,7 +93,6 @@ a home cooked meal very soon :)"
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/feedFragList"
-            android:paddingBottom="80dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layoutAnimation="@anim/feed_layout_animation"
