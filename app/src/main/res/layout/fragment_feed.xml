@@ -91,15 +91,17 @@ a home cooked meal very soon :)"
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.aliumujib.swipetorefresh.SwipeToRefreshLayout
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/top_gradient"
             android:id="@+id/feedFragRefreshLayout"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scrollbars="none">
+            android:layout_width="match_parent"
+            app:srl_animation="rotate"
+            app:srl_direction="top"
+            app:srl_icon="@mipmap/ic_launcher_round">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feedFragList"
@@ -108,14 +110,12 @@ a home cooked meal very soon :)"
                 android:layout_height="match_parent"
                 android:layoutAnimation="@anim/feed_layout_animation"/>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+    </com.aliumujib.swipetorefresh.SwipeToRefreshLayout>
 
     <View
             android:id="@+id/top_gradient"
             android:layout_width="match_parent"
             android:layout_height="15dp"
-            android:layout_marginTop="3dp"
             android:background="@drawable/white_to_transparent_gradient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

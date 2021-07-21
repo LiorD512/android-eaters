@@ -2,35 +2,25 @@ package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
-import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
-import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
+import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import com.segment.analytics.Analytics
-//import com.skydoves.balloon.BalloonAnimation
-//import com.skydoves.balloon.BalloonSizeSpec
-//import com.skydoves.balloon.createBalloon
-import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
-import kotlinx.coroutines.delay
-import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -67,7 +57,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         initObservers()
 
         viewModel.initFeed()
-//        binding.feedFragPb.show()
 
     }
 
@@ -80,6 +69,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             feedFragList.adapter = feedAdapter
 
             feedFragRefreshLayout.setOnRefreshListener { refreshList() }
+
+//            feedFragRefreshLayout.setOnRefreshListener { refreshlayout ->
+//                refreshList()
+//            }
+//            feedFragRefreshLayout.setOnLoadMoreListener { refreshlayout ->
+////                refreshlayout.finishLoadMore(2000 /*,false*/) //传入false表示加载失败
+//            }
         }
     }
 
@@ -188,7 +184,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
     override fun refreshList() {
-        binding.feedFragRefreshLayout.isRefreshing = false
+//        binding.feedFragRefreshLayout.isRefreshing = false
         viewModel.onPullToRefresh()
     }
 
@@ -203,6 +199,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
+            binding.feedFragRefreshLayout.isRefreshing = false
+//            binding.feedFragRefreshLayout.finishLoadMore(500 /*,false*/)
+//            binding.feedFragRefreshLayout.finishRefresh(500 /*,false*/)
             binding.feedFragEmptyLayout.visibility = View.GONE
             feedAdapter.submitList(feedArr)
         }
