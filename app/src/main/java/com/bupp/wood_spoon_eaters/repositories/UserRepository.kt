@@ -242,6 +242,31 @@ class UserRepository(
         return UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
     }
 
+    suspend fun deleteAccount(): UserRepoResult {
+        val result = withContext(Dispatchers.IO){
+            apiService.deleteMe()
+        }
+        result.let{
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG,"deleteAccount - NetworkError")
+                    UserRepoResult(UserRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG,"deleteAccount - GenericError")
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG,"deleteAccount - Success")
+                    UserRepoResult(UserRepoStatus.SUCCESS)
+                }
+                is ResultHandler.WSCustomError -> {
+                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
     //General
 
     fun logout(): UserRepoResult{

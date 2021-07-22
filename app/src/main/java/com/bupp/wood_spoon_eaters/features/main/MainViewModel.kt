@@ -402,9 +402,10 @@ class MainViewModel(
     }
 
     fun deleteAccount(){
-        //todo: wait for server implemation
-//        userRepository.deleteAccount
-//        logout()
+        viewModelScope.launch {
+            userRepository.deleteAccount()
+            logout()
+        }
     }
 
     fun logout() {

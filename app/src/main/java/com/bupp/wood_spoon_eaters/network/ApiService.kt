@@ -101,6 +101,9 @@ interface ApiService {
     @POST("eaters/me")
     suspend fun postEaterNotificationGroup(@Body eater: SettingsRequest): ServerResponse<Eater>
 
+    @DELETE("eaters/me")
+    suspend fun deleteMe(): ServerResponse<Any>
+
     @FormUrlEncoded
     @POST("eaters/me")
     suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>?): ServerResponse<Eater>
