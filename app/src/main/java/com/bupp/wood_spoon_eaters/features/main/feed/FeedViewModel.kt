@@ -20,6 +20,7 @@ class FeedViewModel(
     val progressData = ProgressData()
 
     fun initFeed(){
+        feedSkeletonEvent.postValue(getSkeletonItems())
         feedDataManager.initFeedDataManager()
 
         viewModelScope.launch {
