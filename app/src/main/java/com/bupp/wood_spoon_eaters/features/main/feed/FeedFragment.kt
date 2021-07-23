@@ -24,9 +24,6 @@ import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import java.lang.Exception
-import java.lang.reflect.Field
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.MultiSectionFeedViewListener,
@@ -75,6 +72,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             feedFragRefreshLayout.setOnRefreshListener { refreshList() }
 
 
+
 //            feedFragRefreshLayout.setOnRefreshListener { refreshlayout ->
 //                refreshList()
 //            }
@@ -92,7 +90,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             binding.feedFragHeader.setDate(it?.deliveryDateUi)
         })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
-
             it.feedData?.let { skeletons ->
 //                feedAdapter.submitList(skeletons)
                 handleFeedResult(skeletons)

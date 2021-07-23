@@ -57,6 +57,10 @@
         <attr name="shouldShowDivider" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="DishTagsView">
+        <attr name="isScrollable" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="WSCounterEditText">
         <attr name="minChar" />
         <attr name="maxChar" />

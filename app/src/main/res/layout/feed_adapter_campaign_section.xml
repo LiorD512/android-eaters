@@ -8,8 +8,7 @@
         android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutDescription="@xml/feed_adapter_campaign_section_scene">
+        android:layout_height="wrap_content">
 
    <androidx.viewpager2.widget.ViewPager2
            android:paddingHorizontal="5dp"

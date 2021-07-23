@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <Transition
+            app:motionInterpolator="easeIn"
+            app:constraintSetEnd="@+id/end"
+            app:constraintSetStart="@+id/start"
+            app:duration="1000">
+        <OnSwipe
+                app:dragDirection="dragLeft"
+                app:touchAnchorId="@id/swipeableDishLayout"
+                app:touchAnchorSide="left" />
+        <KeyFrameSet>
+            <KeyTrigger
+                app:framePosition="75"
+                app:onCross="hide"
+                    app:triggerSlack="0.5"
+                app:motionTarget="@id/swipeableDishLayout"/>
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+                android:translationX="0dp"
+                android:id="@+id/swipeableDishLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+                android:id="@+id/swipeableDishAddLayout"
+                app:layout_constraintEnd_toStartOf="@+id/swipeableDishLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/teal_rect_right_cornered"
+                android:layout_width="@dimen/swipeable_dish_option_width"
+                android:layout_height="match_parent"/>
+    </ConstraintSet>
+
+    <ConstraintSet
+            android:id="@+id/end">
+        <Constraint
+                android:id="@+id/swipeableDishLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swipeableDishAddLayout"
+                android:layout_marginStart="@dimen/swipeable_dish_option_width"
+                app:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+                android:id="@+id/swipeableDishAddLayout"
+                app:layout_constraintEnd_toStartOf="@+id/swipeableDishLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/teal_rect_right_cornered"
+                android:layout_width="@dimen/swipeable_dish_option_width"
+                android:layout_height="0dp"/>
+    </ConstraintSet>
+
+    <Transition
+            app:constraintSetStart="@+id/end"
+            app:constraintSetEnd="@+id/end2"
+            app:autoTransition="jumpToStart" >
+        <KeyFrameSet >
+            <KeyPosition
+                    app:motionTarget="@+id/swipeableDishAddLayout"
+                    app:framePosition="0"
+                    app:keyPositionType="deltaRelative"
+                    app:percentX="10"
+                    app:percentY="10" />
+            <KeyPosition
+                    app:motionTarget="@+id/swipeableDishAddLayout"
+                    app:framePosition="50"
+                    app:keyPositionType="deltaRelative"
+                    app:percentX="20"
+                    app:percentY="20" />
+            <KeyPosition
+                    app:motionTarget="@+id/swipeableDishAddLayout"
+                    app:framePosition="80"
+                    app:keyPositionType="deltaRelative"
+                    app:percentX="20"
+                    app:percentY="20" />
+        </KeyFrameSet>
+    </Transition>
+</MotionScene>

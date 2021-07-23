@@ -1,0 +1,145 @@
+package com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet
+
+import android.app.Dialog
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableAddDishItemDecorator
+import com.bupp.wood_spoon_eaters.databinding.UpSaleBottomSheetBinding
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableAddDishItemTouchHelper
+import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.views.WSCounterEditText
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRemoveDishItemDecorator
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRemoveDishItemTouchHelper
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
+class UpSaleBottomSheet : BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
+
+    private val binding: UpSaleBottomSheetBinding by viewBinding()
+    private val viewModel by sharedViewModel<MainViewModel>()
+    private lateinit var adapter: UpSaleAdapter
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.up_sale_bottom_sheet, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+    }
+
+    private lateinit var behavior: BottomSheetBehavior<View>
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val d = it as BottomSheetDialog
+            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
+            behavior = BottomSheetBehavior.from(sheet!!)
+            behavior.isFitToContents = true
+            behavior.isDraggable = false
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            behavior.expandedOffset = Utils.toPx(230)
+        }
+
+        return dialog
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val parent = view.parent as View
+        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
+
+        initUI()
+    }
+
+    private fun initUI() {
+        with(binding) {
+            adapter = UpSaleAdapter()
+            upSaleList.layoutManager = LinearLayoutManager(requireContext())
+            upSaleList.adapter = adapter
+
+            val addSwipeHandler = object : SwipeableAddDishItemTouchHelper() {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                    Log.d(TAG, "onSwiped")
+                    adapter.updateItemQuantityAdd(viewHolder.absoluteAdapterPosition)
+                    adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+
+                }
+            }
+            val addItemTouchHelper = ItemTouchHelper(addSwipeHandler)
+            addItemTouchHelper.attachToRecyclerView(upSaleList)
+
+            val removeSwipeHandler = object : SwipeableRemoveDishItemTouchHelper() {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                    Log.d(TAG, "onSwiped")
+                    adapter.updateItemQuantityRemoved(viewHolder.absoluteAdapterPosition)
+                    adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+
+                }
+            }
+            val removeItemTouchHelper = ItemTouchHelper(removeSwipeHandler)
+            removeItemTouchHelper.attachToRecyclerView(upSaleList)
+
+            upSaleList.itemAnimator?.changeDuration = 0
+            upSaleList.itemAnimator?.moveDuration = 0
+            upSaleList.itemAnimator?.removeDuration = 0
+
+            val removeShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.watermelon_rect_left_cornered)
+            upSaleList.addItemDecoration(SwipeableRemoveDishItemDecorator(requireContext(), removeShape))
+            val defaultShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.grey_white_right_cornered)
+            val selectedShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.teal_rect_right_cornered)
+            upSaleList.addItemDecoration(SwipeableAddDishItemDecorator(requireContext(), defaultShape, selectedShape))
+            val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider)
+            upSaleList.addItemDecoration(DividerItemDecorator(divider))
+
+//            upSaleList.addOnScrollListener(object:  RecyclerView.OnScrollListener(){
+//                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                    super.onScrolled(recyclerView, dx, dy)
+//                    updateAllRecyclerChildren(dx, dy)
+//                }
+//            })
+
+
+            val list = mutableListOf<UpSaleAdapterItem>()
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "a", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "b", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "c", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(10, Dish(0, null, "d", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            adapter.submitList(list)
+        }
+    }
+
+//    fun updateAllRecyclerChildren(dx: Int, dy: Int) {
+//        for (i in 1 until adapter.itemCount) {
+//            val childView = binding.upSaleList.getChildAt(i)
+//            if(childView != null){
+//                val songViewHolder = binding.upSaleList.getChildViewHolder(childView) as? UpSaleAdapter.UpSaleItemViewHolder
+//                songViewHolder?.setMotionParam(dx, dy)
+//            }
+//        }
+//    }
+
+    override fun onHeaderCloseClick() {
+        dismiss()
+    }
+
+
+}

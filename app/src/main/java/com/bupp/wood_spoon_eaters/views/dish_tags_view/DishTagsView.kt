@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.HorizontalPaddingItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.TagViewBinding
 import com.bupp.wood_spoon_eaters.model.Tag
@@ -24,11 +25,21 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun initUi(attrs: AttributeSet?) {
-        adapter = DishTagsViewAdapter()
+
+
+
+            adapter = DishTagsViewAdapter()
         with(binding) {
             tagViewList.adapter = adapter
             tagViewList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             tagViewList.addItemDecoration(HorizontalPaddingItemDecorator(Utils.toPx(8)))
+
+            val attr = context.obtainStyledAttributes(attrs, R.styleable.DishTagsView)
+
+            val isScrollable = attr.getBoolean(R.styleable.DishTagsView_isScrollable, true)
+            tagViewList.isEnabled = isScrollable
+
+            attr.recycle()
         }
     }
 
