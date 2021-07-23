@@ -37,7 +37,8 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
                             val top = child.top + verticalPadding
                             val bottom = child.bottom - verticalPadding
 
-                            val isInCart = (parent.adapter as UpSaleAdapter).isInCart(i)
+                            val adapterPosition = parent.getChildAdapterPosition(child)
+                            val isInCart = (parent.adapter as UpSaleAdapter).isInCart(adapterPosition)
                             if (isInCart) {
                                 right = 15
                                 selectedShape.setBounds(left, top, right, bottom)
@@ -63,8 +64,8 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
         val verticalPadding = Utils.toPx(3)
         defaultShape?.let {
             selectedShape?.let {
-                parent.adapter?.let {
-                    val childCount = Objects.requireNonNull(it).itemCount
+                parent.adapter?.let { adapter ->
+                    val childCount = Objects.requireNonNull(adapter).itemCount
                     for (i in 0 until childCount) {
                         val child = parent.getChildAt(i)
                         child?.let {
@@ -79,7 +80,9 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
                             defaultCopy?.alpha = defaultAlpha
                             selectedCopy?.alpha = selectedAlpha + 50
 
-                            val isInCart = (parent.adapter as UpSaleAdapter).isInCart(i)
+                            val adapterPosition = parent.getChildAdapterPosition(child)
+                            val isInCart = (parent.adapter as UpSaleAdapter).isInCart(adapterPosition)
+                            Log.d(TAG, "i: $i, adapterPosiiton: $adapterPosition, childCount: $childCount, isInCart: $isInCart")
                             if (isInCart) {
                                 right = 20
                                 selectedCopy?.alpha = 255
@@ -89,9 +92,9 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
                                 right = child.translationX.toInt()
                             }
 
-                            Log.d(TAG, "top: $top")
-                            Log.d(TAG, "right: $right")
-                            Log.d(TAG, "bottom: $bottom")
+//                            Log.d(TAG, "top: $top")
+//                            Log.d(TAG, "right: $right")
+//                            Log.d(TAG, "bottom: $bottom")
 
                             selectedCopy?.setBounds(left, top, right, bottom)
                             selectedCopy?.draw(canvas)

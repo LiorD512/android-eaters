@@ -26,7 +26,7 @@ abstract class SwipeableAddDishItemTouchHelper() : ItemTouchHelper.SimpleCallbac
 //    }
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        Log.d(TAG, "onMove")
+//        Log.d(TAG, "onMove")
         return true
     }
 
@@ -37,8 +37,9 @@ abstract class SwipeableAddDishItemTouchHelper() : ItemTouchHelper.SimpleCallbac
         val isCanceled = dX > 600
 
         if (isCanceled && !isCurrentlyActive ) {
+            Log.d(TAG, "onChildDraw: $dX")
             clearCanvas(c, 0f, 0f, 0f, 0f)
-            super.onChildDraw(c, recyclerView, viewHolder, 5f, dY, actionState, isCurrentlyActive)
+            super.onChildDraw(c, recyclerView, viewHolder, 0f, dY, actionState, isCurrentlyActive)
             return
         }
 

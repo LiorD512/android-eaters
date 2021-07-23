@@ -123,6 +123,9 @@ class UpSaleBottomSheet : BottomSheetDialogFragment(), WSCounterEditText.WSCount
             list.add(UpSaleAdapterItem(0, Dish(0, null, "c", null, "d", null, "a", null, null, null, null, null, null, null)))
             list.add(UpSaleAdapterItem(10, Dish(0, null, "d", null, "d", null, "a", null, null, null, null, null, null, null)))
             list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
             adapter.submitList(list)
         }
     }
