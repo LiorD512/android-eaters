@@ -38,6 +38,11 @@ fun Context.showKeyboard(context: Context) {
     )
 }
 
+fun IntRange.convert(number: Int, target: IntRange): Int {
+    val ratio = number.toFloat() / (endInclusive - start)
+    return (ratio * (target.last - target.first)).toInt()
+}
+
 fun Activity.updateScreenUi(){
     val decorView = window.decorView
     decorView.setOnSystemUiVisibilityChangeListener { visibility ->

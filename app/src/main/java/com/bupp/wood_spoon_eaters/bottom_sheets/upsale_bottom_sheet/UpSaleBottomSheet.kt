@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +27,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import androidx.recyclerview.widget.SimpleItemAnimator
+
+import android.R.string.no
+import android.R.string.no
+
+
+
+
+
+
 
 class UpSaleBottomSheet : BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
@@ -80,10 +89,10 @@ class UpSaleBottomSheet : BottomSheetDialogFragment(), WSCounterEditText.WSCount
 //                    Log.d(TAG, "onSwiped")
                     adapter.updateItemQuantityAdd(viewHolder.absoluteAdapterPosition)
                     adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
-
                 }
             }
             val addItemTouchHelper = ItemTouchHelper(addSwipeHandler)
+            addItemTouchHelper.attachToRecyclerView(null)
             addItemTouchHelper.attachToRecyclerView(upSaleList)
 
             val removeSwipeHandler = object : SwipeableRemoveDishItemTouchHelper() {
@@ -97,24 +106,21 @@ class UpSaleBottomSheet : BottomSheetDialogFragment(), WSCounterEditText.WSCount
             val removeItemTouchHelper = ItemTouchHelper(removeSwipeHandler)
             removeItemTouchHelper.attachToRecyclerView(upSaleList)
 
-            upSaleList.itemAnimator?.changeDuration = 0
+            upSaleList.itemAnimator?.changeDuration = 150
             upSaleList.itemAnimator?.moveDuration = 0
             upSaleList.itemAnimator?.removeDuration = 0
 
-            val removeShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.watermelon_rect_left_cornered)
+            upSaleList.itemAnimator = CustomItemAnimator()
+
+
+
+            val removeShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.swipeable_dish_remove_bkg)
             upSaleList.addItemDecoration(SwipeableRemoveDishItemDecorator(requireContext(), removeShape))
             val defaultShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.grey_white_right_cornered)
-            val selectedShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.teal_rect_right_cornered)
+            val selectedShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.swipeable_dish_add_bkg)
             upSaleList.addItemDecoration(SwipeableAddDishItemDecorator(requireContext(), defaultShape, selectedShape))
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider)
             upSaleList.addItemDecoration(DividerItemDecorator(divider))
-
-//            upSaleList.addOnScrollListener(object:  RecyclerView.OnScrollListener(){
-//                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                    super.onScrolled(recyclerView, dx, dy)
-//                    updateAllRecyclerChildren(dx, dy)
-//                }
-//            })
 
 
             val list = mutableListOf<UpSaleAdapterItem>()
@@ -122,10 +128,19 @@ class UpSaleBottomSheet : BottomSheetDialogFragment(), WSCounterEditText.WSCount
             list.add(UpSaleAdapterItem(1, Dish(0, null, "b", null, "d", null, "a", null, null, null, null, null, null, null)))
             list.add(UpSaleAdapterItem(0, Dish(0, null, "c", null, "d", null, "a", null, null, null, null, null, null, null)))
             list.add(UpSaleAdapterItem(10, Dish(0, null, "d", null, "d", null, "a", null, null, null, null, null, null, null)))
-            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
-            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
-            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
-            list.add(UpSaleAdapterItem(1, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(10, Dish(0, null, "d", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", null, null, null, null, null, null, null)))
+            list.add(UpSaleAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", null, null, null, null, null, null, null)))
             adapter.submitList(list)
         }
     }

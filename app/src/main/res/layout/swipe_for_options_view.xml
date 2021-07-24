@@ -13,7 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/swipeableDishAddLayout"
-            android:background="@drawable/teal_rect_right_cornered"
+            android:background="@drawable/swipeable_dish_add_bkg"
             android:layout_width="@dimen/swipeable_dish_option_width"
             android:layout_height="match_parent">
 
@@ -35,7 +35,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:visibility="gone"
             android:id="@+id/swipeableDishRemoveLayout"
-            android:background="@drawable/watermelon_rect_left_cornered"
+            android:background="@drawable/swipeable_dish_remove_bkg"
             android:layout_width="@dimen/swipeable_dish_option_width"
             android:layout_height="match_parent">
 

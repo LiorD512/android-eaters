@@ -18,7 +18,7 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
     private val intrinsicHeight = removeIcon?.intrinsicHeight
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        var left = 900
+        var left = parent.width
         var right = 0
         val verticalPadding = Utils.toPx(3)
         removeShape?.let{
@@ -30,6 +30,9 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
                         val top = child.top + verticalPadding
                         val bottom = child.bottom - verticalPadding
 
+                        if(child.translationX == -360f){
+                            child.translationX = 0f
+                        }
 
                         right = child.width.toInt()
                         if(child.translationX < 0){

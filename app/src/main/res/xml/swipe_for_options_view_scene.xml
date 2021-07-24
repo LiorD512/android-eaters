@@ -35,7 +35,7 @@
                 android:id="@+id/swipeableDishAddLayout"
                 app:layout_constraintEnd_toStartOf="@+id/swipeableDishLayout"
                 app:layout_constraintStart_toStartOf="parent"
-                android:background="@drawable/teal_rect_right_cornered"
+                android:background="@drawable/swipeable_dish_add_bkg"
                 android:layout_width="@dimen/swipeable_dish_option_width"
                 android:layout_height="match_parent"/>
     </ConstraintSet>
@@ -55,7 +55,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/swipeableDishLayout"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@drawable/teal_rect_right_cornered"
+                android:background="@drawable/swipeable_dish_add_bkg"
                 android:layout_width="@dimen/swipeable_dish_option_width"
                 android:layout_height="0dp"/>
     </ConstraintSet>

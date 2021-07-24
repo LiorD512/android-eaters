@@ -51,6 +51,20 @@ class AnimationUtil {
         }
     }
 
+    fun slideFromTo(view: View, from: Float, to: Float, customDuration: Long = 500, customStartDelay: Long = 150) {
+        view.alpha = 0f
+        ObjectAnimator.ofFloat(
+            view, "translationX",
+            from, to,
+        ).apply {
+            duration = customDuration
+            interpolator = AccelerateDecelerateInterpolator()
+            startDelay = customStartDelay
+            repeatCount = 0
+            start()
+        }
+    }
+
     fun alphaIn(view: View, customDuration: Long = 250, customStartDelay: Long = 150) {
         if(view.alpha == 0f){
             view.alpha = 0f
