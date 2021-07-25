@@ -8,6 +8,22 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class CookingSlot(
+    @Json(name = "id") val id: Long,
+    @Json(name = "ends_at") val endsAt: Date,
+    @Json(name = "starts_at") val startsAt: Date,
+    @Json(name = "order_from") val orderFrom: Date,
+    @Json(name = "last_call_at") val lastCallAt: Date?,
+    @Json(name = "delivery_fee") val deliveryFee: Price?,
+    @Json(name = "free_delivery") val freeDelivery: Boolean,
+    @Json(name = "nationwide_shipping") val isNationwide: Boolean?,
+    @Json(name = "menu_items") val menuItems: List<MenuItem>?,
+    val availableDishes: MutableList<Dish> = mutableListOf(),
+    val unAvailableDishes: MutableList<Dish> = mutableListOf(),
+): Parcelable
+
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -27,19 +43,6 @@ data class MenuItem(
         return quantity - unitsSold
     }
 }
-
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class CookingSlot(
-    @Json(name = "id") val id: Long,
-    @Json(name = "ends_at") val endsAt: Date,
-    @Json(name = "starts_at") val startsAt: Date,
-    @Json(name = "order_from") val orderFrom: Date,
-    @Json(name = "last_call_at") val lastCallAt: Date?,
-    @Json(name = "delivery_fee") val deliveryFee: Price?,
-    @Json(name = "free_delivery") val freeDelivery: Boolean,
-    @Json(name = "nationwide_shipping") val isNationwide: Boolean?
-): Parcelable
 
 @JsonClass(generateAdapter = true)
 data class FullDish(

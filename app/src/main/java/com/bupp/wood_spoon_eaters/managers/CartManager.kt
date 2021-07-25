@@ -418,7 +418,7 @@ class CartManager(
     }
 
     fun onNewOrderFinish() {
-        deliveryTimeManager.rollBackToPreviousDeliveryTime()
+//        deliveryTimeManager.rollBackToPreviousDeliveryTime()
     }
 
     fun isEmpty(): Boolean {
@@ -437,7 +437,7 @@ class CartManager(
 
     fun onDeliveryTimeInvalid() {
         //roll back to previous delivery time.. current time isnt valid for order
-        deliveryTimeManager.rollBackToPreviousDeliveryTime()
+//        deliveryTimeManager.rollBackToPreviousDeliveryTime()
     }
 
     suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {

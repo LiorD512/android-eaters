@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.segment.analytics.Analytics

@@ -26,14 +26,6 @@ class DeliveryTimeManager {
 
     fun setTemporaryDeliveryTimeDate(tempDate: Date?){
         tempDeliveryTimeStamp = DateUtils.parseUnixTimestamp(tempDate)
-//        tempDate?.let{
-//           if(!hasChangedTime){
-//                this.previousDeliveryTime = deliveryTime
-//                hasChangedTime = true
-//            }
-////            this.hasChangedTime = true
-//            setNewDeliveryTime(it)
-//        }
     }
 
     fun getDeliveryTimeDate(): Date? {
@@ -57,15 +49,15 @@ class DeliveryTimeManager {
         }
         return "Now"
     }
-
-    fun rollBackToPreviousDeliveryTime(){
-//        Log.d(TAG, "rollBackToPreviousDeliveryTime")
-//        previousDeliveryTime.let{
-//            Log.d(TAG, "rollBackToPreviousDeliveryTime - rolling back")
-//            setNewDeliveryTime(it)
-//            this.previousDeliveryTime = null
-//        }
-    }
+//
+//    fun rollBackToPreviousDeliveryTime(){
+////        Log.d(TAG, "rollBackToPreviousDeliveryTime")
+////        previousDeliveryTime.let{
+////            Log.d(TAG, "rollBackToPreviousDeliveryTime - rolling back")
+////            setNewDeliveryTime(it)
+////            this.previousDeliveryTime = null
+////        }
+//    }
 
     companion object{
         const val TAG = "DeliveryTimeManager"

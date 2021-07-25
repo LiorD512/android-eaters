@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.annotation.SuppressLint
+import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDate
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,6 +57,12 @@ object DateUtils {
     fun parseDateToDayDate(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EE, MMM dd")
+        return sdf.format(date.time)
+    }
+
+    fun parseDateToDayDateSplash(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EE, MM/dd")
         return sdf.format(date.time)
     }
 
@@ -208,4 +215,9 @@ object DateUtils {
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
     }
+}
+
+/** Compering between 2 dates */
+fun Date?.isSameDateAs(dateSecond: Date?): Boolean {
+    return parseDateToDate(this) == parseDateToDate(dateSecond)
 }
