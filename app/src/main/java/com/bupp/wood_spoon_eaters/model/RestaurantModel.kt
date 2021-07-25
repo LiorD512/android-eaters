@@ -20,7 +20,8 @@ data class Restaurant(
     @Json(name = "about") val about: String?,
     @Json(name = "cuisines") val cuisines: MutableList<CuisineLabel> = mutableListOf(),
     @Json(name = "dishes") val dishes: MutableList<Dish> = mutableListOf(),
-    @Json(name = "cooking_slots") val cookingSlots: MutableList<CookingSlot> = mutableListOf()
+    @Json(name = "cooking_slots") val cookingSlots: MutableList<CookingSlot> = mutableListOf(),
+    val shareUrl: String? = "",
 ): Parcelable {
     fun getFullName(): String{
         return "$firstName $lastName"

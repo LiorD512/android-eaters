@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -19,6 +18,10 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Restaurant
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
+import com.google.android.exoplayer2.SimpleExoPlayer
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
@@ -31,7 +34,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
 
-    val adapter = DishesMainAdapter(getDishesAdapterListener())
+    var adapterDishes: DishesMainAdapter? = DishesMainAdapter(getDishesAdapterListener())
+    var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,43 +51,45 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
                 activity?.onBackPressed()
             }
             shareButton.setOnClickListener {
-                //todo: Implement Click Listener
-            }
-            menuButton.setOnClickListener {
-                //todo: Implement Click Listener
+                viewModel.restaurantFullData.value?.shareUrl?.let {
+                    restaurantMainListLayout.shimmerViewContainer.hideShimmer()
+                    restaurantMainListLayout.test.isVisible = true
+                    restaurantMainListLayout.test1.root.isVisible = false
+                }
             }
         }
-
-        binding.restaurantMainListLayout.restaurantDishesList.adapter = adapter
+        with(binding.restaurantMainListLayout) {
+            restaurantDishesList.adapter = adapterDishes
+            restaurantCuisinesList.adapter = adapterCuisines
+        }
     }
 
     private fun initObservers() {
         viewModel.restaurantData.observe(viewLifecycleOwner, {
             handleRestaurantData(it)
         })
-        viewModel.restaurantFullData.observe(viewLifecycleOwner,{
+        viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
         })
-        viewModel.deliveryTiming.observe(viewLifecycleOwner,{
+        viewModel.deliveryTiming.observe(viewLifecycleOwner, {
             handleDeliveryTimingData(it)
         })
-        viewModel.dishesList.observe(viewLifecycleOwner,{
+        viewModel.dishesList.observe(viewLifecycleOwner, {
             handleDishesList(it)
         })
     }
 
     private fun handleDishesList(dishSections: List<DishSections>?) {
-        adapter.submitList(dishSections)
+        adapterDishes?.submitList(dishSections)
     }
 
     private fun getDishesAdapterListener(): DishesMainAdapter.RestaurantPageMainAdapterListener =
-        object: DishesMainAdapter.RestaurantPageMainAdapterListener{
-
+        object : DishesMainAdapter.RestaurantPageMainAdapterListener {
         }
 
     private fun handleDeliveryTimingData(datesList: List<RestaurantPageViewModel.DeliveryDate>?) {
-        datesList?.let{
-            with(binding.restaurantMainListLayout){
+        datesList?.let {
+            with(binding.restaurantMainListLayout) {
                 restaurantDeliveryTiming.initDates(it)
                 restaurantDeliveryTiming.onDateChangeListener()
             }
@@ -103,17 +109,28 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
         }
     }
 
-    private fun handleRestaurantFullData(restaurant: Restaurant){
+    private fun handleRestaurantFullData(restaurant: Restaurant) {
         with(binding) {
-            Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
+            //Cover photo/video
+            if (restaurant.video.isNullOrEmpty()) {
+                Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
+            } else {
+                handleVideoCover(restaurant.video)
+            }
         }
-        with(binding.restaurantMainListLayout){
+        with(binding.restaurantMainListLayout) {
+            //Description
             restaurantDescription.text = restaurant.about
-            val adapter= RPAdapterCuisine()
-            adapter.submitList(restaurant.cuisines)
-            restaurantCuisinesList.adapter = adapter
-            restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
+            handleReadMoreButton()
 
+            //Cuisines
+            adapterCuisines?.submitList(restaurant.cuisines)
+            restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
+        }
+    }
+
+    private fun handleReadMoreButton() {
+        with(binding.restaurantMainListLayout) {
             restaurantDescriptionViewMore.setOnClickListener {
                 if (restaurantDescription.maxLines == Integer.MAX_VALUE) {
                     restaurantDescription.maxLines = 2
@@ -131,14 +148,38 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
                         val lines = l.lineCount
                         if (lines > 2)
                             restaurantDescriptionViewMore.visibility = View.VISIBLE
-                            restaurantDescription.maxLines = 2
+                        restaurantDescription.maxLines = 2
                     }
                     restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
             })
         }
+    }
+
+    private var player: ExoPlayer? = null
+    private fun handleVideoCover(video: String) {
+        player = SimpleExoPlayer.Builder(requireContext()).build()
+        binding.coverVideo.isVisible = true
+        binding.coverVideo.player = player
+        binding.coverVideo.hideController()
+        val mediaItem = MediaItem.fromUri(video)
+        player?.let { player ->
+            player.setMediaItem(mediaItem)
+            player.playWhenReady = true
+            player.repeatMode = REPEAT_MODE_ALL
+            player.volume = 0f
+            player.prepare()
+        }
 
 
+        //todo : ask if plater should play sound?
+//        binding.coverVideo.setOnClickListener {
+//            if (player?.audioComponent?.volume == 0f) {
+//                (player as SimpleExoPlayer).volume = 1f
+//            } else {
+//                (player as SimpleExoPlayer).volume = 0f
+//            }
+//        }
     }
 
 //    /** All sections click actions **/
@@ -146,6 +187,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
 //        object: RestaurantPageMainAdapter.RestaurantPageMainAdapterListener{
 //
 //        }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapterDishes = null
+        adapterCuisines = null
+        player?.release()
+        player = null
+    }
 
     companion object {
         private const val TAG = "RestaurantPageFragment"

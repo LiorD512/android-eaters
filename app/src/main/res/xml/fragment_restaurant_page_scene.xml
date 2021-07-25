@@ -33,9 +33,9 @@
                             motion:motionTarget="@+id/rating"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
-                            android:alpha="0"
+                            android:alpha="1"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/coverPhoto"/>
+                            motion:motionTarget="@+id/coverOverlay"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
@@ -120,13 +120,12 @@
                 android:layout_marginTop="0dp"
                 android:id="@+id/space" />
         <Constraint
-                android:id="@+id/coverPhoto"
+                android:id="@+id/coverPhotoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 motion:layout_constraintBottom_toTopOf="@id/space"
                 motion:layout_constraintTop_toTopOf="parent"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:alpha="0" />
+                motion:layout_constraintStart_toStartOf="parent" />
 <!--        <Constraint-->
 <!--                android:id="@+id/menuButton"-->
 <!--                motion:layout_constraintEnd_toEndOf="parent"-->
@@ -168,9 +167,17 @@
                 motion:layout_constraintBottom_toTopOf="@id/mainList"
                 motion:layout_constraintStart_toStartOf="parent"
                 android:alpha="0" />
+        <Constraint
+                android:id="@+id/coverOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                motion:layout_constraintBottom_toTopOf="@id/space"
+                android:alpha="1"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/overScroll" >
+<!--    <ConstraintSet android:id="@+id/overScroll" >-->
 <!--        <Constraint-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="1dp"-->
@@ -178,6 +185,6 @@
 <!--                motion:layout_constraintStart_toStartOf="parent"-->
 <!--                android:layout_marginTop="500dp"-->
 <!--                android:id="@+id/space" />-->
-    </ConstraintSet>
+<!--    </ConstraintSet>-->
 
 </MotionScene>
