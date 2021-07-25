@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderItemDetailsAdapter
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import mva2.adapter.ItemViewHolder
+
 
 
 class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener):
@@ -71,7 +71,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 //        }
 //    }
 
-    inner class TrackOrderDetailsViewHolder(val binding: TrackOrderDetailsSectionBinding) : ItemViewHolder<OrderTrackDetails>(binding.root) {
+    inner class TrackOrderDetailsViewHolder(val binding: TrackOrderDetailsSectionBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private var sectionHeight = 0
         init {
@@ -127,7 +127,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     private var curOrderStage: Int = 1
-    inner class TrackOrderProgressViewHolder(val binding: TrackOrderProgressSectionBinding) : ItemViewHolder<OrderTrackProgress>(binding.root) {
+    inner class TrackOrderProgressViewHolder(val binding: TrackOrderProgressSectionBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItems(orderItem: OrderTrackProgress) {
             val order = orderItem.order
             order?.let {

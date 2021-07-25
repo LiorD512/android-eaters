@@ -186,7 +186,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         }
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
 

@@ -112,7 +112,7 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
         }
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
 }

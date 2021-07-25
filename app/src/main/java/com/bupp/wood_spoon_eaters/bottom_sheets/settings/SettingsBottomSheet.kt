@@ -85,7 +85,7 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
         binding.settingsFragLocationSwitch.jumpDrawablesToCurrentState()
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
 

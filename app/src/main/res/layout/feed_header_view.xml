@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:elevation="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:background="@color/white">
+
+    <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:paddingStart="15.4dp"
+            android:paddingEnd="7.7dp"
+            android:src="@drawable/ic_location_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/feedHeaderAddress"
+            style="@style/LatoBold13Teal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="828 Broadway, New York" />
+
+    <ImageView
+            android:id="@+id/feedHeaderAddressArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="6dp"
+            android:src="@drawable/ic_arrow_down_teal"
+            app:layout_constraintBottom_toBottomOf="@+id/feedHeaderAddress"
+            app:layout_constraintStart_toEndOf="@+id/feedHeaderAddress"
+            app:layout_constraintTop_toTopOf="@+id/feedHeaderAddress" />
+
+    <TextView
+            android:id="@+id/feedHeaderDate"
+            style="@style/LatoBold13Teal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="7.7dp"
+            android:text="When"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/feedHeaderDateArrow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/feedHeaderDateArrow"
+            android:paddingEnd="15.4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="6dp"
+            android:src="@drawable/ic_arrow_down_teal"
+            app:layout_constraintBottom_toBottomOf="@+id/feedHeaderDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/feedHeaderDate" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

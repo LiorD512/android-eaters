@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
@@ -35,6 +36,11 @@ fun Context.showKeyboard(context: Context) {
         InputMethodManager.SHOW_FORCED,
         InputMethodManager.HIDE_IMPLICIT_ONLY
     )
+}
+
+fun IntRange.convert(number: Int, target: IntRange): Int {
+    val ratio = number.toFloat() / (endInclusive - start)
+    return (ratio * (target.last - target.first)).toInt()
 }
 
 fun Activity.updateScreenUi(){
@@ -75,4 +81,21 @@ fun NavController.navigateSafe(
     if (action != null && currentDestination?.id != action.destinationId) {
         navigate(resId, args, navOptions, navExtras)
     }
+}
+
+inline fun View.waitForLayout(crossinline funAction: () -> Unit) {
+    val vto = viewTreeObserver
+    vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            when {
+                vto.isAlive -> {
+                    vto.removeOnGlobalLayoutListener(this)
+                    funAction()
+                }
+                else -> {
+                    funAction()
+                }
+            }
+        }
+    })
 }

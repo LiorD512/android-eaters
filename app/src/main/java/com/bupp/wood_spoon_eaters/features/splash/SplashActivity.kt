@@ -147,7 +147,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
     override fun onResume() {
         super.onResume()
-        updateScreenUi()
+//        updateScreenUi()
     }
 
     companion object{

@@ -4,14 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapter
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.databinding.FavoriteBtnBinding
 import com.bupp.wood_spoon_eaters.databinding.MultiSectionFeedViewBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ShareBanner
@@ -151,7 +148,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun initShareCampaign(campaign: Campaign){
-        binding.multiSectionViewShareBanner.initCustomBanner(campaign, this)
+        binding.multiSectionViewShareBanner.initCustomBannerByCampaign(campaign, this)
     }
 
     override fun onShareBannerClick(campaign: Campaign?) {

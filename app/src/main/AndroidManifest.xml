@@ -57,7 +57,7 @@
 <!--                android:exported="true">-->
 <!--            <intent-filter>-->
 <!--                <action android:name="com.android.vending.INSTALL_REFERRER" />-->
-<!--            </intent-filter>-->
+<!--            </intent-filter>-->R
 <!--        </receiver>-->
 
         <service

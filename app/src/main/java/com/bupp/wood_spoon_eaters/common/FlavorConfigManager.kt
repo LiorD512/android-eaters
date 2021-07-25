@@ -11,35 +11,51 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         const val DEFAULT_STAGING_ENVIROMENT = FlavorConfig.BASE_URL
         const val TAG = "wowFlavorConfigManager"
         const val SYSTEM_ENVIRONMENT = "system_environment"
+        const val CUSTOM_BASE_URL = "custom_base_url"
     }
 
     val CURRENT_USR_COUNTRY = "cur_usr_country"
 
-    var curEnvironment: String
-        get() = sharedPreferences.getString(SYSTEM_ENVIRONMENT, "")!!
+    var curEnvironment: String?
+        get() = sharedPreferences.getString(SYSTEM_ENVIRONMENT, null)
         set(curEnvironment){
             sharedPreferences.edit().putString(SYSTEM_ENVIRONMENT, curEnvironment).commit()
+        }
+
+    var curBaseUrl: String?
+        get() = sharedPreferences.getString(CUSTOM_BASE_URL, FlavorConfig.BASE_URL)
+        set(curEnvironment){
+            sharedPreferences.edit().putString(CUSTOM_BASE_URL, curEnvironment).commit()
         }
 
 
     fun setEnvironment(env: String) {
         Log.d(TAG, "environment end point branch: $env")
         this.curEnvironment = env
-//        RetrofitUrlManager.getInstance().setGlobalDomain(getBaseUrl())
+    }
+
+    fun setBaseUrl(baseUrl: String) {
+        Log.d(TAG, "setBaseUrl: $baseUrl")
+        this.curBaseUrl = baseUrl
     }
 
     fun getBaseUrl(): String {
-        val baseUrl = if(curEnvironment.isNotEmpty()){
-            "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v1/"
+        var finalUrl = ""
+        if(curBaseUrl?.isNotEmpty() == true){
+            finalUrl = curBaseUrl!!
         }else{
-            FlavorConfig.BASE_URL
+             if(curEnvironment?.isNotEmpty() == true){
+                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v1/"
+            }else{
+                FlavorConfig.BASE_URL
+            }
+            Log.d(TAG, "getBaseUrl: $finalUrl")
         }
-        Log.d(TAG, "getBaseUrl: $baseUrl")
-        return baseUrl
+        return finalUrl
     }
 
     fun getEnvName(): String{
-        if (curEnvironment.isNotEmpty()){
+        if (curEnvironment?.isNotEmpty() == true){
             return "(pr-$curEnvironment)"
         }
         return ""

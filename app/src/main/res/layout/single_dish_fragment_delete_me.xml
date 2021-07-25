@@ -61,8 +61,8 @@
                                             android:layout_gravity="bottom"
                                             android:layout_marginBottom="22dp"
                                             app:ci_animator="@anim/circle_indicator_anim"
-                                            app:ci_drawable="@drawable/vp_indicator_selected"
-                                            app:ci_drawable_unselected="@drawable/vp_indicator_unselected"
+                                            app:ci_drawable="@drawable/vp_dark_indicator_selected"
+                                            app:ci_drawable_unselected="@drawable/vp_dark_indicator_unselected"
                                             app:ci_gravity="center"
                                             app:ci_height="10dp"
                                             app:ci_width="10dp" />

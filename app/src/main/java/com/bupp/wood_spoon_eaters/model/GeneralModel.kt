@@ -99,7 +99,8 @@ data class AppSetting(
 )
 
 enum class CloudinaryTransformationsType{
-    SMALL, MEDIUM, LARGE
+    @Json(name = "small") SMALL,
+    MEDIUM, LARGE
 }
 
 @JsonClass(generateAdapter = true)
@@ -107,7 +108,8 @@ data class CloudinaryTransformations(
     var keyValueMap: Map<CloudinaryTransformationsType, String>?
 ){
     fun getByType(type: CloudinaryTransformationsType): String?{
-        return keyValueMap?.get(type.name.toLowerCase())
+        //todo - Amitt! check this !
+        return keyValueMap?.get(type)
     }
 }
 

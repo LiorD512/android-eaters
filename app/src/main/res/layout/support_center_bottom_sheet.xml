@@ -14,7 +14,7 @@
             android:id="@+id/supportDialogHeader"
             app:isWithSep="true"
             app:title="Support center"
-            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
     <View
             android:layout_width="match_parent"

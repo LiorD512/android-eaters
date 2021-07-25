@@ -47,11 +47,13 @@ interface ApiService {
 //        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
 //    ): ServerResponse<List<FeedFlow>>
 
-    @GET("eaters/me/feed")
+//    @GET("eaters/me/feed")
+    @GET
     suspend fun getFeed(
+        @Url url: String,
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): ServerResponse<List<Feed>>
+    ): ServerResponse<FeedResult>
 
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
@@ -98,6 +100,9 @@ interface ApiService {
 
     @POST("eaters/me")
     suspend fun postEaterNotificationGroup(@Body eater: SettingsRequest): ServerResponse<Eater>
+
+    @DELETE("eaters/me")
+    suspend fun deleteMe(): ServerResponse<Any>
 
     @FormUrlEncoded
     @POST("eaters/me")

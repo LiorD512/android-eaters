@@ -45,6 +45,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+            app:hint="CHANGE BASE API CALL"
+            app:inputType="NUMBER"
+            android:paddingHorizontal="15.4dp"
+            android:paddingVertical="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:id="@+id/superUserDialogInputBase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <View
             android:layout_marginHorizontal="15.4dp"
             android:background="@color/silver_20"

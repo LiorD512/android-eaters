@@ -72,6 +72,10 @@
     </style>
 
 
+    <declare-styleable name="WSFeatureProgressBar">
+        <attr name="stepsCount" format="integer"/>
+    </declare-styleable>
+
 
     //fonts and colors
 
@@ -119,6 +123,11 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoBold15DarkGrey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
     <style name="LatoReg11Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">11.5sp</item>
@@ -139,15 +148,35 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoReg15DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
     <style name="LatoReg15Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoReg13DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+    <style name="LatoReg13White">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
     <style name="LatoReg13Dark">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg13NobelGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/nobel_grey</item>
     </style>
     <style name="LatoReg13MediumGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
@@ -199,9 +228,29 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
+    <style name="LatoBlack19DarkGrey">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+    <style name="LatoBlack15DarkGrey">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
     <style name="LatoBlack15Dark">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoBlack9White">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="LatoBlack9Dark">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">9.6sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
     <style name="Reg32Dark">
@@ -642,12 +691,34 @@
         <item name="tabTextAppearance">@style/NewOrderTabLayoutTextAppearance</item>
         <item name="tabSelectedTextColor">@color/dark</item>
     </style>
+
     <style name="NewOrderTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/grey_to_black_selector</item>
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="MainActTabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:tabStripEnabled">true</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/MainActTabLayoutTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/dark</item>
+    </style>
+    <style name="MainActTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/purpley_grey_two_to_dark_selector</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="roundedCorners7ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">7.7dp</item>
+    </style>
+
+    <style name="roundedCorners13ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">13.4dp</item>
+    </style>
 
     <color name="medium_grey">#929092</color>
 </resources>

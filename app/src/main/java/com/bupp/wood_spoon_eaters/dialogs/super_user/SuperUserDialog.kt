@@ -46,6 +46,9 @@ class SuperUserDialog : DialogFragment() {
             superUserDialogBtn.setOnClickListener {
                 val input = superUserDialogInput.getText()
                 input?.let { it1 -> updateEnv(it1) }
+
+                val baseUrlInput = superUserDialogInput.getText()
+                baseUrlInput?.let { it1 -> updateBaseUrl(it1) }
             }
             superUserDialogReset.setOnClickListener {
                 updateEnv("")
@@ -59,6 +62,12 @@ class SuperUserDialog : DialogFragment() {
     private fun updateEnv(env: String){
         Log.d(TAG, "updateEnv with $env")
         viewModel.setEnvironment(env)
+        listener?.onEnvironmentChanged(true)
+    }
+
+    private fun updateBaseUrl(baseUrl: String){
+        Log.d(TAG, "updateBaseUrl with $baseUrl")
+        viewModel.updateBaseUrl(baseUrl)
         listener?.onEnvironmentChanged(true)
     }
 
