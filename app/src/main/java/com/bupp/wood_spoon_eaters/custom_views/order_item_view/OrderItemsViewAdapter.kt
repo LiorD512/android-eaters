@@ -65,7 +65,7 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
             }
             val priceStr = DecimalFormat("##.##").format(price)
 //            priceView.text = "$$priceStr"
-            name.text = "${dish.name} $$priceStr"
+            name.text = "${dish.name}, $$priceStr"
 
             ingredientsList.layoutManager = LinearLayoutManager(context)
             adapter = IngredientsCheckoutAdapter(context, listOfNotNull(orderItem.getRemovedIngredients(), orderItem.getNoteStr()))

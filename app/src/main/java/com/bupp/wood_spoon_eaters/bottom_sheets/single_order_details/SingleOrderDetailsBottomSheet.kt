@@ -16,13 +16,15 @@ import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBindi
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
-class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, RateLastOrderDialog.RateDialogListener {
+class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, RateLastOrderDialog.RateDialogListener,
+    WSTitleValueView.WSTitleValueListener {
 
     private val binding: SingleOrderDetailsBottomSheetBinding by viewBinding()
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
@@ -97,6 +99,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
             }
             singleOrderDetailsHeader.setHeaderViewListener(this@SingleOrderDetailsBottomSheet)
+
+            binding.singleOrderDetailsFees.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
         }
     }
 
@@ -106,6 +110,9 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
             handlePb(it)
+        })
+        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
         })
     }
 
@@ -124,10 +131,17 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
                 }
 
+                singleOrderDetailsTip.setValue(tip?.formatedValue ?: "N/A")
+
                 if (!promoCode.isNullOrEmpty()) {
                     singleOrderDetailsPromoCode.visibility = View.VISIBLE
                     singleOrderDetailsPromoCode.setTitle("Promo code $promoCode")
                     singleOrderDetailsPromoCode.setValue("(${discount?.formatedValue?.replace("-", "")})")
+                }
+
+                if(status == "cancelled"){
+                    singleOrderDetailsRate.isEnabled = false
+                    singleOrderDetailsRate.alpha = 0.5f
                 }
 
                 var feeAndTax = 0.0
@@ -172,12 +186,16 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         }
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
 
     override fun onRatingDone(isSuccess: Boolean) {
         viewModel.initSingleOrder(curOrderId)
+    }
+
+    override fun onCustomToolTipClick() {
+        viewModel.onFeesAndTaxInfoClick()
     }
 
 //    override fun onAttach(context: Context) {

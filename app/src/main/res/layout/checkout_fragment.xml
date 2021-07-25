@@ -194,7 +194,7 @@
                         android:id="@+id/checkoutFragFees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tip_type="CHECKOUT_MINIMUM_FEE"
+                        app:tip_type="CUSTOM_CLICK"
                         app:title="Fees &amp; Estimated tax" />
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView

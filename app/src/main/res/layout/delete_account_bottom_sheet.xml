@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isWithSep="true"
+            android:id="@+id/deleteAccountHeader"
+            app:title="Delete account"
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle_50" />
+
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <ImageView
+                        android:layout_marginTop="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/illus_trash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:layout_marginHorizontal="15.4dp"
+                        android:gravity="center"
+                        android:layout_marginTop="45dp"
+                        style="@style/LatoReg15Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        android:lineSpacingExtra="7.7sp"
+                        android:text="You will no longer be able to log in to WoodSpoon with this account and will lose your account information."/>
+
+                <TextView
+                        android:layout_marginHorizontal="23dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginBottom="35dp"
+                        style="@style/LatoReg15Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.03"
+                        android:lineSpacingExtra="7.7sp"
+                        android:text="Are you sure you want to delete your account?"/>
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        app:title="Yes, delete account"
+                        app:makeItRed="true"
+                        android:id="@+id/deleteAccountBtn"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginBottom="15.4dp"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+</LinearLayout>

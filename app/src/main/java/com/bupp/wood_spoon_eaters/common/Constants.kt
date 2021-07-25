@@ -5,6 +5,11 @@ import android.Manifest
 class Constants {
     companion object {
 
+        const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
+        const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
+        const val RESTAURANT_SECTION_TYPE_DISH = "dish"
+        const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
+
         //feed banners
         const val NO_BANNER = -1
         const val BANNER_NO_GPS = 0
@@ -119,6 +124,7 @@ class Constants {
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
         const val TOOL_TIP_MINMUM_ORDER_FEE = 4
         const val TOOL_TIP_COURIER_TIP = 5
+        const val TOOL_TIP_CUSTOM_CLICK = 6
 
         //status bottom bar types
         const val CART_BOTTOM_BAR_TYPE_CART = 0
@@ -155,7 +161,6 @@ class Constants {
         const val LOCATION_CHOOSER_TAG = "location_chooser_tag"
         const val PICK_FILTERS_TAG = "pick_filters_tag"
         const val MY_PROFILE_TAG = "my_profile_tag"
-        const val EDIT_MY_PROFILE_TAG = "edit_my_profile_tag"
         const val NO_LOCATIONS_AVAILABLE_TAG = "no_locations_available_tag"
 
         const val GET_EVENT_TAG = "get_event_tag"
@@ -217,13 +222,15 @@ class Constants {
         const val WEB_DOCS_BOTTOM_SHEET = "web_docs_dialog_bottom_sheet"
         const val LOCATION_PERMISSION_BOTTOM_SHEET = "location_permission_bottom_sheet"
         const val CAMPAIGN_BOTTOM_SHEET = "campaign_bottom_sheet"
-        const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val SETTINGS_BOTTOM_SHEET = "settings_bottom_sheet"
         const val SUPPORT_CENTER_BOTTOM_SHEET = "support_center_bottom_sheet"
         const val JOIN_AS_CHEF_BOTTOM_SHEET = "join_as_chef_bottom_sheet"
         const val SINGLE_ORDER_DETAILS_BOTTOM_SHEET = "single_order_details_bottom_sheet"
         const val REPORT_ISSUE_BOTTOM_SHEET = "report_issue_bottom_sheet"
         const val FREE_TEXT_BOTTOM_SHEET = "free_text_bottom_sheet"
+        const val DELETE_ACCOUNT_BOTTOM_SHEET = "delete_account_bottom_sheet"
+        const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
+        const val FEES_AND_tAX_BOTTOM_SHEET = "fees_and_tax_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"
@@ -315,6 +322,7 @@ class Constants {
         const val EVENT_SEND_OTP = "send_otp"
         const val EVENT_VERIFY_OTP = "verify_otp"
         const val EVENT_CREATE_ACCOUNT = "create_account"
+        const val EVENT_CAMPAIGN_INVITE = "campaign_invite"
         const val EVENT_TIP = "tip"
         const val EVENT_LOCATION_PERMISSION = "location_persuasion"
 

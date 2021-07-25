@@ -92,16 +92,14 @@
 
     </LinearLayout>
 
-
-
     <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:paddingEnd="7.7dp"
             android:id="@+id/orderItemPlusMinus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

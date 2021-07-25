@@ -23,7 +23,7 @@ import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
-import com.bupp.wood_spoon_eaters.features.main.profile.edit_my_profile.EditMyProfileViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
@@ -114,7 +114,7 @@ val appModule = module {
 
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get()) }
@@ -130,7 +130,7 @@ val appModule = module {
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { EditMyProfileViewModel(get(), get(), get()) }
+    viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get()) }
     viewModel { OrdersHistoryViewModel(get()) }
 

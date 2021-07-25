@@ -10,8 +10,10 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
-    private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager): ViewModel()  {
+    private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager): ViewModel()  {
 
 //    val progressData = ProgressData()
 
@@ -363,11 +365,11 @@ class MainViewModel(
         return metaDataRepository.getContactUsTextNumber()
     }
 
-    fun test() {
-        val cloudinery = metaDataRepository.getCloudinaryTransformations()
-        val large = cloudinery?.getByType(CloudinaryTransformationsType.LARGE)
-        Log.d(TAG, "coudirery: $cloudinery")
-    }
+//    fun test() {
+//        val cloudinery = metaDataRepository.getCloudinaryTransformations()
+//        val large = cloudinery?.getByType(CloudinaryTransformationsType.LARGE)
+//        Log.d(TAG, "coudirery: $cloudinery")
+//    }
 
     fun onUserImageClick() {
         mainNavigationEvent.postValue(MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE)
@@ -398,6 +400,14 @@ class MainViewModel(
         val shareUrl = campaign?.shareUrl
         val shareText = campaign?.shareText ?: ""
         shareEvent.postValue("$shareText \n $shareUrl")
+        eventsManager.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
+    }
+
+    fun deleteAccount(){
+        viewModelScope.launch {
+            userRepository.deleteAccount()
+            logout()
+        }
     }
 
     fun logout() {
@@ -405,6 +415,17 @@ class MainViewModel(
         if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
             mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
         }
+    }
+
+    val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
+    fun onMediaUtilsResultSuccess(result: MediaUtils.MediaUtilResult) {
+        //use this liveData when using MediaUtils out side of MainActivity scope (for example - EditProfileBottomSheet)
+        mediaUtilsResultLiveData.postValue(result)
+    }
+
+     val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
+    fun onFloatingCartStateChanged(isShowing: Boolean) {
+        onFloatingBtnHeightChange.postValue(isShowing)
     }
 
 

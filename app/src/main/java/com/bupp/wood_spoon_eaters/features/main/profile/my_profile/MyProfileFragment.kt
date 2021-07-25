@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
@@ -10,12 +11,13 @@ import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bupp.wood_spoon_eaters.bottom_sheets.delete_account.DeleteAccountBottomSheet
 import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.CuisinesChooserDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
@@ -40,6 +42,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     val binding: MyProfileFragmentBinding by viewBinding()
     private val viewModel by viewModel<MyProfileViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
+
+    private lateinit var editProfileBS: EditProfileBottomSheet
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -132,7 +136,10 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
         })
         mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.myProfileFragAddress.handleAddressData(it)
+            binding.myProfileFragAddress.updateDeliveryFullDetails(it.address)
+        })
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+            binding.myProfileFragHeightCorrection.isVisible = isVisible
         })
     }
 
@@ -141,7 +148,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             campaign.viewTypes?.forEach { viewType ->
                 when (viewType) {
                     CampaignViewType.PROFILE -> {
-                        binding.myProfileFragShareBanner.initCustomBanner(campaign, this)
+                        binding.myProfileFragShareBanner.initCustomBannerByCampaign(campaign, this)
                     }
                 }
             }
@@ -151,7 +158,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     private fun initClicks() {
         with(binding) {
-            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }
+//            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }//todo - fix this feed 2.0
 
             myProfileFragAddress.setOnClickListener {
                 mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
@@ -169,11 +176,13 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 JoinAsChefBottomSheet().show(childFragmentManager, Constants.JOIN_AS_CHEF_BOTTOM_SHEET)
             }
 
-            myProfileFragOrderHistory.setOnClickListener { openOrderHistoryDialog() }
-
             myProfileFragLogout.setOnClickListener {
                 LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
             }
+            myProfileFragDeleteAccount.setOnClickListener {
+                DeleteAccountBottomSheet().show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
+            }
+            myProfileFragEditAccount.setOnClickListener { onUserImageClick(null) }
             myProfileFragAddress.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragPayment.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragAddress.setChangeable(true)
@@ -202,7 +211,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     private fun openOrderHistoryDialog() {
-        (activity as MainActivity).loadOrderHistoryFragment()
+        //remove this
     }
 
     override fun onCustomDetailsClick(type: Int) {
@@ -252,7 +261,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     override fun onUserImageClick(cook: Cook?) {
-        (activity as MainActivity).loadEditMyProfile()
+        editProfileBS = EditProfileBottomSheet()
+        editProfileBS.show(childFragmentManager, Constants.EDIT_PROFILE_BOTTOM_SHEET)
     }
 
     companion object {

@@ -28,6 +28,11 @@ class DeliveryTimeManager {
         tempDeliveryTimeStamp = DateUtils.parseUnixTimestamp(tempDate)
     }
 
+    fun clearDeliveryTime(){
+        tempDeliveryTimeStamp = null
+//        setNewDeliveryTime(null)
+    }
+
     fun getDeliveryTimeDate(): Date? {
         deliveryTime?.let{
             return it

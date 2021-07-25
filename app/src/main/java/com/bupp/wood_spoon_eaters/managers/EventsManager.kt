@@ -184,6 +184,9 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                 Analytics.with(context).track(Constants.EVENT_CREATE_ACCOUNT, eventData)
                 logFBCreateAccount(params)
             }
+            Constants.EVENT_CAMPAIGN_INVITE -> {
+                Analytics.with(context).track(Constants.EVENT_CAMPAIGN_INVITE, eventData)
+            }
             else -> {
                 Analytics.with(context).track(eventName, eventData)
             }

@@ -224,6 +224,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                 }
             }
             val bounds = builder.build()
+
             //change mechnic to monig map by scroll and target bound on the courer or chef location
             animateCamera(bounds)
             binding.addressMapFragPb.hide()

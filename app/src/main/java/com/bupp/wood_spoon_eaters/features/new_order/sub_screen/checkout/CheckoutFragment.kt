@@ -19,10 +19,12 @@ import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -37,7 +39,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     HeaderView.HeaderViewListener, OrderDateChooserDialog.OrderDateChooserDialogListener,
     ClearCartDialog.ClearCartDialogListener,
     OrderUpdateErrorDialog.UpdateErrorDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView.OrderItemsListener {
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView2.OrderItemsListener,
+    WSTitleValueView.WSTitleValueListener, OrderItemsView.OrderItemsListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
 
@@ -84,6 +87,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 setEmptyPaymentMethod()
             }
         }
+        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+        })
         mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
             if (emptyCartEvent) {
                 ClearCartDialog(this@CheckoutFragment).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
@@ -133,6 +139,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragHeaderView.setHeaderViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
 
             checkoutFragPromoCode.setOnClickListener {
@@ -250,6 +257,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragFees.setValue("$$feeAndTaxStr")
 
 
+
             checkoutFragDeliveryFee.setValue("$$deliveryFee")
 
 
@@ -329,5 +337,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onAddBtnClicked() {
         mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH)
+    }
+
+    override fun onCustomToolTipClick() {
+        viewModel.onFeesAndTaxInfoClick()
     }
 }

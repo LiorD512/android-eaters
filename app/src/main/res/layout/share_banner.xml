@@ -3,13 +3,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
+            app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
             android:id="@+id/customBannerLayout"
             android:layout_width="match_parent"
-            android:layout_height="179dp"
+            android:layout_height="199dp"
             android:visibility="gone"
             app:cardElevation="8dp"
             app:cardCornerRadius="7.7dp"
@@ -24,11 +25,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-            <ImageView
-                    android:scaleType="fitXY"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/banner_overlay" />
+<!--            <ImageView-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:src="@drawable/banner_overlay" />-->
 
             <TextView
                     android:layout_marginHorizontal="15.4dp"
@@ -41,8 +42,6 @@
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"
                     android:lineSpacingExtra="3.8sp"
-                    android:shadowColor="#cc000000"
-                    android:shadowRadius="6"
                     tools:text="Get 30% off your next order" />
 
             <TextView
@@ -55,8 +54,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"
-                    android:shadowColor="#cc000000"
-                    android:shadowRadius="6"
                     tools:text="Invite your friends to try WoodSpoon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

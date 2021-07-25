@@ -88,6 +88,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
             handleMinus(true)
         }
+        handleMinus(true)
+        handlePlus(true)
     }
 
     private fun handlePlus(isEnabled: Boolean){

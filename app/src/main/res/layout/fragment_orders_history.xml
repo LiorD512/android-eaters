@@ -33,6 +33,10 @@
 
     </FrameLayout>
 
-
+    <View
+            android:visibility="gone"
+            android:id="@+id/orderHistoryFragHeightCorrection"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/floating_cart_btn_height"/>
 
 </LinearLayout>

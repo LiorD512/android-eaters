@@ -10,10 +10,6 @@ interface EaterDataRepositoryInterface{
     suspend fun getFavorites(feedRequest: FeedRequest): ResultHandler<ServerResponse<Search>>
     suspend fun getTrigger(): ResultHandler<ServerResponse<Trigger>>
     suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Any>>
-//    suspend fun checkForCampaigns(): ResultHandler<ServerResponse<List<Campaign>>>
-//    suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>>
-//    suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus): ResultHandler<ServerResponse<Any>>
-
 }
 
 class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataRepositoryInterface {
@@ -30,18 +26,5 @@ class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataReposi
     override suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Any>> {
         return safeApiCall { service.cancelOrder(orderId, note) }
     }
-
-//    override suspend fun checkForCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
-//        return safeApiCall { service.getUserCampaign() }
-//    }
-//
-//    override suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>> {
-//        return safeApiCall { service.validateReferralToken(token) }
-//    }
-//
-//    override suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus): ResultHandler<ServerResponse<Any>> {
-//        return safeApiCall { service.updateCampaignStatus(userInteractionId, status.name.toLowerCase()) }
-//    }
-
 
 }

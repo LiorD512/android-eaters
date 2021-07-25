@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <View
+                    android:layout_width="77dp"
+                    android:layout_height="4.8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="7.7dp"
+                    android:background="@drawable/silver_two_rounded_rect" />
+
+            <TextView
+                    style="@style/LatoBlack15Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="17.5dp"
+                    android:layout_marginBottom="23.3dp"
+                    android:gravity="center_horizontal"
+                    android:letterSpacing="0.03"
+                    android:text="Anything else?" />
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1.9dp"
+                    android:background="@color/silver" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/upSaleList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                    android:id="@+id/upSaleBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:layout_marginBottom="15.4dp"
+                    app:title="No thanks" />
+
+        </LinearLayout>
+

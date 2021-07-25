@@ -21,6 +21,7 @@ class FeedViewModel(
     val progressData = ProgressData()
 
     fun initFeed(){
+        feedSkeletonEvent.postValue(getSkeletonItems())
         feedDataManager.initFeedDataManager()
 
         viewModelScope.launch {
@@ -61,10 +62,12 @@ class FeedViewModel(
         refreshFavorites()
     }
 
-    val feedResultData: MutableLiveData<OldFeedEvent> = MutableLiveData()
-    data class OldFeedEvent(val isSuccess: Boolean = false, val feedArr: List<Feed>?)
+    val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
+    val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
+    data class FeedLiveData(val feedData: List<FeedAdapterItem>?)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
+            feedSkeletonEvent.postValue(getSkeletonItems())
             viewModelScope.launch {
                 progressData.startProgress()
                 val feedRepository = feedRepository.getFeed(feedRequest)
@@ -81,7 +84,8 @@ class FeedViewModel(
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getFeedWith - Success")
-                        feedResultData.postValue(OldFeedEvent(true, feedRepository.feed))
+                        feedResultData.postValue(FeedLiveData(feedRepository.feed))
+                        progressData.endProgress()
                     }
                     else -> {
                         MTLogger.c(TAG, "getFeedWith - NetworkError")
@@ -93,9 +97,17 @@ class FeedViewModel(
             }
         }else{
             MTLogger.c("wowFeedVM","getFeed setLocationListener")
-            feedResultData.postValue(OldFeedEvent(false,null))
+            feedResultData.postValue(FeedLiveData(null))
             progressData.endProgress()
         }
+    }
+
+    private fun getSkeletonItems(): FeedLiveData? {
+        val skeletons = mutableListOf<FeedAdapterSkeleton>()
+        for(i in 0 until 2){
+            skeletons.add(FeedAdapterSkeleton())
+        }
+        return FeedLiveData(skeletons)
     }
 
     private fun validFeedRequest(feedRequest: FeedRequest): Boolean {

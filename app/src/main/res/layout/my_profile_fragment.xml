@@ -34,7 +34,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-
                 <com.bupp.wood_spoon_eaters.views.UserImageView
                         android:id="@+id/myProfileFragUserImageView"
                         android:layout_width="wrap_content"
@@ -87,17 +86,9 @@
                     android:id="@+id/myProfileFragPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:showSep="false"
                     app:detailsType="DELIVERY_DETAILS_PAYMENT"
                     app:isSelectionGray="true" />
-
-            <com.bupp.wood_spoon_eaters.views.WSLongBtn
-                    app:WSicon="@drawable/icons_orders"
-                    app:showSep="false"
-                    app:title="View your order history here"
-                    android:layout_marginHorizontal="15.4dp"
-                    android:id="@+id/myProfileFragOrderHistory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
 
             <View
                     android:background="@color/grey_white"
@@ -151,14 +142,6 @@
                     android:layout_height="wrap_content"/>
 
             <com.bupp.wood_spoon_eaters.views.WSLongBtn
-                    app:title="Edit my account"
-                    android:layout_marginTop="15.4dp"
-                    android:layout_marginHorizontal="15.4dp"
-                    android:id="@+id/myProfileFragEditAccount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            <com.bupp.wood_spoon_eaters.views.WSLongBtn
                     app:title="Communication settings"
                     android:layout_marginHorizontal="15.4dp"
                     android:id="@+id/myProfileFragSettings"
@@ -181,10 +164,38 @@
 
             <com.bupp.wood_spoon_eaters.views.WSLongBtn
                     app:title="Privacy policy and terms of use"
+                    app:showSep="false"
                     android:layout_marginHorizontal="15.4dp"
                     android:id="@+id/myProfileFragPrivacy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+
+            <View
+                    android:background="@color/grey_white"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"/>
+
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Edit my account"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragEditAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                    app:title="Delete account"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:id="@+id/myProfileFragDeleteAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:id="@+id/myProfileFragVersion"
+                    style="@style/LatoReg13Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginTop="15.4dp" />
 
             <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                     app:title="Sign out"
@@ -196,13 +207,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-            <TextView
-                    android:id="@+id/myProfileFragVersion"
-                    style="@style/LatoReg13Black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginBottom="7.7dp" />
+            <View
+                    android:visibility="gone"
+                    android:id="@+id/myProfileFragHeightCorrection"
+                    android:layout_width="1dp"
+                    android:layout_height="@dimen/floating_cart_btn_height"/>
 
         </LinearLayout>
 

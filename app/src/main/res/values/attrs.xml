@@ -30,6 +30,7 @@
         <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
         <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
         <enum name="CHECKOUT_COURIER_TIP" value="5" />
+        <enum name="CUSTOM_CLICK" value="6" />
     </attr>
 
     <declare-styleable name="WSEditText">
@@ -55,6 +56,10 @@
         <attr name="title" />
         <attr name="body" format="string" />
         <attr name="shouldShowDivider" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="DishTagsView">
+        <attr name="isScrollable" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="WSCounterEditText">

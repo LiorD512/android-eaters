@@ -167,14 +167,6 @@ class MediaUtils(activity: FragmentActivity? = null, listener: MediaUtilListener
     private fun openPhotoGallery() {
         val galleryIntent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryIntent.type = "image/*"
-//        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
-//        galleryIntent.type = "image/*"
-//        val listGallery = activity!!.packageManager.queryIntentActivities(galleryIntent, 0)
-//        val intent = Intent(galleryIntent)
-//        for (res in listGallery) {
-//            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
-//            intent.setPackage(res.activityInfo.packageName)
-//        }
         mediaGalleryLauncher.launch(galleryIntent)
     }
 
