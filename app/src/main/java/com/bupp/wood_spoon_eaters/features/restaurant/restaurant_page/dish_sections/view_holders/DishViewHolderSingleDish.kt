@@ -9,8 +9,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 
 
-class DishViewHolderSingleDish(view: View) : DishesMainAdapter.BaseItemViewHolder(view) {
-    val binding = RestaurantItemDishBinding.bind(view)
+class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.RestaurantPageMainAdapterListener) {
         section as DishSectionSingleDish
@@ -19,7 +18,9 @@ class DishViewHolderSingleDish(view: View) : DishesMainAdapter.BaseItemViewHolde
             dishName.text = section.dish.name
             dishPrice.text = section.dish.getPriceObj()?.formatedValue
             dishDescription.text = section.dish.description
-            dishSeparator.isVisible = !section.hideSeparator
+
+            dishQuantity.text = section.quantity.toString()
+            dishQuantity.isVisible = section.quantity > 0
         }
     }
 

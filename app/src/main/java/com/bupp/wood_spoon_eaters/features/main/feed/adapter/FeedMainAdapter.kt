@@ -16,7 +16,9 @@ import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAd
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterSkeletonViewHolder
 import com.bupp.wood_spoon_eaters.model.*
 
-class FeedMainAdapter : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
+class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
+
+    interface FeedMainAdapterListener: FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener{}
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
 
@@ -55,7 +57,7 @@ class FeedMainAdapter : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(Di
             }
             is FeedAdapterRestaurant -> {
                 holder as FeedAdapterRestaurantViewHolder
-                holder.bindItems(section)
+                holder.bindItems(section,listener)
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder

@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
-import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Restaurant
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import java.util.*
@@ -19,12 +16,13 @@ class RestaurantPageViewModel(
     val feedRepository: FeedRepository,
 ) : ViewModel() {
 
+    var currentSelectedDate: DeliveryDate? = null
+
     val restaurantData = MutableLiveData<Cook>()
     val restaurantFullData = MutableLiveData<Restaurant>()
 
-    data class DeliveryDate(val date: Date, val cookingSlots: MutableList<CookingSlot>)
+    var menuItems: Map<Long, Dish>? = null
     val deliveryTiming = MutableLiveData<List<DeliveryDate>>()
-
     val dishesList = MutableLiveData<List<DishSections>>()
 
     val progressData = ProgressData()
@@ -32,36 +30,23 @@ class RestaurantPageViewModel(
     fun initData(cook: Cook?) {
         cook?.let {
             Log.d(TAG, "cook= $cook")
+            dishesList.postValue(getDishSkeletonItems())
             restaurantData.postValue(it)
             handleFullRestaurantData(getRestaurantData())
         }
     }
 
-    private fun handleFullRestaurantData(restaurant: Restaurant?) {
+    fun handleFullRestaurantData(restaurant: Restaurant?) {
         Log.d(TAG, "Full restaurant= $restaurant")
         restaurant?.let {
             restaurantFullData.postValue(it)
             val restaurantSorted = sortCookingSlotsDishes(it)
             handleDeliveryTimingSection(restaurantSorted)
-            handleDishesSection(restaurantSorted)
         }
     }
 
-    private fun sortCookingSlotsDishes(restaurant: Restaurant): Restaurant {
-        val dishesHash: Map<Long, Dish> = restaurant.dishes.associateBy({ it.id }, { it })
-        restaurant.cookingSlots.forEach { cookingSlot ->
-            val tempHash = dishesHash.toMutableMap()
-            cookingSlot.menuItems?.forEach { menuItem ->
-                dishesHash[menuItem.id]?.let { dish ->
-                    cookingSlot.availableDishes.add(dish)
-                    tempHash.remove(dish.id)
-                }
-            }
-            cookingSlot.unAvailableDishes.addAll(tempHash.values.toList())
-        }
-        return restaurant
-    }
-
+    /** Creating  Delivery date list
+     * Sorting the cooking slots by dates - cooking slot on the same date goes together  **/
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
         val deliveryDates = mutableListOf<DeliveryDate>()
         var currentDate: Date? = null
@@ -78,31 +63,70 @@ class RestaurantPageViewModel(
                 currentDate = cookingSlot.startsAt
             }
         }
-        deliveryTiming.postValue( deliveryDates)
+        currentSelectedDate = deliveryDates.getOrNull(0)
+        deliveryDates.getOrNull(0)?.cookingSlots?.getOrNull(0)?.let { firstCookingSlot ->
+            handleDishesSection(firstCookingSlot)
+        }
+        deliveryTiming.postValue(deliveryDates)
     }
 
-    private fun handleDishesSection(restaurant: Restaurant) {
-        val dishSectionsList = mutableListOf<DishSections>()
-        val currentCookingSlot = restaurant.cookingSlots.getOrNull(1)
-        currentCookingSlot?.let{ cookingSlot->
-            dishSectionsList.add(DishSectionAvailableHeader(""))
-            cookingSlot.availableDishes.forEachIndexed(){ index, dish ->
-                if( index == cookingSlot.availableDishes.size-1){
-                    dishSectionsList.add(DishSectionSingleDish(dish,true))
-                } else {
-                    dishSectionsList.add(DishSectionSingleDish(dish))
+    /** Sorting the cooking slot to **/
+    private fun sortCookingSlotsDishes(restaurant: Restaurant): Restaurant {
+        menuItems = restaurant.dishes.associateBy({ it.id }, { it })
+        menuItems?.let{ menuItems ->
+            restaurant.cookingSlots.forEach { cookingSlot ->
+                val tempHash = menuItems.toMutableMap()
+                cookingSlot.menuItems?.forEach { menuItem ->
+                    menuItems[menuItem.id]?.let { dish ->
+                        cookingSlot.availableDishes.add(dish)
+                        tempHash.remove(dish.id)
+                    }
                 }
-            }
-            dishSectionsList.add(DishSectionUnavailableHeader())
-            cookingSlot.unAvailableDishes.forEachIndexed(){ index, dish ->
-                if( index == cookingSlot.unAvailableDishes.size-1){
-                    dishSectionsList.add(DishSectionSingleDish(dish,true))
-                } else {
-                    dishSectionsList.add(DishSectionSingleDish(dish))
-                }
+                cookingSlot.unAvailableDishes.addAll(tempHash.values.toList())
             }
         }
-       dishesList.postValue(dishSectionsList)
+        return restaurant
+    }
+
+    private fun handleDishesSection(cookingSlot: CookingSlot) {
+        dishesList.postValue(getDishSkeletonItems())
+        val dishSectionsList = mutableListOf<DishSections>()
+        if(cookingSlot.availableDishes.isNotEmpty()){
+            dishSectionsList.add(DishSectionAvailableHeader("Menu Items"))
+        }
+        cookingSlot.availableDishes.forEachIndexed() { index, dish ->
+            if (index == cookingSlot.availableDishes.size - 1) {
+                dishSectionsList.add(DishSectionSingleDish(dish))
+            } else {
+                dishSectionsList.add(DishSectionSingleDish(dish))
+            }
+        }
+        if(cookingSlot.unAvailableDishes.isNotEmpty()){
+            dishSectionsList.add(DishSectionUnavailableHeader())
+        }
+        cookingSlot.unAvailableDishes.forEachIndexed() { index, dish ->
+            if (index == cookingSlot.unAvailableDishes.size - 1) {
+                dishSectionsList.add(DishSectionSingleDish(dish))
+            } else {
+                dishSectionsList.add(DishSectionSingleDish(dish))
+            }
+        }
+        dishesList.postValue(dishSectionsList)
+    }
+
+    private fun getDishSkeletonItems(): List<DishSections> {
+        val skeletons = mutableListOf<DishSectionSkeleton>()
+        for (i in 0 until 4) {
+            skeletons.add(DishSectionSkeleton())
+        }
+        return skeletons
+    }
+
+    fun onDeliveryDateChanged(date: DeliveryDate?) {
+        currentSelectedDate = date
+        date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
+            handleDishesSection(cookingSlot)
+        }
     }
 
     companion object {

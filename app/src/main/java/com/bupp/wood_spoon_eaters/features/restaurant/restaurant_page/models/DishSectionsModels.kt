@@ -1,31 +1,53 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models
 
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType.*
 import com.bupp.wood_spoon_eaters.model.Dish
 
 sealed class DishSections(
-    val viewType: Int
-)
+    val viewType: DishSectionsViewType
+) : SwipeableAdapterItem()
 
 data class DishSectionAvailableHeader(
     val header: String,
-) : DishSections(viewType = 0) {
+    override val dish: Dish? = null,
+    override var quantity: Int = 0,
+) : DishSections(viewType = AVAILABLE_HEADER) {
     companion object {
-        const val viewType = 0
+        val viewType = AVAILABLE_HEADER
     }
 }
 
-class DishSectionUnavailableHeader
- : DishSections(viewType = 1) {
+class DishSectionUnavailableHeader(
+    override val dish: Dish? = null,
+    override var quantity: Int = 0,
+) : DishSections(viewType = UNAVAILABLE_HEADER) {
     companion object {
-        const val viewType = 1
+        val viewType = UNAVAILABLE_HEADER
     }
 }
 
 data class DishSectionSingleDish(
-    val dish: Dish,
-    val hideSeparator: Boolean = false
-) : DishSections(viewType = 2) {
+    override val dish: Dish,
+    override var quantity: Int = 0,
+) : DishSections(viewType = SINGLE_DISH) {
     companion object {
-        const val viewType = 2
+        val viewType = SINGLE_DISH
     }
+}
+
+class DishSectionSkeleton(
+    override val dish: Dish? = null,
+    override var quantity: Int = 0,
+) : DishSections(viewType = SKELETON) {
+    companion object {
+        val viewType = SKELETON
+    }
+}
+
+enum class DishSectionsViewType {
+    AVAILABLE_HEADER,
+    UNAVAILABLE_HEADER,
+    SINGLE_DISH,
+    SKELETON
 }

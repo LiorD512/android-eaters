@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,6 +17,7 @@ import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
@@ -58,14 +60,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         initObservers()
 
         viewModel.initFeed()
-
     }
 
 
     private fun initUi() {
         with(binding){
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
-            feedAdapter = FeedMainAdapter()
+            feedAdapter = FeedMainAdapter(getFeedMainAdapterListener())
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
             feedFragList.adapter = feedAdapter
 
@@ -81,6 +82,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 //            }
         }
     }
+
 
     private fun initObservers() {
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
@@ -142,6 +144,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 //            mainViewModel.checkCampaignForFeed()
 //        })
     }
+    private fun getFeedMainAdapterListener(): FeedMainAdapter.FeedMainAdapterListener =
+        object: FeedMainAdapter.FeedMainAdapterListener {
+            override fun onRestaurantClick(cook: Cook) {
+                startActivity(Intent(requireContext(), RestaurantActivity::class.java)
+                    .putExtra(Constants.ARG_RESTAURANT, cook)
+                )
+            }
+        }
 
     override fun onHeaderAddressClick() {
         mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)

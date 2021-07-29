@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerBinding
 import com.bupp.wood_spoon_eaters.features.main.search.WSRangeTimeViewItemDecorator
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.WSRangeTimePickerHours
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -75,7 +76,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val dates = getDaysFromNow(7)
         dates.let {
             it.forEach {
-                datesAndHours.add(WSRangeTimePickerHours(it, getHoursForDay(it)))
+                datesAndHours.add(WSRangeTimePickerHours(date = it, hours = getHoursForDay(it)))
             }
         }
     }
@@ -140,7 +141,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             it.forEachIndexed { index, date ->
                 val currentMenuItem = menuItems[index]
                 currentMenuItem.cookingSlot?.let{
-                    datesAndHours.add(WSRangeTimePickerHours(dates[index], getHoursForMenuItem(it.orderFrom, it.endsAt)))
+                    datesAndHours.add(WSRangeTimePickerHours(date = dates[index], hours = getHoursForMenuItem(it.orderFrom, it.endsAt)))
                 }
             }
         }
@@ -199,6 +200,31 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
         return null
+    }
+
+
+    fun setDatesByCookingSlots(cookingSlots: List<CookingSlot>) {
+        datesAndHours.clear()
+        val dates = getCookingSlotsDates(cookingSlots)
+        dates.let {
+            it.forEachIndexed { index, date ->
+                val currentCookingSlot = cookingSlots[index]
+                currentCookingSlot?.let{
+                    datesAndHours.add(WSRangeTimePickerHours(title = dates[index].second, dates[index].first, getHoursForMenuItem(it.orderFrom, it.endsAt)))
+                }
+            }
+        }
+        initDateAndHoursUi()
+    }
+
+    private fun getCookingSlotsDates(cookingSlots: List<CookingSlot>): List<Pair<Date, String?>> {
+        val dates = mutableListOf<Pair<Date, String?>>()
+        cookingSlots.forEach { item ->
+            item.orderFrom?.let{
+                dates.add(Pair(it, item.name))
+            }
+        }
+        return dates
     }
 
     companion object {

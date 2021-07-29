@@ -25,7 +25,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
     @SuppressLint("LogNotTimber")
     suspend fun getFeed(feedRequest: FeedRequest): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
-            apiService.getFeed(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
+//            apiService.getFeed(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
+            apiService.getFeed(40.845381, -73.866364, null, feedRequest.timestamp)
         }
         result.let {
             return when (result) {

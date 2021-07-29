@@ -1,31 +1,27 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.MotionEvent
 import android.view.View
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
+import android.view.View.OnTouchListener
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
-import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
-import com.bupp.wood_spoon_eaters.model.FeedAdapterRestaurant
-import com.bupp.wood_spoon_eaters.model.FeedRestaurantItemDish
-import com.bupp.wood_spoon_eaters.model.FeedRestaurantItemSeeMore
-import com.bupp.wood_spoon_eaters.model.FeedRestaurantSectionItem
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
-import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSRangeTimePickerDateAdapter
-import com.google.android.material.tabs.TabLayoutMediator
+
 
 class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAdapterRestaurantItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bindItems(restaurantSection: FeedAdapterRestaurant) {
+    interface FeedAdapterRestaurantViewHolderListener{
+        fun onRestaurantClick(cook: Cook)
+    }
+
+    fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener) {
         Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {
@@ -35,7 +31,15 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
                 feedRestaurantItemRating.text = restaurant.avgRating
 
                 restaurant.items?.let {
-                    val adapter = FeedRestaurantDishPagerAdapter()
+                    root.setOnClickListener{
+                        listener.onRestaurantClick(restaurant.getCook())
+                    }
+                    val pagerListener = object: FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener{
+                        override fun onPageClick() {
+                            listener.onRestaurantClick(restaurant.getCook())
+                        }
+                    }
+                    val adapter = FeedRestaurantDishPagerAdapter(pagerListener)
                     binding.feedRestaurantItemPager.adapter = adapter
                     binding.feedRestaurantItemPager.setPageTransformer(FeedRestaurantDishItemTransformer())
                     adapter.submitList(it)
@@ -46,6 +50,10 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
 
                         AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
                     }
+
+
+
+
 
                     binding.feedRestaurantItemPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                         override fun onPageSelected(position: Int) {
@@ -78,8 +86,4 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
             }
         }
     }
-
-
-
 }
-

@@ -7,52 +7,60 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.utils.Utils
+import timber.log.Timber
 import java.util.*
 import kotlin.math.abs
 
-class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape: Drawable?): RecyclerView.ItemDecoration() {
+class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape: Drawable?, private val decoratedViewType: Int? = null) :
+    RecyclerView.ItemDecoration() {
 
     private val removeIcon = ContextCompat.getDrawable(context, R.drawable.ic_remove)
     private val intrinsicWidth = removeIcon?.intrinsicWidth
     private val intrinsicHeight = removeIcon?.intrinsicHeight
+    
+    init {
+        removeIcon?.alpha = 0
+    }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         var left = parent.width
         var right = 0
         val verticalPadding = Utils.toPx(3)
-        removeShape?.let{
-            parent.adapter?.let{
+        removeShape?.let {
+            parent.adapter?.let {
                 val childCount = Objects.requireNonNull(it).itemCount
                 for (i in 0 until childCount) {
-                    val child = parent.getChildAt(i)
-                    child?.let{
-                        val top = child.top + verticalPadding
-                        val bottom = child.bottom - verticalPadding
+                    if (decoratedViewType == null || it.getItemViewType(i) == decoratedViewType) {
+                        val child = parent.getChildAt(i)
+                        child?.let {
+                            val top = child.top + verticalPadding
+                            val bottom = child.bottom - verticalPadding
 
-                        if(child.translationX == -360f){
-                            child.translationX = 0f
+                            if (child.translationX == -360f) {
+                                child.translationX = 0f
+                            }
+
+                            right = child.width.toInt()
+                            if (child.translationX < 0) {
+                                left = right - abs(child.translationX.toInt())
+                            }
+
+                            removeShape.setBounds(left, top, right, bottom)
+                            removeShape.draw(canvas)
+
+                            val itemHeight = bottom - top
+                            val removeIconTop = top + (itemHeight - intrinsicHeight!!) / 2
+                            val removeIconMargin = abs((child.translationX.toInt()) / 3) - 20
+                            val removeIconLeft = left + removeIconMargin
+                            val removeIconRight = left + removeIconMargin + intrinsicWidth!!
+                            val removeIconBottom = removeIconTop + intrinsicHeight
+                            calcIconAlpha(abs(child.translationX))
+                            // Draw the delete icon
+                            removeIcon?.setBounds(removeIconLeft, removeIconTop, removeIconRight, removeIconBottom)
+                            removeIcon?.draw(canvas)
                         }
-
-                        right = child.width.toInt()
-                        if(child.translationX < 0){
-                            Log.d(TAG, "translationX: ${child.translationX}")
-                            left = right - abs(child.translationX.toInt())
-                        }
-
-                        removeShape.setBounds(left, top, right, bottom)
-                        removeShape.draw(canvas)
-
-                        val itemHeight = bottom - top
-                        val removeIconTop = top + (itemHeight - intrinsicHeight!!) / 2
-                        val removeIconMargin = abs(child.translationX.toInt() / 3)
-                        val removeIconLeft = right - removeIconMargin - intrinsicWidth!!
-                        val removeIconRight = right - removeIconMargin
-                        val removeIconBottom = removeIconTop + intrinsicHeight
-
-                        // Draw the delete icon
-                        removeIcon?.setBounds(removeIconLeft, removeIconTop, removeIconRight, removeIconBottom)
-                        removeIcon?.draw(canvas)
                     }
                 }
             }
@@ -60,8 +68,17 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
         super.onDraw(canvas, parent, state)
     }
 
-    companion object{
-        const val TAG = "wowItemDecorator"
+    private fun calcIconAlpha(translationX: Float){ //225..0
+//        Log.d(TAG,translationX.toString())
+        if (translationX > 0) {
+            if (translationX > intrinsicWidth!!) {
+                removeIcon?.alpha = ((translationX - intrinsicWidth) * 3).toInt()
+            }
+        }
+    }
+
+    companion object {
+        const val TAG = "wowItemDecoratorRemove"
         const val ALPHA_THRESHOLD = 250
     }
 
