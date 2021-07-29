@@ -98,6 +98,14 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
             binding.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
 
+            order.minOrderFee?.value?.let{
+                if(it > 0){
+                    binding.trackOrderDetailsSectionMinOrderFeeTitle.visibility = View.VISIBLE
+                    binding.trackOrderDetailsSectionMinOrderFee.visibility = View.VISIBLE
+                    binding.trackOrderDetailsSectionMinOrderFee.text = order.minOrderFee.formatedValue
+                }
+            }
+
             order.promoCode?.let{
                 binding.trackOrderDetailsSectionPromoCodeLayout.visibility = View.VISIBLE
                 binding.trackOrderDetailsSectionPromoCodeName.text = "Promo code $it"

@@ -114,25 +114,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                 if (it == href) {
                     data?.let { data ->
 //                        Log.d(TAG, "sdsd")
-                        lastFeedDataResult?.sections!![index].collections == data
-//                        data.sections.forEach { collectionItem ->
-//                            section.title?.let {
-//                                feedData.add(FeedAdapterTitle(it))
-//                            }
-//                            section.href?.let {
-//                                feedData.add(FeedAdapterHref(it))
-//                            }
-//                            section.collections?.forEach { collectionItem ->
-//                                when (collectionItem) {
-//                                    is FeedCampaignSection -> {
-//                                        feedData.add(FeedAdapterCoupons(collectionItem))
-//                                    }
-//                                    is FeedRestaurantSection -> {
-//                                        feedData.add(FeedAdapterRestaurant(collectionItem))
-//                                    }
-//                                }
-//                            }
-//                        }
+                        section.href = null
+                        lastFeedDataResult?.sections!![index].collections = data.toMutableList()
                     }
                 }
 

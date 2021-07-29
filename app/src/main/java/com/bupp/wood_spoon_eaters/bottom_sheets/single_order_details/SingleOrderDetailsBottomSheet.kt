@@ -112,7 +112,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
             handlePb(it)
         })
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
         })
     }
 

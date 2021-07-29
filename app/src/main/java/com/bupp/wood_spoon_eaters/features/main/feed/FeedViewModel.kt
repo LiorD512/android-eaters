@@ -7,9 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterCampaignViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterRestaurantViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterSkeletonViewHolder
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterTitleViewHolder
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
@@ -109,31 +106,23 @@ class FeedViewModel(
 
     private fun handleHrefApiCalls(feed: List<FeedAdapterItem>?) {
         viewModelScope.launch {
-            feed?.forEach {
-                if(it is FeedAdapterHref){
-                    it.href?.let{
+            feed?.forEach { feedAdapterItem ->
+                if(feedAdapterItem is FeedAdapterHref){
+                    feedAdapterItem.href?.let{
                         val feedRepository = feedRepository.getFeedHref(it)
                         when (feedRepository.type) {
                             FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
-//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-//                        progressData.endProgress()
                             }
                             FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - GenericError")
-//                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-//                        progressData.endProgress()
                             }
-                            FeedRepository.FeedRepoStatus.SUCCESS -> {
+                            FeedRepository.FeedRepoStatus.HREF_SUCCESS -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - Success")
-                                handleHrefApiCalls(feedRepository.feed)
                                 feedResultData.postValue(FeedLiveData(feedRepository.feed))
-//                        progressData.endProgress()
                             }
                             else -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
-//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-//                        progressData.endProgress()
                             }
                         }
                     }

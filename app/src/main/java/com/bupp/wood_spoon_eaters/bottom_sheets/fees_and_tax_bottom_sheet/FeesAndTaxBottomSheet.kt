@@ -7,25 +7,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeeAndTaxViewModel
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FeesAndTaxBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.FreeTextBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
 
     private lateinit var binding: FeesAndTaxBottomSheetBinding
+    val viewModel by viewModel<FeeAndTaxViewModel>()
 
     companion object {
-        private const val VALUE_ARGS_FEE = "free_text_title"
-        private const val VALUE_ARGS_TAX = "free_text_body"
-        fun newInstance(fee: String?, tax: String?): FeesAndTaxBottomSheet {
+        private const val VALUE_ARGS_FEE = "args_fee"
+        private const val VALUE_ARGS_TAX = "args_tax"
+        private const val VALUE_ARGS_MIN_FEE = "args_min_fee"
+        fun newInstance(fee: String?, tax: String?, minFee: String?): FeesAndTaxBottomSheet {
             return FeesAndTaxBottomSheet().apply {
                 arguments = Bundle().apply {
                     putString(VALUE_ARGS_FEE, fee)
                     putString(VALUE_ARGS_TAX, tax)
+                    putString(VALUE_ARGS_MIN_FEE, minFee)
                 }
             }
         }
@@ -66,7 +71,16 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
             val tax = it.getString(VALUE_ARGS_TAX)
             binding.feesTaxBSFeeTitle.text = "Service fee: $fee"
             binding.feesTaxBSTaxTitle.text = "Estimated tax: $tax"
+            val minOrderFee = it.getString(VALUE_ARGS_MIN_FEE)
+            minOrderFee?.let{
+                binding.feesTaxBSMinFeeSubTitle.visibility = View.VISIBLE
+                binding.feesTaxBSMinFeeTitle.visibility = View.VISIBLE
+                binding.feesTaxBSMinFeeTitle.text = "Minimum order fee: $minOrderFee"
+            }
         }
+
+        val globalMinimumOrderFee = viewModel.getGlobalMinimumFee()
+        binding.feesTaxBSMinFeeSubTitle.text = "To reduce this fee your order value should be bigger than $globalMinimumOrderFee"
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)

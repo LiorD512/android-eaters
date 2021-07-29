@@ -17,7 +17,7 @@ data class FeedSection(
     var id: Long? = null,
     val title: String? = null,
     var href: String? = null,
-    var collections: List<FeedSectionCollectionItem>? = null
+    var collections: MutableList<FeedSectionCollectionItem>? = null
 ): Parcelable
 
 

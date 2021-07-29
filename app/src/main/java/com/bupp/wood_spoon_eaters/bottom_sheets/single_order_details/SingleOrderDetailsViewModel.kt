@@ -44,12 +44,17 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, 
         }
     }
 
-    data class FeesAndTaxData(val fee: String?, val tax: String?)
+    data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
     val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         curOrder?.let{
-            feeAndTaxDialogData.postValue(FeesAndTaxData(it.serviceFee?.formatedValue, it.tax?.formatedValue))
+            var minOrderFee: String? = null
+            it.minOrderFee?.value?.let {
+                if (it > 0) {
+                    minOrderFee = curOrder?.minOrderFee?.formatedValue
+                }
+            }
+            feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder?.serviceFee?.formatedValue, curOrder?.tax?.formatedValue, minOrderFee))
         }
-
     }
 }
