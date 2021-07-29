@@ -126,33 +126,6 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
 
 
 
-//private suspend fun getHrefData(href: String): FeedRepoResult {
-//    val result = withContext(Dispatchers.IO) {
-//        apiService.getHrefCollection(href)
-//    }
-//    result.let {
-//        return when (result) {
-//            is ResultHandler.NetworkError -> {
-//                Log.d(TAG, "getHrefData - NetworkError")
-//                FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
-//            }
-//            is ResultHandler.GenericError -> {
-//                Log.d(TAG, "getHrefData - GenericError")
-//                FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-//            }
-//            is ResultHandler.Success -> {
-//                Log.d(TAG, "getHrefData - Success")
-//                val feedData = processFeedData(result.value.data)
-//                FeedRepoResult(FeedRepoStatus.SUCCESS, feedData)
-//            }
-//            else -> {
-//                Log.d(TAG, "getHrefData - wsError")
-//                FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-//            }
-//        }
-//    }
-//}
-
 suspend fun getCookById(cookId: Long, addressId: Long?, lat: Double?, lng: Double?): CookResult {
     val result = withContext(Dispatchers.IO) {
         apiService.getCookById(cookId, addressId, lat, lng)
