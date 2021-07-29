@@ -95,7 +95,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
                 handleFeedResult(skeletons)
             }
         })
-
+        viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
+            event.feedData?.let { handleFeedResult(it) }
+        })
 
 
 
@@ -118,9 +120,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
             viewModel.refreshFavorites()
         })
-        viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
-                event.feedData?.let { handleFeedResult(it) }
-        })
+
         viewModel.campaignLiveData.observe(viewLifecycleOwner, { campaigns ->
             handleShareCampaign(campaigns)
         })

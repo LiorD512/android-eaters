@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.ShareBannerBinding
-import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
+import com.bupp.wood_spoon_eaters.model.Campaign
+
+//import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
 
 class FeedCouponSectionPagerAdapter :
-    ListAdapter<FeedCampaignSectionItem, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<Campaign, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ShareBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -34,22 +36,22 @@ class FeedCouponSectionPagerAdapter :
         private val title: TextView = binding.customBannerTitle
         private val subTitle: TextView = binding.customBannerSubTitle
 
-        fun bindItem(context: Context, coupon: FeedCampaignSectionItem) {
-            Glide.with(context).load(coupon.thumbnail_url).into(thumbnail)
-            title.text = coupon.title
-            subTitle.text = coupon.subtitle
+        fun bindItem(context: Context, coupon: Campaign) {
+            Glide.with(context).load(coupon.photoLarge).into(thumbnail)
+            title.text = coupon.header
+            subTitle.text = coupon.bodyText1
 
             layout.visibility = View.VISIBLE
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<FeedCampaignSectionItem>() {
+    class DiffCallback : DiffUtil.ItemCallback<Campaign>() {
 
-        override fun areItemsTheSame(oldItem: FeedCampaignSectionItem, newItem: FeedCampaignSectionItem): Boolean {
+        override fun areItemsTheSame(oldItem: Campaign, newItem: Campaign): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: FeedCampaignSectionItem, newItem: FeedCampaignSectionItem): Boolean {
+        override fun areContentsTheSame(oldItem: Campaign, newItem: Campaign): Boolean {
             return oldItem == newItem
         }
     }

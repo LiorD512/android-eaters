@@ -55,6 +55,11 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
     ): ServerResponse<FeedResult>
 
+    @GET
+    suspend fun getHrefCollection(
+        @Url url: String,
+    ): ServerResponse<List<FeedSectionCollectionItem>>
+
     @FormUrlEncoded
     @POST("eaters/me/presigned_urls")
     fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Any>>

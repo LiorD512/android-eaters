@@ -33,17 +33,16 @@ sealed class FeedSectionCollectionItem(
 @JsonClass(generateAdapter = true)
 data class FeedCampaignSection(
     override val href: String?,
-    override val items: List<FeedCampaignSectionItem>?,
+    override val items: List<Campaign>?,
 ): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.COUPONS)
 
-
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class FeedCampaignSectionItem(
-    val title: String?,
-    val subtitle: String?,
-    val thumbnail_url: String?
-): Parcelable
+//@Parcelize
+//@JsonClass(generateAdapter = true)
+//data class FeedCampaignSectionItem(
+//    val title: String?,
+//    val subtitle: String?,
+//    val thumbnail_url: String?
+//): Parcelable
 
 
 @Parcelize
@@ -111,20 +110,26 @@ enum class FeedRestaurantSectionItemViewType{
 }
 
 sealed class FeedAdapterItem(
-    var type: FeedAdapterViewType?
+    var type: FeedAdapterViewType?,
 ): Parcelable
 
 enum class FeedAdapterViewType{
     TITLE,
     COUPONS,
     RESTAURANT,
-    SKELETON
+    SKELETON,
+    HREF
 }
 
 @Parcelize
 data class FeedAdapterSkeleton(
     val id: Long? = null
 ): Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON)
+
+@Parcelize
+data class FeedAdapterHref(
+    val href: String? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.HREF)
 
 @Parcelize
 data class FeedAdapterTitle(

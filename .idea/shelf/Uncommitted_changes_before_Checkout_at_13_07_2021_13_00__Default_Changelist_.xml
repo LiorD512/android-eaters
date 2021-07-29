@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_Checkout_at_13_07_2021_13_00_[Default_Changelist]" date="1626170456555" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_07_2021_13_00_[Default_Changelist]/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 13/07/2021 13:00 [Default Changelist]" />
-  <binary>
-    <option name="BEFORE_PATH" value="app/prodFlavor/release/app-prodFlavor-release.aab" />
-    <option name="AFTER_PATH" value="app/prodFlavor/release/app-prodFlavor-release.aab" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13_07_2021_13_00_[Default_Changelist]/app-prodFlavor-release.aab" />
-  </binary>
-</changelist>
