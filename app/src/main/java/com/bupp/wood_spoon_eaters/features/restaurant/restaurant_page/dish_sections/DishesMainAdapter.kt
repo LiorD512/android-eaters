@@ -4,43 +4,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
+import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderAvailableHeader
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSkeleton
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
 
 class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener) :
-    ListAdapter<DishSections, RecyclerView.ViewHolder>(DiffCallback()) {
+    SwipeableAdapter<DishSections>(DiffCallback()) {
 
     interface RestaurantPageMainAdapterListener {}
 
-    override fun getItemViewType(position: Int): Int = getItem(position).viewType
+    override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): BaseItemViewHolder {
         when (viewType) {
-            DishSectionSingleDish.viewType -> {
-                return DishViewHolderSingleDish(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.restaurant_item_dish, parent, false)
-                )
+            DishSectionSingleDish.viewType.ordinal -> {
+                val binding = RestaurantItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return DishViewHolderSingleDish(binding)
             }
-            DishSectionAvailableHeader.viewType -> {
-                return DishViewHolderAvailableHeader(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.restaurant_item_dishes_header, parent, false)
-                )
+            DishSectionAvailableHeader.viewType.ordinal -> {
+                val binding = RestaurantItemDishesHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return DishViewHolderAvailableHeader(binding)
             }
-            DishSectionUnavailableHeader.viewType -> {
-                return DishViewHolderUnavailableHeader(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.restaurant_item_available_later, parent, false)
-                )
+            DishSectionUnavailableHeader.viewType.ordinal -> {
+                val binding = RestaurantItemAvailableLaterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return DishViewHolderUnavailableHeader(binding)
+            }
+            DishSectionSkeleton.viewType.ordinal ->{
+                val binding = ItemRestaurantDishSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return DishViewHolderSkeleton(binding)
             }
         }
        throw Exception("Specify a ViewHolder for given viewType : viewType = $viewType")
@@ -58,6 +57,10 @@ class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener)
             }
             is DishSectionUnavailableHeader -> {
                 holder as DishViewHolderUnavailableHeader
+                holder.bind(section, listener)
+            }
+            is DishSectionSkeleton -> {
+                holder as DishViewHolderSkeleton
                 holder.bind(section, listener)
             }
         }

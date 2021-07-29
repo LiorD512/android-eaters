@@ -12,6 +12,7 @@ import kotlin.collections.ArrayList
 @JsonClass(generateAdapter = true)
 data class CookingSlot(
     @Json(name = "id") val id: Long,
+    val name: String = "Name",
     @Json(name = "ends_at") val endsAt: Date,
     @Json(name = "starts_at") val startsAt: Date,
     @Json(name = "order_from") val orderFrom: Date,

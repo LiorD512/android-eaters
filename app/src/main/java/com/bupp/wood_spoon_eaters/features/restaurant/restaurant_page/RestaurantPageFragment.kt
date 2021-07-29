@@ -11,13 +11,17 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheetRestaurant
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Restaurant
+import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
@@ -27,7 +31,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
 
-class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
+class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
+    TimePickerBottomSheetRestaurant.TimePickerListener
+{
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -52,16 +59,32 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
             }
             shareButton.setOnClickListener {
                 viewModel.restaurantFullData.value?.shareUrl?.let {
-                    restaurantMainListLayout.shimmerViewContainer.hideShimmer()
-                    restaurantMainListLayout.test.isVisible = true
-                    restaurantMainListLayout.test1.root.isVisible = false
                 }
             }
         }
         with(binding.restaurantMainListLayout) {
             restaurantDishesList.adapter = adapterDishes
             restaurantCuisinesList.adapter = adapterCuisines
+
+            detailsSkeleton.visibility = View.GONE
+            detailsLayout.visibility = View.INVISIBLE
+
+            restaurantTimePicker.setOnClickListener{
+                viewModel.currentSelectedDate?.let{ deliveryDate->
+                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
+                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
+                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+                }
+            }
+            restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
+            adapterDishes?.let{ adapter->
+                restaurantDishesList.initSwipeableRecycler(adapter)
+            }
         }
+    }
+
+    private fun onDeliveryTimingChange(date: DeliveryDate?) {
+        viewModel.onDeliveryDateChanged(date)
     }
 
     private fun initObservers() {
@@ -80,6 +103,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
     }
 
     private fun handleDishesList(dishSections: List<DishSections>?) {
+        binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
         adapterDishes?.submitList(dishSections)
     }
 
@@ -87,7 +111,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
         object : DishesMainAdapter.RestaurantPageMainAdapterListener {
         }
 
-    private fun handleDeliveryTimingData(datesList: List<RestaurantPageViewModel.DeliveryDate>?) {
+    private fun handleDeliveryTimingData(datesList: List<DeliveryDate>?) {
         datesList?.let {
             with(binding.restaurantMainListLayout) {
                 restaurantDeliveryTiming.initDates(it)
@@ -106,6 +130,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
 
             topHeaderRestaurantName.text = "Restaurant name"
             topHeaderChefName.text = "by ${cook.getFullName()}"
+
+
         }
     }
 
@@ -115,7 +141,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
             if (restaurant.video.isNullOrEmpty()) {
                 Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
             } else {
-                handleVideoCover(restaurant.video)
+               //show video icon
             }
         }
         with(binding.restaurantMainListLayout) {
@@ -126,6 +152,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
             //Cuisines
             adapterCuisines?.submitList(restaurant.cuisines)
             restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
+
+            detailsLayout.visibility = View.VISIBLE
+            detailsSkeletonLayout.root.visibility = View.INVISIBLE
         }
     }
 
@@ -155,45 +184,22 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
             })
         }
     }
-
-    private var player: ExoPlayer? = null
-    private fun handleVideoCover(video: String) {
-        player = SimpleExoPlayer.Builder(requireContext()).build()
-        binding.coverVideo.isVisible = true
-        binding.coverVideo.player = player
-        binding.coverVideo.hideController()
-        val mediaItem = MediaItem.fromUri(video)
-        player?.let { player ->
-            player.setMediaItem(mediaItem)
-            player.playWhenReady = true
-            player.repeatMode = REPEAT_MODE_ALL
-            player.volume = 0f
-            player.prepare()
-        }
-
-
-        //todo : ask if plater should play sound?
-//        binding.coverVideo.setOnClickListener {
-//            if (player?.audioComponent?.volume == 0f) {
-//                (player as SimpleExoPlayer).volume = 1f
-//            } else {
-//                (player as SimpleExoPlayer).volume = 0f
-//            }
-//        }
-    }
-
-//    /** All sections click actions **/
+    //    /** All sections click actions **/
 //    private fun getMainAdapterListener(): RestaurantPageMainAdapter.RestaurantPageMainAdapterListener =
 //        object: RestaurantPageMainAdapter.RestaurantPageMainAdapterListener{
 //
-//        }
+    override fun onDateSelected(date: DeliveryDate?) {
+        onDeliveryTimingChange(date)
+    }
+
+    override fun onCookingSlotSelected() {
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         adapterDishes = null
         adapterCuisines = null
-        player?.release()
-        player = null
     }
 
     companion object {

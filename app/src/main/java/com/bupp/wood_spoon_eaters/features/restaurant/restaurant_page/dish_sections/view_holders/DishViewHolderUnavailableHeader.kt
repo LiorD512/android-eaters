@@ -10,8 +10,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 
 
-class DishViewHolderUnavailableHeader(view: View) : DishesMainAdapter.BaseItemViewHolder(view) {
-    val binding = RestaurantItemAvailableLaterBinding.bind(view)
+class DishViewHolderUnavailableHeader(val binding: RestaurantItemAvailableLaterBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.RestaurantPageMainAdapterListener) {
         section as DishSectionUnavailableHeader

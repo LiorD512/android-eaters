@@ -17,10 +17,11 @@ import com.bupp.wood_spoon_eaters.databinding.UpSaleItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 import com.google.android.material.imageview.ShapeableImageView
 
 class UpSaleAdapter :
-    ListAdapter<UpSaleAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
+    SwipeableAdapter<UpSaleAdapterItem>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = UpSaleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -31,21 +32,6 @@ class UpSaleAdapter :
         val item = getItem(position)
         val itemViewHolder = holder as UpSaleItemViewHolder
         itemViewHolder.bindItem(item)
-    }
-
-    fun isInCart(position: Int): Boolean {
-        return getItem(position).isInCart()
-    }
-
-    fun updateItemQuantityAdd(position: Int) {
-//        val currentItem = getItem(position)
-        getItem(position).quantity ++
-    }
-
-    fun updateItemQuantityRemoved(position: Int) {
-        if(getItem(position).quantity > 0){
-            getItem(position).quantity --
-        }
     }
 
     class UpSaleItemViewHolder(binding: UpSaleItemBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -12,7 +12,7 @@
                 android:id="@+id/dishHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/LatoBlack13DarkGrey"
+                style="@style/LatoBlack19DarkGrey"
                 tools:text="Just For You"/>
 
 </LinearLayout>

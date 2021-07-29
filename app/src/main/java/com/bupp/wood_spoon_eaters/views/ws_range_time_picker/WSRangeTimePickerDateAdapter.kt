@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerDateItemBinding
 import com.bupp.wood_spoon_eaters.model.WSRangeTimePickerHours
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import java.util.*
 
 class WSRangeTimePickerDateAdapter :
     ListAdapter<WSRangeTimePickerHours, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -24,18 +23,22 @@ class WSRangeTimePickerDateAdapter :
         val item = getItem(position)
         val itemViewHolder = holder as ViewHolder
 
-        itemViewHolder.bindItem(item.date)
+        itemViewHolder.bindItem(item)
         Log.d("wowWSRangeAdapter","onBind $position, $itemCount")
     }
 
     class ViewHolder(view: WsRangeTimePickerDateItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val itemText: TextView = view.wsRangeTimePickerItem
 
-        fun bindItem(date: Date) {
-            if(DateUtils.isToday(date)){
+        fun bindItem(data: WSRangeTimePickerHours) {
+            if(DateUtils.isToday(data.date)){
                 itemText.text = "Today"
             }else{
-                itemText.text = DateUtils.parseDateToUsDate(date)
+                itemText.text = DateUtils.parseDateToUsDate(data.date)
+            }
+
+            data.title?.let{
+                itemText.text = it
             }
         }
     }

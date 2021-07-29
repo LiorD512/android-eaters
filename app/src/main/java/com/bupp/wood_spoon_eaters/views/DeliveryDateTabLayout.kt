@@ -8,24 +8,27 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.DeliveryTimingTabLayoutBinding
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
+import com.bupp.wood_spoon_eaters.databinding.DeliveryDateTabLayoutBinding
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDayDateSplash
 import com.google.android.material.tabs.TabLayout
 import com.trading212.stickyheader.dpToPx
 
 
-class DeliveryTimingTabLayout @JvmOverloads
+class DeliveryDateTabLayout @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
 
-    private var binding: DeliveryTimingTabLayoutBinding = DeliveryTimingTabLayoutBinding.inflate(LayoutInflater.from(context), this, true)
+    private var binding: DeliveryDateTabLayoutBinding = DeliveryDateTabLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-    var datesList: List<RestaurantPageViewModel.DeliveryDate>? = null
+    var listener: DeliveryTimingTabLayoutListener? = null
+    interface DeliveryTimingTabLayoutListener{
+        fun onDateSelected(date: DeliveryDate?)
+    }
 
-    fun initDates(datesList: List<RestaurantPageViewModel.DeliveryDate>) {
+    var datesList: List<DeliveryDate>? = null
+
+    fun initDates(datesList: List<DeliveryDate>) {
         this.datesList = datesList
         with(binding) {
             datesList.forEachIndexed() { index, deliveryDate ->
@@ -34,6 +37,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
         setCurvedEdges()
+    }
+
+    fun setTabListener(listener: DeliveryTimingTabLayoutListener){
+        this.listener = listener
     }
 
     private fun setCurvedEdges() {
@@ -64,13 +71,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.let {
-                        updateTabUi(it, true)
+//                        updateTabUi(it, true)
+                        listener?.onDateSelected(datesList?.getOrNull(tab.position))
                     }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     tab?.let {
-                        updateTabUi(it, false)
+//                        updateTabUi(it, false)
+                        listener?.onDateSelected(datesList?.getOrNull(tab.position))
                     }
                 }
 

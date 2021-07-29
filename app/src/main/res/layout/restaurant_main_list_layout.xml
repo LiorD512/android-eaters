@@ -12,7 +12,7 @@
             android:layout_height="wrap_content">
 
         <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_view_container"
+                android:id="@+id/detailsSkeleton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:shimmer_auto_start="true"
@@ -22,18 +22,18 @@
                 app:shimmer_highlight_color="@color/grey_white_three">
 
             <include
-                    android:id="@+id/test1"
+                    android:id="@+id/detailsSkeletonLayout"
                     layout="@layout/restaurant_main_list_layout_skeleton" />
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <LinearLayout
-                android:id="@+id/test"
+                android:id="@+id/detailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:visibility="invisible">
+                android:visibility="visible">
 
             <TextView
                     android:id="@+id/restaurantDescription"
@@ -42,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="15.4dp"
                     android:paddingBottom="3.8dp"
+                    android:maxLines="2"
                     tools:text="Welcome to my kitchen, todat and every day, fresh food, 100% organic, 100% love. follow me on inst…" />
 
             <TextView
@@ -50,9 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="15.4dp"
-                    android:paddingBottom="20dp"
-                    android:text="View More"
-                    android:visibility="gone" />
+                    android:text="View More" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -62,12 +61,13 @@
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:paddingHorizontal="15.4dp"
-                    android:paddingBottom="23dp"
+                    android:layout_marginTop="20dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginTop="23dp"
                     android:layout_marginHorizontal="17.8dp"
                     android:background="@color/grey_white" />
 
@@ -82,13 +82,14 @@
                     android:text="Delivery Timing" />
 
 
-            <com.bupp.wood_spoon_eaters.views.DeliveryTimingTabLayout
+            <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
                     android:id="@+id/restaurantDeliveryTiming"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
 
             <TextView
+                    android:id="@+id/restaurantTimePicker"
                     style="@style/LatoBold15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -104,21 +105,22 @@
                     android:paddingVertical="4dp"
                     android:text="Now" />
 
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="17.8dp"
-                    android:background="@color/grey_white" />
-
         </LinearLayout>
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="17.8dp"
+            android:background="@color/grey_white" />
+
+    <com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRecycler
             android:id="@+id/restaurantDishesList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
+            android:layoutAnimation="@anim/restaurant_layout_animation"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>
