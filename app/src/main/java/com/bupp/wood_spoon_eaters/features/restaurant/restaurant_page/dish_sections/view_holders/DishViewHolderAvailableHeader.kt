@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 
 class DishViewHolderAvailableHeader(val binding: RestaurantItemDishesHeaderBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
 
-    override fun bind(section: DishSections, listener: DishesMainAdapter.RestaurantPageMainAdapterListener) {
+    override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionAvailableHeader
         with(binding) {
             dishHeader.text = section.header

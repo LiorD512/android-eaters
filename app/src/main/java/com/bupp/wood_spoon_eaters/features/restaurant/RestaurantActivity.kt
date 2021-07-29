@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.provider.SyncStateContract
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import kotlin.math.abs
 
 class RestaurantActivity : AppCompatActivity() {
@@ -31,7 +35,20 @@ class RestaurantActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
+        viewModel.fragmentNavigationEvent.observe(this, { navigationEvent ->
+            handleFragmentNavigationEvent(navigationEvent)
+        })
+    }
 
+    private fun handleFragmentNavigationEvent(navigationEvent: LiveEvent<NavDirections>?) {
+        Timber.d("handleFragmentNavigationEvent called")
+        navigationEvent?.getContentIfNotHandled()?.let {
+            try {
+                findNavController(R.id.restaurantActContainer).navigate(it)
+            } catch (ex: Exception) {
+                Timber.e("NavigationEvent Error ${ex.message}")
+            }
+        }
     }
 
     companion object {

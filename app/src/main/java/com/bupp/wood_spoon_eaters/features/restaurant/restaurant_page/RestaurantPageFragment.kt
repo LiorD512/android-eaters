@@ -20,12 +20,9 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
-import com.google.android.exoplayer2.SimpleExoPlayer
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
@@ -33,8 +30,7 @@ import kotlin.math.abs
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
-    TimePickerBottomSheetRestaurant.TimePickerListener
-{
+    TimePickerBottomSheetRestaurant.TimePickerListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -69,15 +65,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             detailsSkeleton.visibility = View.GONE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePicker.setOnClickListener{
-                viewModel.currentSelectedDate?.let{ deliveryDate->
+            restaurantTimePicker.setOnClickListener {
+                viewModel.currentSelectedDate?.let { deliveryDate ->
                     val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
                     timePickerBottomSheet.setDeliveryDate(deliveryDate)
                     timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
-            adapterDishes?.let{ adapter->
+            adapterDishes?.let { adapter ->
                 restaurantDishesList.initSwipeableRecycler(adapter)
             }
         }
@@ -106,10 +102,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
         adapterDishes?.submitList(dishSections)
     }
-
-    private fun getDishesAdapterListener(): DishesMainAdapter.RestaurantPageMainAdapterListener =
-        object : DishesMainAdapter.RestaurantPageMainAdapterListener {
-        }
 
     private fun handleDeliveryTimingData(datesList: List<DeliveryDate>?) {
         datesList?.let {
@@ -141,7 +133,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             if (restaurant.video.isNullOrEmpty()) {
                 Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
             } else {
-               //show video icon
+                //show video icon
             }
         }
         with(binding.restaurantMainListLayout) {
@@ -184,10 +176,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             })
         }
     }
-    //    /** All sections click actions **/
-//    private fun getMainAdapterListener(): RestaurantPageMainAdapter.RestaurantPageMainAdapterListener =
-//        object: RestaurantPageMainAdapter.RestaurantPageMainAdapterListener{
-//
+
+    /** All sections click actions **/
+    private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
+        object : DishesMainAdapter.DishesMainAdapterListener {
+            override fun onDishClick(dish: Dish) {
+                mainViewModel.openDishPage(dish)
+            }
+        }
+
+
     override fun onDateSelected(date: DeliveryDate?) {
         onDeliveryTimingChange(date)
     }

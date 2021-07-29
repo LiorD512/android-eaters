@@ -18,7 +18,7 @@
                 <KeyFrameSet>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
-                            android:alpha="1"
+                            android:alpha="0"
                             motion:framePosition="50"
                             motion:motionTarget="@+id/coverPhotoLayout"/>
                     <KeyAttribute
@@ -60,12 +60,12 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint
                 android:id="@+id/topHeaderDishName"
-                motion:layout_constraintStart_toEndOf="@id/backButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                motion:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="2dp"
+                motion:layout_constraintStart_toEndOf="@id/backButton"
+                motion:layout_constraintBottom_toBottomOf="@id/backButton"
                 android:alpha="1"/>
         <Constraint
                 android:layout_width="match_parent"

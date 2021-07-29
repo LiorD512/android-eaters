@@ -1,17 +1,21 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders
 
-import android.view.View
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemDishBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
+import com.bupp.wood_spoon_eaters.model.Dish
 
 
 class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
 
-    override fun bind(section: DishSections, listener: DishesMainAdapter.RestaurantPageMainAdapterListener) {
+    interface DishViewHolderSingleDishListener{
+        fun onDishClick(dish: Dish)
+    }
+
+    override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish
         with(binding) {
             Glide.with(root.context).load(section.dish.thumbnail).into(dishPhoto)
@@ -21,6 +25,9 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
 
             dishQuantity.text = section.quantity.toString()
             dishQuantity.isVisible = section.quantity > 0
+            root.setOnClickListener(){
+                listener.onDishClick(section.dish)
+            }
         }
     }
 
