@@ -1,38 +1,27 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheetRestaurant
-import com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet.CustomItemAnimator
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType.SINGLE_DISH
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Restaurant
-import com.bupp.wood_spoon_eaters.views.DeliveryTimingTabLayout
-import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableAddDishItemDecorator
-import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableAddDishItemTouchHelper
-import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRemoveDishItemDecorator
-import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRemoveDishItemTouchHelper
+import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
@@ -43,7 +32,7 @@ import kotlin.math.abs
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
-    DeliveryTimingTabLayout.DeliveryTimingTabLayoutListener,
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
     TimePickerBottomSheetRestaurant.TimePickerListener
 {
 
@@ -88,38 +77,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 }
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
+            adapterDishes?.let{ adapter->
+                restaurantDishesList.initSwipeableRecycler(adapter)
+            }
         }
-
-        addDishSwipeAnimation()
     }
 
     private fun onDeliveryTimingChange(date: DeliveryDate?) {
         viewModel.onDeliveryDateChanged(date)
-    }
-
-    private fun addDishSwipeAnimation() {
-        with(binding.restaurantMainListLayout) {
-            adapterDishes?.let{ adapter->
-                ItemTouchHelper(SwipeableAddDishItemTouchHelper(adapter, SINGLE_DISH.ordinal)).attachToRecyclerView(restaurantDishesList)
-                ItemTouchHelper(SwipeableRemoveDishItemTouchHelper(adapter, SINGLE_DISH.ordinal)).attachToRecyclerView(restaurantDishesList)
-            }
-
-            restaurantDishesList.itemAnimator?.changeDuration = 150
-            restaurantDishesList.itemAnimator?.moveDuration = 0
-            restaurantDishesList.itemAnimator?.removeDuration = 0
-            restaurantDishesList.itemAnimator = CustomItemAnimator()
-
-            val removeShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.swipeable_dish_remove_bkg)
-            restaurantDishesList.addItemDecoration(SwipeableRemoveDishItemDecorator(requireContext(), removeShape, SINGLE_DISH.ordinal))
-            val defaultShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.grey_white_right_cornered)
-            val selectedShape: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.swipeable_dish_add_bkg)
-            restaurantDishesList.addItemDecoration(SwipeableAddDishItemDecorator(requireContext(), defaultShape, selectedShape, SINGLE_DISH.ordinal))
-
-
-            val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-            restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
-
-        }
     }
 
     private fun initObservers() {
@@ -176,7 +141,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             if (restaurant.video.isNullOrEmpty()) {
                 Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
             } else {
-                handleVideoCover(restaurant.video)
+               //show video icon
             }
         }
         with(binding.restaurantMainListLayout) {
@@ -219,8 +184,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             })
         }
     }
-
-    private var player: ExoPlayer? = null
     //    /** All sections click actions **/
 //    private fun getMainAdapterListener(): RestaurantPageMainAdapter.RestaurantPageMainAdapterListener =
 //        object: RestaurantPageMainAdapter.RestaurantPageMainAdapterListener{
@@ -233,39 +196,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     }
 
-    private fun handleVideoCover(video: String) {
-        player = SimpleExoPlayer.Builder(requireContext()).build()
-        binding.coverVideo.isVisible = true
-        binding.coverVideo.player = player
-        binding.coverVideo.hideController()
-        val mediaItem = MediaItem.fromUri(video)
-        player?.let { player ->
-            player.setMediaItem(mediaItem)
-            player.playWhenReady = true
-            player.repeatMode = REPEAT_MODE_ALL
-            player.volume = 0f
-            player.prepare()
-        }
-
-
-        //todo : ask if plater should play sound?
-//        binding.coverVideo.setOnClickListener {
-//            if (player?.audioComponent?.volume == 0f) {
-//                (player as SimpleExoPlayer).volume = 1f
-//            } else {
-//                (player as SimpleExoPlayer).volume = 0f
-//            }
-//        }
-    }
-
-//        }
-
     override fun onDestroyView() {
         super.onDestroyView()
         adapterDishes = null
         adapterCuisines = null
-        player?.release()
-        player = null
     }
 
     companion object {

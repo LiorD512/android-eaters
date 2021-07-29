@@ -10,6 +10,23 @@
             android:name="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragment"
             android:label="fragment_restaurant_page"
             tools:layout="@layout/fragment_restaurant_page">
+        <action
+                android:id="@+id/action_restaurantPageFragment_to_dishPageFragment"
+                app:destination="@id/dishPageFragment">
+            <argument
+                    android:name="dish"
+                    app:argType="com.bupp.wood_spoon_eaters.model.Dish" />
+        </action>
+    </fragment>
+
+    <fragment
+            android:id="@+id/dishPageFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageFragment"
+            android:label="fragment_dish_page"
+            tools:layout="@layout/fragment_dish_page">
+        <argument
+                android:name="dish"
+                app:argType="com.bupp.wood_spoon_eaters.model.Dish" />
     </fragment>
 
 

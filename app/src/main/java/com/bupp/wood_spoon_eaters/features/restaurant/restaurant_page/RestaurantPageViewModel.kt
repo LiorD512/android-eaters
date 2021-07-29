@@ -70,7 +70,7 @@ class RestaurantPageViewModel(
         deliveryTiming.postValue(deliveryDates)
     }
 
-    /** Sorting the cooking slot to **/
+
     private fun sortCookingSlotsDishes(restaurant: Restaurant): Restaurant {
         menuItems = restaurant.dishes.associateBy({ it.id }, { it })
         menuItems?.let{ menuItems ->

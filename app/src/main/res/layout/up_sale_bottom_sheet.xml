@@ -30,7 +30,7 @@
                     android:layout_height="1.9dp"
                     android:background="@color/silver" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRecycler
                     android:id="@+id/upSaleList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

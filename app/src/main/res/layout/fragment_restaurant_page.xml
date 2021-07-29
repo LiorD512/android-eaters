@@ -38,25 +38,8 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/event_logo_bkg" />
 
-        <com.google.android.exoplayer2.ui.PlayerView
-                android:id="@+id/coverVideo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                app:resize_mode="fill"
-                app:use_controller="false" />
-
     </FrameLayout>
 
-    <View
-            android:id="@+id/coverOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:alpha="0"
-            android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/space"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
             android:id="@+id/topHeader"

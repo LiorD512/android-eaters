@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: "androidx.navigation.safeargs"
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 
 android {
@@ -47,6 +47,14 @@ android {
         debug {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs += 'build/generated/source/navigation-args'
+            }
         }
     }
 
