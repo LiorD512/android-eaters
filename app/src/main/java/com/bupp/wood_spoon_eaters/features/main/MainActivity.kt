@@ -128,6 +128,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
 
+
+
     private var lastFragmentTag: String? = null
     private var currentFragmentTag: String? = null
 
