@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/reviewsContainer"
+        app:startDestination="@id/reviewExperienceFragment">
+
+    <fragment
+            android:id="@+id/reviewExperienceFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.reviews.fragments.ReviewExperienceFragment"
+            android:label="fragment_review_experience"
+            tools:layout="@layout/fragment_review_experience">
+        <action
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/newOrderMainFragment"
+                android:id="@+id/action_reviewExperienceFragment_to_reviewDetailsFragment"
+                app:destination="@id/reviewDetailsFragment"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/reviewDetailsFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.reviews.fragments.ReviewDetailsFragment"
+            android:label="fragment_review_details"
+            tools:layout="@layout/fragment_review_details">
+
+    </fragment>
+
+
+</navigation>
