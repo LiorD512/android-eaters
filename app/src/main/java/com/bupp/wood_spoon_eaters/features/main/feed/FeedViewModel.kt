@@ -65,7 +65,7 @@ class FeedViewModel(
 
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
-    data class FeedLiveData(val feedData: List<FeedAdapterItem>?)
+    data class FeedLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
             feedSkeletonEvent.postValue(getSkeletonItems())
@@ -86,7 +86,7 @@ class FeedViewModel(
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getFeedWith - Success")
                         handleHrefApiCalls(feedRepository.feed)
-                        feedResultData.postValue(FeedLiveData(feedRepository.feed))
+                        feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
 //                        progressData.endProgress()
                     }
                     else -> {
@@ -119,7 +119,7 @@ class FeedViewModel(
                             }
                             FeedRepository.FeedRepoStatus.HREF_SUCCESS -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - Success")
-                                feedResultData.postValue(FeedLiveData(feedRepository.feed))
+                                feedResultData.postValue(FeedLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
                             }
                             else -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")

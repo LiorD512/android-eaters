@@ -79,9 +79,9 @@ class CountryChooserBottomSheet() : BottomSheetDialogFragment(), CountryIsoChoos
                 countriesISO.add(
                     CountriesISO(
                         name = it.name,
-                        value = it.iso2.toUpperCase(Locale.ROOT),
+                        value = it.iso2.uppercase(Locale.ROOT),
                         country_code = it.countryCode.toString(),
-                        flag = CountryCodeUtils.countryCodeToEmojiFlag(it.iso2.toUpperCase(Locale.ROOT))
+                        flag = CountryCodeUtils.countryCodeToEmojiFlag(it.iso2.uppercase(Locale.ROOT))
                     )
                 )
             }
@@ -91,7 +91,7 @@ class CountryChooserBottomSheet() : BottomSheetDialogFragment(), CountryIsoChoos
                 override fun afterTextChanged(s: Editable) {
                     super.afterTextChanged(s)
                     val input = s.toString()
-                    val filtered = countriesISO.filter { it.name?.toLowerCase(Locale.ROOT)?.contains(input.toLowerCase(Locale.ROOT)) ?: false }
+                    val filtered = countriesISO.filter { it.name?.lowercase(Locale.ROOT)?.contains(input.lowercase(Locale.ROOT)) ?: false }
                     adapter?.submitList(filtered)
                 }
             })

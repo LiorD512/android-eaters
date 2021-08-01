@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
+import com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
 import com.segment.analytics.Analytics
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
@@ -80,6 +81,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             }
         })
         viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
+            handleFeedUi(event.isLargeItems)
             event.feedData?.let { handleFeedResult(it) }
         })
 
@@ -127,13 +129,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 //        })
     }
 
-    private fun getFeedCouponSectionListener(): FeedCouponSectionPagerAdapter.FeedCouponSectionListener =
-        object: FeedCouponSectionPagerAdapter.FeedCouponSectionListener {
-            override fun onShareBannerClick(campaign: Campaign?) {
-                mainViewModel.onShareCampaignClick(campaign)
-            }
-
+    private fun handleFeedUi(isLargeItems: Boolean) {
+        Log.d(TAG, "handleFeedUi: $isLargeItems")
+        if(!isLargeItems){
+            (binding.feedFragList as GravitySnapRecyclerView).enableSnapping(isLargeItems)
         }
+    }
+
 
     override fun onHeaderAddressClick() {
         mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)

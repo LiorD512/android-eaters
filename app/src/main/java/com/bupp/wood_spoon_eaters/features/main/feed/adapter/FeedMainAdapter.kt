@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapter
 
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.*
 import com.bupp.wood_spoon_eaters.model.*
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()),
     FeedCouponSectionPagerAdapter.FeedCouponSectionListener, FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
-    FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener {
+    FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
     interface FeedMainAdapterListener{
         fun onShareBannerClick(campaign: Campaign)
@@ -32,8 +34,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                 FeedAdapterCampaignViewHolder(binding)
             }
             FeedAdapterViewType.RESTAURANT.ordinal -> {
+                val snapHelper = GravitySnapHelper(Gravity.START)
+                val adapter = FeedRestaurantDishPagerAdapter(this)
                 val binding = FeedAdapterRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedAdapterRestaurantViewHolder(parent.context, binding)
+                FeedAdapterRestaurantViewHolder(parent.context, binding, adapter, snapHelper)
             }
             FeedAdapterViewType.RESTAURANT_LARGE.ordinal -> {
                 val binding = FeedAdapterBigRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -61,6 +65,9 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             is FeedAdapterRestaurant -> {
                 holder as FeedAdapterRestaurantViewHolder
                 holder.bindItems(section, this)
+//                holder.itemView.setOnClickListener {
+//                    Log.d("wowFeedAdapter", "itemView setOnClickListener")
+//                }
             }
             is FeedAdapterLargeRestaurant -> {
                 holder as FeedAdapterLargeRestaurantViewHolder
@@ -98,6 +105,11 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
 
     override fun onRestaurantClick(cook: Cook) {
         listener.onRestaurantClick(cook)
+    }
+
+    override fun onPageClick() {
+        Log.d("wowFeedAdapter","position:")
+//        currentList.
     }
 }
 

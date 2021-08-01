@@ -31,14 +31,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="179dp">
 
-                <androidx.viewpager2.widget.ViewPager2
+                <com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
+                        app:snapGravity="end"
+                        app:snapLastItem="true"
+                        app:snapEnabled="true"
+                        app:snapMaxFlingSizeFraction="1"
+                        app:snapToPadding="false"
+                        app:snapScrollMsPerInch="50"
                         android:id="@+id/feedRestaurantItemPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"/>
+
+
+<!--                <androidx.viewpager2.widget.ViewPager2-->
+<!--                        android:focusable="false"-->
+<!--                        android:clickable="false"-->
+<!--                        android:nestedScrollingEnabled="true"-->
+<!--                        android:id="@+id/feedRestaurantItemPager"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
                 <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/feedRestaurantItemBtnPrevious"
@@ -101,7 +120,7 @@
 
                 <com.bupp.wood_spoon_eaters.views.FeedItemsIndicatorView
                         android:id="@+id/feedRestaurantItemIndicator"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
                         android:paddingTop="9dp"

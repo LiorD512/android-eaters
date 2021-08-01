@@ -123,11 +123,12 @@ a home cooked meal very soon :)"
 
         <com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
                 app:snapGravity="top"
-                app:snapEnabled="false"
                 app:snapLastItem="true"
+                app:snapEnabled="true"
                 app:snapMaxFlingSizeFraction="1"
                 app:snapToPadding="false"
                 app:snapScrollMsPerInch="50"
+                android:nestedScrollingEnabled="true"
                 android:id="@+id/feedFragList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,14 +16,16 @@ import at.favre.lib.dali.Dali
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantDishItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantSeeMoreItemBinding
+import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 
-class FeedRestaurantDishPagerAdapter(val listener : FeedRestaurantDishPagerAdapterListener) :
+class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapterListener) :
     ListAdapter<FeedRestaurantSectionItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
     interface FeedRestaurantDishPagerAdapterListener{
@@ -66,23 +69,23 @@ class FeedRestaurantDishPagerAdapter(val listener : FeedRestaurantDishPagerAdapt
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: DishTagsView = binding.feedRestaurantItemTags
 
-        private val shimmer: Shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
-            .setDuration(1300) // how long the shimmering animation takes to do one full sweep
-            .setBaseAlpha(0.7f) //the alpha of the underlying children
-            .setHighlightAlpha(0.6f) // the shimmer alpha amount
-            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
-            .setAutoStart(true)
-            .build()
-
-        // This is the placeholder for the imageView
-        private val shimmerDrawable = ShimmerDrawable().apply {
-            setShimmer(shimmer)
-        }
+//        private val shimmer: Shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+//            .setDuration(1300) // how long the shimmering animation takes to do one full sweep
+//            .setBaseAlpha(0.7f) //the alpha of the underlying children
+//            .setHighlightAlpha(0.6f) // the shimmer alpha amount
+//            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+//            .setAutoStart(true)
+//            .build()
+//
+//        // This is the placeholder for the imageView
+//        private val shimmerDrawable = ShimmerDrawable().apply {
+//            setShimmer(shimmer)
+//        }
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish) {
 
 
-            Glide.with(context).load(dish.thumbnail_url).placeholder(shimmerDrawable).into(thumbnail)
+            Glide.with(context).load(dish.thumbnail_url).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
             name.text = dish.name
             price.text = dish.formatted_price
 
@@ -90,9 +93,11 @@ class FeedRestaurantDishPagerAdapter(val listener : FeedRestaurantDishPagerAdapt
             val tags = listOf<Tag>(Tag(0, "Vegan"), Tag(1, "sababa achi its gooos and looooooks wellll"), Tag(2, "Kosher"))
             tagView.initTagView(tags)
 //            tagView.initTagView(dish.tags)
-            binding.feedRestaurantItemView.setOnClickListener(){
-                listener.onPageClick()
-            }
+
+//            binding.feedRestaurantItemView.setOnClickListener{
+//                Log.d("wowFeedPager", "onDishPageClick")
+//                listener.onPageClick()
+//            }
         }
 
 

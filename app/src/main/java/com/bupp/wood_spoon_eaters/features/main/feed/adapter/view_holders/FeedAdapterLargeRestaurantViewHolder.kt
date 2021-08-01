@@ -2,11 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
 
 import android.content.Context
 import android.util.Log
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -47,7 +43,8 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
 
                     if (it.size > 1) {
                         binding.feedRestaurantItemIndicator.visibility = View.VISIBLE
-                        binding.feedRestaurantItemIndicator.initDishIndicator(it.size, binding.feedRestaurantItemPager)
+                        binding.feedRestaurantItemIndicator.initDishIndicator(it.size)
+//                        binding.feedRestaurantItemIndicator.initDishIndicator(it.size, binding.feedRestaurantItemPager)
 
                     }
 
@@ -55,6 +52,7 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
                         override fun onPageSelected(position: Int) {
                             super.onPageSelected(position)
                             Log.d("wowFeedPager", "onPageSelected - position: $position")
+                            binding.feedRestaurantItemIndicator.onTabChanged(position)
                             when (position) {
                                 0 -> {
                                     if (it.size > 1) {

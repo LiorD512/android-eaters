@@ -4,6 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/feedRestaurantDishItem"
+        android:focusable="false"
+        android:clickable="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,11 +17,15 @@
             android:id="@+id/feedRestaurantDishItemImg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="false"
+            android:clickable="false"
             app:shapeAppearanceOverlay="@style/roundedCorners7ImageView" />
 
     <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="false"
+            android:clickable="false"
             android:background="@drawable/transparent_to_black_60_gradient"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +34,8 @@
 
 
     <TextView
+            android:focusable="false"
+            android:clickable="false"
             android:id="@+id/feedRestaurantItemName"
             style="@style/LatoBlack15White"
             android:layout_width="wrap_content"
@@ -40,6 +48,8 @@
             tools:text="Vegan Health Salad" />
 
     <TextView
+            android:focusable="false"
+            android:clickable="false"
             android:id="@+id/feedRestaurantItemPrice"
             style="@style/LatoBlack15White"
             android:layout_width="wrap_content"
@@ -62,6 +72,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <View
+            android:focusable="false"
+            android:clickable="false"
             android:id="@+id/feedRestaurantItemView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
