@@ -127,8 +127,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    implementation 'com.asksira.android:dropdownview:1.0.3'
+//    implementation 'com.asksira.android:dropdownview:1.0.3'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.aliumujib:SwipeToRefresh:1.01'
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
@@ -156,14 +157,15 @@ dependencies {
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.1'
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
 
     //exo player
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.1'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.1'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.2'
 
     //camera util
     implementation 'com.github.dhaval2404:imagepicker:1.8'
@@ -218,9 +220,18 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
 
     //di
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    implementation "org.koin:koin-androidx-ext:$koin_version"
+    // Koin main features for Android (Scope,ViewModel ...)
+    implementation "io.insert-koin:koin-android:$koin_version"
+// Koin Java Compatibility
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+// Koin for Jetpack WorkManager
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+// Koin for Jetpack Compose
+//    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+//    implementation "io.insert-koin:koin-androidx-scope:$koin_version"
+//    implementation "io.insert-koin:koin-android:$koin_version"
+//    implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
+//    implementation "io.insert-koin:koin-androidx-ext:$koin_version"
 
     //AppCenter
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"

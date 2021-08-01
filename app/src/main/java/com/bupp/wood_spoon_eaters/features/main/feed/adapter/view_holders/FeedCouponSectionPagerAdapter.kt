@@ -14,10 +14,13 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.ShareBannerBinding
 import com.bupp.wood_spoon_eaters.model.Campaign
 
-//import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
 
-class FeedCouponSectionPagerAdapter :
+class FeedCouponSectionPagerAdapter(val listener: FeedCouponSectionListener) :
     ListAdapter<Campaign, RecyclerView.ViewHolder>(DiffCallback()) {
+
+    interface FeedCouponSectionListener{
+        fun onShareBannerClick(campaign: Campaign?)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ShareBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,7 +30,7 @@ class FeedCouponSectionPagerAdapter :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         val itemViewHolder = holder as FeedCouponViewHolder
-        itemViewHolder.bindItem(holder.itemView.context, item)
+        itemViewHolder.bindItem(holder.itemView.context, item, listener)
     }
 
     class FeedCouponViewHolder(binding: ShareBannerBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -36,12 +39,16 @@ class FeedCouponSectionPagerAdapter :
         private val title: TextView = binding.customBannerTitle
         private val subTitle: TextView = binding.customBannerSubTitle
 
-        fun bindItem(context: Context, coupon: Campaign) {
+        fun bindItem(context: Context, coupon: Campaign, listener: FeedCouponSectionListener) {
             Glide.with(context).load(coupon.photoLarge).into(thumbnail)
             title.text = coupon.header
             subTitle.text = coupon.bodyText1
 
             layout.visibility = View.VISIBLE
+
+            layout.setOnClickListener {
+                listener.onShareBannerClick(coupon)
+            }
         }
     }
 

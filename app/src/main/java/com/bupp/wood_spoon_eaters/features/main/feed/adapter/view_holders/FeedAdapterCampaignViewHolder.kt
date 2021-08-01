@@ -6,12 +6,12 @@ import com.bupp.wood_spoon_eaters.databinding.FeedAdapterCampaignSectionBinding
 import com.bupp.wood_spoon_eaters.model.FeedAdapterCoupons
 
 class FeedAdapterCampaignViewHolder(val binding: FeedAdapterCampaignSectionBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bindItems(item: FeedAdapterCoupons) {
+    fun bindItems(item: FeedAdapterCoupons, listener: FeedCouponSectionPagerAdapter.FeedCouponSectionListener) {
         item.couponSection.items?.let {
             if (it.isNotEmpty()) {
                 binding.feedCampaignSectionLayout.visibility = View.VISIBLE
 
-                val adapter = FeedCouponSectionPagerAdapter()
+                val adapter = FeedCouponSectionPagerAdapter(listener)
                 binding.feedCampaignSectionViewPager.adapter = adapter
                 binding.feedCampaignSectionViewPager.setPageTransformer(FeedCampaignCouponItemTransformer())
                 adapter.submitList(it)

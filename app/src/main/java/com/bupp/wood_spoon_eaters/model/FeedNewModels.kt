@@ -138,6 +138,7 @@ enum class FeedAdapterViewType {
     TITLE,
     COUPONS,
     RESTAURANT,
+    RESTAURANT_LARGE,
     SKELETON,
     HREF
 }
@@ -166,6 +167,11 @@ data class FeedAdapterCoupons(
 data class FeedAdapterRestaurant(
     val restaurantSection: FeedRestaurantSection
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)
+
+@Parcelize
+data class FeedAdapterLargeRestaurant(
+    val restaurantSection: FeedRestaurantSection
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
 
 @Parcelize
 data class Tag(

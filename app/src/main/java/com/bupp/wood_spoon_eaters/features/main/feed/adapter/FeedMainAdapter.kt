@@ -6,19 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.databinding.FeedAdapterCampaignSectionBinding
-import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
-import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemSkeletonBinding
-import com.bupp.wood_spoon_eaters.databinding.FeedAdapterTitleItemBinding
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterCampaignViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterTitleViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterRestaurantViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterSkeletonViewHolder
+import com.bupp.wood_spoon_eaters.databinding.*
+import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.*
 import com.bupp.wood_spoon_eaters.model.*
 
-class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
+class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()),
+    FeedCouponSectionPagerAdapter.FeedCouponSectionListener, FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
+    FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener {
 
-    interface FeedMainAdapterListener: FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener{}
+    interface FeedMainAdapterListener{
+        fun onShareBannerClick(campaign: Campaign)
+        fun onRestaurantClick(cook: Cook)
+    }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
 
@@ -35,6 +34,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             FeedAdapterViewType.RESTAURANT.ordinal -> {
                 val binding = FeedAdapterRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterRestaurantViewHolder(parent.context, binding)
+            }
+            FeedAdapterViewType.RESTAURANT_LARGE.ordinal -> {
+                val binding = FeedAdapterBigRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterLargeRestaurantViewHolder(parent.context, binding)
             }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -53,11 +56,15 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             }
             is FeedAdapterCoupons -> {
                 holder as FeedAdapterCampaignViewHolder
-                holder.bindItems(section)
+                holder.bindItems(section, this)
             }
             is FeedAdapterRestaurant -> {
                 holder as FeedAdapterRestaurantViewHolder
-                holder.bindItems(section,listener)
+                holder.bindItems(section, this)
+            }
+            is FeedAdapterLargeRestaurant -> {
+                holder as FeedAdapterLargeRestaurantViewHolder
+                holder.bindItems(section, this)
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder
@@ -81,6 +88,16 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         ): Boolean {
             return oldItem.type == oldItem.type
         }
+    }
+
+    override fun onShareBannerClick(campaign: Campaign?) {
+        campaign?.let{
+            listener.onShareBannerClick(campaign)
+        }
+    }
+
+    override fun onRestaurantClick(cook: Cook) {
+        listener.onRestaurantClick(cook)
     }
 }
 

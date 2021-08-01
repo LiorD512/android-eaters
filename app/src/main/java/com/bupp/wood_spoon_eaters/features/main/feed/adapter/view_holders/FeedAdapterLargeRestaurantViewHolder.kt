@@ -16,13 +16,13 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 
 
-class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAdapterRestaurantItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: FeedAdapterBigRestaurantItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     interface FeedAdapterRestaurantViewHolderListener{
         fun onRestaurantClick(cook: Cook)
     }
 
-    fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener) {
+    fun bindItems(restaurantSection: FeedAdapterLargeRestaurant, listener: FeedAdapterRestaurantViewHolderListener) {
         Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {

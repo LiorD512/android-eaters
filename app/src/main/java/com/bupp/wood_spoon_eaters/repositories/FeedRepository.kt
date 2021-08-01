@@ -82,6 +82,9 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         }
     }
 
+    //todo - change this when server is ready
+    val isLargeItems = true
+
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEach { section ->
@@ -97,7 +100,11 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                         feedData.add(FeedAdapterCoupons(collectionItem))
                     }
                     is FeedRestaurantSection -> {
-                        feedData.add(FeedAdapterRestaurant(collectionItem))
+                        if(isLargeItems){
+                            feedData.add(FeedAdapterLargeRestaurant(collectionItem))
+                        }else{
+                            feedData.add(FeedAdapterRestaurant(collectionItem))
+                        }
                     }
                 }
             }

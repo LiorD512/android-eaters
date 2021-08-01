@@ -11,12 +11,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
-import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedCouponSectionPagerAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -28,14 +27,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.MultiSectionFeedViewListener,
-    CookProfileDialog.CookProfileDialogListener, FeedHeaderView.FeedHeaderViewListener {
-
-
-    override fun onEmptyhDishList() {
-        handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-//        NoDishesAvailableDialog().show(childFragmentManager, Constants.NO_DISHES_AVAILABLE_DIALOG)
-    }
+class FeedFragment : Fragment(R.layout.fragment_feed),
+    CookProfileDialog.CookProfileDialogListener, FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener {
 
 
     companion object {
@@ -43,7 +36,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
-//    private lateinit var skeletonView: Skeleton
     private var tooltip: Tooltip? = null
     val binding: FragmentFeedBinding by viewBinding()
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
@@ -64,22 +56,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 
 
     private fun initUi() {
-        with(binding){
+        with(binding) {
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
-            feedAdapter = FeedMainAdapter(getFeedMainAdapterListener())
+            feedAdapter = FeedMainAdapter(this@FeedFragment)
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
             feedFragList.adapter = feedAdapter
 
             feedFragRefreshLayout.setOnRefreshListener { refreshList() }
-
-
-
-//            feedFragRefreshLayout.setOnRefreshListener { refreshlayout ->
-//                refreshList()
-//            }
-//            feedFragRefreshLayout.setOnLoadMoreListener { refreshlayout ->
-////                refreshlayout.finishLoadMore(2000 /*,false*/) //传入false表示加载失败
-//            }
         }
     }
 
@@ -93,7 +76,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
             it.feedData?.let { skeletons ->
-//                feedAdapter.submitList(skeletons)
                 handleFeedResult(skeletons)
             }
         })
@@ -144,13 +126,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
 //            mainViewModel.checkCampaignForFeed()
 //        })
     }
-    private fun getFeedMainAdapterListener(): FeedMainAdapter.FeedMainAdapterListener =
-        object: FeedMainAdapter.FeedMainAdapterListener {
-            override fun onRestaurantClick(cook: Cook) {
-                startActivity(Intent(requireContext(), RestaurantActivity::class.java)
-                    .putExtra(Constants.ARG_RESTAURANT, cook)
-                )
+
+    private fun getFeedCouponSectionListener(): FeedCouponSectionPagerAdapter.FeedCouponSectionListener =
+        object: FeedCouponSectionPagerAdapter.FeedCouponSectionListener {
+            override fun onShareBannerClick(campaign: Campaign?) {
+                mainViewModel.onShareCampaignClick(campaign)
             }
+
         }
 
     override fun onHeaderAddressClick() {
@@ -198,7 +180,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         }
     }
 
-    override fun refreshList() {
+    fun refreshList() {
         viewModel.onPullToRefresh()
     }
 
@@ -292,35 +274,44 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
     }
 
 
-    override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let {
-            mainViewModel.onDishClick(it.id)
-        }
-    }
-
-    override fun onCookClick(cook: Cook) {
-        Analytics.with(requireContext()).screen("Home chef page (from feed)")
-        val args = Bundle()
-        args.putLong(Constants.ARG_COOK_ID, cook.id)
-        val cookDialog = CookProfileDialog(this)
-        cookDialog.arguments = args
-        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
-    }
-
-    override fun onShareClick(campaign: Campaign) {
-        mainViewModel.onShareCampaignClick(campaign)
-    }
-
-    override fun onWorldwideInfoClick() {
-        NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
-    }
+//    override fun onDishClick(dish: Dish) {
+//        dish.menuItem?.let {
+//            mainViewModel.onDishClick(it.id)
+//        }
+//    }
+//
+//    override fun onCookClick(cook: Cook) {
+//        Analytics.with(requireContext()).screen("Home chef page (from feed)")
+//        val args = Bundle()
+//        args.putLong(Constants.ARG_COOK_ID, cook.id)
+//        val cookDialog = CookProfileDialog(this)
+//        cookDialog.arguments = args
+//        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//    }
+//
+//    override fun onShareClick(campaign: Campaign) {
+//        mainViewModel.onShareCampaignClick(campaign)
+//    }
+//
+//    override fun onWorldwideInfoClick() {
+//        NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
+//    }
 
     fun silentRefresh() {
         Log.d("wowFeedFrag", "silentRefresh")
 //        viewModel.getFeed()
     }
 
+    //Feed main adapter interface
+    override fun onShareBannerClick(campaign: Campaign) {
+        mainViewModel.onShareCampaignClick(campaign)
+    }
 
+    override fun onRestaurantClick(cook: Cook) {
+        startActivity(Intent(requireContext(), RestaurantActivity::class.java)
+            .putExtra(Constants.ARG_RESTAURANT, cook)
+        )
+    }
 
 
 }
