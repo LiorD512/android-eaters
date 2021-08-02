@@ -42,14 +42,14 @@ private var parentItemPosition: Int = -1
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return return when (viewType) {
+        return when (viewType) {
             FeedRestaurantSectionItemViewType.DISH.ordinal -> {
                 val binding = FeedAdapterRestaurantDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedDishViewHolder(binding, parentItemPosition)
             }
             else -> { //FeedRestaurantSectionItemViewType.SEE_MORE
                 val binding = FeedAdapterRestaurantSeeMoreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedDishSeeMoreViewHolder(binding)
+                FeedDishSeeMoreViewHolder(binding, parentItemPosition)
             }
 
         }
@@ -71,7 +71,7 @@ private var parentItemPosition: Int = -1
 
 
 
-    class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding, val parentItemPosition: Int) : RecyclerView.ViewHolder(binding.root) {
+    class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding, private val parentItemPosition: Int) : RecyclerView.ViewHolder(binding.root) {
         private val layout: ConstraintLayout = binding.feedRestaurantDishItem
         private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
         private val name: TextView = binding.feedRestaurantItemName
@@ -96,7 +96,7 @@ private var parentItemPosition: Int = -1
             tagView.initTagView(tags)
 //            tagView.initTagView(dish.tags)
 
-            binding.feedRestaurantItemView.setOnClickListener{
+            layout.setOnClickListener{
                 Log.d("wowFeedPager", "parentItemPosition: $parentItemPosition")
                 listener.onPageClick(parentItemPosition)
             }
@@ -105,7 +105,8 @@ private var parentItemPosition: Int = -1
 
     }
 
-    class FeedDishSeeMoreViewHolder(val binding: FeedAdapterRestaurantSeeMoreItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class FeedDishSeeMoreViewHolder(val binding: FeedAdapterRestaurantSeeMoreItemBinding, private val parentItemPosition: Int) : RecyclerView.ViewHolder(binding.root) {
+        private val layout: ConstraintLayout = binding.feedRestaurantSeeMoreItemLayout
         private val thumbnail: ImageView = binding.feedRestaurantSeeMoreItemImg
         private val quantityLeft: TextView = binding.feedRestaurantSeeMoreItemQuantityLeft
 
@@ -118,8 +119,8 @@ private var parentItemPosition: Int = -1
                 .apply(RequestOptions.bitmapTransform(multiTransformation))
                 .placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
 
-            binding.feedRestaurantItemView.setOnClickListener {
-                listener.onPageClick(0)
+            layout.setOnClickListener{
+                listener.onPageClick(parentItemPosition)
             }
         }
     }

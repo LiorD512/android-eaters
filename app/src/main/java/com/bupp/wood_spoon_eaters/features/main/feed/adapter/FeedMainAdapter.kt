@@ -49,8 +49,16 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                 FeedAdapterRestaurantViewHolder(parent.context, binding, adapter, snapHelper)
             }
             FeedAdapterViewType.RESTAURANT_LARGE.ordinal -> {
+                val snapHelper = GravitySnapHelper(Gravity.START)
+                val adapter = FeedRestaurantDishPagerAdapter(this)
                 val binding = FeedAdapterBigRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedAdapterLargeRestaurantViewHolder(parent.context, binding)
+
+                binding.feedRestaurantItemList.addItemDecoration(FeedAdapterDishItemDecorator())
+                binding.feedRestaurantItemList.addItemDecoration(RecyclerHorizontalIndicatorDecoration())
+                binding.feedRestaurantItemList.layoutManager = LinearLayoutManager(parent.context, RecyclerView.HORIZONTAL, false)
+                binding.feedRestaurantItemList.adapter = adapter
+
+                FeedAdapterLargeRestaurantViewHolder(parent.context, binding, adapter, snapHelper)
             }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -80,7 +88,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             }
             is FeedAdapterLargeRestaurant -> {
                 holder as FeedAdapterLargeRestaurantViewHolder
-                holder.bindItems(section, this)
+                holder.bindItems(section, this, position)
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder

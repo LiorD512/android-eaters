@@ -31,14 +31,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="397dp">
 
-                <androidx.viewpager2.widget.ViewPager2
+                <com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
+                        app:snapGravity="end"
+                        app:snapLastItem="true"
+                        app:snapEnabled="true"
+                        app:snapMaxFlingSizeFraction="1"
+                        app:snapToPadding="false"
+                        app:snapScrollMsPerInch="50"
+                        android:nestedScrollingEnabled="false"
                         android:id="@+id/feedRestaurantItemList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"/>
 
                 <ImageButton
                         android:id="@+id/feedRestaurantItemBtnPrevious"

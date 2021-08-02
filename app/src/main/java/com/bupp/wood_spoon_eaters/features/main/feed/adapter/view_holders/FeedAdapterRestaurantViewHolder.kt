@@ -14,7 +14,7 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 
 class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAdapterRestaurantItemBinding, val adapter: FeedRestaurantDishPagerAdapter, val snapHelper: GravitySnapHelper) :
-    RecyclerView.ViewHolder(binding.root), FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
+    RecyclerView.ViewHolder(binding.root) {
 
     interface FeedAdapterRestaurantViewHolderListener {
         fun onRestaurantClick(cook: Cook)
@@ -77,8 +77,5 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
         }
     }
 
-    override fun onPageClick(position: Int) {
-        TODO("Not yet implemented")
-    }
 
 }
