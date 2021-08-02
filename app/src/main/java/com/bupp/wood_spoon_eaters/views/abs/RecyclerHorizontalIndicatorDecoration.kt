@@ -1,18 +1,16 @@
 package com.bupp.wood_spoon_eaters.views.abs
 
+import android.R.attr.path
 import android.content.res.Resources
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.Log
-import android.view.Display
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.google.android.play.core.internal.cc
 
 
 class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
@@ -58,18 +56,21 @@ class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
     private val mInterpolator: Interpolator = AccelerateDecelerateInterpolator()
 
     private val mPaint: Paint = Paint()
+    private val clearPaint: Paint = Paint()
 
     init {
         mPaint.strokeCap = Paint.Cap.ROUND
         mPaint.strokeWidth = mIndicatorStrokeWidth
         mPaint.style = Paint.Style.STROKE
         mPaint.isAntiAlias = true
-        mPaint.color = Color.RED
+
     }
+
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
         val itemCount = parent.adapter!!.itemCount
+
         if(itemCount > 1){
             val paddingBetweenItems = 0.coerceAtLeast(itemCount - 1) * mIndicatorItemPadding
             mIndicatorItemLength = ((parent.width - (mViewHorizontalPadding)) / itemCount) - mIndicatorItemPadding
@@ -105,8 +106,7 @@ class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
     }
 
     private fun drawInactiveIndicators(c: Canvas, indicatorStartX: Float, indicatorPosY: Float, itemCount: Int) {
-        mPaint.setColor(colorInactive)
-
+        mPaint.color = colorInactive
         // width of item indicator including padding
         val itemWidth = mIndicatorItemLength + mIndicatorItemPadding
         var start = indicatorStartX
@@ -156,9 +156,5 @@ class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
         }
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        super.getItemOffsets(outRect, view, parent, state)
-        outRect.bottom = 0//mIndicatorHeight
-    }
 
 }

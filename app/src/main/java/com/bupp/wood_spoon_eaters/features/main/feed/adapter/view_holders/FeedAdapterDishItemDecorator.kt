@@ -53,12 +53,12 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
     }
 
 
-    fun convert(number: Int, original: IntRange, target: IntRange): Int {
-        val ratio = number.toFloat() / (original.last - original.first)
-        return (ratio * (target.last - target.first)).toInt()
-    }
+//    fun convert(number: Int, original: IntRange, target: IntRange): Int {
+//        val ratio = number.toFloat() / (original.last - original.first)
+//        return (ratio * (target.last - target.first)).toInt()
+//    }
 
-    fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
+    private fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
         val percentage = (value - min) / (max - min)
         val result = (percentage * (max2 - min2)) + min2
         Log.d(TAG, "lerp: ${result}")

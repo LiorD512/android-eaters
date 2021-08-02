@@ -1,10 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,24 +11,32 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import at.favre.lib.dali.Dali
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantDishItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantSeeMoreItemBinding
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
-import com.facebook.shimmer.Shimmer
-import com.facebook.shimmer.ShimmerDrawable
+import jp.wasabeef.glide.transformations.BlurTransformation
+import xyz.belvi.blurhash.BlurHash
+
 
 class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapterListener) :
     ListAdapter<FeedRestaurantSectionItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
-    interface FeedRestaurantDishPagerAdapterListener{
-        fun onPageClick()
+//    val blurHash: BlurHash = BlurHash(context, lruSize = 20, punch = 1F)
+private var parentItemPosition: Int = -1
+    interface FeedRestaurantDishPagerAdapterListener {
+        fun onPageClick(position: Int)
+    }
+
+    @JvmName("setChefId1")
+    fun setParentItemPosition(position: Int) {
+        this.parentItemPosition = position
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -38,7 +45,7 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
         return return when (viewType) {
             FeedRestaurantSectionItemViewType.DISH.ordinal -> {
                 val binding = FeedAdapterRestaurantDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedDishViewHolder(binding)
+                FeedDishViewHolder(binding, parentItemPosition)
             }
             else -> { //FeedRestaurantSectionItemViewType.SEE_MORE
                 val binding = FeedAdapterRestaurantSeeMoreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -53,39 +60,34 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
         when (item.data) {
             is FeedRestaurantItemDish -> {
                 holder as FeedDishViewHolder
-                holder.bindItem(listener,holder.itemView.context, item.data as FeedRestaurantItemDish)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish)
             }
             is FeedRestaurantItemSeeMore -> {
                 holder as FeedDishSeeMoreViewHolder
-                holder.bindItem(listener,holder.itemView.context, item.data as FeedRestaurantItemSeeMore)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore)
             }
         }
     }
 
-    class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
+
+    class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding, val parentItemPosition: Int) : RecyclerView.ViewHolder(binding.root) {
         private val layout: ConstraintLayout = binding.feedRestaurantDishItem
         private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
         private val name: TextView = binding.feedRestaurantItemName
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: DishTagsView = binding.feedRestaurantItemTags
 
-//        private val shimmer: Shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
-//            .setDuration(1300) // how long the shimmering animation takes to do one full sweep
-//            .setBaseAlpha(0.7f) //the alpha of the underlying children
-//            .setHighlightAlpha(0.6f) // the shimmer alpha amount
-//            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
-//            .setAutoStart(true)
-//            .build()
-//
-//        // This is the placeholder for the imageView
-//        private val shimmerDrawable = ShimmerDrawable().apply {
-//            setShimmer(shimmer)
-//        }
-
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish) {
 
-
-            Glide.with(context).load(dish.thumbnail_url).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
+//            dish.thumbnail_url?.let{
+//                GlideApp.with(context).load(dish.thumbnail_url)
+//                    .blurPlaceHolder(it, thumbnail, blurHash)
+//                    { requestBuilder ->
+//                        requestBuilder.into(thumbnail)
+//                    }
+//            }
+            GlideApp.with(context).load(dish.thumbnail_url).thumbnail(0.1f).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
             name.text = dish.name
             price.text = dish.formatted_price
 
@@ -94,10 +96,10 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
             tagView.initTagView(tags)
 //            tagView.initTagView(dish.tags)
 
-//            binding.feedRestaurantItemView.setOnClickListener{
-//                Log.d("wowFeedPager", "onDishPageClick")
-//                listener.onPageClick()
-//            }
+            binding.feedRestaurantItemView.setOnClickListener{
+                Log.d("wowFeedPager", "parentItemPosition: $parentItemPosition")
+                listener.onPageClick(parentItemPosition)
+            }
         }
 
 
@@ -106,23 +108,18 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
     class FeedDishSeeMoreViewHolder(val binding: FeedAdapterRestaurantSeeMoreItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val thumbnail: ImageView = binding.feedRestaurantSeeMoreItemImg
         private val quantityLeft: TextView = binding.feedRestaurantSeeMoreItemQuantityLeft
-//        private val price: TextView = binding.feedRestaurantSeeMoreItemPrice
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore) {
             quantityLeft.text = dish.title
-//            price.text = dish.formatted_price
-            Glide.with(context)
-                .asBitmap()
+            val multiTransformation = MultiTransformation(BlurTransformation( 10, 2), CenterCrop())
+            GlideApp.with(context)
                 .load(dish.thumbnail_url)
-                .into(object : CustomTarget<Bitmap>(){
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        Dali.create(context).load(resource).into(thumbnail)
-                    }
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                    }
-                })
-            binding.feedRestaurantItemView.setOnClickListener(){
-                listener.onPageClick()
+                .thumbnail(0.1f)
+                .apply(RequestOptions.bitmapTransform(multiTransformation))
+                .placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
+
+            binding.feedRestaurantItemView.setOnClickListener {
+                listener.onPageClick(0)
             }
         }
     }

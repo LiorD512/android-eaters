@@ -5,18 +5,20 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.*
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()),
     FeedCouponSectionPagerAdapter.FeedCouponSectionListener, FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
     FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
-    interface FeedMainAdapterListener{
+    interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
         fun onRestaurantClick(cook: Cook)
     }
@@ -34,9 +36,16 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                 FeedAdapterCampaignViewHolder(binding)
             }
             FeedAdapterViewType.RESTAURANT.ordinal -> {
+                Log.d("wowFeedAdapter", "onCreateViewHolder -> RESTAURANT")
                 val snapHelper = GravitySnapHelper(Gravity.START)
                 val adapter = FeedRestaurantDishPagerAdapter(this)
                 val binding = FeedAdapterRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+                binding.feedRestaurantItemList.addItemDecoration(FeedAdapterDishItemDecorator())
+                binding.feedRestaurantItemList.addItemDecoration(RecyclerHorizontalIndicatorDecoration())
+                binding.feedRestaurantItemList.layoutManager = LinearLayoutManager(parent.context, RecyclerView.HORIZONTAL, false)
+                binding.feedRestaurantItemList.adapter = adapter
+
                 FeedAdapterRestaurantViewHolder(parent.context, binding, adapter, snapHelper)
             }
             FeedAdapterViewType.RESTAURANT_LARGE.ordinal -> {
@@ -51,7 +60,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("wowFeedAdapter","position: $position")
+        Log.d("wowFeedAdapter", "position: $position")
         val section = getItem(position)
         when (section) {
             is FeedAdapterTitle -> {
@@ -64,7 +73,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             }
             is FeedAdapterRestaurant -> {
                 holder as FeedAdapterRestaurantViewHolder
-                holder.bindItems(section, this)
+                holder.bindItems(section, this, position)
 //                holder.itemView.setOnClickListener {
 //                    Log.d("wowFeedAdapter", "itemView setOnClickListener")
 //                }
@@ -98,7 +107,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onShareBannerClick(campaign: Campaign?) {
-        campaign?.let{
+        campaign?.let {
             listener.onShareBannerClick(campaign)
         }
     }
@@ -107,9 +116,18 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         listener.onRestaurantClick(cook)
     }
 
-    override fun onPageClick() {
-        Log.d("wowFeedAdapter","position:")
-//        currentList.
+    override fun onPageClick(position: Int) {
+        Log.d("wowFeedAdapter", "position:")
+        val section = getItem(position)
+        when (section) {
+            is FeedAdapterRestaurant -> {
+                listener.onRestaurantClick(section.restaurantSection.getCook())
+            }
+            is FeedAdapterLargeRestaurant  -> {
+                listener.onRestaurantClick(section.restaurantSection.getCook())
+            }
+            else -> {}
+        }
     }
 }
 

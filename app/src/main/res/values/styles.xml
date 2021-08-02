@@ -805,6 +805,12 @@
         <item name="cornerSize">7.7dp</item>
     </style>
 
+    <style name="roundedTopCorners7ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">7.7dp</item>
+        <item name="cornerSizeTopRight">7.7dp</item>
+    </style>
+
     <style name="roundedCorners13ImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">13.4dp</item>

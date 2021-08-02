@@ -52,7 +52,7 @@ data class FeedRestaurantSection(
     @Json(name = "chef_name") val chefName: String?,
     @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "title") val title: String?,
-    @Json(name = "chef_id") val chefId: String?,
+    @Json(name = "chef_id") val chefId: Long?,
     @Json(name = "chef_thumbnail_url") val chefThumbnailUrl: String?,
     @Json(name = "avg_rating") val avgRating: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
