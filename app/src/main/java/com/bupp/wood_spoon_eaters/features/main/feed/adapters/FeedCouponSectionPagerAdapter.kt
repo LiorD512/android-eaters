@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
+package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.feed.adapter
+package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
 import android.util.Log
 import android.view.Gravity
@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.*
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.*
+import com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators.FeedAdapterDishItemDecorator
+import com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
@@ -82,9 +83,6 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             is FeedAdapterRestaurant -> {
                 holder as FeedAdapterRestaurantViewHolder
                 holder.bindItems(section, this, position)
-//                holder.itemView.setOnClickListener {
-//                    Log.d("wowFeedAdapter", "itemView setOnClickListener")
-//                }
             }
             is FeedAdapterLargeRestaurant -> {
                 holder as FeedAdapterLargeRestaurantViewHolder

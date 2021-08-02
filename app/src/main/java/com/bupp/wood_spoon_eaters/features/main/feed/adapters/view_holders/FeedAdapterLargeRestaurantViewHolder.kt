@@ -1,26 +1,25 @@
-package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
+package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
 import android.content.Context
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
-import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
+import com.bupp.wood_spoon_eaters.databinding.FeedAdapterBigRestaurantItemBinding
+import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedRestaurantDishPagerAdapter
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 
-class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAdapterRestaurantItemBinding, val adapter: FeedRestaurantDishPagerAdapter, val snapHelper: GravitySnapHelper) :
-    RecyclerView.ViewHolder(binding.root) {
+class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: FeedAdapterBigRestaurantItemBinding, val adapter: FeedRestaurantDishPagerAdapter, val snapHelper: GravitySnapHelper) : RecyclerView.ViewHolder(binding.root) {
 
-    interface FeedAdapterRestaurantViewHolderListener {
+    interface FeedAdapterRestaurantViewHolderListener{
         fun onRestaurantClick(cook: Cook)
     }
 
-    fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
+    fun bindItems(restaurantSection: FeedAdapterLargeRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
         Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {
@@ -67,7 +66,7 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
                 }
                 binding.feedRestaurantItemBtnPrevious.setOnClickListener {
                     var curPosition = snapHelper.currentSnappedPosition
-                    if(curPosition == NO_POSITION){
+                    if(curPosition == RecyclerView.NO_POSITION){
                         curPosition = adapter.itemCount - 1
                     }
                     if(curPosition >= 1)
@@ -76,6 +75,4 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
             }
         }
     }
-
-
 }

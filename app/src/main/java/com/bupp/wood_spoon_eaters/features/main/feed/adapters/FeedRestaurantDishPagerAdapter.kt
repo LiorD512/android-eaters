@@ -1,9 +1,8 @@
-package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
+package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantDishItemBinding
@@ -22,7 +20,6 @@ import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
 import jp.wasabeef.glide.transformations.BlurTransformation
-import xyz.belvi.blurhash.BlurHash
 
 
 class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapterListener) :

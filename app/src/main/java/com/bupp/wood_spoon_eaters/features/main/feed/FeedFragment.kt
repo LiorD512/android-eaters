@@ -14,8 +14,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedCouponSectionPagerAdapter
+import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
