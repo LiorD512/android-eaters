@@ -72,8 +72,8 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
             }
         }
 
-        binding.reviewExperienceFragmentSubmitBtn?.let {
-            binding.reviewExperienceFragmentSubmitBtn.apply {
+        binding.textViewReview?.let {
+            binding.textViewReview.apply {
                 // Set the content view to 0% opacity but visible, so that it is visible
                 // (but fully transparent) during the animation.
                 alpha = 0f
