@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.reviews
 
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 
 class ReviewsViewModel() : ViewModel() {
@@ -12,6 +13,7 @@ class ReviewsViewModel() : ViewModel() {
 
     fun onNextClick() {
         navigationEvent.postRawValue(NavigationEvent.EXPERIENCE_TO_DETAILS)
+
     }
 
 

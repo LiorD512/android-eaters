@@ -14,5 +14,8 @@
         <item name="android:windowBackground">@drawable/splash_bkg</item>
 
         <item name="android:autofilledHighlight">@android:color/transparent</item>
+
+        <item name="android:windowContentTransitions">true</item>
+
     </style>
 </resources>

@@ -23,6 +23,7 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
         initUi()
         initObservers()
     }

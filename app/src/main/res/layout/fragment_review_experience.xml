@@ -19,7 +19,7 @@
 
 
             <ImageView
-                    android:id="@+id/addressChooserDialogClose"
+                    android:id="@+id/reviewExperienceFragmentImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
@@ -30,13 +30,17 @@
         </FrameLayout>
 
         <ImageView
+                android:id="@+id/image"
                 android:layout_width="144dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="36.4dp"
-                android:src="@mipmap/ic_launcher_round"
+                android:transitionName="logo_transition"
+                app:srcCompat="@mipmap/ic_launcher_round"
                 android:layout_height="144dp"/>
 
         <TextView
+                android:transitionName="title_transition"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -44,10 +48,12 @@
                 style="@style/LatoBlack19DarkGrey"
                 android:text="Israeli in The Big Apple"/>
         <TextView
+                android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingTop="3.9dp"
+                android:transitionName="subtitle_transition"
                 style="@style/LatoReg13PurpelyGrey"
                 android:text="by Assaf Beer"/>
         <TextView
@@ -65,7 +71,7 @@
                 style="@style/LatoReg13Black"
                 android:text="Your feedback helps us improve"/>
 
-        <com.bupp.wood_spoon_eaters.custom_views.RatingStarsView
+        <com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
                 android:id="@+id/pickFiltersFragRatingStarsView"
                 android:layout_width="match_parent"
                 android:paddingTop="22.8dp"
@@ -80,11 +86,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="Next"
+                android:layout_gravity="bottom"
                 android:layout_marginStart="15.4dp"
                 android:layout_marginEnd="15.4dp"
-                android:layout_marginBottom="14.8dp"
-
-                />
+                android:layout_marginBottom="14.8dp" />
 
 
     </LinearLayout>
