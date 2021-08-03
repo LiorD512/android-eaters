@@ -112,7 +112,7 @@ class SwipeableAddDishItemDecorator(
                         val addIconLeft = right - addIconMargin - intrinsicWidth!!
                         val addIconRight = right - addIconMargin
                         val addIconBottom = addIconTop + intrinsicHeight
-                        calcIconAlpha(child.translationX - 30)
+                        calcIconAlpha(abs(child.translationX))
                         // Draw the delete icon
 //                            addIcon?.alpha = selectedAlpha
                         addIcon?.setBounds(addIconLeft, addIconTop, addIconRight, addIconBottom)
@@ -152,9 +152,9 @@ class SwipeableAddDishItemDecorator(
 //    }
 
     private fun calcIconAlpha(translationX: Float) { //225..0
-        Log.d(SwipeableRemoveDishItemDecorator.TAG, translationX.toString())
+        Log.d(TAG, translationX.toString())
         if (translationX > 0) {
-            addIcon?.alpha = Utils.lerp(abs(translationX), 0f, SWIPE_THRESHOLD, 0f, ALPHA_THRESHOLD).toInt()
+            addIcon?.alpha = Utils.lerp(abs(translationX), 0f, SWIPE_THRESHOLD, 50f, ALPHA_THRESHOLD).toInt()
         }
     }
 

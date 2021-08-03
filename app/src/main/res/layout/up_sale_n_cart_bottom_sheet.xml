@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:background="@drawable/top_cornered_bkg">
 
     <LinearLayout
@@ -48,7 +48,7 @@
             android:background="@color/silver" />
 
         <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/restaurantActContainer"
+                android:id="@+id/upsaleNCartContainer"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

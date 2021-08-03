@@ -16,7 +16,7 @@ class SwipeableRecycler @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0):
     RecyclerView(context, attrs, defStyleAttr) {
 
-    fun initSwipeableRecycler(adapter: SwipeableAdapter<*>, divider: Drawable?) {
+    fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
         //todo - nicole - lets talk about "decoratedViewType"
         this.adapter = adapter
 
@@ -34,7 +34,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val selectedShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_add_bkg)
         this.addItemDecoration(SwipeableAddDishItemDecorator(context, defaultShape, selectedShape))
 
-
-        this.addItemDecoration(DividerItemDecoratorDish(divider))
+//        this.addItemDecoration(DividerItemDecoratorDish(divider)) //todo - i toםk this out to fragment, its very specific implementation
     }
 }

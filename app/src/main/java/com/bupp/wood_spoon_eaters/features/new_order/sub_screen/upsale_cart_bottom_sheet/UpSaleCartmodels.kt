@@ -1,0 +1,34 @@
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet
+
+import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
+import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
+import kotlinx.parcelize.Parcelize
+
+data class UpSaleAdapterItem(
+    override var quantity: Int = 0,
+    override val dish: Dish
+): SwipeableAdapterItem()
+
+
+sealed class CartBaseAdapterItem(
+    var type: CartAdapterViewType?
+) : SwipeableAdapterItem()
+
+enum class CartAdapterViewType {
+    DISH,
+    SUB_TOTAL
+}
+
+data class CartAdapterItem(
+    override var quantity: Int = 0,
+    override val dish: Dish
+): CartBaseAdapterItem(CartAdapterViewType.DISH)
+
+data class CartAdapterSubTotalItem(
+    val subTotal: String,
+    override val dish: Dish? = null,
+    override var quantity: Int = 0
+): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)

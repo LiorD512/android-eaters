@@ -19,7 +19,7 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
     private val intrinsicHeight = removeIcon?.intrinsicHeight
 
     init {
-        removeIcon?.alpha = 255
+        removeIcon?.alpha = 0
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {

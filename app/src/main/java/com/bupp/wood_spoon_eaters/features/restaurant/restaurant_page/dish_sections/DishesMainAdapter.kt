@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderAvailableHeader
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSkeleton
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 
 class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener) :
     SwipeableAdapter<DishSections>(DiffCallback()) {
@@ -68,9 +69,7 @@ class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener)
     }
 
 
-    abstract class SwipeableBaseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        abstract val isSwipeable: Boolean
-    }
+
 
     abstract class BaseItemViewHolder(view: View) : SwipeableBaseItemViewHolder(view) {
         abstract override val isSwipeable: Boolean

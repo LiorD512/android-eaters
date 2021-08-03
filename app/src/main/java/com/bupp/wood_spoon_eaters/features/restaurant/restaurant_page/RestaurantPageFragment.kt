@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
@@ -81,8 +82,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
             adapterDishes?.let { adapter ->
                 val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-                restaurantDishesList.initSwipeableRecycler(adapter, divider)
-                //todo - nicole - i add the decoratedViewType in here
+                restaurantDishesList.initSwipeableRecycler(adapter)
+                restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
+                //todo - nicole - i add the addItemDecoration in here
             }
         }
     }

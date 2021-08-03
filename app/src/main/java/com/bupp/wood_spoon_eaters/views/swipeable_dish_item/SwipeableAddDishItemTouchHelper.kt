@@ -3,10 +3,8 @@ package com.bupp.wood_spoon_eaters.views.swipeable_dish_item
 import android.R
 import android.graphics.Canvas
 import android.util.Log
-import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 
@@ -33,7 +31,7 @@ class SwipeableAddDishItemTouchHelper(val adapter: SwipeableAdapter<*>) : ItemTo
     }
 
     override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        if(viewHolder is DishesMainAdapter.SwipeableBaseItemViewHolder){
+        if(viewHolder is SwipeableBaseItemViewHolder){
             val isSwipeable = viewHolder.isSwipeable
             if (isSwipeable) {
                 return super.getSwipeDirs(recyclerView, viewHolder)

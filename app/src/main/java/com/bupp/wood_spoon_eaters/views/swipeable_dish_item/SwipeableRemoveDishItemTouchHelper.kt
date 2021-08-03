@@ -30,7 +30,7 @@ class SwipeableRemoveDishItemTouchHelper(val adapter: SwipeableAdapter<*>) :
     }
 
     override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        if(viewHolder is DishesMainAdapter.SwipeableBaseItemViewHolder){
+        if(viewHolder is SwipeableBaseItemViewHolder){
             val isSwipeable = viewHolder.isSwipeable
             if (isSwipeable) {
                 return super.getSwipeDirs(recyclerView, viewHolder)

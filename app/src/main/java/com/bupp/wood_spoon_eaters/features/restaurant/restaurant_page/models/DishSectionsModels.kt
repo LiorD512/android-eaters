@@ -11,8 +11,7 @@ sealed class DishSections(
 data class DishSectionAvailableHeader(
     val header: String,
     override val dish: Dish? = null,
-    override var quantity: Int = 0,
-    val isSwipeable: Boolean = false
+    override var quantity: Int = 0
 ) : DishSections(viewType = AVAILABLE_HEADER) {
     companion object {
         val viewType = AVAILABLE_HEADER
@@ -21,8 +20,7 @@ data class DishSectionAvailableHeader(
 
 class DishSectionUnavailableHeader(
     override val dish: Dish? = null,
-    override var quantity: Int = 0,
-    val isSwipeable: Boolean = false
+    override var quantity: Int = 0
 ) : DishSections(viewType = UNAVAILABLE_HEADER) {
     companion object {
         val viewType = UNAVAILABLE_HEADER
@@ -31,8 +29,7 @@ class DishSectionUnavailableHeader(
 
 data class DishSectionSingleDish(
     override val dish: Dish,
-    override var quantity: Int = 0,
-    val isSwipeable: Boolean = true
+    override var quantity: Int = 0
 ) : DishSections(viewType = SINGLE_DISH) {
     companion object {
         val viewType = SINGLE_DISH
@@ -41,8 +38,7 @@ data class DishSectionSingleDish(
 
 class DishSectionSkeleton(
     override val dish: Dish? = null,
-    override var quantity: Int = 0,
-    val isSwipeable: Boolean = false
+    override var quantity: Int = 0
 ) : DishSections(viewType = SKELETON) {
     companion object {
         val viewType = SKELETON

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.adapters
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.sub_screens.upsale
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.UpSaleItemBinding
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleAdapterItem
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -24,7 +25,9 @@ class UpSaleAdapter : SwipeableAdapter<UpSaleAdapterItem>(DiffCallback()) {
         itemViewHolder.bindItem(item)
     }
 
-    class UpSaleItemViewHolder(binding: UpSaleItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class UpSaleItemViewHolder(binding: UpSaleItemBinding) : SwipeableBaseItemViewHolder(binding.root) {
+
+        override val isSwipeable: Boolean = true
 
         private val name: TextView = binding.upSaleItemName
         private val description: TextView = binding.upSaleItemDescription
