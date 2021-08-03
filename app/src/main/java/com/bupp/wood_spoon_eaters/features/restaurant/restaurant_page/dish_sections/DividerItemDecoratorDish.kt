@@ -8,7 +8,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType.UNAVAILABLE_HEADER
 import java.util.*
 
-class DividerItemDecoratorDish(val divider: Drawable?) : ItemDecoration() {
+class DividerItemDecoratorDish(val divider: Drawable?, private val decoratedViewType: Int? = null) : ItemDecoration() {
 
     override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = parent.paddingLeft
@@ -20,8 +20,8 @@ class DividerItemDecoratorDish(val divider: Drawable?) : ItemDecoration() {
                 val child = parent.getChildAt(i)
                 val currentViewType = adapter.getItemViewType(i)
                 val nextViewType = adapter.getItemViewType(i + 1)
-                if (currentViewType == SINGLE_DISH.ordinal && nextViewType != UNAVAILABLE_HEADER.ordinal) {
-                    child?.let {
+                if (decoratedViewType == null || (currentViewType == SINGLE_DISH.ordinal && nextViewType != UNAVAILABLE_HEADER.ordinal)) {
+                        child?.let {
                         val params = child.layoutParams as RecyclerView.LayoutParams
                         val top = child.bottom + params.bottomMargin
                         val bottom = top + divider!!.intrinsicHeight

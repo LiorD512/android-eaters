@@ -18,12 +18,13 @@ class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener)
 
     interface RestaurantPageMainAdapterListener {}
 
+
     override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BaseItemViewHolder {
+    ): SwipeableBaseItemViewHolder {
         when (viewType) {
             DishSectionSingleDish.viewType.ordinal -> {
                 val binding = RestaurantItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -67,7 +68,13 @@ class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener)
     }
 
 
-    abstract class BaseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    abstract class SwipeableBaseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        abstract val isSwipeable: Boolean
+    }
+
+    abstract class BaseItemViewHolder(view: View) : SwipeableBaseItemViewHolder(view) {
+        abstract override val isSwipeable: Boolean
+
         abstract fun bind(
             section: DishSections,
             listener: RestaurantPageMainAdapterListener

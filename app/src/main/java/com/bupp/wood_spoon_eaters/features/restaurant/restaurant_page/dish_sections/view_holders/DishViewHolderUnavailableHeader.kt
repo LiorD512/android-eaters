@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 
 
 class DishViewHolderUnavailableHeader(val binding: RestaurantItemAvailableLaterBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
+    override val isSwipeable: Boolean = false
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.RestaurantPageMainAdapterListener) {
         section as DishSectionUnavailableHeader

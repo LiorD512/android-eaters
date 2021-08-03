@@ -6,10 +6,11 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 
-class SwipeableAddDishItemTouchHelper(val adapter: SwipeableAdapter<*>, private val decoratedViewType: Int? = null) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+class SwipeableAddDishItemTouchHelper(val adapter: SwipeableAdapter<*>) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         adapter.updateItemQuantityAdd(viewHolder.absoluteAdapterPosition)
@@ -32,10 +33,13 @@ class SwipeableAddDishItemTouchHelper(val adapter: SwipeableAdapter<*>, private 
     }
 
     override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        if(decoratedViewType == null || viewHolder.itemViewType == decoratedViewType){
-            return super.getSwipeDirs(recyclerView, viewHolder)
+        if(viewHolder is DishesMainAdapter.SwipeableBaseItemViewHolder){
+            val isSwipeable = viewHolder.isSwipeable
+            if (isSwipeable) {
+                return super.getSwipeDirs(recyclerView, viewHolder)
+            }
         }
-        return  0
+        return 0
     }
 
 

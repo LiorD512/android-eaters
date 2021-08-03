@@ -31,7 +31,6 @@ class UpSaleAdapter : SwipeableAdapter<UpSaleAdapterItem>(DiffCallback()) {
         private val price: TextView = binding.upSaleItemPrice
         private val img: ShapeableImageView = binding.upSaleItemImg
 
-
         fun bindItem(dishItem: UpSaleAdapterItem) {
             Log.d(TAG,"bindItem")
             val dish = dishItem.dish

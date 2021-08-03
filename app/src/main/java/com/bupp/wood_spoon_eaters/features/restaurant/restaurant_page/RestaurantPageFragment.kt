@@ -1,8 +1,10 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +21,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -45,7 +48,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initData(mainViewModel.currentRestaurant)
+        viewModel.initData(mainViewModel.currentRestaurant) //todo - nicole - what is this ?
 
         initUi()
         initObservers()
@@ -62,7 +65,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
         }
         with(binding.restaurantMainListLayout) {
-//            restaurantDishesList.adapter = adapterDishes // todo - *nicole - i edited this - i add the adapter inside - initSwipeableRecycler
+//            restaurantDishesList.adapter = adapterDishes // todo - * nicole - i edited this - i add the adapter inside - initSwipeableRecycler
             restaurantCuisinesList.adapter = adapterCuisines
 
             detailsSkeleton.visibility = View.GONE
@@ -77,7 +80,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
             adapterDishes?.let { adapter ->
-                restaurantDishesList.initSwipeableRecycler(adapter)
+                val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
+                restaurantDishesList.initSwipeableRecycler(adapter, divider)
+                //todo - nicole - i add the decoratedViewType in here
             }
         }
     }

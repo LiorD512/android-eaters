@@ -64,9 +64,9 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment(){
 
     private fun initUI() {
         with(binding) {
-            mainAdapter = UpSaleNCartAdapter(this@UpSaleNCartBottomSheet)
-            upSaleCartViewPager.adapter = mainAdapter
-            upSaleCartViewPager.isUserInputEnabled = false
+//            mainAdapter = UpSaleNCartAdapter(this@UpSaleNCartBottomSheet)
+//            upSaleCartViewPager.adapter = mainAdapter
+//            upSaleCartViewPager.isUserInputEnabled = false
         }
     }
 
