@@ -63,9 +63,11 @@
 
 
         <TextView
+                android:id="@+id/textViewReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:layout_marginTop="23.4dp"
                 style="@style/LatoReg13Black"
                 android:text="Tell others what you thought about your order"/>
@@ -81,7 +83,7 @@
 
         <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
                 android:id="@+id/editTextReviewDetails"
-                app:hint="Share your experience with our WoodSpoon/n community (optional)"
+                app:hint="Share your experience with our WoodSpoon community (optional)"
                 app:maxChar="50"
                 android:layout_marginTop="14.6dp"
                 android:layout_gravity="center"
@@ -111,8 +113,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="Submit review"
+            android:transitionName="btn_transition"
             android:layout_gravity="bottom"
-            android:visibility="gone"
             android:layout_marginStart="15.4dp"
             android:layout_marginEnd="15.4dp"
             android:layout_marginBottom="14.8dp" />
