@@ -18,14 +18,6 @@
                 android:layout_height="wrap_content">
 
 
-            <ImageView
-                    android:id="@+id/reviewExperienceFragmentImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
-                    android:layout_marginLeft="15.4dp"
-                    android:padding="5dp"
-                    android:src="@drawable/icons_close_grey"/>
 
         </FrameLayout>
 
@@ -86,7 +78,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="Next"
-                android:transitionName="btn_transition"
                 android:layout_gravity="bottom"
                 android:layout_marginStart="15.4dp"
                 android:layout_marginEnd="15.4dp"

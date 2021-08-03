@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".features.reviews.review_activity.ReviewActivity">
 
+
     <androidx.fragment.app.FragmentContainerView
             android:id="@+id/reviewsContainerFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -16,5 +17,14 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/reviews_nav" />
 
+    <ImageButton
+            android:id="@+id/reviewDetailFragmentImageView"
+            android:layout_width="wrap_content"
+            android:background="@null"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:padding="15.4dp"
+            android:src="@drawable/icons_close_grey"/>
 
-</FrameLayout>
+    </FrameLayout>
+

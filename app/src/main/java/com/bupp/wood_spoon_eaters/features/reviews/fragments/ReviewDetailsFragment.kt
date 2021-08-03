@@ -49,11 +49,6 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
 
     }
 
-//    fun fadeIn()
-//    {
-//        val animation = AnimationUtils.loadAnimation(context , R.anim.fade_in)
-//        binding.editTextReviewDetails.animation = animation
-//    }
 
     private fun  fadeIn() {
         binding.editTextLayoutReview?.let {
@@ -90,26 +85,5 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        initObservers()
-    }
-
-    private fun initObservers() {
-        viewModel.navigationEvent.observe(viewLifecycleOwner, Observer { navigationEvent ->
-            handleNavigationEvent(navigationEvent)
-        })
-    }
-
-    private fun handleNavigationEvent(navigationEvent: LiveEvent<ReviewsViewModel.NavigationEvent>?) {
-        navigationEvent?.getContentIfNotHandled()?.let {
-            when (it) {
-                ReviewsViewModel.NavigationEvent.EXPERIENCE_TO_DETAILS -> {
-                    val action = ReviewExperienceFragmentDirections.actionReviewExperienceFragmentToReviewDetailsFragment()
-                    findNavController().navigate(action)
-                }
-            }
-        }
-    }
 }
