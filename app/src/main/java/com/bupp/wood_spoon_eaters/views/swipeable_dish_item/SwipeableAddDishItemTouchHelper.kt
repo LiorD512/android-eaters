@@ -32,7 +32,7 @@ class SwipeableAddDishItemTouchHelper(val adapter: SwipeableAdapter<*>, private 
     }
 
     override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        if(decoratedViewType == null ||viewHolder.itemViewType == decoratedViewType){
+        if(decoratedViewType == null || viewHolder.itemViewType == decoratedViewType){
             return super.getSwipeDirs(recyclerView, viewHolder)
         }
         return  0

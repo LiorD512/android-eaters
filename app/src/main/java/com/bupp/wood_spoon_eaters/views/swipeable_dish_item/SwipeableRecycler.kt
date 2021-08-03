@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet.CustomItemAnimator
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomItemAnimator
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
@@ -17,9 +17,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     RecyclerView(context, attrs, defStyleAttr) {
 
     fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
+        this.adapter = adapter
+
         ItemTouchHelper(SwipeableAddDishItemTouchHelper(adapter, DishSectionsViewType.SINGLE_DISH.ordinal)).attachToRecyclerView(this)
         ItemTouchHelper(SwipeableRemoveDishItemTouchHelper(adapter, DishSectionsViewType.SINGLE_DISH.ordinal)).attachToRecyclerView(this)
-
 
         this.itemAnimator?.changeDuration = 150
         this.itemAnimator?.moveDuration = 0
@@ -32,9 +33,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val selectedShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_add_bkg)
         this.addItemDecoration(SwipeableAddDishItemDecorator(context, defaultShape, selectedShape, DishSectionsViewType.SINGLE_DISH.ordinal))
 
-
         val divider: Drawable? = ContextCompat.getDrawable(context, R.drawable.divider_white_three)
         this.addItemDecoration(DividerItemDecoratorDish(divider))
-
     }
 }

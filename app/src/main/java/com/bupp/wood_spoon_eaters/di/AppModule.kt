@@ -35,6 +35,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.Checkou
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
@@ -109,6 +110,7 @@ val appModule = module {
     //New Order
     viewModel { NewOrderMainViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SingleDishInfoViewModel(get(), get()) }
+    viewModel { UpSaleNCartViewModel() }
     viewModel { SingleDishIngredientViewModel(get()) }
     viewModel { CheckoutViewModel(get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get()) }

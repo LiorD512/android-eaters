@@ -33,8 +33,7 @@ import kotlin.math.abs
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
-    TimePickerBottomSheetRestaurant.TimePickerListener
-{
+    TimePickerBottomSheetRestaurant.TimePickerListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -63,21 +62,21 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
         }
         with(binding.restaurantMainListLayout) {
-            restaurantDishesList.adapter = adapterDishes
+//            restaurantDishesList.adapter = adapterDishes // todo - *nicole - i edited this - i add the adapter inside - initSwipeableRecycler
             restaurantCuisinesList.adapter = adapterCuisines
 
             detailsSkeleton.visibility = View.GONE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePicker.setOnClickListener{
-                viewModel.currentSelectedDate?.let{ deliveryDate->
+            restaurantTimePicker.setOnClickListener {
+                viewModel.currentSelectedDate?.let { deliveryDate ->
                     val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
                     timePickerBottomSheet.setDeliveryDate(deliveryDate)
                     timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
-            adapterDishes?.let{ adapter->
+            adapterDishes?.let { adapter ->
                 restaurantDishesList.initSwipeableRecycler(adapter)
             }
         }
@@ -141,7 +140,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             if (restaurant.video.isNullOrEmpty()) {
                 Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
             } else {
-               //show video icon
+                //show video icon
             }
         }
         with(binding.restaurantMainListLayout) {
@@ -184,6 +183,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             })
         }
     }
+
     //    /** All sections click actions **/
 //    private fun getMainAdapterListener(): RestaurantPageMainAdapter.RestaurantPageMainAdapterListener =
 //        object: RestaurantPageMainAdapter.RestaurantPageMainAdapterListener{

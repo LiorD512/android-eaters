@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <View
+            android:id="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="77dp"
+            android:layout_height="4.8dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="7.7dp"
+            android:background="@drawable/silver_two_rounded_rect" />
+
+    <TextView
+            android:id="@+id/upsaleCartTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            style="@style/LatoBlack15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="17.5dp"
+            android:layout_marginBottom="23.3dp"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:text="Anything else?" />
+
+    <View
+            android:id="@+id/sep"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upsaleCartTitle"
+            android:layout_width="match_parent"
+            android:layout_height="1.9dp"
+            android:background="@color/silver" />
+
+
+    <androidx.viewpager2.widget.ViewPager2
+            android:background="@color/dark_40"
+            android:id="@+id/upSaleCartViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:layout_gravity="bottom"
+            android:id="@+id/upSaleBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            app:title="No thanks" />
+
+</FrameLayout>
+
