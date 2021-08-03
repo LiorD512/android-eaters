@@ -48,7 +48,6 @@ private var parentItemPosition: Int = -1
                 val binding = FeedAdapterRestaurantSeeMoreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedDishSeeMoreViewHolder(binding, parentItemPosition)
             }
-
         }
     }
 
