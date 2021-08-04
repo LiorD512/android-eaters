@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
+import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel

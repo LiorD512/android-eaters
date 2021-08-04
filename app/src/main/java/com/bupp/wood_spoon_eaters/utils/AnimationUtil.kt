@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.utils
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -51,10 +52,24 @@ class AnimationUtil {
         }
     }
 
-    fun slideFromTo(view: View, from: Float, to: Float, customDuration: Long = 500, customStartDelay: Long = 150) {
+    fun slideHorizontalFromTo(view: View, from: Float, to: Float, customDuration: Long = 500, customStartDelay: Long = 150) {
         view.alpha = 0f
         ObjectAnimator.ofFloat(
             view, "translationX",
+            from, to,
+        ).apply {
+            duration = customDuration
+            interpolator = AccelerateDecelerateInterpolator()
+            startDelay = customStartDelay
+            repeatCount = 0
+            start()
+        }
+    }
+
+    fun slideVerticalFromTo(view: View, from: Float, to: Float, customDuration: Long = 500, customStartDelay: Long = 150) {
+        view.alpha = 0f
+        ObjectAnimator.ofFloat(
+            view, "translationY",
             from, to,
         ).apply {
             duration = customDuration
@@ -81,7 +96,7 @@ class AnimationUtil {
         }
     }
 
-    fun alphaOut(view: View, customDuration: Long = 250, customStartDelay: Long = 150) {
+    fun alphaOut(view: View, customDuration: Long = 250, customStartDelay: Long = 0, listener: Animator.AnimatorListener? = null) {
         view.alpha = 1f
         ObjectAnimator.ofFloat(
             view, "alpha",
@@ -91,6 +106,9 @@ class AnimationUtil {
             interpolator = AccelerateInterpolator()
             startDelay = customStartDelay
             repeatCount = 0
+            listener?.let{
+                addListener(listener)
+            }
             start()
         }
     }

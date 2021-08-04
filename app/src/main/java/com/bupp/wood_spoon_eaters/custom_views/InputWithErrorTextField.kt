@@ -10,7 +10,7 @@
 //import android.widget.FrameLayout
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.common.Constants
-//import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
+//import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 //
 //class InputWithErrorTextField @JvmOverloads
 //constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :

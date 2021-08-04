@@ -36,7 +36,7 @@ class CartViewModel : ViewModel() {
         list.add(CartAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", "", null, null, null, null, null, null, null)))
         list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
         list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-        list.add(CartAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", "", null, null, null, null, null, null, null)))
+        list.add(CartAdapterItem(1, Dish(0, null, "z1", null, "d", null, "a", "", null, null, null, null, null, null, null)))
         list.add(CartAdapterSubTotalItem("150"))
         return CartData(list)
     }

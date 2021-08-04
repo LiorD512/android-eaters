@@ -9,7 +9,8 @@ import kotlinx.parcelize.Parcelize
 
 data class UpSaleAdapterItem(
     override var quantity: Int = 0,
-    override val dish: Dish
+    override val dish: Dish,
+    override val isSwipeable: Boolean = true
 ): SwipeableAdapterItem()
 
 
@@ -24,11 +25,13 @@ enum class CartAdapterViewType {
 
 data class CartAdapterItem(
     override var quantity: Int = 0,
-    override val dish: Dish
+    override val dish: Dish,
+    override val isSwipeable: Boolean = true
 ): CartBaseAdapterItem(CartAdapterViewType.DISH)
 
 data class CartAdapterSubTotalItem(
     val subTotal: String,
     override val dish: Dish? = null,
-    override var quantity: Int = 0
+    override var quantity: Int = 0,
+    override val isSwipeable: Boolean = false
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)

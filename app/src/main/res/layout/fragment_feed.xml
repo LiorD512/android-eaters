@@ -91,28 +91,28 @@ a home cooked meal very soon :)"
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"-->
-<!--                    android:id="@+id/feedFragRefreshLayout"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:scrollbars="none">-->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"
+                    android:id="@+id/feedFragRefreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scrollbars="none">
 
-    <com.aliumujib.swipetorefresh.SwipeToRefreshLayout
-            android:id="@+id/feedFragRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"
-            app:srl_animation="rotate"
-            app:srl_direction="top"
-            app:srl_icon="@mipmap/ic_launcher_round"
-            app:srl_shadow_shape="rounded_rect">
+<!--    <com.aliumujib.swipetorefresh.SwipeToRefreshLayout-->
+<!--            android:id="@+id/feedFragRefreshLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"-->
+<!--            app:srl_animation="rotate"-->
+<!--            app:srl_direction="top"-->
+<!--            app:srl_icon="@mipmap/ic_launcher_round"-->
+<!--            app:srl_shadow_shape="rounded_rect">-->
 
 <!--        <androidx.recyclerview.widget.RecyclerView-->
 <!--                android:id="@+id/feedFragList"-->
@@ -135,9 +135,9 @@ a home cooked meal very soon :)"
                 android:clipToPadding="false"
                 android:layoutAnimation="@anim/feed_layout_animation" />
 
-<!--            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </com.aliumujib.swipetorefresh.SwipeToRefreshLayout>
+<!--    </com.aliumujib.swipetorefresh.SwipeToRefreshLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

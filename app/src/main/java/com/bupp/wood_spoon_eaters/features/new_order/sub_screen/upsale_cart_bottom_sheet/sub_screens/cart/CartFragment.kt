@@ -11,14 +11,16 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.FragmentCartBinding
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
 
     private val viewModel by viewModel<CartViewModel>()
+    private val mainViewModel by sharedViewModel<UpSaleNCartViewModel>()
     private val binding: FragmentCartBinding by viewBinding()
-    private var cartAdapter = CartAdapter()
+    private lateinit var cartAdapter: CartAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,10 +38,12 @@ class CartFragment : Fragment() {
 
     private fun initUi() {
         with(binding){
+            cartAdapter = CartAdapter(this@CartFragment)
+
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.line_divider)
             cartFragList.initSwipeableRecycler(cartAdapter)
             cartFragList.addItemDecoration(DividerItemDecorator(divider))
-            cartFragList.setHasFixedSize(true)
+//            cartFragList.setHasFixedSize(true)
         }
         viewModel.initData()
     }
@@ -54,6 +58,10 @@ class CartFragment : Fragment() {
         with(binding){
             cartAdapter.submitList(data.items)
         }
+    }
+
+    override fun onCartBtnClicked() {
+        mainViewModel.onCartBtnClick()
     }
 
 }

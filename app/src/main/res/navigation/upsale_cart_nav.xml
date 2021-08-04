@@ -15,15 +15,22 @@
                 app:destination="@id/upSaleFragment"
                 app:enterAnim="@anim/slide_right_enter"
                 app:exitAnim="@anim/slide_right_exit"
-                app:popEnterAnim="@anim/slide_left_enter"
-                app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/upSaleFragment"/>
+                app:popUpTo="@+id/cartFragment"/>
     </fragment>
 
     <fragment
             android:id="@+id/upSaleFragment"
             android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.sub_screens.upsale.UpSaleFragment"
             android:label="fragment_upsale"
-            tools:layout="@layout/fragment_upsale" />
+            tools:layout="@layout/fragment_upsale" >
+        <action
+                android:id="@+id/action_upSaleFragment_to_cartFragment"
+                app:destination="@id/cartFragment"
+                app:exitAnim="@anim/slide_right_enter"
+                app:enterAnim="@anim/slide_right_exit"
+                app:popExitAnim="@anim/slide_left_enter"
+                app:popEnterAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/cartFragment"/>
+    </fragment>
 
 </navigation>

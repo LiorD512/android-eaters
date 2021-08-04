@@ -44,19 +44,21 @@ class SwipeableAddDishItemDecorator(
                             val bottom = child.bottom - verticalPadding
 
                             val adapterPosition = parent.getChildAdapterPosition(child)
-                            val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
-                            if (isInCart) {
-                                right = 15
-                                selectedShape.setBounds(left, top, right, bottom)
-                                selectedShape.draw(canvas)
-                            } else {
-                                right = 10
-                                val defaultAlpha = calcDefaultAlpha(child.translationX)
-                                defaultShape.alpha = defaultAlpha
-                                defaultShape.setBounds(left, top, right, bottom)
-                                defaultShape.draw(canvas)
+                            val isSwipeable = (parent.adapter as SwipeableAdapter<*>).isSwipeable(adapterPosition)
+                            if (isSwipeable) {
+                                val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
+                                if (isInCart) {
+                                    right = 15
+                                    selectedShape.setBounds(left, top, right, bottom)
+                                    selectedShape.draw(canvas)
+                                } else {
+                                    right = 10
+                                    val defaultAlpha = calcDefaultAlpha(child.translationX)
+                                    defaultShape.alpha = defaultAlpha
+                                    defaultShape.setBounds(left, top, right, bottom)
+                                    defaultShape.draw(canvas)
+                                }
                             }
-
                         }
                     }
                 }

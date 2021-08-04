@@ -151,6 +151,11 @@
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoReg11PurpleyGreyThree">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/purpley_grey_three</item>
+    </style>
 
     <style name="LatoBlack23Dark">
         <item name="android:fontFamily">@font/lato_black</item>
@@ -817,4 +822,5 @@
     </style>
 
     <color name="medium_grey">#929092</color>
+    <color name="purpley_grey_three">#929092</color>
 </resources>
