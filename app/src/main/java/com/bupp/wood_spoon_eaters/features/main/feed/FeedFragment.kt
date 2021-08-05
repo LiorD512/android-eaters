@@ -260,14 +260,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
                 .anchor(feedFragHeader, 0, -30, true)
                 .text(text)
                 .arrow(true)
-                .floatingAnimation(Tooltip.Animation.SLOW)
+//                .floatingAnimation(Tooltip.Animation.SLOW)
                 .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
-                .fadeDuration(500)
+                .fadeDuration(250)
                 .showDuration(10000)
                 .overlay(false)
                 .maxWidth(feedFragHeader.measuredWidth - 50)
                 .create()
-
             tooltip!!
                 .doOnHidden { }
                 .doOnFailure { }

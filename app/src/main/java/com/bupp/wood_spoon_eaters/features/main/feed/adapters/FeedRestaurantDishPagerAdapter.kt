@@ -76,7 +76,7 @@ private var parentItemPosition: Int = -1
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish) {
 
-//            dish.thumbnail_url?.let{
+//            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
 //                    .blurPlaceHolder(it, thumbnail, blurHash)
 //                    { requestBuilder ->
@@ -87,10 +87,7 @@ private var parentItemPosition: Int = -1
             name.text = dish.name
             price.text = dish.formatted_price
 
-            //todo - remove this when Tag entity is provided by server
-            val tags = listOf<Tag>(Tag(0, "Vegan"), Tag(1, "sababa achi its gooos and looooooks wellll"), Tag(2, "Kosher"))
-            tagView.initTagView(tags)
-//            tagView.initTagView(dish.tags)
+            tagView.initTagView(dish.tags)
 
             layout.setOnClickListener{
                 Log.d("wowFeedPager", "parentItemPosition: $parentItemPosition")

@@ -181,10 +181,9 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
         val targetHeight = defaultPeekHeight
         ObjectAnimator.ofInt(
             behavior!!, "peekHeight",
-            50, 25, targetHeight
+            50, targetHeight
         ).apply {
                 duration = 600
-                startDelay = 150
                 interpolator = FastOutSlowInInterpolator()
                 start()
             }
