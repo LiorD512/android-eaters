@@ -25,10 +25,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun initUi(attrs: AttributeSet?) {
-
-
-
-            adapter = DishTagsViewAdapter()
+        adapter = DishTagsViewAdapter()
         with(binding) {
             tagViewList.adapter = adapter
             tagViewList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)

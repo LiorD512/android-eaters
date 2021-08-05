@@ -58,6 +58,12 @@
         <attr name="shouldShowDivider" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="ExpandableTextView">
+        <attr name="collapseMaxLines" format="integer" />
+        <attr name="viewMoreText" format="string" />
+        <attr name="viewLessText" format="string" />
+    </declare-styleable>
+
     <declare-styleable name="DishTagsView">
         <attr name="isScrollable" format="boolean" />
     </declare-styleable>

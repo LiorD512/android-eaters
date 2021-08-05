@@ -73,7 +73,7 @@
                                 <!--android:layout_width="match_parent"-->
                                 <!--android:layout_height="match_parent"/>-->
 
-                                <com.bupp.wood_spoon_eaters.views.UserImageView
+                                <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                                         android:id="@+id/singleDishInfoCook"
                                         android:layout_width="57.6dp"
                                         android:layout_height="57.6dp"

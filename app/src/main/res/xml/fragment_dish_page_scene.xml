@@ -45,12 +45,12 @@
                             motion:keyPositionType="pathRelative"
                             android:alpha="1"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/restaurantHeader"/>
+                            motion:motionTarget="@+id/dishHeader"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="70"
-                            motion:motionTarget="@+id/restaurantHeader"/>
+                            motion:motionTarget="@+id/dishHeader"/>
                 </KeyFrameSet>
     </Transition>
 

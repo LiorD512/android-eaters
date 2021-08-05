@@ -102,11 +102,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         })
 
 
-
-
-
-
-
         viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
             handleFeedBannerUi(it)
         })

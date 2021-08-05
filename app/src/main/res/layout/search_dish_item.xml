@@ -44,7 +44,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
-                <com.bupp.wood_spoon_eaters.views.UserImageView
+                <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                         app:imageSize="SMALL"
                         android:id="@+id/searchDishItemUserImg"
                         android:layout_marginTop="7.7dp"

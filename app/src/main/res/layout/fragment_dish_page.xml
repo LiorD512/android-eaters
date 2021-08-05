@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/event_logo_bkg" />
+                android:src="@drawable/my_dishes_pic" />
 
     </FrameLayout>
 
@@ -87,19 +88,34 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-            android:id="@+id/restaurantHeader"
+            android:id="@+id/dishHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_white_top_cornered"
             android:orientation="horizontal"
-            android:padding="15.4dp"
+            android:padding="23dp"
             app:layout_constraintBottom_toTopOf="@id/mainList"
             app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+                android:id="@+id/dishHeaderName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Bold19Dark"
+                tools:text="Labneh"/>
+
+        <TextView
+                android:id="@+id/dishHeaderPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Bold19Dark"
+                tools:text="$7"/>
 
     </LinearLayout>
 
 
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
             android:id="@+id/mainList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +127,7 @@
                     android:id="@+id/dishMainListLayout"
                     layout="@layout/dish_main_list_layout" />
 
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

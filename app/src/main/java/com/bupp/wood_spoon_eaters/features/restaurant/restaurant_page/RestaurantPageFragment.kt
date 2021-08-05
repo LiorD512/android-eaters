@@ -2,14 +2,12 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheetRestaurant
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -62,8 +60,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantDishesList.adapter = adapterDishes
             restaurantCuisinesList.adapter = adapterCuisines
 
-            detailsSkeleton.visibility = View.GONE
+//            detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
+
 
             restaurantTimePicker.setOnClickListener {
                 viewModel.currentSelectedDate?.let { deliveryDate ->
@@ -117,13 +116,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding) {
             restHeaderRestName.text = "Restaurant name"
             restHeaderChefName.text = "by ${cook.getFullName()}"
-            Glide.with(requireContext()).load(cook.thumbnail).transform(CircleCrop()).into(restHeaderChefThumbnail)
+            restHeaderChefThumbnail.setImage(cook.thumbnail)
             rating.text = "${cook.rating} (${cook.reviewCount} ratings)"
 
             topHeaderRestaurantName.text = "Restaurant name"
             topHeaderChefName.text = "by ${cook.getFullName()}"
-
-
         }
     }
 
@@ -139,43 +136,51 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding.restaurantMainListLayout) {
             //Description
             restaurantDescription.text = restaurant.about
-            handleReadMoreButton()
 
             //Cuisines
             adapterCuisines?.submitList(restaurant.cuisines)
             restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
 
             detailsLayout.visibility = View.VISIBLE
-            detailsSkeletonLayout.root.visibility = View.INVISIBLE
+//            detailsSkeletonLayout.root.visibility = View.INVISIBLE
         }
     }
 
-    private fun handleReadMoreButton() {
-        with(binding.restaurantMainListLayout) {
-            restaurantDescriptionViewMore.setOnClickListener {
-                if (restaurantDescription.maxLines == Integer.MAX_VALUE) {
-                    restaurantDescription.maxLines = 2
-                    restaurantDescriptionViewMore.text = "View more"
-                } else {
-                    restaurantDescription.maxLines = Integer.MAX_VALUE
-                    restaurantDescriptionViewMore.text = "View less"
-                }
-            }
-
-            restaurantDescription.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    val l = restaurantDescription.layout
-                    if (l != null) {
-                        val lines = l.lineCount
-                        if (lines > 2)
-                            restaurantDescriptionViewMore.visibility = View.VISIBLE
-                        restaurantDescription.maxLines = 2
-                    }
-                    restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            })
-        }
-    }
+//    private fun handleReadMoreButton() {
+//        with(binding.restaurantMainListLayout) {
+//            restaurantDescriptionViewMore.setOnClickListener {
+//                if (restaurantDescription.maxLines == Integer.MAX_VALUE) {
+//                    applyLayoutTransition()
+//                    restaurantDescription.maxLines = 2
+//                    restaurantDescriptionViewMore.text = "View more"
+//                } else {
+//                    applyLayoutTransition()
+//                    restaurantDescription.maxLines = Integer.MAX_VALUE
+//                    restaurantDescriptionViewMore.text = "View less"
+//                }
+//            }
+//
+//            restaurantDescription.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+//                override fun onGlobalLayout() {
+//                    val l = restaurantDescription.layout
+//                    if (l != null) {
+//                        val lines = l.lineCount
+//                        if (lines > 2)
+//                            restaurantDescriptionViewMore.visibility = View.VISIBLE
+//                        restaurantDescription.maxLines = 2
+//                    }
+//                    restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
+//                }
+//            })
+//        }
+//    }
+//
+//    private fun applyLayoutTransition() {
+//        val transition = LayoutTransition()
+//        transition.setDuration(300)
+//        transition.enableTransitionType(LayoutTransition.CHANGING)
+//        binding.restaurantMainListLayout.detailsLayout.layoutTransition = transition
+//    }
 
     /** All sections click actions **/
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
@@ -194,10 +199,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
-        adapterDishes = null
-        adapterCuisines = null
+//        adapterDishes = null
+//        adapterCuisines = null
     }
 
     companion object {

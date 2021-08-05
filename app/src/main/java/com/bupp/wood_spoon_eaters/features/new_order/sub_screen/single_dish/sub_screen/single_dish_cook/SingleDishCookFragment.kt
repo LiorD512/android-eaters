@@ -11,7 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.CookProfileFragmentBinding
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CooksDishesAdapter
@@ -24,7 +24,7 @@ import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SingleDishCookFragment : Fragment(R.layout.cook_profile_fragment), CooksDishesAdapter.CooksProfileDishesListener,
-    UserImageView.UserImageViewListener {
+    UserImageVideoView.UserImageViewListener {
 
     val binding: CookProfileFragmentBinding by viewBinding()
     val mainViewModel by sharedViewModel<NewOrderMainViewModel>()

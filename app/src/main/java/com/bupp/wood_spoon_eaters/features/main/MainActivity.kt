@@ -25,6 +25,7 @@ import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddr
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*

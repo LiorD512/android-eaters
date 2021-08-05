@@ -150,19 +150,11 @@
             app:layout_constraintBottom_toTopOf="@id/mainList"
             app:layout_constraintStart_toStartOf="parent">
 
-        <FrameLayout
+        <com.bupp.wood_spoon_eaters.views.UserImageView
+                android:id="@+id/restHeaderChefThumbnail"
                 android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/blue_circle">
-
-            <ImageView
-                    android:id="@+id/restHeaderChefThumbnail"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/icons_profile" />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"/>
 
         <LinearLayout
                 android:layout_width="0dp"
