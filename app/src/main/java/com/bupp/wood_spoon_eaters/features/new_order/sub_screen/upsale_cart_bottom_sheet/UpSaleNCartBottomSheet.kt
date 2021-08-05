@@ -39,6 +39,7 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var cartAdapter: UpSaleNCartAdapter
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
     }
@@ -59,6 +60,7 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
         dialog.setOnShowListener {
             Log.d(TAG, "setOnShowListener")
             val d = it as BottomSheetDialog
+            d.setCancelable(false)
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
             behavior = BottomSheetBehavior.from(sheet!!)
             behavior!!.peekHeight = defaultPeekHeight
@@ -118,7 +120,7 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun onCloseBtnClick() {
-
+        dismiss()
     }
 
 
@@ -126,7 +128,7 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
         viewModel.navigationEvent.observe(viewLifecycleOwner, {
             when (it) {
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_CHECKOUT -> {
-                    setCartUi()
+                    dismiss()
                 }
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_UP_SALE -> {
                     navToUpSale()

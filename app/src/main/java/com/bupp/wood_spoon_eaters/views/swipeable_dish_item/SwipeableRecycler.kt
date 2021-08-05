@@ -7,9 +7,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomItemAnimator
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 class SwipeableRecycler @JvmOverloads
@@ -39,6 +36,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val selectedShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_add_bkg)
         this.addItemDecoration(SwipeableAddDishItemDecorator(context, defaultShape, selectedShape))
 
-//        this.addItemDecoration(DividerItemDecoratorDish(divider)) //todo - i toםk this out to fragment, its very specific implementation
+//        this.addItemDecoration(DividerItemDecoratorDish(divider)) //todo - i took this out to fragment, its very specific implementation
     }
 }
