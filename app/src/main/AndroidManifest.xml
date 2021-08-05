@@ -32,20 +32,16 @@
 
 
         <activity android:name=".features.reviews.review_activity.ReviewActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <!-- <activity android:name=".delete_me.TestActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:windowSoftInputMode="adjustResize"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
+         <activity android:name=".delete_me.TestActivity"
+         android:screenOrientation="portrait"
+         android:windowSoftInputMode="adjustResize">
+         <intent-filter>
+         <action android:name="android.intent.action.MAIN" />
+         <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+         </activity>
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU" />

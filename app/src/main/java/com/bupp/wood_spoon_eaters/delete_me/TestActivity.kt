@@ -10,6 +10,10 @@ class TestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
 
-        UpSaleBottomSheet().show(supportFragmentManager, "upsale")
+//        UpSaleBottomSheet().show(supportFragmentManager, "upsale")
+
+        BottomSheetReviews().show(supportFragmentManager, "bottomsheet")
+
+
     }
 }

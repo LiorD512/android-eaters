@@ -2,12 +2,14 @@ package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import com.bupp.wood_spoon_eaters.databinding.RatingStarsViewBinding
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.RatingStarsViewReviewsBinding
+import com.bupp.wood_spoon_eaters.utils.Utils
 
 
 class RatingStarsViewReviews @JvmOverloads
@@ -29,19 +31,75 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var listener: RatingStarsViewListener? = null
 
     init{
-        with(binding){
-            this@RatingStarsViewReviews.arrayOfStars =
-                arrayListOf<ImageView>(ratingStarNum1, ratingStarNum2, ratingStarNum3, ratingStarNum4, ratingStarNum5)
+        attrs.let {
+            val attrArray = context.obtainStyledAttributes(attrs, R.styleable.RatingStarsViewReviews)
 
-            ratingStarNum1.setOnClickListener(this@RatingStarsViewReviews)
-            ratingStarNum2.setOnClickListener(this@RatingStarsViewReviews)
-            ratingStarNum3.setOnClickListener(this@RatingStarsViewReviews)
-            ratingStarNum4.setOnClickListener(this@RatingStarsViewReviews)
-            ratingStarNum5.setOnClickListener(this@RatingStarsViewReviews)
+            with(binding) {
+                this@RatingStarsViewReviews.arrayOfStars =
+                    arrayListOf<ImageView>(ratingStarNum1, ratingStarNum2, ratingStarNum3, ratingStarNum4, ratingStarNum5)
 
-            reset()
+                ratingStarNum1.setOnClickListener(this@RatingStarsViewReviews)
+                ratingStarNum2.setOnClickListener(this@RatingStarsViewReviews)
+                ratingStarNum3.setOnClickListener(this@RatingStarsViewReviews)
+                ratingStarNum4.setOnClickListener(this@RatingStarsViewReviews)
+                ratingStarNum5.setOnClickListener(this@RatingStarsViewReviews)
+
+                reset()
+
+
+//                val isSmallUi = attrArray.getBoolean(R.styleable.RatingStarsViewReviews_isSmall,
+//                    false)
+//                if(isSmallUi){
+//                    setSmallUi()
+//                }
+            }
         }
     }
+//    private fun setSmallUi(){
+//        with(binding) {
+//            val topBottomPadding = Utils.toPx(15)
+//            val leftRightPadding = Utils.toPx(2)
+//
+//
+//            ratingStarNum1.minimumWidth = 17
+//            ratingStarNum2.minimumWidth = 17
+//            ratingStarNum3.minimumWidth = 17
+//            ratingStarNum4.minimumWidth = 17
+//            ratingStarNum5.minimumWidth = 17
+//
+//            ratingStarNum1.minimumHeight = 15
+//            ratingStarNum2.minimumHeight = 15
+//            ratingStarNum3.minimumHeight = 15
+//            ratingStarNum4.minimumHeight = 15
+//            ratingStarNum5.minimumHeight = 15
+//
+//            ratingStarNum1.setPadding(leftRightPadding,
+//                topBottomPadding,
+//                leftRightPadding,
+//                topBottomPadding)
+//
+//            ratingStarNum2.setPadding(leftRightPadding,
+//                topBottomPadding,
+//                leftRightPadding,
+//                topBottomPadding)
+//
+//            ratingStarNum3.setPadding(leftRightPadding,
+//                topBottomPadding,
+//                leftRightPadding,
+//                topBottomPadding)
+//
+//            ratingStarNum4.setPadding(leftRightPadding,
+//                topBottomPadding,
+//                leftRightPadding,
+//                topBottomPadding)
+//
+//            ratingStarNum5.setPadding(leftRightPadding,
+//                topBottomPadding,
+//                leftRightPadding,
+//                topBottomPadding)
+//        }
+//    }
+
 
     override fun onClick(v: View?) {
         with(binding){
