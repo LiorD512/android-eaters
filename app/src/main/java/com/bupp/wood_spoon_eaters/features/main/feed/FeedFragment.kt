@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -137,7 +138,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
 
     override fun onHeaderAddressClick() {
-        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+//        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
     override fun onHeaderDateClick() {
