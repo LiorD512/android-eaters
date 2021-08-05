@@ -1,32 +1,43 @@
 package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet
 
 import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.app.Dialog
-import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.Navigation.findNavController
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListener
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class UpSaleNCartBottomSheet : BottomSheetDialogFragment(){
+
+class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
+
+    private val defaultPeekHeight = Utils.toPx(400)
 
     private val binding: UpSaleNCartBottomSheetBinding by viewBinding()
     private val viewModel by sharedViewModel<UpSaleNCartViewModel>()
+    private var currentParentHeight: Int = defaultPeekHeight
+    private var behavior: BottomSheetBehavior<View>? = null
+
+    private lateinit var cartAdapter: UpSaleNCartAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
@@ -34,41 +45,49 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.FloatingBottomSheetStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
-    private lateinit var behavior: BottomSheetBehavior<View>
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-
-        val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        var width = displayMetrics.widthPixels
-        var height = displayMetrics.heightPixels
-
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
+        val displayMetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        var height = displayMetrics.heightPixels
+
         dialog.setOnShowListener {
+            Log.d(TAG, "setOnShowListener")
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
             behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isFitToContents = false
-            behavior.isDraggable = true
-            behavior.state = STATE_HALF_EXPANDED
-//            behavior.expandedOffset = Utils.toPx(130)
-            behavior.addBottomSheetCallback(object : SimpleBottomSheetCallback() {
+            behavior!!.peekHeight = defaultPeekHeight
+            behavior!!.addBottomSheetCallback(object : SimpleBottomSheetCallback() {
                 override fun onSlide(view: View, v: Float) {
-                    Log.d("wowBottomShit","height: $height")
-                    Log.d("wowBottomShit","view y: ${view.y}")
                     val yPos = height - (binding.floatingCartBtnLayout.height).toFloat() - view.y
-                    binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
-                    Log.d("wowBottomShit","yPos: $yPos")
+                    if (yPos > binding.floatingCartBtnLayout.height) {
+                        binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+                        Log.d(TAG, "yPos: $yPos")
+                        Log.d(TAG,"view y: ${view.y}")
+                    }
+                    currentParentHeight = height - view.y.toInt()
                 }
             })
+
+            refreshButtonPosition()
+
+//            currentParentHeight = behavior!!.peekHeight
         }
 
         return dialog
+    }
+
+    private fun refreshButtonPosition() {
+        val displayMetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        var height = displayMetrics.heightPixels
+        val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
+        binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,94 +98,133 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment(){
 
         initUI()
         initObservers()
+
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding) {
+            val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.line_divider)
+            cartFragList.addItemDecoration(DividerItemDecorator(divider))
 
-//            upsaleCartMainLayout.waitForLayout {
-//                val displayMetrics = DisplayMetrics()
-//                requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-//                var height = displayMetrics.heightPixels
-//
-//                val yPos = height - (floatingCartBtnLayout.height).toFloat() - upsaleCartMainLayout.y
-//                binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
-//                Log.d("wowBottomShit","yPos: $yPos")
-//                Log.d("wowBottomShit","floatingCartBtnLayout.height: ${floatingCartBtnLayout.height}")
-//                Log.d("wowBottomShit","upsaleCartMainLayout.y: ${upsaleCartMainLayout.y}")
-//            }
-
-//            upSaleCartViewPager.isUserInputEnabled = false
-//            upSaleCartViewPager.adapter = UpSaleNCartAdapter(this@UpSaleNCartBottomSheet)
-            upSaleBtn.setOnClickListener {
+            upSaleCartBtn.setOnClickListener {
                 viewModel.onCartBtnClick()
             }
-            upsaleCartBackBtn.setOnClickListener {
-                navToCart()
-//                findNavController(binding.upsaleNCartContainer).navigate(R.id.action_upSaleFragment_to_cartFragment)
+
+            upsaleCartCloseBtn.setOnClickListener {
+                onCloseBtnClick()
             }
-//            navToUpSale()
+            viewModel.initData()
         }
     }
 
+    private fun onCloseBtnClick() {
+
+    }
+
+
     private fun initObservers() {
         viewModel.navigationEvent.observe(viewLifecycleOwner, {
-            when(it){
+            when (it) {
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_CHECKOUT -> {
-                    navToCart()
+                    setCartUi()
                 }
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_UP_SALE -> {
                     navToUpSale()
                 }
             }
         })
+        viewModel.upsaleNCartLiveData.observe(viewLifecycleOwner, {
+            handleCartData(it)
+        })
     }
 
-//    override fun onBackPressed() {
-//        if (binding.upSaleCartViewPager.currentItem == 0) {
-//            // If the user is currently looking at the first step, allow the system to handle the
-//            // Back button. This calls finish() on this activity and pops the back stack.
-//            super.onBackPressed()
-//        } else {
-//            // Otherwise, select the previous step.
-//            binding.upSaleCartViewPager.currentItem = viewPager.currentItem - 1
-//        }
-//    }
+    private fun handleCartData(data: UpSaleNCartViewModel.CartData) {
+        Log.d(TAG, "handleCartData data: $data")
+        cartAdapter = UpSaleNCartAdapter()
+        binding.cartFragList.initSwipeableRecycler(cartAdapter)
+        cartAdapter.submitList(data.items)
+    }
 
     private fun navToUpSale() {
-        animateTitle("Any thing else?")
-        animateBtn("No thanks")
-        AnimationUtil().alphaIn(binding.upsaleCartBackBtn)
-        findNavController(binding.upsaleNCartContainer).navigate(R.id.action_cartFragment_to_upSaleFragment)
+        Log.d(TAG, "navToUpSale")
+        setUpsaleUi()
+        animateCollapse(object : SimpleAnimatorListener() {
+            override fun onAnimationEnd(p0: Animator?) {
+                super.onAnimationEnd(p0)
+                Log.d(TAG, "navToUpSale: onAnimationEnd")
+                viewModel.initData()
+                animateExpand()
+            }
+        })
     }
 
-    private fun navToCart() {
+    private fun animateCollapse(listener: SimpleAnimatorListener) {
+        val currentHeight = currentParentHeight
+        Log.d(TAG, "animateCollapse: currentHeight $currentHeight")
+        behavior!!.peekHeight = currentHeight
+        behavior!!.state = STATE_COLLAPSED
+        ObjectAnimator.ofInt(
+            behavior!!, "peekHeight",
+            currentHeight, 50
+        ).apply {
+                duration = 500
+                interpolator = FastOutSlowInInterpolator()
+                addListener(listener)
+                start()
+            }
+    }
+
+    private fun animateExpand() {
+        Log.d(TAG, "animateExpand")
+        val targetHeight = defaultPeekHeight
+        ObjectAnimator.ofInt(
+            behavior!!, "peekHeight",
+            50, 25, targetHeight
+        ).apply {
+                duration = 600
+                startDelay = 150
+                interpolator = FastOutSlowInInterpolator()
+                start()
+            }
+        refreshButtonPosition()
+
+    }
+
+    private fun setUpsaleUi() {
+        Log.d(TAG, "setUpsaleUi")
+        animateTitle("Any thing else?")
+        animateBtn("No Thanks")
+        AnimationUtil().alphaIn(binding.upsaleCartCloseBtn)
+    }
+
+    private fun setCartUi() {
+        Log.d(TAG, "setCartUi")
         animateTitle("Restaurant name")
         animateBtn("Go to checkout")
-        AnimationUtil().alphaOut(binding.upsaleCartBackBtn)
-        findNavController(binding.upsaleNCartContainer).navigate(R.id.action_upSaleFragment_to_cartFragment)
+        AnimationUtil().alphaOut(binding.upsaleCartCloseBtn)
     }
 
-    private fun animateTitle(text: String){
-        AnimationUtil().alphaOut(binding.upsaleCartTitle, listener = object: SimpleAnimatorListener(){
+    private fun animateTitle(text: String) {
+        AnimationUtil().alphaOut(binding.upsaleCartTitle, listener = object : SimpleAnimatorListener() {
             override fun onAnimationEnd(p0: Animator?) {
                 binding.upsaleCartTitle.text = text
                 AnimationUtil().alphaIn(binding.upsaleCartTitle)
             }
         })
     }
-    private fun animateBtn(text: String){
-        AnimationUtil().alphaOut(binding.floatingCartBtnLayout, listener = object: SimpleAnimatorListener(){
+
+    private fun animateBtn(text: String) {
+        AnimationUtil().alphaOut(binding.floatingCartBtnLayout, listener = object : SimpleAnimatorListener() {
             override fun onAnimationEnd(p0: Animator?) {
-                binding.upSaleBtn.setBtnText(text)
+                binding.upSaleCartBtn.setBtnText(text)
                 AnimationUtil().alphaIn(binding.floatingCartBtnLayout)
             }
         })
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        findNavController(binding.upsaleNCartContainer).popBackStack()
+    companion object {
+        const val TAG = "wowUpSaleNCartBS"
+
     }
 
 }

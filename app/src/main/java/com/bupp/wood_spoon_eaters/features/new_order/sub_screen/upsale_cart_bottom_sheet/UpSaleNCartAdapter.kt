@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.sub_screens.cart
+package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -8,16 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
 import com.bupp.wood_spoon_eaters.databinding.*
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CartAdapterItem
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CartAdapterSubTotalItem
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CartAdapterViewType
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CartBaseAdapterItem
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
+import com.google.android.material.imageview.ShapeableImageView
 
-class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
+class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
 
     interface CartAdapterListener{
         fun onCartBtnClicked()
@@ -27,7 +23,11 @@ class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBase
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CartAdapterViewType.DISH.ordinal -> {
+            CartAdapterViewType.UPSALE_DISH.ordinal -> {
+                val binding = UpSaleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                UpSaleItemViewHolder(binding)
+            }
+            CartAdapterViewType.CART_DISH.ordinal -> {
                 val binding = CartItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 CartDishItemViewHolder(binding)
             }
@@ -41,13 +41,17 @@ class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBase
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (item) {
+            is UpsaleAdapterItem -> {
+                holder as UpSaleItemViewHolder
+                holder.bindItem(item)
+            }
             is CartAdapterItem -> {
                 holder as CartDishItemViewHolder
                 holder.bindItem(item)
             }
             is CartAdapterSubTotalItem -> {
                 holder as CartSubTotalItemViewHolder
-                holder.bindItem(item, listener)
+                holder.bindItem(item)
             }
         }
     }
@@ -63,7 +67,7 @@ class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBase
 
         @SuppressLint("SetTextI18n")
         fun bindItem(dishItem: CartAdapterItem) {
-            Log.d(TAG, "bindItem")
+            Log.d(TAG, "bindItem - cart dish")
             val dish = dishItem.dish
             dish?.let {
                 name.text = dish.name
@@ -75,6 +79,26 @@ class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBase
 
     }
 
+    class UpSaleItemViewHolder(binding: UpSaleItemBinding) : SwipeableBaseItemViewHolder(binding.root) {
+
+        override val isSwipeable: Boolean = true
+
+        private val name: TextView = binding.upSaleItemName
+        private val description: TextView = binding.upSaleItemDescription
+        private val price: TextView = binding.upSaleItemPrice
+        private val img: ShapeableImageView = binding.upSaleItemImg
+
+        fun bindItem(dishItem: UpsaleAdapterItem) {
+            Log.d(TAG,"bindItem - upsale")
+            val dish = dishItem.dish
+            name.text = dish.name
+            description.text = dish.description
+            price.text = "$${dish.price?.formatedValue} X${dishItem.quantity}"
+        }
+
+    }
+
+
     class CartSubTotalItemViewHolder(binding: CartItemSubtotalBinding) : SwipeableBaseItemViewHolder(binding.root) {
 
         override val isSwipeable: Boolean = false
@@ -84,8 +108,8 @@ class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBase
         private val pb: ImageView = binding.cartSubTotalItemPb
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(dishItem: CartAdapterSubTotalItem, listener: CartAdapterListener) {
-            Log.d(TAG, "bindItem")
+        fun bindItem(dishItem: CartAdapterSubTotalItem) {
+            Log.d(TAG, "bindItem - subtotal")
             subtotal.text = dishItem.subTotal
 
 //            cartBtn.setOnClickListener {
@@ -102,7 +126,7 @@ class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBase
         }
 
         override fun areContentsTheSame(oldItem: CartBaseAdapterItem, newItem: CartBaseAdapterItem): Boolean {
-            return oldItem == newItem
+            return oldItem.type == newItem.type
         }
     }
 

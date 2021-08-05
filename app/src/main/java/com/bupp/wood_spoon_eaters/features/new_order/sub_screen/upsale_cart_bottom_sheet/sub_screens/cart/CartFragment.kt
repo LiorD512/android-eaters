@@ -11,6 +11,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.FragmentCartBinding
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.cart_bottom_sheet.CartAdapter
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.cart_bottom_sheet.CartViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,7 +40,7 @@ class CartFragment : Fragment(), CartAdapter.CartAdapterListener {
 
     private fun initUi() {
         with(binding){
-            cartAdapter = CartAdapter(this@CartFragment)
+            cartAdapter = CartAdapter()
 
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.line_divider)
             cartFragList.initSwipeableRecycler(cartAdapter)

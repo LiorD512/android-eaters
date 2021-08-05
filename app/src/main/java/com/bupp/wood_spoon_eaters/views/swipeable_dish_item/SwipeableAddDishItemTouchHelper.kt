@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 
-class SwipeableAddDishItemTouchHelper(val adapter: SwipeableAdapter<*>) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+class SwipeableAddDishItemTouchHelper() : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+    var adapter: SwipeableAdapter<*>? = null
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapter.updateItemQuantityAdd(viewHolder.absoluteAdapterPosition)
-        adapter.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+        adapter?.updateItemQuantityAdd(viewHolder.absoluteAdapterPosition)
+        adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
     }
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {

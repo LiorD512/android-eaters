@@ -69,7 +69,7 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
     }
 
     private fun calcIconAlpha(translationX: Float) { //225..0
-        Log.d(TAG, translationX.toString())
+//        Log.d(TAG, translationX.toString())
         if (translationX > 0) {
             removeIcon?.alpha = Utils.lerp(abs(translationX), 0f, SWIPE_THRESHOLD, 0f, ALPHA_THRESHOLD).toInt()
         }

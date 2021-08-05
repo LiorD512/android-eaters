@@ -7,11 +7,11 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 import kotlinx.parcelize.Parcelize
 
-data class UpSaleAdapterItem(
-    override var quantity: Int = 0,
-    override val dish: Dish,
-    override val isSwipeable: Boolean = true
-): SwipeableAdapterItem()
+//data class UpSaleAdapterItem(
+//    override var quantity: Int = 0,
+//    override val dish: Dish,
+//    override val isSwipeable: Boolean = true
+//): SwipeableAdapterItem()
 
 
 sealed class CartBaseAdapterItem(
@@ -19,15 +19,22 @@ sealed class CartBaseAdapterItem(
 ) : SwipeableAdapterItem()
 
 enum class CartAdapterViewType {
-    DISH,
+    UPSALE_DISH,
+    CART_DISH,
     SUB_TOTAL
 }
+
+data class UpsaleAdapterItem(
+    override var quantity: Int = 0,
+    override val dish: Dish,
+    override val isSwipeable: Boolean = true
+): CartBaseAdapterItem(CartAdapterViewType.UPSALE_DISH)
 
 data class CartAdapterItem(
     override var quantity: Int = 0,
     override val dish: Dish,
     override val isSwipeable: Boolean = true
-): CartBaseAdapterItem(CartAdapterViewType.DISH)
+): CartBaseAdapterItem(CartAdapterViewType.CART_DISH)
 
 data class CartAdapterSubTotalItem(
     val subTotal: String,

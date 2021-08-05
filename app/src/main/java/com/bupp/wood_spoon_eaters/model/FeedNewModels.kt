@@ -99,7 +99,7 @@ data class FeedRestaurantItemDish(
     val name: String?,
     val thumbnail_url: String?,
     val formatted_price: String?,
-    val tags: List<Tag>?
+    val tags: List<String>?
 ) : Parcelable
 
 @Parcelize

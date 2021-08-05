@@ -26,10 +26,10 @@
         <action
                 android:id="@+id/action_upSaleFragment_to_cartFragment"
                 app:destination="@id/cartFragment"
-                app:exitAnim="@anim/slide_right_enter"
-                app:enterAnim="@anim/slide_right_exit"
-                app:popExitAnim="@anim/slide_left_enter"
-                app:popEnterAnim="@anim/slide_left_exit"
+                app:enterAnim="@anim/slide_left_exit"
+                app:exitAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_right_enter"
+                app:popEnterAnim="@anim/slide_right_exit"
                 app:popUpTo="@+id/cartFragment"/>
     </fragment>
 

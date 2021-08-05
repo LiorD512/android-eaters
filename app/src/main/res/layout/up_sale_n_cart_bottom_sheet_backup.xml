@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:id="@+id/upsaleCartCoordinatorLayout">
+        android:id="@+id/upsaleCartCoordinatorLayout"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
             android:id="@+id/upsaleCartMainLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="vertical"
-            android:background="@drawable/top_cornered_30_bkg">
+            tools:background="@drawable/top_cornered_30_bkg">
 
         <LinearLayout
                 android:id="@+id/upsaleCartTopLayout"
@@ -38,13 +38,13 @@
 
                 <ImageButton
                         android:alpha="0"
-                        android:id="@+id/upsaleCartCloseBtn"
+                        android:id="@+id/upsale_cart_close_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center"
                         android:layout_marginStart="15.4dp"
                         android:background="@null"
-                        android:src="@drawable/icons_close" />
+                        android:src="@drawable/ic_arrow_left" />
 
                 <TextView
                         android:id="@+id/upsaleCartTitle"
@@ -95,5 +95,5 @@
     </FrameLayout>
 
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

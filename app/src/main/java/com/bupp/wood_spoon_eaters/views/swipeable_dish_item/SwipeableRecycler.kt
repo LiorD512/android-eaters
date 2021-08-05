@@ -16,12 +16,17 @@ class SwipeableRecycler @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0):
     RecyclerView(context, attrs, defStyleAttr) {
 
+    private val addTouchHelper = SwipeableAddDishItemTouchHelper()
+    private val removeTouchHelper = SwipeableRemoveDishItemTouchHelper()
+
     fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
         //todo - nicole - lets talk about "decoratedViewType"
         this.adapter = adapter
 
-        ItemTouchHelper(SwipeableAddDishItemTouchHelper(adapter)).attachToRecyclerView(this)
-        ItemTouchHelper(SwipeableRemoveDishItemTouchHelper(adapter)).attachToRecyclerView(this)
+        ItemTouchHelper(addTouchHelper).attachToRecyclerView(this)
+        ItemTouchHelper(removeTouchHelper).attachToRecyclerView(this)
+        addTouchHelper.adapter = adapter
+        removeTouchHelper.adapter = adapter
 
         this.itemAnimator?.changeDuration = 150
         this.itemAnimator?.moveDuration = 0

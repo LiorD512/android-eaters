@@ -66,7 +66,6 @@ class SwipeableAddDishItemDecorator(
         }
     }
 
-    var lastDx = 0f
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = 0
         var right = 10
@@ -101,9 +100,6 @@ class SwipeableAddDishItemDecorator(
                             right = child.translationX.toInt()
                         }
 
-                        if (lastDx != child.translationX) {
-                            lastDx = child.translationX
-                        }
 
                         selectedCopy?.setBounds(left, top, right, bottom)
                         selectedCopy?.draw(canvas)
@@ -145,16 +141,9 @@ class SwipeableAddDishItemDecorator(
         return result.toInt()
     }
 
-//    private fun calcIconAlpha(translationX: Float){ //225..0
-//        if (translationX > 0) {
-//            if (translationX > intrinsicWidth!!) {
-//                addIcon?.alpha = ((translationX - intrinsicWidth) * 3).toInt()
-//            }
-//        }
-//    }
 
     private fun calcIconAlpha(translationX: Float) { //225..0
-        Log.d(TAG, translationX.toString())
+//        Log.d(TAG, translationX.toString())
         if (translationX > 0) {
             addIcon?.alpha = Utils.lerp(abs(translationX), 0f, SWIPE_THRESHOLD, 50f, ALPHA_THRESHOLD).toInt()
         }
