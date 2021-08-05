@@ -61,6 +61,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
 
                 FeedAdapterLargeRestaurantViewHolder(parent.context, binding, adapter, snapHelper)
             }
+            FeedAdapterViewType.EMPTY_FEED_NO_CHEFS.ordinal -> {
+                val binding = FeedAdapterNoChefItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterNoChefViewHolder(binding)
+            }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterSkeletonViewHolder(binding)
@@ -87,6 +91,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
             is FeedAdapterLargeRestaurant -> {
                 holder as FeedAdapterLargeRestaurantViewHolder
                 holder.bindItems(section, this, position)
+            }
+            is FeedAdapterNoChef -> {
+                holder as FeedAdapterNoChefViewHolder
+                holder.bindItems(section)
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder

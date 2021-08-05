@@ -82,7 +82,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private fun initUi() {
         with(binding) {
             mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
-            mainActFloatingCartBtn.updateFloatingCartButton(13.55)
+            mainActFloatingCartBtn.updateFloatingCartButton(3)
         }
 
 //        //TODO - COMMENT THIS (FOT BRANCH TESTING)

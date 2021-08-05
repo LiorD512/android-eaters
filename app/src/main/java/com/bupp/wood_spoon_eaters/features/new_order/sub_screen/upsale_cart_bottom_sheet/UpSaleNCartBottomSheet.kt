@@ -21,11 +21,13 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCa
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
@@ -33,7 +35,7 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
     private val defaultPeekHeight = Utils.toPx(400)
 
     private val binding: UpSaleNCartBottomSheetBinding by viewBinding()
-    private val viewModel by sharedViewModel<UpSaleNCartViewModel>()
+    private val viewModel by viewModel<UpSaleNCartViewModel>()
     private var currentParentHeight: Int = defaultPeekHeight
     private var behavior: BottomSheetBehavior<View>? = null
 
@@ -85,11 +87,16 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun refreshButtonPosition() {
-        val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        var height = displayMetrics.heightPixels
-        val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
-        binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+        binding.floatingCartBtnLayout.waitForLayout {
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            var height = displayMetrics.heightPixels
+            val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
+            binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+//            Log.d(TAG, "initial defaultPeekHeight: ${defaultPeekHeight}")
+//            Log.d(TAG, "initial height: $height")
+//            Log.d(TAG, "initial yPos: $yPos")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -138,8 +138,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
 
     override fun onHeaderAddressClick() {
-        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
-//        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
     override fun onHeaderDateClick() {

@@ -821,6 +821,4 @@
         <item name="cornerSize">13.4dp</item>
     </style>
 
-    <color name="medium_grey">#929092</color>
-    <color name="purpley_grey_three">#929092</color>
 </resources>
