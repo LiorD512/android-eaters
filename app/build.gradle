@@ -29,10 +29,6 @@ android {
     }
 
 
-//    androidExtensions {
-//        experimental = true
-//    }
-
     buildTypes {
         release {
             debuggable false
@@ -82,6 +78,9 @@ android {
         viewBinding true
     }
 
+//    androidExtensions {
+//        experimental = true
+//    }
 
 //    lintOptions {
 //        checkReleaseBuilds false
@@ -127,7 +126,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
 //    implementation 'com.asksira.android:dropdownview:1.0.3'
-    implementation 'com.github.aliumujib:SwipeToRefresh:1.01'
+//    implementation 'com.github.aliumujib:SwipeToRefresh:1.01'
 
 
     implementation 'com.androidadvance:topsnackbar:1.1.1'

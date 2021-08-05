@@ -25,7 +25,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
     }
 
     //todo - change this when server is ready
-    val isLargeItems = true
+    val isLargeItems = false
 
     @SuppressLint("LogNotTimber")
     suspend fun getFeed(feedRequest: FeedRequest): FeedRepoResult {

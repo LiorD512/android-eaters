@@ -42,14 +42,14 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
                             override fun onSnapPositionChange(position: Int) {
                                 when (position) {
                                     0 -> {
-                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnPrevious)
+                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnPrevious, customStartDelay = 150)
                                         if (it.size > 1) {
                                             AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
                                         }
                                     }
                                     adapter.itemCount - 1 -> {
                                         AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
-                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnNext)
+                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnNext, customStartDelay = 150)
                                     }
                                     else -> {
                                         AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)

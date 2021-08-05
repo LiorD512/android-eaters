@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet;
+package com.bupp.wood_spoon_eaters.views.swipeable_dish_item;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

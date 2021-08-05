@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+import com.bupp.wood_spoon_eaters.utils.Utils
 import java.util.*
 import kotlin.math.abs
 
@@ -33,10 +34,10 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
                             seeMoreView = child.findViewById(R.id.feedRestaurantSeeMoreItemSeeMore)
                         }
 
-                        priceView?.alpha = 1 - lerp(abs(dx), 0f, 1080f, 0f, 1f)
-                        titleView.alpha = 1 - lerp(abs(dx), 0f, 1080f, 0f, 1f)
+                        priceView?.alpha = 1 - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
+                        titleView.alpha = 1 - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
                         titleView.translationX = 1.0f + (abs(dx) / 3)
-                        seeMoreView?.alpha = 1.0f - lerp(abs(dx), 0f, 1080f, 0f, 1f)
+                        seeMoreView?.alpha = 1.0f - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
                     }
                 }
             }
@@ -44,12 +45,12 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
         super.onDraw(canvas, parent, state)
     }
 
-    private fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
-        val percentage = (value - min) / (max - min)
-        val result = (percentage * (max2 - min2)) + min2
-        Log.d(TAG, "lerp: ${result}")
-        return result
-    }
+//    private fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
+//        val percentage = (value - min) / (max - min)
+//        val result = (percentage * (max2 - min2)) + min2
+//        Log.d(TAG, "lerp: ${result}")
+//        return result
+//    }
 
 
     companion object {
