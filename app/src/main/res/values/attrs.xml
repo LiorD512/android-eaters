@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="RatingStarsViewReviews">
+        <attr name="isSmall" format="boolean"/>
+    </declare-styleable>
+
     <attr name="title" format="string" />
     <attr name="isMandatory" format="boolean" />
     <attr name="hint" format="string" />
