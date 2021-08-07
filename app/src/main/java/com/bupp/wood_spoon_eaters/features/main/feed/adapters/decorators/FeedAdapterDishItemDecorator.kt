@@ -19,7 +19,7 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
                 val child = parent.getChildAt(i)
                 child?.let {
                     val dx = child.x
-                    Log.d(TAG, "dx: $dx")
+//                    Log.d(TAG, "dx: $dx")
                     child.apply {
                         val titleView: TextView
                         var priceView: TextView? = null

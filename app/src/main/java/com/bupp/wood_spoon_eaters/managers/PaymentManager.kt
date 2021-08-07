@@ -103,7 +103,8 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                     PaymentMethod.Type.Card,
                     object : CustomerSession.PaymentMethodsRetrievalListener {
                         override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
-                            MTLogger.c(TAG, "getStripeCustomerCards $paymentMethods")
+                            MTLogger.c(TAG, "getStripeCustomerCards")
+//                            MTLogger.c(TAG, "getStripeCustomerCards $paymentMethods")
                             if(lastSelectedCardIdRes != null){
                                 val lastSelectedCard = paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
                                 lastSelectedCard?.let{

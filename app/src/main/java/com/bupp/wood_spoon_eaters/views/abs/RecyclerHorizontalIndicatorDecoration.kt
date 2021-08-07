@@ -128,8 +128,8 @@ class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
         if (progress == 0f) {
             // no swipe, draw a normal indicator
             val highlightStart = indicatorStartX + itemWidth * highlightPosition
-            Log.d("wowIndicator","highlightStart : $highlightStart")
-            Log.d("wowIndicator","indicatorPosY : $indicatorPosY")
+//            Log.d("wowIndicator","highlightStart : $highlightStart")
+//            Log.d("wowIndicator","indicatorPosY : $indicatorPosY")
             c.drawLine(
                 highlightStart, indicatorPosY,
                 highlightStart + mIndicatorItemLength, indicatorPosY, mPaint

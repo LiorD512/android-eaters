@@ -72,7 +72,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         with(binding){
             val pagerAdapter = MainActPagerAdapter(this@MainActivity)
             mainActViewPager.adapter = pagerAdapter
-            mainActViewPager.offscreenPageLimit = 4
+            mainActViewPager.offscreenPageLimit = 1
             mainActViewPager.isUserInputEnabled = false
 
             mainActBottomTabLayout.setViewPager(mainActViewPager)
@@ -289,7 +289,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
         viewModel.campaignLiveData.observe(this, {
-            Log.d(TAG, "campaignLiveData: $it")
+//            Log.d(TAG, "campaignLiveData: $it")
             it?.let{
                 handleCampaignData(it)
             }
