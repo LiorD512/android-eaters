@@ -8,11 +8,26 @@
         tools:context=".delete_me.TestActivity">
 
     <Button
+            android:layout_gravity="bottom|center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/btn"
             android:layout_width="130dp"
             android:layout_height="130dp"/>
+
+    <Button
+            android:text="clear"
+            android:layout_gravity="bottom|start"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/clearBtn"
+            android:layout_width="130dp"
+            android:layout_height="130dp"/>
+
+    <com.bupp.wood_spoon_eaters.views.OrderProgressBar
+            android:id="@+id/orderPb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 <!--    <com.bupp.wood_spoon_eaters.views.ws_marker.WSMarkerView-->
 <!--            android:layout_width="match_parent"-->

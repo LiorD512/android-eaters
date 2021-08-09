@@ -14,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentAddressVerificationMapBinding
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
+import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
@@ -36,6 +37,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private val viewModel by viewModel<AddressMapVerificationViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
     private val checkoutViewModel by sharedViewModel<NewOrderMainViewModel>()
+    private val orderHistoryViewModel by sharedViewModel<OrdersHistoryViewModel>()
 
     private var googleMap: GoogleMap? = null
     private var currentBoundSize = 100
@@ -123,7 +125,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             }
         })
         viewModel.addressMapVerificationStatus.observe(viewLifecycleOwner, {
-            with(binding!!) {
+            with(binding) {
                 when (it) {
                     AddressMapVerificationViewModel.AddressMapVerificationStatus.CORRECT -> {
                         addressMapFragHeader.updateMapHeaderView(MapHeaderView.MapHeaderViewType.CORRECT)
@@ -175,10 +177,10 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                     val location = CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel)
                     googleMap?.moveCamera(location)
 
-                    binding!!.addressMapFragPin.visibility = View.VISIBLE
+                    binding.addressMapFragPin.visibility = View.VISIBLE
                     viewModel.checkCenterLatLngPosition(myLocation)
 
-                    binding!!.addressMapFragPb.hide()
+                    binding.addressMapFragPb.hide()
                 }
             }
         }

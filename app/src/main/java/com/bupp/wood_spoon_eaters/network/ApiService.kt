@@ -183,7 +183,7 @@ interface ApiService {
 //    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
 
     @GET("eaters/me/orders")
-    fun getOrders(): Call<ServerResponse<List<Order>>>
+    suspend fun getOrders(): ServerResponse<List<Order>>
 
     @GET("eaters/me/orders/{order_id}")
     suspend fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Order>

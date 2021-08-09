@@ -63,7 +63,7 @@ class CartAdapter() : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
         @SuppressLint("SetTextI18n")
         fun bindItem(dishItem: CartAdapterItem) {
             Log.d(TAG, "bindItem")
-            val dish = dishItem.dish
+            val dish = dishItem.menuItem?.dish
             dish?.let {
                 name.text = dish.name
                 quantity.text = "${dishItem.quantity}"

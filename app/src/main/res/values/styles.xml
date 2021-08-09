@@ -13,9 +13,6 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
         <item name="android:windowBackground">@drawable/splash_bkg</item>
 
-        <!--        <item name="android:windowFullscreen">true</item>-->
-        <!--        <item name="android:windowTranslucentNavigation">true</item>-->
-
         <item name="android:windowActivityTransitions">true</item>
 
     </style>
@@ -306,6 +303,11 @@
         <item name="android:textSize">19.2sp</item>
         <item name="android:textColor">@color/dark_grey</item>
     </style>
+    <style name="LatoBlack19DarkThree">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">19.2sp</item>
+        <item name="android:textColor">@color/dark_three</item>
+    </style>
 
     <style name="LatoBlack15DarkGrey">
         <item name="android:fontFamily">@font/lato_black</item>
@@ -317,6 +319,11 @@
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoBlack15DarkThree">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_three</item>
     </style>
 
     <style name="LatoBlack13DarkGrey">

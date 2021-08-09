@@ -3,10 +3,19 @@ package com.bupp.wood_spoon_eaters.model
 import android.os.Parcelable
 import androidx.annotation.Nullable
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
+import com.bupp.wood_spoon_eaters.features.main.order_history.OrderHistoryViewType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
+
+enum class OrderState{
+    NONE,
+    RECEIVED,
+    PREPARED,
+    ON_THE_WAY,
+    DELIVERED
+}
 
 @JsonClass(generateAdapter = true)
 data class OrderRequest(
@@ -69,7 +78,29 @@ data class Order (
     @Json(name = "discount") val discount: Price?,
     @Json(name = "was_rated") val wasRated: Boolean?,
     @Json(name = "nationwide_shipping") val isNationwide: Boolean?
-): Parcelable
+): Parcelable {
+    fun getOrderState(): OrderState {
+        var curOrderStage =  OrderState.NONE
+        when (preparationStatus) {
+            "in_progress" -> {
+                curOrderStage = OrderState.RECEIVED
+            }
+            "completed" -> {
+                curOrderStage = OrderState.PREPARED
+            }
+        }
+
+        when (deliveryStatus) {
+            "on_the_way" -> {
+                curOrderStage = OrderState.ON_THE_WAY
+            }
+            "shipped" -> {
+                curOrderStage = OrderState.DELIVERED
+            }
+        }
+        return curOrderStage
+    }
+}
 
 @Parcelize
 @JsonClass(generateAdapter = true)

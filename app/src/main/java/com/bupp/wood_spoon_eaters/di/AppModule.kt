@@ -139,7 +139,7 @@ val appModule = module {
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get()) }
-    viewModel { OrdersHistoryViewModel(get()) }
+    viewModel { OrdersHistoryViewModel(get(), get()) }
 
     //support
     viewModel { SupportViewModel(get(), get()) }

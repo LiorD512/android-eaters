@@ -7,14 +7,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <TextView
+            android:padding="15.4dp"
+            style="@style/LatoBlack23Dark"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:text="Orders"/>
+
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+                android:layoutAnimation="@anim/restaurant_layout_animation"
                 android:id="@+id/ordersHistoryFragRecyclerView"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginEnd="15.4dp"
+                android:paddingHorizontal="15.4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

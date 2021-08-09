@@ -70,7 +70,7 @@ class EaterDataManager(
     fun getTraceableOrders() = traceableOrders
     private val traceableOrders = MutableLiveData<List<Order>?>()
 
-    suspend fun checkForTraceableOrders() {
+    suspend fun checkForTraceableOrders(): List<Order>? {
         val result = eaterDataRepository.getTraceableOrders()
         when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_SUCCESS -> {
@@ -78,6 +78,7 @@ class EaterDataManager(
                     Log.d(TAG, "checkForTraceableOrders - success")
                     traceableOrdersList = it
                     traceableOrders.postValue(it)
+                    return traceableOrdersList
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_FAILED -> {
@@ -88,9 +89,9 @@ class EaterDataManager(
 
             }
             else -> {
-
             }
         }
+        return null
     }
 
     suspend fun cancelOrder(orderId: Long?, note: String?): EaterDataRepository.EaterDataRepoResult<Any>? {

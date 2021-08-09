@@ -68,7 +68,7 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
         @SuppressLint("SetTextI18n")
         fun bindItem(dishItem: CartAdapterItem) {
             Log.d(TAG, "bindItem - cart dish")
-            val dish = dishItem.dish
+            val dish = dishItem.menuItem?.dish
             dish?.let {
                 name.text = dish.name
                 quantity.text = "${dishItem.quantity}"
@@ -90,10 +90,12 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
 
         fun bindItem(dishItem: UpsaleAdapterItem) {
             Log.d(TAG,"bindItem - upsale")
-            val dish = dishItem.dish
-            name.text = dish.name
-            description.text = dish.description
-            price.text = "$${dish.price?.formatedValue} X${dishItem.quantity}"
+            val dish = dishItem.menuItem?.dish
+            dish?.let{
+                name.text = dish.name
+                description.text = dish.description
+                price.text = "$${dish.price?.formatedValue} X${dishItem.quantity}"
+            }
         }
 
     }

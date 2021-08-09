@@ -17,16 +17,23 @@ class TestActivity : ComponentActivity() {
 //        setContent{
 //            Text("hello world")
 //        }
-//        binding = ActivityTestBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
+        binding = ActivityTestBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 //
 //        UpSaleNCartBottomSheet().show(supportFragmentManager, "upsale")
 //
 //
 //        binding.btn.setOnClickListener {
 //            UpSaleNCartBottomSheet().show(supportFragmentManager, "upsale")
-////            CartBottomSheet().show(supportFragmentManager, "upsale2")
+//            CartBottomSheet().show(supportFragmentManager, "upsale2")
 //        }
 
+        binding.btn.setOnClickListener {
+            binding.orderPb.next()
+        }
+        binding.clearBtn.setOnClickListener {
+            binding.orderPb.setProgress(0)
+        }
     }
+
 }
