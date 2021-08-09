@@ -7,15 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <!--    <ImageView-->
-    <!--            android:id="@+id/feedRestaurantDishItemImg"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"/>-->
     <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/feedRestaurantDishItemImg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:shapeAppearanceOverlay="@style/roundedCorners7ImageView" />
+            android:scaleType="fitXY"
+            app:shapeAppearanceOverlay="@style/roundedTopCorners7ImageView" />
 
     <View
             android:layout_width="match_parent"

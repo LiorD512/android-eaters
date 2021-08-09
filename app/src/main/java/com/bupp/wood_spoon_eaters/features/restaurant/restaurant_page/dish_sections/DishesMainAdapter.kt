@@ -12,18 +12,20 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderAvailableHeader
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSkeleton
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 
 class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
     SwipeableAdapter<DishSections>(DiffCallback()) {
 
     interface DishesMainAdapterListener: DishViewHolderSingleDish.DishViewHolderSingleDishListener
 
+
     override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BaseItemViewHolder {
+    ): SwipeableBaseItemViewHolder {
         when (viewType) {
             DishSectionSingleDish.viewType.ordinal -> {
                 val binding = RestaurantItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -67,7 +69,11 @@ class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
     }
 
 
-    abstract class BaseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+
+    abstract class BaseItemViewHolder(view: View) : SwipeableBaseItemViewHolder(view) {
+        abstract override val isSwipeable: Boolean
+
         abstract fun bind(
             section: DishSections,
             listener: DishesMainAdapterListener

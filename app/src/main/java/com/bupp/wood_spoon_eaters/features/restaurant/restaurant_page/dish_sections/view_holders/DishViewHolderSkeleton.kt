@@ -15,7 +15,8 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 
 class DishViewHolderSkeleton(val binding: ItemRestaurantDishSkeletonBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
 
-    override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
+    override val isSwipeable: Boolean = false
+    override fun bind(section: DishSections, listener: DishesMainAdapter.RestaurantPageMainAdapterListener) {
         if(layoutPosition == 0){
             binding.dishHeader.isVisible = true
         }

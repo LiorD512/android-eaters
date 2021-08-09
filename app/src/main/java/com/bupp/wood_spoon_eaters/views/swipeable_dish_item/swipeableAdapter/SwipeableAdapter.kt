@@ -13,13 +13,17 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
         return getItem(position).isInCart()
     }
 
+    fun isSwipeable(position: Int): Boolean {
+        return getItem(position).isSwipeable
+    }
+
     fun updateItemQuantityAdd(position: Int) {
-        getItem(position).quantity ++
+        getItem(position).quantity++
     }
 
     fun updateItemQuantityRemoved(position: Int) {
-        if(getItem(position).quantity > 0){
-            getItem(position).quantity --
+        if (getItem(position).quantity > 0) {
+            getItem(position).quantity--
         }
     }
 
@@ -28,10 +32,11 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
     }
 }
 
-abstract class SwipeableAdapterItem{
+abstract class SwipeableAdapterItem {
     abstract var quantity: Int
     abstract val menuItem: MenuItem?
-    fun isInCart(): Boolean{
+    abstract val isSwipeable: Boolean
+    fun isInCart(): Boolean {
         return quantity > 0
     }
 }

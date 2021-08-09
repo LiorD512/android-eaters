@@ -19,14 +19,12 @@ data class FeedSection(
     var collections: MutableList<FeedSectionCollectionItem>? = null
 ): Parcelable
 
-
 sealed class FeedSectionCollectionItem(
     @Json(name = "type") var type: FeedModelsViewType?
 ) : Parcelable {
     abstract val items: List<Parcelable>?
     abstract val href: String?
 }
-
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -35,13 +33,25 @@ data class FeedCampaignSection(
     override val items: List<Campaign>?,
 ): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.COUPONS)
 
-//@Parcelize
-//@JsonClass(generateAdapter = true)
-//data class FeedCampaignSectionItem(
-//    val title: String?,
-//    val subtitle: String?,
-//    val thumbnail_url: String?
-//): Parcelable
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedNoChefSection(
+    override val href: String? = null,
+    override val items: List<Campaign>? = null,
+    @Json(name = "title") val title: String?,
+    @Json(name = "subtitle") val subtitle: String?,
+    @Json(name = "action") val action: String?
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_FEED_NO_CHEFS)
+
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedNoChefSectionTest(
+    @Json(name = "title") val title: String?,
+    @Json(name = "subtitle") val subtitle: String?,
+    @Json(name = "action") val action: String?
+): Parcelable
+
 
 
 @Parcelize
@@ -52,7 +62,7 @@ data class FeedRestaurantSection(
     @Json(name = "chef_name") val chefName: String?,
     @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "title") val title: String?,
-    @Json(name = "chef_id") val chefId: String?,
+    @Json(name = "chef_id") val chefId: Long?,
     @Json(name = "chef_thumbnail_url") val chefThumbnailUrl: String?,
     @Json(name = "avg_rating") val avgRating: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
@@ -123,6 +133,8 @@ enum class FeedModelsViewType {
     COUPONS,
     @Json(name = "restaurant_overview")
     RESTAURANT,
+    @Json(name = "feed_empty_no_chefs")
+    EMPTY_FEED_NO_CHEFS,
 }
 
 enum class FeedRestaurantSectionItemViewType{
@@ -138,6 +150,8 @@ enum class FeedAdapterViewType {
     TITLE,
     COUPONS,
     RESTAURANT,
+    RESTAURANT_LARGE,
+    EMPTY_FEED_NO_CHEFS,
     SKELETON,
     HREF
 }
@@ -166,6 +180,16 @@ data class FeedAdapterCoupons(
 data class FeedAdapterRestaurant(
     val restaurantSection: FeedRestaurantSection
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)
+
+@Parcelize
+data class FeedAdapterNoChef(
+    val noChefSection: FeedNoChefSection
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_FEED_NO_CHEFS)
+
+@Parcelize
+data class FeedAdapterLargeRestaurant(
+    val restaurantSection: FeedRestaurantSection
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
 
 @Parcelize
 data class Tag(

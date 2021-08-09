@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet;
+package com.bupp.wood_spoon_eaters.views.swipeable_dish_item;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,14 +9,13 @@ import android.view.ViewPropertyAnimator;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+// wrote by mittelman
 //*// - this class is a direct copy of the DefaultItemAnimator with only one fix,
 //*// - fix is nesseccery to remove the alpha animation when refreshing an item (on horizontal swipe)..
 

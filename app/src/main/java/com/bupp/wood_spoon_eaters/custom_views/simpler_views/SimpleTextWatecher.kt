@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views
+package com.bupp.wood_spoon_eaters.custom_views.simpler_views
 
 import android.text.Editable
 import android.text.TextWatcher

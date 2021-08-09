@@ -157,6 +157,11 @@
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoReg11PurpleyGreyThree">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/purpley_grey_three</item>
+    </style>
 
     <style name="LatoBlack23Dark">
         <item name="android:fontFamily">@font/lato_black</item>
@@ -838,10 +843,15 @@
         <item name="cornerSize">7.7dp</item>
     </style>
 
+    <style name="roundedTopCorners7ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">7.7dp</item>
+        <item name="cornerSizeTopRight">7.7dp</item>
+    </style>
+
     <style name="roundedCorners13ImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">13.4dp</item>
     </style>
 
-    <color name="medium_grey">#929092</color>
 </resources>

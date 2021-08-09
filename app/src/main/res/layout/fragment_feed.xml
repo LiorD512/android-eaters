@@ -95,26 +95,20 @@ a home cooked meal very soon :)"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/top_gradient"
+                    app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"
                     android:id="@+id/feedFragRefreshLayout"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scrollbars="none">
 
-<!--    <com.aliumujib.swipetorefresh.SwipeToRefreshLayout-->
-<!--            android:id="@+id/feedFragRefreshLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/top_gradient"-->
-<!--            app:srl_animation="rotate"-->
-<!--            app:srl_direction="top"-->
-<!--            app:srl_icon="@mipmap/ic_launcher_round"-->
-<!--            app:srl_shadow_shape="rounded_rect">-->
-
-        <androidx.recyclerview.widget.RecyclerView
+        <com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
+                app:snapGravity="top"
+                app:snapLastItem="true"
+                app:snapEnabled="true"
+                app:snapMaxFlingSizeFraction="1"
+                app:snapToPadding="false"
+                app:snapScrollMsPerInch="50"
+                android:nestedScrollingEnabled="true"
                 android:id="@+id/feedFragList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -122,15 +116,5 @@ a home cooked meal very soon :)"
                 android:layoutAnimation="@anim/feed_layout_animation" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-<!--    </com.aliumujib.swipetorefresh.SwipeToRefreshLayout>-->
-
-    <View
-            android:id="@+id/top_gradient"
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:background="@drawable/white_to_transparent_gradient"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

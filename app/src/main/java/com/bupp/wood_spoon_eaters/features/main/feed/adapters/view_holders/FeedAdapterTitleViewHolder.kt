@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders
+package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemSkeletonBinding
@@ -13,8 +13,5 @@ class FeedAdapterTitleViewHolder(val binding: FeedAdapterTitleItemBinding) : Rec
 
 class FeedAdapterSkeletonViewHolder(val binding: FeedAdapterRestaurantItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bindItems() {
-//        binding.feedRestaurantItemShimmerLayout1.startShimmerAnimation()
-//        binding.feedRestaurantItemShimmerLayout2.startShimmerAnimation()
-//        binding.feedRestaurantItemShimmerLayout3.startShimmerAnimation()
     }
 }

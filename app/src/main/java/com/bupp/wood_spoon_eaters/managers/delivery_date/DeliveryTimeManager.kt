@@ -49,7 +49,7 @@ class DeliveryTimeManager {
 
     private fun getDeliveryDateUiString(): String {
         getDeliveryTimeDate()?.let{
-            return DateUtils.parseDateToFullDate(it)
+            return DateUtils.parseDateToDayDateSplash(it)
         }
         return "Now"
     }

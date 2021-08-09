@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
@@ -25,15 +26,8 @@ android {
         versionCode 86
         versionName "2.2.4"
 
-        //for Dali blur
-        renderscriptTargetApi 24
-        renderscriptSupportModeEnabled true
     }
 
-
-//    androidExtensions {
-//        experimental = true
-//    }
 
     buildTypes {
         release {
@@ -84,6 +78,9 @@ android {
         viewBinding true
     }
 
+//    androidExtensions {
+//        experimental = true
+//    }
 
 //    lintOptions {
 //        checkReleaseBuilds false
@@ -106,8 +103,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
-    implementation 'androidx.fragment:fragment-ktx:1.3.5'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
+    implementation 'androidx.fragment:fragment-ktx:1.3.6'
 
 
 
@@ -127,20 +125,25 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    implementation 'com.asksira.android:dropdownview:1.0.3'
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
+//    implementation 'com.asksira.android:dropdownview:1.0.3'
+//    implementation 'com.github.aliumujib:SwipeToRefresh:1.01'
 
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     implementation 'com.androidadvance:topsnackbar:1.1.1'
     implementation 'com.trading212:sticky-headers:0.1.4'
     implementation 'com.daasuu:EasingInterpolator:1.0.0'
     implementation 'com.loopeer.lib:shadow:0.0.4-beta3'
     implementation 'com.airbnb.android:lottie:3.7.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'me.relex:circleindicator:2.1.6'
     implementation 'com.daasuu:BubbleLayout:1.2.0'
-    implementation 'at.favre.lib:dali:0.4.0'
+
+    //image proccessing
+
+    implementation 'jp.wasabeef:glide-transformations:4.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'xyz.belvi.blurHash:blurHash:1.0.4'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     //Google
     implementation 'com.google.android.play:core:1.10.0'
@@ -156,14 +159,15 @@ dependencies {
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.1'
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
+    implementation 'com.github.rubensousa:gravitysnaphelper:2.2.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
 
     //exo player
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.1'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.1'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.2'
 
     //camera util
     implementation 'com.github.dhaval2404:imagepicker:1.8'
@@ -218,9 +222,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
 
     //di
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    implementation "org.koin:koin-androidx-ext:$koin_version"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
 
     //AppCenter
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"

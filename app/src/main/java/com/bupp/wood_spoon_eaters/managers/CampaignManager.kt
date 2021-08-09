@@ -95,8 +95,10 @@ class CampaignManager(private val campaignRepository: CampaignRepository, privat
                 campaignLiveData.postValue(campaigns)
 
                 campaigns.forEach { campaign ->
-                    campaign.userInteractionId?.let {
-                        updateCampaignStatus(it, UserInteractionStatus.SEEN)
+                    if(campaign.status != UserInteractionStatus.SEEN){
+                        campaign.userInteractionId?.let {
+                            updateCampaignStatus(it, UserInteractionStatus.SEEN)
+                        }
                     }
                 }
             }else{

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders
 
+import android.view.View
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemDishBinding
@@ -14,6 +15,8 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
     interface DishViewHolderSingleDishListener{
         fun onDishClick(dish: Dish)
     }
+
+    override val isSwipeable: Boolean = true
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish

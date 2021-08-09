@@ -34,6 +34,8 @@
     <color name="dark_80">#cc252126</color>
     <color name="dark_grey">#2a2a2c</color>
     <color name="light_grey">#585858</color>
+    <color name="medium_grey">#929092</color>
+    <color name="purpley_grey_three">#929092</color>
     <color name="very_light_grey">#a19e9e</color>
     <color name="purpley_grey">#929092</color>
     <color name="purpley_grey_two">#918f91</color>

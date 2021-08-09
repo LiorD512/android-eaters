@@ -86,6 +86,7 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
             PolymorphicJsonAdapterFactory.of(FeedSectionCollectionItem::class.java, "type")
                 .withSubtype(FeedCampaignSection::class.java, Constants.FEED_SECTION_TYPE_COUPONS)
                 .withSubtype(FeedRestaurantSection::class.java, Constants.FEED_SECTION_TYPE_RESTAURANT)
+                .withSubtype(FeedNoChefSection::class.java, Constants.FEED_SECTION_NO_CHEF)
 //                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
         )
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())

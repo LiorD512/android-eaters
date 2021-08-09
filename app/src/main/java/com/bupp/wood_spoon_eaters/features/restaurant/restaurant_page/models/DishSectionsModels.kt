@@ -13,6 +13,7 @@ data class DishSectionAvailableHeader(
     val header: String,
     override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
+    override val isSwipeable: Boolean = false
 ) : DishSections(viewType = AVAILABLE_HEADER) {
     companion object {
         val viewType = AVAILABLE_HEADER
@@ -22,6 +23,7 @@ data class DishSectionAvailableHeader(
 class DishSectionUnavailableHeader(
     override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
+    override val isSwipeable: Boolean = false
 ) : DishSections(viewType = UNAVAILABLE_HEADER) {
     companion object {
         val viewType = UNAVAILABLE_HEADER
@@ -31,6 +33,7 @@ class DishSectionUnavailableHeader(
 data class DishSectionSingleDish(
     override val menuItem: MenuItem,
     override var quantity: Int = 0,
+    override val isSwipeable: Boolean = true
 ) : DishSections(viewType = SINGLE_DISH) {
     companion object {
         val viewType = SINGLE_DISH
@@ -40,6 +43,7 @@ data class DishSectionSingleDish(
 class DishSectionSkeleton(
     override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
+    override val isSwipeable: Boolean = false
 ) : DishSections(viewType = SKELETON) {
     companion object {
         val viewType = SKELETON

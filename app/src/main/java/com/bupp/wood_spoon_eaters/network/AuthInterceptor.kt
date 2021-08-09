@@ -46,7 +46,7 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     }
 
     private fun updateToken(newToken: String) {
-        Log.d("wowAuth", "updateD Token: $newToken")
+//        Log.d("wowAuth", "updateD Token: $newToken")
         storedAuthToken = newToken
         settings.token = newToken
     }

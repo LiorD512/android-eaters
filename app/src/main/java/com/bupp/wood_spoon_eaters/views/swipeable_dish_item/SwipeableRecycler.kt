@@ -7,19 +7,23 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet.CustomItemAnimator
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 class SwipeableRecycler @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0):
     RecyclerView(context, attrs, defStyleAttr) {
 
-    fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
-        ItemTouchHelper(SwipeableAddDishItemTouchHelper(adapter, DishSectionsViewType.SINGLE_DISH.ordinal)).attachToRecyclerView(this)
-        ItemTouchHelper(SwipeableRemoveDishItemTouchHelper(adapter, DishSectionsViewType.SINGLE_DISH.ordinal)).attachToRecyclerView(this)
+    private val addTouchHelper = SwipeableAddDishItemTouchHelper()
+    private val removeTouchHelper = SwipeableRemoveDishItemTouchHelper()
 
+    fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
+        //todo - nicole - lets talk about "decoratedViewType"
+        this.adapter = adapter
+
+        ItemTouchHelper(addTouchHelper).attachToRecyclerView(this)
+        ItemTouchHelper(removeTouchHelper).attachToRecyclerView(this)
+        addTouchHelper.adapter = adapter
+        removeTouchHelper.adapter = adapter
 
         this.itemAnimator?.changeDuration = 150
         this.itemAnimator?.moveDuration = 0
@@ -27,14 +31,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         this.itemAnimator = CustomItemAnimator()
 
         val removeShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_remove_bkg)
-        this.addItemDecoration(SwipeableRemoveDishItemDecorator(context, removeShape, DishSectionsViewType.SINGLE_DISH.ordinal))
+        this.addItemDecoration(SwipeableRemoveDishItemDecorator(context, removeShape))
         val defaultShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.grey_white_right_cornered)
         val selectedShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_add_bkg)
-        this.addItemDecoration(SwipeableAddDishItemDecorator(context, defaultShape, selectedShape, DishSectionsViewType.SINGLE_DISH.ordinal))
+        this.addItemDecoration(SwipeableAddDishItemDecorator(context, defaultShape, selectedShape))
 
-
-        val divider: Drawable? = ContextCompat.getDrawable(context, R.drawable.divider_white_three)
-        this.addItemDecoration(DividerItemDecoratorDish(divider))
-
+//        this.addItemDecoration(DividerItemDecoratorDish(divider)) //todo - i took this out to fragment, its very specific implementation
     }
 }

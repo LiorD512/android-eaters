@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterTitleViewHolder
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -65,7 +64,7 @@ class FeedViewModel(
 
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
-    data class FeedLiveData(val feedData: List<FeedAdapterItem>?)
+    data class FeedLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
             feedSkeletonEvent.postValue(getSkeletonItems())
@@ -86,7 +85,7 @@ class FeedViewModel(
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getFeedWith - Success")
                         handleHrefApiCalls(feedRepository.feed)
-                        feedResultData.postValue(FeedLiveData(feedRepository.feed))
+                        feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
 //                        progressData.endProgress()
                     }
                     else -> {
@@ -119,7 +118,7 @@ class FeedViewModel(
                             }
                             FeedRepository.FeedRepoStatus.HREF_SUCCESS -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - Success")
-                                feedResultData.postValue(FeedLiveData(feedRepository.feed))
+                                feedResultData.postValue(FeedLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
                             }
                             else -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
