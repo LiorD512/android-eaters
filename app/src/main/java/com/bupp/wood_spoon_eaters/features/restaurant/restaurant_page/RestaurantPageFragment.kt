@@ -66,7 +66,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
         }
         with(binding.restaurantMainListLayout) {
-//            restaurantDishesList.adapter = adapterDishes // todo - * nicole - i edited this - i add the adapter inside - initSwipeableRecycler
+//            restaurantDishesList.adapter = adapterDishes
             restaurantCuisinesList.adapter = adapterCuisines
 
             detailsSkeleton.visibility = View.GONE
@@ -84,7 +84,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
                 restaurantDishesList.initSwipeableRecycler(adapter)
                 restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
-                //todo - nicole - i add the addItemDecoration in here
             }
         }
     }
