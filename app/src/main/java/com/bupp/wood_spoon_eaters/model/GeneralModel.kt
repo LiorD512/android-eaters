@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Metrics
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize

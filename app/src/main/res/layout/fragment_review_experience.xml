@@ -66,6 +66,8 @@
         <com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
                 android:id="@+id/pickFiltersFragRatingStarsView"
                 android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:paddingTop="22.8dp"
                 android:layout_height="wrap_content"/>
         <View

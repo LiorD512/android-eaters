@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Metrics
 import com.bupp.wood_spoon_eaters.databinding.MetricsViewBinding
-import com.bupp.wood_spoon_eaters.model.Metrics
 
 class MetricsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :

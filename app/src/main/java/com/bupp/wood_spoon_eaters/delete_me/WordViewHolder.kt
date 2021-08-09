@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 
 class WordViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+//    val wordTV = view.findViewById<TextView>(R.id.wo)
     fun setData(word: String){
-        val wordTV = view.findViewById<TextView>(R.id.word_tv)
-        wordTV.text = word
+
+//        wordTV.text = word
     }
 }
+

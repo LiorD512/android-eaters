@@ -47,58 +47,47 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 reset()
 
 
-//                val isSmallUi = attrArray.getBoolean(R.styleable.RatingStarsViewReviews_isSmall,
-//                    false)
-//                if(isSmallUi){
-//                    setSmallUi()
-//                }
+                val isSmallUi = attrArray.getBoolean(R.styleable.RatingStarsViewReviews_isSmall,
+                    false)
+                if(isSmallUi){
+                    setSmallUi()
+                }
             }
         }
     }
-//    private fun setSmallUi(){
-//        with(binding) {
-//            val topBottomPadding = Utils.toPx(15)
-//            val leftRightPadding = Utils.toPx(2)
-//
-//
-//            ratingStarNum1.minimumWidth = 17
-//            ratingStarNum2.minimumWidth = 17
-//            ratingStarNum3.minimumWidth = 17
-//            ratingStarNum4.minimumWidth = 17
-//            ratingStarNum5.minimumWidth = 17
-//
-//            ratingStarNum1.minimumHeight = 15
-//            ratingStarNum2.minimumHeight = 15
-//            ratingStarNum3.minimumHeight = 15
-//            ratingStarNum4.minimumHeight = 15
-//            ratingStarNum5.minimumHeight = 15
-//
-//            ratingStarNum1.setPadding(leftRightPadding,
-//                topBottomPadding,
-//                leftRightPadding,
-//                topBottomPadding)
-//
-//            ratingStarNum2.setPadding(leftRightPadding,
-//                topBottomPadding,
-//                leftRightPadding,
-//                topBottomPadding)
-//
-//            ratingStarNum3.setPadding(leftRightPadding,
-//                topBottomPadding,
-//                leftRightPadding,
-//                topBottomPadding)
-//
-//            ratingStarNum4.setPadding(leftRightPadding,
-//                topBottomPadding,
-//                leftRightPadding,
-//                topBottomPadding)
-//
-//            ratingStarNum5.setPadding(leftRightPadding,
-//                topBottomPadding,
-//                leftRightPadding,
-//                topBottomPadding)
-//        }
-//    }
+
+
+    private fun setSmallUi(){
+        with(binding) {
+            val topBottomPadding = Utils.toPx(15)
+            val leftRightPadding = Utils.toPx(2)
+
+            ratingStarNum1.setPadding(leftRightPadding,
+                topBottomPadding,
+                leftRightPadding,
+                Utils.toPx(0))
+
+            ratingStarNum2.setPadding(leftRightPadding,
+                topBottomPadding,
+                leftRightPadding,
+                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+
+            ratingStarNum3.setPadding(leftRightPadding,
+                topBottomPadding,
+                leftRightPadding,
+                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+
+            ratingStarNum4.setPadding(leftRightPadding,
+                topBottomPadding,
+                leftRightPadding,
+                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+
+            ratingStarNum5.setPadding(leftRightPadding,
+                topBottomPadding,
+                leftRightPadding,
+                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+        }
+    }
 
 
     override fun onClick(v: View?) {

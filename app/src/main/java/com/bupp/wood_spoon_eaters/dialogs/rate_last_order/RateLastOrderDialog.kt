@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
@@ -19,7 +20,6 @@ import com.bupp.wood_spoon_eaters.custom_views.metrics_view.MetricsViewAdapter
 import com.bupp.wood_spoon_eaters.databinding.RateLastOrderDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 

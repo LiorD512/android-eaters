@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.DishMetricsRequest
 import com.bupp.wood_spoon_eaters.databinding.RateDishItemViewBinding
-import com.bupp.wood_spoon_eaters.model.DishMetricsRequest
 import com.bupp.wood_spoon_eaters.model.OrderItem
 
 class RateLastOrderAdapter(val context: Context, private var orderItems: List<OrderItem>?, val listener: RateOrderAdapterListener) : RecyclerView.Adapter<RateLastOrderAdapter.DishViewHolder>() {

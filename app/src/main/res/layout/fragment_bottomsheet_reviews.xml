@@ -1,37 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:background="@color/white"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="7dp">
 
-        <TextView
+        <ImageButton
+                android:id="@+id/reviewBottomSheetCloseIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/LatoReg15Black"
-                android:textStyle="normal"
-                android:paddingBottom="23.3dp"
-                android:letterSpacing="0.03"
-                android:paddingTop="27.8dp"
-                android:gravity="center_horizontal"
-                tools:text="Israeli in The Big Apple"/>
+                android:layout_gravity="top|left"
+                android:background="@null"
+                android:padding="15.4dp"
+                android:src="@drawable/icons_close_grey" />
 
-        <View
-                android:background="@color/silver_20"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+        <TextView
+                android:id="@+id/reviewsBottomSheetTextView"
+                style="@style/LatoBlack15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Israeli in The Big Apple" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ReviewsList"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom|right"
+            android:clipToPadding="false"
+            android:paddingBottom="5dp"
+            tools:listitem="@layout/reviews_item"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/reviewsBottomSheetBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            app:title="Show all 21 reviews" />
+<!--    -->
+<!--    <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/word_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                tools:listitem="@layout/recyclerview_list_item_reviews"
-                 />
+
+<!--        <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:background="@color/grey_seperator"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/SingleEventItemPriceEvent" />-->
+
+<!--        <androidx.core.widget.NestedScrollView-->
+<!--                xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--                xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                xmlns:tools="http://schemas.android.com/tools"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+
+<!--            <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                        style="@style/LatoBlack23Dark"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="top"-->
+<!--                        android:drawableStart="@drawable/ic_icon_review"-->
+<!--                        android:drawablePadding="5dp"-->
+<!--                        android:padding="15.4dp"-->
+<!--                        android:text="4.8 (21 reviews)" />-->
+
+
+<!--                -->
+
+<!--            </LinearLayout>-->
+
+<!--        </androidx.core.widget.NestedScrollView>-->
+
+
+
+
+<!--    </LinearLayout>-->
+
+<!--   -->
 
 
 </LinearLayout>
+
+
+

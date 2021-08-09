@@ -5,9 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.DishMetricsRequest
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Metrics
 import com.bupp.wood_spoon_eaters.databinding.MetricsViewItemBinding
-import com.bupp.wood_spoon_eaters.model.DishMetricsRequest
-import com.bupp.wood_spoon_eaters.model.Metrics
+
 
 class MetricsViewAdapter(val context: Context, val metrics: ArrayList<Metrics>, val listener: MetricsViewAdapterListener) : RecyclerView.Adapter<MetricsViewAdapter.ViewHolder>() {
 
