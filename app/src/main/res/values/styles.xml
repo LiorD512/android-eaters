@@ -374,6 +374,12 @@
         <item name="android:textColor">@color/purpley_grey_two</item>
     </style>
 
+    <style name="LatoReg13LightGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/light_grey</item>
+    </style>
+
     <style name="LatoReg19Teal">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">19.2sp</item>

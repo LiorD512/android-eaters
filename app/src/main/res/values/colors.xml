@@ -90,6 +90,7 @@
     <color name="light_pink">#ffe6e7</color>
     <color name="watermelon">#ff4b65</color>
     <color name="silver_two">#dcdcdf</color>
+    <color name="grey_seperator">#5c3c3c43</color>
 
 </resources>
 

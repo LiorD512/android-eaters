@@ -10,12 +10,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
 import com.bupp.wood_spoon_eaters.databinding.RateLastOrderDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 

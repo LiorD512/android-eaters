@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.delete_me
+package com.bupp.wood_spoon_eaters.bottom_sheets.reviews
 
 import android.app.Dialog
 import android.os.Bundle
@@ -10,12 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentBottomsheetReviewsBinding
+import com.bupp.wood_spoon_eaters.delete_me.WordAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.compat.ScopeCompat.viewModel
 
 class BottomSheetReviews : BottomSheetDialogFragment() {
 
+//    val viewModel by viewModel<ReviewsViewmodel>()
     private val binding: FragmentBottomsheetReviewsBinding by viewBinding()
 
     val words = arrayListOf("One", "Two", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three",
@@ -34,6 +37,9 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val parent = view.parent as View
+        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
 //        val offsetFromTop = 700
 //        (dialog as? BottomSheetDialog)?.behavior?.apply {
@@ -62,11 +68,17 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
 
     private fun initUI() {
+
         with(binding) {
-            val adapter = WordAdapter(words){ word ->
+            val adapter = ReviewsAdapter()
+            binding.ReviewsList.adapter = adapter
+            binding.ReviewsList.layoutManager = LinearLayoutManager(requireContext())
+
+            reviewBottomSheetCloseIcon.setOnClickListener {
+                dismiss()
             }
-            binding.wordRv.adapter = adapter
-            binding.wordRv.layoutManager = LinearLayoutManager(requireContext())
+
+//            adapter.submitList(words.subList(0, 5))
         }
     }
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black_two"
+                app:cardElevation="7dp"
+                app:cardCornerRadius="8dp"
+                app:cardUseCompatPadding="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:paddingTop="16dp"
+                    android:paddingBottom="15.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                            android:id="@+id/reviewsItemIcon"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:contentDescription="@null"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginBottom="9dp"
+                            android:scaleType="centerCrop"
+                            android:background="@mipmap/ic_launcher_round"
+                            app:layout_constraintBottom_toBottomOf="@+id/reviewsItemDate"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+
+                <TextView
+                        android:id="@+id/reviewsItemName"
+                        style="@style/LatoBold13Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="9dp"
+                        android:ellipsize="end"
+                        android:gravity="start"
+                        android:lineSpacingExtra="11.5dp"
+                        android:maxLines="1"
+                        android:text="Steven"
+                        app:layout_constraintStart_toEndOf="@+id/reviewsItemIcon"
+                        app:layout_constraintTop_toTopOf="@+id/reviewsItemIcon" />
+
+                <TextView
+                        android:id="@+id/reviewsItemDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LatoReg13PurpelyGreyTwo"
+                        android:layout_marginStart="9dp"
+                        android:text="June 2021"
+                        app:layout_constraintTop_toBottomOf="@+id/reviewsItemName"
+                        app:layout_constraintBottom_toBottomOf="@+id/reviewsItemIcon"
+                        app:layout_constraintStart_toEndOf="@+id/reviewsItemIcon" />
+
+                <com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
+                        android:id="@+id/reviewsItemRating"
+                        android:layout_width="85dp"
+                        android:layout_height="25dp"
+                        app:isSmall="true"
+                        android:layout_marginRight="15.4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/reviewsItemIcon" />
+
+
+                <TextView
+                        android:id="@+id/reviewsItemComment"
+                        style="@style/LatoReg13LightGrey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        app:layout_constraintStart_toStartOf="@id/reviewsItemIcon"
+                        app:layout_constraintTop_toBottomOf="@+id/reviewsItemIcon"
+                        tools:text="Thank you eran , delicious!" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+</FrameLayout>
