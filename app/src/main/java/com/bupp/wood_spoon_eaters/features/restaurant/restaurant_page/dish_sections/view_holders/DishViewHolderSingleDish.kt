@@ -17,16 +17,19 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish
+        val dish = section.menuItem.dish
         with(binding) {
-            Glide.with(root.context).load(section.dish.thumbnail).into(dishPhoto)
-            dishName.text = section.dish.name
-            dishPrice.text = section.dish.getPriceObj()?.formatedValue
-            dishDescription.text = section.dish.description
+            dish?.let{ dish->
+                Glide.with(root.context).load(dish.thumbnail).into(dishPhoto)
+                dishName.text = dish.name
+                dishPrice.text = dish.getPriceObj()?.formatedValue
+                dishDescription.text = dish.description
 
-            dishQuantity.text = section.quantity.toString()
-            dishQuantity.isVisible = section.quantity > 0
-            root.setOnClickListener(){
-                listener.onDishClick(section.dish)
+                dishQuantity.text = section.quantity.toString()
+                dishQuantity.isVisible = section.quantity > 0
+                root.setOnClickListener(){
+                    listener.onDishClick(dish)
+                }
             }
         }
     }

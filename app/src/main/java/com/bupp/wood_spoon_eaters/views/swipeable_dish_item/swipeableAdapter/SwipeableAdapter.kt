@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 
 abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCallback<T>) :
     ListAdapter<T, RecyclerView.ViewHolder>(diff) {
@@ -29,7 +30,7 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
 
 abstract class SwipeableAdapterItem{
     abstract var quantity: Int
-    abstract val dish: Dish?
+    abstract val menuItem: MenuItem?
     fun isInCart(): Boolean{
         return quantity > 0
     }

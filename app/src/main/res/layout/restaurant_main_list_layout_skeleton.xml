@@ -5,32 +5,27 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-    <View
+    <com.facebook.shimmer.ShimmerFrameLayout
+            style="@style/shimmerFrameStyle"
             android:layout_width="match_parent"
-            android:layout_height="15.4dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="7.7dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+            android:layout_marginBottom="3.8dp"
+            android:background="@drawable/shimmer_cornered_rad13">
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="15.4dp"
-            android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="7.7dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+        <TextView
+                style="@style/LatoReg13DarkGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2" />
 
-    <View
-            android:layout_width="66dp"
-            android:layout_height="16dp"
-            android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="24dp">
+            android:layout_marginTop="20dp">
 
         <View
                 android:layout_width="60dp"
@@ -56,34 +51,62 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginHorizontal="17.8dp"
+            android:layout_marginTop="23dp"
             android:background="@color/grey_white" />
 
-    <View
-            android:layout_width="130dp"
-            android:layout_height="15.4dp"
+    <com.facebook.shimmer.ShimmerFrameLayout
+            style="@style/shimmerFrameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="15.4dp"
-            android:layout_marginTop="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/shimmer_cornered_rad13">
 
-    <View
+        <TextView
+                style="@style/LatoBold15DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery Timing" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            style="@style/shimmerFrameStyle"
             android:layout_width="match_parent"
-            android:layout_height="38.4dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="15.4dp"
-            android:layout_marginTop="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+            android:background="@drawable/shimmer_cornered_left_rad13">
 
-    <View
-            android:layout_width="88.3dp"
-            android:layout_height="30.7dp"
+        <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            style="@style/shimmerFrameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="15.4dp"
-            android:layout_marginTop="15.4dp"
-            android:layout_marginBottom="23dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="23dp">
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginHorizontal="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+        <TextView
+                android:id="@+id/restaurantTimePicker"
+                style="@style/LatoBold15DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grey_white_cornered_rag15_rect"
+                android:drawableStart="@drawable/ic_time_rest"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:drawablePadding="3dp"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="Now" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </LinearLayout>

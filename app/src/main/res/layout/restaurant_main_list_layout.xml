@@ -7,6 +7,27 @@
         android:background="@color/white"
         android:orientation="vertical">
 
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+                android:visibility="gone"
+                android:id="@+id/detailsSkeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.6"
+                app:shimmer_base_color="@color/whiteTwo"
+                app:shimmer_highlight_alpha="1"
+                app:shimmer_highlight_color="@color/grey_white_three">
+
+            <include
+                    android:id="@+id/detailsSkeletonLayout"
+                    layout="@layout/restaurant_main_list_layout_skeleton" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <LinearLayout
                 android:id="@+id/detailsLayout"
                 android:layout_width="match_parent"
@@ -79,6 +100,8 @@
                     android:text="Now" />
 
         </LinearLayout>
+
+    </FrameLayout>
 
     <View
             android:layout_width="match_parent"

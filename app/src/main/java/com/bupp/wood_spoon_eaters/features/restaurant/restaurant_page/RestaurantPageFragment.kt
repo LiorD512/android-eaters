@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -53,6 +54,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
             shareButton.setOnClickListener {
                 viewModel.restaurantFullData.value?.shareUrl?.let {
+
                 }
             }
         }
@@ -60,20 +62,21 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantDishesList.adapter = adapterDishes
             restaurantCuisinesList.adapter = adapterCuisines
 
-//            detailsSkeleton.visibility = View.VISIBLE
+            detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
 
+            restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
+            adapterDishes?.let { adapter ->
+                restaurantDishesList.initSwipeableRecycler(adapter)
+            }
 
             restaurantTimePicker.setOnClickListener {
+                Log.d(TAG,"click")
                 viewModel.currentSelectedDate?.let { deliveryDate ->
                     val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
                     timePickerBottomSheet.setDeliveryDate(deliveryDate)
                     timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
-            }
-            restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
-            adapterDishes?.let { adapter ->
-                restaurantDishesList.initSwipeableRecycler(adapter)
             }
         }
     }
@@ -89,7 +92,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
         })
-        viewModel.deliveryTiming.observe(viewLifecycleOwner, {
+        viewModel.deliveryDates.observe(viewLifecycleOwner, {
             handleDeliveryTimingData(it)
         })
         viewModel.dishesList.observe(viewLifecycleOwner, {
@@ -142,7 +145,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
 
             detailsLayout.visibility = View.VISIBLE
-//            detailsSkeletonLayout.root.visibility = View.INVISIBLE
+            detailsSkeletonLayout.root.visibility = View.GONE
         }
     }
 

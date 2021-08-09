@@ -46,10 +46,12 @@ class UpSaleAdapter :
 
         fun bindItem(dishItem: UpSaleAdapterItem) {
             Log.d(TAG,"bindItem")
-            val dish = dishItem.dish
-            name.text = dish.name
-            description.text = dish.description
-            price.text = "$69 X${dishItem.quantity}"
+            val dish = dishItem.menuItem.dish
+            dish?.let{
+                name.text = dish.name
+                description.text = dish.description
+                price.text = "$69 X${dishItem.quantity}"
+            }
         }
 
     }

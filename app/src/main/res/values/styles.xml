@@ -785,6 +785,15 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="shimmerFrameStyle">
+        <item name="shimmer_auto_start">true</item>
+        <item name="shimmer_base_alpha">1</item>
+        <item name="shimmer_base_color">@color/whiteTwo</item>
+        <item name="shimmer_colored">true</item>
+        <item name="shimmer_highlight_alpha">1</item>
+        <item name="shimmer_highlight_color">@color/grey_white_three</item>
+    </style>
+
     <style name="BottomSheetTransparentStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>
