@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType.*
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 
 sealed class DishSections(
     val viewType: DishSectionsViewType
@@ -10,7 +11,7 @@ sealed class DishSections(
 
 data class DishSectionAvailableHeader(
     val header: String,
-    override val dish: Dish? = null,
+    override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
     override val isSwipeable: Boolean = false
 ) : DishSections(viewType = AVAILABLE_HEADER) {
@@ -20,7 +21,7 @@ data class DishSectionAvailableHeader(
 }
 
 class DishSectionUnavailableHeader(
-    override val dish: Dish? = null,
+    override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
     override val isSwipeable: Boolean = false
 ) : DishSections(viewType = UNAVAILABLE_HEADER) {
@@ -30,7 +31,7 @@ class DishSectionUnavailableHeader(
 }
 
 data class DishSectionSingleDish(
-    override val dish: Dish,
+    override val menuItem: MenuItem,
     override var quantity: Int = 0,
     override val isSwipeable: Boolean = true
 ) : DishSections(viewType = SINGLE_DISH) {
@@ -40,7 +41,7 @@ data class DishSectionSingleDish(
 }
 
 class DishSectionSkeleton(
-    override val dish: Dish? = null,
+    override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
     override val isSwipeable: Boolean = false
 ) : DishSections(viewType = SKELETON) {

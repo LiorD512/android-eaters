@@ -21,8 +21,8 @@ class RestaurantPageViewModel(
     val restaurantData = MutableLiveData<Cook>()
     val restaurantFullData = MutableLiveData<Restaurant>()
 
-    var menuItems: Map<Long, Dish>? = null
-    val deliveryTiming = MutableLiveData<List<DeliveryDate>>()
+    var dishes: Map<Long, Dish>? = null
+    val deliveryDates = MutableLiveData<List<DeliveryDate>>()
     val dishesList = MutableLiveData<List<DishSections>>()
 
     val progressData = ProgressData()
@@ -38,10 +38,10 @@ class RestaurantPageViewModel(
 
     fun handleFullRestaurantData(restaurant: Restaurant?) {
         Log.d(TAG, "Full restaurant= $restaurant")
-        restaurant?.let {
-            restaurantFullData.postValue(it)
-            val restaurantSorted = sortCookingSlotsDishes(it)
-            handleDeliveryTimingSection(restaurantSorted)
+        restaurant?.let { restaurant ->
+            restaurantFullData.postValue(restaurant)
+            dishes = restaurant.dishes.associateBy({ it.id }, { it })
+            handleDeliveryTimingSection(restaurant)
         }
     }
 
@@ -49,66 +49,60 @@ class RestaurantPageViewModel(
      * Sorting the cooking slots by dates - cooking slot on the same date goes together  **/
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
         val deliveryDates = mutableListOf<DeliveryDate>()
-        var currentDate: Date? = null
         restaurant.cookingSlots.forEach { cookingSlot ->
-            if (currentDate == null) {
-                currentDate = cookingSlot.startsAt
+            val relevantDeliveryTime = deliveryDates.find { it.date.isSameDateAs(cookingSlot.startsAt)}
+            if (relevantDeliveryTime == null) {
                 deliveryDates.add(DeliveryDate(cookingSlot.startsAt, mutableListOf(cookingSlot)))
-                return@forEach
-            }
-            if (cookingSlot.startsAt.isSameDateAs(currentDate)) {
-                deliveryDates[deliveryDates.lastIndex].cookingSlots.add(cookingSlot)
             } else {
-                deliveryDates.add(DeliveryDate(cookingSlot.startsAt, mutableListOf(cookingSlot)))
-                currentDate = cookingSlot.startsAt
+                relevantDeliveryTime.cookingSlots.add(cookingSlot)
+                relevantDeliveryTime.cookingSlots.sortBy{it.startsAt}
             }
         }
-        currentSelectedDate = deliveryDates.getOrNull(0)
-        deliveryDates.getOrNull(0)?.cookingSlots?.getOrNull(0)?.let { firstCookingSlot ->
-            handleDishesSection(firstCookingSlot)
+        deliveryDates.sortBy { it.date }
+        this.deliveryDates.postValue(deliveryDates)
+        restaurant.cookingSlots.getOrNull(0)?.let{
+            sortCookingSlotDishes(it)
         }
-        deliveryTiming.postValue(deliveryDates)
     }
 
 
-    private fun sortCookingSlotsDishes(restaurant: Restaurant): Restaurant {
-        menuItems = restaurant.dishes.associateBy({ it.id }, { it })
-        menuItems?.let{ menuItems ->
-            restaurant.cookingSlots.forEach { cookingSlot ->
-                val tempHash = menuItems.toMutableMap()
-                cookingSlot.menuItems?.forEach { menuItem ->
-                    menuItems[menuItem.id]?.let { dish ->
-                        cookingSlot.availableDishes.add(dish)
+    private fun sortCookingSlotDishes(cookingSlot: CookingSlot) {
+        dishes?.let { dishes ->
+            val tempHash = dishes.toMutableMap()
+            cookingSlot.sections.forEach { section ->
+                section.menuItems.forEach { menuItem ->
+                    dishes[menuItem.id]?.let { dish ->
+                        menuItem.dish = dish
                         tempHash.remove(dish.id)
                     }
                 }
-                cookingSlot.unAvailableDishes.addAll(tempHash.values.toList())
+            }
+            tempHash.forEach{
+                findClosestMenuItem(it.value)
             }
         }
-        return restaurant
+    }
+
+    private fun findClosestMenuItem(dish: Dish){
+//        deliveryDates.value?.forEach {
+//            it.cookingSlots.find { cookingSlot -> cookingSlot.sections.forEach{ dishesList -> dishesList. } }
+//        }
     }
 
     private fun handleDishesSection(cookingSlot: CookingSlot) {
-        dishesList.postValue(getDishSkeletonItems())
         val dishSectionsList = mutableListOf<DishSections>()
-        if(cookingSlot.availableDishes.isNotEmpty()){
-            dishSectionsList.add(DishSectionAvailableHeader("Menu Items"))
-        }
-        cookingSlot.availableDishes.forEachIndexed() { index, dish ->
-            if (index == cookingSlot.availableDishes.size - 1) {
-                dishSectionsList.add(DishSectionSingleDish(dish))
-            } else {
-                dishSectionsList.add(DishSectionSingleDish(dish))
+        if (cookingSlot.sections.isNotEmpty()) {
+            cookingSlot.sections.forEach { section ->
+                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: ""))
+                section.menuItems.forEach { menuItem ->
+                    dishSectionsList.add(DishSectionSingleDish(menuItem))
+                }
             }
         }
-        if(cookingSlot.unAvailableDishes.isNotEmpty()){
+        if (cookingSlot.unAvailableDishes.isNotEmpty()) {
             dishSectionsList.add(DishSectionUnavailableHeader())
-        }
-        cookingSlot.unAvailableDishes.forEachIndexed() { index, dish ->
-            if (index == cookingSlot.unAvailableDishes.size - 1) {
-                dishSectionsList.add(DishSectionSingleDish(dish))
-            } else {
-                dishSectionsList.add(DishSectionSingleDish(dish))
+            cookingSlot.unAvailableDishes.forEach { menuItem ->
+                dishSectionsList.add(DishSectionSingleDish(menuItem))
             }
         }
         dishesList.postValue(dishSectionsList)
@@ -125,7 +119,7 @@ class RestaurantPageViewModel(
     fun onDeliveryDateChanged(date: DeliveryDate?) {
         currentSelectedDate = date
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
-            handleDishesSection(cookingSlot)
+            sortCookingSlotDishes(cookingSlot)
         }
     }
 

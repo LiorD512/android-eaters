@@ -20,9 +20,15 @@ data class CookingSlot(
     @Json(name = "delivery_fee") val deliveryFee: Price?,
     @Json(name = "free_delivery") val freeDelivery: Boolean,
     @Json(name = "nationwide_shipping") val isNationwide: Boolean?,
-    @Json(name = "menu_items") val menuItems: List<MenuItem>?,
-    val availableDishes: MutableList<Dish> = mutableListOf(),
-    val unAvailableDishes: MutableList<Dish> = mutableListOf(),
+    @Json(name = "sections") val sections: List<CookingSlotSection> = listOf(),
+    val unAvailableDishes: MutableList<MenuItem> = mutableListOf(),
+): Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class CookingSlotSection(
+    @Json (name = "title") val title: String?,
+    @Json (name = "menu_items") val menuItems: List<MenuItem> = listOf(),
 ): Parcelable
 
 
@@ -34,7 +40,11 @@ data class MenuItem(
     @Json(name = "quantity") val quantity: Int = 0,
     @Json(name = "units_sold") val unitsSold: Int = 0,
     @Json(name = "order_at") val orderAt: Date? = null,
-    @Json(name = "cooking_slot") val cookingSlot: CookingSlot?
+    @Json(name = "dish_id") val dishId: Long,
+    @Json(name = "tags") val tags: List<String> = listOf(),
+    @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
+    var dish: Dish? = null,
+    var availableLater: AvailableLaterDate? = null
 ): Parcelable{
     fun getQuantityLeftString(): String{
         val left = quantity - unitsSold
@@ -44,6 +54,12 @@ data class MenuItem(
         return quantity - unitsSold
     }
 }
+
+@Parcelize
+data class AvailableLaterDate(
+    val startsAt: Date,
+    val endsAt: Date
+): Parcelable
 
 @JsonClass(generateAdapter = true)
 data class FullDish(

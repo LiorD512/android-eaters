@@ -39,6 +39,7 @@ import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bott
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.cart_bottom_sheet.CartViewModel
 //import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.sub_screens.upsale.UpSaleViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
@@ -151,7 +152,7 @@ val appModule = module {
     //RestaurantPage
     viewModel { RestaurantMainViewModel() }
     viewModel { RestaurantPageViewModel(get(),get()) }
-
+    viewModel { DishPageViewModel() }
 
 
 }

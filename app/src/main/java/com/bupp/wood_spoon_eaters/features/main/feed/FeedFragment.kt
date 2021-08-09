@@ -86,11 +86,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         })
 
 
-
-
-
-
-
         viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
             handleFeedBannerUi(it)
         })

@@ -22,8 +22,8 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
 import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.google.android.exoplayer2.ExoPlayer
@@ -37,7 +37,8 @@ import kotlin.math.abs
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
-    TimePickerBottomSheetRestaurant.TimePickerListener {
+    TimePickerBottomSheetRestaurant.TimePickerListener
+{
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -49,7 +50,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initData(mainViewModel.currentRestaurant) //todo - nicole - what is this ?
+        viewModel.initData(mainViewModel.currentRestaurant)
 
         initUi()
         initObservers()
@@ -69,18 +70,18 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 //            restaurantDishesList.adapter = adapterDishes
             restaurantCuisinesList.adapter = adapterCuisines
 
-            detailsSkeleton.visibility = View.GONE
+            detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePicker.setOnClickListener {
-                viewModel.currentSelectedDate?.let { deliveryDate ->
+            restaurantTimePicker.setOnClickListener{
+                viewModel.currentSelectedDate?.let{ deliveryDate->
                     val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
                     timePickerBottomSheet.setDeliveryDate(deliveryDate)
                     timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
-            adapterDishes?.let { adapter ->
+            adapterDishes?.let{ adapter->
                 val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
                 restaurantDishesList.initSwipeableRecycler(adapter)
                 restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
@@ -99,7 +100,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
         })
-        viewModel.deliveryTiming.observe(viewLifecycleOwner, {
+        viewModel.deliveryDates.observe(viewLifecycleOwner, {
             handleDeliveryTimingData(it)
         })
         viewModel.dishesList.observe(viewLifecycleOwner, {
@@ -112,9 +113,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         adapterDishes?.submitList(dishSections)
     }
 
-    private fun getDishesAdapterListener(): DishesMainAdapter.RestaurantPageMainAdapterListener =
-        object : DishesMainAdapter.RestaurantPageMainAdapterListener {
-        }
 
     private fun handleDeliveryTimingData(datesList: List<DeliveryDate>?) {
         datesList?.let {
@@ -130,7 +128,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding) {
             restHeaderRestName.text = "Restaurant name"
             restHeaderChefName.text = "by ${cook.getFullName()}"
-            Glide.with(requireContext()).load(cook.thumbnail).transform(CircleCrop()).into(restHeaderChefThumbnail)
+            restHeaderChefThumbnail.setImage(cook.thumbnail)
             rating.text = "${cook.rating} (${cook.reviewCount} ratings)"
 
             topHeaderRestaurantName.text = "Restaurant name"
@@ -146,49 +144,81 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             if (restaurant.video.isNullOrEmpty()) {
                 Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
             } else {
-                //show video icon
+               //show video icon
             }
         }
         with(binding.restaurantMainListLayout) {
             //Description
             restaurantDescription.text = restaurant.about
-            handleReadMoreButton()
 
             //Cuisines
             adapterCuisines?.submitList(restaurant.cuisines)
             restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
 
             detailsLayout.visibility = View.VISIBLE
-            detailsSkeletonLayout.root.visibility = View.INVISIBLE
+            detailsSkeletonLayout.root.visibility = View.GONE
         }
     }
 
-    private fun handleReadMoreButton() {
-        with(binding.restaurantMainListLayout) {
-            restaurantDescriptionViewMore.setOnClickListener {
-                if (restaurantDescription.maxLines == Integer.MAX_VALUE) {
-                    restaurantDescription.maxLines = 2
-                    restaurantDescriptionViewMore.text = "View more"
-                } else {
-                    restaurantDescription.maxLines = Integer.MAX_VALUE
-                    restaurantDescriptionViewMore.text = "View less"
-                }
+//    private fun handleReadMoreButton() {
+//        with(binding.restaurantMainListLayout) {
+//            restaurantDescriptionViewMore.setOnClickListener {
+//                if (restaurantDescription.maxLines == Integer.MAX_VALUE) {
+//                    applyLayoutTransition()
+//                    restaurantDescription.maxLines = 2
+//                    restaurantDescriptionViewMore.text = "View more"
+//                } else {
+//                    applyLayoutTransition()
+//                    restaurantDescription.maxLines = Integer.MAX_VALUE
+//                    restaurantDescriptionViewMore.text = "View less"
+//                }
+//            }
+//
+//            restaurantDescription.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+//                override fun onGlobalLayout() {
+//                    val l = restaurantDescription.layout
+//                    if (l != null) {
+//                        val lines = l.lineCount
+//                        if (lines > 2)
+//                            restaurantDescriptionViewMore.visibility = View.VISIBLE
+//                        restaurantDescription.maxLines = 2
+//                    }
+//                    restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
+//                }
+//            })
+//        }
+//    }
+//
+//    private fun applyLayoutTransition() {
+//        val transition = LayoutTransition()
+//        transition.setDuration(300)
+//        transition.enableTransitionType(LayoutTransition.CHANGING)
+//        binding.restaurantMainListLayout.detailsLayout.layoutTransition = transition
+//    }
+
+    /** All sections click actions **/
+    private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
+        object : DishesMainAdapter.DishesMainAdapterListener {
+            override fun onDishClick(dish: Dish) {
+                mainViewModel.openDishPage(dish)
             }
-
-            restaurantDescription.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    val l = restaurantDescription.layout
-                    if (l != null) {
-                        val lines = l.lineCount
-                        if (lines > 2)
-                            restaurantDescriptionViewMore.visibility = View.VISIBLE
-                        restaurantDescription.maxLines = 2
-                    }
-                    restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            })
         }
-    }
+
+
+//            restaurantDescription.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+//                override fun onGlobalLayout() {
+//                    val l = restaurantDescription.layout
+//                    if (l != null) {
+//                        val lines = l.lineCount
+//                        if (lines > 2)
+//                            restaurantDescriptionViewMore.visibility = View.VISIBLE
+//                        restaurantDescription.maxLines = 2
+//                    }
+//                    restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
+//                }
+//            })
+//        }
+//    }
 
     //    /** All sections click actions **/
 //    private fun getMainAdapterListener(): RestaurantPageMainAdapter.RestaurantPageMainAdapterListener =
@@ -204,8 +234,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        adapterDishes = null
-        adapterCuisines = null
+//        adapterDishes = null
+//        adapterCuisines = null
     }
 
     companion object {

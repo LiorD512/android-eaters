@@ -98,6 +98,12 @@
         <item name="android:textColor">@color/teal_blue</item>
     </style>
 
+    <style name="LatoBold17Teal">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
     <style name="LatoBold13Black">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">13.4sp</item>
@@ -181,6 +187,12 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoReg15BrownishGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
     <style name="LatoReg15Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
@@ -203,6 +215,12 @@
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/nobel_grey</item>
+    </style>
+
+    <style name="LatoReg13BrownishGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
     </style>
 
     <style name="LatoReg13DarkGrey">
@@ -359,6 +377,12 @@
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold19DarkGrey">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
     </style>
 
     <style name="Bold23Blue">
@@ -764,6 +788,15 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="shimmerFrameStyle">
+        <item name="shimmer_auto_start">true</item>
+        <item name="shimmer_base_alpha">1</item>
+        <item name="shimmer_base_color">@color/whiteTwo</item>
+        <item name="shimmer_colored">true</item>
+        <item name="shimmer_highlight_alpha">1</item>
+        <item name="shimmer_highlight_color">@color/grey_white_three</item>
     </style>
 
     <style name="BottomSheetTransparentStyle" parent="Theme.Design.Light.BottomSheetDialog">

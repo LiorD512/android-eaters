@@ -14,10 +14,10 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 
-class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener) :
+class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
     SwipeableAdapter<DishSections>(DiffCallback()) {
 
-    interface RestaurantPageMainAdapterListener {}
+    interface DishesMainAdapterListener: DishViewHolderSingleDish.DishViewHolderSingleDishListener
 
 
     override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
@@ -76,7 +76,7 @@ class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener)
 
         abstract fun bind(
             section: DishSections,
-            listener: RestaurantPageMainAdapterListener
+            listener: DishesMainAdapterListener
         )
     }
 
