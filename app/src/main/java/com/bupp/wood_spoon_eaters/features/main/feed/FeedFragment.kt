@@ -133,29 +133,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
 
     override fun onHeaderAddressClick() {
-        val cook: Cook =  Cook(
-            id = 1,
-            firstName = "Nicole",
-            lastName = "",
-            thumbnail = "",
-            video = null,
-            profession = null,
-            about = null,
-            birthdate = null,
-            pickupAddress = null,
-            country = null,
-            certificates = listOf(),
-            cuisines = mutableListOf(),
-            diets = mutableListOf(),
-            rating = 0.0,
-            reviewCount = 0,
-            dishes = mutableListOf()
-        )
-        startActivity(Intent(requireContext(), RestaurantActivity::class.java)
-            .putExtra(Constants.ARG_RESTAURANT, cook)
-        )
-
-        /// TODO: remove later
+        UpSaleNCartBottomSheet().show(childFragmentManager, "")
 //        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 

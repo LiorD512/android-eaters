@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheetRestaurant
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -24,6 +26,10 @@ import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
+import com.google.android.exoplayer2.SimpleExoPlayer
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
@@ -67,6 +73,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
         }
         with(binding.restaurantMainListLayout) {
+//            restaurantDishesList.adapter = adapterDishes // todo - * nicole - i edited this - i add the adapter inside - initSwipeableRecycler
             restaurantCuisinesList.adapter = adapterCuisines
 
             detailsSkeleton.visibility = View.VISIBLE
