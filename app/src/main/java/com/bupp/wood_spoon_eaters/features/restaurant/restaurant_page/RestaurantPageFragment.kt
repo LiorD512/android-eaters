@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheetRestaurant
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
@@ -20,7 +21,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
-import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -31,7 +32,7 @@ import kotlin.math.abs
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
-    TimePickerBottomSheetRestaurant.TimePickerListener
+    TimePickerBottomSheet.TimePickerListener
 {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
@@ -46,11 +47,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         initUi()
         initObservers()
-        viewModel.initData(mainViewModel.currentRestaurant)
+//        viewModel.initData(mainViewModel.currentRestaurant)
     }
 
     private fun initUi() {
@@ -71,9 +70,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             restaurantTimePicker.setOnClickListener{
                 viewModel.currentSelectedDate?.let{ deliveryDate->
-                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
-                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
-                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+//                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
+//                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
+//                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
@@ -90,8 +89,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun initObservers() {
-        viewModel.restaurantData.observe(viewLifecycleOwner, {
-            handleRestaurantData(it)
+        mainViewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner, {
+            handleRestaurantInitialParamData(it)
         })
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
@@ -120,15 +119,18 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     /** Headers data **/
-    private fun handleRestaurantData(cook: Cook) {
+    @SuppressLint("SetTextI18n")
+    private fun handleRestaurantInitialParamData(restaurantInitParams: RestaurantInitParams) {
         with(binding) {
-            restHeaderRestName.text = "Restaurant name"
-            restHeaderChefName.text = "by ${cook.getFullName()}"
-            restHeaderChefThumbnail.setImage(cook.thumbnail)
-            rating.text = "${cook.rating} (${cook.reviewCount} ratings)"
+            viewModel.getRestaurantFullData(restaurantInitParams.restaurantId)
+            Glide.with(requireContext()).load(restaurantInitParams.coverPhoto).into(coverPhoto)
+            restHeaderRestName.text = restaurantInitParams.restaurantName
+            restHeaderChefName.text = "by ${restaurantInitParams.chefName}"
+            restaurantInitParams.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
+            rating.text = "${restaurantInitParams.rating}"// (${cook.reviewCount} ratings)"
 
-            topHeaderRestaurantName.text = "Restaurant name"
-            topHeaderChefName.text = "by ${cook.getFullName()}"
+            topHeaderRestaurantName.text = restaurantInitParams.restaurantName
+            topHeaderChefName.text = "by ${restaurantInitParams.chefName}"
 
 
         }
@@ -169,9 +171,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         onDeliveryTimingChange(date)
     }
 
-    override fun onCookingSlotSelected() {
-
-    }
+//    override fun onCookingSlotSelected() {
+//
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -181,6 +183,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     companion object {
         private const val TAG = "RestaurantPageFragment"
+    }
+
+    override fun onTimerPickerChange() {
+
     }
 }
 

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,12 +42,12 @@ class RestaurantActivity : AppCompatActivity() {
     }
 
     private fun handleFragmentNavigationEvent(navigationEvent: LiveEvent<NavDirections>?) {
-        Timber.d("handleFragmentNavigationEvent called")
+        MTLogger.c(body = "handleFragmentNavigationEvent called")
         navigationEvent?.getContentIfNotHandled()?.let {
             try {
                 findNavController(R.id.restaurantActContainer).navigate(it)
             } catch (ex: Exception) {
-                Timber.e("NavigationEvent Error ${ex.message}")
+                MTLogger.d(body = "NavigationEvent Error ${ex.message}")
             }
         }
     }

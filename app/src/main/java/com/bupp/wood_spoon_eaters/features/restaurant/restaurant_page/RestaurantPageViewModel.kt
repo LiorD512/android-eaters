@@ -18,7 +18,7 @@ class RestaurantPageViewModel(
 
     var currentSelectedDate: DeliveryDate? = null
 
-    val restaurantData = MutableLiveData<Cook>()
+//    val restaurantData = MutableLiveData<Cook>()
     val restaurantFullData = MutableLiveData<Restaurant>()
 
     var dishes: Map<Long, Dish>? = null
@@ -28,20 +28,14 @@ class RestaurantPageViewModel(
 
     val progressData = ProgressData()
 
-    fun initData(cook: Cook?) {
-        cook?.let {
-            Log.d(TAG, "cook= $cook")
-            dishesList.postValue(getDishSkeletonItems())
-            restaurantData.postValue(it)
-            getRestaurantFullData(cook.id)
-        }
-    }
 
-    private fun getRestaurantFullData(cookId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = restaurantRepository.getRestaurant(1)
-            if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
-                handleFullRestaurantData(result.restaurant)
+    fun getRestaurantFullData(restaurantId: Long?) {
+        restaurantId?.let{
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = restaurantRepository.getRestaurant(restaurantId)
+                if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
+                    handleFullRestaurantData(result.restaurant)
+                }
             }
         }
     }

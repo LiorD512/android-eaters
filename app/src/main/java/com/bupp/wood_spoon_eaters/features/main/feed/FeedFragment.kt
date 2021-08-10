@@ -9,14 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
@@ -29,7 +29,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed),
-    CookProfileDialog.CookProfileDialogListener, FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener {
+     FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener {
 
 
     companion object {
@@ -138,7 +138,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onHeaderDateClick() {
-        val timePickerBottomSheet = TimePickerBottomSheet()
+//        val timePickerBottomSheet = TimePickerBottomSheet()
+        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet()
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
@@ -183,9 +184,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-    override fun onDishClick(menuItemId: Long) {
-        mainViewModel.onDishClick(menuItemId)
-    }
+//    override fun onDishClick(menuItemId: Long) {
+//        mainViewModel.onDishClick(menuItemId)
+//    }
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
         if (feedArr.isEmpty()) {
@@ -198,17 +199,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         }
     }
 
-    private fun initSkeletons() {
-//        skeletonView = binding.feedFragList.applySkeleton(
-//            R.layout.feed_adapter_restaurant_item_skeleton,
-//            15,
-//            shimmerColor = ContextCompat.getColor(
-//                requireContext(),
-//                R.color.dark_40
-//            ),
-//            showShimmer = true,
-//            shimmerDurationInMillis = 1000L
-//        )
+    override fun onChangeAddressClick() {
+        mainViewModel.startLocationAndAddressAct()
     }
 
 
@@ -251,22 +243,22 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     private fun showBanner(text: String) {
         with(binding) {
-//            tooltip = Tooltip.Builder(requireContext())
-//                .anchor(feedFragHeader, 0, -30, true)
-//                .text(text)
-//                .arrow(true)
-////                .floatingAnimation(Tooltip.Animation.SLOW)
-//                .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
-//                .fadeDuration(250)
-//                .showDuration(10000)
-//                .overlay(false)
-//                .maxWidth(feedFragHeader.measuredWidth - 50)
-//                .create()
-//            tooltip!!
-//                .doOnHidden { }
-//                .doOnFailure { }
-//                .doOnShown { }
-//                .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
+            tooltip = Tooltip.Builder(requireContext())
+                .anchor(feedFragHeader, 0, -30, true)
+                .text(text)
+                .arrow(true)
+//                .floatingAnimation(Tooltip.Animation.SLOW)
+                .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
+                .fadeDuration(250)
+                .showDuration(10000)
+                .overlay(false)
+                .maxWidth(feedFragHeader.measuredWidth - 50)
+                .create()
+            tooltip!!
+                .doOnHidden { }
+                .doOnFailure { }
+                .doOnShown { }
+                .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
         }
     }
 
@@ -304,9 +296,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         mainViewModel.onShareCampaignClick(campaign)
     }
 
-    override fun onRestaurantClick(cook: Cook) {
+    override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
         startActivity(Intent(requireContext(), RestaurantActivity::class.java)
-            .putExtra(Constants.ARG_RESTAURANT, cook)
+            .putExtra(Constants.ARG_RESTAURANT, restaurantInitParams)
         )
     }
 

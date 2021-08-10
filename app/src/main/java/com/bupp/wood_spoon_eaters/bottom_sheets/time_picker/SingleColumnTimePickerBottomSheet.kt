@@ -10,27 +10,28 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetRestaurantBinding
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
+import com.bupp.wood_spoon_eaters.databinding.SingleTimePickerBottomSheetBinding
+import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TimePickerBottomSheetRestaurant(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
+class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
 
+//    var listener: TimePickerListener? = null
     interface TimePickerListener{
-        fun onCookingSlotSelected()
+        fun onTimerPickerChange()
     }
 
-    private val binding: TimePickerBottomSheetRestaurantBinding by viewBinding()
+    private val binding: SingleTimePickerBottomSheetBinding by viewBinding()
     val viewModel by viewModel<TimePickerViewModel>()
-
-    private var deliveryDate: DeliveryDate? = null
-//    private var isTemporary: Boolean = false
+    private var menuItems: List<MenuItem>? = null
+    private var isTemporary: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.time_picker_bottom_sheet_restaurant, container, false)
+        return inflater.inflate(R.layout.single_time_picker_bottom_sheet, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,19 +76,28 @@ class TimePickerBottomSheetRestaurant(val listener: TimePickerListener? = null) 
 
     private fun initUi() {
         with(binding){
+            timePickerAsapBtn.setOnClickListener {
+                viewModel.setDeliveryTime(null, isTemporary)
+                listener?.onTimerPickerChange()
+                dismiss()
+            }
             timePickerScheduleBtn.setOnClickListener {
-//                listener?.onCookingSlotSelected(timePickerTimePicker.getChosenDate())
+                viewModel.setDeliveryTime(timePickerTimePicker.getChosenDate(), isTemporary)
+                listener?.onTimerPickerChange()
                 dismiss()
             }
 
-            deliveryDate?.cookingSlots?.let{
-                timePickerTimePicker.setDatesByCookingSlots(it)
+            menuItems?.let{
+                timePickerTimePicker.setDatesByMenuItems(it)
+                timePickerAsapBtn.visibility = View.GONE
             }
         }
     }
 
-    fun setDeliveryDate(deliveryDate: DeliveryDate){
-        this.deliveryDate = deliveryDate
+    fun setMenuItems(menuItems: List<MenuItem>){
+        val menuItemsData = menuItems.filter { it.quantity > 0 }
+        this.isTemporary = true
+        this.menuItems = menuItemsData
     }
 
 }

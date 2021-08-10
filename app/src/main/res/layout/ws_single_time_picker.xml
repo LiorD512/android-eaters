@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/wsRangeTimePickerMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wsRangeTimePickerDateList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.85"
+            android:clipToPadding="false"
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp" />
+
+    <View
+            android:id="@+id/wsRangeTimePickerUiLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/light_periwinkle_rect_cornered"
+            android:orientation="vertical"/>
+
+
+</FrameLayout>

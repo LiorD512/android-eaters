@@ -23,9 +23,3 @@ data class FeedRequest(
     @Json(name = "timestamp") var timestamp: String? = null
 )
 
-@JsonClass(generateAdapter = true)
-data class WSRangeTimePickerHours(
-    val title: String? = null,
-    val date: Date,
-    val hours: List<Date>
-)

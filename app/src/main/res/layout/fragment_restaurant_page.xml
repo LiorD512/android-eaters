@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/event_logo_bkg" />
+                tools:src="@drawable/event_logo_bkg" />
 
     </FrameLayout>
 
@@ -170,7 +171,7 @@
                     style="@style/LatoBlack15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Israeli in The Big Apple" />
+                    tools:text="Israeli in The Big Apple" />
 
             <TextView
                     android:id="@+id/restHeaderChefName"
@@ -178,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="3dp"
-                    android:text="by Assaf Beer"
+                    tools:text="by Assaf Beer"
                     android:textColor="@color/very_light_grey" />
 
         </LinearLayout>

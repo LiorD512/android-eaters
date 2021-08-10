@@ -83,7 +83,7 @@ private var parentItemPosition: Int = -1
 //                        requestBuilder.into(thumbnail)
 //                    }
 //            }
-            GlideApp.with(context).load(dish.thumbnail_url).thumbnail(0.1f).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
+            GlideApp.with(context).load(dish.thumbnail?.url).thumbnail(0.1f).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
             name.text = dish.name
             price.text = dish.formatted_price
 
@@ -107,7 +107,7 @@ private var parentItemPosition: Int = -1
             quantityLeft.text = dish.title
             val multiTransformation = MultiTransformation(BlurTransformation( 10, 2), CenterCrop())
             GlideApp.with(context)
-                .load(dish.thumbnail_url)
+                .load(dish.thumbnail?.url)
                 .thumbnail(0.1f)
                 .apply(RequestOptions.bitmapTransform(multiTransformation))
                 .placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)

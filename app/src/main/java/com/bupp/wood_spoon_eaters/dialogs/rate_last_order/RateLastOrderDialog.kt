@@ -100,7 +100,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
             rateLastOrderDishesRecyclerView.adapter = adapter
 
 
-            rateLastOrderUserImage.setImage(order.cook!!.thumbnail)
+            rateLastOrderUserImage.setImage(order.cook!!.thumbnail.url)
             rateLastOrderUserName.text = "Made by ${order.cook!!.getFullName()}"
 
         }

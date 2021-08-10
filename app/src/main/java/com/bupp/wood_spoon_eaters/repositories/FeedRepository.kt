@@ -99,8 +99,11 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                     is FeedCampaignSection -> {
                         feedData.add(FeedAdapterCoupons(collectionItem))
                     }
-                    is FeedNoChefSection -> {
-                        feedData.add(FeedAdapterNoChef(collectionItem))
+                    is FeedIsEmptySection -> {
+                        feedData.add(FeedAdapterEmptyFeed(collectionItem))
+                    }
+                    is FeedSingleEmptySection -> {
+                        feedData.add(FeedAdapterEmptySection(collectionItem))
                     }
                     is FeedRestaurantSection -> {
                         if (isLargeItems) {

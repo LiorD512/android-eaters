@@ -101,7 +101,8 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         fun bind(orderItem: OrderItem){
             price.text = orderItem.price.formatedValue
             count.text = "${orderItem.quantity}"
-            img.loadResizableImage(orderItem.dish.thumbnail)
+//            img.loadResizableImage(orderItem.dish.thumbnail?.url)
+            img.loadResizableImage(orderItem.dish.thumbnail) //todo restore this when misha is ready
             name.text = orderItem.dish.name
         }
     }
@@ -122,6 +123,9 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
             dish.thumbnail?.let{
                 img.loadResizableImage(it)
             }
+//            dish.thumbnail?.url?.let{ //todo restore this when misha is ready
+//                img.loadResizableImage(it)
+//            }
             name.text = dish.name
         }
     }

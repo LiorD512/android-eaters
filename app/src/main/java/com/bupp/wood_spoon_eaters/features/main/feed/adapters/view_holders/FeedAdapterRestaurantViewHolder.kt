@@ -18,14 +18,14 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
     RecyclerView.ViewHolder(binding.root) {
 
     interface FeedAdapterRestaurantViewHolderListener {
-        fun onRestaurantClick(cook: Cook)
+        fun onRestaurantClick(restaurant: FeedRestaurantSection)
     }
 
     fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
         Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {
-                Glide.with(context).load(restaurant.chefThumbnailUrl).circleCrop().into(feedRestaurantItemChefImage)
+                Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
@@ -35,7 +35,7 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
                 restaurant.items?.let {
                     root.setOnClickListener {
                         Log.d("wowFeedPager", "onRestaurantClick")
-                        listener.onRestaurantClick(restaurant.getCook())
+                        listener.onRestaurantClick(restaurant)
                     }
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {
