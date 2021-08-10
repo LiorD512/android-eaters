@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.DishItemAvailabilityBinding
-import com.bupp.wood_spoon_eaters.databinding.FeedAdapterTitleItemBinding
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterTitleViewHolder
 
 class DishAvailabilityAdapter(private val listener: DishAvailabilityAdapterListener) : ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
 

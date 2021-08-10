@@ -64,6 +64,8 @@ val appModule = module {
     single { FeedRepository(get()) }
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
+    single { RestaurantRepository(get())}
+    single { RestaurantRepositoryImpl(get())}
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get()) }
@@ -151,7 +153,7 @@ val appModule = module {
 
     //RestaurantPage
     viewModel { RestaurantMainViewModel() }
-    viewModel { RestaurantPageViewModel(get(),get()) }
+    viewModel { RestaurantPageViewModel(get()) }
     viewModel { DishPageViewModel() }
 
 

@@ -44,7 +44,8 @@ data class MenuItem(
     @Json(name = "tags") val tags: List<String> = listOf(),
     @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
     var dish: Dish? = null,
-    var availableLater: AvailableLaterDate? = null
+    /** when menu item is available at other times - the AvailabilityDate is not null and indicates the closest availability date **/
+    var availableLater: AvailabilityDate? = null
 ): Parcelable{
     fun getQuantityLeftString(): String{
         val left = quantity - unitsSold
@@ -56,7 +57,7 @@ data class MenuItem(
 }
 
 @Parcelize
-data class AvailableLaterDate(
+data class AvailabilityDate(
     val startsAt: Date,
     val endsAt: Date
 ): Parcelable

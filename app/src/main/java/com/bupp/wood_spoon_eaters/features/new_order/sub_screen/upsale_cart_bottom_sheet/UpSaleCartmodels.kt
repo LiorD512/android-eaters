@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 import kotlinx.parcelize.Parcelize
 
@@ -26,19 +27,19 @@ enum class CartAdapterViewType {
 
 data class UpsaleAdapterItem(
     override var quantity: Int = 0,
-    override val dish: Dish,
+    override val menuItem: MenuItem,
     override val isSwipeable: Boolean = true
 ): CartBaseAdapterItem(CartAdapterViewType.UPSALE_DISH)
 
 data class CartAdapterItem(
     override var quantity: Int = 0,
-    override val dish: Dish,
+    override val menuItem: MenuItem,
     override val isSwipeable: Boolean = true
 ): CartBaseAdapterItem(CartAdapterViewType.CART_DISH)
 
 data class CartAdapterSubTotalItem(
     val subTotal: String,
-    override val dish: Dish? = null,
+    override val menuItem: MenuItem? = null,
     override var quantity: Int = 0,
     override val isSwipeable: Boolean = false
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)

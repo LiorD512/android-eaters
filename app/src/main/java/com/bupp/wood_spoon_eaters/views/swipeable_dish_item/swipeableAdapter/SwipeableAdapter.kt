@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter
 
+import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
