@@ -39,7 +39,7 @@ data class CartAdapterItem(
 
 data class CartAdapterSubTotalItem(
     val subTotal: String,
-    override var quantity: Int = 0,
     override val menuItem: MenuItem? = null,
+    override var quantity: Int = 0,
     override val isSwipeable: Boolean = false
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)

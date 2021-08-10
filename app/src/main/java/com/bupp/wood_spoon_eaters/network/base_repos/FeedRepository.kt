@@ -16,7 +16,7 @@ interface FeedRepositoryInterface{
 
 class FeedRepositoryImpl(private val service: ApiService) : FeedRepositoryInterface {
     override suspend fun getFeed(lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<FeedResult>> {
-        val tempUrl = "https://woodspoon-server-pr-196.herokuapp.com/api/v2/eaters/me/feed" // todo - remove this shit !
+        val tempUrl = "https://woodspoon-server-pr-167.herokuapp.com/api/v2/eaters/me/feed" // todo - remove this shit !
         return safeApiCall { service.getFeed(tempUrl, lat, lng, addressId, timestamp) }
     }
 
