@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -13,8 +14,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
+import com.bupp.wood_spoon_eaters.databinding.RestaurantMainListLayoutBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -22,6 +23,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -32,8 +34,7 @@ import kotlin.math.abs
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
-    TimePickerBottomSheet.TimePickerListener
-{
+    TimePickerBottomSheet.TimePickerListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -49,7 +50,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
         initUi()
         initObservers()
-//        viewModel.initData(mainViewModel.currentRestaurant)
     }
 
     private fun initUi() {
@@ -68,15 +68,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePicker.setOnClickListener{
-                viewModel.currentSelectedDate?.let{ deliveryDate->
+            restaurantTimePicker.setOnClickListener {
+                Log.d(TAG, "restaurantTimePicker clicker")
+                viewModel.currentSelectedDate?.let { deliveryDate ->
 //                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
 //                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
 //                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
             }
             restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
-            adapterDishes?.let{ adapter->
+            adapterDishes?.let { adapter ->
                 val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
                 restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
                 restaurantDishesList.initSwipeableRecycler(adapter)
@@ -98,16 +99,28 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.deliveryDatesData.observe(viewLifecycleOwner, {
             handleDeliveryTimingData(it)
         })
+        viewModel.timePickerUi.observe(viewLifecycleOwner, {
+            handleTimePickerUi(it)
+        })
         viewModel.dishesList.observe(viewLifecycleOwner, {
             handleDishesList(it)
         })
+    }
+
+    private fun handleTimePickerUi(timePickerStr: String?) {
+        timePickerStr?.let {
+            with(binding.restaurantMainListLayout) {
+                Log.d(TAG, "eieiei: ${restaurantTimePicker.text} - $timePickerStr")
+                test.text = it
+                restaurantTimePicker.text = it
+            }
+        }
     }
 
     private fun handleDishesList(dishSections: List<DishSections>?) {
         binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
         adapterDishes?.submitList(dishSections)
     }
-
 
     private fun handleDeliveryTimingData(datesList: List<DeliveryDate>?) {
         datesList?.let {
@@ -146,6 +159,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
         }
         with(binding.restaurantMainListLayout) {
+
             //Description
             restaurantDescription.text = restaurant.about
 
@@ -181,41 +195,43 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 //        adapterCuisines = null
     }
 
-    companion object {
-        private const val TAG = "RestaurantPageFragment"
-    }
 
     override fun onTimerPickerChange() {
 
     }
-}
 
-fun setFadeInOnScrollRecycler(
-    fadingView: View,
-    recyclerView: RecyclerView,
-    startFadeAtChild: Int = 0,
-    fadeDuration: Int = 500
-) {
-    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    fun setFadeInOnScrollRecycler(
+        fadingView: View,
+        recyclerView: RecyclerView,
+        startFadeAtChild: Int = 0,
+        fadeDuration: Int = 500
+    ) {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-        var startFadeAt: Float? = null
+            var startFadeAt: Float? = null
 
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            val currentChildIndex =
-                (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-            if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
-                startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
-            }
-            startFadeAt?.let { itemHeight ->
-                // The length that is currently scrolled
-                val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
-                // The distance you need to scroll to end the animation
-                val totalScrollableLength = fadeDuration
-                if (abs(scrolledLength) > 0) {
-                    val alpha = scrolledLength.div(totalScrollableLength)
-                    fadingView.alpha = alpha
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val currentChildIndex =
+                    (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
+                    startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
+                }
+                startFadeAt?.let { itemHeight ->
+                    // The length that is currently scrolled
+                    val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
+                    // The distance you need to scroll to end the animation
+                    val totalScrollableLength = fadeDuration
+                    if (abs(scrolledLength) > 0) {
+                        val alpha = scrolledLength.div(totalScrollableLength)
+                        fadingView.alpha = alpha
+                    }
                 }
             }
-        }
-    })
+        })
+    }
+
+
+    companion object {
+        private const val TAG = "RestaurantPageFragment"
+    }
 }

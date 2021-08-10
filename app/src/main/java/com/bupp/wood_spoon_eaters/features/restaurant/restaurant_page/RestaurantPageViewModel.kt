@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class RestaurantPageViewModel(
     var deliveryDates: List<DeliveryDate>? = null
     val deliveryDatesData = MutableLiveData<List<DeliveryDate>>()
     val dishesList = MutableLiveData<List<DishSections>>()
+    val timePickerUi = MutableLiveData<String>()
 
     val progressData = ProgressData()
 
@@ -52,6 +54,7 @@ class RestaurantPageViewModel(
     /** Creating  Delivery date list
      * Sorting the cooking slots by dates - cooking slot on the same date goes together  **/
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
+        //todo - nicole please explain - relevantDeliveryTime
         val deliveryDates = mutableListOf<DeliveryDate>()
         restaurant.cookingSlots.forEach { cookingSlot ->
             val relevantDeliveryTime = deliveryDates.find { it.date.isSameDateAs(cookingSlot.startsAt) }
@@ -162,6 +165,21 @@ class RestaurantPageViewModel(
         currentSelectedDate = date
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
             sortCookingSlotDishes(cookingSlot)
+        }
+        updateTimePickerUi(date?.cookingSlots?.get(0))
+    }
+
+    private fun updateTimePickerUi(selectedCookingSlot: CookingSlot?) {
+        selectedCookingSlot?.let{
+            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
+            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
+            var uiStr = ""
+            if(isNow){
+                uiStr = "Now $datesStr"
+            }else{
+                uiStr = "${selectedCookingSlot.name} $datesStr"
+            }
+            timePickerUi.postValue(uiStr)
         }
     }
 
