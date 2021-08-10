@@ -15,7 +15,7 @@ class SuperUserViewModel(
     }
 
     fun updateBaseUrl(baseUrl: String) {
-        flavorConfig.setBaseUrl(baseUrl)
+        flavorConfig.setCustomBaseUrl(baseUrl)
         userRepository.logout()
     }
 

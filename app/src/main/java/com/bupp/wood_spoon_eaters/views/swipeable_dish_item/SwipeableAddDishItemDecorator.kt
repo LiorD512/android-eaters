@@ -44,19 +44,21 @@ class SwipeableAddDishItemDecorator(
                             val bottom = child.bottom - verticalPadding
 
                             val adapterPosition = parent.getChildAdapterPosition(child)
-                            val isSwipeable = (parent.adapter as SwipeableAdapter<*>).isSwipeable(adapterPosition)
-                            if (isSwipeable) {
-                                val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
-                                if (isInCart) {
-                                    right = 15
-                                    selectedShape.setBounds(left, top, right, bottom)
-                                    selectedShape.draw(canvas)
-                                } else {
-                                    right = 10
-                                    val defaultAlpha = calcDefaultAlpha(child.translationX)
-                                    defaultShape.alpha = defaultAlpha
-                                    defaultShape.setBounds(left, top, right, bottom)
-                                    defaultShape.draw(canvas)
+                            if (adapterPosition >= 0) {
+                                val isSwipeable = (parent.adapter as SwipeableAdapter<*>).isSwipeable(adapterPosition)
+                                if (isSwipeable) {
+                                    val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
+                                    if (isInCart) {
+                                        right = 15
+                                        selectedShape.setBounds(left, top, right, bottom)
+                                        selectedShape.draw(canvas)
+                                    } else {
+                                        right = 10
+                                        val defaultAlpha = calcDefaultAlpha(child.translationX)
+                                        defaultShape.alpha = defaultAlpha
+                                        defaultShape.setBounds(left, top, right, bottom)
+                                        defaultShape.draw(canvas)
+                                    }
                                 }
                             }
                         }
@@ -85,36 +87,37 @@ class SwipeableAddDishItemDecorator(
 
                         val selectedAlpha = calcAlpha(child.translationX)
 
-                        val adapterPosition = parent.getChildAdapterPosition(child)
-
                         val selectedCopy = selectedShape.constantState?.newDrawable()?.mutate()
                         selectedCopy?.alpha = selectedAlpha
 
-                        val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
-                        if (isInCart) {
-                            right = 20
-                            selectedCopy?.alpha = 255
-                        }
+                        val adapterPosition = parent.getChildAdapterPosition(child)
+                        if (adapterPosition >= 0) {
+                            val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
+                            if (isInCart) {
+                                right = 20
+                                selectedCopy?.alpha = 255
+                            }
 
-                        if (child.translationX > 0) {
-                            right = child.translationX.toInt()
-                        }
+                            if (child.translationX > 0) {
+                                right = child.translationX.toInt()
+                            }
 
 
-                        selectedCopy?.setBounds(left, top, right, bottom)
-                        selectedCopy?.draw(canvas)
+                            selectedCopy?.setBounds(left, top, right, bottom)
+                            selectedCopy?.draw(canvas)
 
-                        val itemHeight = bottom - top
-                        val addIconTop = top + (itemHeight - intrinsicHeight!!) / 2
-                        val addIconMargin = (child.translationX.toInt() / 3)
-                        val addIconLeft = right - addIconMargin - intrinsicWidth!!
-                        val addIconRight = right - addIconMargin
-                        val addIconBottom = addIconTop + intrinsicHeight
-                        calcIconAlpha(abs(child.translationX))
-                        // Draw the delete icon
+                            val itemHeight = bottom - top
+                            val addIconTop = top + (itemHeight - intrinsicHeight!!) / 2
+                            val addIconMargin = (child.translationX.toInt() / 3)
+                            val addIconLeft = right - addIconMargin - intrinsicWidth!!
+                            val addIconRight = right - addIconMargin
+                            val addIconBottom = addIconTop + intrinsicHeight
+                            calcIconAlpha(abs(child.translationX))
+                            // Draw the delete icon
 //                            addIcon?.alpha = selectedAlpha
-                        addIcon?.setBounds(addIconLeft, addIconTop, addIconRight, addIconBottom)
-                        addIcon?.draw(canvas)
+                            addIcon?.setBounds(addIconLeft, addIconTop, addIconRight, addIconBottom)
+                            addIcon?.draw(canvas)
+                        }
                     }
                 }
             }

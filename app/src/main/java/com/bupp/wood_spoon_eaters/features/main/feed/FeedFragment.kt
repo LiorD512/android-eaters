@@ -133,8 +133,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
 
     override fun onHeaderAddressClick() {
-        UpSaleNCartBottomSheet().show(childFragmentManager, "")
-//        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+//        UpSaleNCartBottomSheet().show(childFragmentManager, "")
+        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
     override fun onHeaderDateClick() {
@@ -251,22 +251,22 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     private fun showBanner(text: String) {
         with(binding) {
-            tooltip = Tooltip.Builder(requireContext())
-                .anchor(feedFragHeader, 0, -30, true)
-                .text(text)
-                .arrow(true)
-//                .floatingAnimation(Tooltip.Animation.SLOW)
-                .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
-                .fadeDuration(250)
-                .showDuration(10000)
-                .overlay(false)
-                .maxWidth(feedFragHeader.measuredWidth - 50)
-                .create()
-            tooltip!!
-                .doOnHidden { }
-                .doOnFailure { }
-                .doOnShown { }
-                .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
+//            tooltip = Tooltip.Builder(requireContext())
+//                .anchor(feedFragHeader, 0, -30, true)
+//                .text(text)
+//                .arrow(true)
+////                .floatingAnimation(Tooltip.Animation.SLOW)
+//                .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
+//                .fadeDuration(250)
+//                .showDuration(10000)
+//                .overlay(false)
+//                .maxWidth(feedFragHeader.measuredWidth - 50)
+//                .create()
+//            tooltip!!
+//                .doOnHidden { }
+//                .doOnFailure { }
+//                .doOnShown { }
+//                .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
         }
     }
 
