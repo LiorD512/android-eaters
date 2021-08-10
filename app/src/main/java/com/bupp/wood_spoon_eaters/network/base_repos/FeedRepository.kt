@@ -21,7 +21,7 @@ class FeedRepositoryImpl(private val service: ApiService) : FeedRepositoryInterf
     }
 
     override suspend fun getHrefCollection(href: String): ResultHandler<ServerResponse<List<FeedSectionCollectionItem>>> {
-        val callPrefix = "https://woodspoon-server-pr-196.herokuapp.com/api/v2" // todo - remove this shit !
+        val callPrefix = "https://woodspoon-server-pr-167.herokuapp.com/api/v2" // todo - remove this shit !
         return safeApiCall { service.getHrefCollection(callPrefix+href) }
     }
 
