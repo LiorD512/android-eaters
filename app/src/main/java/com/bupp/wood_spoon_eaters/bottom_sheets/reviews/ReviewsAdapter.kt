@@ -44,11 +44,12 @@ class ReviewsAdapter() : ListAdapter<ReviewsBaseAdapterItem, RecyclerView.ViewHo
 
     inner class ReviewItemViewHolder(val binding: ReviewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(data: ReviewAdapterItem) {
-            data.comment.eater
-            data.comment.body
+                binding.reviewsItemName.text =  data.comment.eater.firstName
+                binding.reviewsItemComment.text = data.comment.body
         }
 
         val icon: ImageView = binding.reviewsItemIcon
+
     }
 
     inner class ReviewTitleItemViewHolder(val binding: ReviewsTitleItemBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@drawable/top_cornered_bkg"
         android:orientation="vertical">
 
     <FrameLayout
@@ -50,59 +50,6 @@
             android:layout_marginHorizontal="15.4dp"
             android:layout_marginBottom="15.4dp"
             app:title="Show all 21 reviews" />
-<!--    -->
-<!--    <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
-
-
-
-<!--        <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                android:background="@color/grey_seperator"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/SingleEventItemPriceEvent" />-->
-
-<!--        <androidx.core.widget.NestedScrollView-->
-<!--                xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--                xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                xmlns:tools="http://schemas.android.com/tools"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
-
-
-<!--            <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@color/white"-->
-<!--                    android:orientation="vertical">-->
-
-<!--                <TextView-->
-<!--                        style="@style/LatoBlack23Dark"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="top"-->
-<!--                        android:drawableStart="@drawable/ic_icon_review"-->
-<!--                        android:drawablePadding="5dp"-->
-<!--                        android:padding="15.4dp"-->
-<!--                        android:text="4.8 (21 reviews)" />-->
-
-
-<!--                -->
-
-<!--            </LinearLayout>-->
-
-<!--        </androidx.core.widget.NestedScrollView>-->
-
-
-
-
-<!--    </LinearLayout>-->
-
-<!--   -->
 
 
 </LinearLayout>

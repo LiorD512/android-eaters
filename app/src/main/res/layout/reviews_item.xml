@@ -81,6 +81,7 @@
                     tools:text="Thank you eran , delicious!" />
 
             <com.bupp.wood_spoon_eaters.views.ExpandableTextView
+                    android:id="@+id/reviewsExpandableTextView"
                     style="@style/LatoBold13DarkGrey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
