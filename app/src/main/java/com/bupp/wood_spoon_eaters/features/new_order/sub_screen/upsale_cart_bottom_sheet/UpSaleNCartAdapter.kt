@@ -135,4 +135,12 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
     companion object {
         const val TAG = "wowCartAdapter"
     }
+
+    override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
+
+    }
+
+    override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
+
+    }
 }

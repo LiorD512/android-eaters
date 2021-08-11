@@ -14,7 +14,6 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
-import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -119,7 +118,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     private fun handleOrder(order: Order) {
         with(binding) {
             order.apply {
-                cook?.apply {
+                restaurant?.apply {
                     singleOrderDetailsHeader.setTitle("Home chef $firstName")
                 }
                 deliveryAddress?.apply{

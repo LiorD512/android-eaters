@@ -83,7 +83,7 @@ val appModule = module {
     single { OrderManager(get(), get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
     single { OldCartManager(get(), get(), get(), get(), get()) }
-    single { CartManager(get(), get()) }
+    single { CartManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get(), get()) }
 

@@ -15,10 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RestaurantPageViewModel(
-    val restaurantRepository: RestaurantRepository,
+    private val restaurantRepository: RestaurantRepository,
     val cartManager: CartManager,
 ) : ViewModel() {
 
+    private lateinit var currentCookingSlot: CookingSlot
     var currentSelectedDate: DeliveryDate? = null
 
     val initialParamData = MutableLiveData<RestaurantInitParams>()
@@ -30,7 +31,9 @@ class RestaurantPageViewModel(
     val dishesList = MutableLiveData<List<DishSections>>()
     val timePickerUi = MutableLiveData<String>()
 
+    val clearCartEvent = cartManager.getClearCartUiEvent()
     val cartLiveData = cartManager.getCurrentCartData()
+    val wsErrorEvent = cartManager.getWsErrorEvent()
 
     val progressData = ProgressData()
 
@@ -40,7 +43,7 @@ class RestaurantPageViewModel(
     }
 
     private fun getRestaurantFullData(restaurantId: Long?) {
-        restaurantId?.let{
+        restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 dishesList.postValue(getDishSkeletonItems())
                 val result = restaurantRepository.getRestaurant(restaurantId)
@@ -85,7 +88,7 @@ class RestaurantPageViewModel(
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
         handleDishesSection(sortedCookingSlot)
 
-        cartManager.currentCookingSlot = cookingSlot
+        currentCookingSlot = cookingSlot
     }
 
     /** on cooking slot selected - need to sort by available/unavailable dishes
@@ -181,25 +184,47 @@ class RestaurantPageViewModel(
     }
 
     private fun updateTimePickerUi(selectedCookingSlot: CookingSlot?) {
-        selectedCookingSlot?.let{
+        selectedCookingSlot?.let {
             val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
             val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
             var uiStr = ""
-            if(isNow){
+            if (isNow) {
                 uiStr = "Now ($datesStr)"
-            }else{
+            } else {
                 uiStr = "${selectedCookingSlot.name} ($datesStr)"
             }
             timePickerUi.postValue(uiStr)
         }
     }
 
-    fun onDishAdded(item: DishSectionSingleDish) {
-        cartManager.addItemRequest(item.menuItem.dishId, item.quantity)
+//    fun onDishAdded(item: DishSectionSingleDish) {
+//        item.menuItem.dishId?.let{
+//            cartManager.addItemRequest(it, item.quantity)
+//        }
+//    }
+
+//    fun onDishUpdated(item: DishSectionSingleDish) {
+//        cartManager.updateItemRequest(item)
+//    }
+
+
+    fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
+        val currentCookingSlot = currentCookingSlot
+        val currentRestaurant = restaurantFullData.value!!
+        if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot)) {
+            viewModelScope.launch {
+                cartManager.updateCurCookingSlot(currentCookingSlot)
+                cartManager.addOrUpdateCart(quantity, dishId, note)
+            }
+        }
     }
 
-    fun onDishUpdated(item: DishSectionSingleDish) {
-        cartManager.updateItemRequest(item)
+    fun removeOrderItemsByDishId(dishId: Long?){
+        dishId?.let{
+            viewModelScope.launch {
+                cartManager.removeOrderItems(it)
+            }
+        }
     }
 
     companion object {

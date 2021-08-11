@@ -33,6 +33,7 @@ private var parentItemPosition: Int = -1
 
     @JvmName("setChefId1")
     fun setParentItemPosition(position: Int) {
+        Log.d("feedItemPosition", "setParentItemPosition: $position")
         this.parentItemPosition = position
     }
 
@@ -75,7 +76,7 @@ private var parentItemPosition: Int = -1
         private val tagView: DishTagsView = binding.feedRestaurantItemTags
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemPosition: Int) {
-
+            Log.d("feedItemPosition", "bindItem: $parentItemPosition")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
 //                    .blurPlaceHolder(it, thumbnail, blurHash)
@@ -90,7 +91,7 @@ private var parentItemPosition: Int = -1
             tagView.initTagView(dish.tags)
 
             layout.setOnClickListener{
-                Log.d("wowFeedPager", "parentItemPosition: ${parentItemPosition}")
+                Log.d("feedItemPosition", "parentItemPosition: $parentItemPosition")
                 listener.onPageClick(parentItemPosition)
             }
         }

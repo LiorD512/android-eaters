@@ -19,16 +19,17 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
     fun updateItemQuantityAdd(position: Int) {
         val item = getItem(position)
         item.quantity++
-        onSwipeableItemAdded(item)
+        onDishSwipedAdd(item)
     }
 
     fun updateItemQuantityRemoved(position: Int) {
-        if (getItem(position).quantity > 0) {
-            getItem(position).quantity--
-        }
+        val item = getItem(position)
+        item.quantity = 0
+        onDishSwipedRemove(item)
     }
 
-    abstract fun onSwipeableItemAdded(item: T)
+    abstract fun onDishSwipedAdd(item: T)
+    abstract fun onDishSwipedRemove(item: T)
 
     companion object {
         const val TAG = "wowUpsaleAdapter"

@@ -19,6 +19,7 @@ data class Restaurant(
     @Json(name = "avg_rating") val rating: Double?,
     @Json(name = "reviews_count") var reviewCount: Int = 0,
     @Json(name = "about") val about: String?,
+    @Json(name = "pickup_address") var pickupAddress: Address? = null,
     @Json(name = "is_favorite") val isFavorite: Boolean? = false,
     @Json(name = "share_ulr")val shareUrl: String? = "",
     @Json(name = "tags") val tags: MutableList<String> = mutableListOf(),

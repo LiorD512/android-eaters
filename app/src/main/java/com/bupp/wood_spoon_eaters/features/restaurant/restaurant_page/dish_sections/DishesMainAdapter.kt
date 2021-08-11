@@ -19,16 +19,15 @@ class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
     SwipeableAdapter<DishSections>(DiffCallback()) {
 
     interface DishesMainAdapterListener: DishViewHolderSingleDish.DishViewHolderSingleDishListener{
-        fun onDishAdded(item: DishSectionSingleDish)
-        fun onDishUpdated(item: DishSectionSingleDish)
+        fun onDishSwipedAdd(item: DishSectionSingleDish)
+        fun onDishSwipedRemove(item: DishSectionSingleDish)
     }
 
-    override fun onSwipeableItemAdded(item: DishSections) {
-        if(item.quantity > 1){
-            listener.onDishUpdated(item as DishSectionSingleDish)
-        }else{
-            listener.onDishAdded(item as DishSectionSingleDish)
-        }
+    override fun onDishSwipedAdd(item: DishSections) {
+        listener.onDishSwipedAdd(item as DishSectionSingleDish)
+    }
+    override fun onDishSwipedRemove(item: DishSections) {
+        listener.onDishSwipedRemove(item as DishSectionSingleDish)
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal

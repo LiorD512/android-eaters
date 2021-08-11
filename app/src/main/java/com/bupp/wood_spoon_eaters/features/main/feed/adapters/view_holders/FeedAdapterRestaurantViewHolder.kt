@@ -36,6 +36,8 @@ class FeedAdapterRestaurantViewHolder(
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
 
+                adapter.setParentItemPosition(parentAdapterPosition)
+
                 restaurant.items?.let {
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {

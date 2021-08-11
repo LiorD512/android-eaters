@@ -16,7 +16,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
         fun onDishClick(menuItem: MenuItem)
     }
 
-    override val isSwipeable: Boolean = true
+    override var isSwipeable: Boolean = true
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish
@@ -34,6 +34,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                     dishTagsView.setTags(section.menuItem.tags)
                 } else {
                     section.menuItem.availableLater?.let{ it->
+                        isSwipeable = false // todo - maybe replace we grey "disabled" ui instead of the teal_blue shape (inside item decorator)
                         val tag = it.getStartEndAtTag()
                         dishTagsView.setTags(listOf(tag))
                     }

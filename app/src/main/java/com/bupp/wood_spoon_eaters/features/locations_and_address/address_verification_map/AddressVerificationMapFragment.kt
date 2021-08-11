@@ -16,7 +16,6 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentAddressVerificationMapBind
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -205,8 +204,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
             googleMap?.clear()
 
-            val chefLat = curOrderData.cook?.pickupAddress?.lat
-            val chefLng = curOrderData.cook?.pickupAddress?.lng
+            val chefLat = curOrderData.restaurant?.pickupAddress?.lat
+            val chefLng = curOrderData.restaurant?.pickupAddress?.lng
             chefLat?.let{
                 chefLng?.let{
                     val chefLocation = LatLng(chefLat, chefLng)

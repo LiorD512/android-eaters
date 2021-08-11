@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -32,7 +35,7 @@ import kotlin.math.abs
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
-    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener {
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -111,6 +114,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.cartLiveData.observe(viewLifecycleOwner, {
             handleCurrentCartData(it)
         })
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+            handleWSError(it.getContentIfNotHandled())
+        })
+    }
+
+    private fun handleWSError(errorEvent: String?) {
+        errorEvent?.let{
+            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+        }
     }
 
     private fun handleCurrentCartData(it: Order?) {
@@ -185,13 +197,17 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 mainViewModel.openDishPage(menuItem)
             }
 
-            override fun onDishAdded(item: DishSectionSingleDish) {
-                viewModel.onDishAdded(item)
+            override fun onDishSwipedAdd(item: DishSectionSingleDish) {
+                item.menuItem.dishId?.let{
+                    viewModel.addDishToCart(1, it)
+                }
             }
 
-            override fun onDishUpdated(item: DishSectionSingleDish) {
-                viewModel.onDishUpdated(item)
+            override fun onDishSwipedRemove(item: DishSectionSingleDish) {
+                //todo - ask neta - if after current remove - cart is empty - should i notify the user ?
+                viewModel.removeOrderItemsByDishId(item.menuItem.dishId)
             }
+
         }
 
     override fun onDateSelected(date: DeliveryDate?) {
@@ -236,5 +252,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 }
             }
         })
+    }
+
+    override fun onWSErrorDone() {
+
     }
 }

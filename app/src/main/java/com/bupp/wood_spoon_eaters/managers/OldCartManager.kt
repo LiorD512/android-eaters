@@ -154,7 +154,6 @@ class OldCartManager(
         val inCartTotalPrice: Double? = null,
         val currentOrderItemCounter: Int? = null,
         val currentOrderItemPrice: Double? = null
-
     )
 
     enum class CartStatusEventType {
@@ -177,7 +176,7 @@ class OldCartManager(
                 if (cookingSlot.id != currentCookingSlotId) {
                     //if the showing dish's (cook) is the same as the in-cart order's cook
                     val currentShowingCookName = currentShowingDish?.cook?.getFullName()
-                    val inCartCookName = orderResponse.cook?.getFullName()
+                    val inCartCookName = orderResponse.restaurant?.getFullName()
                     return NewCartData(
                         inCartCookName = inCartCookName,
                         currentShowingCookName = currentShowingCookName
@@ -547,7 +546,7 @@ class OldCartManager(
 
     private fun getCurrentOrderDishNames(): List<String> {
         val dishNames = mutableSetOf<String>()
-        val chefsName = currentOrderResponse?.cook?.firstName ?: ""
+        val chefsName = currentOrderResponse?.restaurant?.firstName ?: ""
         currentOrderResponse?.orderItems?.forEach {
             dishNames.add("${chefsName}_${it.dish.name}")
         }

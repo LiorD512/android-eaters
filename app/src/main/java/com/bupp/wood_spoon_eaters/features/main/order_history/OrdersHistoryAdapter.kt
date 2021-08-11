@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -82,7 +81,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
         fun bindItem(data: OrderAdapterItemOrder) {
             val order = data.order
-            title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.cook?.firstName}"
+            title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.restaurant?.firstName}"
             price.text = "Total: ${order.total?.formatedValue}"
             if (order.estDeliveryTime != null) {
                 date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
@@ -108,7 +107,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
         fun bindItem(data: OrderAdapterItemActiveOrder) {
             val order = data.order
-            title.text = order.cook?.getFullName() ?: ""
+            title.text = order.restaurant?.getFullName() ?: ""
             val orderState = order.getOrderState()
             orderPb.setState(orderState)
 //            val order = data.order

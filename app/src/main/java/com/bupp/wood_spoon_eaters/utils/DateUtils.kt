@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.annotation.SuppressLint
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDate
 import java.text.SimpleDateFormat
 import java.util.*
@@ -103,8 +104,14 @@ object DateUtils {
     }
 
     fun parseDateToUsTime(date: Date): String {
-        //4:30 PM
+        //04:30 pm
         val sdf = SimpleDateFormat("hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
+    }
+
+    fun parseDateToDayAndUsTime(date: Date): String {
+        //Fri, 04:30 pm
+        val sdf = SimpleDateFormat("EE, hh:mm a")
         return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
     }
 
@@ -234,6 +241,14 @@ object DateUtils {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
+    }
+
+    fun parseCookingSlotForNowOrDates(cookingSlot: CookingSlot): String {
+        return if(isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)){
+            "Now"
+        }else{
+            "${parseDateToDayAndUsTime(cookingSlot.startsAt)} - ${parseDateToUsTime(cookingSlot.endsAt)}"
+        }
     }
 }
 
