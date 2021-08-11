@@ -37,29 +37,31 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
                         val bottom = child.bottom - verticalPadding
 
                         val adapterPosition = parent.getChildAdapterPosition(child)
-                        val isSwipeable = (parent.adapter as SwipeableAdapter<*>).isSwipeable(adapterPosition)
-                        if (isSwipeable) {
-                            if (child.translationX == -360f) {
-                                child.translationX = 0f
-                            }
+                        if (adapterPosition >= 0) {
+                            val isSwipeable = (parent.adapter as SwipeableAdapter<*>).isSwipeable(adapterPosition)
+                            if (isSwipeable) {
+                                if (child.translationX == -360f) {
+                                    child.translationX = 0f
+                                }
 
-                            right = child.width.toInt()
-                            if (child.translationX < 0) {
-                                left = right - abs(child.translationX.toInt())
-                            }
-                            removeShape.setBounds(left, top, right, bottom)
-                            removeShape.draw(canvas)
+                                right = child.width.toInt()
+                                if (child.translationX < 0) {
+                                    left = right - abs(child.translationX.toInt())
+                                }
+                                removeShape.setBounds(left, top, right, bottom)
+                                removeShape.draw(canvas)
 
-                            val itemHeight = bottom - top
-                            val removeIconTop = top + (itemHeight - intrinsicHeight!!) / 2
-                            val removeIconMargin = abs((child.translationX.toInt()) / 3)
-                            val removeIconLeft = left + removeIconMargin
-                            val removeIconRight = left + removeIconMargin + intrinsicWidth!!
-                            val removeIconBottom = removeIconTop + intrinsicHeight
-                            calcIconAlpha(abs(child.translationX))
-                            // Draw the delete icon
-                            removeIcon?.setBounds(removeIconLeft, removeIconTop, removeIconRight, removeIconBottom)
-                            removeIcon?.draw(canvas)
+                                val itemHeight = bottom - top
+                                val removeIconTop = top + (itemHeight - intrinsicHeight!!) / 2
+                                val removeIconMargin = abs((child.translationX.toInt()) / 3)
+                                val removeIconLeft = left + removeIconMargin
+                                val removeIconRight = left + removeIconMargin + intrinsicWidth!!
+                                val removeIconBottom = removeIconTop + intrinsicHeight
+                                calcIconAlpha(abs(child.translationX))
+                                // Draw the delete icon
+                                removeIcon?.setBounds(removeIconLeft, removeIconTop, removeIconRight, removeIconBottom)
+                                removeIcon?.draw(canvas)
+                            }
                         }
                     }
                 }

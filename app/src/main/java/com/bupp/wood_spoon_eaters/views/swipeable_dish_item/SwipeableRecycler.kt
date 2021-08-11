@@ -17,7 +17,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private val removeTouchHelper = SwipeableRemoveDishItemTouchHelper()
 
     fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
-        //todo - nicole - lets talk about "decoratedViewType"
         this.adapter = adapter
 
         ItemTouchHelper(addTouchHelper).attachToRecyclerView(this)
@@ -36,6 +35,5 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val selectedShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_add_bkg)
         this.addItemDecoration(SwipeableAddDishItemDecorator(context, defaultShape, selectedShape))
 
-//        this.addItemDecoration(DividerItemDecoratorDish(divider)) //todo - i took this out to fragment, its very specific implementation
     }
 }
