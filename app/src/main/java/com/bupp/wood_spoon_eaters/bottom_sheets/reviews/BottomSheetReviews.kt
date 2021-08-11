@@ -9,12 +9,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet.UpSaleAdapterItem
 import com.bupp.wood_spoon_eaters.databinding.FragmentBottomsheetReviewsBinding
 import com.bupp.wood_spoon_eaters.delete_me.WordAdapter
+import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.androidx.viewmodel.compat.ScopeCompat.viewModel
 
 class BottomSheetReviews : BottomSheetDialogFragment() {
 
@@ -73,12 +75,34 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             val adapter = ReviewsAdapter()
             binding.ReviewsList.adapter = adapter
             binding.ReviewsList.layoutManager = LinearLayoutManager(requireContext())
-
             reviewBottomSheetCloseIcon.setOnClickListener {
                 dismiss()
             }
 
-//            adapter.submitList(words.subList(0, 5))
+            val list = mutableListOf<ReviewsBaseAdapterItem>()
+            list.add(ReviewAdapterTitleItem("bla", 1))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+            "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+            list.add(ReviewAdapterItem(Comment(313,"Hi there im just cheking if its work...:) ", Eater(12,"0502497343",
+                "Karin","Krupetsky","hi",null,null,null,null,0,null,null,null,null,null))))
+
+//            adapter.submitList(list)
+            adapter.submitList(list.subList(0, 5))
+            reviewsBottomSheetBtn.setOnClickListener {
+              adapter.submitList(list)
+            }
         }
     }
 

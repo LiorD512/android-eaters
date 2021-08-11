@@ -1,19 +1,13 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.reviews
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.databinding.*
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterCampaignViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterTitleViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterRestaurantViewHolder
-import com.bupp.wood_spoon_eaters.features.main.feed.adapter.view_holders.FeedAdapterSkeletonViewHolder
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.databinding.ReviewsItemBinding
+import com.bupp.wood_spoon_eaters.databinding.ReviewsTitleItemBinding
 
 class ReviewsAdapter() : ListAdapter<ReviewsBaseAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
@@ -59,7 +53,7 @@ class ReviewsAdapter() : ListAdapter<ReviewsBaseAdapterItem, RecyclerView.ViewHo
 
     inner class ReviewTitleItemViewHolder(val binding: ReviewsTitleItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(data: ReviewAdapterTitleItem) {
-            val reviewStr = "${data.rating} (${data.reviewCount} revies)"
+            val reviewStr = "${data.rating} (${data.reviewCount} reviwes)"
             binding.reviewTitle.text = reviewStr
         }
     }
