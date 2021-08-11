@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators.FeedAdapterDishItemDecorator
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders.*
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
@@ -21,7 +22,8 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
 
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
-        fun onRestaurantClick(cook: Cook)
+        fun onRestaurantClick(cook: RestaurantInitParams)
+        fun onChangeAddressClick()
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -61,9 +63,13 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
 
                 FeedAdapterLargeRestaurantViewHolder(parent.context, binding, adapter, snapHelper)
             }
-            FeedAdapterViewType.EMPTY_FEED_NO_CHEFS.ordinal -> {
-                val binding = FeedAdapterNoChefItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedAdapterNoChefViewHolder(binding)
+            FeedAdapterViewType.EMPTY_FEED.ordinal -> {
+                val binding = FeedAdapterEmptyFeedItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterEmptyFeedViewHolder(binding, listener)
+            }
+            FeedAdapterViewType.EMPTY_SECTION.ordinal -> {
+                val binding = FeedAdapterEmptySectionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterEmptySectionViewHolder(binding)
             }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -92,15 +98,19 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                 holder as FeedAdapterLargeRestaurantViewHolder
                 holder.bindItems(section, this, position)
             }
-            is FeedAdapterNoChef -> {
-                holder as FeedAdapterNoChefViewHolder
+            is FeedAdapterEmptyFeed -> {
+                holder as FeedAdapterEmptyFeedViewHolder
+                holder.bindItems(section)
+            }
+            is FeedAdapterEmptySection -> {
+                holder as FeedAdapterEmptySectionViewHolder
                 holder.bindItems(section)
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder
                 holder.bindItems()
             }
-
+            else -> {}
         }
     }
 
@@ -126,8 +136,8 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         }
     }
 
-    override fun onRestaurantClick(cook: Cook) {
-        listener.onRestaurantClick(cook)
+    override fun onRestaurantClick(restaurant: FeedRestaurantSection) {
+        listener.onRestaurantClick(restaurant.toRestaurantInitParams())
     }
 
     override fun onPageClick(position: Int) {
@@ -135,10 +145,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         val section = getItem(position)
         when (section) {
             is FeedAdapterRestaurant -> {
-                listener.onRestaurantClick(section.restaurantSection.getCook())
+                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
             }
             is FeedAdapterLargeRestaurant  -> {
-                listener.onRestaurantClick(section.restaurantSection.getCook())
+                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
             }
             else -> {}
         }

@@ -80,11 +80,11 @@ interface ApiService {
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
 
     /** Restaurant **/
-    @GET
+    @GET("cooks/{cook_id}")
     suspend fun getRestaurant(
-        @Url url: String,
+        @Path(value = "cook_id", encoded = true) restaurantId: Long,
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("id") cookId: Long
+        @Query("address_id") addressId: Long? = null
     ): ServerResponse<Restaurant>
 
 

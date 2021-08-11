@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -35,13 +36,23 @@ data class FeedCampaignSection(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-data class FeedNoChefSection(
+data class FeedIsEmptySection(
     override val href: String? = null,
     override val items: List<Campaign>? = null,
     @Json(name = "title") val title: String?,
     @Json(name = "subtitle") val subtitle: String?,
     @Json(name = "action") val action: String?
-): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_FEED_NO_CHEFS)
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_FEED)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedSingleEmptySection(
+    override val href: String? = null,
+    override val items: List<Campaign>? = null,
+    @Json(name = "title") val title: String?,
+    @Json(name = "subtitle") val subtitle: String?,
+    @Json(name = "action") val action: String?
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_SECTION)
 
 
 @Parcelize
@@ -63,28 +74,21 @@ data class FeedRestaurantSection(
     @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "title") val title: String?,
     @Json(name = "chef_id") val chefId: Long?,
-    @Json(name = "chef_thumbnail_url") val chefThumbnailUrl: String?,
+    @Json(name = "chef_thumbnail") val chefThumbnail: WSImage?,
+    @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
-    fun getCook(): Cook =
-        Cook(
-            id = chefId?.toLong() ?: 0,
-            firstName = chefName ?: "",
-            lastName = "",
-            thumbnail = chefThumbnailUrl ?: "",
-            video = null,
-            profession = null,
-            about = null,
-            birthdate = null,
-            pickupAddress = null,
-            country = null,
-            certificates = listOf(),
-            cuisines = mutableListOf(),
-            diets = mutableListOf(),
-            rating = avgRating?.toDouble(),
-            reviewCount = 0,
-            dishes = mutableListOf()
+    fun toRestaurantInitParams(): RestaurantInitParams {
+        return RestaurantInitParams(
+            chefId,
+            chefThumbnail,
+            chefCover,
+            avgRating,
+            restaurantName,
+            chefName,
+            false
         )
+    }
 }
 
 
@@ -107,7 +111,7 @@ data class FeedRestaurantItemTypeDish(
 data class FeedRestaurantItemDish(
     val id: Long?,
     val name: String?,
-    val thumbnail_url: String?,
+    val thumbnail: WSImage?,
     val formatted_price: String?,
     val tags: List<String>?
 ) : Parcelable
@@ -123,7 +127,7 @@ data class FeedRestaurantItemTypeSeeMore(
 @JsonClass(generateAdapter = true)
 data class FeedRestaurantItemSeeMore(
     val title: String?,
-    val thumbnail_url: String?,
+    val thumbnail: WSImage?,
     val formatted_price: String?,
 ) : Parcelable
 
@@ -134,7 +138,9 @@ enum class FeedModelsViewType {
     @Json(name = "restaurant_overview")
     RESTAURANT,
     @Json(name = "feed_empty_no_chefs")
-    EMPTY_FEED_NO_CHEFS,
+    EMPTY_FEED,
+    @Json(name = "section_empty_no_chefs")
+    EMPTY_SECTION,
 }
 
 enum class FeedRestaurantSectionItemViewType{
@@ -151,7 +157,8 @@ enum class FeedAdapterViewType {
     COUPONS,
     RESTAURANT,
     RESTAURANT_LARGE,
-    EMPTY_FEED_NO_CHEFS,
+    EMPTY_FEED,
+    EMPTY_SECTION,
     SKELETON,
     HREF
 }
@@ -182,9 +189,14 @@ data class FeedAdapterRestaurant(
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)
 
 @Parcelize
-data class FeedAdapterNoChef(
-    val noChefSection: FeedNoChefSection
-) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_FEED_NO_CHEFS)
+data class FeedAdapterEmptyFeed(
+    val emptyFeedSection: FeedIsEmptySection
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_FEED)
+
+@Parcelize
+data class FeedAdapterEmptySection(
+    val emptySection: FeedSingleEmptySection
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SECTION)
 
 @Parcelize
 data class FeedAdapterLargeRestaurant(

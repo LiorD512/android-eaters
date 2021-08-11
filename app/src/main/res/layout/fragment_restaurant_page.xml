@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/event_logo_bkg" />
+                tools:src="@drawable/event_logo_bkg" />
 
     </FrameLayout>
 
@@ -154,7 +155,7 @@
                 android:id="@+id/restHeaderChefThumbnail"
                 android:layout_width="46dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp" />
 
         <LinearLayout
                 android:layout_width="0dp"
@@ -170,7 +171,7 @@
                     style="@style/LatoBlack15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Israeli in The Big Apple" />
+                    tools:text="Israeli in The Big Apple" />
 
             <TextView
                     android:id="@+id/restHeaderChefName"
@@ -178,8 +179,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="3dp"
-                    android:text="by Assaf Beer"
-                    android:textColor="@color/very_light_grey" />
+                    android:textColor="@color/very_light_grey"
+                    tools:text="by Assaf Beer" />
 
         </LinearLayout>
 
@@ -204,9 +205,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/space">
 
-            <include
-                    android:id="@+id/restaurantMainListLayout"
-                    layout="@layout/restaurant_main_list_layout" />
+        <include
+                android:id="@+id/restaurantMainListLayout"
+                layout="@layout/restaurant_main_list_layout" />
 
     </androidx.core.widget.NestedScrollView>
 

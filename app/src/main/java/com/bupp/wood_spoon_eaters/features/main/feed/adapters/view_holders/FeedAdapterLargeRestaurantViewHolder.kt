@@ -16,14 +16,14 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: FeedAdapterBigRestaurantItemBinding, val adapter: FeedRestaurantDishPagerAdapter, val snapHelper: GravitySnapHelper) : RecyclerView.ViewHolder(binding.root) {
 
     interface FeedAdapterRestaurantViewHolderListener{
-        fun onRestaurantClick(cook: Cook)
+        fun onRestaurantClick(restaurant: FeedRestaurantSection)
     }
 
     fun bindItems(restaurantSection: FeedAdapterLargeRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
-        Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
+        Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName} - $parentAdapterPosition")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {
-                Glide.with(context).load(restaurant.chefThumbnailUrl).circleCrop().into(feedRestaurantItemChefImage)
+                Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
@@ -33,7 +33,7 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
                 restaurant.items?.let {
                     root.setOnClickListener {
                         Log.d("wowFeedPager", "onRestaurantClick")
-                        listener.onRestaurantClick(restaurant.getCook())
+                        listener.onRestaurantClick(restaurant)
                     }
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {

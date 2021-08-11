@@ -42,11 +42,11 @@ private var parentItemPosition: Int = -1
         return when (viewType) {
             FeedRestaurantSectionItemViewType.DISH.ordinal -> {
                 val binding = FeedAdapterRestaurantDishItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedDishViewHolder(binding, parentItemPosition)
+                FeedDishViewHolder(binding)
             }
             else -> { //FeedRestaurantSectionItemViewType.SEE_MORE
                 val binding = FeedAdapterRestaurantSeeMoreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedDishSeeMoreViewHolder(binding, parentItemPosition)
+                FeedDishSeeMoreViewHolder(binding)
             }
         }
     }
@@ -56,25 +56,25 @@ private var parentItemPosition: Int = -1
         when (item.data) {
             is FeedRestaurantItemDish -> {
                 holder as FeedDishViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemPosition)
             }
             is FeedRestaurantItemSeeMore -> {
                 holder as FeedDishSeeMoreViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore, parentItemPosition)
             }
         }
     }
 
 
 
-    class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding, private val parentItemPosition: Int) : RecyclerView.ViewHolder(binding.root) {
+    class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val layout: ConstraintLayout = binding.feedRestaurantDishItem
         private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
         private val name: TextView = binding.feedRestaurantItemName
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: DishTagsView = binding.feedRestaurantItemTags
 
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish) {
+        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemPosition: Int) {
 
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
@@ -83,14 +83,14 @@ private var parentItemPosition: Int = -1
 //                        requestBuilder.into(thumbnail)
 //                    }
 //            }
-            GlideApp.with(context).load(dish.thumbnail_url).thumbnail(0.1f).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
+            GlideApp.with(context).load(dish.thumbnail?.url).thumbnail(0.1f).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
             name.text = dish.name
             price.text = dish.formatted_price
 
             tagView.initTagView(dish.tags)
 
             layout.setOnClickListener{
-                Log.d("wowFeedPager", "parentItemPosition: $parentItemPosition")
+                Log.d("wowFeedPager", "parentItemPosition: ${parentItemPosition}")
                 listener.onPageClick(parentItemPosition)
             }
         }
@@ -98,16 +98,16 @@ private var parentItemPosition: Int = -1
 
     }
 
-    class FeedDishSeeMoreViewHolder(val binding: FeedAdapterRestaurantSeeMoreItemBinding, private val parentItemPosition: Int) : RecyclerView.ViewHolder(binding.root) {
+    class FeedDishSeeMoreViewHolder(val binding: FeedAdapterRestaurantSeeMoreItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val layout: ConstraintLayout = binding.feedRestaurantSeeMoreItemLayout
         private val thumbnail: ImageView = binding.feedRestaurantSeeMoreItemImg
         private val quantityLeft: TextView = binding.feedRestaurantSeeMoreItemQuantityLeft
 
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore) {
+        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore, parentItemPosition: Int) {
             quantityLeft.text = dish.title
             val multiTransformation = MultiTransformation(BlurTransformation( 10, 2), CenterCrop())
             GlideApp.with(context)
-                .load(dish.thumbnail_url)
+                .load(dish.thumbnail?.url)
                 .thumbnail(0.1f)
                 .apply(RequestOptions.bitmapTransform(multiTransformation))
                 .placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)

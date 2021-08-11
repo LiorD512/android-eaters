@@ -239,7 +239,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     //view binding
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.6'
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.7'
 
     //skeleton
     implementation 'com.facebook.shimmer:shimmer:0.5.0'

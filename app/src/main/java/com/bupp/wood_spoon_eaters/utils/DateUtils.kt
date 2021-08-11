@@ -70,6 +70,12 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
+    fun parseDateToFullDayDate(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EEEE, MMM dd")
+        return sdf.format(date.time)
+    }
+
     fun parseDateToDayDateSplash(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EE, MM/dd")
@@ -98,13 +104,13 @@ object DateUtils {
 
     fun parseDateToUsTime(date: Date): String {
         //4:30 PM
-        val sdf = SimpleDateFormat("h:mma")
-        return sdf.format(date.time)
+        val sdf = SimpleDateFormat("hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
     }
 
-    fun parseDateToUsDayTime(date: Date?): String{
-        date?.let{
-            if(isToday(it))
+    fun parseDateToUsDayTime(date: Date?): String {
+        date?.let {
+            if (isToday(it))
                 return parseDateToUsTime(it)
             else
                 return parseDateToDayDateHour(it)
@@ -115,7 +121,7 @@ object DateUtils {
     fun parseDateToDate(date: Date?): String {
         //05.04.19
         val sdf = SimpleDateFormat("dd.MM.yy")
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -124,7 +130,7 @@ object DateUtils {
     fun parseDateToDateAndTime(date: Date?): String {
         //05.04.19, 6:10PM
         val sdf = SimpleDateFormat("dd.MM.yy, h:mma")
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -152,7 +158,7 @@ object DateUtils {
 
     fun parseUnixTimestamp(date: Date?): String {
         var yourmilliseconds: Long = Date().time
-        date?.let{
+        date?.let {
             yourmilliseconds = date.time
         }
         val droppedMillis = yourmilliseconds / 1000
@@ -162,7 +168,7 @@ object DateUtils {
 
     fun parseFromUnixTimestamp(milliStr: String?): Date {
         var yourmilliseconds: Long = Date().time
-        milliStr?.let{
+        milliStr?.let {
             yourmilliseconds = it.toLong()
             yourmilliseconds *= 1000
         }
@@ -172,13 +178,17 @@ object DateUtils {
     }
 
 
-
     fun isNow(newChosenDate: Date?): Boolean {
-        newChosenDate?.let{
+        newChosenDate?.let {
             val now = Date().time
-            return it.time-1000 < now
+            return it.time - 1000 < now
         }
         return true
+    }
+
+    fun isNowInRange(startDate: Date, endDate: Date): Boolean {
+        val now = Date().time
+        return now > startDate.time && now < endDate.time
     }
 
     fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
@@ -214,7 +224,7 @@ object DateUtils {
         return isSameDay(orderDate, today)
     }
 
-    fun truncateDate30MinUp(date: Date): Date{
+    fun truncateDate30MinUp(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
 

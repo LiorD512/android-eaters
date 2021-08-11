@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerDateItemBinding
-import com.bupp.wood_spoon_eaters.model.WSRangeTimePickerHours
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 
 class WSRangeTimePickerDateAdapter :
-    ListAdapter<WSRangeTimePickerHours, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<WSBaseTimePicker, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = WsRangeTimePickerDateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,11 +29,11 @@ class WSRangeTimePickerDateAdapter :
     class ViewHolder(view: WsRangeTimePickerDateItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val itemText: TextView = view.wsRangeTimePickerItem
 
-        fun bindItem(data: WSRangeTimePickerHours) {
+        fun bindItem(data: WSBaseTimePicker) {
             if(DateUtils.isToday(data.date)){
                 itemText.text = "Today"
             }else{
-                itemText.text = DateUtils.parseDateToUsDate(data.date)
+                itemText.text = DateUtils.parseDateToFullDayDate(data.date)
             }
 
             data.title?.let{
@@ -43,13 +42,13 @@ class WSRangeTimePickerDateAdapter :
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<WSRangeTimePickerHours>() {
+    class DiffCallback : DiffUtil.ItemCallback<WSBaseTimePicker>() {
 
-        override fun areItemsTheSame(oldItem: WSRangeTimePickerHours, newItem: WSRangeTimePickerHours): Boolean {
+        override fun areItemsTheSame(oldItem: WSBaseTimePicker, newItem: WSBaseTimePicker): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: WSRangeTimePickerHours, newItem: WSRangeTimePickerHours): Boolean {
+        override fun areContentsTheSame(oldItem: WSBaseTimePicker, newItem: WSBaseTimePicker): Boolean {
             return oldItem == newItem
         }
     }

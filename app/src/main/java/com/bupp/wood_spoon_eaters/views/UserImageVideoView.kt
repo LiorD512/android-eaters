@@ -191,7 +191,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setCookFromCooksView(cook: Cook) {
         this.curCook = cook
 //        Glide.with(context).load(cook.thumbnail).transform(CircleCrop()).into(cookImageView)
-        loadSmallImage(cook.thumbnail)
+        cook.thumbnail.url?.let{
+            loadSmallImage(it)
+        }
     }
 
     fun setUser(eater: Eater) {
@@ -202,7 +204,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setUser(cook: Cook) {
         this.curCook = cook
-        setImage(cook.thumbnail)
+        setImage(cook.thumbnail.url)
         if (cook.video.isNullOrEmpty()) {
             isWithBkg = false
             isWithStroke = false

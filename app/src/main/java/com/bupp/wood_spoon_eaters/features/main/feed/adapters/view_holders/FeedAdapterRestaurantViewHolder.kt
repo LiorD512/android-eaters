@@ -14,18 +14,23 @@ import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 
-class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAdapterRestaurantItemBinding, val adapter: FeedRestaurantDishPagerAdapter, val snapHelper: GravitySnapHelper) :
+class FeedAdapterRestaurantViewHolder(
+    val context: Context,
+    val binding: FeedAdapterRestaurantItemBinding,
+    val adapter: FeedRestaurantDishPagerAdapter,
+    val snapHelper: GravitySnapHelper
+) :
     RecyclerView.ViewHolder(binding.root) {
 
     interface FeedAdapterRestaurantViewHolderListener {
-        fun onRestaurantClick(cook: Cook)
+        fun onRestaurantClick(restaurant: FeedRestaurantSection)
     }
 
     fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
         Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {
-                Glide.with(context).load(restaurant.chefThumbnailUrl).circleCrop().into(feedRestaurantItemChefImage)
+                Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
@@ -33,50 +38,58 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
                 adapter.setParentItemPosition(parentAdapterPosition)
 
                 restaurant.items?.let {
-                    root.setOnClickListener {
-                        Log.d("wowFeedPager", "onRestaurantClick")
-                        listener.onRestaurantClick(restaurant.getCook())
-                    }
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {
                             override fun onSnapPositionChange(position: Int) {
-                                when (position) {
-                                    0 -> {
-                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnPrevious, customStartDelay = 150)
-                                        if (it.size > 1) {
-                                            AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
-                                        }
-                                    }
-                                    adapter.itemCount - 1 -> {
-                                        AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
-                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnNext, customStartDelay = 150)
-                                    }
-                                    else -> {
-                                        AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
-                                        AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
-                                    }
-                                }
+                                handleArrows(position, it.size, binding)
                             }
-
                         })
                     adapter.submitList(it)
                 }
 
                 binding.feedRestaurantItemBtnNext.setOnClickListener {
                     val curPosition = snapHelper.currentSnappedPosition
-                    binding.feedRestaurantItemList.smoothScrollToPosition(curPosition +1)
+                    binding.feedRestaurantItemList.smoothScrollToPosition(curPosition + 1)
                 }
                 binding.feedRestaurantItemBtnPrevious.setOnClickListener {
                     var curPosition = snapHelper.currentSnappedPosition
-                    if(curPosition == NO_POSITION){
+                    if (curPosition == NO_POSITION) {
                         curPosition = adapter.itemCount - 1
                     }
-                    if(curPosition >= 1)
-                        binding.feedRestaurantItemList.smoothScrollToPosition(curPosition-1)
+                    if (curPosition >= 1)
+                        binding.feedRestaurantItemList.smoothScrollToPosition(curPosition - 1)
+                }
+                handleArrows(0, restaurant.items?.size, binding)
+
+                root.setOnClickListener {
+                    listener.onRestaurantClick(restaurant)
                 }
             }
         }
     }
 
-
+    private fun handleArrows(position: Int, maxItems: Int? = 0, binding: FeedAdapterRestaurantItemBinding) {
+        Log.d("wowFeedPager", "handleArrows $position")
+        when (position) {
+            0 -> {
+                Log.d("wowFeedPager", "first pos")
+                AnimationUtil().alphaOut(binding.feedRestaurantItemBtnPrevious, customStartDelay = 150)
+                if (maxItems!! > 1) {
+                    AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
+                } else {
+                    binding.feedRestaurantItemBtnNext.alpha = 0f
+                }
+            }
+            adapter.itemCount - 1 -> { //last page
+                Log.d("wowFeedPager", "last pos")
+                AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
+                AnimationUtil().alphaOut(binding.feedRestaurantItemBtnNext, customStartDelay = 150)
+            }
+            else -> {
+                Log.d("wowFeedPager", "middle pos")
+                AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
+                AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
+            }
+        }
+    }
 }
