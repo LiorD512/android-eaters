@@ -14,7 +14,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
-import com.bupp.wood_spoon_eaters.databinding.RestaurantMainListLayoutBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -22,8 +21,8 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
-import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,7 +87,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun initObservers() {
         mainViewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner, {
-            handleRestaurantInitialParamData(it)
+            it.getContentIfNotHandled()?.let { params->
+                viewModel.handleInitialParamData(params)
+            }
         })
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
@@ -101,6 +102,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         })
         viewModel.dishesList.observe(viewLifecycleOwner, {
             handleDishesList(it)
+        })
+        viewModel.initialParamData.observe(viewLifecycleOwner, {
+            handleInitialParamData(it)
         })
     }
 
@@ -128,19 +132,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     /** Headers data **/
     @SuppressLint("SetTextI18n")
-    private fun handleRestaurantInitialParamData(restaurantInitParams: RestaurantInitParams) {
+    private fun handleInitialParamData(params: RestaurantInitParams) {
         with(binding) {
-            viewModel.getRestaurantFullData(restaurantInitParams.restaurantId)
-            Glide.with(requireContext()).load(restaurantInitParams.coverPhoto).into(coverPhoto)
-            restHeaderRestName.text = restaurantInitParams.restaurantName
-            restHeaderChefName.text = "by ${restaurantInitParams.chefName}"
-            restaurantInitParams.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
-            rating.text = "${restaurantInitParams.rating}"// (${cook.reviewCount} ratings)"
+            Glide.with(requireContext()).load(params.coverPhoto).into(coverPhoto)
+            restHeaderRestName.text = params.restaurantName
+            restHeaderChefName.text = "by ${params.chefName}"
+            params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
+            rating.text = "${params.rating}"// (${cook.reviewCount} ratings)"
 
-            topHeaderRestaurantName.text = restaurantInitParams.restaurantName
-            topHeaderChefName.text = "by ${restaurantInitParams.chefName}"
-
-
+            topHeaderRestaurantName.text = params.restaurantName
+            topHeaderChefName.text = "by ${params.chefName}"
         }
     }
 
@@ -179,10 +180,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onDateSelected(date: DeliveryDate?) {
         onDeliveryTimingChange(date)
     }
-
-//    override fun onCookingSlotSelected() {
-//
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

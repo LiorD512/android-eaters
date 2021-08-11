@@ -14,10 +14,10 @@ import com.bupp.wood_spoon_eaters.model.MenuItem
 class RestaurantMainViewModel : ViewModel() {
 
 //    var currentRestaurant: RestaurantInitParams? = null
-    val restaurantInitParamsLiveData = MutableLiveData<RestaurantInitParams>()
+    val restaurantInitParamsLiveData = LiveEventData<RestaurantInitParams>()
     fun initExtras(restaurantInitParams: RestaurantInitParams?) {
         restaurantInitParams?.let{
-            restaurantInitParamsLiveData.postValue(it)
+            restaurantInitParamsLiveData.postRawValue(it)
         }
     }
 
