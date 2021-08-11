@@ -146,7 +146,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         with(binding.dishMainListLayout) {
             userRequest?.let {
                 dishChefName.text = userRequest.cook.getFullName()
-                dishChefThumbnail.setImage(userRequest.cook.thumbnail)
+                userRequest.cook.thumbnail.url?.let{
+                    dishChefThumbnail.setImage(it)
+                }
                 dishUserRequestLine.text = "Hey ${userRequest.eaterName}, any special requests?"
             }
         }

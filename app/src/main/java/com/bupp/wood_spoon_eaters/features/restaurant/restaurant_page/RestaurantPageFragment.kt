@@ -31,7 +31,7 @@ import kotlin.math.abs
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
-    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener{
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -65,7 +65,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePicker.setOnClickListener {
+            restaurantTimePickerView.setOnClickListener {
                 Log.d(TAG, "restaurantTimePicker clicker")
                 viewModel.currentSelectedDate?.let { deliveryDate ->
 //                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
@@ -194,32 +194,33 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         private const val TAG = "RestaurantPageFragment"
     }
 
-fun setFadeInOnScrollRecycler(
-    fadingView: View,
-    recyclerView: RecyclerView,
-    startFadeAtChild: Int = 0,
-    fadeDuration: Int = 500
-) {
-    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    fun setFadeInOnScrollRecycler(
+        fadingView: View,
+        recyclerView: RecyclerView,
+        startFadeAtChild: Int = 0,
+        fadeDuration: Int = 500
+    ) {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-        var startFadeAt: Float? = null
+            var startFadeAt: Float? = null
 
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            val currentChildIndex =
-                (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-            if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
-                startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
-            }
-            startFadeAt?.let { itemHeight ->
-                // The length that is currently scrolled
-                val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
-                // The distance you need to scroll to end the animation
-                val totalScrollableLength = fadeDuration
-                if (abs(scrolledLength) > 0) {
-                    val alpha = scrolledLength.div(totalScrollableLength)
-                    fadingView.alpha = alpha
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val currentChildIndex =
+                    (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
+                    startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
+                }
+                startFadeAt?.let { itemHeight ->
+                    // The length that is currently scrolled
+                    val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
+                    // The distance you need to scroll to end the animation
+                    val totalScrollableLength = fadeDuration
+                    if (abs(scrolledLength) > 0) {
+                        val alpha = scrolledLength.div(totalScrollableLength)
+                        fadingView.alpha = alpha
+                    }
                 }
             }
-        }
-    })
+        })
+    }
 }
