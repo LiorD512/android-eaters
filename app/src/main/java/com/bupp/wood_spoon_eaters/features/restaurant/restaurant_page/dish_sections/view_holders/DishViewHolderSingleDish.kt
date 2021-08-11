@@ -23,7 +23,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
         val dish = section.menuItem.dish
         with(binding) {
             dish?.let { dish ->
-                Glide.with(root.context).load(dish.thumbnail).into(dishPhoto)
+                Glide.with(root.context).load(dish.thumbnail?.url).into(dishPhoto)
                 dishName.text = dish.name
                 dishPrice.text = dish.getPriceObj()?.formatedValue
                 dishDescription.text = dish.description

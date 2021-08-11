@@ -21,7 +21,7 @@ class RestaurantPageViewModel(
 
     var currentSelectedDate: DeliveryDate? = null
 
-//    val restaurantData = MutableLiveData<Cook>()
+    val initialParamData = MutableLiveData<RestaurantInitParams>()
     val restaurantFullData = MutableLiveData<Restaurant>()
 
     var dishes: Map<Long, Dish>? = null
@@ -32,18 +32,15 @@ class RestaurantPageViewModel(
 
     val progressData = ProgressData()
 
-//    fun initData(cook: Cook?) {
-//        cook?.let {
-//            Log.d(TAG, "cook= $cook")
-////            dishesList.postValue(getDishSkeletonItems())
-//            restaurantData.postValue(it)
-//            getRestaurantFullData(cook.id)
-//        }
-//    }
+    fun handleInitialParamData(params: RestaurantInitParams) {
+        initialParamData.postValue(params)
+        getRestaurantFullData(params.restaurantId)
+    }
 
-    fun getRestaurantFullData(restaurantId: Long?) {
+    private fun getRestaurantFullData(restaurantId: Long?) {
         restaurantId?.let{
             viewModelScope.launch(Dispatchers.IO) {
+                dishesList.postValue(getDishSkeletonItems())
                 val result = restaurantRepository.getRestaurant(restaurantId)
                 if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
                     handleFullRestaurantData(result.restaurant)
@@ -66,12 +63,12 @@ class RestaurantPageViewModel(
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
         val deliveryDates = mutableListOf<DeliveryDate>()
         restaurant.cookingSlots.forEach { cookingSlot ->
-            val relevantDeliveryTime = deliveryDates.find { it.date.isSameDateAs(cookingSlot.startsAt) }
-            if (relevantDeliveryTime == null) {
+            val relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.startsAt) }
+            if (relevantDeliveryDate == null) {
                 deliveryDates.add(DeliveryDate(cookingSlot.startsAt, mutableListOf(cookingSlot)))
             } else {
-                relevantDeliveryTime.cookingSlots.add(cookingSlot)
-                relevantDeliveryTime.cookingSlots.sortBy { it.startsAt }
+                relevantDeliveryDate.cookingSlots.add(cookingSlot)
+                relevantDeliveryDate.cookingSlots.sortBy { it.startsAt }
             }
         }
         deliveryDates.sortBy { it.date }
@@ -105,6 +102,7 @@ class RestaurantPageViewModel(
                     }
                 }
             }
+            cookingSlot.unAvailableDishes.clear()
             tempHash.forEach {
                 findClosestMenuItem(it.value)?.let { menuItem ->
                     dishes[menuItem.dishId]?.let { dish ->
@@ -175,9 +173,9 @@ class RestaurantPageViewModel(
     fun onDeliveryDateChanged(date: DeliveryDate?) {
         currentSelectedDate = date
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
-            sortCookingSlotDishes(cookingSlot)
+            onCookingSlotSelected(cookingSlot)
+            updateTimePickerUi(cookingSlot)
         }
-        updateTimePickerUi(date?.cookingSlots?.get(0))
     }
 
     private fun updateTimePickerUi(selectedCookingSlot: CookingSlot?) {
