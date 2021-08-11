@@ -134,6 +134,12 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoBold13BrownishGrey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
     <style name="LatoBold15White">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">15.4sp</item>
@@ -239,6 +245,12 @@
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="LatoReg13TealBlue">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
     </style>
 
     <style name="LatoBold9Grey">
@@ -792,9 +804,8 @@
 
     <style name="shimmerFrameStyle">
         <item name="shimmer_auto_start">true</item>
-        <item name="shimmer_base_alpha">1</item>
+        <item name="shimmer_base_alpha">0.6</item>
         <item name="shimmer_base_color">@color/whiteTwo</item>
-        <item name="shimmer_colored">true</item>
         <item name="shimmer_highlight_alpha">1</item>
         <item name="shimmer_highlight_color">@color/grey_white_three</item>
     </style>

@@ -154,7 +154,7 @@ val appModule = module {
     //RestaurantPage
     viewModel { RestaurantMainViewModel() }
     viewModel { RestaurantPageViewModel(get()) }
-    viewModel { DishPageViewModel() }
+    viewModel { DishPageViewModel(get(),get()) }
 
 
 }

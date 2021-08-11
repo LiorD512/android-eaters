@@ -19,6 +19,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/icons_profile" />
+                android:src="@drawable/profile_pic_placeholder_big" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Del
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Dish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.google.android.exoplayer2.ExoPlayer
@@ -141,8 +142,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             topHeaderRestaurantName.text = "Restaurant name"
             topHeaderChefName.text = "by ${cook.getFullName()}"
-
-
         }
     }
 
@@ -150,7 +149,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding) {
             //Cover photo/video
             if (restaurant.video.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
+//                Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
             } else {
                 //show video icon
             }
@@ -172,8 +171,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     /** All sections click actions **/
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
         object : DishesMainAdapter.DishesMainAdapterListener {
-            override fun onDishClick(dish: Dish) {
-                mainViewModel.openDishPage(dish)
+            override fun onDishClick(menuItem: MenuItem) {
+                mainViewModel.openDishPage(menuItem)
             }
         }
 

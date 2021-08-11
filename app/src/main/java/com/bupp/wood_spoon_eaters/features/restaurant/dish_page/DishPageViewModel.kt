@@ -2,16 +2,30 @@ package com.bupp.wood_spoon_eaters.features.restaurant.dish_page
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bupp.wood_spoon_eaters.databinding.QuantityViewBinding
-import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.model.Dish
+import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import kotlinx.coroutines.launch
 
-class DishPageViewModel : ViewModel() {
-    val dishData = MutableLiveData<Dish>()
-    val dishFullData = MutableLiveData<Dish>()
+class DishPageViewModel(
+    val cartManager: CartManager,
+    val userRepository: UserRepository
+) : ViewModel() {
 
-    var dishQuantity = 0
-    var dishMaxQuantity = 5
+    lateinit var extras :ExtrasDishPage
+
+    val progressData = ProgressData()
+    val menuItemData = MutableLiveData<MenuItem>()
+    val dishFullData = MutableLiveData<FullDish>()
+
+    val userRequestData = MutableLiveData<UserRequest>()
+    class UserRequest(val eaterName: String,val cook: Cook)
+
+
+    private var dishQuantity = 0
+    var dishMaxQuantity = 0
 
     val dishQuantityState = MutableLiveData<DishQuantityState>()
     enum class DishQuantityState{
@@ -20,25 +34,34 @@ class DishPageViewModel : ViewModel() {
         MAX_QUANTITY
     }
 
-    fun initData(dish: Dish) {
-        dishData.postValue(dish)
-        handleFullDish()
-        updateDishQuantity(0)
+    fun initData(extras: ExtrasDishPage) {
+        this.extras = extras
+        handleMenuItemData(extras.menuItem)
+        getFullDish(extras.menuItem.id)
     }
 
-    fun handleFullDish(){
-        handleModificationsData()
-        handleDishAvailabilityData()
+    private fun handleMenuItemData(menuItem: MenuItem) {
+        menuItemData.postValue(menuItem)
+        dishQuantity = 0
+        dishMaxQuantity = menuItem.quantity
     }
 
-    val modificationsData = MutableLiveData<List<String>>()
-    fun handleModificationsData(){
-        modificationsData.postValue(listOf<String>("Extra Cheese","No Salt","Yogurt on the side","Vegan Cheese"))
+    private fun getFullDish(menuItemId: Long) {
+        menuItemId.let {
+            progressData.startProgress()
+            viewModelScope.launch {
+                val getFullDishResult = cartManager.getFullDish(it)
+                getFullDishResult?.let {
+                    dishFullData.postValue(it.fullDish)
+                    getUserRequestData(it.fullDish.cook)
+                }
+                progressData.endProgress()
+            }
+        }
     }
 
-    val dishAvailabilityData = MutableLiveData<List<String>>()
-    fun handleDishAvailabilityData(){
-        dishAvailabilityData.postValue(listOf<String>("06/21   Mon   2pm - 5pm","06/22  Tue   2pm - 5pm"))
+    private fun getUserRequestData(cook: Cook) {
+        userRequestData.postValue(UserRequest(eaterName = userRepository.getUser()?.getFullName()?:"", cook))
     }
 
     fun updateDishQuantity(quantity: Int){

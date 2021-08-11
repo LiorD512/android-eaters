@@ -14,8 +14,8 @@
                 android:id="@+id/action_restaurantPageFragment_to_dishPageFragment"
                 app:destination="@id/dishPageFragment">
             <argument
-                    android:name="dish"
-                    app:argType="com.bupp.wood_spoon_eaters.model.Dish" />
+                    android:name="extras"
+                    app:argType="com.bupp.wood_spoon_eaters.model.ExtrasDishPage" />
         </action>
     </fragment>
 
@@ -25,9 +25,10 @@
             android:label="fragment_dish_page"
             tools:layout="@layout/fragment_dish_page">
         <argument
-                android:name="dish"
-                app:argType="com.bupp.wood_spoon_eaters.model.Dish" />
+                android:name="extras"
+                app:argType="com.bupp.wood_spoon_eaters.model.ExtrasDishPage" />
     </fragment>
+
 
 
 

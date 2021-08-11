@@ -31,7 +31,7 @@ class RestaurantPageViewModel(
     fun initData(cook: Cook?) {
         cook?.let {
             Log.d(TAG, "cook= $cook")
-            dishesList.postValue(getDishSkeletonItems())
+//            dishesList.postValue(getDishSkeletonItems())
             restaurantData.postValue(it)
             getRestaurantFullData(cook.id)
         }
