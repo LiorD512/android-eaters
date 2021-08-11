@@ -15,7 +15,7 @@ data class FeedResult(
 @JsonClass(generateAdapter = true)
 data class FeedSection(
     var id: Long? = null,
-    val title: String? = null,
+    var title: String? = null,
     var href: String? = null,
     var collections: MutableList<FeedSectionCollectionItem>? = null
 ): Parcelable

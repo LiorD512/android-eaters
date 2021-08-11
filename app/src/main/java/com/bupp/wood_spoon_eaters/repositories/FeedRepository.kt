@@ -73,7 +73,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                 }
                 is ResultHandler.Success -> {
                     Log.d(TAG, "getFeedHref - Success")
-                    val feedData = processFeedHrefData(result.value.data, href)
+//                    val feedData = processFeedHrefData(result.value.data, href)
+                    val feedData = processFeedHrefData(emptyList(), href)
                     FeedRepoResult(FeedRepoStatus.HREF_SUCCESS, feedData, isLargeItems)
                 }
                 else -> {
@@ -121,12 +122,14 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
 
 
     private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
-//        val feedData = mutableListOf<FeedAdapterItem>()
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
             section.href?.let {
                 if (it == href) {
                     data?.let { data ->
-//                        Log.d(TAG, "sdsd")
+                        if(data.isEmpty()){
+                            //remove title incase Href data is empty
+                            lastFeedDataResult?.sections!![index].title = ""
+                        }
                         section.href = null
                         lastFeedDataResult?.sections!![index].collections = data.toMutableList()
                     }
