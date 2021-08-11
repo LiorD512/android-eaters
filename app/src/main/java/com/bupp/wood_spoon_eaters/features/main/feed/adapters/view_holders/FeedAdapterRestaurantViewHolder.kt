@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
 import android.content.Context
 import android.util.Log
+import android.view.Gravity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.bumptech.glide.Glide
@@ -20,7 +21,7 @@ class FeedAdapterRestaurantViewHolder(
     val adapter: FeedRestaurantDishPagerAdapter,
     val snapHelper: GravitySnapHelper
 ) :
-    RecyclerView.ViewHolder(binding.root) {
+    RecyclerView.ViewHolder(binding.root), FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
     interface FeedAdapterRestaurantViewHolderListener {
         fun onRestaurantClick(restaurant: FeedRestaurantSection)
@@ -35,13 +36,14 @@ class FeedAdapterRestaurantViewHolder(
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
 
-                adapter.setParentItemPosition(parentAdapterPosition)
-
                 restaurant.items?.let {
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {
                             override fun onSnapPositionChange(position: Int) {
-                                handleArrows(position, it.size, binding)
+                                if(absoluteAdapterPosition == parentAdapterPosition){
+                                    //todo - this method id been called for recycled items as well - need fix when have time
+                                    handleArrows(position, it.size, binding)
+                                }
                             }
                         })
                     adapter.submitList(it)
@@ -69,7 +71,8 @@ class FeedAdapterRestaurantViewHolder(
     }
 
     private fun handleArrows(position: Int, maxItems: Int? = 0, binding: FeedAdapterRestaurantItemBinding) {
-        Log.d("wowFeedPager", "handleArrows $position")
+        Log.d("wowFeedPager", "handleArrows $position, $this")
+        Log.d("wowFeedPager", "handleArrows itemCount - ${adapter.itemCount}")
         when (position) {
             0 -> {
                 Log.d("wowFeedPager", "first pos")
@@ -91,5 +94,9 @@ class FeedAdapterRestaurantViewHolder(
                 AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
             }
         }
+    }
+
+    override fun onPageClick(position: Int) {
+
     }
 }

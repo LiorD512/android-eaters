@@ -62,7 +62,6 @@ class RestaurantPageViewModel(
     /** Creating  Delivery date list
      * Sorting the cooking slots by dates - cooking slot on the same date goes together  **/
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
-        //todo - nicole please explain - relevantDeliveryTime
         val deliveryDates = mutableListOf<DeliveryDate>()
         restaurant.cookingSlots.forEach { cookingSlot ->
             val relevantDeliveryTime = deliveryDates.find { it.date.isSameDateAs(cookingSlot.startsAt) }
