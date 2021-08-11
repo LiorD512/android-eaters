@@ -14,7 +14,12 @@ import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 
-class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAdapterRestaurantItemBinding, val adapter: FeedRestaurantDishPagerAdapter, val snapHelper: GravitySnapHelper) :
+class FeedAdapterRestaurantViewHolder(
+    val context: Context,
+    val binding: FeedAdapterRestaurantItemBinding,
+    val adapter: FeedRestaurantDishPagerAdapter,
+    val snapHelper: GravitySnapHelper
+) :
     RecyclerView.ViewHolder(binding.root) {
 
     interface FeedAdapterRestaurantViewHolderListener {
@@ -33,50 +38,58 @@ class FeedAdapterRestaurantViewHolder(val context: Context, val binding: FeedAda
                 adapter.setParentItemPosition(parentAdapterPosition)
 
                 restaurant.items?.let {
-                    root.setOnClickListener {
-                        Log.d("wowFeedPager", "onRestaurantClick")
-                        listener.onRestaurantClick(restaurant)
-                    }
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {
                             override fun onSnapPositionChange(position: Int) {
-                                when (position) {
-                                    0 -> {
-                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnPrevious, customStartDelay = 150)
-                                        if (it.size > 1) {
-                                            AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
-                                        }
-                                    }
-                                    adapter.itemCount - 1 -> {
-                                        AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
-                                        AnimationUtil().alphaOut(binding.feedRestaurantItemBtnNext, customStartDelay = 150)
-                                    }
-                                    else -> {
-                                        AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
-                                        AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
-                                    }
-                                }
+                                handleArrows(position, it.size, binding)
                             }
-
                         })
                     adapter.submitList(it)
                 }
 
                 binding.feedRestaurantItemBtnNext.setOnClickListener {
                     val curPosition = snapHelper.currentSnappedPosition
-                    binding.feedRestaurantItemList.smoothScrollToPosition(curPosition +1)
+                    binding.feedRestaurantItemList.smoothScrollToPosition(curPosition + 1)
                 }
                 binding.feedRestaurantItemBtnPrevious.setOnClickListener {
                     var curPosition = snapHelper.currentSnappedPosition
-                    if(curPosition == NO_POSITION){
+                    if (curPosition == NO_POSITION) {
                         curPosition = adapter.itemCount - 1
                     }
-                    if(curPosition >= 1)
-                        binding.feedRestaurantItemList.smoothScrollToPosition(curPosition-1)
+                    if (curPosition >= 1)
+                        binding.feedRestaurantItemList.smoothScrollToPosition(curPosition - 1)
+                }
+                handleArrows(0, restaurant.items?.size, binding)
+
+                root.setOnClickListener {
+                    listener.onRestaurantClick(restaurant)
                 }
             }
         }
     }
 
-
+    private fun handleArrows(position: Int, maxItems: Int? = 0, binding: FeedAdapterRestaurantItemBinding) {
+        Log.d("wowFeedPager", "handleArrows $position")
+        when (position) {
+            0 -> {
+                Log.d("wowFeedPager", "first pos")
+                AnimationUtil().alphaOut(binding.feedRestaurantItemBtnPrevious, customStartDelay = 150)
+                if (maxItems!! > 1) {
+                    AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
+                } else {
+                    binding.feedRestaurantItemBtnNext.alpha = 0f
+                }
+            }
+            adapter.itemCount - 1 -> { //last page
+                Log.d("wowFeedPager", "last pos")
+                AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
+                AnimationUtil().alphaOut(binding.feedRestaurantItemBtnNext, customStartDelay = 150)
+            }
+            else -> {
+                Log.d("wowFeedPager", "middle pos")
+                AnimationUtil().alphaIn(binding.feedRestaurantItemBtnPrevious)
+                AnimationUtil().alphaIn(binding.feedRestaurantItemBtnNext)
+            }
+        }
+    }
 }

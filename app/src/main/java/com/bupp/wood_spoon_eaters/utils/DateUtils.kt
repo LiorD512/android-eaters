@@ -94,8 +94,8 @@ object DateUtils {
 
     fun parseDateToUsTime(date: Date): String {
         //4:30 PM
-        val sdf = SimpleDateFormat("h:mma")
-        return sdf.format(date.time)
+        val sdf = SimpleDateFormat("hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
     }
 
     fun parseDateToUsDayTime(date: Date?): String {

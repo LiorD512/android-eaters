@@ -20,7 +20,7 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
     }
 
     fun bindItems(restaurantSection: FeedAdapterLargeRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
-        Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
+        Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName} - $parentAdapterPosition")
         restaurantSection.restaurantSection.let { restaurant ->
             with(binding) {
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)

@@ -191,7 +191,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setCookFromCooksView(cook: Cook) {
         this.curCook = cook
 //        Glide.with(context).load(cook.thumbnail).transform(CircleCrop()).into(cookImageView)
-        loadSmallImage(cook.thumbnail.url)
+        cook.thumbnail.url?.let{
+            loadSmallImage(it)
+        }
     }
 
     fun setUser(eater: Eater) {

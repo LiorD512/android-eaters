@@ -67,7 +67,6 @@
 
 
             <TextView
-                    android:id="@+id/test"
                     style="@style/LatoBold15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -84,7 +83,7 @@
 
 
             <TextView
-                    android:id="@+id/restaurantTimePicker"
+                    android:id="@+id/restaurantTimePickerView"
                     style="@style/LatoBold15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

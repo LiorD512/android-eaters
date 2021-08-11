@@ -68,7 +68,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePicker.setOnClickListener {
+            restaurantTimePickerView.setOnClickListener {
                 Log.d(TAG, "restaurantTimePicker clicker")
                 viewModel.currentSelectedDate?.let { deliveryDate ->
 //                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
@@ -110,9 +110,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun handleTimePickerUi(timePickerStr: String?) {
         timePickerStr?.let {
             with(binding.restaurantMainListLayout) {
-                Log.d(TAG, "eieiei: ${restaurantTimePicker.text} - $timePickerStr")
-                test.text = it
-                restaurantTimePicker.text = it
+                restaurantTimePickerView.text = it
             }
         }
     }

@@ -125,8 +125,7 @@ data class Dish(
     @Json(name = "price") val price: Price?,
     @Json(name = "description") val description: String,
     @Json(name = "avg_rating") val rating: Double?,
-//    @Json(name = "thumbnail") val thumbnail: WSImage?, //todo restore this when misha is ready
-    @Json(name = "thumbnail") val thumbnail: String?,
+    @Json(name = "thumbnail") val thumbnail: WSImage?,
     @Json(name = "video") val video:String?,
     @Json(name = "is_favorite") val isFavorite: Boolean?,
     @Json(name = "nationwide_shipping") val worldwide: Boolean?,

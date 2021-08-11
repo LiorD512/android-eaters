@@ -175,9 +175,9 @@ class RestaurantPageViewModel(
             val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
             var uiStr = ""
             if(isNow){
-                uiStr = "Now $datesStr"
+                uiStr = "Now ($datesStr)"
             }else{
-                uiStr = "${selectedCookingSlot.name} $datesStr"
+                uiStr = "${selectedCookingSlot.name} ($datesStr)"
             }
             timePickerUi.postValue(uiStr)
         }

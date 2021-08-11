@@ -32,7 +32,7 @@ data class WSError(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class WSImage(
-    @Json(name = "url") val url: String,
+    @Json(name = "url") val url: String?,
 ):Parcelable
 
 @JsonClass(generateAdapter = true)
