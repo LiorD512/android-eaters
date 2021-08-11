@@ -4,20 +4,18 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.OldCartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 import kotlinx.coroutines.launch
 
 
-class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager, private val eventsManager: EventsManager) :
+class CheckoutViewModel(private val oldCartManager: OldCartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager, private val eventsManager: EventsManager) :
     ViewModel() {
 
 
@@ -31,7 +29,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     fun simpleUpdateOrder(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
             progressData.startProgress()
-            val result = cartManager.postUpdateOrder(orderRequest, eventType)
+            val result = oldCartManager.postUpdateOrder(orderRequest, eventType)
             progressData.endProgress()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -46,7 +44,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
 
     fun onTimeChangeClick() {
-        val menuItems = cartManager.currentShowingDish?.availableMenuItems
+        val menuItems = oldCartManager.currentShowingDish?.availableMenuItems
         menuItems?.let{
             timeChangeEvent.postRawValue(it)
         }
@@ -57,7 +55,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     fun onNationwideShippingSelectClick() {
         progressData.startProgress()
         viewModelScope.launch {
-            val result = cartManager.getUpsShippingRates()
+            val result = oldCartManager.getUpsShippingRates()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.GET_SHIPPING_METHOD_SUCCESS -> {
                     Log.d(TAG, "onNationwideShippingSelectClick - success")
@@ -75,12 +73,12 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     }
 
     fun refreshUi(){
-        cartManager.refreshOrderUi()
+        oldCartManager.refreshOrderUi()
     }
 
     fun updateOrderShippingMethod(shippingService: String) {
         viewModelScope.launch {
-            cartManager.updateShippingService(shippingService)
+            oldCartManager.updateShippingService(shippingService)
         }
 
     }
@@ -88,7 +86,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
     val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
-        val curOrder = cartManager.getCurrentOrderData().value
+        val curOrder = oldCartManager.getCurrentOrderData().value
         curOrder?.let {
             var minOrderFee: String? = null
             curOrder.minOrderFee?.value?.let {

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
-import com.bupp.wood_spoon_eaters.managers.NewCartManager
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class RestaurantPageViewModel(
     val restaurantRepository: RestaurantRepository,
-    val cartManager: NewCartManager,
+    val cartManager: CartManager,
 ) : ViewModel() {
 
     var currentSelectedDate: DeliveryDate? = null
@@ -29,6 +29,8 @@ class RestaurantPageViewModel(
     val deliveryDatesData = MutableLiveData<List<DeliveryDate>>()
     val dishesList = MutableLiveData<List<DishSections>>()
     val timePickerUi = MutableLiveData<String>()
+
+    val cartLiveData = cartManager.getCurrentCartData()
 
     val progressData = ProgressData()
 
@@ -83,7 +85,7 @@ class RestaurantPageViewModel(
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
         handleDishesSection(sortedCookingSlot)
 
-
+        cartManager.currentCookingSlot = cookingSlot
     }
 
     /** on cooking slot selected - need to sort by available/unavailable dishes
@@ -190,6 +192,14 @@ class RestaurantPageViewModel(
             }
             timePickerUi.postValue(uiStr)
         }
+    }
+
+    fun onDishAdded(item: DishSectionSingleDish) {
+        cartManager.addItemRequest(item.menuItem.dishId, item.quantity)
+    }
+
+    fun onDishUpdated(item: DishSectionSingleDish) {
+        cartManager.updateItemRequest(item)
     }
 
     companion object {

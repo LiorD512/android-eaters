@@ -12,13 +12,24 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderAvailableHeader
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSkeleton
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
+import com.bupp.wood_spoon_eaters.model.DishSection
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 
 class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
     SwipeableAdapter<DishSections>(DiffCallback()) {
 
-    interface DishesMainAdapterListener: DishViewHolderSingleDish.DishViewHolderSingleDishListener
+    interface DishesMainAdapterListener: DishViewHolderSingleDish.DishViewHolderSingleDishListener{
+        fun onDishAdded(item: DishSectionSingleDish)
+        fun onDishUpdated(item: DishSectionSingleDish)
+    }
 
+    override fun onSwipeableItemAdded(item: DishSections) {
+        if(item.quantity > 1){
+            listener.onDishUpdated(item as DishSectionSingleDish)
+        }else{
+            listener.onDishAdded(item as DishSectionSingleDish)
+        }
+    }
 
     override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
 

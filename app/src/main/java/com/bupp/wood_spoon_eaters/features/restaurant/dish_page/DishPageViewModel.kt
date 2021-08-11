@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.OldCartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
 
 class DishPageViewModel(
-    val cartManager: CartManager,
+    val oldCartManager: OldCartManager,
     val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -50,7 +50,7 @@ class DishPageViewModel(
         menuItemId.let {
             progressData.startProgress()
             viewModelScope.launch {
-                val getFullDishResult = cartManager.getFullDish(it)
+                val getFullDishResult = oldCartManager.getFullDish(it)
                 getFullDishResult?.let {
                     dishFullData.postValue(it.fullDish)
                     getUserRequestData(it.fullDish.cook)

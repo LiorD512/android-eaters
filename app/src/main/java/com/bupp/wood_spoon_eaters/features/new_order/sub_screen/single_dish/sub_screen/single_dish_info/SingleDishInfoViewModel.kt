@@ -4,21 +4,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.OldCartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import java.util.*
 
 class SingleDishInfoViewModel(
-    private val cartManager: CartManager,
+    private val oldCartManager: OldCartManager,
     private val eaterDataManager: EaterDataManager,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
     val timeChangeEvent = LiveEventData<List<MenuItem>>()
 
     fun updateCurrentOrderItem(quantity: Int? = null, note: String? = null){
-        cartManager.updateCurrentOrderItemRequest(OrderItemRequest(quantity = quantity, notes = note))
+        oldCartManager.updateCurrentOrderItemRequest(OrderItemRequest(quantity = quantity, notes = note))
     }
 
     fun getDropOffLocation(): String? {
@@ -26,11 +26,11 @@ class SingleDishInfoViewModel(
     }
 
     fun getTotalPriceForDishQuantity(counter: Int): Double {
-        return cartManager.getTotalPriceForDishQuantity(counter)
+        return oldCartManager.getTotalPriceForDishQuantity(counter)
     }
 
     fun onTimeChangeClick() {
-        val menuItems = cartManager.currentShowingDish?.availableMenuItems
+        val menuItems = oldCartManager.currentShowingDish?.availableMenuItems
         menuItems?.let{
             timeChangeEvent.postRawValue(it)
         }

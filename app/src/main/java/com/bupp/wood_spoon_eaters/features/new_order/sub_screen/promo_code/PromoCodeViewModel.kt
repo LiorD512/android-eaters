@@ -4,19 +4,14 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.OrderManager
-import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.managers.OldCartManager
 import com.bupp.wood_spoon_eaters.model.OrderRequest
-import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.model.WSError
-import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.network.BaseCallback
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
 
 
-class PromoCodeViewModel(private val cartManager: CartManager) : ViewModel() {
+class PromoCodeViewModel(private val oldCartManager: OldCartManager) : ViewModel() {
 
     val progressData = ProgressData()
     val promoCodeEvent: SingleLiveEvent<PromoCodeEvent> = SingleLiveEvent()
@@ -26,7 +21,7 @@ class PromoCodeViewModel(private val cartManager: CartManager) : ViewModel() {
     fun savePromoCode(code: String) {
         viewModelScope.launch {
             progressData.startProgress()
-            val result = cartManager.postUpdateOrder(OrderRequest( promoCode = code))
+            val result = oldCartManager.postUpdateOrder(OrderRequest( promoCode = code))
             when(result?.type){
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
                     promoCodeEvent.postValue(PromoCodeEvent(true))

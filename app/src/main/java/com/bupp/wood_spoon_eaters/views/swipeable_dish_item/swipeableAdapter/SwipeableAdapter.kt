@@ -1,10 +1,8 @@
 package com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter
 
-import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.MenuItem
 
 abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCallback<T>) :
@@ -19,7 +17,9 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
     }
 
     fun updateItemQuantityAdd(position: Int) {
-        getItem(position).quantity++
+        val item = getItem(position)
+        item.quantity++
+        onSwipeableItemAdded(item)
     }
 
     fun updateItemQuantityRemoved(position: Int) {
@@ -27,6 +27,8 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
             getItem(position).quantity--
         }
     }
+
+    abstract fun onSwipeableItemAdded(item: T)
 
     companion object {
         const val TAG = "wowUpsaleAdapter"

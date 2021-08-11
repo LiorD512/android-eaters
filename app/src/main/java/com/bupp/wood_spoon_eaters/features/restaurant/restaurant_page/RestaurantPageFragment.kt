@@ -19,9 +19,11 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -106,6 +108,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.initialParamData.observe(viewLifecycleOwner, {
             handleInitialParamData(it)
         })
+        viewModel.cartLiveData.observe(viewLifecycleOwner, {
+            handleCurrentCartData(it)
+        })
+    }
+
+    private fun handleCurrentCartData(it: Order?) {
+
     }
 
     private fun handleTimePickerUi(timePickerStr: String?) {
@@ -174,6 +183,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         object : DishesMainAdapter.DishesMainAdapterListener {
             override fun onDishClick(menuItem: MenuItem) {
                 mainViewModel.openDishPage(menuItem)
+            }
+
+            override fun onDishAdded(item: DishSectionSingleDish) {
+                viewModel.onDishAdded(item)
+            }
+
+            override fun onDishUpdated(item: DishSectionSingleDish) {
+                viewModel.onDishUpdated(item)
             }
         }
 

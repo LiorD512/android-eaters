@@ -2,15 +2,15 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub
 
 import androidx.lifecycle.ViewModel;
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.OldCartManager
 
 class SingleDishIngredientViewModel(
-    private val cartManager: CartManager,
+    private val oldCartManager: OldCartManager,
 ) : ViewModel() {
 
 
     fun updateCurrentOrderItem(removedIngredients: List<Long>){
-        cartManager.updateCurrentOrderItemRequest(OrderItemRequest(removedIngredientsIds = removedIngredients))
+        oldCartManager.updateCurrentOrderItemRequest(OrderItemRequest(removedIngredientsIds = removedIngredients))
     }
 
     companion object{
