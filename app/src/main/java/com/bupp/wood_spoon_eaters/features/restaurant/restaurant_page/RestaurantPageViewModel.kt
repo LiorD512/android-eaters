@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
+import com.bupp.wood_spoon_eaters.managers.NewCartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class RestaurantPageViewModel(
     val restaurantRepository: RestaurantRepository,
+    val cartManager: NewCartManager,
 ) : ViewModel() {
 
     var currentSelectedDate: DeliveryDate? = null
@@ -83,6 +85,8 @@ class RestaurantPageViewModel(
     fun onCookingSlotSelected(cookingSlot: CookingSlot) {
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
         handleDishesSection(sortedCookingSlot)
+
+
     }
 
     /** on cooking slot selected - need to sort by available/unavailable dishes

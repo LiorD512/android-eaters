@@ -73,8 +73,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                 }
                 is ResultHandler.Success -> {
                     Log.d(TAG, "getFeedHref - Success")
-//                    val feedData = processFeedHrefData(result.value.data, href)
-                    val feedData = processFeedHrefData(emptyList(), href)
+                    val feedData = processFeedHrefData(result.value.data, href)
+//                    val feedData = processFeedHrefData(emptyList(), href) //todo = check campaigns
                     FeedRepoResult(FeedRepoStatus.HREF_SUCCESS, feedData, isLargeItems)
                 }
                 else -> {
