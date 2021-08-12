@@ -106,13 +106,13 @@ object DateUtils {
     fun parseDateToUsTime(date: Date): String {
         //04:30 pm
         val sdf = SimpleDateFormat("hh:mm a")
-        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
+        return sdf.format(date.time).replace("AM", "am").replace("PM", "pm")
     }
 
     fun parseDateToDayAndUsTime(date: Date): String {
         //Fri, 04:30 pm
         val sdf = SimpleDateFormat("EE, hh:mm a")
-        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
+        return sdf.format(date.time).replace("AM", "am").replace("PM", "pm")
     }
 
     fun parseDateToUsDayTime(date: Date?): String {
@@ -193,6 +193,11 @@ object DateUtils {
         return true
     }
 
+    fun isDateInRange(dateToCheck: Date, startDate: Date, endDate: Date): Boolean {
+        val date = dateToCheck.time
+        return date > startDate.time && date < endDate.time
+    }
+
     fun isNowInRange(startDate: Date, endDate: Date): Boolean {
         val now = Date().time
         return now > startDate.time && now < endDate.time
@@ -244,9 +249,9 @@ object DateUtils {
     }
 
     fun parseCookingSlotForNowOrDates(cookingSlot: CookingSlot): String {
-        return if(isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)){
+        return if (isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)) {
             "Now"
-        }else{
+        } else {
             "${parseDateToDayAndUsTime(cookingSlot.startsAt)} - ${parseDateToUsTime(cookingSlot.endsAt)}"
         }
     }

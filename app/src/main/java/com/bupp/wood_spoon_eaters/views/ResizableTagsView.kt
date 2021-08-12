@@ -19,14 +19,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.tagSecond.isVisible = false
     }
 
-    fun setTags(tags:List<String>) {
-        with(binding) {
-            val firstTag = tags.getOrNull(0) ?: ""
-            val secondTag = tags.getOrNull(1) ?: ""
-            binding.tagFirst.text = firstTag
-            binding.tagFirst.isVisible = firstTag.isNotEmpty()
-            binding.tagSecond.text = secondTag
-            binding.tagSecond.isVisible = secondTag.isNotEmpty()
+    fun setTags(tags:List<String>?) {
+        tags?.let{
+            with(binding) {
+                val firstTag = tags?.getOrNull(0) ?: ""
+                val secondTag = tags?.getOrNull(1) ?: ""
+                binding.tagFirst.text = firstTag
+                binding.tagFirst.isVisible = firstTag.isNotEmpty()
+                binding.tagSecond.text = secondTag
+                binding.tagSecond.isVisible = secondTag.isNotEmpty()
+            }
         }
     }
 }

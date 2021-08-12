@@ -125,6 +125,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.timePickerEvent.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { it1 -> handleTimePickerClick(it1) }
         })
+        viewModel.currentCookingSlotData.observe(viewLifecycleOwner,{
+            handleCookingSlotChange(it)
+        })
     }
 
     private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
@@ -153,9 +156,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         errorEvent?.let {
             WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
         }
-        viewModel.currentCookingSlotData.observe(viewLifecycleOwner, {
-            handleCookingSlotChange(it)
-        })
     }
 
     private fun handleTimePickerUi(timePickerStr: String?) {
@@ -184,7 +184,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     @SuppressLint("SetTextI18n")
     private fun handleInitialParamData(params: RestaurantInitParams) {
         with(binding) {
-            Glide.with(requireContext()).load(params.coverPhoto).into(coverPhoto)
+            Glide.with(requireContext()).load(params.coverPhoto?.url).into(coverPhoto)
             restHeaderRestName.text = params.restaurantName
             restHeaderChefName.text = "by ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
@@ -199,7 +199,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding) {
             //Cover photo/video
             if (restaurant.video.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
+                Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
             } else {
                 //show video icon
             }

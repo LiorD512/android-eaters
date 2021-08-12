@@ -1,7 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models
 
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.model.AvailabilityDate
 import com.bupp.wood_spoon_eaters.model.CookingSlot
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.WSImage
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -18,3 +20,10 @@ data class RestaurantInitParams(
     var chefName: String?,
     var isFavorite: Boolean
 ): Parcelable
+
+@Parcelize
+data class ExtrasDishPage(
+    val menuItem: MenuItem,
+    val currentSelectedDate: Long? = null,
+    val availability: AvailabilityDate? = null
+) : Parcelable

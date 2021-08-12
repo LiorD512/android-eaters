@@ -14,22 +14,30 @@ class DeliveryTimeManager {
     private val deliveryTimeDateLiveData = MutableLiveData<DeliveryTimeLiveData?>()
     fun getDeliveryTimeLiveData() = deliveryTimeDateLiveData
 
+    private var tempDeliveryTime: Date? = null
     private var tempDeliveryTimeStamp: String? = null
     fun getTempDeliveryTimeStamp() = tempDeliveryTimeStamp
 
     fun setNewDeliveryTime(newDeliveryTime: Date?){
         this.deliveryTime = newDeliveryTime
+        tempDeliveryTime = newDeliveryTime
         tempDeliveryTimeStamp = getDeliveryTimestamp()
         deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryDateUiString()))
     }
 
     fun setTemporaryDeliveryTimeDate(tempDate: Date?){
+        tempDeliveryTime = tempDate
         tempDeliveryTimeStamp = DateUtils.parseUnixTimestamp(tempDate)
     }
 
     fun clearDeliveryTime(){
+        tempDeliveryTime = null
         tempDeliveryTimeStamp = null
 //        setNewDeliveryTime(null)
+    }
+
+    fun getTempDeliveryTimeDate(): Date? {
+        return tempDeliveryTime
     }
 
     fun getDeliveryTimeDate(): Date? {

@@ -40,7 +40,8 @@ data class MenuItem(
     @Json(name = "units_sold") val unitsSold: Int = 0,
     @Json(name = "order_at") val orderAt: Date? = null,
     @Json(name = "dish_id") val dishId: Long?,
-    @Json(name = "tags") val tags: List<String> = listOf(),
+    @Json(name = "tags") val tags: List<String>?,
+    var cookingSlotId: Long? = null,
     @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
     var dish: Dish? = null,
     /** when menu item is available at other times - the AvailabilityDate is not null and indicates the closest availability date **/
