@@ -12,7 +12,7 @@ sealed class DishSections(
 data class DishSectionAvailableHeader(
     val header: String,
     override val menuItem: MenuItem? = null,
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false
 ) : DishSections(viewType = AVAILABLE_HEADER) {
     companion object {
@@ -22,7 +22,7 @@ data class DishSectionAvailableHeader(
 
 class DishSectionUnavailableHeader(
     override val menuItem: MenuItem? = null,
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false
 ) : DishSections(viewType = UNAVAILABLE_HEADER) {
     companion object {
@@ -32,7 +32,7 @@ class DishSectionUnavailableHeader(
 
 data class DishSectionSingleDish(
     override val menuItem: MenuItem,
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = true
 ) : DishSections(viewType = SINGLE_DISH) {
     companion object {
@@ -42,7 +42,7 @@ data class DishSectionSingleDish(
 
 class DishSectionSkeleton(
     override val menuItem: MenuItem? = null,
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false
 ) : DishSections(viewType = SKELETON) {
     companion object {

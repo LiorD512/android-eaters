@@ -44,7 +44,7 @@ object DateUtils {
     fun parseDateToStartAndEnd(startDate: Date, endDate: Date): String {
         //06/21 Mon 2pm - 5pm
         val dateFormat = SimpleDateFormat("MM/dd  E", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("hma", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("hha", Locale.getDefault())
         val date = dateFormat.format(startDate)
         val startTime = timeFormat.format(startDate).lowercase(Locale.getDefault())
         val endTime = timeFormat.format(endDate).lowercase(Locale.getDefault())

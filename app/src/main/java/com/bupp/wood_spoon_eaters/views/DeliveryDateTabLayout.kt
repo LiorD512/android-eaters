@@ -1,15 +1,13 @@
 package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.bupp.wood_spoon_eaters.databinding.DeliveryDateTabLayoutBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDayDateSplash
 import com.google.android.material.tabs.TabLayout
 import com.trading212.stickyheader.dpToPx
@@ -26,6 +24,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         fun onDateSelected(date: DeliveryDate?)
     }
 
+    lateinit var tabSelectedListener: TabLayout.OnTabSelectedListener
+
     var datesList: List<DeliveryDate>? = null
 
     fun initDates(datesList: List<DeliveryDate>) {
@@ -37,10 +37,26 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
         setCurvedEdges()
+        with(binding) {
+            tabLayout.addOnTabSelectedListener(tabSelectedListener)
+        }
     }
 
     fun setTabListener(listener: DeliveryTimingTabLayoutListener){
         this.listener = listener
+        this.tabSelectedListener =  object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    listener.onDateSelected(datesList?.getOrNull(tab.position))
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        }
     }
 
     private fun setCurvedEdges() {
@@ -66,41 +82,31 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun onDateChangeListener() {
-        with(binding) {
-            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    tab?.let {
-//                        updateTabUi(it, true)
-                        listener?.onDateSelected(datesList?.getOrNull(tab.position))
-                    }
+    /**
+     * Changing selected cookingSlot - only UI without triggering listener
+     */
+    fun selectTabByCookingSlot(cookingSlot: CookingSlot){
+        datesList?.forEachIndexed{ index,date->
+            val date = date.cookingSlots.find { it.id == cookingSlot.id }
+            if(date != null){
+                //relevant cookingSlot is found in current date
+                with(binding){
+                    tabLayout.removeOnTabSelectedListener(tabSelectedListener)
+                    tabLayout.getTabAt(index)?.select()
+                    tabLayout.addOnTabSelectedListener(tabSelectedListener);
+                    return@forEachIndexed
                 }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    tab?.let {
-//                        updateTabUi(it, false)
-                        //todo - nicole - why do you need this ?
-//                        listener?.onDateSelected(datesList?.getOrNull(tab.position))
-                    }
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-
-                }
-
-            })
+            }
         }
     }
 
-    fun updateTabUi(tab: TabLayout.Tab, isSelected: Boolean) {
-        val tabLayout = (binding.tabLayout.getChildAt(0) as ViewGroup).getChildAt(tab.position) as LinearLayout
-        val tabTextView = tabLayout.getChildAt(1) as TextView
-        if(isSelected){
-            tabTextView.setTypeface(null, Typeface.BOLD);
-        } else {
-            tabTextView.setTypeface(null, Typeface.NORMAL);
+    fun getSelectedDate(): DeliveryDate? {
+        with(binding){
+            val position = tabLayout.selectedTabPosition
+            return datesList?.getOrNull(position)
         }
     }
+
 
 }
 

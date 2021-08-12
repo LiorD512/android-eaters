@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
-import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
@@ -23,10 +22,9 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -71,13 +69,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             restaurantTimePickerView.setOnClickListener {
                 Log.d(TAG, "restaurantTimePicker clicker")
-                viewModel.currentSelectedDate?.let { deliveryDate ->
-//                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
-//                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
-//                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+                restaurantDeliveryDates.getSelectedDate()?.let { deliveryDate ->
+////                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
+////                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
+////                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
                 }
             }
-            restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
+            restaurantDeliveryDates.setTabListener(this@RestaurantPageFragment)
             adapterDishes?.let { adapter ->
                 val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
                 restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
@@ -87,12 +85,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun onDeliveryTimingChange(date: DeliveryDate?) {
-        viewModel.onDeliveryDateChanged(date)
+        date?.let {
+            viewModel.onDeliveryDateChanged(date)
+        }
     }
 
     private fun initObservers() {
         mainViewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let { params->
+            it.getContentIfNotHandled()?.let { params ->
                 viewModel.handleInitialParamData(params)
             }
         })
@@ -105,14 +105,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.timePickerUi.observe(viewLifecycleOwner, {
             handleTimePickerUi(it)
         })
-        viewModel.dishesList.observe(viewLifecycleOwner, {
+        viewModel.dishListData.observe(viewLifecycleOwner, {
             handleDishesList(it)
         })
         viewModel.initialParamData.observe(viewLifecycleOwner, {
             handleInitialParamData(it)
         })
         viewModel.cartLiveData.observe(viewLifecycleOwner, {
-            handleCurrentCartData(it)
+            viewModel.handleCartData(it)
         })
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
@@ -120,13 +120,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleWSError(errorEvent: String?) {
-        errorEvent?.let{
+        errorEvent?.let {
             WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
         }
-    }
-
-    private fun handleCurrentCartData(it: Order?) {
-
+        viewModel.currentCookingSlotData.observe(viewLifecycleOwner, {
+            handleCookingSlotChange(it)
+        })
     }
 
     private fun handleTimePickerUi(timePickerStr: String?) {
@@ -137,16 +136,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleDishesList(dishSections: List<DishSections>?) {
-        binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
-        adapterDishes?.submitList(dishSections)
+    private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData) {
+        if (dishSections.animateList)
+            binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+        adapterDishes?.submitList(dishSections.dishes)
     }
 
     private fun handleDeliveryTimingData(datesList: List<DeliveryDate>?) {
         datesList?.let {
             with(binding.restaurantMainListLayout) {
-                restaurantDeliveryTiming.initDates(it)
-                restaurantDeliveryTiming.onDateChangeListener()
+                restaurantDeliveryDates.initDates(it)
             }
         }
     }
@@ -190,6 +189,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
 
+    private fun handleCookingSlotChange(cookingSlot: CookingSlot?) {
+        cookingSlot?.let {
+            with(binding.restaurantMainListLayout) {
+                //todo : not sure about this shit
+                restaurantDeliveryDates.selectTabByCookingSlot(cookingSlot)
+            }
+        }
+    }
+
     /** All sections click actions **/
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
         object : DishesMainAdapter.DishesMainAdapterListener {
@@ -198,7 +206,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             override fun onDishSwipedAdd(item: DishSectionSingleDish) {
-                item.menuItem.dishId?.let{
+                item.menuItem.dishId?.let {
                     viewModel.addDishToCart(1, it)
                 }
             }

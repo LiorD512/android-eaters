@@ -71,7 +71,7 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
             val dish = dishItem.menuItem?.dish
             dish?.let {
                 name.text = dish.name
-                quantity.text = "${dishItem.quantity}"
+                quantity.text = "${dishItem.cartQuantity}"
                 price.text = "$${dish.price?.formatedValue}"
                 description.text = "$${dish.price?.formatedValue}" //todo - add note after we get the dish model from server
             }
@@ -94,7 +94,7 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
             dish?.let{
                 name.text = dish.name
                 description.text = dish.description
-                price.text = "$${dish.price?.formatedValue} X${dishItem.quantity}"
+                price.text = "$${dish.price?.formatedValue} X${dishItem.cartQuantity}"
             }
         }
 
