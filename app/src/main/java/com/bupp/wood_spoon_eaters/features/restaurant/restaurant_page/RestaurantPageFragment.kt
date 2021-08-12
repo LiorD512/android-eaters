@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
@@ -35,7 +38,8 @@ import kotlin.math.abs
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
-    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener {
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener,
+    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -71,11 +75,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             restaurantTimePickerView.setOnClickListener {
                 Log.d(TAG, "restaurantTimePicker clicker")
-                restaurantDeliveryDates.getSelectedDate()?.let { deliveryDate ->
-////                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
-////                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
-////                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
-                }
+                viewModel.onTimePickerClicked()
             }
             restaurantDeliveryDates.setTabListener(this@RestaurantPageFragment)
             adapterDishes?.let { adapter ->
@@ -122,15 +122,27 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+        viewModel.timePickerEvent.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { it1 -> handleTimePickerClick(it1) }
+        })
+    }
+
+    private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
+        binding.restaurantMainListLayout.restaurantDeliveryDates.getSelectedDate()?.let { deliveryDate ->
+            val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
+            timePickerBottomSheet.setCookingSlots(selectedCookingSlot, deliveryDate.cookingSlots)
+            timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+        }
     }
 
     private fun handleClearCartEvent(event: CartManager.ClearCartEvent?) {
         event?.let{
             when(it.dialogType){
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
-
+                    ClearCartRestaurantBottomSheet.newInstance(event.curData, event.newData, this)
                 }
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
+                    ClearCartCookingSlotBottomSheet.newInstance(event.curData, event.newData, this)
 
                 }
             }
@@ -230,57 +242,62 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             override fun onDishSwipedRemove(item: DishSectionSingleDish) {
-                //todo - ask neta - if after current remove - cart is empty - should i notify the user ?
                 viewModel.removeOrderItemsByDishId(item.menuItem.dishId)
             }
 
         }
 
-    override fun onDateSelected(date: DeliveryDate?) {
-        onDeliveryTimingChange(date)
+    override fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot) {
+        //callback from TimePickerDialog - for changing cooking slot
+        viewModel.onCookingSlotSelected(cookingSlot)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-//        adapterDishes = null
-//        adapterCuisines = null
+    override fun onDateSelected(date: DeliveryDate?) {
+        //callback from time tab layout
+        onDeliveryTimingChange(date)
     }
 
     companion object {
         private const val TAG = "RestaurantPageFragment"
     }
 
-    fun setFadeInOnScrollRecycler(
-        fadingView: View,
-        recyclerView: RecyclerView,
-        startFadeAtChild: Int = 0,
-        fadeDuration: Int = 500
-    ) {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            var startFadeAt: Float? = null
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val currentChildIndex =
-                    (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
-                    startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
-                }
-                startFadeAt?.let { itemHeight ->
-                    // The length that is currently scrolled
-                    val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
-                    // The distance you need to scroll to end the animation
-                    val totalScrollableLength = fadeDuration
-                    if (abs(scrolledLength) > 0) {
-                        val alpha = scrolledLength.div(totalScrollableLength)
-                        fadingView.alpha = alpha
-                    }
-                }
-            }
-        })
-    }
+//    fun setFadeInOnScrollRecycler(
+//        fadingView: View,
+//        recyclerView: RecyclerView,
+//        startFadeAtChild: Int = 0,
+//        fadeDuration: Int = 500
+//    ) {
+//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//
+//            var startFadeAt: Float? = null
+//
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                val currentChildIndex =
+//                    (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//                if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
+//                    startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
+//                }
+//                startFadeAt?.let { itemHeight ->
+//                    // The length that is currently scrolled
+//                    val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
+//                    // The distance you need to scroll to end the animation
+//                    val totalScrollableLength = fadeDuration
+//                    if (abs(scrolledLength) > 0) {
+//                        val alpha = scrolledLength.div(totalScrollableLength)
+//                        fadingView.alpha = alpha
+//                    }
+//                }
+//            }
+//        })
+//    }
 
     override fun onWSErrorDone() {
 
     }
+
+    override fun onPerformClearCart() {
+
+    }
+
+
 }

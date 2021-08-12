@@ -138,7 +138,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.restaurant.RestaurantActivity"/>
+        <activity android:name=".features.restaurant.RestaurantActivity"
+                android:screenOrientation="portrait" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"

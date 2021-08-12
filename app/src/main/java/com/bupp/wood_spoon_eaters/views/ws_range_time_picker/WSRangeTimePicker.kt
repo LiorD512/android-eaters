@@ -14,7 +14,6 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.MyLinearSnapHelper
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerBinding
-import com.bupp.wood_spoon_eaters.features.main.search.WSRangeTimeViewItemDecorator
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import java.util.*
@@ -28,7 +27,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     val viewModel = WSRangeTimePickerViewModel()
     val interval = viewModel.getHoursInterval()
 
-    var wsRangeTimePickerDateAdapter: WSRangeTimePickerDateAdapter? = null
+    var wsTimePickerCustomAdapter: WSTimePickerCustomAdapter? = null
     var wsRangeTimePickerHoursAdapter: WSRangeTimePickerHoursAdapter? = null
     private var binding: WsRangeTimePickerBinding = WsRangeTimePickerBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -48,9 +47,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
 
         //dates
-        wsRangeTimePickerDateAdapter = WSRangeTimePickerDateAdapter()
+        wsTimePickerCustomAdapter = WSTimePickerCustomAdapter()
         binding.wsRangeTimePickerDateList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.wsRangeTimePickerDateList.adapter = wsRangeTimePickerDateAdapter
+        binding.wsRangeTimePickerDateList.adapter = wsTimePickerCustomAdapter
 
         val snapHelper: SnapHelper = LinearSnapHelper()
         binding.wsRangeTimePickerDateList.attachSnapHelperWithListener(
@@ -80,7 +79,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun initDateAndHoursUi() {
-        wsRangeTimePickerDateAdapter?.submitList(datesAndHours as List<WSBaseTimePicker>?)
+        wsTimePickerCustomAdapter?.submitList(datesAndHours as List<WSBaseTimePicker>?)
 
         wsRangeTimePickerHoursAdapter?.submitList(datesAndHours[0].hours)
         binding.wsRangeTimePickerHoursList.scrollToPosition(datesAndHours[0].hours.size/2)

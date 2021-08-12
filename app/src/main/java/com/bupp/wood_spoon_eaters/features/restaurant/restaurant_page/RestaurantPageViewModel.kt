@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
@@ -29,6 +30,7 @@ class RestaurantPageViewModel(
     var dishes: Map<Long, Dish>? = null
     var deliveryDates: List<DeliveryDate>? = null
     val deliveryDatesData = MutableLiveData<List<DeliveryDate>>()
+    val timePickerEvent = LiveEventData<CookingSlot>()
 
     val dishListData = MutableLiveData<DishListData>()
     data class DishListData(val dishes: List<DishSections> , val animateList: Boolean = false)
@@ -92,14 +94,14 @@ class RestaurantPageViewModel(
     private fun chooseStartingCookingSlot(restaurant: Restaurant, deliveryDates: List<DeliveryDate>) {
         if (cartLiveData.value?.restaurant?.id == restaurant.id) {
             /**  case1 : has open cart - get the cooking slot of the current order **/
-            val orderCookingSlot = cartLiveData.value?.cookingSlot
-            onCookingSlotSelected(deliveryDates.get(3).cookingSlots.get(0))
+//            val orderCookingSlot = cartLiveData.value?.cookingSlot
+//            onCookingSlotSelected(deliveryDates.get(3).cookingSlots.get(0))
         } else if (false) {
             /**  case2 : no open cart, has chosen date - get closest cooking slot to the chosen date  **/
 
         } else {
             /**  case3 : no open cart, no chosen date - get first cooking slot in list **/
-            deliveryDates.getOrNull(0)?.cookingSlots?.getOrNull(1)?.let {
+            deliveryDates.getOrNull(0)?.cookingSlots?.getOrNull(0)?.let {
                 onCookingSlotSelected(it)
             }
         }
@@ -128,6 +130,13 @@ class RestaurantPageViewModel(
             }
             timePickerUi.postValue(uiStr)
         }
+    }
+
+
+    fun onTimePickerClicked() {
+        //when picker is clicked we send from viewModel the selected cooking slot
+        // so we can highlight it for the user inside the dialog
+        timePickerEvent.postRawValue(currentCookingSlot)
     }
 
     /** on cooking slot selected - need to sort by available/unavailable dishes
@@ -278,6 +287,7 @@ class RestaurantPageViewModel(
             }
         }
     }
+
 
     companion object {
         const val TAG = "wowRestaurantPageVM"

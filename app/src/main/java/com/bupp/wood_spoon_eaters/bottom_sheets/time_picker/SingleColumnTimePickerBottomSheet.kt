@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.SingleTimePickerBottomSheetBinding
-import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -22,13 +22,17 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
 
 //    var listener: TimePickerListener? = null
     interface TimePickerListener{
-        fun onTimerPickerChange()
+        fun onTimerPickerChange(){}
+        fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot)
     }
 
     private val binding: SingleTimePickerBottomSheetBinding by viewBinding()
     val viewModel by viewModel<TimePickerViewModel>()
-    private var menuItems: List<MenuItem>? = null
     private var isTemporary: Boolean = false
+
+    private var menuItems: List<MenuItem>? = null
+    private var cookingSlots: List<CookingSlot>? = null
+    private var selectedCookingSlot: CookingSlot? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.single_time_picker_bottom_sheet, container, false)
@@ -91,6 +95,19 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
                 timePickerTimePicker.setDatesByMenuItems(it)
                 timePickerAsapBtn.visibility = View.GONE
             }
+
+            cookingSlots?.let{
+                timePickerTimePicker.setDatesByCookingSlots(it)
+                timePickerAsapBtn.visibility = View.GONE
+
+                timePickerScheduleBtn.setOnClickListener {
+                    val selectedCookingSlot = timePickerTimePicker.getChosenCookingSlot()
+                    selectedCookingSlot?.let{
+                        listener?.onTimerPickerCookingSlotChange(it)
+                    }
+                    dismiss()
+                }
+            }
         }
     }
 
@@ -98,6 +115,13 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
         val menuItemsData = menuItems.filter { it.quantity > 0 }
         this.isTemporary = true
         this.menuItems = menuItemsData
+    }
+
+    fun setCookingSlots(selectedCookingSlot: CookingSlot, cookingSlots: MutableList<CookingSlot>) {
+        this.isTemporary = true
+        this.cookingSlots = cookingSlots
+        val curCookingSlot = cookingSlots.find { it.id == selectedCookingSlot.id }
+        this.selectedCookingSlot = curCookingSlot
     }
 
 }
