@@ -8,11 +8,15 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.DietaryIcon
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
@@ -20,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailabilityAdapter.DishAvailabilityAdapterListener,
-    ModificationsListAdapter.ModificationsListAdapterListener {
+    ModificationsListAdapter.ModificationsListAdapterListener, ClearCartCookingSlotBottomSheet.ClearCartListener {
 
     private val binding: FragmentDishPageBinding by viewBinding()
 
@@ -38,29 +42,36 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
 
     private fun initUi() {
         with(binding) {
-            backButton.setOnClickListener {
+            dishFragBackButton.setOnClickListener {
                 activity?.onBackPressed()
             }
-            shareButton.setOnClickListener {
+            dishFragShareButton.setOnClickListener {
 
             }
+            dishFragAddBtn.setOnClickListener {
+                onAddToCartClick()
+            }
         }
-        with(binding.dishMainListLayout) {
+        with(binding.dishFragMainListLayout) {
             handleDishQuantityButtons()
         }
     }
 
+    private fun onAddToCartClick() {
+        viewModel.addDishToCart()
+    }
+
     private fun handleDishQuantityButtons() {
-        with(binding.dishMainListLayout) {
-            dishAddQuantity.setOnClickListener {
-                val quantity = (dishQuantity.text).toString().toInt() + 1
+        with(binding.dishFragMainListLayout) {
+            dishFragAddQuantity.setOnClickListener {
+                val quantity = (dishFragQuantity.text).toString().toInt() + 1
                 viewModel.updateDishQuantity(quantity)
-                dishQuantity.text = quantity.toString()
+                dishFragQuantity.text = quantity.toString()
             }
-            dishRemoveQuantity.setOnClickListener {
-                val quantity = (dishQuantity.text).toString().toInt() - 1
+            dishFragRemoveQuantity.setOnClickListener {
+                val quantity = (dishFragQuantity.text).toString().toInt() - 1
                 viewModel.updateDishQuantity(quantity)
-                dishQuantity.text = quantity.toString()
+                dishFragQuantity.text = quantity.toString()
             }
         }
     }
@@ -81,16 +92,33 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         viewModel.progressData.observe(viewLifecycleOwner, {
             handleSkeleton(it)
         })
+        viewModel.clearCartEvent.observe(viewLifecycleOwner, {
+            handleClearCartEvent(it)
+        })
+        viewModel.onFinishDishPage.observe(viewLifecycleOwner, {
+            activity?.onBackPressed()
+        })
     }
 
     private fun handleSkeleton(isLoading: Boolean) {
         with(binding) {
             if (isLoading) {
-                dishMainListLayout.root.isVisible = false
-                dishMainListLayoutSkeleton.root.isVisible = true
+                dishFragMainListLayout.root.isVisible = false
+                dishFragMainListLayoutSkeleton.root.isVisible = true
             } else {
-                dishMainListLayoutSkeleton.root.isVisible = false
-                dishMainListLayout.root.isVisible = true
+                dishFragMainListLayoutSkeleton.root.isVisible = false
+                dishFragMainListLayout.root.isVisible = true
+            }
+        }
+    }
+
+    private fun handleClearCartEvent(event: LiveEvent<CartManager.ClearCartEvent>) {
+        event.getContentIfNotHandled()?.let{
+            when(it.dialogType){
+                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
+                    ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this).show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
+                }
+                else -> {}
             }
         }
     }
@@ -99,76 +127,76 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
     private fun handleDishData(menuItem: MenuItem) {
         with(binding) {
             val dish = menuItem.dish
-            dishHeaderName.text = dish?.name
-            dishHeaderPrice.text = dish?.price?.formatedValue ?: ""
-            topHeaderDishName.text = dish?.name
-            Glide.with(requireContext()).load(dish?.thumbnail?.url).into(coverPhoto)
+            dishFragHeaderName.text = dish?.name
+            dishFragHeaderPrice.text = dish?.price?.formatedValue ?: ""
+            dishFragTopHeaderDishName.text = dish?.name
+            Glide.with(requireContext()).load(dish?.thumbnail?.url).into(dishFragCoverPhoto)
             if(menuItem.availableLater == null) {
-                dishTags.setTags(menuItem.tags)
+                dishFragTags.setTags(menuItem.tags)
             } else{
-                dishTags.setTags(listOf(menuItem.availableLater?.getStartEndAtTag()?:""))
+                dishFragTags.setTags(listOf(menuItem.availableLater?.getStartEndAtTag()?:""))
             }
 
         }
     }
 
     private fun handleDishFullData(dish: FullDish) {
-        with(binding.dishMainListLayout) {
+        with(binding.dishFragMainListLayout) {
             handleDietaryList(dish.dietaries)
             //Description
-            dishDescription.isVisible = !dish.description.isNullOrEmpty()
-            dishDescription.text = dish.description
+            dishFragDescription.isVisible = !dish.description.isNullOrEmpty()
+            dishFragDescription.text = dish.description
             //Portion size
-            dishPortionSize.isVisible = !dish.portionSize.isNullOrEmpty()
-            dishPortionSize.text = "Portion size : ${dish.portionSize} Servings "
+            dishFragPortionSize.isVisible = !dish.portionSize.isNullOrEmpty()
+            dishFragPortionSize.text = "Portion size : ${dish.portionSize} Servings "
             //Ingredients
-            dishIngredientsLayout.isVisible = !dish.ingredients.isNullOrEmpty()
-            dishIngredients.text = dish.ingredients ?: ""
+            dishFragIngredientsLayout.isVisible = !dish.ingredients.isNullOrEmpty()
+            dishFragIngredients.text = dish.ingredients ?: ""
             //Accommodations
-            dishAccommodationsLayout.isVisible = !dish.accommodations.isNullOrEmpty()
-            dishAccommodations.text = dish.accommodations ?: ""
+            dishFragAccommodationsLayout.isVisible = !dish.accommodations.isNullOrEmpty()
+            dishFragAccommodations.text = dish.accommodations ?: ""
             //Additional Details
-            dishAdditionalDetailsLayout.isVisible = false
+            dishFragAdditionalDetailsLayout.isVisible = false
 //            dishAdditionalDetails.text = dish.  //todo : what goes here?
         }
     }
 
     private fun handleDietaryList(dietaries: List<DietaryIcon>?) {
         val adapter = DietariesAdapter()
-        with(binding.dishMainListLayout) {
-            dishDietaryList.adapter = adapter
+        with(binding.dishFragMainListLayout) {
+            dishFragDietaryList.adapter = adapter
             adapter.submitList(dietaries)
-            dishDietaryList.isVisible = !dietaries.isNullOrEmpty()
+            dishFragDietaryList.isVisible = !dietaries.isNullOrEmpty()
         }
     }
 
     private fun handleUserRequestData(userRequest: DishPageViewModel.UserRequest?) {
-        with(binding.dishMainListLayout) {
+        with(binding.dishFragMainListLayout) {
             userRequest?.let {
-                dishChefName.text = userRequest.cook.getFullName()
-                userRequest.cook.thumbnail.url?.let{
-                    dishChefThumbnail.setImage(it)
+                dishFragChefName.text = userRequest.cook.getFullName()
+                userRequest.cook.thumbnail?.url?.let{
+                    dishFragChefThumbnail.setImage(it)
                 }
-                dishUserRequestLine.text = "Hey ${userRequest.eaterName}, any special requests?"
+                dishFragUserRequestLine.text = "Hey ${userRequest.eaterName}, any special requests?"
             }
         }
     }
 
     private fun handleDishQuantityState(quantityState: DishPageViewModel.DishQuantityState?) {
         quantityState?.let { state ->
-            with(binding.dishMainListLayout) {
+            with(binding.dishFragMainListLayout) {
                 when (state) {
                     DishPageViewModel.DishQuantityState.ZERO_QUANTITY -> {
-                        dishRemoveQuantity.isEnabled = false
-                        dishAddQuantity.isEnabled = true
+                        dishFragRemoveQuantity.isEnabled = false
+                        dishFragAddQuantity.isEnabled = true
                     }
                     DishPageViewModel.DishQuantityState.REGULAR -> {
-                        dishRemoveQuantity.isEnabled = true
-                        dishAddQuantity.isEnabled = true
+                        dishFragRemoveQuantity.isEnabled = true
+                        dishFragAddQuantity.isEnabled = true
                     }
                     DishPageViewModel.DishQuantityState.MAX_QUANTITY -> {
-                        dishRemoveQuantity.isEnabled = true
-                        dishAddQuantity.isEnabled = false
+                        dishFragRemoveQuantity.isEnabled = true
+                        dishFragAddQuantity.isEnabled = false
                     }
                 }
             }
@@ -181,5 +209,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
 
     companion object {
         private const val TAG = "RestaurantPageFragment"
+    }
+
+    override fun onPerformClearCart() {
+        viewModel.onPerformClearCart()
     }
 }

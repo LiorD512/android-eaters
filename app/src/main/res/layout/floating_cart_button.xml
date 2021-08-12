@@ -6,6 +6,7 @@
         android:layout_height="@dimen/floating_cart_btn_height"
         android:clickable="false"
         android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/floatingCartBtnLayout"
         android:background="@drawable/transparent_to_white_80_gradient">
 
@@ -46,6 +47,7 @@
                     android:text="View Cart" />
 
             <TextView
+                    android:id="@+id/floatingCartBtnTitle"
                     style="@style/LatoBlack9White"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -175,7 +175,7 @@ class OldCartManager(
             inCartCookingSlot?.let { cookingSlot ->
                 if (cookingSlot.id != currentCookingSlotId) {
                     //if the showing dish's (cook) is the same as the in-cart order's cook
-                    val currentShowingCookName = currentShowingDish?.cook?.getFullName()
+                    val currentShowingCookName = currentShowingDish?.restaurant?.getFullName()
                     val inCartCookName = orderResponse.restaurant?.getFullName()
                     return NewCartData(
                         inCartCookName = inCartCookName,
@@ -592,7 +592,7 @@ class OldCartManager(
 
     private fun getCurrentOrderChefId(): String {
         currentShowingDish.let {
-            return it?.cook?.id.toString()
+            return it?.restaurant?.id.toString()
         }
     }
 
@@ -630,7 +630,7 @@ class OldCartManager(
 
     private fun getCurrentOrderChefName(): String {
         currentShowingDish.let {
-            return it?.cook?.getFullName() ?: "no_name"
+            return it?.restaurant?.getFullName() ?: "no_name"
         }
     }
 

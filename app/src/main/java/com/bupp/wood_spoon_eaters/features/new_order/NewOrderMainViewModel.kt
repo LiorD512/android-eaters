@@ -93,7 +93,7 @@ class NewOrderMainViewModel(
                 val getFullDishResult = oldCartManager.getFullDish(it)
                 getFullDishResult?.let {
                     dishInfoEvent.postValue(it.fullDish)
-                    dishCookEvent.postValue(it.fullDish.cook)
+//                    dishCookEvent.postValue(it.fullDish.restaurant)
 
                     if(!oldCartManager.isInCheckout()){
                         checkCartStatusAndUpdateUi()
@@ -301,7 +301,7 @@ class NewOrderMainViewModel(
 
 
     fun getDishReview(cookId: Long?) {
-        val cookId = cookId ?: oldCartManager.currentShowingDish?.cook?.id
+        val cookId = cookId ?: oldCartManager.currentShowingDish?.restaurant?.id
         cookId?.let{
             progressData.startProgress()
             viewModelScope.launch {

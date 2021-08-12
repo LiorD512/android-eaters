@@ -23,6 +23,10 @@ open class LiveEvent<out T>(private val content: T) {
         }
     }
 
+    fun forceUnHandled(){
+        hasBeenHandled = false
+    }
+
     /**
      * Returns the content, even if it's already been handled.
      */

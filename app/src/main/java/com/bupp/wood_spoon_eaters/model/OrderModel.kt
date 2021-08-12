@@ -101,6 +101,14 @@ data class Order (
         }
         return curOrderStage
     }
+
+    fun getAllOrderItemsQuantity(): Int {
+        var allOrderItemsQuantity = 0
+        orderItems?.forEach {
+            allOrderItemsQuantity += it.quantity
+        }
+        return allOrderItemsQuantity
+    }
 }
 
 @Parcelize

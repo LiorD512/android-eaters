@@ -38,9 +38,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun updateFloatingCartButton(quantity: Int) {
+    fun updateFloatingCartButton(restaurantName: String, quantity: Int) {
         Log.d(TAG, "updateFloatingCartButton: $quantity")
-//        val priceStr = DecimalFormat("##.##").format(price)
+        binding.floatingCartBtnTitle.text = "$restaurantName"
         binding.floatingCartBtnPrice.text = "$quantity"
         binding.floatingCartBtnLayout.visibility = View.VISIBLE
         listener?.onFloatingCartStateChanged(true)

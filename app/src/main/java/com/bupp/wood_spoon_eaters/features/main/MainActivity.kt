@@ -82,8 +82,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun initUi() {
         with(binding) {
-            mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
-            mainActFloatingCartBtn.updateFloatingCartButton(3)
+//            mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
+//            mainActFloatingCartBtn.updateFloatingCartButton(3, "sd")
         }
 
 //        //TODO - COMMENT THIS (FOT BRANCH TESTING)

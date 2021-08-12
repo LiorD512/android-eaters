@@ -41,10 +41,10 @@ data class MenuItem(
     @Json(name = "order_at") val orderAt: Date? = null,
     @Json(name = "dish_id") val dishId: Long?,
     @Json(name = "tags") val tags: List<String>?,
-    var cookingSlotId: Long? = null,
     @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
     var dish: Dish? = null,
     /** when menu item is available at other times - the AvailabilityDate is not null and indicates the closest availability date **/
+    var cookingSlotId: Long? = null,
     var availableLater: AvailabilityDate? = null
 ) : Parcelable {
     fun getQuantityLeftString(): String {
@@ -70,7 +70,8 @@ data class AvailabilityDate(
 @JsonClass(generateAdapter = true)
 data class FullDish(
     @Json(name = "id") val id: Long,
-    @Json(name = "cook") val cook: Cook,
+//    @Json(name = "cook") val cook: Cook,
+    @Json(name = "cook") val restaurant: Restaurant,
     @Json(name = "name") val name: String,
     @Json(name = "price") val price: Price,
     @Json(name = "thumbnail") val thumbnail: WSImage,
@@ -122,10 +123,10 @@ data class FullDish(
     fun getAdditionalDishes(curCookingSlotId: Long? = null): MutableList<Dish> {
         val availableArr = mutableListOf<Dish>()
         if (curCookingSlotId != null) {
-            availableArr.addAll(cook.dishes.filter { it.menuItem?.cookingSlot?.id == curCookingSlotId && it.menuItem.unitsSold < it.menuItem.quantity })
+            availableArr.addAll(restaurant.dishes.filter { it.menuItem?.cookingSlot?.id == curCookingSlotId && it.menuItem.unitsSold < it.menuItem.quantity })
         } else {
             //todo - first case when entering screen and there is not cooking slot yet for order.
-            cook.dishes.forEach { dish ->
+            restaurant.dishes.forEach { dish ->
                 dish.menuItem?.let {
                     if (it.unitsSold < it.quantity) {
                         availableArr.add(dish)

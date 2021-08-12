@@ -94,11 +94,11 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
         with(binding){
             singleDishNote.setText("")
-            singleDishInfoCook.setUser(fullDish.cook)
+//            singleDishInfoCook.setUser(fullDish.restaurant)
             singleDishInfoFavorite.setIsFav(fullDish.isFavorite)
             singleDishInfoFavorite.setDishId(fullDish.id)
             singleDishInfoName.text = fullDish.name
-            singleDishInfoCookName.text = "By ${fullDish.cook.getFullName()}"
+            singleDishInfoCookName.text = "By ${fullDish.restaurant.getFullName()}"
             singleDishInfoDescription.text = fullDish.description
             singleDishInfoPrice.text = fullDish.getPriceObj().formatedValue
 
@@ -108,9 +108,9 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
                 singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
             }
 
-            fullDish.cook.country?.let{
-                Glide.with(requireContext()).load(fullDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
-            }
+//            fullDish.restaurant.country?.let{
+//                Glide.with(requireContext()).load(fullDish.restaurant.country.flagUrl).into(singleDishInfoCookFlag)
+//            }
 
             val menuItem = fullDish.menuItem
             if (menuItem != null) {

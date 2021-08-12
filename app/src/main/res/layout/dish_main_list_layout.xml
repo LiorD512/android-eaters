@@ -21,7 +21,7 @@
                 android:background="@color/grey_white" />
 
         <com.bupp.wood_spoon_eaters.views.ExpandableTextView
-                android:id="@+id/dishDescription"
+                android:id="@+id/dishFragDescription"
                 style="@style/LatoReg13BrownishGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
                 tools:text="Labaneh is soft cheese, similar in texture to cream cheese, made from strained yogurt and very popular in middle eastern cuisine eastern cuisine…" />
 
         <TextView
-                android:id="@+id/dishPortionSize"
+                android:id="@+id/dishFragPortionSize"
                 style="@style/LatoReg13NobelGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:background="@color/grey_white" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dishDietaryList"
+                android:id="@+id/dishFragDietaryList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="21dp"
@@ -53,7 +53,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <androidx.cardview.widget.CardView
-                android:id="@+id/dishIngredientsLayout"
+                android:id="@+id/dishFragIngredientsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="1dp"
@@ -75,7 +75,7 @@
                         android:text="Ingredients" />
 
                 <com.bupp.wood_spoon_eaters.views.ExpandableTextView
-                        android:id="@+id/dishIngredients"
+                        android:id="@+id/dishFragIngredients"
                         style="@style/LatoReg13BrownishGrey"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-                android:id="@+id/dishAccommodationsLayout"
+                android:id="@+id/dishFragAccommodationsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="1dp"
@@ -111,7 +111,7 @@
                         android:text="Accomodations" />
 
                 <com.bupp.wood_spoon_eaters.views.ExpandableTextView
-                        android:id="@+id/dishAccommodations"
+                        android:id="@+id/dishFragAccommodations"
                         style="@style/LatoReg13BrownishGrey"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                 android:gravity="center">
 
             <ImageButton
-                    android:id="@+id/dishRemoveQuantity"
+                    android:id="@+id/dishFragRemoveQuantity"
                     android:layout_width="61dp"
                     android:layout_height="61dp"
                     android:background="@null"
@@ -140,7 +140,7 @@
                     android:src="@drawable/plus_minus_minus_selector" />
 
             <TextView
-                    android:id="@+id/dishQuantity"
+                    android:id="@+id/dishFragQuantity"
                     style="@style/LatoBold15Teal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                     android:text="0" />
 
             <ImageButton
-                    android:id="@+id/dishAddQuantity"
+                    android:id="@+id/dishFragAddQuantity"
                     android:layout_width="61dp"
                     android:layout_height="61dp"
                     android:background="@null"
@@ -158,7 +158,7 @@
         </LinearLayout>
 
         <TextView
-                android:id="@+id/dishModificationHeader"
+                android:id="@+id/dishFragModificationHeader"
                 style="@style/LatoBlack19DarkGrey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dishModificationList"
+                android:id="@+id/dishFragModificationList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="19dp"
@@ -182,12 +182,12 @@
                 android:orientation="horizontal">
 
             <com.bupp.wood_spoon_eaters.views.UserImageView
-                    android:id="@+id/dishChefThumbnail"
+                    android:id="@+id/dishFragChefThumbnail"
                     android:layout_width="46dp"
                     android:layout_height="wrap_content" />
 
             <androidx.cardview.widget.CardView
-                    android:id="@+id/dishChefLayout"
+                    android:id="@+id/dishFragChefLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="1dp"
@@ -204,14 +204,14 @@
                         android:paddingVertical="16dp">
 
                     <TextView
-                            android:id="@+id/dishChefName"
+                            android:id="@+id/dishFragChefName"
                             style="@style/LatoBold13Black"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             tools:text="Assaf Beer" />
 
                     <TextView
-                            android:id="@+id/dishUserRequestLine"
+                            android:id="@+id/dishFragUserRequestLine"
                             style="@style/LatoReg15BrownishGrey"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
         </LinearLayout>
 
         <EditText
-                android:id="@+id/dishUserRequestInput"
+                android:id="@+id/dishFragUserRequestInput"
                 style="@style/LatoReg15BrownishGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -251,7 +251,7 @@
                 app:cardCornerRadius="7.7dp">
 
             <LinearLayout
-                    android:id="@+id/dishAdditionalDetailsLayout"
+                    android:id="@+id/dishFragAdditionalDetailsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -266,7 +266,7 @@
                         android:text="Additional Details" />
 
                 <TextView
-                        android:id="@+id/dishAdditionalDetails"
+                        android:id="@+id/dishFragAdditionalDetails"
                         style="@style/LatoReg13BrownishGrey"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -277,7 +277,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-                android:id="@+id/dishAvailabilityLisLayout"
+                android:id="@+id/dishFragAvailabilityLisLayout"
                 style="@style/LatoBlack19DarkGrey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -286,7 +286,7 @@
                 android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dishAvailabilityList"
+                android:id="@+id/dishFragAvailabilityList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

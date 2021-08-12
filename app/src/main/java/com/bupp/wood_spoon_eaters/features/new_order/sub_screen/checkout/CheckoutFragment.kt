@@ -92,7 +92,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         })
         mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
             if (emptyCartEvent) {
-                ClearCartDialog(this@CheckoutFragment).show(childFragmentManager, Constants.CLEAR_CART_DIALOG_TAG)
+                ClearCartDialog(this@CheckoutFragment).show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
             }
         })
         viewModel.shippingMethodsEvent.observe(viewLifecycleOwner, {

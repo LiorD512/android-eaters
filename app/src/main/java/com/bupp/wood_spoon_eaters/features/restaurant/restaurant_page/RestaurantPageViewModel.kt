@@ -21,7 +21,7 @@ class RestaurantPageViewModel(
     private val timeManager: DeliveryTimeManager,
     private val cartManager: CartManager,
 ) : ViewModel() {
-    private var currentCookingSlot: CookingSlot? = null
+    var currentCookingSlot: CookingSlot? = null
     val currentCookingSlotData = MutableLiveData<CookingSlot>()
 
     val initialParamData = MutableLiveData<RestaurantInitParams>()
@@ -38,8 +38,9 @@ class RestaurantPageViewModel(
     data class DishListData(val dishes: List<DishSections>, val animateList: Boolean = true)
 
     val clearCartEvent = cartManager.getClearCartUiEvent()
-    val cartLiveData = cartManager.getCurrentCartData()
+    val orderLiveData = cartManager.getCurrentCartData()
     val wsErrorEvent = cartManager.getWsErrorEvent()
+    val floatingBtnEvent = cartManager.getFloatingCartBtnEvent()
 
     val progressData = ProgressData()
 
@@ -95,7 +96,7 @@ class RestaurantPageViewModel(
     private fun chooseStartingCookingSlot(restaurant: Restaurant, deliveryDates: List<DeliveryDate>) {
         if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
             /**  case1 : has open cart - get the cooking slot of the current order **/
-            val orderCookingSlot = cartManager.currentCookingSlot
+            val orderCookingSlot = cartManager.getCurrentCookingSlot()
             orderCookingSlot?.let { onCookingSlotSelected(it) }
         } else {
             /**  case2 : no open cart, has chosen date from feed - search for cookingSlot that contains chosen date  **/
@@ -147,7 +148,9 @@ class RestaurantPageViewModel(
     fun onTimePickerClicked() {
         //when picker is clicked we send from viewModel the selected cooking slot
         // so we can highlight it for the user inside the dialog
-        timePickerEvent.postRawValue(currentCookingSlot)
+        currentCookingSlot?.let{
+            timePickerEvent.postRawValue(it)
+        }
     }
 
     /** on cooking slot selected - need to sort by available/unavailable dishes
@@ -225,14 +228,14 @@ class RestaurantPageViewModel(
                 dishSectionsList.add(DishSectionSingleDish(menuItem))
             }
         }
-        updateSelectedDishesCounts(dishSectionsList)
+        updateDishCountUi(dishSectionsList)
     }
 
     /**
      * update the dishCount of every dish in the current presented menu
      */
-    private fun updateSelectedDishesCounts(dishSectionsList: List<DishSections>, animateList: Boolean = true) {
-        if (cartManager.currentCookingSlot?.id == currentCookingSlot?.id) {
+    private fun updateDishCountUi(dishSectionsList: List<DishSections>, animateList: Boolean = true) {
+        if (cartManager.currentCookingSlotId == currentCookingSlot?.id) {
             cartManager.getCurrentOrderOrderItems()?.let { orderItems ->
                 dishSectionsList.forEach { dishSection ->
                     if (dishSection is DishSectionSingleDish) {
@@ -271,11 +274,13 @@ class RestaurantPageViewModel(
     fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
         currentCookingSlot?.let { currentCookingSlot ->
             val currentRestaurant = restaurantFullData.value!!
-            if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot)) {
+            if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot.id, currentCookingSlot.startsAt, currentCookingSlot.endsAt)) {
                 viewModelScope.launch {
-                    cartManager.updateCurCookingSlot(currentCookingSlot)
+                    cartManager.updateCurCookingSlot(currentCookingSlot.id)
                     cartManager.addOrUpdateCart(quantity, dishId, note)
                 }
+            }else{
+                cartManager.setPendingRequestParams(currentCookingSlot, quantity, dishId, note)
             }
         }
     }
@@ -293,16 +298,30 @@ class RestaurantPageViewModel(
      */
     fun handleCartData(order: Order?) {
         if (order?.cookingSlot != null && currentCookingSlot != null) {
-            val orderCookingSlot = order.cookingSlot
-            if (orderCookingSlot.id == currentCookingSlot?.id) {
-                /** Same cooking slot - only need to update dishes count **/
-                dishListData.value?.dishes?.let {
-                    updateSelectedDishesCounts(it, false)
-                }
-            } else {
-                /** Different cooking slot - need to change all screen UI accordingly **/
-                onCookingSlotSelected(orderCookingSlot)
+            dishListData.value?.dishes?.let {
+                updateDishCountUi(it, false)
+                updateFloatingCartButtonUi(order)
             }
+//            val orderCookingSlot = order.cookingSlot
+//            if (orderCookingSlot.id == currentCookingSlot?.id) {
+//                /** Same cooking slot - only need to update dishes count **/
+//                dishListData.value?.dishes?.let {
+//                    updateSelectedDishesCounts(it, false)
+//                }
+//            } else {
+//                /** Different cooking slot - need to change all screen UI accordingly **/
+////                onCookingSlotSelected(orderCookingSlot)
+//            }
+        }
+    }
+
+    private fun updateFloatingCartButtonUi(order: Order) {
+        cartManager.updateFloatingCartBtn(order.restaurant?.restaurantName, order.getAllOrderItemsQuantity())
+    }
+
+    fun onPerformClearCart() {
+        viewModelScope?.launch {
+            cartManager.onCartCleared()
         }
     }
 
