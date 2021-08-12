@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_eaters.network
 
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
+import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantResult
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -76,6 +78,15 @@ interface ApiService {
     @FormUrlEncoded
     @POST("eaters/me/campaigns/interactions/referee")
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
+
+    /** Restaurant **/
+    @GET("cooks/{cook_id}")
+    suspend fun getRestaurant(
+        @Path(value = "cook_id", encoded = true) restaurantId: Long,
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null
+    ): ServerResponse<Restaurant>
+
 
     @FormUrlEncoded
     @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
@@ -183,7 +194,7 @@ interface ApiService {
 //    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
 
     @GET("eaters/me/orders")
-    fun getOrders(): Call<ServerResponse<List<Order>>>
+    suspend fun getOrders(): ServerResponse<List<Order>>
 
     @GET("eaters/me/orders/{order_id}")
     suspend fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Order>

@@ -19,7 +19,7 @@
             app:title="Edit account"
             app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
-    <com.bupp.wood_spoon_eaters.views.UserImageView
+    <com.bupp.wood_spoon_eaters.views.UserImageVideoView
             android:id="@+id/editMyProfileFragUserImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

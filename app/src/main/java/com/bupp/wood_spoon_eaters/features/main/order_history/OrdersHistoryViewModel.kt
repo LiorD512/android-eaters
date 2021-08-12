@@ -1,41 +1,79 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Order
 //import com.bupp.wood_spoon_eaters.model.Report
-import com.bupp.wood_spoon_eaters.model.ServerResponse
-import com.bupp.wood_spoon_eaters.network.ApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import kotlinx.coroutines.launch
 
-class OrdersHistoryViewModel(val api: ApiService) : ViewModel() {
+class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager) : ViewModel() {
 
     val TAG = "wowOrderHistoryVM"
-    val getOrdersEvent: SingleLiveEvent<OrderHistoryEvent> = SingleLiveEvent()
-    data class OrderHistoryEvent(val isSuccess: Boolean, val orderHistory: List<Order>? = null)
 
-    fun getOrderHistory(){
-        api.getOrders().enqueue(object: Callback<ServerResponse<List<Order>>>{
-            override fun onResponse(call: Call<ServerResponse<List<Order>>>, response: Response<ServerResponse<List<Order>>>) {
-                if(response.isSuccessful){
-                    Log.d(TAG, "getOrders success")
-                    val orderHistory = response.body()?.data
-                    getOrdersEvent.postValue(OrderHistoryEvent(true, orderHistory))
-                }else{
-                    Log.d(TAG, "getOrders fail")
-                    getOrdersEvent.postValue(OrderHistoryEvent(false))
+//    var archiveOrderData: MutableList<OrderAdapterItemOrder> = mutableListOf()
+//    var activeOrderData: MutableList<OrderAdapterItemActiveOrder> = mutableListOf()
+    private val orderListData: MutableList<OrderHistoryBaseItem> = mutableListOf()
+
+    val orderLiveData = MutableLiveData<List<OrderHistoryBaseItem>>()
+
+    fun fetchData() {
+        orderListData.clear()
+        getArchivedOrders()
+        getActiveOrders()
+    }
+
+    fun getArchivedOrders() {
+        viewModelScope.launch {
+            val result = orderRepository.getAllOrders()
+            when (result.type) {
+                OrderRepository.OrderRepoStatus.GET_All_ORDERS_SUCCESS -> {
+                    handleData(result.data, TYPE_ARCHIVE_ORDER)
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun getActiveOrders() {
+        viewModelScope.launch {
+            val data = eaterDataManager.checkForTraceableOrders()
+            handleData(data, TYPE_ACTIVE_ORDER)
+        }
+    }
+
+    private fun handleData(data: List<Order>?, type: String) {
+        Log.d(TAG, "handleData: $type")
+        when (type) {
+            TYPE_ACTIVE_ORDER -> {
+                data?.let{ it ->
+                    it.forEach {
+                        orderListData.add(OrderAdapterItemActiveOrder(it))
+                    }
                 }
             }
-
-            override fun onFailure(call: Call<ServerResponse<List<Order>>>, t: Throwable) {
-                Log.d(TAG, "getOrders big fail")
-                getOrdersEvent.postValue(OrderHistoryEvent(false))
+            TYPE_ARCHIVE_ORDER -> {
+                data?.let{ it ->
+                    orderListData.add(OrderAdapterItemTitle("Past orders"))
+                    it.forEach {
+                        orderListData.add(OrderAdapterItemOrder(it))
+                    }
+                }
             }
+        }
+        orderLiveData.postValue(orderListData)
+    }
 
-        })
+
+    companion object {
+        const val TAG = "wowOrderHistoryVM"
+        const val TYPE_ACTIVE_ORDER = "active"
+        const val TYPE_ARCHIVE_ORDER = "archive"
     }
 
 }

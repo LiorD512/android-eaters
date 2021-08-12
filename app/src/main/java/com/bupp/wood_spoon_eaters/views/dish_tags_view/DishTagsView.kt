@@ -25,10 +25,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun initUi(attrs: AttributeSet?) {
-
-
-
-            adapter = DishTagsViewAdapter()
+        adapter = DishTagsViewAdapter()
         with(binding) {
             tagViewList.adapter = adapter
             tagViewList.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
@@ -36,14 +33,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
             val attr = context.obtainStyledAttributes(attrs, R.styleable.DishTagsView)
 
-            val isScrollable = attr.getBoolean(R.styleable.DishTagsView_isScrollable, true)
+            val isScrollable = attr.getBoolean(R.styleable.DishTagsView_isScrollable, false)
             tagViewList.isEnabled = isScrollable
 
             attr.recycle()
         }
     }
 
-    fun initTagView(tags: List<Tag>?) {
+    fun initTagView(tags: List<String>?) {
         tags?.let{
             adapter.submitList(tags)
         }

@@ -13,9 +13,6 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
         <item name="android:windowBackground">@drawable/splash_bkg</item>
 
-        <!--        <item name="android:windowFullscreen">true</item>-->
-        <!--        <item name="android:windowTranslucentNavigation">true</item>-->
-
         <item name="android:windowActivityTransitions">true</item>
 
     </style>
@@ -113,6 +110,12 @@
         <item name="android:textColor">@color/teal_blue</item>
     </style>
 
+    <style name="LatoBold17Teal">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
     <style name="LatoBold13Black">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">13.4sp</item>
@@ -143,6 +146,12 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoBold13BrownishGrey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
     <style name="LatoBold15White">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">15.4sp</item>
@@ -165,6 +174,11 @@
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="LatoReg11PurpleyGreyThree">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/purpley_grey_three</item>
     </style>
 
     <style name="LatoBlack23Dark">
@@ -191,6 +205,12 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoReg15BrownishGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
     <style name="LatoReg15Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
@@ -215,6 +235,12 @@
         <item name="android:textColor">@color/nobel_grey</item>
     </style>
 
+    <style name="LatoReg13BrownishGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
     <style name="LatoReg13DarkGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
@@ -231,6 +257,12 @@
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="LatoReg13TealBlue">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
     </style>
 
     <style name="LatoBold9Grey">
@@ -298,6 +330,11 @@
         <item name="android:textSize">19.2sp</item>
         <item name="android:textColor">@color/dark_grey</item>
     </style>
+    <style name="LatoBlack19DarkThree">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">19.2sp</item>
+        <item name="android:textColor">@color/dark_three</item>
+    </style>
 
     <style name="LatoBlack15DarkGrey">
         <item name="android:fontFamily">@font/lato_black</item>
@@ -309,6 +346,11 @@
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoBlack15DarkThree">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_three</item>
     </style>
 
     <style name="LatoBlack13DarkGrey">
@@ -369,6 +411,12 @@
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold19DarkGrey">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
     </style>
 
     <style name="Bold23Blue">
@@ -776,6 +824,14 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="shimmerFrameStyle">
+        <item name="shimmer_auto_start">true</item>
+        <item name="shimmer_base_alpha">0.6</item>
+        <item name="shimmer_base_color">@color/whiteTwo</item>
+        <item name="shimmer_highlight_alpha">1</item>
+        <item name="shimmer_highlight_color">@color/grey_white_three</item>
+    </style>
+
     <style name="BottomSheetTransparentStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>
@@ -820,10 +876,15 @@
         <item name="cornerSize">7.7dp</item>
     </style>
 
+    <style name="roundedTopCorners7ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">7.7dp</item>
+        <item name="cornerSizeTopRight">7.7dp</item>
+    </style>
+
     <style name="roundedCorners13ImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">13.4dp</item>
     </style>
 
-    <color name="medium_grey">#929092</color>
 </resources>

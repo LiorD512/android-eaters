@@ -12,18 +12,30 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderAvailableHeader
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSkeleton
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
+import com.bupp.wood_spoon_eaters.model.DishSection
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 
-class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener) :
+class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
     SwipeableAdapter<DishSections>(DiffCallback()) {
 
-    interface RestaurantPageMainAdapterListener {}
+    interface DishesMainAdapterListener: DishViewHolderSingleDish.DishViewHolderSingleDishListener{
+        fun onDishSwipedAdd(item: DishSectionSingleDish)
+        fun onDishSwipedRemove(item: DishSectionSingleDish)
+    }
+
+    override fun onDishSwipedAdd(item: DishSections) {
+        listener.onDishSwipedAdd(item as DishSectionSingleDish)
+    }
+    override fun onDishSwipedRemove(item: DishSections) {
+        listener.onDishSwipedRemove(item as DishSectionSingleDish)
+    }
 
     override fun getItemViewType(position: Int): Int = getItem(position).viewType.ordinal
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BaseItemViewHolder {
+    ): SwipeableBaseItemViewHolder {
         when (viewType) {
             DishSectionSingleDish.viewType.ordinal -> {
                 val binding = RestaurantItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -67,10 +79,14 @@ class DishesMainAdapter(private val listener: RestaurantPageMainAdapterListener)
     }
 
 
-    abstract class BaseItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+
+    abstract class BaseItemViewHolder(view: View) : SwipeableBaseItemViewHolder(view) {
+        abstract override val isSwipeable: Boolean
+
         abstract fun bind(
             section: DishSections,
-            listener: RestaurantPageMainAdapterListener
+            listener: DishesMainAdapterListener
         )
     }
 

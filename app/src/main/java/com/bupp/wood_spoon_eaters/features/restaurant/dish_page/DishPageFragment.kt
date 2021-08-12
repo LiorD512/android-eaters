@@ -2,50 +2,35 @@ package com.bupp.wood_spoon_eaters.features.restaurant.dish_page;
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheetRestaurant
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
-import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
-import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Restaurant
-import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
+import com.bupp.wood_spoon_eaters.model.DietaryIcon
+import com.bupp.wood_spoon_eaters.model.FullDish
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.abs
 
-
-class DishPageFragment : Fragment(R.layout.fragment_dish_page) {
+class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailabilityAdapter.DishAvailabilityAdapterListener,
+    ModificationsListAdapter.ModificationsListAdapterListener {
 
     private val binding: FragmentDishPageBinding by viewBinding()
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<DishPageViewModel>()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navArgs: DishPageFragmentArgs by navArgs()
-        viewModel.initData(navArgs.dish)
+        viewModel.initData(navArgs.extras)
 
         initUi()
         initObservers()
@@ -57,62 +42,141 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page) {
                 activity?.onBackPressed()
             }
             shareButton.setOnClickListener {
-//                viewModel.dishData.value?.shareUrl?.let {
-//                }
+
             }
         }
         with(binding.dishMainListLayout) {
-//            restaurantDishesList.adapter = adapterDishes
-//            restaurantCuisinesList.adapter = adapterCuisines
-//
-//            detailsSkeleton.visibility = View.GONE
-//            detailsLayout.visibility = View.INVISIBLE
-//
-//            restaurantTimePicker.setOnClickListener{
-//                viewModel.currentSelectedDate?.let{ deliveryDate->
-//                    val timePickerBottomSheet = TimePickerBottomSheetRestaurant(this@RestaurantPageFragment)
-//                    timePickerBottomSheet.setDeliveryDate(deliveryDate)
-//                    timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
-//                }
-//            }
-//            restaurantDeliveryTiming.setTabListener(this@RestaurantPageFragment)
-//            adapterDishes?.let{ adapter->
-//                restaurantDishesList.initSwipeableRecycler(adapter)
-//            }
+            handleDishQuantityButtons()
+        }
+    }
+
+    private fun handleDishQuantityButtons() {
+        with(binding.dishMainListLayout) {
+            dishAddQuantity.setOnClickListener {
+                val quantity = (dishQuantity.text).toString().toInt() + 1
+                viewModel.updateDishQuantity(quantity)
+                dishQuantity.text = quantity.toString()
+            }
+            dishRemoveQuantity.setOnClickListener {
+                val quantity = (dishQuantity.text).toString().toInt() - 1
+                viewModel.updateDishQuantity(quantity)
+                dishQuantity.text = quantity.toString()
+            }
         }
     }
 
     private fun initObservers() {
-        viewModel.dishData.observe(viewLifecycleOwner, {
+        viewModel.menuItemData.observe(viewLifecycleOwner, {
             handleDishData(it)
         })
         viewModel.dishFullData.observe(viewLifecycleOwner, {
             handleDishFullData(it)
         })
+        viewModel.dishQuantityState.observe(viewLifecycleOwner, {
+            handleDishQuantityState(it)
+        })
+        viewModel.userRequestData.observe(viewLifecycleOwner, {
+            handleUserRequestData(it)
+        })
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            handleSkeleton(it)
+        })
     }
 
-    /** Headers data **/
-    private fun handleDishData(dish: Dish) {
+    private fun handleSkeleton(isLoading: Boolean) {
         with(binding) {
-            topHeaderDishName.text = dish.name
-//            Glide.with(requireContext()).load(dish.thumbnail).transform(CircleCrop()).into()
-
-        }
-    }
-
-    private fun handleDishFullData(dish: Dish) {
-        with(binding) {
-            //Cover photo/video
-            if (dish.video.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(dish.thumbnail).into(coverPhoto)
+            if (isLoading) {
+                dishMainListLayout.root.isVisible = false
+                dishMainListLayoutSkeleton.root.isVisible = true
             } else {
-
+                dishMainListLayoutSkeleton.root.isVisible = false
+                dishMainListLayout.root.isVisible = true
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    /** Headers data **/
+    private fun handleDishData(menuItem: MenuItem) {
+        with(binding) {
+            val dish = menuItem.dish
+            dishHeaderName.text = dish?.name
+            dishHeaderPrice.text = dish?.price?.formatedValue ?: ""
+            topHeaderDishName.text = dish?.name
+            Glide.with(requireContext()).load(dish?.thumbnail).into(coverPhoto)
+            if(menuItem.availableLater == null) {
+                dishTags.setTags(menuItem.tags)
+            } else{
+                dishTags.setTags(listOf(menuItem.availableLater?.getStartEndAtTag()?:""))
+            }
+
+        }
+    }
+
+    private fun handleDishFullData(dish: FullDish) {
+        with(binding.dishMainListLayout) {
+            handleDietaryList(dish.dietaries)
+            //Description
+            dishDescription.isVisible = !dish.description.isNullOrEmpty()
+            dishDescription.text = dish.description
+            //Portion size
+            dishPortionSize.isVisible = !dish.portionSize.isNullOrEmpty()
+            dishPortionSize.text = "Portion size : ${dish.portionSize} Servings "
+            //Ingredients
+            dishIngredientsLayout.isVisible = !dish.ingredients.isNullOrEmpty()
+            dishIngredients.text = dish.ingredients ?: ""
+            //Accommodations
+            dishAccommodationsLayout.isVisible = !dish.accommodations.isNullOrEmpty()
+            dishAccommodations.text = dish.accommodations ?: ""
+            //Additional Details
+            dishAdditionalDetailsLayout.isVisible = false
+//            dishAdditionalDetails.text = dish.  //todo : what goes here?
+        }
+    }
+
+    private fun handleDietaryList(dietaries: List<DietaryIcon>?) {
+        val adapter = DietariesAdapter()
+        with(binding.dishMainListLayout) {
+            dishDietaryList.adapter = adapter
+            adapter.submitList(dietaries)
+            dishDietaryList.isVisible = !dietaries.isNullOrEmpty()
+        }
+    }
+
+    private fun handleUserRequestData(userRequest: DishPageViewModel.UserRequest?) {
+        with(binding.dishMainListLayout) {
+            userRequest?.let {
+                dishChefName.text = userRequest.cook.getFullName()
+                userRequest.cook.thumbnail.url?.let{
+                    dishChefThumbnail.setImage(it)
+                }
+                dishUserRequestLine.text = "Hey ${userRequest.eaterName}, any special requests?"
+            }
+        }
+    }
+
+    private fun handleDishQuantityState(quantityState: DishPageViewModel.DishQuantityState?) {
+        quantityState?.let { state ->
+            with(binding.dishMainListLayout) {
+                when (state) {
+                    DishPageViewModel.DishQuantityState.ZERO_QUANTITY -> {
+                        dishRemoveQuantity.isEnabled = false
+                        dishAddQuantity.isEnabled = true
+                    }
+                    DishPageViewModel.DishQuantityState.REGULAR -> {
+                        dishRemoveQuantity.isEnabled = true
+                        dishAddQuantity.isEnabled = true
+                    }
+                    DishPageViewModel.DishQuantityState.MAX_QUANTITY -> {
+                        dishRemoveQuantity.isEnabled = true
+                        dishAddQuantity.isEnabled = false
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onModificationClick() {
+        //
     }
 
     companion object {

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.annotation.SuppressLint
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDate
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +41,16 @@ object DateUtils {
         return "$date, $time"
     }
 
+    fun parseDateToStartAndEnd(startDate: Date, endDate: Date): String {
+        //06/21 Mon 2pm - 5pm
+        val dateFormat = SimpleDateFormat("MM/dd  E", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("hma", Locale.getDefault())
+        val date = dateFormat.format(startDate)
+        val startTime = timeFormat.format(startDate).lowercase(Locale.getDefault())
+        val endTime = timeFormat.format(endDate).lowercase(Locale.getDefault())
+        return "$date  $startTime - $endTime"
+    }
+
     @SuppressLint("SimpleDateFormat")
     fun parseDateToTime(date: Date?): String {
         val sdf = SimpleDateFormat("h:mm a")
@@ -57,6 +68,12 @@ object DateUtils {
     fun parseDateToDayDate(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EE, MMM dd")
+        return sdf.format(date.time)
+    }
+
+    fun parseDateToFullDayDate(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EEEE, MMM dd")
         return sdf.format(date.time)
     }
 
@@ -87,14 +104,20 @@ object DateUtils {
     }
 
     fun parseDateToUsTime(date: Date): String {
-        //4:30 PM
-        val sdf = SimpleDateFormat("h:mma")
-        return sdf.format(date.time)
+        //04:30 pm
+        val sdf = SimpleDateFormat("hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
     }
 
-    fun parseDateToUsDayTime(date: Date?): String{
-        date?.let{
-            if(isToday(it))
+    fun parseDateToDayAndUsTime(date: Date): String {
+        //Fri, 04:30 pm
+        val sdf = SimpleDateFormat("EE, hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM","pm")
+    }
+
+    fun parseDateToUsDayTime(date: Date?): String {
+        date?.let {
+            if (isToday(it))
                 return parseDateToUsTime(it)
             else
                 return parseDateToDayDateHour(it)
@@ -105,7 +128,7 @@ object DateUtils {
     fun parseDateToDate(date: Date?): String {
         //05.04.19
         val sdf = SimpleDateFormat("dd.MM.yy")
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -114,7 +137,7 @@ object DateUtils {
     fun parseDateToDateAndTime(date: Date?): String {
         //05.04.19, 6:10PM
         val sdf = SimpleDateFormat("dd.MM.yy, h:mma")
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -142,7 +165,7 @@ object DateUtils {
 
     fun parseUnixTimestamp(date: Date?): String {
         var yourmilliseconds: Long = Date().time
-        date?.let{
+        date?.let {
             yourmilliseconds = date.time
         }
         val droppedMillis = yourmilliseconds / 1000
@@ -152,7 +175,7 @@ object DateUtils {
 
     fun parseFromUnixTimestamp(milliStr: String?): Date {
         var yourmilliseconds: Long = Date().time
-        milliStr?.let{
+        milliStr?.let {
             yourmilliseconds = it.toLong()
             yourmilliseconds *= 1000
         }
@@ -162,13 +185,17 @@ object DateUtils {
     }
 
 
-
     fun isNow(newChosenDate: Date?): Boolean {
-        newChosenDate?.let{
+        newChosenDate?.let {
             val now = Date().time
-            return it.time-1000 < now
+            return it.time - 1000 < now
         }
         return true
+    }
+
+    fun isNowInRange(startDate: Date, endDate: Date): Boolean {
+        val now = Date().time
+        return now > startDate.time && now < endDate.time
     }
 
     fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
@@ -204,7 +231,7 @@ object DateUtils {
         return isSameDay(orderDate, today)
     }
 
-    fun truncateDate30MinUp(date: Date): Date{
+    fun truncateDate30MinUp(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
 
@@ -214,6 +241,14 @@ object DateUtils {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
+    }
+
+    fun parseCookingSlotForNowOrDates(cookingSlot: CookingSlot): String {
+        return if(isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)){
+            "Now"
+        }else{
+            "${parseDateToDayAndUsTime(cookingSlot.startsAt)} - ${parseDateToUsTime(cookingSlot.endsAt)}"
+        }
     }
 }
 

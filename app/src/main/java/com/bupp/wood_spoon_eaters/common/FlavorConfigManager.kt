@@ -23,7 +23,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         }
 
     var curBaseUrl: String?
-        get() = sharedPreferences.getString(CUSTOM_BASE_URL, FlavorConfig.BASE_URL)
+        get() = sharedPreferences.getString(CUSTOM_BASE_URL, "")
         set(curEnvironment){
             sharedPreferences.edit().putString(CUSTOM_BASE_URL, curEnvironment).commit()
         }
@@ -34,20 +34,22 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         this.curEnvironment = env
     }
 
-    fun setBaseUrl(baseUrl: String) {
+    fun setCustomBaseUrl(baseUrl: String) {
         Log.d(TAG, "setBaseUrl: $baseUrl")
         this.curBaseUrl = baseUrl
     }
 
     fun getBaseUrl(): String {
-        var finalUrl = ""
+        Log.d(TAG, "getBaseUrl env: $curEnvironment")
+        var finalUrl = FlavorConfig.BASE_URL
         if(curBaseUrl?.isNotEmpty() == true){
             finalUrl = curBaseUrl!!
         }else{
              if(curEnvironment?.isNotEmpty() == true){
-                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v1/"
+                 Log.d(TAG, "curEnvironment: $curEnvironment")
+                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v2/"
             }else{
-                FlavorConfig.BASE_URL
+                 finalUrl = FlavorConfig.BASE_URL
             }
             Log.d(TAG, "getBaseUrl: $finalUrl")
         }

@@ -15,7 +15,6 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
@@ -23,7 +22,7 @@ import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val cartManager: CartManager,
+    val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val oldCartManager: OldCartManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager): ViewModel()  {
 
@@ -188,8 +187,8 @@ class MainViewModel(
     data class CheckCartStatusEvent(val hasPendingOrder: Boolean, val totalPrice: Double?)
 
     fun refreshMainBottomBarUi(){
-        val hasPending = !cartManager.isEmpty()
-        val totalPrice = cartManager.calcTotalDishesPrice()
+        val hasPending = !oldCartManager.isEmpty()
+        val totalPrice = oldCartManager.calcTotalDishesPrice()
         val activeOrders = eaterDataManager.traceableOrdersList
         mainBottomBarEvent.postValue(MainBottomBarEvent(hasPending, totalPrice, activeOrders, !activeOrders.isNullOrEmpty() && hasPending))
     }

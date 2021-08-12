@@ -15,6 +15,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
     enum class OrderRepoStatus {
         FULL_DISH_SUCCESS,
         FULL_DISH_FAILED,
+        ADD_NEW_DISH_SUCCESS,
+        ADD_NEW_DISH_FAILED,
         POST_ORDER_SUCCESS,
         UPDATE_ORDER_FAILED,
         UPDATE_ORDER_SUCCESS,
@@ -29,6 +31,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         POST_REVIEW_FAILED,
         POST_REVIEW_SUCCESS,
         POST_ORDER_FAILED,
+        GET_All_ORDERS_FAILED,
+        GET_All_ORDERS_SUCCESS,
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
         WS_ERROR
@@ -61,6 +65,33 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
     }
 
     
+    suspend fun addNewDish(orderRequest: OrderRequest): OrderRepoResult<Order>{
+        val result = withContext(Dispatchers.IO){
+            apiService.postOrder(orderRequest)
+        }
+        result.let{
+           return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"addNewDish - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"addNewDish - GenericError")
+                    OrderRepoResult(OrderRepoStatus.ADD_NEW_DISH_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"addNewDish - Success")
+                    OrderRepoResult(OrderRepoStatus.ADD_NEW_DISH_SUCCESS, result.value.data)
+                }
+               is ResultHandler.WSCustomError -> {
+                   MTLogger.c(TAG,"addNewDish - wsError")
+                   OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+               }
+           }
+        }
+    }
+
+    @Deprecated("old function - changed with addNewDish")
     suspend fun postNewOrder(orderRequest: OrderRequest): OrderRepoResult<Order>{
         val result = withContext(Dispatchers.IO){
             apiService.postOrder(orderRequest)
@@ -159,6 +190,31 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                 }
                 is ResultHandler.WSCustomError -> {
                     MTLogger.c(TAG,"getUpsShippingRates - wsError")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun getAllOrders(): OrderRepoResult<List<Order>> {
+        val result = withContext(Dispatchers.IO){
+            apiService.getAllOrders()
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"getAllOrders - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"getAllOrders - GenericError")
+                    OrderRepoResult(OrderRepoStatus.GET_All_ORDERS_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"getAllOrders - Success")
+                    OrderRepoResult(OrderRepoStatus.GET_All_ORDERS_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

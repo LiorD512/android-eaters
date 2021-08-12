@@ -28,7 +28,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
 
     fun initSegment(eater: Eater?, address: Address?){
 //        val user = eaterDataManager.currentEater
-        Log.d(TAG, "user: $eater")
+//        Log.d(TAG, "user: $eater")
         eater?.let{ user ->
             Analytics.with(context).identify(
                 user.id.toString(), Traits()
@@ -45,7 +45,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             UXCam.setUserProperty("phone",user.phoneNumber ?: "N/A")
             UXCam.setUserProperty("created_at", DateUtils.parseDateToDate(user.createdAt))
 
-            Log.d(TAG, "address: $address")
+//            Log.d(TAG, "address: $address")
             address?.let{
                 Analytics.with(context).identify(
                     user.id.toString(), Traits()

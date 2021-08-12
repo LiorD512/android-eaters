@@ -5,9 +5,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingBottom="20dp"
         android:orientation="vertical">
 
     <FrameLayout
+            android:id="@+id/someLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -15,6 +17,7 @@
                 android:id="@+id/detailsSkeleton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:shimmer_auto_start="true"
                 app:shimmer_base_alpha="0.6"
                 app:shimmer_base_color="@color/whiteTwo"
@@ -35,40 +38,32 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-            <TextView
+            <com.bupp.wood_spoon_eaters.views.ExpandableTextView
                     android:id="@+id/restaurantDescription"
                     style="@style/LatoReg13DarkGrey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:paddingHorizontal="15.4dp"
                     android:paddingBottom="3.8dp"
-                    android:maxLines="2"
+                    app:maxLines="1"
                     tools:text="Welcome to my kitchen, todat and every day, fresh food, 100% organic, 100% love. follow me on inst…" />
-
-            <TextView
-                    android:id="@+id/restaurantDescriptionViewMore"
-                    style="@style/LatoBold13Dark"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="15.4dp"
-                    android:text="View More" />
-
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/restaurantCuisinesList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:paddingHorizontal="15.4dp"
-                    android:layout_marginTop="20dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="23dp"
                     android:layout_marginHorizontal="17.8dp"
+                    android:layout_marginTop="23dp"
                     android:background="@color/grey_white" />
 
 
@@ -89,7 +84,7 @@
 
 
             <TextView
-                    android:id="@+id/restaurantTimePicker"
+                    android:id="@+id/restaurantTimePickerView"
                     style="@style/LatoBold15DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,13 +92,13 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="23dp"
                     android:background="@drawable/grey_white_cornered_rag15_rect"
-                    android:drawableStart="@drawable/ic_time_rest"
-                    android:drawableEnd="@drawable/ic_arrow"
                     android:drawablePadding="3dp"
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:text="Now" />
+                    android:text="Now"
+                    app:drawableEndCompat="@drawable/ic_arrow"
+                    app:drawableStartCompat="@drawable/ic_time_rest" />
 
         </LinearLayout>
 
@@ -119,8 +114,8 @@
             android:id="@+id/restaurantDishesList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
             android:layoutAnimation="@anim/restaurant_layout_animation"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

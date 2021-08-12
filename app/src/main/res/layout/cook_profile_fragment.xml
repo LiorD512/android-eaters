@@ -22,7 +22,7 @@
                 android:src="@drawable/icons_back"
                 android:visibility="gone" />
 
-        <com.bupp.wood_spoon_eaters.views.UserImageView
+        <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                 android:id="@+id/cookProfileImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

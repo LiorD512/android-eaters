@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,47 +7,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-                android:scaleType="centerCrop"
-                android:id="@+id/feedRestaurantSeeMoreItemImg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/feedRestaurantSeeMoreItemImg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shapeAppearanceOverlay="@style/roundedTopCorners7ImageView" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/transparent_to_black_60_gradient"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-            app:title="See more"
-            android:alpha="0"
             android:id="@+id/feedRestaurantSeeMoreItemSeeMore"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="See more" />
 
     <TextView
-            style="@style/LatoBlack15White"
             android:id="@+id/feedRestaurantSeeMoreItemQuantityLeft"
+            style="@style/LatoBlack15White"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15.4dp"
-            android:layout_width="wrap_content"
-            android:letterSpacing="-0.01"
             android:layout_marginBottom="27dp"
+            android:letterSpacing="-0.01"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="11 more Dishes" />
-
-<!--    <TextView-->
-<!--            style="@style/LatoBlack15White"-->
-<!--            android:id="@+id/feedRestaurantSeeMoreItemPrice"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="15dp"-->
-<!--            android:layout_marginStart="15.4dp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:letterSpacing="-0.01"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantSeeMoreItemQuantityLeft"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/feedRestaurantSeeMoreItemQuantityLeft"-->
-<!--            tools:text="$$" />-->
 
     <View
             android:id="@+id/feedRestaurantItemView"
@@ -58,5 +53,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

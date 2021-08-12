@@ -45,7 +45,7 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
 
         binding.settingsFragHeader.setHeaderViewListener(this)
 
-        binding.settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.settingsFragLocationSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setLocationSetting(isChecked)
         }
 

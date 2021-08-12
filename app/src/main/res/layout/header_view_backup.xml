@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <com.bupp.wood_spoon_eaters.views.UserImageView
+        <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                 tools:visibility="gone"
                 android:id="@+id/headerViewProfileBtn"
                 android:layout_marginLeft="10.4dp"

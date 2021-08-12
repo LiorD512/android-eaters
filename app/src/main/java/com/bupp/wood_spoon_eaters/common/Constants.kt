@@ -7,6 +7,8 @@ class Constants {
 
         const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
         const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
+        const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
+        const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
         const val RESTAURANT_SECTION_TYPE_DISH = "dish"
         const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
 
@@ -231,6 +233,7 @@ class Constants {
         const val DELETE_ACCOUNT_BOTTOM_SHEET = "delete_account_bottom_sheet"
         const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val FEES_AND_tAX_BOTTOM_SHEET = "fees_and_tax_bottom_sheet"
+        const val UPSALE_AND_CART_BOTTOM_SHEET = "upsale_and_cart_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

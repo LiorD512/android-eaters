@@ -194,7 +194,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             with(binding) {
 
                 if (!it.orderItems.isNullOrEmpty()) {
-                    var cook = it.cook
+                    var cook = it.restaurant
 
                     checkoutFragDeliveryAddress.updateDeliveryFullDetails(it.deliveryAddress)
 

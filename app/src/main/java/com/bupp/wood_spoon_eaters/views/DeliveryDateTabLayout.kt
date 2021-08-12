@@ -79,7 +79,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     tab?.let {
 //                        updateTabUi(it, false)
-                        listener?.onDateSelected(datesList?.getOrNull(tab.position))
+                        //todo - nicole - why do you need this ?
+//                        listener?.onDateSelected(datesList?.getOrNull(tab.position))
                     }
                 }
 

@@ -9,7 +9,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
@@ -23,8 +22,8 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrac
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
-import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -36,7 +35,6 @@ import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
-import io.branch.referral.validators.IntegrationValidator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -75,7 +73,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         with(binding){
             val pagerAdapter = MainActPagerAdapter(this@MainActivity)
             mainActViewPager.adapter = pagerAdapter
-            mainActViewPager.offscreenPageLimit = 4
+            mainActViewPager.offscreenPageLimit = 1
             mainActViewPager.isUserInputEnabled = false
 
             mainActBottomTabLayout.setViewPager(mainActViewPager)
@@ -85,14 +83,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private fun initUi() {
         with(binding) {
             mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
-            mainActFloatingCartBtn.updateFloatingCartButton(13.55)
-
-            testBtn.setOnClickListener {
-                com.bupp.wood_spoon_eaters.dialogs.NewCartDialog().show(supportFragmentManager, "NewCartDialog")
-            }
+            mainActFloatingCartBtn.updateFloatingCartButton(3)
         }
 
-//        //TODO - REMOVE THIS (BRANCH TEST)
+//        //TODO - COMMENT THIS (FOT BRANCH TESTING)
 //        IntegrationValidator.validate(this)
     }
 
@@ -100,6 +94,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         //this method triggered when Floating cart button is hide or shown - activity related screen need to update their bottom padding.
         viewModel.onFloatingCartStateChanged(isShowing)
     }
+
+
 
 
 
@@ -294,7 +290,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
         })
         viewModel.campaignLiveData.observe(this, {
-            Log.d(TAG, "campaignLiveData: $it")
+//            Log.d(TAG, "campaignLiveData: $it")
             it?.let{
                 handleCampaignData(it)
             }

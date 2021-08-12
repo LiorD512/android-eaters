@@ -3,488 +3,219 @@ package com.bupp.wood_spoon_eaters.managers
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
-import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import java.util.*
 
 class CartManager(
-    private val orderRepository: OrderRepository,
     private val feedDataManager: FeedDataManager,
     private val deliveryTimeManager: DeliveryTimeManager,
-    private val locationManager: LocationManager,
+    private val orderRepository: OrderRepository,
     private val eventsManager: EventsManager
 ) {
 
-    private var isInCheckout = false
-    private var shippingService: String? = null
-    fun getCurrentOrderData() = currentOrderLiveData
-    private val currentOrderLiveData = MutableLiveData<Order>()
-
-    //    private var currentOrderRequest: OrderRequest? = null
-    var currentShowingDish: FullDish? = null
+    // global params -
     private var currentOrderResponse: Order? = null
 
-    private var currentOrderItemRequest: OrderItemRequest? = null
+    var currentCookingSlot: CookingSlot? = null
+    val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
+    val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
-    //    private var currentOrderDeliveryTime: Date? = null
-    private val cart: MutableList<OrderItemRequest> = mutableListOf()
+    private val orderLiveData = MutableLiveData<Order>()
+    fun getCurrentCartData() = orderLiveData
 
-//    val globalDeliveryTimeLiveData = deliveryTimeManager.getDeliveryTimeLiveData()
-//    var currentCartDeliveryTimestamp: String? =
+    private val wsErrorEvent = LiveEventData<String>()
+    fun getWsErrorEvent() = wsErrorEvent
 
-    data class GetFullDishResult(
-        val fullDish: FullDish,
-        val isAvailable: Boolean,
-        val startingTime: Date?,
-        val isSoldOut: Boolean
-    )
 
-    private fun buildDishRequest(): FeedRequest {
-        val feedRequest = FeedRequest()
-        val lastAddress = locationManager.getFinalAddressLiveDataParam().value
-        lastAddress?.let {
-            //address
-            if (lastAddress.id != null) {
-                feedRequest.addressId = lastAddress.id
-            } else {
-                feedRequest.lat = lastAddress.lat
-                feedRequest.lng = lastAddress.lng
-            }
+
+    fun getCurOrderId(): Long{
+        currentOrderResponse?.id?.let{
+            return it
         }
-
-        //time
-        feedRequest.timestamp = deliveryTimeManager.getTempDeliveryTimeStamp()
-
-        return feedRequest
+        return -1
     }
 
-    suspend fun getFullDish(menuItemId: Long): GetFullDishResult? {
-//        val feedRequest = feedDataManager.getLastFeedRequest()
-        val result = orderRepository.getFullDish(menuItemId, buildDishRequest())
-        result.data?.let {
-            //build new currentItemRequest
-            initNewOrderItemRequest(it)
-            this.currentShowingDish = it
-            checkIfFutureDish()
-            return GetFullDishResult(
-                it,
-                isAvailable = checkCookingSlotAvailability(),
-                startingTime = getStartingDate(),
-                isSoldOut = checkDishSellout()
-            )
-        }
-        //inspect result log if reach here.
-        return null
+    private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
+        return OrderRequest(
+            cookingSlotId = currentCookingSlot?.id,
+            deliveryAt = deliverAt,
+            deliveryAddressId = deliveryAddressId,
+            orderItemRequests = cart
+        )
     }
 
-    private fun checkIfFutureDish() {
-        Log.d(TAG, "checkIfFutureDish")
-//            if(currentShowingDish?.menuItem?.orderAt == null){
-//                //Dish is offered today.
-//                return globalDeliveryTimeLiveData.value?.deliveryTimestamp
-//            }else{
-        currentShowingDish?.menuItem?.orderAt?.let {
-            //Dish is offered in the future.
-            val userSelectedDate = DateUtils.parseFromUnixTimestamp(deliveryTimeManager.getTempDeliveryTimeStamp())
-            if (userSelectedDate.before(it)) {
-                //order stating in the future. needs to update order delivery time to "orderAt" time
-                deliveryTimeManager.setTemporaryDeliveryTimeDate(it)
-                Log.d(TAG, "checkIfFutureDish - changing delivery time to future order")
-            } else {
-                //do nothing. stay with user selected date,
-
-            }
-        }
-
-    }
-
-
-//    fun refreshDeliveryTimeByUserTimeSelection() {
-//        currentCartDeliveryTimestamp = globalDeliveryTimeLiveData.value?.deliveryTimestamp
+//    fun addItemRequest(dishId: Long, quantity: Int, note: String? = null) {
+//        val orderItemRequest = OrderItemRequest(dishId, quantity = quantity, notes = note)
+//        val orderRequest = buildOrderRequest(listOf(orderItemRequest))
+//        postOrUpdateOrder(orderRequest)
+//    }
+//
+//
+//    suspend fun postNewOrder(orderRequest: OrderRequest) {
+//        Log.d(OldCartManager.TAG, "postNewOrUpdateCart.. posting new order")
+//        val result = orderRepository.postNewOrder(orderRequest)
+//        if (result.type == OrderRepository.OrderRepoStatus.POST_ORDER_SUCCESS) {
+//            result.data?.let {
+//                orderLiveData.postValue(it)
+//            }
+//        }
+////        eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id))
+//    }
+//
+//    fun updateItemRequest(item: DishSectionSingleDish) {
+//
 //    }
 
-    private fun checkCookingSlotAvailability(): Boolean {
-        currentShowingDish?.let {
-            val orderFrom: Date? = it.menuItem?.cookingSlot?.orderFrom
-            val start: Date? = it.menuItem?.cookingSlot?.startsAt
-            val end: Date? = it.menuItem?.cookingSlot?.endsAt
-            var userSelection: Date? = deliveryTimeManager.getDeliveryTimeDate()
 
-            if (start == null || end == null) {
+
+    /**
+     * this method is being called when user already have an "active" order.
+     * this method checks that the current added dish is part of the same restaurant and
+     * that is part of the current cooking slot. if so, returns true, else
+     * informs the user with the ui of ClearCart dialog and returns false.
+     */
+    enum class ClearCartDialogType {
+        CLEAR_CART_DIFFERENT_RESTAURANT,
+        CLEAR_CART_DIFFERENT_COOKING_SLOT
+    }
+    data class ClearCartEvent(val dialogType: ClearCartDialogType, val curData: String, val newData: String)
+    private val clearCartUiEvent = MutableLiveData<ClearCartEvent>()
+    fun getClearCartUiEvent() = clearCartUiEvent
+    fun validateCartMatch(newRestaurant: Restaurant, newCookingSlot: CookingSlot): Boolean {
+        currentOrderResponse?.let {
+            if (it.restaurant!!.id != newRestaurant.id) {
+                val curRestaurantName = it.restaurant.restaurantName ?: ""
+                val newRestaurantName = newRestaurant.restaurantName ?: ""
+                clearCartUiEvent.postValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT, curRestaurantName, newRestaurantName))
                 return false
             }
-            if (userSelection == null) {
-                //in this case order is ASAP - then check from starting time and not orderingFrom time
-                userSelection = Date()
-                return (userSelection.equals(start) || userSelection.equals(end)) || (userSelection.after(start) && userSelection.before(end))
+            if (it.cookingSlot!!.id != newCookingSlot.id) {
+                val curCookingSlotStr = DateUtils.parseCookingSlotForNowOrDates(it.cookingSlot)
+                val newCookingSlotStr = DateUtils.parseCookingSlotForNowOrDates(newCookingSlot)
+                clearCartUiEvent.postValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT, curCookingSlotStr, newCookingSlotStr))
+                return false
             }
-            return (userSelection.equals(orderFrom) || userSelection.equals(end)) || (userSelection.after(orderFrom) && userSelection.before(end))
+            return true
         }
         return true
     }
 
-    private fun getStartingDate(): Date {
-        var newDate = Date()
-        currentShowingDish?.menuItem?.cookingSlot?.orderFrom?.let {
-            if (it.after(newDate)) {
-                newDate = it
-            }
-        }
-        return newDate
-    }
 
-    private fun checkDishSellout(): Boolean {
-        currentShowingDish?.let {
-            val quantity = it.menuItem?.quantity
-            val unitsSold = it.menuItem?.unitsSold
-            quantity?.let {
-                unitsSold?.let {
-                    return ((quantity - unitsSold <= 0))
-                }
-            }
-        }
-        return false
-    }
-
-    data class CartStatus(
-        val type: CartStatusEventType,
-        val inCartTotalPrice: Double? = null,
-        val currentOrderItemCounter: Int? = null,
-        val currentOrderItemPrice: Double? = null
-
-    )
-
-    enum class CartStatusEventType {
-        CART_IS_EMPTY,
-        SHOWING_CURRENT_CART,
-//        DIFFERENT_COOKING_SLOT
-    }
-
-    data class NewCartData(
-        val inCartCookName: String? = null,
-        val currentShowingCookName: String? = null
-    )
-
-    //check if needs to force clear cart - when user tries to add item to cart while has different cooking slot in his cart
-    fun shouldForceClearCart(): NewCartData? {
-        currentOrderResponse?.let { orderResponse ->
-            val currentCookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
-            val inCartCookingSlot = orderResponse.cookingSlot
-            inCartCookingSlot?.let { cookingSlot ->
-                if (cookingSlot.id != currentCookingSlotId) {
-                    //if the showing dish's (cook) is the same as the in-cart order's cook
-                    val currentShowingCookName = currentShowingDish?.cook?.getFullName()
-                    val inCartCookName = orderResponse.cook?.getFullName()
-                    return NewCartData(
-                        inCartCookName = inCartCookName,
-                        currentShowingCookName = currentShowingCookName
-                    )
-                }
-            }
-        }
-        return null
-    }
-
-    //check order status - is there any open order?
-    fun getCartStatus(): CartStatus {
-        currentOrderResponse?.let { orderResponse ->
-            val inCartCookingSlot = orderResponse.cookingSlot
-            inCartCookingSlot.let { inCartCookingSlot ->
-                //SHOWING_CURRENT_CART
-                val inCartTotalPrice = currentOrderResponse?.total?.value
-                val currentOrderItemCounter = currentOrderItemRequest?.quantity
-                val currentOrderItemPrice = currentShowingDish?.price?.value
-                return CartStatus(
-                    CartStatusEventType.SHOWING_CURRENT_CART,
-                    inCartTotalPrice = inCartTotalPrice,
-                    currentOrderItemCounter = currentOrderItemCounter,
-                    currentOrderItemPrice = currentOrderItemPrice
-                )
-            }
-        }
-        return CartStatus(CartStatusEventType.CART_IS_EMPTY, currentOrderItemPrice = currentShowingDish?.getPriceObj()?.value, currentOrderItemCounter = 1)
-    }
-
-    //cart methods
-    private fun initNewOrderItemRequest(fullDish: FullDish) {
-        Log.d(TAG, "initNewOrderIteRequest")
-        val newOrderItemRequest = OrderItemRequest(dishId = fullDish.id, quantity = 1, id = null, removedIngredientsIds = null, notes = null, _destroy = null)
-        updateCurrentOrderItemRequest(newOrderItemRequest)
-    }
-
-    fun updateCurrentOrderItemRequest(orderItemRequest: OrderItemRequest) {
-        Log.d(TAG, "updateCurrentOrderItemRequest")
-        currentOrderItemRequest = OrderItemRequest(
-            dishId = orderItemRequest.dishId ?: currentOrderItemRequest?.dishId,
-            notes = orderItemRequest.notes ?: currentOrderItemRequest?.notes,
-            quantity = orderItemRequest.quantity ?: currentOrderItemRequest?.quantity,
-            removedIngredientsIds = orderItemRequest.removedIngredientsIds ?: currentOrderItemRequest?.removedIngredientsIds
-        )
-        Log.d(TAG, "updateCurrentOrderItem: $currentOrderItemRequest")
-    }
-
-    fun addCurrentOrderItemToCart() {
-        Log.d(TAG, "addCurrentOrderItemToCart")
-        currentOrderItemRequest?.let {
-            cart.add(0, it)
-            Log.d(TAG, "addNewItemToCart: $currentOrderItemRequest")
-        }
-    }
-
-    fun removeLastOrderItem() {
-            cart.removeAt(0)
-            Log.d(TAG, "addNewItemToCart: $cart")
-    }
-
-    suspend fun updateInCartOrderItem(updatedOrderItem: OrderItem): OrderRepository.OrderRepoResult<Order>? {
-        Log.d(TAG, "updateInCartOrderItem")
-        //this method used to update orderItems that changed in AdditionalDishesDialog and checkout.
-        //get specific orderItem from response and update cart with new orderItemRequest
-        for (item in currentOrderResponse?.orderItems ?: arrayListOf()) {
-            if (item.id == updatedOrderItem.id) {
-                cart.find { it.dishId == item.dish.id }?.apply {
-                    id = updatedOrderItem.id
-                    quantity = updatedOrderItem.quantity
-                    notes = updatedOrderItem.notes
-                    _destroy = updatedOrderItem._destroy
-                }
-            }
-        }
-
-        return postNewOrUpdateCart()
-    }
-
-    suspend fun postNewOrUpdateCart(): OrderRepository.OrderRepoResult<Order>? {
-        Log.d(TAG, "postNewOrUpdateCart..")
-        val orderRequest = buildOrderRequest()
-        var result: OrderRepository.OrderRepoResult<Order>? = null
+    /**
+     * this function is being called whenever a user is adding a new dish to the cart.
+     * this function checks if this is the first item is the cart - and post a new cart
+     * or cart is allready existed and it just updates the cart with the new dish
+     */
+    suspend fun addOrUpdateCart(quantity: Int, dishId: Long, note: String?) {
         if (currentOrderResponse == null) {
-            //this is first itemRequest therefore post new order
-            Log.d(TAG, "postNewOrUpdateCart.. posting new order")
-            result = orderRepository.postNewOrder(orderRequest)
-
-//            eventsManager.sendAddToCart(result.data?.id)
-
-            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id))
+            //order response is null therefore post new order
+            addToCart(quantity, dishId, note)
         } else {
-            //order already have items therefore update order
-            Log.d(TAG, "postNewOrUpdateCart.. updating current order")
-            result = postUpdateOrder(orderRequest)
-
-            eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(result?.data?.id))
+            //order already have exist therefore update current order
+            postUpdateOrder(quantity, dishId, note)
         }
-        result?.data?.let {
-            updateCartManagerParams(it.copy())
-        }
-        return result
     }
 
-
-    suspend fun addNewOrderItemToCart(orderItemRequest: OrderItemRequest): OrderRepository.OrderRepoResult<Order>? {
-        Log.d(TAG, "addNewOrderItemToCart")
-        val tempCart = mutableListOf<OrderItemRequest>()
-        tempCart.add(orderItemRequest)
-        cart.add(0, orderItemRequest)
-        val orderRequest = buildOrderRequest(tempCart)
-        return postUpdateOrder(orderRequest)
-    }
-
-    private fun buildOrderRequest(tempCart: List<OrderItemRequest>? = null): OrderRequest {
-        Log.d(TAG, "buildOrderRequest withTempCart: ${!tempCart.isNullOrEmpty()}")
-        val cookingSlotId = currentShowingDish?.menuItem?.cookingSlot?.id
-        val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
-        val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
-
-        return OrderRequest(
-            cookingSlotId = cookingSlotId,
-            deliveryAt = deliverAt,
-            deliveryAddressId = deliveryAddressId,
-            orderItemRequests = tempCart ?: cart
-        )
-    }
-
-    suspend fun postUpdateOrder(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
-        Log.d(TAG, "postUpdateOrder")
-        currentOrderResponse?.let {
-            val result = orderRepository.updateOrder(it.id!!, orderRequest)
-            handleEvent(eventType)
+    /**
+     * this function simply crates new order and adds a new instance of a dish to the cart
+     */
+    suspend fun addToCart(quantity: Int, dishId: Long, note: String?) {
+        val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
+        val result = orderRepository.addNewDish(orderRequest)
+        if(result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
             result.data?.let {
                 updateCartManagerParams(it.copy())
-                return result
             }
-            return result
+
+            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id, currentAddedDish))
+        }else{
+            //check for errors
+            if(result.type == OrderRepository.OrderRepoStatus.WS_ERROR){
+                handleWsError(result.wsError)
+            }
         }
-        return null
     }
 
-    private fun handleEvent(eventType: String?) {
-        eventType?.let {
-            when (it) {
-                Constants.EVENT_TIP -> {
-                    eventsManager.logEvent(eventType, getTipData())
+    suspend fun postUpdateOrder(quantity: Int, dishId: Long, note: String?) {
+        val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
+        currentOrderResponse?.let {
+            val result = orderRepository.updateOrder(it.id!!, orderRequest)
+            result.data?.let {
+                updateCartManagerParams(it.copy())
+            }
+        }
+    }
+
+    /**
+     * this functions is called whenever a user swiped out (right) a dish.
+     * it updates the order with a "destroyed" orderItems list.
+     */
+    suspend fun removeOrderItems(dishId: Long) {
+        val orderRequest = buildOrderRequest(getDestroyedOrderItemsRequestByDishId(dishId))
+        val result = orderRepository.updateOrder(getCurOrderId(), orderRequest)
+        if(result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS){
+            result.data?.let {
+                updateCartManagerParams(it.copy())
+            }
+//            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }?
+//            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id, currentAddedDish))
+        }else{
+            //check for errors
+        }
+    }
+
+    /**
+     * this function is being used to retrieve list of orderItems based on dish Id for deletion.
+     * this function gets dishId and returns a list of OrderItems with _destroy = true
+     */
+    fun getDestroyedOrderItemsRequestByDishId(dishId: Long): List<OrderItemRequest> {
+        currentOrderResponse?.let{
+            val destroyedOrderItemRequest = mutableListOf<OrderItemRequest>()
+            it.orderItems?.forEach {
+                if(it.dish.id == dishId){
+                    val parsed = it.toOrderItemRequest()
+                    parsed._destroy = true
+                    destroyedOrderItemRequest.add(parsed)
                 }
             }
+            return destroyedOrderItemRequest.toList()
         }
+        return listOf()
     }
 
-    private fun getTipData(): Map<String, String> {
-        val data = mutableMapOf<String, String>()
-        data["order_total_before_tip"] = currentOrderResponse?.totalBeforeTip?.formatedValue ?: "0"
-        data["order_total_including_tip"] = currentOrderResponse?.total?.formatedValue ?: "0"
-        data["tip_quantity"] = currentOrderResponse?.tip?.formatedValue ?: "0"
-        return data
-    }
+    //update dish
 
+    /**
+     * Global methods
+     */
 
     private fun updateCartManagerParams(order: Order) {
         Log.d(TAG, "updateCartParams")
         this.currentOrderResponse = order
-        refreshCartWithUpdatedOrder(order)
+        orderLiveData.postValue(order)
+//        refreshCartWithUpdatedOrder(order)
 
-        currentOrderLiveData.postValue(order)
-        Log.d(TAG, "updated Cart: $cart")
+//        Log.d(OldCartManager.TAG, "updated Cart: $cart")
     }
 
-    private fun refreshCartWithUpdatedOrder(order: Order) {
-        val updatedItems = mutableListOf<OrderItemRequest>()
-        order.orderItems?.forEach { orderItem ->
-            val item = orderItem.toOrderItemRequest()
-            updatedItems.add(item)
+    private fun handleWsError(wsError: List<WSError>?) {
+        var errorList = ""
+        wsError?.forEach {
+            errorList += "${it.msg} \n"
         }
-        cart.clear()
-        cart.addAll(updatedItems)
-    }
-
-    fun clearCart() {
-        Log.d(TAG, "clearCart")
-        cart.clear()
-        currentShowingDish = null
-        currentOrderResponse = null
-        isInCheckout = false
-        deliveryTimeManager.clearDeliveryTime()
-    }
-
-    fun refreshOrderUi() {
-        this.currentOrderResponse?.let {
-            currentOrderLiveData.postValue(it)
-        }
+        wsErrorEvent.postRawValue(errorList)
     }
 
 
-    //Additional dishes bottom sheet
-    fun shouldShowAdditionalDishesDialog(): Boolean {
-        return cart.size == 1
-    }
-
-    fun getCurrentOrderItems(): List<OrderItem>? {
-        currentOrderResponse?.let {
-            return it.orderItems
-        }
-        return null
-    }
-
-    fun getAdditionalDishes(): List<Dish>? {
-        currentShowingDish?.let {
-            val allAdditionalDishes = it.getAdditionalDishes(it.menuItem?.cookingSlot?.id)
-            currentOrderResponse?.orderItems?.let {
-                val filteredAdditionals = allAdditionalDishes.f(it)
-                return filteredAdditionals
-            }
-        }
-        return null
-    }
-
-    fun List<Dish>.f(orderItems: List<OrderItem>) = filter { m -> orderItems.all { !it.dish.name.equals(m.name) } }
-
-//    fun calcTotalDishesPrice(): Double {
-//        var total = 0.0
-//        currentOrderResponse?.orderItems?.let {
-//            it.forEach {
-//                total += (it.price.value * it.quantity)
-//            }
-//        }
-//        return total
-//    }
-
-    fun calcTotalDishesPrice(): Double {
-        var total = 0.0
-        currentOrderResponse?.total?.value?.let {
-            total = it
-        }
-        return total
-    }
-
-    fun getTotalPriceForDishQuantity(counter: Int): Double {
-        currentShowingDish?.price?.value?.let {
-            return it * counter
-        }
-        return 0.0
-    }
-
-    fun onNewOrderFinish() {
-//        deliveryTimeManager.rollBackToPreviousDeliveryTime()
-    }
-
-    fun isEmpty(): Boolean {
-        return cart.isEmpty()
-    }
-
-    suspend fun refreshOrderParams(): OrderRepository.OrderRepoResult<Order>? {
-        val orderRequest = buildOrderRequest()
-        return postUpdateOrder(orderRequest)
-    }
-
-    suspend fun updateOrderDeliveryParam(): OrderRepository.OrderRepoResult<Order>? {
-        val orderRequest = buildOrderRequest(emptyList())
-        return postUpdateOrder(orderRequest)
-    }
-
-    fun onLocationInvalid() {
-        //roll back to previous locaiton.. current location doesnt valid for order
-        locationManager.rollBackToPreviousAddress()
-    }
-
-    fun onDeliveryTimeInvalid() {
-        //roll back to previous delivery time.. current time isnt valid for order
-//        deliveryTimeManager.rollBackToPreviousDeliveryTime()
-    }
-
-    suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {
-        this.currentOrderResponse?.id?.let { it ->
-            val result = orderRepository.finalizeOrder(it, paymentMethodId)
-            val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
-            eventsManager.sendPurchaseEvent(it, calcTotalDishesPrice())
-            eventsManager.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(isSuccess, result.wsError))
-            return result
-        }
-        return null
-    }
-
-
-    suspend fun getUpsShippingRates(): OrderRepository.OrderRepoResult<List<ShippingMethod>>? {
-        this.currentOrderResponse?.id?.let { it ->
-            return orderRepository.getUpsShippingRates(it)
-        }
-        return null
-    }
-
-    suspend fun updateShippingService(shippingService: String) {
-        this.shippingService = shippingService
-        val deliveryTime = currentShowingDish?.menuItem?.cookingSlot?.startsAt
-        val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
-        val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
-        postUpdateOrder(orderRequest)
-    }
-
-    fun checkShippingMethodValidation(): Boolean {
-        return currentOrderResponse?.isNationwide == true && shippingService == null
-    }
-
-    //Events param -
-
+    /**
+     * Analytics data calculations
+     */
     private fun getOrderValue(isSuccess: Boolean, wsError: List<WSError>? = null): Map<String, Any> {
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
@@ -547,20 +278,20 @@ class CartManager(
 
     private fun getCurrentOrderDishNames(): List<String> {
         val dishNames = mutableSetOf<String>()
-        val chefsName = currentOrderResponse?.cook?.firstName ?: ""
+        val chefsName = currentOrderResponse?.restaurant?.firstName ?: ""
         currentOrderResponse?.orderItems?.forEach {
             dishNames.add("${chefsName}_${it.dish.name}")
         }
         return dishNames.toList()
     }
 
-    fun getAddDishData(id: Long? = null, dish: Dish? = null): Map<String, String> {
-        val currentDishName = getCurrentDishName(dish)
+    private fun getAddDishData(orderId: Long? = null, orderItem: OrderItem? = null): Map<String, String> {
+        val currentDishName = getCurrentDishName(orderItem?.dish)
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
         val cuisine = getCurrentOrderChefCuisine()
-        val dishId = getCurrentDishId(dish)
-        val dishPrice = getCurrentDishPrice(dish)
+        val dishId = getCurrentDishId(orderItem?.dish)
+        val dishPrice = orderItem?.price?.value
         val data = mutableMapOf<String, String>("cook_name" to chefsName)
 
         data["cook_id"] = chefsId
@@ -570,58 +301,59 @@ class CartManager(
         if (cuisine.isNotEmpty()) {
             data["cuisine"] = cuisine[0]
         }
-        id?.let {
-            data["order_id"] = id.toString()
+        orderId?.let {
+            data["order_id"] = orderId.toString()
         }
 
         return data
     }
 
     private fun getCurrentDishName(dish: Dish? = null): String {
-        dish?.name?.let{
-            return it
-        }
-        currentShowingDish?.name?.let {
+        dish?.name?.let {
             return it
         }
         return ""
     }
 
-    fun sendFBAdditioanlDishEvent(dish: Dish) {
-        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(dish = dish))
+    fun sendFBAdditionalDishEvent(orderItem: OrderItem?) {
+        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(orderItem = orderItem))
     }
 
     private fun getCurrentOrderChefId(): String {
-        currentShowingDish.let {
-            return it?.cook?.id.toString()
+        currentOrderResponse.let {
+            return it?.restaurant?.id.toString()
         }
     }
 
     private fun getCurrentDishPrice(dish: Dish? = null): Double? {
-        dish?.let{
+        dish?.let {
             return it.price?.value
-        }
-        currentShowingDish?.let {
-            return it.price.value
         }
         return null
     }
 
     private fun getCurrentDishId(dish: Dish? = null): Long {
-        dish?.let{
-            return it.id
-        }
-        currentShowingDish?.let {
+        dish?.let {
             return it.id
         }
         return 0
     }
 
+    fun calcTotalDishesPrice(): Double {
+        var total = 0.0
+        currentOrderResponse?.orderItems?.let {
+            it.forEach {
+                total += (it.price.value?.times(it.quantity)!!)
+            }
+        }
+        return total
+    }
+
     private fun getCurrentOrderChefCuisine(): List<String> {
         val cuisine = mutableSetOf<String>()
         currentOrderResponse?.orderItems?.forEach {
-            if(!it.dish.cuisines.isNullOrEmpty()){
-                it.dish.cuisines[0]?.let {
+            if (!it.dish.cuisines.isNullOrEmpty()) {
+                it.dish.cuisines[0].let {
                     cuisine.add(it.name)
                 }
             }
@@ -630,63 +362,21 @@ class CartManager(
     }
 
     private fun getCurrentOrderChefName(): String {
-        currentShowingDish.let {
-            return it?.cook?.getFullName() ?: "no_name"
+        currentOrderResponse.let {
+            return it?.restaurant?.getFullName() ?: "no_name"
         }
     }
 
-    fun isInCheckout(): Boolean {
-        return this.isInCheckout
-    }
-
-    fun setIsInCheckout(isInCheckout: Boolean) {
-        this.isInCheckout = isInCheckout
-    }
-
-    fun onDishChangeEvent() = deliveryTimeManager.getTempDeliveryTimeStamp()
-
-    fun sendClickOnDishEvent() {
-        val dishId = currentShowingDish?.id
-        val param = getAddDishData(dishId)
-        eventsManager.logOnDishClickEvent(param)
+    fun updateCurCookingSlot(currentCookingSlot: CookingSlot) {
+        this.currentCookingSlot = currentCookingSlot
     }
 
 
-//    fun checkoutOrder(orderId: Long) {
-//        progressData.startProgress()
-//        apiService.checkoutOrder(orderId, eaterDataManager.getCustomerCardId())
-//            .enqueue(object : BaseCallback<ServerResponse<Void>>() {
-//                override fun onSuccess(result: ServerResponse<Void>) {
-//                    progressData.endProgress()
-//                    checkoutOrderEvent.postValue(CheckoutEvent(true))
-//                    //todo - check this ! that it send purchase cost
-//                    val totalCost = orderManager.getTotalCostValue()
-//                    eventsManager.sendPurchaseEvent(orderId, totalCost.toDouble())
-//                    eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ORDER_PLACED, getOrderValue(true))
-//                    orderManager.clearCurrentOrder()
-//
-//                }
-//
-//                override fun onError(errors: List<WSError>) {
-//                    progressData.endProgress()
-//                    eventsManager.logUxCamEvent(Constants.UXCAM_EVENT_ORDER_PLACED, getOrderValue(false))
-//                    errorEvent.postValue(errors)
-//                }
-//            })
-//    }
 
-
+    /**
+     *  General
+     */
     companion object {
-        const val TAG = "wowNCartManager"
+        const val TAG = "wowCartManager"
     }
-
-
-    // 1. init order - set basic param - cookingSlotId, deliveryTime etc,
-    // 2. update current orderItemRequest - dishId, quantity
-    // 2.1 update current orderItemRequest - note, ingredients if necessary
-    // 3. create order. (POST) -> order Response.
-    // 4. update existing item (orderItem id, orderItem)
-    // 5. add new item (dishId, quantity) {orderItemRequest}
-
-
 }

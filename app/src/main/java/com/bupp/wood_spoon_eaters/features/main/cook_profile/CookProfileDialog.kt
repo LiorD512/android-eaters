@@ -20,11 +20,11 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CookProfileDialogBinding
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragment(), HeaderView.HeaderViewListener,
-     UserImageView.UserImageViewListener, CooksProfileDishesAdapter.CooksProfileDishesListener {
+     UserImageVideoView.UserImageViewListener, CooksProfileDishesAdapter.CooksProfileDishesListener {
 
     interface CookProfileDialogListener{
         fun onDishClick(menuItemId: Long)
