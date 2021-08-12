@@ -15,7 +15,7 @@
                 app:destination="@id/dishPageFragment">
             <argument
                     android:name="extras"
-                    app:argType="com.bupp.wood_spoon_eaters.model.ExtrasDishPage" />
+                    app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.ExtrasDishPage" />
         </action>
     </fragment>
 
@@ -26,7 +26,7 @@
             tools:layout="@layout/fragment_dish_page">
         <argument
                 android:name="extras"
-                app:argType="com.bupp.wood_spoon_eaters.model.ExtrasDishPage" />
+                app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.ExtrasDishPage" />
     </fragment>
 
 

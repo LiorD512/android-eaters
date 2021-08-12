@@ -102,7 +102,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
             dishHeaderName.text = dish?.name
             dishHeaderPrice.text = dish?.price?.formatedValue ?: ""
             topHeaderDishName.text = dish?.name
-            Glide.with(requireContext()).load(dish?.thumbnail).into(coverPhoto)
+            Glide.with(requireContext()).load(dish?.thumbnail?.url).into(coverPhoto)
             if(menuItem.availableLater == null) {
                 dishTags.setTags(menuItem.tags)
             } else{

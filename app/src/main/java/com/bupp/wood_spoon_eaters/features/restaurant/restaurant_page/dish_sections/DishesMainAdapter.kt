@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections;
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,9 +79,6 @@ class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
         }
     }
 
-
-
-
     abstract class BaseItemViewHolder(view: View) : SwipeableBaseItemViewHolder(view) {
         abstract override val isSwipeable: Boolean
 
@@ -103,7 +101,7 @@ class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
             oldItem: DishSections,
             newItem: DishSections
         ): Boolean {
-            return oldItem.viewType == oldItem.viewType
+            return oldItem == newItem
         }
     }
 }

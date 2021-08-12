@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
@@ -32,9 +30,8 @@ class CartManager(
     fun getWsErrorEvent() = wsErrorEvent
 
 
-
-    fun getCurOrderId(): Long{
-        currentOrderResponse?.id?.let{
+    fun getCurOrderId(): Long {
+        currentOrderResponse?.id?.let {
             return it
         }
         return -1
@@ -72,7 +69,6 @@ class CartManager(
 //    }
 
 
-
     /**
      * this method is being called when user already have an "active" order.
      * this method checks that the current added dish is part of the same restaurant and
@@ -83,7 +79,9 @@ class CartManager(
         CLEAR_CART_DIFFERENT_RESTAURANT,
         CLEAR_CART_DIFFERENT_COOKING_SLOT
     }
+
     data class ClearCartEvent(val dialogType: ClearCartDialogType, val curData: String, val newData: String)
+
     private val clearCartUiEvent = MutableLiveData<ClearCartEvent>()
     fun getClearCartUiEvent() = clearCartUiEvent
     fun validateCartMatch(newRestaurant: Restaurant, newCookingSlot: CookingSlot): Boolean {
@@ -127,16 +125,16 @@ class CartManager(
     suspend fun addToCart(quantity: Int, dishId: Long, note: String?) {
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         val result = orderRepository.addNewDish(orderRequest)
-        if(result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
+        if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
             result.data?.let {
                 updateCartManagerParams(it.copy())
             }
 
             val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
             eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id, currentAddedDish))
-        }else{
+        } else {
             //check for errors
-            if(result.type == OrderRepository.OrderRepoStatus.WS_ERROR){
+            if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
                 handleWsError(result.wsError)
             }
         }
@@ -159,13 +157,13 @@ class CartManager(
     suspend fun removeOrderItems(dishId: Long) {
         val orderRequest = buildOrderRequest(getDestroyedOrderItemsRequestByDishId(dishId))
         val result = orderRepository.updateOrder(getCurOrderId(), orderRequest)
-        if(result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS){
+        if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
             result.data?.let {
                 updateCartManagerParams(it.copy())
             }
 //            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }?
 //            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id, currentAddedDish))
-        }else{
+        } else {
             //check for errors
         }
     }
@@ -175,10 +173,10 @@ class CartManager(
      * this function gets dishId and returns a list of OrderItems with _destroy = true
      */
     fun getDestroyedOrderItemsRequestByDishId(dishId: Long): List<OrderItemRequest> {
-        currentOrderResponse?.let{
+        currentOrderResponse?.let {
             val destroyedOrderItemRequest = mutableListOf<OrderItemRequest>()
             it.orderItems?.forEach {
-                if(it.dish.id == dishId){
+                if (it.dish.id == dishId) {
                     val parsed = it.toOrderItemRequest()
                     parsed._destroy = true
                     destroyedOrderItemRequest.add(parsed)
@@ -276,6 +274,16 @@ class CartManager(
         return data
     }
 
+    fun hasOpenCartInRestaurant(restaurantId: Long): Boolean {
+        return currentOrderResponse?.restaurant?.id == restaurantId
+    }
+
+    fun getCurrentOrderOrderItems(): List<OrderItem>? {
+        currentOrderResponse.let {
+            return it?.orderItems
+        }
+    }
+
     private fun getCurrentOrderDishNames(): List<String> {
         val dishNames = mutableSetOf<String>()
         val chefsName = currentOrderResponse?.restaurant?.firstName ?: ""
@@ -370,7 +378,6 @@ class CartManager(
     fun updateCurCookingSlot(currentCookingSlot: CookingSlot) {
         this.currentCookingSlot = currentCookingSlot
     }
-
 
 
     /**

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders
 
+import android.util.Log
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemDishBinding
@@ -20,6 +21,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish
         val dish = section.menuItem.dish
+        Log.d("wowSingleDish","bind ${dish?.name}")
         with(binding) {
             dish?.let { dish ->
                 Glide.with(root.context).load(dish.thumbnail?.url).into(dishPhoto)
@@ -29,13 +31,20 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
 
                 dishQuantity.text = section.cartQuantity.toString()
                 dishQuantity.isVisible = section.cartQuantity > 0
+                dishTagsView.isVisible = false
                 if (section.menuItem.availableLater == null) {
-                    dishTagsView.setTags(section.menuItem.tags)
+                    Log.d("wowSingleDish","availableLater = null ${dish?.name}")
+                    section.menuItem.tags?.let{
+                        dishTagsView.setTags(section.menuItem.tags)
+                        dishTagsView.isVisible = true
+                    }
                 } else {
+                    Log.d("wowSingleDish","availableLater ${dish?.name}")
                     section.menuItem.availableLater?.let{ it->
                         isSwipeable = false // todo - maybe replace we grey "disabled" ui instead of the teal_blue shape (inside item decorator)
                         val tag = it.getStartEndAtTag()
                         dishTagsView.setTags(listOf(tag))
+                        dishTagsView.isVisible = true
                     }
                 }
                 root.setOnClickListener() {
