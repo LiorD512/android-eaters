@@ -34,6 +34,7 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
 
     interface ClearCartListener{
         fun onPerformClearCart()
+        fun onClearCartCanceled()
     }
 
     private val binding: ClearCartCookingSlotBottomSheetBinding by viewBinding()
@@ -89,6 +90,7 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
                 dismiss()
             }
             clearCartCookingSlotCancelBtn.setOnClickListener {
+                listener.onClearCartCanceled()
                 dismiss()
             }
         }

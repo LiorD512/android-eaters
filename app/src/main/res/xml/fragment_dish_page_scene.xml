@@ -89,13 +89,13 @@
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
                 android:alpha="1"/>
-        <Constraint
-                android:id="@+id/dishFragRestaurantHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                motion:layout_constraintBottom_toTopOf="@id/dishFragMainList"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:alpha="0" />
+<!--        <Constraint-->
+<!--                android:id="@+id/dishFragTopHeader"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                motion:layout_constraintBottom_toTopOf="@id/dishFragMainList"-->
+<!--                motion:layout_constraintStart_toStartOf="parent"-->
+<!--                android:alpha="0" />-->
     </ConstraintSet>
 
 </MotionScene>

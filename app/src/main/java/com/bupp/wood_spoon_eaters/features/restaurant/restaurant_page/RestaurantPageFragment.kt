@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -65,6 +66,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 }
             }
             restaurantFragFloatingCartBtn.setFloatingCartBtnListener(this@RestaurantPageFragment)
+            restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
         with(binding.restaurantMainListLayout) {
             restaurantCuisinesList.adapter = adapterCuisines
@@ -83,6 +85,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantDishesList.initSwipeableRecycler(adapter)
             }
         }
+    }
+
+    private fun openCartNUpsaleDialog() {
+        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     private fun onDeliveryTimingChange(date: DeliveryDate?) {
@@ -307,10 +313,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.onPerformClearCart()
     }
 
-    override fun onFloatingCartStateChanged(isShowing: Boolean) {
-        if(isShowing){
+    override fun onClearCartCanceled() {
+        viewModel.refreshRestaurantUiToInitialState()
+    }
 
-        }
+    override fun onFloatingCartStateChanged(isShowing: Boolean) {
+        binding.restaurantFragHeightCorrection.isVisible = isShowing
     }
 
 

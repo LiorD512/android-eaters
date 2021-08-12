@@ -245,9 +245,6 @@ class CartManager(
         Log.d(TAG, "updateCartParams")
         this.currentOrderResponse = order
         orderLiveData.postValue(order)
-//        refreshCartWithUpdatedOrder(order)
-
-//        Log.d(OldCartManager.TAG, "updated Cart: $cart")
     }
 
     private fun handleWsError(wsError: List<WSError>?) {
@@ -256,6 +253,13 @@ class CartManager(
             errorList += "${it.msg} \n"
         }
         wsErrorEvent.postRawValue(errorList)
+    }
+
+    fun getOrderSubTotal(): String? {
+        currentOrderResponse?.let{
+            return it.subtotal?.formatedValue
+        }
+        return null
     }
 
 
@@ -326,7 +330,7 @@ class CartManager(
         return currentOrderResponse?.restaurant?.id == restaurantId
     }
 
-    fun getCurrentOrderOrderItems(): List<OrderItem>? {
+    fun getCurrentOrderItems(): List<OrderItem>? {
         currentOrderResponse.let {
             return it?.orderItems
         }
@@ -422,6 +426,7 @@ class CartManager(
             return it?.restaurant?.getFullName() ?: "no_name"
         }
     }
+
 
 
 

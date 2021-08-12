@@ -32,6 +32,7 @@ data class UpsaleAdapterItem(
 ): CartBaseAdapterItem(CartAdapterViewType.UPSALE_DISH)
 
 data class CartAdapterItem(
+    val customCartItem: CustomCartItem,
     override var cartQuantity: Int = 0,
     override val menuItem: MenuItem? = null,
     override val isSwipeable: Boolean = true
@@ -43,3 +44,10 @@ data class CartAdapterSubTotalItem(
     override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)
+
+data class CustomCartItem(
+    val dishName: String,
+    val quantity: Int,
+    val price: String,
+    val note: String?
+)

@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.DietaryIcon
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -97,6 +98,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         })
         viewModel.onFinishDishPage.observe(viewLifecycleOwner, {
             activity?.onBackPressed()
+        })
+        viewModel.shakeAddToCartBtn.observe(viewLifecycleOwner, {
+            AnimationUtil().shakeView(binding.dishFragAddBtn)
         })
     }
 
@@ -203,6 +207,17 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         }
     }
 
+    /**
+     * Clear Cart Dialog callbacks.
+     */
+    override fun onPerformClearCart() {
+        viewModel.onPerformClearCart()
+    }
+
+    override fun onClearCartCanceled() {
+        //todo
+    }
+
     override fun onModificationClick() {
         //
     }
@@ -211,7 +226,5 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         private const val TAG = "RestaurantPageFragment"
     }
 
-    override fun onPerformClearCart() {
-        viewModel.onPerformClearCart()
-    }
+    
 }

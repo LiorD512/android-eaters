@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.restaurant.dish_page
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.ExtrasDishPage
 import com.bupp.wood_spoon_eaters.managers.CartManager
@@ -31,6 +32,7 @@ class DishPageViewModel(
     val userRequestData = MutableLiveData<UserRequest>()
     class UserRequest(val eaterName: String,val cook: Restaurant)
 
+    val shakeAddToCartBtn = LiveEventData<Boolean>()
 
     private var dishQuantity = 0
     var dishMaxQuantity = 0
@@ -95,31 +97,35 @@ class DishPageViewModel(
 
     fun addDishToCart(note: String? = null) {
         val quantity = dishQuantity
-        val dishId = dishFullData.value?.id
-        dishId?.let{
-            var isValid = false
-            val restaurant = dishFullData.value?.restaurant!!
-            var cookingSlotId: Long? = 0L
-            if(extras.menuItem.availableLater != null){
-                cookingSlotId = extras.menuItem.cookingSlotId!!
-                val startsAt = extras.menuItem.availableLater?.startsAt!!
-                val endsAt = extras.menuItem.availableLater?.endsAt!!
-                isValid = cartManager.validateCartMatch(restaurant, cookingSlotId, startsAt, endsAt)
-            }else{
-                val curCookingSlot = extras.cookingSlot
-                cookingSlotId = curCookingSlot?.id!!
-                isValid = cartManager.validateCartMatch(restaurant, cookingSlotId, curCookingSlot.startsAt, curCookingSlot.endsAt)
-            }
-            if(isValid){
-                viewModelScope.launch {
-                    cartManager.updateCurCookingSlot(cookingSlotId)
-                    val result = cartManager.addToCart(quantity, it, note)
-                    if(result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
-                        onFinishDishPage.postValue(true)
-                    }
+        if(quantity > 1){
+            val dishId = dishFullData.value?.id
+            dishId?.let{
+                var isValid = false
+                val restaurant = dishFullData.value?.restaurant!!
+                var cookingSlotId: Long? = 0L
+                if(extras.menuItem.availableLater != null){
+                    cookingSlotId = extras.menuItem.cookingSlotId!!
+                    val startsAt = extras.menuItem.availableLater?.startsAt!!
+                    val endsAt = extras.menuItem.availableLater?.endsAt!!
+                    isValid = cartManager.validateCartMatch(restaurant, cookingSlotId, startsAt, endsAt)
+                }else{
+                    val curCookingSlot = extras.cookingSlot
+                    cookingSlotId = curCookingSlot?.id!!
+                    isValid = cartManager.validateCartMatch(restaurant, cookingSlotId, curCookingSlot.startsAt, curCookingSlot.endsAt)
+                }
+                if(isValid){
+                    viewModelScope.launch {
+                        cartManager.updateCurCookingSlot(cookingSlotId)
+                        val result = cartManager.addToCart(quantity, it, note)
+                        if(result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
+                            onFinishDishPage.postValue(true)
+                        }
 
+                    }
                 }
             }
+        }else{
+            shakeAddToCartBtn.postRawValue(true)
         }
     }
 

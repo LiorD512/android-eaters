@@ -32,12 +32,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
 
-    private val defaultPeekHeight = Utils.toPx(400)
+    private var defaultPeekHeight = Utils.toPx(400)
 
     private val binding: UpSaleNCartBottomSheetBinding by viewBinding()
     private val viewModel by viewModel<UpSaleNCartViewModel>()
     private var currentParentHeight: Int = defaultPeekHeight
     private var behavior: BottomSheetBehavior<View>? = null
+    private lateinit var currentSheetView: View
 
     private lateinit var cartAdapter: UpSaleNCartAdapter
 
@@ -60,10 +61,13 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
         var height = displayMetrics.heightPixels
 
         dialog.setOnShowListener {
-            Log.d(TAG, "setOnShowListener")
+//            Log.d(TAG, "setOnShowListener")
+//            Log.d(TAG, "defaultPeekHeight $defaultPeekHeight")
             val d = it as BottomSheetDialog
-            d.setCancelable(false)
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
+            sheet?.let{ sheet ->
+                currentSheetView = sheet
+            }
             behavior = BottomSheetBehavior.from(sheet!!)
             behavior!!.peekHeight = defaultPeekHeight
             behavior!!.addBottomSheetCallback(object : SimpleBottomSheetCallback() {
@@ -72,7 +76,6 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
                     if (yPos > binding.floatingCartBtnLayout.height) {
                         binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
                         Log.d(TAG, "yPos: $yPos")
-                        Log.d(TAG,"view y: ${view.y}")
                     }
                     currentParentHeight = height - view.y.toInt()
                 }
@@ -91,8 +94,10 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
             val displayMetrics = DisplayMetrics()
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
             var height = displayMetrics.heightPixels
-            val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
+//            val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
+            val yPos = height - (binding.floatingCartBtnLayout.height).toFloat() - currentSheetView.y
             binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+//            Log.d(TAG, "initial binding.floatingCartBtnLayout.height: ${binding.floatingCartBtnLayout.height}")
 //            Log.d(TAG, "initial defaultPeekHeight: ${defaultPeekHeight}")
 //            Log.d(TAG, "initial height: $height")
 //            Log.d(TAG, "initial yPos: $yPos")

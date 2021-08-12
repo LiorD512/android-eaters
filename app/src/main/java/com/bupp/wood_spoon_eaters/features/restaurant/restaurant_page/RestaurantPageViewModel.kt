@@ -236,7 +236,7 @@ class RestaurantPageViewModel(
      */
     private fun updateDishCountUi(dishSectionsList: List<DishSections>, animateList: Boolean = true) {
         if (cartManager.currentCookingSlotId == currentCookingSlot?.id) {
-            cartManager.getCurrentOrderOrderItems()?.let { orderItems ->
+            cartManager.getCurrentOrderItems()?.let { orderItems ->
                 dishSectionsList.forEach { dishSection ->
                     if (dishSection is DishSectionSingleDish) {
                         dishSection.cartQuantity = 0
@@ -323,6 +323,10 @@ class RestaurantPageViewModel(
         viewModelScope?.launch {
             cartManager.onCartCleared()
         }
+    }
+
+    fun refreshRestaurantUiToInitialState() {
+        currentCookingSlot?.let { onCookingSlotSelected(it) }
     }
 
 

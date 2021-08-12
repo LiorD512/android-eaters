@@ -5,10 +5,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AnimationUtils
-import android.view.animation.BounceInterpolator
+import android.view.animation.*
 import com.bupp.wood_spoon_eaters.R
 import kotlinx.coroutines.delay
 
@@ -43,6 +40,56 @@ class AnimationUtil {
         ObjectAnimator.ofFloat(
             view, "alpha",
             0f, 1f,
+        ).apply {
+            duration = customDuration / 2
+            interpolator = AccelerateInterpolator()
+            startDelay = customStartDelay
+            repeatCount = 0
+            start()
+        }
+    }
+
+    fun enterFromBottomWithAlpha(view: View, customDuration: Long = 500, customStartDelay: Long = 150) {
+        view.alpha = 0f
+        ObjectAnimator.ofFloat(
+            view, "translationY",
+            250f, 0f,
+        ).apply {
+            duration = customDuration
+            interpolator = OvershootInterpolator()
+            startDelay = customStartDelay
+            repeatCount = 0
+            start()
+        }
+
+        ObjectAnimator.ofFloat(
+            view, "alpha",
+            0f, 1f,
+        ).apply {
+            duration = (customDuration / 1.5).toLong()
+            interpolator = AccelerateInterpolator()
+            startDelay = customStartDelay
+            repeatCount = 0
+            start()
+        }
+    }
+
+    fun exitToBottomWithAlpha(view: View, customDuration: Long = 500, customStartDelay: Long = 150) {
+        view.alpha = 1f
+        ObjectAnimator.ofFloat(
+            view, "translationY",
+            0f, 250f,
+        ).apply {
+            duration = customDuration
+            interpolator = AccelerateDecelerateInterpolator()
+            startDelay = customStartDelay
+            repeatCount = 0
+            start()
+        }
+
+        ObjectAnimator.ofFloat(
+            view, "alpha",
+            1f, 0f,
         ).apply {
             duration = customDuration / 2
             interpolator = AccelerateInterpolator()

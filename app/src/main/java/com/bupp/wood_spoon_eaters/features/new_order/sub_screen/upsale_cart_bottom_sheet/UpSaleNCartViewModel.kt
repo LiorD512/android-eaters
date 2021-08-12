@@ -2,10 +2,12 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.MenuItem
 
-class UpSaleNCartViewModel : ViewModel() {
+class UpSaleNCartViewModel(
+    val cartManager: CartManager
+) : ViewModel() {
 
     var currentPageState = PageState.CART
 
@@ -23,7 +25,7 @@ class UpSaleNCartViewModel : ViewModel() {
     val navigationEvent = MutableLiveData<NavigationEvent>()
 
     fun onCartBtnClick() {
-        val shouldShowUpsaleDialog = true
+        val shouldShowUpsaleDialog = false
         if (shouldShowUpsaleDialog && currentPageState == PageState.CART) {
             currentPageState = PageState.UPSALE
             navigationEvent.postValue(NavigationEvent.GO_TO_UP_SALE)
@@ -57,22 +59,20 @@ class UpSaleNCartViewModel : ViewModel() {
 
     private fun fetchCartData(): CartData {
         val list = mutableListOf<CartBaseAdapterItem>()
-//        list.add(CartAdapterItem(0, Dish(0, null, "a", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(1, Dish(0, null, "b", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "c", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(10, Dish(0, null, "d", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(10, Dish(0, null, "d", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(1, Dish(0, null, "z", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(0, Dish(0, null, "e", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-//        list.add(CartAdapterItem(1, Dish(0, null, "z1", null, "d", null, "a", "", null, null, null, null, null, null, null)))
-        list.add(CartAdapterSubTotalItem("150"))
+        val orderItems = cartManager.getCurrentOrderItems()
+        val subTotal = cartManager.getOrderSubTotal()
+        orderItems?.forEach {
+            val customCartItem = CustomCartItem(
+                dishName = it.dish.name,
+                quantity = it.quantity,
+                price = it.price.formatedValue ?: "0",
+                note = it.notes
+            )
+            list.add(CartAdapterItem(customCartItem = customCartItem))
+        }
+        subTotal?.let{
+            list.add(CartAdapterSubTotalItem(it))
+        }
         return CartData(list)
     }
 
