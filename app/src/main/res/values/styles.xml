@@ -40,6 +40,21 @@
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 
+<!--    <style name="NewCartDialog" parent="Theme.AppCompat.Dialog">-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowFullscreen">false</item>-->
+<!--        <item name="android:windowIsFloating">true</item>-->
+<!--        <item name="android:windowMinWidthMajor">96%</item>-->
+<!--        <item name="android:windowMinWidthMinor">96%</item>-->
+<!--        <item name="android:layout_height">260dp</item>-->
+<!--        <item name="android:windowBackground">@color/transparent</item>-->
+<!--    </style>-->
+
+    <style name="NewCartDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/new_cart_overshoot_anim</item>
+        <item name="android:windowExitAnimation">@anim/new_cart_slide_out_anim</item>
+    </style>
+
     <style name="ErrorText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/coral</item>
         <item name="android:textSize">11.5sp</item>

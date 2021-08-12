@@ -86,6 +86,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         with(binding) {
             mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
             mainActFloatingCartBtn.updateFloatingCartButton(13.55)
+
+            testBtn.setOnClickListener {
+                com.bupp.wood_spoon_eaters.dialogs.NewCartDialog().show(supportFragmentManager, "NewCartDialog")
+            }
         }
 
 //        //TODO - REMOVE THIS (BRANCH TEST)
