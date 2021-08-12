@@ -24,6 +24,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Del
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.CookingSlot
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -114,9 +115,29 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.cartLiveData.observe(viewLifecycleOwner, {
             viewModel.handleCartData(it)
         })
+        viewModel.clearCartEvent.observe(viewLifecycleOwner, {
+            handleClearCartEvent(it)
+        })
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+    }
+
+    private fun handleClearCartEvent(event: CartManager.ClearCartEvent?) {
+        event?.let{
+            when(it.dialogType){
+                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
+
+                }
+                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
+
+                }
+            }
+        }
+    }
+
+    private fun handleCurrentCartData(it: Order?) {
+
     }
 
     private fun handleWSError(errorEvent: String?) {
