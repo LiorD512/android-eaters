@@ -72,7 +72,7 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
             customCartItem.let {
                 name.text = it.dishName
                 quantity.text = "${it.quantity}"
-                price.text = "$${it.price}"
+                price.text = "${it.price}"
                 description.text = "${it.note}"
             }
         }

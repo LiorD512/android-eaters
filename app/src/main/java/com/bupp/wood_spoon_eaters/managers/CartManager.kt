@@ -150,9 +150,21 @@ class CartManager(
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         currentOrderResponse?.let {
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
-            result.data?.let {
-                updateCartManagerParams(it.copy())
+            if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
+                result.data?.let {
+                    updateCartManagerParams(it.copy())
+                }
+
+                //todo - check analytics for updated order.....
+                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+                eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
+            } else {
+                //check for errors
+                if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
+                    handleWsError(result.wsError)
+                }
             }
+
         }
     }
 

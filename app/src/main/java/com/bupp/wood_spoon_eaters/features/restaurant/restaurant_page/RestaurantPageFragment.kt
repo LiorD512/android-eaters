@@ -306,7 +306,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 //    }
 
     override fun onWSErrorDone() {
-
+        viewModel.refreshRestaurantUiToInitialState()
     }
 
     override fun onPerformClearCart() {
