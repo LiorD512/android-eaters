@@ -26,13 +26,13 @@ enum class CartAdapterViewType {
 }
 
 data class UpsaleAdapterItem(
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val menuItem: MenuItem? = null,
     override val isSwipeable: Boolean = true
 ): CartBaseAdapterItem(CartAdapterViewType.UPSALE_DISH)
 
 data class CartAdapterItem(
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val menuItem: MenuItem? = null,
     override val isSwipeable: Boolean = true
 ): CartBaseAdapterItem(CartAdapterViewType.CART_DISH)
@@ -40,6 +40,6 @@ data class CartAdapterItem(
 data class CartAdapterSubTotalItem(
     val subTotal: String,
     override val menuItem: MenuItem? = null,
-    override var quantity: Int = 0,
+    override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)

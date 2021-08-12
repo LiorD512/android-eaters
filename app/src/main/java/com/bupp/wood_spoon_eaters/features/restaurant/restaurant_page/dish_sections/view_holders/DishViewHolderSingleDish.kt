@@ -7,7 +7,6 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 
 
 class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
@@ -28,8 +27,8 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                 dishPrice.text = dish.getPriceObj()?.formatedValue
                 dishDescription.text = dish.description
 
-                dishQuantity.text = section.quantity.toString()
-                dishQuantity.isVisible = section.quantity > 0
+                dishQuantity.text = section.cartQuantity.toString()
+                dishQuantity.isVisible = section.cartQuantity > 0
                 if (section.menuItem.availableLater == null) {
                     dishTagsView.setTags(section.menuItem.tags)
                 } else {

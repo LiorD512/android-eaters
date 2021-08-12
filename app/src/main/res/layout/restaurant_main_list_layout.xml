@@ -78,7 +78,7 @@
 
 
             <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-                    android:id="@+id/restaurantDeliveryTiming"
+                    android:id="@+id/restaurantDeliveryDates"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
