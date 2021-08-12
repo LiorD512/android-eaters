@@ -26,6 +26,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Res
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -134,10 +135,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 }
             }
         }
-    }
-
-    private fun handleCurrentCartData(it: Order?) {
-
     }
 
     private fun handleWSError(errorEvent: String?) {
