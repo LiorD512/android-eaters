@@ -218,7 +218,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-
     private fun handleCookingSlotChange(cookingSlot: CookingSlot?) {
         cookingSlot?.let {
             with(binding.restaurantMainListLayout) {

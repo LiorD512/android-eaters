@@ -143,11 +143,12 @@ class RestaurantPageViewModel(
         }
     }
 
-
     fun onTimePickerClicked() {
         //when picker is clicked we send from viewModel the selected cooking slot
         // so we can highlight it for the user inside the dialog
-        timePickerEvent.postRawValue(currentCookingSlot)
+        currentCookingSlot?.let{
+            timePickerEvent.postRawValue(it)
+        }
     }
 
     /** on cooking slot selected - need to sort by available/unavailable dishes
@@ -299,10 +300,7 @@ class RestaurantPageViewModel(
                 dishListData.value?.dishes?.let {
                     updateSelectedDishesCounts(it, false)
                 }
-            } else {
-                /** Different cooking slot - need to change all screen UI accordingly **/
-                onCookingSlotSelected(orderCookingSlot)
-            }
+            }  
         }
     }
 

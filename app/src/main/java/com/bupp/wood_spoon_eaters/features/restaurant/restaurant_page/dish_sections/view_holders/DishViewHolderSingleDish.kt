@@ -34,6 +34,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                 dishTagsView.isVisible = false
                 if (section.menuItem.availableLater == null) {
                     Log.d("wowSingleDish","availableLater = null ${dish?.name}")
+                    isSwipeable = true
                     section.menuItem.tags?.let{
                         dishTagsView.setTags(section.menuItem.tags)
                         dishTagsView.isVisible = true

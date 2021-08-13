@@ -22,7 +22,7 @@ data class RestaurantInitParams(
 ): Parcelable
 
 @Parcelize
-data class ExtrasDishPage(
+data class DishInitParams(
     val menuItem: MenuItem,
     val currentSelectedDate: Long? = null,
     val availability: AvailabilityDate? = null

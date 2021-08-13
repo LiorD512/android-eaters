@@ -1,13 +1,11 @@
 package com.bupp.wood_spoon_eaters.features.restaurant
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.ExtrasDishPage
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
-import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.MenuItem
 
 class RestaurantMainViewModel : ViewModel() {
@@ -24,7 +22,7 @@ class RestaurantMainViewModel : ViewModel() {
     val fragmentNavigationEvent = LiveEventData<NavDirections>()
 
     fun openDishPage(menuItem: MenuItem){
-        val extras = ExtrasDishPage(
+        val extras = DishInitParams(
             menuItem = menuItem, currentSelectedDate = null, availability = null
         )
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
