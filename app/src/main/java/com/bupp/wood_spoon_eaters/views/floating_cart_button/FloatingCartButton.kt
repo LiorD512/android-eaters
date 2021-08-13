@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bupp.wood_spoon_eaters.databinding.FloatingCartButtonBinding
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import java.text.DecimalFormat
 
 class FloatingCartButton @JvmOverloads
@@ -14,6 +15,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var binding: FloatingCartButtonBinding = FloatingCartButtonBinding.inflate(LayoutInflater.from(context), this, true)
+    private var isShowing = false
 
     var listener: FloatingCartButtonListener? = null
     fun setFloatingCartBtnListener(listener: FloatingCartButtonListener){
@@ -38,12 +40,24 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun updateFloatingCartButton(quantity: Int) {
+    fun updateFloatingCartButton(restaurantName: String, quantity: Int) {
         Log.d(TAG, "updateFloatingCartButton: $quantity")
-//        val priceStr = DecimalFormat("##.##").format(price)
-        binding.floatingCartBtnPrice.text = "$quantity"
-        binding.floatingCartBtnLayout.visibility = View.VISIBLE
-        listener?.onFloatingCartStateChanged(true)
+        if(quantity > 0){
+            binding.floatingCartBtnTitle.text = "$restaurantName"
+            binding.floatingCartBtnPrice.text = "$quantity"
+            binding.floatingCartBtnLayout.visibility = View.VISIBLE
+            if(!isShowing){
+                isShowing = true
+                AnimationUtil().enterFromBottomWithAlpha(binding.floatingCartBtnLayout)
+            }
+            listener?.onFloatingCartStateChanged(isShowing)
+        }else {
+            if(isShowing){
+                AnimationUtil().exitToBottomWithAlpha(binding.floatingCartBtnLayout)
+            }
+            isShowing = false
+            listener?.onFloatingCartStateChanged(isShowing)
+        }
     }
 
     fun hide(){

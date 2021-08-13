@@ -23,8 +23,10 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -59,18 +61,21 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         setContentView(binding.root)
 //        setContentView(R.layout.activity_main)
 
-
+        initUi()
         initObservers()
         initMainViewPager()
-        initUi()
 
         initUiRelatedProcesses()
 
         loadFeedProgressBarFragment()
     }
 
+    fun initUi(){
+        binding.mainActFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
+    }
+
     private fun initMainViewPager() {
-        with(binding){
+        with(binding) {
             val pagerAdapter = MainActPagerAdapter(this@MainActivity)
             mainActViewPager.adapter = pagerAdapter
             mainActViewPager.offscreenPageLimit = 1
@@ -79,55 +84,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             mainActBottomTabLayout.setViewPager(mainActViewPager)
         }
     }
-
-    private fun initUi() {
-        with(binding) {
-            mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
-            mainActFloatingCartBtn.updateFloatingCartButton(3)
-        }
-
-//        //TODO - COMMENT THIS (FOT BRANCH TESTING)
-//        IntegrationValidator.validate(this)
-    }
-
-    override fun onFloatingCartStateChanged(isShowing: Boolean) {
-        //this method triggered when Floating cart button is hide or shown - activity related screen need to update their bottom padding.
-        viewModel.onFloatingCartStateChanged(isShowing)
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -188,8 +144,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
 
-
-
     private fun loadFeedProgressBarFragment() {
 //        loadFragment(FeedLoaderFragment(), Constants.FEED_LOADER_TAG)
 //        FeedLoaderDialog().show(supportFragmentManager, Constants.FEED_LOADER_TAG)
@@ -199,7 +153,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ////////////////////////////////////////////////
     ///////       Ui processes - start       ///////
     ////////////////////////////////////////////////
-
 
 
     private fun initUiRelatedProcesses() {
@@ -246,6 +199,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.mainNavigationEvent.observe(this, {
             handleNavigation(it)
         })
+        viewModel.floatingCartBtnEvent.observe(this, {
+            handleFloatingBtnEvent(it)
+        })
 
         //header event
 //        viewModel.getFinalAddressParams().observe(this, {
@@ -291,7 +247,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         })
         viewModel.campaignLiveData.observe(this, {
 //            Log.d(TAG, "campaignLiveData: $it")
-            it?.let{
+            it?.let {
                 handleCampaignData(it)
             }
         })
@@ -316,6 +272,24 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
             }
         }
+    }
+
+    private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
+        event?.let {
+            with(binding) {
+                mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
+                mainActFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            }
+        }
+    }
+
+    override fun onFloatingCartStateChanged(isShowing: Boolean) {
+        //this method triggered when Floating cart button is hide or shown - activity related screen need to update their bottom padding.
+        viewModel.onFloatingCartStateChanged(isShowing)
+    }
+
+    private fun openCartNUpsaleDialog() {
+        UpSaleNCartBottomSheet().show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     private fun handleCampaignData(campaigns: List<Campaign>) {
@@ -720,8 +694,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     override fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         viewModel.onMediaUtilsResultSuccess(result)
     }
-
-
 
 
 }

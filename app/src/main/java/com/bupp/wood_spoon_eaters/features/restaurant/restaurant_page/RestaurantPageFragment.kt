@@ -8,8 +8,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
@@ -18,7 +16,9 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_re
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -29,17 +29,16 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Res
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+import com.bupp.wood_spoon_eaters.views.floating_cart_button.FloatingCartButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.abs
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener,
-    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener {
+    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener, FloatingCartButton.FloatingCartButtonListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -66,6 +65,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 viewModel.restaurantFullData.value?.shareUrl?.let {
                 }
             }
+            restaurantFragFloatingCartBtn.setFloatingCartBtnListener(this@RestaurantPageFragment)
+            restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
         with(binding.restaurantMainListLayout) {
             restaurantCuisinesList.adapter = adapterCuisines
@@ -84,6 +85,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantDishesList.initSwipeableRecycler(adapter)
             }
         }
+    }
+
+    private fun openCartNUpsaleDialog() {
+        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     private fun onDeliveryTimingChange(date: DeliveryDate?) {
@@ -113,7 +118,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.initialParamData.observe(viewLifecycleOwner, {
             handleInitialParamData(it)
         })
-        viewModel.cartLiveData.observe(viewLifecycleOwner, {
+        viewModel.orderLiveData.observe(viewLifecycleOwner, {
             viewModel.handleCartData(it)
         })
         viewModel.clearCartEvent.observe(viewLifecycleOwner, {
@@ -128,6 +133,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.currentCookingSlotData.observe(viewLifecycleOwner,{
             handleCookingSlotChange(it)
         })
+        viewModel.floatingBtnEvent.observe(viewLifecycleOwner, {
+            handleFloatingBtnEvent(it)
+        })
+    }
+
+    private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
+        event?.let{
+            binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+        }
     }
 
     private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
@@ -138,15 +152,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleClearCartEvent(event: CartManager.ClearCartEvent?) {
-        event?.let{
+    private fun handleClearCartEvent(event: LiveEvent<CartManager.ClearCartEvent>) {
+        event.getContentIfNotHandled()?.let{
             when(it.dialogType){
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
-                    ClearCartRestaurantBottomSheet.newInstance(event.curData, event.newData, this)
+                    ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this).show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                 }
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
-                    ClearCartCookingSlotBottomSheet.newInstance(event.curData, event.newData, this)
-
+                    ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this).show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
                 }
             }
         }
@@ -231,7 +244,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
         object : DishesMainAdapter.DishesMainAdapterListener {
             override fun onDishClick(menuItem: MenuItem) {
-                mainViewModel.openDishPage(menuItem)
+                val curCookingSlot = viewModel.currentCookingSlot
+                mainViewModel.openDishPage(menuItem, curCookingSlot)
             }
 
             override fun onDishSwipedAdd(item: DishSectionSingleDish) {
@@ -291,11 +305,19 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 //    }
 
     override fun onWSErrorDone() {
-
+        viewModel.refreshRestaurantUiToInitialState()
     }
 
     override fun onPerformClearCart() {
+        viewModel.onPerformClearCart()
+    }
 
+    override fun onClearCartCanceled() {
+        viewModel.refreshRestaurantUiToInitialState()
+    }
+
+    override fun onFloatingCartStateChanged(isShowing: Boolean) {
+        binding.restaurantFragHeightCorrection.isVisible = isShowing
     }
 
 

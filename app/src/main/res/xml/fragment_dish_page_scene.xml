@@ -12,7 +12,7 @@
                 motion:dragScale="1"
                 motion:moveWhenScrollAtTop="true"
                 motion:onTouchUp="autoComplete"
-                motion:touchAnchorId="@id/mainList"
+                motion:touchAnchorId="@id/dishFragMainList"
                 motion:touchAnchorSide="top"/>
 
                 <KeyFrameSet>
@@ -20,37 +20,37 @@
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/coverPhotoLayout"/>
+                            motion:motionTarget="@+id/dishFragCoverPhotoLayout"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="40"
-                            motion:motionTarget="@+id/topHeader"/>
+                            motion:motionTarget="@+id/dishFragTopHeader"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="1"
                             motion:framePosition="60"
-                            motion:motionTarget="@+id/topHeader"/>
+                            motion:motionTarget="@+id/dishFragTopHeader"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="60"
-                            motion:motionTarget="@+id/topHeaderDishName"/>
+                            motion:motionTarget="@+id/dishFragTopHeaderDishName"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="1"
                             motion:framePosition="90"
-                            motion:motionTarget="@+id/topHeaderDishName"/>
+                            motion:motionTarget="@+id/dishFragTopHeaderDishName"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="1"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/dishHeader"/>
+                            motion:motionTarget="@+id/dishFragDishHeader"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="70"
-                            motion:motionTarget="@+id/dishHeader"/>
+                            motion:motionTarget="@+id/dishFragDishHeader"/>
                 </KeyFrameSet>
     </Transition>
 
@@ -59,13 +59,13 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-                android:id="@+id/topHeaderDishName"
+                android:id="@+id/dishFragTopHeaderDishName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="2dp"
-                motion:layout_constraintStart_toEndOf="@id/backButton"
-                motion:layout_constraintBottom_toBottomOf="@id/backButton"
+                motion:layout_constraintStart_toEndOf="@id/dishFragBackButton"
+                motion:layout_constraintBottom_toBottomOf="@id/dishFragBackButton"
                 android:alpha="1"/>
         <Constraint
                 android:layout_width="match_parent"
@@ -73,29 +73,29 @@
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="0dp"
-                android:id="@+id/space" />
+                android:id="@+id/dishFragSpace" />
         <Constraint
-                android:id="@+id/coverPhotoLayout"
+                android:id="@+id/dishFragCoverPhotoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:alpha="0"
-                motion:layout_constraintBottom_toTopOf="@id/space"
+                motion:layout_constraintBottom_toTopOf="@id/dishFragSpace"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
-                android:id="@+id/topHeader"
+                android:id="@+id/dishFragTopHeader"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
                 android:alpha="1"/>
-        <Constraint
-                android:id="@+id/restaurantHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                motion:layout_constraintBottom_toTopOf="@id/mainList"
-                motion:layout_constraintStart_toStartOf="parent"
-                android:alpha="0" />
+<!--        <Constraint-->
+<!--                android:id="@+id/dishFragTopHeader"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                motion:layout_constraintBottom_toTopOf="@id/dishFragMainList"-->
+<!--                motion:layout_constraintStart_toStartOf="parent"-->
+<!--                android:alpha="0" />-->
     </ConstraintSet>
 
 </MotionScene>

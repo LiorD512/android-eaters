@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import java.util.*
 
 class CartManager(
     private val feedDataManager: FeedDataManager,
@@ -19,7 +20,7 @@ class CartManager(
     // global params -
     private var currentOrderResponse: Order? = null
 
-    var currentCookingSlot: CookingSlot? = null
+    var currentCookingSlotId: Long? = null
     val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
     val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
@@ -29,6 +30,9 @@ class CartManager(
     private val wsErrorEvent = LiveEventData<String>()
     fun getWsErrorEvent() = wsErrorEvent
 
+    data class FloatingCartEvent(val restaurantName: String, val allOrderItemsQuantity: Int)
+    private val floatingCartBtnEvent = MutableLiveData<FloatingCartEvent>()
+    fun getFloatingCartBtnEvent() = floatingCartBtnEvent
 
     fun getCurOrderId(): Long {
         currentOrderResponse?.id?.let {
@@ -39,7 +43,7 @@ class CartManager(
 
     private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
         return OrderRequest(
-            cookingSlotId = currentCookingSlot?.id,
+            cookingSlotId = currentCookingSlotId,
             deliveryAt = deliverAt,
             deliveryAddressId = deliveryAddressId,
             orderItemRequests = cart
@@ -81,21 +85,22 @@ class CartManager(
     }
 
     data class ClearCartEvent(val dialogType: ClearCartDialogType, val curData: String, val newData: String)
-
-    private val clearCartUiEvent = MutableLiveData<ClearCartEvent>()
+    private val clearCartUiEvent = LiveEventData<ClearCartEvent>()
     fun getClearCartUiEvent() = clearCartUiEvent
-    fun validateCartMatch(newRestaurant: Restaurant, newCookingSlot: CookingSlot): Boolean {
+    fun validateCartMatch(newRestaurant: Restaurant, newCookingSlotId: Long, newStartAtDate: Date, newEndsAtDate: Date): Boolean {
         currentOrderResponse?.let {
             if (it.restaurant!!.id != newRestaurant.id) {
                 val curRestaurantName = it.restaurant.restaurantName ?: ""
                 val newRestaurantName = newRestaurant.restaurantName ?: ""
-                clearCartUiEvent.postValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT, curRestaurantName, newRestaurantName))
+                clearCartUiEvent.postRawValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT, curRestaurantName, newRestaurantName))
                 return false
             }
-            if (it.cookingSlot!!.id != newCookingSlot.id) {
-                val curCookingSlotStr = DateUtils.parseCookingSlotForNowOrDates(it.cookingSlot)
-                val newCookingSlotStr = DateUtils.parseCookingSlotForNowOrDates(newCookingSlot)
-                clearCartUiEvent.postValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT, curCookingSlotStr, newCookingSlotStr))
+            if (currentOrderResponse!!.cookingSlot!!.id != newCookingSlotId) {
+                val curStartsAtDate = currentOrderResponse!!.cookingSlot!!.startsAt
+                val curEndsAtDate = currentOrderResponse!!.cookingSlot!!.endsAt
+                val curCookingSlotStr = DateUtils.parseDatesToNowOrDates(curStartsAtDate, curEndsAtDate)
+                val newCookingSlotStr = DateUtils.parseDatesToNowOrDates(newStartAtDate, newEndsAtDate)
+                clearCartUiEvent.postRawValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT, curCookingSlotStr, newCookingSlotStr))
                 return false
             }
             return true
@@ -122,7 +127,7 @@ class CartManager(
     /**
      * this function simply crates new order and adds a new instance of a dish to the cart
      */
-    suspend fun addToCart(quantity: Int, dishId: Long, note: String?) {
+    suspend fun addToCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         val result = orderRepository.addNewDish(orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
@@ -131,22 +136,35 @@ class CartManager(
             }
 
             val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
-            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id, currentAddedDish))
+            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
         } else {
             //check for errors
             if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
                 handleWsError(result.wsError)
             }
         }
+        return result.type
     }
 
     suspend fun postUpdateOrder(quantity: Int, dishId: Long, note: String?) {
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         currentOrderResponse?.let {
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
-            result.data?.let {
-                updateCartManagerParams(it.copy())
+            if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
+                result.data?.let {
+                    updateCartManagerParams(it.copy())
+                }
+
+                //todo - check analytics for updated order.....
+                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+                eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
+            } else {
+                //check for errors
+                if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
+                    handleWsError(result.wsError)
+                }
             }
+
         }
     }
 
@@ -193,13 +211,52 @@ class CartManager(
      * Global methods
      */
 
+    private var pendingRequestParam: PendingRequestParam? = null
+
+    data class PendingRequestParam(
+        val cookingSlot: CookingSlot,
+        val quantity: Int,
+        val dishId: Long,
+        val note: String?
+    )
+
+    fun setPendingRequestParams(cookingSlot: CookingSlot, quantity: Int, dishId: Long, note: String?) {
+        pendingRequestParam = PendingRequestParam(cookingSlot, quantity, dishId, note)
+    }
+
+    fun getCurrentCookingSlot(): CookingSlot? {
+        currentOrderResponse?.let {
+            return it.cookingSlot
+        }
+        return null
+    }
+
+    fun updateCurCookingSlot(currentCookingSlotId: Long) {
+        this.currentCookingSlotId = currentCookingSlotId
+    }
+
+
+    fun updateFloatingCartBtn(restaurantName: String?, allOrderItemsQuantity: Int) {
+        floatingCartBtnEvent.postValue(FloatingCartEvent(restaurantName ?: "", allOrderItemsQuantity))
+    }
+
+    /**
+     * this function is being called when user decided to clear the cart via ClearCart dialog.
+     */
+    suspend fun onCartCleared() {
+        currentOrderResponse = null
+        pendingRequestParam?.let {
+            //addtocart
+            updateCurCookingSlot(it.cookingSlot.id)
+            addToCart(it.quantity, it.dishId, it.note)
+            pendingRequestParam = null
+        }
+    }
+
     private fun updateCartManagerParams(order: Order) {
         Log.d(TAG, "updateCartParams")
         this.currentOrderResponse = order
         orderLiveData.postValue(order)
-//        refreshCartWithUpdatedOrder(order)
-
-//        Log.d(OldCartManager.TAG, "updated Cart: $cart")
     }
 
     private fun handleWsError(wsError: List<WSError>?) {
@@ -208,6 +265,13 @@ class CartManager(
             errorList += "${it.msg} \n"
         }
         wsErrorEvent.postRawValue(errorList)
+    }
+
+    fun getOrderSubTotal(): String? {
+        currentOrderResponse?.let{
+            return it.subtotal?.formatedValue
+        }
+        return null
     }
 
 
@@ -278,7 +342,7 @@ class CartManager(
         return currentOrderResponse?.restaurant?.id == restaurantId
     }
 
-    fun getCurrentOrderOrderItems(): List<OrderItem>? {
+    fun getCurrentOrderItems(): List<OrderItem>? {
         currentOrderResponse.let {
             return it?.orderItems
         }
@@ -375,9 +439,7 @@ class CartManager(
         }
     }
 
-    fun updateCurCookingSlot(currentCookingSlot: CookingSlot) {
-        this.currentCookingSlot = currentCookingSlot
-    }
+
 
 
     /**

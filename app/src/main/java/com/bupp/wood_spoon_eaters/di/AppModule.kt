@@ -118,10 +118,10 @@ val appModule = module {
     viewModel { PromoCodeViewModel(get()) }
     viewModel { FeeAndTaxViewModel(get()) }
 
-    viewModel { UpSaleNCartViewModel() }
+    viewModel { UpSaleNCartViewModel(get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get()) }
@@ -151,8 +151,8 @@ val appModule = module {
 
     //RestaurantPage
     viewModel { RestaurantMainViewModel() }
-    viewModel { RestaurantPageViewModel(get(), get(),get()) }
-    viewModel { DishPageViewModel(get(),get()) }
+    viewModel { RestaurantPageViewModel(get(), get(), get()) }
+    viewModel { DishPageViewModel(get(),get(), get()) }
 
 
 }

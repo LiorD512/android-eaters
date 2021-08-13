@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository, private val oldCartManager: OldCartManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
-    private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager): ViewModel()  {
+    private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
+    private val cartManager: CartManager): ViewModel()  {
 
 //    val progressData = ProgressData()
 
@@ -52,7 +53,7 @@ class MainViewModel(
         mainNavigationEvent.postValue(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
-
+    val floatingCartBtnEvent = cartManager.getFloatingCartBtnEvent()
 //    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
 //    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
     val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()

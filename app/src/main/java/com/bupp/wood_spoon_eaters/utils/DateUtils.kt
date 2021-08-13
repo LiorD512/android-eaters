@@ -248,11 +248,19 @@ object DateUtils {
         return calendar.time
     }
 
-    fun parseCookingSlotForNowOrDates(cookingSlot: CookingSlot): String {
-        return if (isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)) {
+//    fun parseCookingSlotForNowOrDates(cookingSlot: CookingSlot): String {
+//        return if (isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)) {
+//            "Now"
+//        } else {
+//            "${parseDateToDayAndUsTime(cookingSlot.startsAt)} - ${parseDateToUsTime(cookingSlot.endsAt)}"
+//        }
+//    }
+
+    fun parseDatesToNowOrDates(startsAt: Date, endsAt: Date): String {
+        return if (isNowInRange(startsAt, endsAt)) {
             "Now"
         } else {
-            "${parseDateToDayAndUsTime(cookingSlot.startsAt)} - ${parseDateToUsTime(cookingSlot.endsAt)}"
+            "${parseDateToDayAndUsTime(startsAt)} - ${parseDateToUsTime(endsAt)}"
         }
     }
 }

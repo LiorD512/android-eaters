@@ -68,12 +68,12 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
         @SuppressLint("SetTextI18n")
         fun bindItem(dishItem: CartAdapterItem) {
             Log.d(TAG, "bindItem - cart dish")
-            val dish = dishItem.menuItem?.dish
-            dish?.let {
-                name.text = dish.name
-                quantity.text = "${dishItem.cartQuantity}"
-                price.text = "$${dish.price?.formatedValue}"
-                description.text = "$${dish.price?.formatedValue}" //todo - add note after we get the dish model from server
+            val customCartItem = dishItem.customCartItem
+            customCartItem.let {
+                name.text = it.dishName
+                quantity.text = "${it.quantity}"
+                price.text = "${it.price}"
+                description.text = "${it.note}"
             }
         }
 

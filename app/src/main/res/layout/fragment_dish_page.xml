@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
@@ -10,7 +9,7 @@
         app:layoutDescription="@xml/fragment_dish_page_scene">
 
     <Space
-            android:id="@+id/space"
+            android:id="@+id/dishFragSpace"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="300dp"
@@ -18,15 +17,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-            android:id="@+id/coverPhotoLayout"
+            android:id="@+id/dishFragCoverPhotoLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/space"
+            app:layout_constraintBottom_toTopOf="@id/dishFragSpace"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-                android:id="@+id/coverPhoto"
+                android:id="@+id/dishFragCoverPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -35,7 +34,7 @@
     </FrameLayout>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/topHeader"
+            android:id="@+id/dishFragTopHeader"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:alpha="0"
@@ -46,7 +45,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-            android:id="@+id/topHeaderDishName"
+            android:id="@+id/dishFragTopHeaderDishName"
             style="@style/LatoBlack19DarkGrey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,12 +54,12 @@
             android:alpha="0"
             android:elevation="15dp"
             android:text="Labneh"
-            app:layout_constraintBottom_toBottomOf="@+id/backButton"
-            app:layout_constraintStart_toEndOf="@id/backButton" />
+            app:layout_constraintBottom_toBottomOf="@+id/dishFragBackButton"
+            app:layout_constraintStart_toEndOf="@id/dishFragBackButton" />
 
 
     <ImageView
-            android:id="@+id/backButton"
+            android:id="@+id/dishFragBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15.4dp"
@@ -70,7 +69,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/shareButton"
+            android:id="@+id/dishFragShareButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15.4dp"
@@ -82,17 +81,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-            android:id="@+id/dishHeader"
+            android:id="@+id/dishFragDishHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_white_top_cornered"
             android:orientation="horizontal"
             android:padding="23dp"
-            app:layout_constraintBottom_toTopOf="@id/space"
+            app:layout_constraintBottom_toTopOf="@id/dishFragSpace"
             app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-                android:id="@+id/dishHeaderName"
+                android:id="@+id/dishFragHeaderName"
                 style="@style/Bold19Dark"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -100,7 +99,7 @@
                 tools:text="Labneh" />
 
         <TextView
-                android:id="@+id/dishHeaderPrice"
+                android:id="@+id/dishFragHeaderPrice"
                 style="@style/Bold19Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,30 +107,65 @@
     </LinearLayout>
 
     <com.bupp.wood_spoon_eaters.views.ResizableTagsView
-            android:id="@+id/dishTags"
+            android:id="@+id/dishFragTags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="23dp"
             android:paddingBottom="15dp"
-            app:layout_constraintTop_toBottomOf="@id/dishHeader"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dishFragDishHeader" />
 
     <FrameLayout
-            android:id="@+id/mainList"
+            android:id="@+id/dishFragMainList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
             android:animateLayoutChanges="true"
+            android:overScrollMode="never"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dishTags">
+            app:layout_constraintTop_toBottomOf="@+id/dishFragTags">
 
         <include
-                android:id="@+id/dishMainListLayout"
+                android:id="@+id/dishFragMainListLayout"
                 layout="@layout/dish_main_list_layout" />
 
         <include
-                android:id="@+id/dishMainListLayoutSkeleton"
+                tools:visibility="gone"
+                android:id="@+id/dishFragMainListLayoutSkeleton"
                 layout="@layout/dish_main_list_layout_skeleton" />
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/dishFragAddBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="12.4dp"
+                android:layout_marginBottom="7.7dp"
+                app:cardBackgroundColor="@color/teal_blue"
+                app:cardCornerRadius="7.7dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true">
+
+            <TextView
+                    style="@style/LatoBlack15White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="0sp"
+                    android:paddingVertical="15dp"
+                    android:text="Add to cart" />
+
+            <TextView
+                    android:id="@+id/dishFragAddBtnPrice"
+                    style="@style/LatoBlack15White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:letterSpacing="0.03"
+                    android:paddingEnd="15.4dp"
+                    android:text="$7" />
+
+        </androidx.cardview.widget.CardView>
     </FrameLayout>
 
 

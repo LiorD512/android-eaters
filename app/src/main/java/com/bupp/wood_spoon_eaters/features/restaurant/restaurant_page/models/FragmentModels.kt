@@ -24,6 +24,7 @@ data class RestaurantInitParams(
 @Parcelize
 data class DishInitParams(
     val menuItem: MenuItem,
-    val currentSelectedDate: Long? = null,
-    val availability: AvailabilityDate? = null
+    val cookingSlot: CookingSlot?,
+//    val currentSelectedDate: Long? = null,
+//    val availability: AvailabilityDate? = null
 ) : Parcelable

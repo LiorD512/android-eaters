@@ -2,11 +2,13 @@ package com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_r
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +35,7 @@ class ClearCartRestaurantBottomSheet(val listener: ClearCartListener): BottomShe
 
     interface ClearCartListener{
         fun onPerformClearCart()
+        fun onClearCartCanceled()
     }
 
     private val binding: ClearCartRestaurantBottomSheetBinding by viewBinding()
@@ -86,8 +89,12 @@ class ClearCartRestaurantBottomSheet(val listener: ClearCartListener): BottomShe
 
             val sb = SpannableStringBuilder(subTitle)
             val fcs = ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.teal_blue))
-            sb.setSpan(fcs, 57, subTitle.length - 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-
+            sb.setSpan(fcs, 56, subTitle.length - 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            sb.setSpan(
+                StyleSpan(Typeface.BOLD),
+                56, subTitle.length - 9,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             clearCartRestSubtitle.text = sb
 
             clearCartRestClearBtn.setOnClickListener {
@@ -95,6 +102,7 @@ class ClearCartRestaurantBottomSheet(val listener: ClearCartListener): BottomShe
                 dismiss()
             }
             clearCartRestCancelBtn.setOnClickListener {
+                listener.onClearCartCanceled()
                 dismiss()
             }
         }
