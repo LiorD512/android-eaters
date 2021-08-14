@@ -171,7 +171,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
                 dishFragTags.setTags(orderItem.menuItem?.tags)
 
             dishFragMainListLayout.dishFragRemoveBtn.visibility = View.VISIBLE
-            dishFragMainListLayout.dishFragRemoveBtn.setOnClickListener {  }
+            dishFragMainListLayout.dishFragRemoveBtn.setOnClickListener {
+                viewModel.onDishRemove(orderItem.dish.id)
+            }
 
             initDishQuantityButtons(initialCounter = orderItem.quantity, maxQuantity = orderItem.menuItem?.quantity ?: -1)
         }

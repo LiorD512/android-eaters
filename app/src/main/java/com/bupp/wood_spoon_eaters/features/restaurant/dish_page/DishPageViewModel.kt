@@ -193,6 +193,15 @@ class DishPageViewModel(
         }
     }
 
+    fun onDishRemove(dishId: Long){
+        viewModelScope.launch {
+            val result = cartManager.removeOrderItems(dishId)
+            if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
+                onFinishDishPage.postValue(true)
+            }
+        }
+    }
+
 
     companion object{
         const val TAG = "dishPageVM"

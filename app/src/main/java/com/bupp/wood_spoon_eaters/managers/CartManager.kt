@@ -201,7 +201,7 @@ class CartManager(
      * this functions is called whenever a user swiped out (right) a dish.
      * it updates the order with a "destroyed" orderItems list.
      */
-    suspend fun removeOrderItems(dishId: Long) {
+    suspend fun removeOrderItems(dishId: Long): OrderRepository.OrderRepoStatus? {
         val orderRequest = buildOrderRequest(getDestroyedOrderItemsRequestByDishId(dishId))
         val result = orderRepository.updateOrder(getCurOrderId(), orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
@@ -213,6 +213,7 @@ class CartManager(
         } else {
             //check for errors
         }
+        return result.type
     }
 
     /**
