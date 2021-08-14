@@ -22,7 +22,7 @@
 
     <fragment
             android:id="@+id/checkoutFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragment"
             android:label="fragment_checkout"
             tools:layout="@layout/checkout_fragment">
 

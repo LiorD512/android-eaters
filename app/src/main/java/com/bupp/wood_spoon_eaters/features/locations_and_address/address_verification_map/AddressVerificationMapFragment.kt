@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentAddressVerificationMapBind
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -35,7 +36,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private val binding: FragmentAddressVerificationMapBinding by viewBinding()
     private val viewModel by viewModel<AddressMapVerificationViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
-    private val checkoutViewModel by sharedViewModel<NewOrderMainViewModel>()
+    private val checkoutViewModel by sharedViewModel<CheckoutViewModel>()
     private val orderHistoryViewModel by sharedViewModel<OrdersHistoryViewModel>()
 
     private var googleMap: GoogleMap? = null
@@ -114,7 +115,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     }
 
     private fun initObservers() {
-        checkoutViewModel.orderData.observe(viewLifecycleOwner, { orderData ->
+        checkoutViewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             updateCheckoutMap(orderData)
         })
         mainViewModel.newAddressLiveData.observe(viewLifecycleOwner, {
@@ -214,8 +215,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                     Log.d("wowMapBinder","chefLocation $chefLocation")
                 }
             }
-            val myLat = curOrderData.deliveryAddress?.lat
-            val myLng = curOrderData.deliveryAddress?.lng
+            val myLat = curOrderData.deliveryAddress?.lat ?: 0
+            val myLng = curOrderData.deliveryAddress?.lng ?: 0
             myLat?.let{
                 myLng?.let{
                     val myLocation = LatLng(myLat, myLng)

@@ -196,6 +196,26 @@ class CartManager(
         return OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED
     }
 
+    /**
+     * this function is used to update order params - ex. deliveryTime, AddressId, Ups, etc.
+     * @param orderRequest OrderRequest
+     * @param eventType String?
+     * @return OrderRepository.OrderRepoResult<Order>?
+     */
+    suspend fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
+        Log.d(TAG, "updateOrderParams")
+        currentOrderResponse?.let {
+            val result = orderRepository.updateOrder(it.id!!, orderRequest)
+            handleEvent(eventType)
+            result.data?.let {
+                updateCartManagerParams(it.copy())
+                return result
+            }
+            return result
+        }
+        return null
+    }
+
 
     /**
      * this functions is called whenever a user swiped out (right) a dish.
@@ -245,6 +265,16 @@ class CartManager(
             return result
         }
         //inspect result log if reach here.
+        return null
+    }
+
+    /** Checkout page related functions
+     */
+    //todo - fix this
+    fun getAvailableMenuItems(): List<MenuItem>? {
+        currentOrderResponse?.let{
+            return it.cookingSlot?.sections?.get(0)?.menuItems
+        }
         return null
     }
 
@@ -337,10 +367,46 @@ class CartManager(
         return null
     }
 
+    /**
+     * Ups Data Functions
+     */
+    suspend fun getUpsShippingRates(): OrderRepository.OrderRepoResult<List<ShippingMethod>>? {
+        this.currentOrderResponse?.id?.let { it ->
+            return orderRepository.getUpsShippingRates(it)
+        }
+        return null
+    }
+    suspend fun updateShippingService(shippingService: String) {
+//        this.shippingService = shippingService
+        val deliveryTime = getCurrentCookingSlot()?.startsAt
+        val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
+        val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
+        updateOrderParams(orderRequest)
+    }
+
 
     /**
      * Analytics data calculations
      */
+
+    private fun handleEvent(eventType: String?) {
+        eventType?.let {
+            when (it) {
+                Constants.EVENT_TIP -> {
+                    eventsManager.logEvent(eventType, getTipData())
+                }
+            }
+        }
+    }
+
+    private fun getTipData(): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["order_total_before_tip"] = currentOrderResponse?.totalBeforeTip?.formatedValue ?: "0"
+        data["order_total_including_tip"] = currentOrderResponse?.total?.formatedValue ?: "0"
+        data["tip_quantity"] = currentOrderResponse?.tip?.formatedValue ?: "0"
+        return data
+    }
+
     private fun getOrderValue(isSuccess: Boolean, wsError: List<WSError>? = null): Map<String, Any> {
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()

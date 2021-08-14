@@ -31,7 +31,7 @@ import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientViewModel

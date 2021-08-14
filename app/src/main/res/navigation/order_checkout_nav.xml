@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/order_checkout_nav.xml"
+        app:startDestination="@id/checkoutFragment">
+
+    <fragment
+            android:id="@+id/checkoutFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragment"
+            android:label="CheckoutFragment" />
+
+</navigation>
+

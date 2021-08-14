@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -95,6 +97,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onCartDishCLick(customCartItem: CustomCartItem) {
         mainViewModel.openDishPageWithOrderItem(customCartItem)
+    }
+
+    override fun onGoToCheckoutClicked() {
+        startActivity(Intent(requireContext(), OrderCheckoutActivity::class.java))
     }
 
     private fun onDeliveryTimingChange(date: SortedCookingSlots?) {

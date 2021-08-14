@@ -36,6 +36,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     interface UpsaleNCartBSListener{
         fun refreshParentOnCartCleared()
         fun onCartDishCLick(customCartItem: CustomCartItem)
+        fun onGoToCheckoutClicked()
     }
 
     private var defaultPeekHeight = Utils.toPx(400)
@@ -146,6 +147,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         viewModel.navigationEvent.observe(viewLifecycleOwner, {
             when (it) {
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_CHECKOUT -> {
+                    listener?.onGoToCheckoutClicked()
                     dismiss()
                 }
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_UP_SALE -> {
