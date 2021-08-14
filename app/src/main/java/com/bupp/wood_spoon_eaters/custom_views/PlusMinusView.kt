@@ -17,11 +17,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var counter: Int = 0
     private var listener: PlusMinusInterface? = null
     private var position: Int = -1
+    private var maxQuantity: Int = -1
     private var quantityLeft: Int = -1
     private var canReachZero: Boolean = true
 
     fun setPlusMinusListener(listener: PlusMinusInterface, position: Int = 0, initialCounter: Int = 0, quantityLeft: Int? = 1, canReachZero: Boolean = true) {
         Log.d("wowPlusMinus","initialCounter $initialCounter, quantityLeft: $quantityLeft")
+//        initialCounter = orderItem.quantity, quantityLeft = orderItem.menuItem?.quantity
         this.listener = listener
         this.position = position
         this.counter = initialCounter
@@ -43,15 +45,35 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initUi()
     }
 
+    fun initSimplePlusMinus(listener: PlusMinusInterface, initialCounter: Int = 0, quantityLeft: Int = 1) {
+        Log.d("setSimplePlusMinus","initialCounter $initialCounter, quantityLeft: $quantityLeft")
+        this.listener = listener
+        this.counter = initialCounter
+        this.quantityLeft = quantityLeft
+        this.canReachZero = false
+
+        binding.plusMinusCounter.text = "$counter"
+
+        if(counter >= this.quantityLeft){
+            handlePlus(false)
+        }
+
+        if(!canReachZero && counter == 1){
+            handleMinus(false)
+        }
+
+        initUi()
+    }
+
     fun updateCounterUiOnly(count: Int) {
         counter = count
         binding.plusMinusCounter.text = "$counter"
     }
 
-    fun setViewEnabled(isEnabled: Boolean) {
-        handleMinus(isEnabled)
-        handlePlus(isEnabled)
-    }
+//    fun setViewEnabled(isEnabled: Boolean) {
+//        handleMinus(isEnabled)
+//        handlePlus(isEnabled)
+//    }
 
     interface PlusMinusInterface {
         fun onPlusMinusChange(counter: Int, position: Int)
@@ -61,18 +83,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun initUi() {
         binding.plusMinusMinus.setOnClickListener {
             if (counter > 0) {
+                counter--
+                binding.plusMinusCounter.text = "$counter"
+                listener?.onPlusMinusChange(counter, position)
+
+                if(counter == quantityLeft){
+                    handlePlus(false)
+                }else{
+                    handlePlus(true)
+                }
                 if(!canReachZero && counter == 1){
                     handleMinus(false)
-                }else{
-                    counter--
-                    binding.plusMinusCounter.text = "$counter"
-                    listener?.onPlusMinusChange(counter, position)
-
-                    if(counter == quantityLeft){
-                        handlePlus(false)
-                    }else{
-                        handlePlus(true)
-                    }
                 }
             }
         }
@@ -88,18 +109,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
             handleMinus(true)
         }
-        handleMinus(true)
-        handlePlus(true)
+
+//        handleMinus(true)
+//        handlePlus(true)
     }
 
     private fun handlePlus(isEnabled: Boolean){
         binding.plusMinusPlus.isEnabled = isEnabled
         if(isEnabled){
             binding.plusMinusPlus.alpha = 1f
-            binding.plusMinusCounter.alpha = 1f
+//            binding.plusMinusCounter.alpha = 1f
         }else{
             binding.plusMinusPlus.alpha = 0.5f
-            binding.plusMinusCounter.alpha = 0.5f
+//            binding.plusMinusCounter.alpha = 0.5f
         }
     }
 

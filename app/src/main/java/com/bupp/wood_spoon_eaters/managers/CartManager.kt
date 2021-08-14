@@ -24,8 +24,11 @@ class CartManager(
     val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
     val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
 
+    private var tempCookingSlotId = LiveEventData<Long>()
+    fun getOnCookingSlotIdChange() = tempCookingSlotId
+
     private val orderLiveData = MutableLiveData<Order>()
-    fun getCurrentCartData() = orderLiveData
+    fun getCurrentOrderData() = orderLiveData
 
     private val wsErrorEvent = LiveEventData<String>()
     fun getWsErrorEvent() = wsErrorEvent
@@ -134,7 +137,6 @@ class CartManager(
             result.data?.let {
                 updateCartManagerParams(it.copy())
             }
-
             val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
             eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
         } else {
@@ -205,7 +207,19 @@ class CartManager(
         return listOf()
     }
 
-    //update dish
+    /**
+     * Dish Page related functions
+     */
+
+
+    suspend fun getFullDish(menuItemId: Long): OrderRepository.OrderRepoResult<FullDish>? {
+        val result = orderRepository.getFullDish(menuItemId)
+        if(result.type == OrderRepository.OrderRepoStatus.FULL_DISH_SUCCESS){
+            return result
+        }
+        //inspect result log if reach here.
+        return null
+    }
 
     /**
      * Global methods
@@ -214,14 +228,14 @@ class CartManager(
     private var pendingRequestParam: PendingRequestParam? = null
 
     data class PendingRequestParam(
-        val cookingSlot: CookingSlot,
+        val cookingSlotId: Long,
         val quantity: Int,
         val dishId: Long,
         val note: String?
     )
 
-    fun setPendingRequestParams(cookingSlot: CookingSlot, quantity: Int, dishId: Long, note: String?) {
-        pendingRequestParam = PendingRequestParam(cookingSlot, quantity, dishId, note)
+    fun setPendingRequestParams(cookingSlotId: Long, quantity: Int, dishId: Long, note: String?) {
+        pendingRequestParam = PendingRequestParam(cookingSlotId, quantity, dishId, note)
     }
 
     fun getCurrentCookingSlot(): CookingSlot? {
@@ -231,8 +245,18 @@ class CartManager(
         return null
     }
 
-    fun updateCurCookingSlot(currentCookingSlotId: Long) {
+    fun updateCurCookingSlotId(currentCookingSlotId: Long) {
+        //updating the current cooking slot everytime before starting a new cart
         this.currentCookingSlotId = currentCookingSlotId
+    }
+
+    /** this functions is called when user starts a new cart from dishPage,
+     * forcing cooking slot change will update restaurant page on user return.
+      * @param currentCookingSlotId Long
+     */
+    fun forceCookingSlotChnage(currentCookingSlotId: Long){
+        tempCookingSlotId.postRawValue(currentCookingSlotId)
+
     }
 
 
@@ -243,14 +267,26 @@ class CartManager(
     /**
      * this function is being called when user decided to clear the cart via ClearCart dialog.
      */
-    suspend fun onCartCleared() {
+     fun onCartCleared() {
         currentOrderResponse = null
+    }
+
+    /**
+     * this function is called to add a dish to cart after user accepted clear cart dialog
+     * the function checks is there is a pending "add to cart" action,
+     * and clearing action after execute.
+     * @return OrderRepository.OrderRepoStatus? - status is returned to DishPage to inform page
+     * to dismiss it self in case of success.
+     */
+    suspend fun checkForPendingActions(): OrderRepository.OrderRepoStatus? {
         pendingRequestParam?.let {
-            //addtocart
-            updateCurCookingSlot(it.cookingSlot.id)
-            addToCart(it.quantity, it.dishId, it.note)
+            updateCurCookingSlotId(it.cookingSlotId)
+            forceCookingSlotChnage(it.cookingSlotId)
+            val result = addToCart(it.quantity, it.dishId, it.note)
             pendingRequestParam = null
+            return result
         }
+        return null
     }
 
     private fun updateCartManagerParams(order: Order) {
@@ -438,7 +474,6 @@ class CartManager(
             return it?.restaurant?.getFullName() ?: "no_name"
         }
     }
-
 
 
 

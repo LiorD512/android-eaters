@@ -63,7 +63,7 @@ class OldCartManager(
 
     suspend fun getFullDish(menuItemId: Long): GetFullDishResult? {
 //        val feedRequest = feedDataManager.getLastFeedRequest()
-        val result = orderRepository.getFullDish(menuItemId, buildDishRequest())
+        val result = orderRepository.getFullDish(menuItemId)
         result.data?.let {
             //build new currentItemRequest
             initNewOrderItemRequest(it)

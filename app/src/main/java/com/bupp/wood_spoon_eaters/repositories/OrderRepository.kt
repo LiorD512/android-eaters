@@ -38,9 +38,9 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         WS_ERROR
     }
 
-    suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): OrderRepoResult<FullDish> {
+    suspend fun getFullDish(menuItemId: Long): OrderRepoResult<FullDish> {
         val result = withContext(Dispatchers.IO) {
-            apiService.getFullDish(menuItemId, feedRequest)
+            apiService.getFullDishNew(menuItemId)
         }
         result.let{
             return  when (result) {

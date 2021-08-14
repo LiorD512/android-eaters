@@ -2,14 +2,16 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.model.Dish
+import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(
     val cartManager: CartManager
 ) : ViewModel() {
 
     var currentPageState = PageState.CART
+    val currentOrderData = cartManager.getCurrentOrderData()
 
 
     enum class PageState {
@@ -48,21 +50,21 @@ class UpSaleNCartViewModel(
 
 
     val upsaleNCartLiveData = MutableLiveData<CartData>()
+
     data class CartData(
-        val items: List<CartBaseAdapterItem>
+        val items: List<CartBaseAdapterItem>?
     )
 
-//    val upsaleLiveData = MutableLiveData<UpsaleData>()
-//    data class UpsaleData(
-//        val items: List<UpSaleAdapterItem>
-//    )
 
-    private fun fetchCartData(): CartData {
+    private fun fetchCartData(): CartData? {
         val list = mutableListOf<CartBaseAdapterItem>()
-        val orderItems = cartManager.getCurrentOrderItems()
-        val subTotal = cartManager.getOrderSubTotal()
+        val orderItems = currentOrderData.value?.orderItems
+        if(orderItems?.isEmpty() == true){
+            return null
+        }
         orderItems?.forEach {
             val customCartItem = CustomCartItem(
+                dishId = it.dish.id,
                 dishName = it.dish.name,
                 quantity = it.quantity,
                 price = it.price.formatedValue ?: "0",
@@ -70,13 +72,13 @@ class UpSaleNCartViewModel(
             )
             list.add(CartAdapterItem(customCartItem = customCartItem))
         }
-        subTotal?.let{
+
+        val subTotal = currentOrderData.value?.subtotal?.formatedValue
+        subTotal?.let {
             list.add(CartAdapterSubTotalItem(it))
         }
         return CartData(list)
     }
-
-
 
 
     private fun fetchUpSaleData(): CartData {
@@ -85,5 +87,31 @@ class UpSaleNCartViewModel(
         return CartData(list)
     }
 
+
+    fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
+        viewModelScope.launch {
+            cartManager.addOrUpdateCart(quantity, dishId, note)
+        }
+    }
+
+    fun removeOrderItemsByDishId(dishId: Long?) {
+        dishId?.let {
+            viewModelScope.launch {
+                cartManager.removeOrderItems(it)
+            }
+        }
+    }
+
+//    /**
+//     * this function is being called when user swiped out all of his
+//     * items from the cart - restaurant page need to update item items counter
+//     */
+//    fun onCartCleared(){
+//        viewModelScope.launch {
+//            cartManager.currentCookingSlotId?.let{
+//                cartManager.updateCurCookingSlot(it)
+//            }
+//        }
+//    }
 
 }

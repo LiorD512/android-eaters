@@ -24,7 +24,6 @@ import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddr
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
-import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
@@ -32,7 +31,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
-import com.bupp.wood_spoon_eaters.views.floating_cart_button.FloatingCartButton
+import com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager

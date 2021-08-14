@@ -26,11 +26,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
+class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : BottomSheetDialogFragment() {
+
+    interface UpsaleNCartBSListener{
+        fun refreshParentOnCartCleared()
+    }
 
     private var defaultPeekHeight = Utils.toPx(400)
 
@@ -150,14 +153,52 @@ class UpSaleNCartBottomSheet : BottomSheetDialogFragment() {
         viewModel.upsaleNCartLiveData.observe(viewLifecycleOwner, {
             handleCartData(it)
         })
+        viewModel.currentOrderData.observe(viewLifecycleOwner, {
+            viewModel.initData()
+        })
     }
 
-    private fun handleCartData(data: UpSaleNCartViewModel.CartData) {
+    private fun handleCartData(data: UpSaleNCartViewModel.CartData?) {
         Log.d(TAG, "handleCartData data: $data")
-        cartAdapter = UpSaleNCartAdapter()
-        binding.cartFragList.initSwipeableRecycler(cartAdapter)
-        cartAdapter.submitList(data.items)
+        if(data != null){
+            cartAdapter = UpSaleNCartAdapter(getAdapterListener())
+            binding.cartFragList.initSwipeableRecycler(cartAdapter)
+            cartAdapter.submitList(data.items)
+        }else{
+//            listener?.refreshParentOnCartCleared()
+            dismiss()
+        }
     }
+
+    private fun getAdapterListener(): UpSaleNCartAdapter.UpSaleNCartAdapterListener =
+        object : UpSaleNCartAdapter.UpSaleNCartAdapterListener {
+            override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
+                when(item){
+                    is CartAdapterItem -> {
+                        val itemCopy = item
+                        viewModel.addDishToCart(1, itemCopy.customCartItem.dishId)
+                    }
+                    is UpsaleAdapterItem -> {}
+                    else -> {}
+                }
+            }
+
+            override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
+                when(item){
+                    is CartAdapterItem -> {
+                        viewModel.removeOrderItemsByDishId(item.customCartItem.dishId)
+                    }
+                    is UpsaleAdapterItem -> {}
+                    else -> {}
+                }
+            }
+
+            override fun onCartBtnClicked() {
+                //cart pending opening
+//                val curCookingSlot = viewModel.currentCookingSlot
+//                mainViewModel.openDishPage(menuItem, curCookingSlot)
+            }
+        }
 
     private fun navToUpSale() {
         Log.d(TAG, "navToUpSale")

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter
 
+import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ abstract class SwipeableAdapter<T: SwipeableAdapterItem>(diff :DiffUtil.ItemCall
 
     fun updateItemQuantityAdd(position: Int) {
         val item = getItem(position)
+        Log.d(TAG, "updateItemQuantityAdd $position")
         item.cartQuantity++
         onDishSwipedAdd(item)
     }

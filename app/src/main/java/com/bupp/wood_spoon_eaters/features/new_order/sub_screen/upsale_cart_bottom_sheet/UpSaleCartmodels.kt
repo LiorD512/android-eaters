@@ -46,6 +46,7 @@ data class CartAdapterSubTotalItem(
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)
 
 data class CustomCartItem(
+    val dishId: Long,
     val dishName: String,
     val quantity: Int,
     val price: String,

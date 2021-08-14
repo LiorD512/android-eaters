@@ -51,7 +51,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     private fun initUi() {
         with(binding){
-            singleDishPlusMinus.setViewEnabled(true)
+//            singleDishPlusMinus.setViewEnabled(true)
             singleDishInfoCook.setUserImageViewListener(this@SingleDishInfoFragment)
             singleDishInfoRating.setOnClickListener { onRatingClick() }
 

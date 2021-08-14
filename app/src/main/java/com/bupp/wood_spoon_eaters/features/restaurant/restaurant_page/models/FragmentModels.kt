@@ -8,7 +8,7 @@ import com.bupp.wood_spoon_eaters.model.WSImage
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-data class DeliveryDate(val date: Date, val cookingSlots: MutableList<CookingSlot>)
+data class SortedCookingSlots(val date: Date, val cookingSlots: MutableList<CookingSlot>)
 
 @Parcelize
 data class RestaurantInitParams(
@@ -25,6 +25,4 @@ data class RestaurantInitParams(
 data class DishInitParams(
     val menuItem: MenuItem,
     val cookingSlot: CookingSlot?,
-//    val currentSelectedDate: Long? = null,
-//    val availability: AvailabilityDate? = null
 ) : Parcelable

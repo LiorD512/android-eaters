@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.views.floating_cart_button
+package com.bupp.wood_spoon_eaters.views.floating_buttons
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,7 +8,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bupp.wood_spoon_eaters.databinding.FloatingCartButtonBinding
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
-import java.text.DecimalFormat
 
 class FloatingCartButton @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :

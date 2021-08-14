@@ -9,14 +9,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.*
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSingleDish
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 import com.google.android.material.imageview.ShapeableImageView
 
-class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
+class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
 
-    interface CartAdapterListener{
+
+    interface UpSaleNCartAdapterListener{
+        fun onDishSwipedAdd(item: CartBaseAdapterItem)
+        fun onDishSwipedRemove(item: CartBaseAdapterItem)
         fun onCartBtnClicked()
+    }
+
+    override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
+        listener.onDishSwipedAdd(item)
+    }
+
+    override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
+        listener.onDishSwipedRemove(item)
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -136,11 +148,5 @@ class UpSaleNCartAdapter : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback())
         const val TAG = "wowCartAdapter"
     }
 
-    override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
 
-    }
-
-    override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
-
-    }
 }

@@ -57,7 +57,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/dishFragBackButton"
             app:layout_constraintStart_toEndOf="@id/dishFragBackButton" />
 
-
     <ImageView
             android:id="@+id/dishFragBackButton"
             android:layout_width="wrap_content"
@@ -133,40 +132,12 @@
                 android:id="@+id/dishFragMainListLayoutSkeleton"
                 layout="@layout/dish_main_list_layout_skeleton" />
 
-        <androidx.cardview.widget.CardView
-                android:id="@+id/dishFragAddBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginHorizontal="12.4dp"
-                android:layout_marginBottom="7.7dp"
-                app:cardBackgroundColor="@color/teal_blue"
-                app:cardCornerRadius="7.7dp"
-                app:cardElevation="3dp"
-                app:cardUseCompatPadding="true">
-
-            <TextView
-                    style="@style/LatoBlack15White"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:letterSpacing="0.03"
-                    android:lineSpacingExtra="0sp"
-                    android:paddingVertical="15dp"
-                    android:text="Add to cart" />
-
-            <TextView
-                    android:id="@+id/dishFragAddBtnPrice"
-                    style="@style/LatoBlack15White"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:letterSpacing="0.03"
-                    android:paddingEnd="15.4dp"
-                    android:text="$7" />
-
-        </androidx.cardview.widget.CardView>
     </FrameLayout>
 
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingAddToCartButton
+            android:id="@+id/dishFragAddToCartBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

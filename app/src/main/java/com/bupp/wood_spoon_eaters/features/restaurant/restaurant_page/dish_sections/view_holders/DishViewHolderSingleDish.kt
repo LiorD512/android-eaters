@@ -21,7 +21,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish
         val dish = section.menuItem.dish
-        Log.d("wowSingleDish","bind ${dish?.name}")
+//        Log.d("wowSingleDish","bind ${dish?.name}")
         with(binding) {
             dish?.let { dish ->
                 Glide.with(root.context).load(dish.thumbnail?.url).into(dishPhoto)
@@ -33,14 +33,14 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                 dishQuantity.isVisible = section.cartQuantity > 0
                 dishTagsView.isVisible = false
                 if (section.menuItem.availableLater == null) {
-                    Log.d("wowSingleDish","availableLater = null ${dish?.name}")
+//                    Log.d("wowSingleDish","availableLater = null ${dish?.name}")
                     isSwipeable = true
                     section.menuItem.tags?.let{
                         dishTagsView.setTags(section.menuItem.tags)
                         dishTagsView.isVisible = true
                     }
                 } else {
-                    Log.d("wowSingleDish","availableLater ${dish?.name}")
+//                    Log.d("wowSingleDish","availableLater ${dish?.name}")
                     section.menuItem.availableLater?.let{ it->
                         isSwipeable = false // todo - maybe replace we grey "disabled" ui instead of the teal_blue shape (inside item decorator)
                         val tag = it.getStartEndAtTag()

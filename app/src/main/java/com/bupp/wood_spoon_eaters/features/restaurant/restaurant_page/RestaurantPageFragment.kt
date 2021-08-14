@@ -23,7 +23,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DeliveryDate
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.CookingSlot
@@ -31,14 +31,15 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-import com.bupp.wood_spoon_eaters.views.floating_cart_button.FloatingCartButton
+import com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener,
-    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener, FloatingCartButton.FloatingCartButtonListener {
+    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener, FloatingCartButton.FloatingCartButtonListener,
+    UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
@@ -88,13 +89,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun openCartNUpsaleDialog() {
-        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
-    private fun onDeliveryTimingChange(date: DeliveryDate?) {
-        date?.let {
-            viewModel.onDeliveryDateChanged(date)
-        }
+    private fun onDeliveryTimingChange(date: SortedCookingSlots?) {
+
     }
 
     private fun initObservers() {
@@ -107,10 +106,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             handleRestaurantFullData(it)
         })
         viewModel.deliveryDatesData.observe(viewLifecycleOwner, {
-            handleDeliveryTimingData(it)
+            initDeliveryDatesTabLayout(it)
         })
-        viewModel.timePickerUi.observe(viewLifecycleOwner, {
-            handleTimePickerUi(it)
+        viewModel.onCookingSlotUiChange.observe(viewLifecycleOwner, {
+            handleCookingSlotUiChange(it)
         })
         viewModel.dishListData.observe(viewLifecycleOwner, {
             handleDishesList(it)
@@ -130,12 +129,22 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.timePickerEvent.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { it1 -> handleTimePickerClick(it1) }
         })
-        viewModel.currentCookingSlotData.observe(viewLifecycleOwner,{
-            handleCookingSlotChange(it)
+        viewModel.onCookingSlotForceChange.observe(viewLifecycleOwner , {
+            it.getContentIfNotHandled()?.let{ viewModel.forceCookingSlotUiChange(it) }
         })
         viewModel.floatingBtnEvent.observe(viewLifecycleOwner, {
             handleFloatingBtnEvent(it)
         })
+    }
+
+    private fun handleCookingSlotUiChange(uiChange: RestaurantPageViewModel.CookingSlotUi?) {
+        uiChange?.let{
+            //timer picker ui
+            handleTimePickerUi(uiChange.timePickerString)
+            //delivery dates tabLayout
+            binding.restaurantMainListLayout.restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+            //current menu list
+        }
     }
 
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
@@ -185,7 +194,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         adapterDishes?.submitList(dishSections.dishes)
     }
 
-    private fun handleDeliveryTimingData(datesList: List<DeliveryDate>?) {
+    private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
         datesList?.let {
             with(binding.restaurantMainListLayout) {
                 restaurantDeliveryDates.initDates(it)
@@ -231,14 +240,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleCookingSlotChange(cookingSlot: CookingSlot?) {
-        cookingSlot?.let {
-            with(binding.restaurantMainListLayout) {
-                //todo : not sure about this shit
-                restaurantDeliveryDates.selectTabByCookingSlot(cookingSlot)
-            }
-        }
-    }
+//    private fun handleCookingSlotChange(cookingSlot: CookingSlot?) {
+//        cookingSlot?.let {
+//            with(binding.restaurantMainListLayout) {
+//                //todo : not sure about this shit
+//                restaurantDeliveryDates.selectTabByCookingSlot(cookingSlot)
+//            }
+//        }
+//    }
 
     /** All sections click actions **/
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
@@ -265,9 +274,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.onCookingSlotSelected(cookingSlot)
     }
 
-    override fun onDateSelected(date: DeliveryDate?) {
+    override fun onDateSelected(date: SortedCookingSlots?) {
         //callback from time tab layout
-        onDeliveryTimingChange(date)
+        date?.let {
+            viewModel.onDeliveryDateChanged(date)
+        }
     }
 
     companion object {
@@ -305,7 +316,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 //    }
 
     override fun onWSErrorDone() {
-        viewModel.refreshRestaurantUiToInitialState()
+        viewModel.refreshRestaurantUi()
     }
 
     override fun onPerformClearCart() {
@@ -313,12 +324,17 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     override fun onClearCartCanceled() {
-        viewModel.refreshRestaurantUiToInitialState()
+        viewModel.refreshRestaurantUi()
+    }
+
+    override fun refreshParentOnCartCleared() {
+        viewModel.refreshRestaurantUi()
     }
 
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
         binding.restaurantFragHeightCorrection.isVisible = isShowing
     }
+
 
 
 }
