@@ -131,6 +131,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"/>
 
+        <TextView
+                android:id="@+id/dishFragRemoveBtn"
+                android:visibility="gone"
+                android:padding="7.7dp"
+                android:layout_gravity="center"
+                style="@style/LatoBold13Watermelon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="-0.01"
+                android:text="Remove item"/>
+
 <!--        <LinearLayout-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
@@ -230,18 +241,15 @@
 
         </LinearLayout>
 
-        <EditText
+        <com.bupp.wood_spoon_eaters.views.WSCounterEditText
                 android:id="@+id/dishFragUserRequestInput"
                 style="@style/LatoReg15BrownishGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:layout_marginBottom="24dp"
-                android:background="@color/pinkish_grey_20"
-                android:gravity="start"
-                android:hint="Type Your Request here…"
-                android:minHeight="130dp"
-                android:padding="15dp" />
+                app:maxLines="5"
+                app:hint="Type Your Request here…" />
 
         <View
                 android:layout_width="match_parent"

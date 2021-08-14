@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
@@ -21,16 +22,18 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.DietaryIcon
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailabilityAdapter.DishAvailabilityAdapterListener,
-    ModificationsListAdapter.ModificationsListAdapterListener, ClearCartCookingSlotBottomSheet.ClearCartListener, PlusMinusView.PlusMinusInterface {
+    ModificationsListAdapter.ModificationsListAdapterListener, ClearCartCookingSlotBottomSheet.ClearCartListener, PlusMinusView.PlusMinusInterface,
+    WSErrorDialog.WSErrorListener {
 
     private val binding: FragmentDishPageBinding by viewBinding()
 
-    private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
+//    private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<DishPageViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +60,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
     }
 
     private fun onAddToCartClick() {
-        viewModel.addDishToCart()
+        val note = binding.dishFragMainListLayout.dishFragUserRequestInput.getText() ?: ""
+        viewModel.onDishPageCartClick(note.toString())
     }
 
     private fun initDishQuantityButtons(initialCounter: Int? = 1, maxQuantity: Int) {
@@ -73,6 +77,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
     private fun initObservers() {
         viewModel.menuItemData.observe(viewLifecycleOwner, {
             handleDishData(it)
+        })
+        viewModel.orderItemData.observe(viewLifecycleOwner, {
+            handleOrderItemData(it)
         })
         viewModel.dishFullData.observe(viewLifecycleOwner, {
             handleDishFullData(it)
@@ -94,6 +101,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         })
         viewModel.dishQuantityChange.observe(viewLifecycleOwner, {
             handleAddToCartBtn(it)
+        })
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+            handleWSError(it.getContentIfNotHandled())
         })
     }
 
@@ -147,6 +157,26 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         }
     }
 
+    private fun handleOrderItemData(orderItem: OrderItem) {
+        with(binding) {
+            //update counter -> must be after menuItemLiveData is posted and can be read.
+            viewModel.updateDishQuantity(orderItem.quantity)
+
+            dishFragAddToCartBtn.updateButtonText("Update cart")
+            val dish = orderItem.dish
+            dishFragHeaderName.text = dish.name
+            dishFragHeaderPrice.text = dish.price?.formatedValue ?: ""
+            dishFragTopHeaderDishName.text = dish.name
+            Glide.with(requireContext()).load(dish.thumbnail?.url).into(dishFragCoverPhoto)
+                dishFragTags.setTags(orderItem.menuItem?.tags)
+
+            dishFragMainListLayout.dishFragRemoveBtn.visibility = View.VISIBLE
+            dishFragMainListLayout.dishFragRemoveBtn.setOnClickListener {  }
+
+            initDishQuantityButtons(initialCounter = orderItem.quantity, maxQuantity = orderItem.menuItem?.quantity ?: -1)
+        }
+    }
+
     private fun handleDishFullData(dish: FullDish) {
         with(binding.dishFragMainListLayout) {
             handleDietaryList(dish.dietaries)
@@ -187,6 +217,16 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
                 dishFragUserRequestLine.text = "Hey ${userRequest.eaterName}, any special requests?"
             }
         }
+    }
+
+    private fun handleWSError(errorEvent: String?) {
+        errorEvent?.let {
+            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+        }
+    }
+
+    override fun onWSErrorDone() {
+
     }
 
     /**

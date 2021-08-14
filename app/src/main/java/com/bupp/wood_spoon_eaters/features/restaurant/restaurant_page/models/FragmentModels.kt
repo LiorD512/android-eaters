@@ -1,10 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.model.AvailabilityDate
-import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.WSImage
+import com.bupp.wood_spoon_eaters.model.*
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -23,6 +20,7 @@ data class RestaurantInitParams(
 
 @Parcelize
 data class DishInitParams(
-    val menuItem: MenuItem,
+    val menuItem: MenuItem?,
+    val orderItem: OrderItem?,
     val cookingSlot: CookingSlot?,
 ) : Parcelable

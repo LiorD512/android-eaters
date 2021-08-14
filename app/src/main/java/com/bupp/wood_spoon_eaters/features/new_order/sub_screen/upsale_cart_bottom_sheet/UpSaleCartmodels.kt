@@ -3,8 +3,10 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.model.OrderItem
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 import kotlinx.parcelize.Parcelize
 
@@ -46,9 +48,6 @@ data class CartAdapterSubTotalItem(
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)
 
 data class CustomCartItem(
-    val dishId: Long,
-    val dishName: String,
-    val quantity: Int,
-    val price: String,
-    val note: String?
+    val orderItem: OrderItem,
+    val cookingSlot: CookingSlot?
 )

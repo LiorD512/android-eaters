@@ -20,6 +20,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.floatingAddToCartPrice.text = price
     }
 
+    fun updateButtonText(text: String){
+        binding.floatingAddToCartTitle.text  = text
+    }
+
     companion object{
         const val TAG = "wowFloatingAddCartButton"
     }

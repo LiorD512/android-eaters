@@ -120,17 +120,17 @@ class CartManager(
     suspend fun addOrUpdateCart(quantity: Int, dishId: Long, note: String?) {
         if (currentOrderResponse == null) {
             //order response is null therefore post new order
-            addToCart(quantity, dishId, note)
+            addDishToNewCart(quantity, dishId, note)
         } else {
             //order already have exist therefore update current order
-            postUpdateOrder(quantity, dishId, note)
+            addDishToExistingCart(quantity, dishId, note)
         }
     }
 
     /**
      * this function simply crates new order and adds a new instance of a dish to the cart
      */
-    suspend fun addToCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
+    suspend fun addDishToNewCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         val result = orderRepository.addNewDish(orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
@@ -148,7 +148,7 @@ class CartManager(
         return result.type
     }
 
-    suspend fun postUpdateOrder(quantity: Int, dishId: Long, note: String?) {
+    private suspend fun addDishToExistingCart(quantity: Int, dishId: Long, note: String?) {
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         currentOrderResponse?.let {
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
@@ -159,7 +159,7 @@ class CartManager(
 
                 //todo - check analytics for updated order.....
                 val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
-                eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
+                eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
                 //check for errors
                 if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
@@ -169,6 +169,33 @@ class CartManager(
 
         }
     }
+
+    suspend fun updateDishInExistingCart(quantity: Int, note: String?, dishId: Long, orderItem: OrderItem): OrderRepository.OrderRepoStatus {
+        Log.d(TAG, "updateDishInExistingCart")
+        val updatedOrderItem = OrderItemRequest(
+            id = orderItem.id, dishId = dishId,
+            quantity = quantity, notes = note
+        )
+        val orderRequest = buildOrderRequest(listOf(updatedOrderItem))
+        currentOrderResponse?.let {
+            val result = orderRepository.updateOrder(it.id!!, orderRequest)
+            if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
+                result.data?.let {
+                    updateCartManagerParams(it.copy())
+                }
+                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+                eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(result.data.id, currentAddedDish))
+            } else {
+//                check for errors
+                if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
+                    handleWsError(result.wsError)
+                }
+            }
+            return result.type
+        }
+        return OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED
+    }
+
 
     /**
      * this functions is called whenever a user swiped out (right) a dish.
@@ -189,6 +216,7 @@ class CartManager(
     }
 
     /**
+     * called when user swipe out a dish from his cart
      * this function is being used to retrieve list of orderItems based on dish Id for deletion.
      * this function gets dishId and returns a list of OrderItems with _destroy = true
      */
@@ -210,8 +238,6 @@ class CartManager(
     /**
      * Dish Page related functions
      */
-
-
     suspend fun getFullDish(menuItemId: Long): OrderRepository.OrderRepoResult<FullDish>? {
         val result = orderRepository.getFullDish(menuItemId)
         if(result.type == OrderRepository.OrderRepoStatus.FULL_DISH_SUCCESS){
@@ -282,7 +308,7 @@ class CartManager(
         pendingRequestParam?.let {
             updateCurCookingSlotId(it.cookingSlotId)
             forceCookingSlotChnage(it.cookingSlotId)
-            val result = addToCart(it.quantity, it.dishId, it.note)
+            val result = addDishToNewCart(it.quantity, it.dishId, it.note)
             pendingRequestParam = null
             return result
         }

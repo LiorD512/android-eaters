@@ -4,7 +4,6 @@
         android:layout_width="match_parent"
         android:layout_height="125dp"
         android:paddingHorizontal="15.4dp"
-
         android:background="@color/white"
         android:id="@+id/upSaleItemMainLayout"
         xmlns:tools="http://schemas.android.com/tools"

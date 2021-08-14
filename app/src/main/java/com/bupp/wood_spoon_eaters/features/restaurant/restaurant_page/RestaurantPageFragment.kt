@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
@@ -90,6 +91,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun openCartNUpsaleDialog() {
         UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+    }
+
+    override fun onCartDishCLick(customCartItem: CustomCartItem) {
+        mainViewModel.openDishPageWithOrderItem(customCartItem)
     }
 
     private fun onDeliveryTimingChange(date: SortedCookingSlots?) {

@@ -16,6 +16,7 @@
             android:layout_marginHorizontal="12.4dp">
 
         <TextView
+                android:id="@+id/floatingAddToCartTitle"
                 style="@style/LatoBlack15White"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

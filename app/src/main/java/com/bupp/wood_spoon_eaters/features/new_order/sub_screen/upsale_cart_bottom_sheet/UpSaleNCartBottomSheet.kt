@@ -19,6 +19,8 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListener
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
@@ -33,6 +35,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
 
     interface UpsaleNCartBSListener{
         fun refreshParentOnCartCleared()
+        fun onCartDishCLick(customCartItem: CustomCartItem)
     }
 
     private var defaultPeekHeight = Utils.toPx(400)
@@ -156,7 +159,16 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         viewModel.currentOrderData.observe(viewLifecycleOwner, {
             viewModel.initData()
         })
+        viewModel.onDishCartClick.observe(viewLifecycleOwner, {
+            handleOnCartDishClick(it)
+        })
     }
+
+    private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomCartItem>?) {
+        cartDishData?.getContentIfNotHandled()?.let{
+                listener?.onCartDishCLick(it)
+            }
+        }
 
     private fun handleCartData(data: UpSaleNCartViewModel.CartData?) {
         Log.d(TAG, "handleCartData data: $data")
@@ -175,8 +187,8 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
                 when(item){
                     is CartAdapterItem -> {
-                        val itemCopy = item
-                        viewModel.addDishToCart(1, itemCopy.customCartItem.dishId)
+                        val dishId = item.customCartItem.orderItem.dish.id
+                        viewModel.addDishToCart(1, dishId)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}
@@ -186,17 +198,18 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
                 when(item){
                     is CartAdapterItem -> {
-                        viewModel.removeOrderItemsByDishId(item.customCartItem.dishId)
+                        val dishId = item.customCartItem.orderItem.dish.id
+                        viewModel.removeOrderItemsByDishId(dishId)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}
                 }
             }
 
-            override fun onCartBtnClicked() {
-                //cart pending opening
-//                val curCookingSlot = viewModel.currentCookingSlot
-//                mainViewModel.openDishPage(menuItem, curCookingSlot)
+            override fun onCartItemClicked(customCartItem: CustomCartItem) {
+                Log.d(TAG, "onCartItemClicked: $customCartItem")
+                viewModel.onCartItemClicked(customCartItem)
+                dismiss()
             }
         }
 

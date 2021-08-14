@@ -3,7 +3,9 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(
@@ -12,7 +14,8 @@ class UpSaleNCartViewModel(
 
     var currentPageState = PageState.CART
     val currentOrderData = cartManager.getCurrentOrderData()
-
+    val currentCookingSlot = cartManager.getCurrentCookingSlot()
+    val onDishCartClick = LiveEventData<CustomCartItem>()
 
     enum class PageState {
         UPSALE,
@@ -64,11 +67,8 @@ class UpSaleNCartViewModel(
         }
         orderItems?.forEach {
             val customCartItem = CustomCartItem(
-                dishId = it.dish.id,
-                dishName = it.dish.name,
-                quantity = it.quantity,
-                price = it.price.formatedValue ?: "0",
-                note = it.notes
+                orderItem = it,
+                cookingSlot = currentCookingSlot
             )
             list.add(CartAdapterItem(customCartItem = customCartItem))
         }
@@ -100,6 +100,10 @@ class UpSaleNCartViewModel(
                 cartManager.removeOrderItems(it)
             }
         }
+    }
+
+    fun onCartItemClicked(customCartItem: CustomCartItem) {
+        onDishCartClick.postRawValue(customCartItem)
     }
 
 //    /**

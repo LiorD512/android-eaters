@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.restaurant
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
@@ -23,7 +24,13 @@ class RestaurantMainViewModel : ViewModel() {
     val fragmentNavigationEvent = LiveEventData<NavDirections>()
 
     fun openDishPage(menuItem: MenuItem, curCookingSlot: CookingSlot?){
-        val extras = DishInitParams(menuItem = menuItem, cookingSlot = curCookingSlot)
+        val extras = DishInitParams(menuItem = menuItem, cookingSlot = curCookingSlot, orderItem = null)
+        val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
+        fragmentNavigationEvent.postRawValue(action)
+    }
+
+    fun openDishPageWithOrderItem(customCartItem: CustomCartItem) {
+        val extras = DishInitParams(orderItem = customCartItem.orderItem, cookingSlot = customCartItem.cookingSlot, menuItem = null)
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
         fragmentNavigationEvent.postRawValue(action)
     }
