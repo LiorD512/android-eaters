@@ -401,16 +401,15 @@ class RestaurantPageViewModel(
 //        currentCookingSlot?.let { onCookingSlotSelected(it) }
     }
 
-    private fun getCookingSlotById(cookingSlotId: Long): CookingSlot?{
+    private fun getCookingSlotById(cookingSlotId: Long): CookingSlot? {
         val result = sortedCookingSlots?.find { it.cookingSlots.find { it.id == cookingSlotId } != null }
-        val reuslt2 = result?.cookingSlots?.find { it.id == cookingSlotId }
+        return result?.cookingSlots?.find { it.id == cookingSlotId }
 //        val result = sortedCookingSlots?.forEach{ list ->
 //            list.cookingSlots.find { item ->
 //                item.id == cookingSlotId  }
 //        }
-        Log.d(TAG, "getCSById result: $cookingSlotId -> $result")
-        Log.d(TAG, "getCSById: $cookingSlotId -> $reuslt2")
-        return reuslt2 as CookingSlot?
+//        Log.d(TAG, "getCSById result: $cookingSlotId -> $result")
+//        Log.d(TAG, "getCSById: $cookingSlotId -> $reuslt2")
     }
 
 
