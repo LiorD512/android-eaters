@@ -83,7 +83,7 @@ data class FullDish(
     @Json(name = "portion_size") var portionSize: String? = null,
     @Json(name = "dietary_accommodations") var accommodations: String? = null,
     @Json(name = "image_gallery") val imageGallery: List<String>? = null,
-//    @Json(name = "available_times") val availableTimes: List<>,
+    @Json(name = "available_times") val availableTimes: List<AvailableAt>,
     //old model
     @Json(name = "avg_rating") val rating: Double?,
     @Json(name = "proteins") val proteins: Double?,
@@ -138,6 +138,11 @@ data class FullDish(
         return availableArr
     }
 }
+
+data class AvailableAt(
+    @Json(name = "starts_at") val startAt: Date?,
+    @Json(name = "ends_at") val endsAt: Date?,
+)
 
 data class MediaList(
     val media: String,

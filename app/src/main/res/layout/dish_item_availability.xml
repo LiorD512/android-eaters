@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
         android:background="@color/white"
         android:paddingBottom="14dp">
 
@@ -9,6 +10,6 @@
             style="@style/LatoReg13DarkGrey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="06/21   Mon   2pm - 5pm" />
+            tools:text="06/21   Mon   2pm - 5pm" />
 
 </FrameLayout>
