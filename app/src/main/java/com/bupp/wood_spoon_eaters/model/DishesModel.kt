@@ -83,6 +83,7 @@ data class FullDish(
     @Json(name = "portion_size") var portionSize: String? = null,
     @Json(name = "dietary_accommodations") var accommodations: String? = null,
     @Json(name = "image_gallery") val imageGallery: List<String>? = null,
+//    @Json(name = "available_times") val availableTimes: List<>,
     //old model
     @Json(name = "avg_rating") val rating: Double?,
     @Json(name = "proteins") val proteins: Double?,
@@ -142,7 +143,6 @@ data class MediaList(
     val media: String,
     val isImage: Boolean
 )
-
 
 @Parcelize
 @JsonClass(generateAdapter = true)

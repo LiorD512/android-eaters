@@ -63,11 +63,11 @@ class DishPageViewModel(
 
     fun initData(extras: DishInitParams) {
         this.extras = extras
-        if(extras.menuItem != null){
+        if (extras.menuItem != null) {
             handleMenuItemData(extras.menuItem)
             getFullDish(extras.menuItem.id)
 
-            if(extras.cookingSlot?.id != extras.menuItem.cookingSlotId){
+            if (extras.cookingSlot?.id != extras.menuItem.cookingSlotId) {
                 Log.d(TAG, "this is a different Cooking slot")
                 dishMatchCookingSlot = false
             }
