@@ -14,9 +14,12 @@ class RestaurantMainViewModel : ViewModel() {
 
 //    var currentRestaurant: RestaurantInitParams? = null
     val restaurantInitParamsLiveData = LiveEventData<RestaurantInitParams>()
-    fun initExtras(restaurantInitParams: RestaurantInitParams?) {
+    fun initExtras(restaurantInitParams: RestaurantInitParams?, customCartItem: CustomCartItem?) {
         restaurantInitParams?.let{
             restaurantInitParamsLiveData.postRawValue(it)
+        }
+        customCartItem?.let{
+            openDishPageWithOrderItem(it, true)
         }
     }
 
@@ -48,8 +51,8 @@ class RestaurantMainViewModel : ViewModel() {
         navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }
 
-    fun openDishPageWithOrderItem(customCartItem: CustomCartItem) {
-        val extras = DishInitParams(orderItem = customCartItem.orderItem, cookingSlot = customCartItem.cookingSlot, menuItem = null)
+    fun openDishPageWithOrderItem(customCartItem: CustomCartItem, finishToFeed: Boolean = false) {
+        val extras = DishInitParams(orderItem = customCartItem.orderItem, cookingSlot = customCartItem.cookingSlot, menuItem = null, finishToFeed = finishToFeed)
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
         navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }

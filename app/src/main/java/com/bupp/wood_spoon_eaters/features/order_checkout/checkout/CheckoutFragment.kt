@@ -107,7 +107,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 }
             }
         })
-
         viewModel.validationError.observe(viewLifecycleOwner, {
             when (it) {
                 CheckoutViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING -> {
@@ -124,7 +123,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
-
+        if(deliveryDates.isEmpty()){
+            binding.checkoutFragDeliveryTime.setChangeable(false)
+        }
     }
 
 //    private fun updateBottomBar(totalPrice: Price?) {

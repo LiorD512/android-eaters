@@ -142,6 +142,7 @@ class Constants {
         //activity / dialog tags
         const val ARG_COOK_ID = "args_cook_id"
         const val ARG_RESTAURANT = "args_restaurant"
+        const val ARG_DISH = "args_dish"
 
         const val WELCOME_DIALOG_TAG = "welcome_dialog_tag"
         const val CREATE_ACCOUNT_TAG = "create_account_tag"

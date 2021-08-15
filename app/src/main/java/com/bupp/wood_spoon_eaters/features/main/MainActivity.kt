@@ -25,6 +25,7 @@ import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
@@ -59,7 +60,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        setContentView(R.layout.activity_main)
 
         initUi()
         initObservers()
@@ -293,7 +293,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onCartDishCLick(customCartItem: CustomCartItem) {
-
+        startActivity(Intent(this, RestaurantActivity::class.java)
+            .putExtra(Constants.ARG_DISH, customCartItem)
+        )
     }
 
     override fun onGoToCheckoutClicked() {

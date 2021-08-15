@@ -33,7 +33,6 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     }
 
     val timeChangeEvent = LiveEventData<List<DeliveryDates>>()
-//    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
     init{
         fetchOrderDeliveryTimes()
@@ -71,7 +70,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         if(deliveryDatesLiveData.value != null){
             timeChangeEvent.postRawValue(deliveryDatesLiveData.value!!)
         }else{
-//            fetchOrderDeliveryTimes(true)
+            fetchOrderDeliveryTimes(true)
         }
     }
 

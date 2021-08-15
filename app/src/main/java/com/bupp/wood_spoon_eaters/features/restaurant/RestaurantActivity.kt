@@ -13,7 +13,6 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
-import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,7 +38,7 @@ class RestaurantActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant)
 
-        viewModel.initExtras(intent.extras?.getParcelable(Constants.ARG_RESTAURANT))
+        viewModel.initExtras(intent.extras?.getParcelable(Constants.ARG_RESTAURANT), intent.extras?.getParcelable(Constants.ARG_DISH))
         initUi()
         initObservers()
     }

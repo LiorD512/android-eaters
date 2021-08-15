@@ -47,7 +47,8 @@ data class CartAdapterSubTotalItem(
     override val isSwipeable: Boolean = false
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)
 
+@Parcelize
 data class CustomCartItem(
     val orderItem: OrderItem,
     val cookingSlot: CookingSlot?
-)
+): Parcelable

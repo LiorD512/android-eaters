@@ -26,6 +26,7 @@ class DishPageViewModel(
 
     private var isEditMode = false
     lateinit var extras: DishInitParams
+    private var finishToFeed: Boolean = true
     private var dishMatchCookingSlot: Boolean = true
     //this param indicates if the current menuItem is matching the selected cooking slot in parent
 
@@ -35,7 +36,12 @@ class DishPageViewModel(
     val menuItemData = MutableLiveData<MenuItem>()
     val orderItemData = MutableLiveData<OrderItem>()
     val dishFullData = MutableLiveData<FullDish>()
-    val onFinishDishPage = MutableLiveData<Boolean>()
+
+    enum class FinishNavigation{
+        FINISH_AND_BACK,
+        FINISH_ACTIVITY
+    }
+    val onFinishDishPage = MutableLiveData<FinishNavigation>()
 
     val clearCartEvent = cartManager.getClearCartUiEvent()
 
@@ -66,6 +72,7 @@ class DishPageViewModel(
                 dishMatchCookingSlot = false
             }
         }else if(extras.orderItem != null){
+            finishToFeed = extras.finishToFeed
             isEditMode = true
             handleOrderItemData(extras.orderItem)
             extras.orderItem.menuItem?.id?.let { getFullDish(it) }

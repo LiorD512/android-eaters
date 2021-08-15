@@ -23,4 +23,5 @@ data class DishInitParams(
     val menuItem: MenuItem?,
     val orderItem: OrderItem?,
     val cookingSlot: CookingSlot?,
+    val finishToFeed: Boolean = false
 ) : Parcelable
