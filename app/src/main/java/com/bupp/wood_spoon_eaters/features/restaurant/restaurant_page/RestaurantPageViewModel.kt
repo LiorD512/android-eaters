@@ -106,7 +106,7 @@ class RestaurantPageViewModel(
 //                    }
                     feedTimeCookingSlot?.let {
                         /**  case2 : feed time cooking slot found
-                         * 1. update cartManager to be set to the first time order can be valid
+                         * 1. update cartManager to be set to the "orderFrom" date, order can be made
                          * 2. update restaurant screen ui
                          * **/
                         timeManager.setTemporaryDeliveryTimeDate(it.orderFrom)
