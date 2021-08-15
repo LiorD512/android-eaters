@@ -20,19 +20,38 @@ class RestaurantMainViewModel : ViewModel() {
         }
     }
 
+    enum class NavigationType{
+        OPEN_DISH_PAGE,
+        START_ORDER_CHECKOUT_ACTIVITY,
+        FINISH_RESTAURANT_ACTIVITY
+    }
+    data class NavigationEvent(
+        val navigationType: NavigationType?,
+        val navDirections: NavDirections?
+    )
+    val navigationEvent = LiveEventData<NavigationEvent>()
 
-    val fragmentNavigationEvent = LiveEventData<NavDirections>()
+    fun handleNavigation(navigationType: NavigationType?){
+        when(navigationType){
+            NavigationType.FINISH_RESTAURANT_ACTIVITY -> {
+                navigationEvent.postRawValue(NavigationEvent(navigationType, null))
+            }
+            NavigationType.START_ORDER_CHECKOUT_ACTIVITY -> {
+                navigationEvent.postRawValue(NavigationEvent(navigationType, null))
+            }
+        }
+    }
 
     fun openDishPage(menuItem: MenuItem, curCookingSlot: CookingSlot?){
         val extras = DishInitParams(menuItem = menuItem, cookingSlot = curCookingSlot, orderItem = null)
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
-        fragmentNavigationEvent.postRawValue(action)
+        navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }
 
     fun openDishPageWithOrderItem(customCartItem: CustomCartItem) {
         val extras = DishInitParams(orderItem = customCartItem.orderItem, cookingSlot = customCartItem.cookingSlot, menuItem = null)
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
-        fragmentNavigationEvent.postRawValue(action)
+        navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }
 
 

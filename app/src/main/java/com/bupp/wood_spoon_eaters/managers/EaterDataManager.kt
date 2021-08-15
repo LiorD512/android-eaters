@@ -53,6 +53,11 @@ class EaterDataManager(
         locationManager.forceStopLocationUpdates(true)
     }
 
+    fun rollBackToPreviousAddress() {
+        locationManager.rollBackToPreviousAddress()
+    }
+
+
     /////////////////////////////////////////
     ///////////      FEED         ///////////
     /////////////////////////////////////////
@@ -234,6 +239,8 @@ class EaterDataManager(
     fun getCartAddressId(): Long? {
         return getLastChosenAddress()?.id
     }
+
+
 
 
     companion object {

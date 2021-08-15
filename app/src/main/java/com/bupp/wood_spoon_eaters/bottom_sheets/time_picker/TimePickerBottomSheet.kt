@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.TimePickerBottomSheetBinding
+import com.bupp.wood_spoon_eaters.model.DeliveryDates
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -27,6 +28,7 @@ class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSh
     private val binding: TimePickerBottomSheetBinding by viewBinding()
     val viewModel by viewModel<TimePickerViewModel>()
     private var menuItems: List<MenuItem>? = null
+    private var deliveryDates: List<DeliveryDates>? = null
     private var isTemporary: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -98,5 +100,6 @@ class TimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSh
         this.isTemporary = true
         this.menuItems = menuItemsData
     }
+
 
 }

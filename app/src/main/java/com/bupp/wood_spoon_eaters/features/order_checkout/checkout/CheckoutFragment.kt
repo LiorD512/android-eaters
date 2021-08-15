@@ -15,8 +15,8 @@ import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
@@ -25,7 +25,6 @@ import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
@@ -39,10 +38,9 @@ import kotlin.collections.ArrayList
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
     OrderDateChooserDialog.OrderDateChooserDialogListener,
-//    ClearCartDialog.ClearCartDialogListener,
-//    OrderUpdateErrorDialog.UpdateErrorDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView2.OrderItemsListener,
-    WSTitleValueView.WSTitleValueListener, OrderItemsView.OrderItemsListener, HeaderView.HeaderViewListener {
+    WSTitleValueView.WSTitleValueListener, OrderItemsView.OrderItemsListener, HeaderView.HeaderViewListener, WSErrorDialog.WSErrorListener,
+    SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
 
@@ -51,6 +49,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     val viewModel by viewModel<CheckoutViewModel>()
     val mainViewModel by sharedViewModel<OrderCheckoutViewModel>()
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +73,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
-//            updateBottomBar(orderData.total)
+        })
+        viewModel.deliveryDatesLiveData.observe(viewLifecycleOwner, {
+            handleOrderDeliveryDates(it)
         })
         viewModel.timeChangeEvent.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let {
@@ -117,6 +118,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 }
             }
         })
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+            handleWSError(it.getContentIfNotHandled())
+        })
+    }
+
+    private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
+
     }
 
 //    private fun updateBottomBar(totalPrice: Price?) {
@@ -128,11 +136,17 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //    }
 
     override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
-//        if (isCartEmpty) {
-//            mainViewModel.showClearCartDialog()
-//        } else {
-//            mainViewModel.updateOrderItem(updatedOrderItem)
-//        }
+        if (isCartEmpty) {
+            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY)
+        } else {
+            viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
+        }
+    }
+
+    private fun handleWSError(errorEvent: String?) {
+        errorEvent?.let {
+            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+        }
     }
 
     private fun initUi() {
@@ -158,9 +172,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     }
 
-    private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
-        val timePickerBottomSheet = TimePickerBottomSheet(this)
-        timePickerBottomSheet.setMenuItems(menuItems)
+    private fun openOrderTimeBottomSheet(deliveryDates: List<DeliveryDates>) {
+        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
+        timePickerBottomSheet.setDeliveryDates(deliveryDates)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
@@ -168,6 +182,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //        mainViewModel.onDeliveryTimeChange()
 //        mainViewModel.refreshFullDish()
     }
+
 
     private fun setEmptyPaymentMethod() {
         with(binding) {
@@ -319,7 +334,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onCustomDetailsClick(type: Int) {
         when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
-//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.LOCATION_AND_ADDRESS_ACTIVITY)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
             }
             Constants.DELIVERY_DETAILS_TIME -> {
                 viewModel.onTimeChangeClick()
@@ -338,6 +353,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onHeaderBackClick() {
+        activity?.onBackPressed()
 //        if (mainViewModel.isCheckout) {
 //            mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
 //        } else {
@@ -346,10 +362,16 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onAddBtnClicked() {
+        //Place an order click
+        viewModel.finalizeOrder()
 //        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH)
     }
 
     override fun onCustomToolTipClick() {
         viewModel.onFeesAndTaxInfoClick()
+    }
+
+    override fun onWSErrorDone() {
+
     }
 }

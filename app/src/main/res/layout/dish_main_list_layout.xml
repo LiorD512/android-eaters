@@ -142,38 +142,6 @@
                 android:letterSpacing="-0.01"
                 android:text="Remove item"/>
 
-<!--        <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="13dp"-->
-<!--                android:gravity="center">-->
-
-<!--            <ImageButton-->
-<!--                    android:id="@+id/dishFragRemoveQuantity"-->
-<!--                    android:layout_width="61dp"-->
-<!--                    android:layout_height="61dp"-->
-<!--                    android:background="@null"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/plus_minus_minus_selector" />-->
-
-<!--            <TextView-->
-<!--                    android:id="@+id/dishFragQuantity"-->
-<!--                    style="@style/LatoBold15Teal"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:paddingHorizontal="12dp"-->
-<!--                    android:text="0" />-->
-
-<!--            <ImageButton-->
-<!--                    android:id="@+id/dishFragAddQuantity"-->
-<!--                    android:layout_width="61dp"-->
-<!--                    android:layout_height="61dp"-->
-<!--                    android:background="@null"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/plus_minus_plus_selector" />-->
-<!--        </LinearLayout>-->
 
         <TextView
                 android:id="@+id/dishFragModificationHeader"

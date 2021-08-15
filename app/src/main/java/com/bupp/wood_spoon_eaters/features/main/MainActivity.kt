@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
@@ -46,7 +47,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ShareDialog.ShareDialogListener,
     ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
-    FloatingCartButton.FloatingCartButtonListener {
+    FloatingCartButton.FloatingCartButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -288,7 +289,14 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun openCartNUpsaleDialog() {
-        UpSaleNCartBottomSheet().show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        UpSaleNCartBottomSheet(this).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+    }
+
+    override fun onCartDishCLick(customCartItem: CustomCartItem) {
+
+    }
+
+    override fun onGoToCheckoutClicked() {
     }
 
     private fun handleCampaignData(campaigns: List<Campaign>) {
@@ -693,6 +701,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     override fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         viewModel.onMediaUtilsResultSuccess(result)
     }
+
 
 
 }

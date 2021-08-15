@@ -173,7 +173,7 @@ class DishPageViewModel(
                 } else {
                     val curCookingSlot = extras.cookingSlot
                     cookingSlotId = curCookingSlot?.id!!
-                    isValid = cartManager.validateCartMatch(restaurant, cookingSlotId, curCookingSlot.startsAt, curCookingSlot.endsAt)
+                    isValid = cartManager.validateCartMatch(restaurant, cookingSlotId, curCookingSlot.orderFrom, curCookingSlot.endsAt)
                 }
                 if (isValid) {
                     viewModelScope.launch {

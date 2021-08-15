@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.MyLinearSnapHelper
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerBinding
+import com.bupp.wood_spoon_eaters.model.DeliveryDates
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import java.util.*
@@ -145,6 +146,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         initDateAndHoursUi()
     }
 
+    fun setDatesByDeliveryDates(deliveryDates: List<DeliveryDates>) {
+
+    }
+
     private fun getDaysForMenuItems(menuItems: List<MenuItem>): List<Date> {
         val dates = mutableListOf<Date>()
         menuItems.forEach { item ->
@@ -198,6 +203,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
         return null
     }
+
 
     companion object {
         const val TAG = "wowWSRangeTimePicker"

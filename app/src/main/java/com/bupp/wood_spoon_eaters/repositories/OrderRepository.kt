@@ -24,6 +24,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         GET_ORDER_BY_ID_SUCCESS,
         FINALIZE_ORDER_FAILED,
         FINALIZE_ORDER_SUCCESS,
+        GET_DELIVERY_DATES_FAILED,
+        GET_DELIVERY_DATES_SUCCESS,
         GET_SHIPPING_METHOD_FAILED,
         GET_SHIPPING_METHOD_SUCCESS,
         REPORT_ISSUE_FAILED,
@@ -164,6 +166,32 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                 }
                 is ResultHandler.WSCustomError -> {
                     MTLogger.c(TAG,"finalizeOrder - wsError")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun getOrderDeliveryTimes(orderId: Long): OrderRepoResult<List<DeliveryDates>> {
+        val result = withContext(Dispatchers.IO){
+            apiService.getOrderDeliveryTimes(orderId)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"getOrderDeliveryTimes - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"getOrderDeliveryTimes - GenericError")
+                    OrderRepoResult(OrderRepoStatus.GET_DELIVERY_DATES_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"getOrderDeliveryTimes - Success")
+                    OrderRepoResult(OrderRepoStatus.GET_DELIVERY_DATES_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+                    MTLogger.c(TAG,"getOrderDeliveryTimess - wsError")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

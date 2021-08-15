@@ -52,12 +52,12 @@ class WSTimePickerCustomAdapter :
 
         @SuppressLint("SetTextI18n")
         fun bindItem(data: WSCookingSlotTimePicker) {
-            if(DateUtils.isNowInRange(data.cookingSlot.startsAt, data.cookingSlot.endsAt)){
+            if(DateUtils.isNowInRange(data.cookingSlot.orderFrom, data.cookingSlot.endsAt)){
                 cookingSlotName.text = "Now"
             }else{
                 cookingSlotName.text = data.title
             }
-            cookingSlotDate.text = "${DateUtils.parseDateToUsTime(data.cookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(data.cookingSlot.endsAt)}"
+            cookingSlotDate.text = "${DateUtils.parseDateToUsTime(data.cookingSlot.orderFrom)} - ${DateUtils.parseDateToUsTime(data.cookingSlot.endsAt)}"
         }
     }
 

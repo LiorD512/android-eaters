@@ -32,7 +32,6 @@ class RestaurantPageViewModel(
     val deliveryDatesData = MutableLiveData<List<SortedCookingSlots>>()
     val timePickerEvent = LiveEventData<CookingSlot>()
 
-    val timePickerUi = MutableLiveData<String>()
     val dishListData = MutableLiveData<DishListData>()
 
     data class DishListData(val dishes: List<DishSections>, val animateList: Boolean = true)
@@ -72,18 +71,17 @@ class RestaurantPageViewModel(
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
         val deliveryDates = mutableListOf<SortedCookingSlots>()
         restaurant.cookingSlots.forEach { cookingSlot ->
-            val relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.startsAt) }
+            val relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.orderFrom) }
             if (relevantDeliveryDate == null) {
-                deliveryDates.add(SortedCookingSlots(cookingSlot.startsAt, mutableListOf(cookingSlot)))
+                deliveryDates.add(SortedCookingSlots(cookingSlot.orderFrom, mutableListOf(cookingSlot)))
             } else {
                 relevantDeliveryDate.cookingSlots.add(cookingSlot)
-                relevantDeliveryDate.cookingSlots.sortBy { it.startsAt }
+                relevantDeliveryDate.cookingSlots.sortBy { it.orderFrom }
             }
         }
         deliveryDates.sortBy { it.date }
         this.sortedCookingSlots = deliveryDates
         this.deliveryDatesData.postValue(deliveryDates)
-//        chooseStartingCookingSlot(restaurant, deliveryDates)
     }
 
     /**
@@ -100,7 +98,7 @@ class RestaurantPageViewModel(
             timeManager.getTempDeliveryTimeDate()?.let { feedDate ->
                 sortedCookingSlots.forEach { date ->
                     val feedTimeCookingSlot = date.cookingSlots.find { cookingSlot ->
-                        DateUtils.isDateInRange(feedDate, cookingSlot.startsAt, cookingSlot.endsAt)
+                        DateUtils.isDateInRange(feedDate, cookingSlot.orderFrom, cookingSlot.endsAt)
                     }
                     feedTimeCookingSlot?.let {
                         /**  case2 : feed time cooking slot found  **/
@@ -127,39 +125,19 @@ class RestaurantPageViewModel(
 
     fun onCookingSlotSelected(cookingSlot: CookingSlot) {
         updateCookingSlotRelatedUi(cookingSlot)
-//        cartManager.tempCookingSlotId.postRawValue(cookingSlot.id)
         currentCookingSlot = cookingSlot
-//        currentCookingSlotData.postValue(cookingSlot) //update tabLayout ui
-//        updateTimePickerUi(cookingSlot)
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
         handleDishesSection(sortedCookingSlot)
     }
 
-//    /**
-//     * Updating the text on the time picker button
-//     */
-//    @Deprecated("combined into mutable live data")
-//    private fun updateTimePickerUi(selectedCookingSlot: CookingSlot?) {
-//        selectedCookingSlot?.let {
-//            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
-//            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
-//            var uiStr = ""
-//            if (isNow) {
-//                uiStr = "Now ($datesStr)"
-//            } else {
-//                uiStr = "${selectedCookingSlot.name} ($datesStr)"
-//            }
-//            timePickerUi.postValue(uiStr)
-//        }
-//    }
 
     /**
      * returns the text to show on the time picker button
      */
     private fun getTimerPickerStr(selectedCookingSlot: CookingSlot?): String {
         selectedCookingSlot?.let {
-            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
-            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
+            val isNow = DateUtils.isNowInRange(selectedCookingSlot.orderFrom, selectedCookingSlot.endsAt)
+            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.orderFrom)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
             var uiStr = ""
             if (isNow) {
                 uiStr = "Now ($datesStr)"
@@ -223,7 +201,7 @@ class RestaurantPageViewModel(
                 cookingSlot.sections.forEach { section ->
                     val menuItem = section.menuItems.find { it.dishId == dish.id }?.copy()
                     if (menuItem != null) {
-                        menuItem.availableLater = AvailabilityDate(startsAt = cookingSlot.startsAt, endsAt = cookingSlot.endsAt)
+                        menuItem.availableLater = AvailabilityDate(startsAt = cookingSlot.orderFrom, endsAt = cookingSlot.endsAt)
                         menuItem.cookingSlotId = cookingSlot.id
                         return menuItem
                     }
@@ -275,27 +253,10 @@ class RestaurantPageViewModel(
             }
             Log.d("wowSingleDish", "updateDishCountUi - same c.s")
             dishListData.postValue(DishListData(updatedSectionList, animateList))
-        }else{
+        } else {
             dishListData.postValue(DishListData(dishSectionsList, animateList))
         }
-
-//        if (cartManager.getCurrentOrderItems() != null) {
-//            Log.d("wowSingleDish", "updateDishCountUi - diff c.s")
-////            val updatedSectionList = mutableListOf<DishSections>()
-//            cartManager.getCurrentOrderItems()?.let { orderItems ->
-//                dishSectionsList.forEach { dishSection ->
-//                    if (dishSection is DishSectionSingleDish) {
-//                        val updatedDishSection = dishSection.copy()
-//                        // we make copy of the dish section so the adapter will refresh the item
-//                        updatedDishSection.cartQuantity = 0
-//                        updatedSectionList.add(updatedDishSection)
-//                    }else{
-//                        updatedSectionList.add(dishSection)
-//                    }
-//                }
-            }
-
-
+    }
 
     private fun resetSectionItemsCounter(dishSectionsList: List<DishSections>): MutableList<DishSections>{
         val updatedSectionList = mutableListOf<DishSections>()
@@ -334,7 +295,7 @@ class RestaurantPageViewModel(
     fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
         currentCookingSlot?.let { currentCookingSlot ->
             val currentRestaurant = restaurantFullData.value!!
-            if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot.id, currentCookingSlot.startsAt, currentCookingSlot.endsAt)) {
+            if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot.id, currentCookingSlot.orderFrom, currentCookingSlot.endsAt)) {
                 viewModelScope.launch {
                     cartManager.updateCurCookingSlotId(currentCookingSlot.id)
                     cartManager.addOrUpdateCart(quantity, dishId, note)
@@ -358,24 +319,12 @@ class RestaurantPageViewModel(
      */
     fun handleCartData(order: Order?) {
         Log.d(TAG, "handleCartData")
-//        if (order?.cookingSlot != null && currentCookingSlot != null) {
         order?.let{
             dishListData.value?.dishes?.let {
                 updateDishCountUi(it, false)
                 updateFloatingCartButtonUi(order)
             }
         }
-//            val orderCookingSlot = order.cookingSlot
-//            if (orderCookingSlot.id == currentCookingSlot?.id) {
-//                /** Same cooking slot - only need to update dishes count **/
-//                dishListData.value?.dishes?.let {
-//                    updateSelectedDishesCounts(it, false)
-//                }
-//            } else {
-//                /** Different cooking slot - need to change all screen UI accordingly **/
-////                onCookingSlotSelected(orderCookingSlot)
-//            }
-//        }
     }
 
     private fun updateFloatingCartButtonUi(order: Order) {
@@ -395,21 +344,12 @@ class RestaurantPageViewModel(
 
     fun forceCookingSlotUiChange(cookingSlotId: Long) {
         Log.d(TAG, "forceCookingSlotUiChange")
-//        sortedCookingSlots
         getCookingSlotById(cookingSlotId)?.let { onCookingSlotSelected(it) }
-//        currentCookingSlot = cartManager.getCurrentCookingSlot()
-//        currentCookingSlot?.let { onCookingSlotSelected(it) }
     }
 
     private fun getCookingSlotById(cookingSlotId: Long): CookingSlot? {
         val result = sortedCookingSlots?.find { it.cookingSlots.find { it.id == cookingSlotId } != null }
         return result?.cookingSlots?.find { it.id == cookingSlotId }
-//        val result = sortedCookingSlots?.forEach{ list ->
-//            list.cookingSlots.find { item ->
-//                item.id == cookingSlotId  }
-//        }
-//        Log.d(TAG, "getCSById result: $cookingSlotId -> $result")
-//        Log.d(TAG, "getCSById: $cookingSlotId -> $reuslt2")
     }
 
 

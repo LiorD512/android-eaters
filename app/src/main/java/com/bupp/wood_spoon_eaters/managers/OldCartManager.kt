@@ -109,7 +109,7 @@ class OldCartManager(
     private fun checkCookingSlotAvailability(): Boolean {
         currentShowingDish?.let {
             val orderFrom: Date? = it.menuItem?.cookingSlot?.orderFrom
-            val start: Date? = it.menuItem?.cookingSlot?.startsAt
+            val start: Date? = it.menuItem?.cookingSlot?.orderFrom
             val end: Date? = it.menuItem?.cookingSlot?.endsAt
             var userSelection: Date? = deliveryTimeManager.getDeliveryTimeDate()
 
@@ -472,7 +472,7 @@ class OldCartManager(
 
     suspend fun updateShippingService(shippingService: String) {
         this.shippingService = shippingService
-        val deliveryTime = currentShowingDish?.menuItem?.cookingSlot?.startsAt
+        val deliveryTime = currentShowingDish?.menuItem?.cookingSlot?.orderFrom
         val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
         val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
         postUpdateOrder(orderRequest)

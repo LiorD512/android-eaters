@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.WsSingleTimePickerBinding
 import com.bupp.wood_spoon_eaters.model.CookingSlot
+import com.bupp.wood_spoon_eaters.model.DeliveryDates
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.*
 import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSSingleTimePicker
@@ -128,6 +129,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             return datesList[it].date
         }
         return null
+    }
+
+    fun setDatesByDeliveryDates(deliveryDates: List<DeliveryDates>) {
+        datesList.clear()
+        deliveryDates.let {
+            it.forEachIndexed { index, date ->
+                    datesList.add(WSSingleTimePicker(date = date.from))
+            }
+        }
+        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSCookingSlotTimePicker>?)
     }
 
     fun setDatesByCookingSlots(cookingSlots: List<CookingSlot>) {

@@ -99,7 +99,7 @@ class CartManager(
                 return false
             }
             if (currentOrderResponse!!.cookingSlot!!.id != newCookingSlotId) {
-                val curStartsAtDate = currentOrderResponse!!.cookingSlot!!.startsAt
+                val curStartsAtDate = currentOrderResponse!!.cookingSlot!!.orderFrom
                 val curEndsAtDate = currentOrderResponse!!.cookingSlot!!.endsAt
                 val curCookingSlotStr = DateUtils.parseDatesToNowOrDates(curStartsAtDate, curEndsAtDate)
                 val newCookingSlotStr = DateUtils.parseDatesToNowOrDates(newStartAtDate, newEndsAtDate)
@@ -278,6 +278,30 @@ class CartManager(
         return null
     }
 
+    /**
+     * this function returns current order other available cooking slots
+     */
+    suspend fun fetchOrderDeliveryTimes(orderId: Long?): List<DeliveryDates>? {
+        orderId?.let{
+            val result = orderRepository.getOrderDeliveryTimes(it)
+            if(result.type == OrderRepository.OrderRepoStatus.GET_DELIVERY_DATES_SUCCESS){
+                return result.data
+            }
+        }
+        return null
+    }
+
+
+    suspend fun updateOrderDeliveryParam(): OrderRepository.OrderRepoResult<Order>? {
+        val orderRequest = buildOrderRequest(emptyList())
+        return updateOrderParams(orderRequest)
+    }
+
+    fun onLocationInvalid() {
+        //roll back to previous locaiton.. current location doesnt valid for order
+        eaterDataManager.rollBackToPreviousAddress()
+    }
+
     suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {
         this.currentOrderResponse?.id?.let { it ->
             val result = orderRepository.finalizeOrder(it, paymentMethodId)
@@ -362,7 +386,7 @@ class CartManager(
         orderLiveData.postValue(order)
     }
 
-    private fun handleWsError(wsError: List<WSError>?) {
+    fun handleWsError(wsError: List<WSError>?) {
         var errorList = ""
         wsError?.forEach {
             errorList += "${it.msg} \n"
@@ -389,7 +413,7 @@ class CartManager(
     }
     suspend fun updateShippingService(shippingService: String) {
         this.shippingService = shippingService
-        val deliveryTime = getCurrentCookingSlot()?.startsAt
+        val deliveryTime = getCurrentCookingSlot()?.orderFrom
         val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
         val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
         updateOrderParams(orderRequest)
@@ -582,7 +606,6 @@ class CartManager(
             return it?.restaurant?.getFullName() ?: "no_name"
         }
     }
-
 
 
     /**

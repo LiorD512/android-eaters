@@ -13,7 +13,7 @@ data class CookingSlot(
     @Json(name = "id") val id: Long,
     val name: String = "Name",
     @Json(name = "ends_at") val endsAt: Date,
-    @Json(name = "starts_at") val startsAt: Date,
+//    @Json(name = "starts_at") val startsAt: Date,
     @Json(name = "order_from") val orderFrom: Date,
     @Json(name = "last_call_at") val lastCallAt: Date?,
     @Json(name = "delivery_fee") val deliveryFee: Price?,

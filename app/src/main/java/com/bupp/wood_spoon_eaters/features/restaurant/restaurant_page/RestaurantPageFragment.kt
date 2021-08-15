@@ -100,7 +100,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     override fun onGoToCheckoutClicked() {
-        startActivity(Intent(requireContext(), OrderCheckoutActivity::class.java))
+        mainViewModel.handleNavigation(RestaurantMainViewModel.NavigationType.START_ORDER_CHECKOUT_ACTIVITY)
     }
 
     private fun onDeliveryTimingChange(date: SortedCookingSlots?) {

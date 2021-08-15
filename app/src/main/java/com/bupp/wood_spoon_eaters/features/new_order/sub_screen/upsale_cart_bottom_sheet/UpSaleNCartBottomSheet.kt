@@ -34,7 +34,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : BottomSheetDialogFragment() {
 
     interface UpsaleNCartBSListener{
-        fun refreshParentOnCartCleared()
+        fun refreshParentOnCartCleared(){}
         fun onCartDishCLick(customCartItem: CustomCartItem)
         fun onGoToCheckoutClicked()
     }

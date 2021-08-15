@@ -1,15 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.checkout
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
@@ -26,21 +23,34 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     val progressData = ProgressData()
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
     val orderLiveData = cartManager.getCurrentOrderData()
+    val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
 
+    val wsErrorEvent = cartManager.getWsErrorEvent()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
     enum class OrderValidationErrorType {
         SHIPPING_METHOD_MISSING,
         PAYMENT_METHOD_MISSING
     }
 
-    val timeChangeEvent = LiveEventData<List<MenuItem>>()
+    val timeChangeEvent = LiveEventData<List<DeliveryDates>>()
 //    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 
     init{
-        fetCurrentOrderData()
+        fetchOrderDeliveryTimes()
     }
 
-    private fun fetCurrentOrderData() {
+    private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
+        orderLiveData.value?.let{
+            viewModelScope.launch {
+                val result = cartManager.fetchOrderDeliveryTimes(it.id)
+                result?.let{
+                    deliveryDatesLiveData.postValue(it)
+                }
+            }
+            if(isPendingRequest){
+                onTimeChangeClick()
+            }
+        }
     }
 
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
@@ -52,16 +62,16 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
                 }
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
-
                 }
             }
         }
     }
 
     fun onTimeChangeClick() {
-        val menuItems = cartManager.getAvailableMenuItems()
-        menuItems?.let{
-            timeChangeEvent.postRawValue(it)
+        if(deliveryDatesLiveData.value != null){
+            timeChangeEvent.postRawValue(deliveryDatesLiveData.value!!)
+        }else{
+//            fetchOrderDeliveryTimes(true)
         }
     }
 
@@ -112,7 +122,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         }
     }
 
-    private fun finalizeOrder() {
+    fun finalizeOrder() {
         viewModelScope.launch {
             val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()?.id
             progressData.startProgress()
@@ -122,13 +132,13 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                     Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - success")
                     cartManager.onCartCleared()
                     //todo - finish activity and restaurant activity - go back to main.
-//                    handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY_AFTER_PURCHASE)
+//                    (NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY_AFTER_PURCHASE)
                 }
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
-                    Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - failed")
+                    Log.d(TAG, "finalizeOrder - failed")
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - ws error")
+                    Log.d(TAG, "finalizeOrder - ws error")
 
                 }
             }

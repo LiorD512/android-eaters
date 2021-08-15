@@ -42,6 +42,14 @@ data class OrderItemRequest(
     @Json(name = "_destroy") var _destroy: Boolean? = false
 )
 
+@JsonClass(generateAdapter = true)
+data class DeliveryDates(
+    val from: Date,
+    val to: Date
+)
+
+
+
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Order (

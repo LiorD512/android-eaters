@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.model.CookingSlot
 import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(

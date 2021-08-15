@@ -179,6 +179,9 @@ interface ApiService {
     @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
     suspend fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<ShippingMethod>>
 
+    @GET("eaters/me/me/orders/{order_id}/delivery_times")
+    suspend fun getOrderDeliveryTimes(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<DeliveryDates>>
+
 
     //Eater Data
     @GET("eaters/me/orders/trackable")
