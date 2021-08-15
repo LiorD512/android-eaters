@@ -194,19 +194,23 @@ object DateUtils {
     }
 
     fun isDateInRange(dateToCheck: Date, startDate: Date, endDate: Date): Boolean {
-        val date = dateToCheck.time
-        return date > startDate.time && date < endDate.time
+        return dateToCheck.time > startDate.time && dateToCheck.time < endDate.time
     }
 
     fun isNowInRange(startDate: Date, endDate: Date): Boolean {
-        val now = Date().time
-        return now > startDate.time && now < endDate.time
+        return isDateInRange(Date(), startDate, endDate)
     }
 
     fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
         val sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
         return sameDay
+    }
+
+    fun isSameDay(date1: Date, date2: Date): Boolean {
+        val fmt = SimpleDateFormat("yyyyMMdd")
+//        fmt.setTimeZone(...); // your time zone
+        return fmt.format(date1).equals(fmt.format(date2))
     }
 
     fun isIn30MinutesRangeFromNow(dateToCheck: Date): Boolean {

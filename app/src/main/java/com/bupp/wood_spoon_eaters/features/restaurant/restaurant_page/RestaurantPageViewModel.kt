@@ -97,11 +97,19 @@ class RestaurantPageViewModel(
             /**  case2 : no open cart, has chosen date from feed - search for cookingSlot that contains chosen date  **/
             timeManager.getTempDeliveryTimeDate()?.let { feedDate ->
                 sortedCookingSlots.forEach { date ->
-                    val feedTimeCookingSlot = date.cookingSlots.find { cookingSlot ->
-                        DateUtils.isDateInRange(feedDate, cookingSlot.orderFrom, cookingSlot.endsAt)
-                    }
+                    var feedTimeCookingSlot: CookingSlot? = null
+                        if (DateUtils.isSameDay(date.date, feedDate)) {
+                            feedTimeCookingSlot = date.cookingSlots[0]
+                        }
+//                    val feedTimeCookingSlot = date.cookingSlots.find { cookingSlot ->
+//                        DateUtils.isDateInRange(feedDate, cookingSlot.orderFrom, cookingSlot.endsAt)
+//                    }
                     feedTimeCookingSlot?.let {
-                        /**  case2 : feed time cooking slot found  **/
+                        /**  case2 : feed time cooking slot found
+                         * 1. update cartManager to be set to the first time order can be valid
+                         * 2. update restaurant screen ui
+                         * **/
+                        timeManager.setTemporaryDeliveryTimeDate(it.orderFrom)
                         onCookingSlotSelected(it)
                         return
                     }
@@ -118,8 +126,9 @@ class RestaurantPageViewModel(
         val cookingSlotId: Long,
         val timePickerString: String,
     )
+
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
-    fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot){
+    fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot) {
         onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot)))
     }
 
@@ -153,7 +162,7 @@ class RestaurantPageViewModel(
     fun onTimePickerClicked() {
         //when picker is clicked we send from viewModel the selected cooking slot
         // so we can highlight it for the user inside the dialog
-        currentCookingSlot?.let{
+        currentCookingSlot?.let {
             timePickerEvent.postRawValue(it)
         }
     }
@@ -258,7 +267,7 @@ class RestaurantPageViewModel(
         }
     }
 
-    private fun resetSectionItemsCounter(dishSectionsList: List<DishSections>): MutableList<DishSections>{
+    private fun resetSectionItemsCounter(dishSectionsList: List<DishSections>): MutableList<DishSections> {
         val updatedSectionList = mutableListOf<DishSections>()
         dishSectionsList.forEach { dishSection ->
             if (dishSection is DishSectionSingleDish) {
@@ -266,7 +275,7 @@ class RestaurantPageViewModel(
                 // we make copy of the dish section so the adapter will refresh the item
                 updatedDishSection.cartQuantity = 0
                 updatedSectionList.add(updatedDishSection)
-            }else{
+            } else {
                 updatedSectionList.add(dishSection)
             }
         }
@@ -300,7 +309,7 @@ class RestaurantPageViewModel(
                     cartManager.updateCurCookingSlotId(currentCookingSlot.id)
                     cartManager.addOrUpdateCart(quantity, dishId, note)
                 }
-            }else{
+            } else {
                 cartManager.setPendingRequestParams(currentCookingSlot.id, quantity, dishId, note)
             }
         }
@@ -319,7 +328,7 @@ class RestaurantPageViewModel(
      */
     fun handleCartData(order: Order?) {
         Log.d(TAG, "handleCartData")
-        order?.let{
+        order?.let {
             dishListData.value?.dishes?.let {
                 updateDishCountUi(it, false)
                 updateFloatingCartButtonUi(order)
@@ -328,7 +337,11 @@ class RestaurantPageViewModel(
     }
 
     private fun updateFloatingCartButtonUi(order: Order) {
-        cartManager.updateFloatingCartBtn(order.restaurant?.restaurantName, order.getAllOrderItemsQuantity())
+        cartManager.updateFloatingCartBtn(order)
+    }
+
+    private fun refreshFloatingCartButtonUi() {
+        cartManager.refreshFloatingCartBtn()
     }
 
     fun onPerformClearCart() {

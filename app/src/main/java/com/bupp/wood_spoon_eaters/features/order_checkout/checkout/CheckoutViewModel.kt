@@ -25,6 +25,8 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     val orderLiveData = cartManager.getCurrentOrderData()
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
 
+    val onCheckoutDone = LiveEventData<Boolean>()
+
     val wsErrorEvent = cartManager.getWsErrorEvent()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
     enum class OrderValidationErrorType {
@@ -52,6 +54,10 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         }
     }
 
+    fun refreshCheckoutPage(){
+        cartManager.refreshOrderLiveData()
+    }
+
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
             progressData.startProgress()
@@ -62,8 +68,19 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 }
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
                 }
+                OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                    handleWsError(result.wsError)
+                }
             }
         }
+    }
+
+    private fun handleWsError(wsError: List<WSError>?) {
+        var errorList = ""
+        wsError?.forEach {
+            errorList += "${it.msg} \n"
+        }
+        wsErrorEvent.postRawValue(errorList)
     }
 
     fun onTimeChangeClick() {
@@ -130,8 +147,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
                     Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - success")
                     cartManager.onCartCleared()
-                    //todo - finish activity and restaurant activity - go back to main.
-//                    (NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY_AFTER_PURCHASE)
+                    onCheckoutDone.postRawValue(true)
                 }
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
                     Log.d(TAG, "finalizeOrder - failed")
@@ -146,17 +162,25 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     }
 
     fun onPlaceOrderClick() {
+        if (validteOrderData()) {
+            finalizeOrder()
+        }
+    }
+
+    private fun validteOrderData(): Boolean {
         if (cartManager.checkShippingMethodValidation()) {
             validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
-//            return false
+            return false
         }
-            val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
-            if (paymentMethod == null) {
-                validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
-//                return false
-            }
-//            return true
+        val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
+        if (paymentMethod == null) {
+            validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
+            return false
         }
+        return true
+    }
+
+
 
     /**Stripe related functions
      *

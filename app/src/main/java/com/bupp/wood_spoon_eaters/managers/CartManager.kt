@@ -351,8 +351,20 @@ class CartManager(
     }
 
 
-    fun updateFloatingCartBtn(restaurantName: String?, allOrderItemsQuantity: Int) {
-        floatingCartBtnEvent.postValue(FloatingCartEvent(restaurantName ?: "", allOrderItemsQuantity))
+    fun updateFloatingCartBtn(order: Order) {
+        floatingCartBtnEvent.postValue(FloatingCartEvent(order.restaurant?.restaurantName ?: "", order.getAllOrderItemsQuantity()))
+    }
+
+    fun refreshFloatingCartBtn() {
+        currentOrderResponse.let{
+            floatingCartBtnEvent.postValue(FloatingCartEvent(it?.restaurant?.restaurantName ?: "", it?.getAllOrderItemsQuantity() ?: 0))
+        }
+    }
+
+    fun refreshOrderLiveData() {
+        currentOrderResponse?.let{
+            orderLiveData.postValue(it)
+        }
     }
 
     /**
@@ -360,6 +372,7 @@ class CartManager(
      */
      fun onCartCleared() {
         currentOrderResponse = null
+        refreshFloatingCartBtn()
     }
 
     /**
@@ -606,6 +619,7 @@ class CartManager(
             return it?.restaurant?.getFullName() ?: "no_name"
         }
     }
+
 
 
     /**

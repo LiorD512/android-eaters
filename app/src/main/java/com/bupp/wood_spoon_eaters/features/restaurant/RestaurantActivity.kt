@@ -28,6 +28,7 @@ class RestaurantActivity : AppCompatActivity() {
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)
             if(isAfterPurchase!!){
+                intent.putExtra("isAfterPurchase", isAfterPurchase)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -75,6 +76,6 @@ class RestaurantActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "RestaurantActivity"
+        private const val TAG = "wowRestaurantActivity"
     }
 }

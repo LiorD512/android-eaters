@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
@@ -25,7 +26,9 @@ import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
@@ -91,7 +94,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private var currentFragmentTag: String? = null
 
     private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-        Log.d("wowMain", "Activity For Result - location")
+        Log.d(TAG, "Activity For Result - location")
 //        binding.mainActHeaderView.enableLocationClick(true)
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
@@ -99,17 +102,27 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
     private val afterOrderResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-        Log.d("wowMain", "Activity For Result - new order")
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            val data = result.data
+        Log.d(TAG, "Activity For Result - new order")
         //check if has order and refresh ui
-        viewModel.refreshMainBottomBarUi()
-        result.data?.let {
-            if (it.getBooleanExtra("isAfterPurchase", false)) {
-                showRateTheAppDialog()
-                viewModel.checkForActiveOrder()
-                refreshActiveCampaigns()
-            }
+        if (result.resultCode == Activity.RESULT_OK) {
+            updateUiAfterOrderSuccess(result.data)
+        }
+    }
+
+    private val startCheckoutForResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+        Log.d(TAG, "Activity For Result - startCheckoutForResult")
+        if (result.resultCode == Activity.RESULT_OK) {
+            updateUiAfterOrderSuccess(result.data)
+        }
+    }
+
+    private fun updateUiAfterOrderSuccess(data: Intent?) {
+        val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)
+        if(isAfterPurchase!!){
+            showRateTheAppDialog()
+            viewModel.checkForActiveOrder()
+            refreshActiveCampaigns()
+//            viewModel.refreshFloatingCartBtn()
         }
     }
 
@@ -202,7 +215,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.floatingCartBtnEvent.observe(this, {
             handleFloatingBtnEvent(it)
         })
-
+        viewModel.startRestaurantActivity.observe(this, {
+            startRestaurantActivity(it)
+        })
         //header event
 //        viewModel.getFinalAddressParams().observe(this, {
 //            binding.mainActHeaderView.setLocationTitle(it?.shortTitle)
@@ -214,7 +229,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.dishClickEvent.observe(this, {
             val event = it.getContentIfNotHandled()
             event?.let {
-                afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_MENU_ITEM_ID, event))
+
             }
         })
 
@@ -254,8 +269,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.shareEvent.observe(this, {
             sendShareCampaign(it)
         })
+    }
 
-
+    private fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams?) {
+        afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_RESTAURANT, restaurantInitParams))
     }
 
     private fun handleError(errorData: GlobalErrorManager.GlobalError?) {
@@ -293,12 +310,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     override fun onCartDishCLick(customCartItem: CustomCartItem) {
-        startActivity(Intent(this, RestaurantActivity::class.java)
-            .putExtra(Constants.ARG_DISH, customCartItem)
-        )
+        afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customCartItem))
     }
 
     override fun onGoToCheckoutClicked() {
+        startCheckoutForResult.launch(Intent(this, OrderCheckoutActivity::class.java))
     }
 
     private fun handleCampaignData(campaigns: List<Campaign>) {

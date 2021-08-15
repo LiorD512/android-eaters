@@ -31,7 +31,8 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     val viewModel by viewModel<TimePickerViewModel>()
     private var isTemporary: Boolean = false
 
-    private var menuItems: List<MenuItem>? = null
+//    private var menuItems: List<MenuItem>? = null
+    private var daysFromNow: Int? = null
     private var cookingSlots: List<CookingSlot>? = null
     private var deliveryDates: List<DeliveryDates>? = null
     private var selectedCookingSlot: CookingSlot? = null
@@ -93,10 +94,10 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
                 dismiss()
             }
 
-            menuItems?.let{
-                timePickerTimePicker.setDatesByMenuItems(it)
-                timePickerAsapBtn.visibility = View.GONE
-            }
+//            menuItems?.let{
+//                timePickerTimePicker.setDatesByMenuItems(it)
+//                timePickerAsapBtn.visibility = View.GONE
+//            }
 
             cookingSlots?.let{
                 timePickerTimePicker.setDatesByCookingSlots(it)
@@ -111,29 +112,25 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
                 }
             }
 
-
             deliveryDates?.let{
                 timePickerTimePicker.setDatesByDeliveryDates(it)
                 timePickerAsapBtn.visibility = View.GONE
-
-//                timePickerScheduleBtn.setOnClickListener {
-//                    val selectedCookingSlot = timePickerTimePicker.getChosenCookingSlot()
-//                    selectedCookingSlot?.let{
-//                        listener?.onTimerPickerCookingSlotChange(it)
-//                    }
-//                    dismiss()
-//                }
             }
+
+            daysFromNow?.let{
+                binding.timePickerTimePicker.initSimpleDatesData(it)
+            }
+
 
 
         }
     }
 
-    fun setMenuItems(menuItems: List<MenuItem>){
-        val menuItemsData = menuItems.filter { it.quantity > 0 }
-        this.isTemporary = true
-        this.menuItems = menuItemsData
-    }
+//    fun setMenuItems(menuItems: List<MenuItem>){
+//        val menuItemsData = menuItems.filter { it.quantity > 0 }
+//        this.isTemporary = true
+//        this.menuItems = menuItemsData
+//    }
 
     fun setCookingSlots(selectedCookingSlot: CookingSlot, cookingSlots: MutableList<CookingSlot>) {
         this.isTemporary = true
@@ -145,6 +142,12 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     fun setDeliveryDates(deliveryDates: List<DeliveryDates>){
         this.isTemporary = true
         this.deliveryDates = deliveryDates
+    }
+
+    fun setDatesFromNow(daysFromNow: Int = 7){
+        this.isTemporary = false
+        this.daysFromNow = daysFromNow
+
     }
 
 }

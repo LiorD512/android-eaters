@@ -140,6 +140,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     override fun onHeaderDateClick() {
 //        val timePickerBottomSheet = TimePickerBottomSheet()
         val timePickerBottomSheet = SingleColumnTimePickerBottomSheet()
+        timePickerBottomSheet.setDatesFromNow(7)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
@@ -297,9 +298,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
-        startActivity(Intent(requireContext(), RestaurantActivity::class.java)
-            .putExtra(Constants.ARG_RESTAURANT, restaurantInitParams)
-        )
+        mainViewModel.startRestaurantActivity(restaurantInitParams)
+//        startActivity(Intent(requireContext(), RestaurantActivity::class.java)
+//            .putExtra(Constants.ARG_RESTAURANT, restaurantInitParams)
+//        )
     }
 
 

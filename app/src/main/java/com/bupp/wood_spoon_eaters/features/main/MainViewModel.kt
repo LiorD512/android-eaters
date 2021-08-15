@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
@@ -58,6 +59,8 @@ class MainViewModel(
 //    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
     val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
     val campaignLiveData = campaignManager.getCampaignLiveData()
+
+    val startRestaurantActivity = MutableLiveData<RestaurantInitParams>()
 //    fun checkCampaignForFeed() {
 //        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)
 //    }
@@ -426,6 +429,21 @@ class MainViewModel(
      val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
     fun onFloatingCartStateChanged(isShowing: Boolean) {
         onFloatingBtnHeightChange.postValue(isShowing)
+    }
+
+    /**
+     * Refreshing Floating cart button ui after order was updated.
+     */
+    fun refreshFloatingCartBtn() {
+        cartManager.refreshFloatingCartBtn()
+    }
+
+    /**
+     * Starts Restaurant Activity with the initial params
+     * we start it from here, beacuse we need to update stuff when order is successfully done.
+     */
+    fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
+        startRestaurantActivity.postValue(restaurantInitParams)
     }
 
 

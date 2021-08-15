@@ -157,9 +157,17 @@ class DishPageViewModel(
             orderItemData.value?.let {
                 val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it)
                 if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
-                    onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
+                    onFinishDishPage.postValue(getFinishPageType())
                 }
             }
+        }
+    }
+
+    private fun getFinishPageType(): FinishNavigation {
+        return if(finishToFeed){
+            FinishNavigation.FINISH_ACTIVITY
+        }else{
+            FinishNavigation.FINISH_AND_BACK
         }
     }
 

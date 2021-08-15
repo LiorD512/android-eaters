@@ -94,7 +94,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
             handleClearCartEvent(it)
         })
         viewModel.onFinishDishPage.observe(viewLifecycleOwner, {
-            activity?.onBackPressed()
+            handleFinishPage(it)
         })
         viewModel.shakeAddToCartBtn.observe(viewLifecycleOwner, {
             AnimationUtil().shakeView(binding.dishFragAddToCartBtn)
@@ -105,6 +105,17 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+    }
+
+    private fun handleFinishPage(type: DishPageViewModel.FinishNavigation) {
+        when(type){
+            DishPageViewModel.FinishNavigation.FINISH_AND_BACK -> {
+                activity?.onBackPressed()
+            }
+            DishPageViewModel.FinishNavigation.FINISH_ACTIVITY -> {
+                activity?.finish()
+            }
+        }
     }
 
     private fun handleAddToCartBtn(event: DishPageViewModel.DishQuantityData?) {

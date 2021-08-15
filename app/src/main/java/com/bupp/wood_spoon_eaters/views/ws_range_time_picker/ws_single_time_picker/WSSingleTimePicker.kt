@@ -35,7 +35,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     init {
         initView(attrs)
-        initDatesData()
         initDateAndHoursUi()
     }
 
@@ -61,13 +60,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     }
 
-    private fun initDatesData() {
-        val dates = getDaysFromNow(7)
+    fun initSimpleDatesData(daysFromNow: Int) {
+        datesList.clear()
+        val dates = getDaysFromNow(daysFromNow)
         dates.let {
             it.forEach {
                 datesList.add(WSSingleTimePicker(date = it))
             }
         }
+        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSSingleTimePicker>?)
     }
 
     private fun initDateAndHoursUi() {
@@ -96,30 +97,30 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return dates
     }
 
-    fun setDatesByMenuItems(menuItems: List<MenuItem>) {
-        datesList.clear()
-        val dates = getDaysForMenuItems(menuItems)
-        dates.let {
-            it.forEachIndexed { index, date ->
-                val currentMenuItem = menuItems[index]
-                currentMenuItem.cookingSlot?.let{
-                    datesList.add(WSSingleTimePicker(date = dates[index]))
-                }
-            }
-        }
-        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSSingleTimePicker>?)
-//        initDateAndHoursUi()
-    }
-
-    private fun getDaysForMenuItems(menuItems: List<MenuItem>): List<Date> {
-        val dates = mutableListOf<Date>()
-        menuItems.forEach { item ->
-            item.cookingSlot?.orderFrom?.let{
-                dates.add(it)
-            }
-        }
-        return dates
-    }
+//    fun setDatesByMenuItems(menuItems: List<MenuItem>) {
+//        datesList.clear()
+//        val dates = getDaysForMenuItems(menuItems)
+//        dates.let {
+//            it.forEachIndexed { index, date ->
+//                val currentMenuItem = menuItems[index]
+//                currentMenuItem.cookingSlot?.let{
+//                    datesList.add(WSSingleTimePicker(date = dates[index]))
+//                }
+//            }
+//        }
+//        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSSingleTimePicker>?)
+////        initDateAndHoursUi()
+//    }
+//
+//    private fun getDaysForMenuItems(menuItems: List<MenuItem>): List<Date> {
+//        val dates = mutableListOf<Date>()
+//        menuItems.forEach { item ->
+//            item.cookingSlot?.orderFrom?.let{
+//                dates.add(it)
+//            }
+//        }
+//        return dates
+//    }
 
     fun getChosenDate(): Date? {
         val chosenDateView = snapHelper.findSnapView(binding.wsRangeTimePickerDateList.layoutManager)

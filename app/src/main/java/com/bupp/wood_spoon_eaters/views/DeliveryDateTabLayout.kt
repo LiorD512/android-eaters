@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
+import android.os.Handler
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.bupp.wood_spoon_eaters.databinding.DeliveryDateTabLayoutBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDayDateSplash
+import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.google.android.material.tabs.TabLayout
 import com.trading212.stickyheader.dpToPx
 
@@ -20,7 +22,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var binding: DeliveryDateTabLayoutBinding = DeliveryDateTabLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
     var listener: DeliveryTimingTabLayoutListener? = null
-    interface DeliveryTimingTabLayoutListener{
+
+    interface DeliveryTimingTabLayoutListener {
         fun onDateSelected(date: SortedCookingSlots?)
     }
 
@@ -42,9 +45,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setTabListener(listener: DeliveryTimingTabLayoutListener){
+    fun setTabListener(listener: DeliveryTimingTabLayoutListener) {
         this.listener = listener
-        this.tabSelectedListener =  object : TabLayout.OnTabSelectedListener {
+        this.tabSelectedListener = object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
                     listener.onDateSelected(datesList?.getOrNull(tab.position))
@@ -85,29 +88,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     /**
      * Changing selected cookingSlot - only UI without triggering listener
      */
-    fun selectTabByCookingSlot(cookingSlot: CookingSlot){
-        datesList?.forEachIndexed{ index,date->
+    fun selectTabByCookingSlot(cookingSlot: CookingSlot) {
+        datesList?.forEachIndexed { index, date ->
             val date = date.cookingSlots.find { it.id == cookingSlot.id }
-            if(date != null){
+            if (date != null) {
                 //relevant cookingSlot is found in current date
-                with(binding){
-                    tabLayout.removeOnTabSelectedListener(tabSelectedListener)
-                    tabLayout.getTabAt(index)?.select()
-                    tabLayout.addOnTabSelectedListener(tabSelectedListener);
-                    return@forEachIndexed
-                }
-            }
-        }
-    }
-    /**
-     * Changing selected cookingSlot by Id - only UI without triggering listener
-     */
-    fun selectTabByCookingSlotId(cookingSlotId: Long){
-        datesList?.forEachIndexed{ index,date->
-            val date = date.cookingSlots.find { it.id == cookingSlotId }
-            if(date != null){
-                //relevant cookingSlot is found in current date
-                with(binding){
+                with(binding) {
                     tabLayout.removeOnTabSelectedListener(tabSelectedListener)
                     tabLayout.getTabAt(index)?.select()
                     tabLayout.addOnTabSelectedListener(tabSelectedListener);
@@ -117,8 +103,28 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    /**
+     * Changing selected cookingSlot by Id - only UI without triggering listener
+     */
+    fun selectTabByCookingSlotId(cookingSlotId: Long) {
+        datesList?.forEachIndexed { index, date ->
+            val date = date.cookingSlots.find { it.id == cookingSlotId }
+            if (date != null) {
+                //relevant cookingSlot is found in current date
+                with(binding) {
+                    tabLayout.waitForLayout {
+                        tabLayout.removeOnTabSelectedListener(tabSelectedListener)
+                        tabLayout.getTabAt(index)?.select()
+                        tabLayout.addOnTabSelectedListener(tabSelectedListener)
+                    }
+                    return@forEachIndexed
+                }
+            }
+        }
+    }
+
     fun getSelectedDate(): SortedCookingSlots? {
-        with(binding){
+        with(binding) {
             val position = tabLayout.selectedTabPosition
             return datesList?.getOrNull(position)
         }

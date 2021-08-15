@@ -71,6 +71,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 binding.checkoutFragmentPb.hide()
             }
         })
+        viewModel.onCheckoutDone.observe(viewLifecycleOwner, {
+            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE)
+        })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
         })
@@ -365,7 +368,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onAddBtnClicked() {
         //Place an order click
         viewModel.finalizeOrder()
-//        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.CHECKOUT_TO_ADD_MORE_DISH)
     }
 
     override fun onCustomToolTipClick() {
@@ -373,6 +375,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onWSErrorDone() {
-
+        viewModel.refreshCheckoutPage()
     }
 }
