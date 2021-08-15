@@ -137,7 +137,7 @@ class DishPageViewModel(
         viewModelScope.launch {
             val startNewCartAction = cartManager.checkForPendingActions()
             if(startNewCartAction == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
-                onFinishDishPage.postValue(true)
+                onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
             }
         }
     }
@@ -157,7 +157,7 @@ class DishPageViewModel(
             orderItemData.value?.let {
                 val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it)
                 if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
-                    onFinishDishPage.postValue(true)
+                    onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
                 }
             }
         }
@@ -188,7 +188,7 @@ class DishPageViewModel(
                         cartManager.forceCookingSlotChange(cookingSlotId)
                         val result = cartManager.addDishToNewCart(quantity, it, note)
                         if (result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
-                            onFinishDishPage.postValue(true)
+                            onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
                         }
                     }
                 }else{
@@ -204,7 +204,7 @@ class DishPageViewModel(
         viewModelScope.launch {
             val result = cartManager.removeOrderItems(dishId)
             if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
-                onFinishDishPage.postValue(true)
+                onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
             }
         }
     }
