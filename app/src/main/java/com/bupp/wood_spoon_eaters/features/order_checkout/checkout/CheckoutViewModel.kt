@@ -1,11 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.checkout
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
@@ -21,6 +26,12 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     val progressData = ProgressData()
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
     val orderLiveData = cartManager.getCurrentOrderData()
+
+    val validationError = SingleLiveEvent<OrderValidationErrorType>()
+    enum class OrderValidationErrorType {
+        SHIPPING_METHOD_MISSING,
+        PAYMENT_METHOD_MISSING
+    }
 
     val timeChangeEvent = LiveEventData<List<MenuItem>>()
 //    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
@@ -100,6 +111,63 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
             feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue, minOrderFee))
         }
     }
+
+    private fun finalizeOrder() {
+        viewModelScope.launch {
+            val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()?.id
+            progressData.startProgress()
+            val result = cartManager.finalizeOrder(paymentMethodId)
+            when (result?.type) {
+                OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
+                    Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - success")
+                    cartManager.onCartCleared()
+                    //todo - finish activity and restaurant activity - go back to main.
+//                    handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY_AFTER_PURCHASE)
+                }
+                OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
+                    Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - failed")
+                }
+                OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                    Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - ws error")
+
+                }
+            }
+            progressData.endProgress()
+        }
+    }
+
+    fun onPlaceOrderClick() {
+        if (cartManager.checkShippingMethodValidation()) {
+            validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
+//            return false
+        }
+            val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
+            if (paymentMethod == null) {
+                validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
+//                return false
+            }
+//            return true
+        }
+
+    /**Stripe related functions
+     *
+     */
+//    private fun validateOrder(): Boolean {
+////        if (cartManager.checkShippingMethodValidation()) {
+////            validationError.postValue(NewOrderMainViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING)
+////            return false
+////        }
+//        val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
+//        if (paymentMethod == null) {
+//            startStripeOrReInit()
+////            handleNavigation(NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
+//            validationError.postValue(NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING)
+//            return false
+//        }
+//        return true
+//    }
+
+
 
     companion object{
         const val TAG = "wowCheckoutVM"

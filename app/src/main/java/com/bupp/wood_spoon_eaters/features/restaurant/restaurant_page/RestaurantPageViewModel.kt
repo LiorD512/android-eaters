@@ -135,23 +135,23 @@ class RestaurantPageViewModel(
         handleDishesSection(sortedCookingSlot)
     }
 
-    /**
-     * Updating the text on the time picker button
-     */
-    @Deprecated("combined into mutable live data")
-    private fun updateTimePickerUi(selectedCookingSlot: CookingSlot?) {
-        selectedCookingSlot?.let {
-            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
-            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
-            var uiStr = ""
-            if (isNow) {
-                uiStr = "Now ($datesStr)"
-            } else {
-                uiStr = "${selectedCookingSlot.name} ($datesStr)"
-            }
-            timePickerUi.postValue(uiStr)
-        }
-    }
+//    /**
+//     * Updating the text on the time picker button
+//     */
+//    @Deprecated("combined into mutable live data")
+//    private fun updateTimePickerUi(selectedCookingSlot: CookingSlot?) {
+//        selectedCookingSlot?.let {
+//            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
+//            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
+//            var uiStr = ""
+//            if (isNow) {
+//                uiStr = "Now ($datesStr)"
+//            } else {
+//                uiStr = "${selectedCookingSlot.name} ($datesStr)"
+//            }
+//            timePickerUi.postValue(uiStr)
+//        }
+//    }
 
     /**
      * returns the text to show on the time picker button

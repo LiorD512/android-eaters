@@ -215,8 +215,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                     Log.d("wowMapBinder","chefLocation $chefLocation")
                 }
             }
-            val myLat = curOrderData.deliveryAddress?.lat ?: 0
-            val myLng = curOrderData.deliveryAddress?.lng ?: 0
+            val myLat = curOrderData.deliveryAddress?.lat ?: 0.0
+            val myLng = curOrderData.deliveryAddress?.lng ?: 0.0
             myLat?.let{
                 myLng?.let{
                     val myLocation = LatLng(myLat, myLng)

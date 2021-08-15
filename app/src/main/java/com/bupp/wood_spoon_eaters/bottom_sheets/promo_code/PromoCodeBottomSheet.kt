@@ -17,7 +17,7 @@ import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -45,11 +45,13 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
     private lateinit var behavior: BottomSheetBehavior<View>
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
         dialog.setOnShowListener {
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
             behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isFitToContents = false
+            behavior.isFitToContents = true
             behavior.isDraggable = true
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
@@ -59,8 +61,9 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val parent = view.parent as View
-        parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
+//        val parent = view.parent as View
+//        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
+
 
         initUi()
         initObservers()
@@ -70,7 +73,7 @@ class PromoCodeBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewL
     private fun initUi() {
         with(binding){
 
-            extraSpace.minimumHeight = (Resources.getSystem().displayMetrics.heightPixels) / 2
+//            extraSpace.minimumHeight = (Resources.getSystem().displayMetrics.heightPixels) / 2
 
             promoCodeFragHeaderView.setHeaderViewListener(this@PromoCodeBottomSheet)
             promoCodeFragHeaderView.setSaveButtonClickable(false)

@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_eaters.utils.DateUtils
 import java.util.*
 
 class CartManager(
-    private val feedDataManager: FeedDataManager,
+    private val eaterDataManager: EaterDataManager,
     private val deliveryTimeManager: DeliveryTimeManager,
     private val orderRepository: OrderRepository,
     private val eventsManager: EventsManager
@@ -21,8 +21,8 @@ class CartManager(
     private var currentOrderResponse: Order? = null
 
     var currentCookingSlotId: Long? = null
-    val deliverAt = deliveryTimeManager.getTempDeliveryTimeStamp()
-    val deliveryAddressId = feedDataManager.getFinalAddressLiveDataParam().value?.id
+    fun getDeliverAt() = deliveryTimeManager.getTempDeliveryTimeStamp()
+    fun getAddressId() = eaterDataManager.getCartAddressId()
 
     private var tempCookingSlotId = LiveEventData<Long>()
     fun getOnCookingSlotIdChange() = tempCookingSlotId
@@ -47,8 +47,8 @@ class CartManager(
     private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
         return OrderRequest(
             cookingSlotId = currentCookingSlotId,
-            deliveryAt = deliverAt,
-            deliveryAddressId = deliveryAddressId,
+            deliveryAt = getDeliverAt(),
+            deliveryAddressId = getAddressId(),
             orderItemRequests = cart
         )
     }
@@ -278,6 +278,17 @@ class CartManager(
         return null
     }
 
+    suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {
+        this.currentOrderResponse?.id?.let { it ->
+            val result = orderRepository.finalizeOrder(it, paymentMethodId)
+            val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
+            eventsManager.sendPurchaseEvent(it, calcTotalDishesPrice())
+            eventsManager.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(isSuccess, result.wsError))
+            return result
+        }
+        return null
+    }
+
     /**
      * Global methods
      */
@@ -311,9 +322,8 @@ class CartManager(
      * forcing cooking slot change will update restaurant page on user return.
       * @param currentCookingSlotId Long
      */
-    fun forceCookingSlotChnage(currentCookingSlotId: Long){
+    fun forceCookingSlotChange(currentCookingSlotId: Long){
         tempCookingSlotId.postRawValue(currentCookingSlotId)
-
     }
 
 
@@ -338,7 +348,7 @@ class CartManager(
     suspend fun checkForPendingActions(): OrderRepository.OrderRepoStatus? {
         pendingRequestParam?.let {
             updateCurCookingSlotId(it.cookingSlotId)
-            forceCookingSlotChnage(it.cookingSlotId)
+            forceCookingSlotChange(it.cookingSlotId)
             val result = addDishToNewCart(it.quantity, it.dishId, it.note)
             pendingRequestParam = null
             return result
@@ -370,6 +380,7 @@ class CartManager(
     /**
      * Ups Data Functions
      */
+    var shippingService: String? = null
     suspend fun getUpsShippingRates(): OrderRepository.OrderRepoResult<List<ShippingMethod>>? {
         this.currentOrderResponse?.id?.let { it ->
             return orderRepository.getUpsShippingRates(it)
@@ -377,11 +388,15 @@ class CartManager(
         return null
     }
     suspend fun updateShippingService(shippingService: String) {
-//        this.shippingService = shippingService
+        this.shippingService = shippingService
         val deliveryTime = getCurrentCookingSlot()?.startsAt
         val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
         val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
         updateOrderParams(orderRequest)
+    }
+
+    fun checkShippingMethodValidation(): Boolean {
+        return currentOrderResponse?.isNationwide == true && shippingService == null
     }
 
 

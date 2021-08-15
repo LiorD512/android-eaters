@@ -178,7 +178,7 @@ class DishPageViewModel(
                 if (isValid) {
                     viewModelScope.launch {
                         cartManager.updateCurCookingSlotId(cookingSlotId)
-                        cartManager.forceCookingSlotChnage(cookingSlotId)
+                        cartManager.forceCookingSlotChange(cookingSlotId)
                         val result = cartManager.addDishToNewCart(quantity, it, note)
                         if (result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
                             onFinishDishPage.postValue(true)

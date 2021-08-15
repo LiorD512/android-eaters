@@ -231,6 +231,10 @@ class EaterDataManager(
         eventsManager.logEvent(eventName, params)
     }
 
+    fun getCartAddressId(): Long? {
+        return getLastChosenAddress()?.id
+    }
+
 
     companion object {
         const val TAG = "wowEaterDataManager"

@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeBottomSheet
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -21,6 +22,7 @@ import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
@@ -48,7 +50,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
 
     val viewModel by viewModel<CheckoutViewModel>()
-//    val mainViewModel by sharedViewModel<NewOrderMainViewModel>()
+    val mainViewModel by sharedViewModel<OrderCheckoutViewModel>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,16 +107,16 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         })
 
-//        mainViewModel.validationError.observe(viewLifecycleOwner, {
-//            when (it) {
-//                NewOrderMainViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING -> {
-//                    viewModel.onNationwideShippingSelectClick()
-//                }
-////                NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
-////                    mainViewModel.startStripeOrReInit()
-////                }
-//            }
-//        })
+        viewModel.validationError.observe(viewLifecycleOwner, {
+            when (it) {
+                CheckoutViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING -> {
+                    viewModel.onNationwideShippingSelectClick()
+                }
+                CheckoutViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
+                    mainViewModel.startStripeOrReInit()
+                }
+            }
+        })
     }
 
 //    private fun updateBottomBar(totalPrice: Price?) {
@@ -141,11 +143,15 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
         binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
+            checkoutFragPlaceOrderBtn.updateButtonText("Place an order")
 
-//            checkoutFragPromoCode.setOnClickListener {
-//                mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.PROMO_CODE)
-//            }
-
+            checkoutFragPromoCode.setOnClickListener {
+                val promoCodeBottomSheet = PromoCodeBottomSheet()
+                promoCodeBottomSheet.show(childFragmentManager, Constants.PROMO_CODE_TAG)
+            }
+            checkoutFragPlaceOrderBtn.setOnClickListener {
+                viewModel.onPlaceOrderClick()
+            }
         }
 
 //        mainViewModel.getLastOrderDetails()
@@ -266,6 +272,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
             checkoutFragSubtotal.setValue("$$allDishSubTotalStr")
             checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
+
+            curOrder.total?.formatedValue?.let {
+                checkoutFragPlaceOrderBtn.updateAddToCartButton(it)
+            }
         }
 
     }
@@ -315,7 +325,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 viewModel.onTimeChangeClick()
             }
             Constants.DELIVERY_DETAILS_PAYMENT -> {
-//                mainViewModel.startStripeOrReInit()
+                mainViewModel.startStripeOrReInit()
             }
             Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
                 viewModel.onNationwideShippingSelectClick()
