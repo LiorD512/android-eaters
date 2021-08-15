@@ -19,22 +19,22 @@ import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.Dietari
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.model.DietaryIcon
-import com.bupp.wood_spoon_eaters.model.FullDish
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.OrderItem
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailabilityAdapter.DishAvailabilityAdapterListener,
-    ModificationsListAdapter.ModificationsListAdapterListener, ClearCartCookingSlotBottomSheet.ClearCartListener, PlusMinusView.PlusMinusInterface,
+class DishPageFragment : Fragment(R.layout.fragment_dish_page),
+    ModificationsListAdapter.ModificationsListAdapterListener,
+    ClearCartCookingSlotBottomSheet.ClearCartListener, PlusMinusView.PlusMinusInterface,
     WSErrorDialog.WSErrorListener {
 
     private val binding: FragmentDishPageBinding by viewBinding()
 
 //    private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<DishPageViewModel>()
+
+    var availableTimesAdapter = DishAvailabilityAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -193,6 +193,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
     private fun handleDishFullData(dish: FullDish) {
         with(binding.dishFragMainListLayout) {
             handleDietaryList(dish.dietaries)
+            handleAvailableTimes(dish.availableTimes)
             //Description
             dishFragDescription.isVisible = !dish.description.isNullOrEmpty()
             dishFragDescription.text = dish.description
@@ -208,6 +209,15 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page), DishAvailability
             //Additional Details
             dishFragAdditionalDetailsLayout.isVisible = false
 //            dishAdditionalDetails.text = dish.  //todo : what goes here?
+        }
+    }
+
+    private fun handleAvailableTimes(availableTimes: List<AvailableAt>) {
+        availableTimes.let{
+            with(binding.dishFragMainListLayout){
+                dishFragAvailabilityList.adapter = availableTimesAdapter
+                availableTimesAdapter.submitList(it)
+            }
         }
     }
 
