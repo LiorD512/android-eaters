@@ -291,11 +291,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             viewModel.onDeliveryDateChanged(date)
         }
     }
-
-    companion object {
-        private const val TAG = "RestaurantPageFragment"
-    }
-
 //    fun setFadeInOnScrollRecycler(
 //        fadingView: View,
 //        recyclerView: RecyclerView,
@@ -344,6 +339,28 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
         binding.restaurantFragHeightCorrection.isVisible = isShowing
+    }
+
+    private var hasMotionScrolled = false
+
+    override fun onResume() {
+        super.onResume()
+        if (hasMotionScrolled){
+            binding.motionLayout.transitionToEnd()
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
+    }
+
+
+    companion object {
+        private const val MOTION_TRANSITION_COMPLETED = 1F
+        private const val MOTION_TRANSITION_INITIAL = 0F
+        private const val TAG = "RestaurantPageFragment"
     }
 
 

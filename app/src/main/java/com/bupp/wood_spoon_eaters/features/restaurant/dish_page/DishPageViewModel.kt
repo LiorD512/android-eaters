@@ -57,15 +57,15 @@ class DishPageViewModel(
 
     fun initData(extras: DishInitParams) {
         this.extras = extras
-        if(extras.menuItem != null){
+        if (extras.menuItem != null) {
             handleMenuItemData(extras.menuItem)
             getFullDish(extras.menuItem.id)
 
-            if(extras.cookingSlot?.id != extras.menuItem.cookingSlotId){
+            if (extras.cookingSlot?.id != extras.menuItem.cookingSlotId) {
                 Log.d(TAG, "this is a different Cooking slot")
                 dishMatchCookingSlot = false
             }
-        }else if(extras.orderItem != null){
+        } else if (extras.orderItem != null) {
             isEditMode = true
             handleOrderItemData(extras.orderItem)
             extras.orderItem.menuItem?.id?.let { getFullDish(it) }
@@ -107,14 +107,14 @@ class DishPageViewModel(
         dishQuantity = quantity
 
         var overallPrice = ""
-        if(isEditMode){
+        if (isEditMode) {
             orderItemData.value?.let {
                 it.price.value?.let {
                     val priceStr = DecimalFormat("##.##").format(it * quantity)
                     overallPrice = "$$priceStr"
                 }
             }
-        }else{
+        } else {
             menuItemData.value?.let {
                 it.dish?.price?.value?.let {
                     val priceStr = DecimalFormat("##.##").format(it * quantity)
@@ -129,21 +129,21 @@ class DishPageViewModel(
         cartManager.onCartCleared()
         viewModelScope.launch {
             val startNewCartAction = cartManager.checkForPendingActions()
-            if(startNewCartAction == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
+            if (startNewCartAction == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
                 onFinishDishPage.postValue(true)
             }
         }
     }
 
     fun onDishPageCartClick(note: String? = null) {
-        if(isEditMode){
+        if (isEditMode) {
             updateOrderItem(note)
-        }else{
+        } else {
             addDishToCart(note)
         }
     }
 
-    private fun updateOrderItem(note: String? = null){
+    private fun updateOrderItem(note: String? = null) {
         viewModelScope.launch {
             val quantity = dishQuantity
             val dishId = dishFullData.value?.id ?: -1
@@ -184,7 +184,7 @@ class DishPageViewModel(
                             onFinishDishPage.postValue(true)
                         }
                     }
-                }else{
+                } else {
                     cartManager.setPendingRequestParams(cookingSlotId, quantity, dishId, note)
                 }
             }
@@ -193,7 +193,7 @@ class DishPageViewModel(
         }
     }
 
-    fun onDishRemove(dishId: Long){
+    fun onDishRemove(dishId: Long) {
         viewModelScope.launch {
             val result = cartManager.removeOrderItems(dishId)
             if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
@@ -202,8 +202,7 @@ class DishPageViewModel(
         }
     }
 
-
-    companion object{
+    companion object {
         const val TAG = "dishPageVM"
     }
 
