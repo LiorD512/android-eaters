@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.dish_page;
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -14,19 +15,20 @@ import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
-import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     ModificationsListAdapter.ModificationsListAdapterListener,
-    ClearCartCookingSlotBottomSheet.ClearCartListener, PlusMinusView.PlusMinusInterface,
+    ClearCartCookingSlotBottomSheet.ClearCartListener,
+    PlusMinusView.PlusMinusInterface,
+    WSFloatingButton.WSFloatingButtonListener,
     WSErrorDialog.WSErrorListener {
 
     private val binding: FragmentDishPageBinding by viewBinding()
@@ -56,6 +58,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragAddToCartBtn.setOnClickListener {
                 onAddToCartClick()
             }
+            dishFragAddToCartBtn.setWSFloatingBtnListener(this@DishPageFragment)
         }
     }
 
@@ -120,7 +123,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleAddToCartBtn(event: DishPageViewModel.DishQuantityData?) {
         event?.let{
-            binding.dishFragAddToCartBtn.updateAddToCartButton(it.overallPrice)
+            binding.dishFragAddToCartBtn.updateFloatingBtnPrice(it.overallPrice)
         }
     }
 
@@ -173,7 +176,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             //update counter -> must be after menuItemLiveData is posted and can be read.
             viewModel.updateDishQuantity(orderItem.quantity)
 
-            dishFragAddToCartBtn.updateButtonText("Update cart")
+            dishFragAddToCartBtn.updateFloatingBtnTitle("Update cart")
             val dish = orderItem.dish
             dishFragHeaderName.text = dish.name
             dishFragHeaderPrice.text = dish.price?.formatedValue ?: ""
@@ -212,11 +215,26 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         }
     }
 
-    private fun handleAvailableTimes(availableTimes: List<AvailableAt>) {
-        availableTimes.let{
+    private fun handleAvailableTimes(availableTimes: List<AvailabilityDate>) {
+        availableTimes.let{ list->
             with(binding.dishFragMainListLayout){
                 dishFragAvailabilityList.adapter = availableTimesAdapter
-                availableTimesAdapter.submitList(it)
+                if(list.size > 3){
+                    dishFragAvailabilityViewMore.isVisible = true
+                    availableTimesAdapter.submitList(list.subList(0,3))
+                    dishFragAvailabilityViewMore.setOnClickListener {
+                        dishFragAvailabilityList.scheduleLayoutAnimation()
+                        if(availableTimesAdapter.itemCount > 3){
+                            dishFragAvailabilityViewMore.text = "View More"
+                            availableTimesAdapter.submitList(list.subList(0,3))
+                        } else {
+                            dishFragAvailabilityViewMore.text = "View Less"
+                            availableTimesAdapter.submitList(list)
+                        }
+                    }
+                } else{
+                    availableTimesAdapter.submitList(list)
+                }
             }
         }
     }
@@ -258,6 +276,11 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     override fun onPerformClearCart() {
         viewModel.onPerformClearCart()
     }
+
+    override fun onFloatingCartStateChanged(isShowing: Boolean) {
+        binding.dishFragHeightCorrection.isVisible = isShowing
+    }
+
 
     override fun onClearCartCanceled() {
         //todo

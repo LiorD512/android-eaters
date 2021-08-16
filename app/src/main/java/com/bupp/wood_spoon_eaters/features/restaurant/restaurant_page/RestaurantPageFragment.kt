@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +20,6 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
-import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
@@ -34,14 +32,15 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-import com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
+import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener,
-    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener, FloatingCartButton.FloatingCartButtonListener,
+    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener,
+    WSFloatingButton.WSFloatingButtonListener,
     UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
@@ -69,7 +68,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 viewModel.restaurantFullData.value?.shareUrl?.let {
                 }
             }
-            restaurantFragFloatingCartBtn.setFloatingCartBtnListener(this@RestaurantPageFragment)
+            restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
         with(binding.restaurantMainListLayout) {

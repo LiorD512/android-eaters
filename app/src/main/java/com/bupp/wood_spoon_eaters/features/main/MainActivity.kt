@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
@@ -37,7 +36,7 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
-import com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
+import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
@@ -52,7 +51,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ShareDialog.ShareDialogListener,
     ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
-    FloatingCartButton.FloatingCartButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener {
+    WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -299,7 +298,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
         event?.let {
             with(binding) {
-                mainActFloatingCartBtn.setFloatingCartBtnListener(this@MainActivity)
+                mainActFloatingCartBtn.setWSFloatingBtnListener(this@MainActivity)
                 mainActFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
             }
         }

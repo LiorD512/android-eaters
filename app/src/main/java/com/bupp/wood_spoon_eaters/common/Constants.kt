@@ -141,6 +141,11 @@ class Constants {
         const val FEED_VIEW_STUB_SHARE = 0
         const val FEED_VIEW_STUB_PROMO = 1
 
+        //Floating button type
+        const val VIEW_CART = 0
+        const val ADD_TO_CART = 1
+        const val PLACE_ORDER = 2
+
 
 
         //activity / dialog tags

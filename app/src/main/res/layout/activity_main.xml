@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp" />
 
-    <com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
             android:id="@+id/mainActFloatingCartBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

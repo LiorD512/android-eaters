@@ -133,17 +133,17 @@ object Utils {
         activity.startActivity(Intent.createChooser(shareIntent, "Share"))
     }
 
-    fun vibrate(context: Context){
+    fun vibrate(context: Context, milliseconds: Long = 150){
         val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         // Vibrate for 500 milliseconds
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(
-                VibrationEffect.createOneShot(150,
+                VibrationEffect.createOneShot(milliseconds,
                     VibrationEffect.DEFAULT_AMPLITUDE))
         }
         else {
-            v.vibrate(150)
+            v.vibrate(milliseconds)
         }
     }
 

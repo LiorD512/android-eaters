@@ -161,8 +161,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
         binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
-            checkoutFragPlaceOrderBtn.updateButtonText("Place an order")
-
             checkoutFragPromoCode.setOnClickListener {
                 val promoCodeBottomSheet = PromoCodeBottomSheet()
                 promoCodeBottomSheet.show(childFragmentManager, Constants.PROMO_CODE_TAG)
@@ -293,7 +291,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
 
             curOrder.total?.formatedValue?.let {
-                checkoutFragPlaceOrderBtn.updateAddToCartButton(it)
+                checkoutFragPlaceOrderBtn.updateFloatingBtnPrice(it)
             }
         }
 
