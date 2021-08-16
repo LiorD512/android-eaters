@@ -34,6 +34,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
@@ -244,7 +245,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             handleMainBottomBarUi(it)
         })
         viewModel.getTraceableOrder.observe(this, { traceableOrders ->
-            viewModel.refreshMainBottomBarUi()
+            handleTraceableOrderData(traceableOrders)
         })
         viewModel.getTriggers.observe(this, { triggerEvent ->
             triggerEvent?.let {
@@ -269,6 +270,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.shareEvent.observe(this, {
             sendShareCampaign(it)
         })
+    }
+
+    private fun handleTraceableOrderData(traceableOrders: List<Order>?) {
+        binding.mainActBottomTabLayout.handleOrdersIndicator(traceableOrders != null && traceableOrders.isNotEmpty())
     }
 
     private fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams?) {

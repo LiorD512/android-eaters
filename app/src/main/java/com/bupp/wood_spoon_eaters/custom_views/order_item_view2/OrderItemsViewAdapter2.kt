@@ -50,7 +50,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
         private val priceView: TextView = view.orderItemPrice
         private val name: TextView = view.orderItemName
         private val counter: TextView = view.orderItemCounter
-        private val ingredientsList = view.orderItemIngredientsRecyclerView!!
+        private val note: TextView = view.orderItemNote
 
         @SuppressLint("SetTextI18n")
         fun bindItem(context: Context, orderItem: OrderItem){
@@ -66,10 +66,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
             }
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
-
-            ingredientsList.layoutManager = LinearLayoutManager(context)
-            adapter = IngredientsCheckoutAdapter(context, listOfNotNull(orderItem.getRemovedIngredients(), orderItem.getNoteStr()))
-            ingredientsList.adapter = adapter
+            note.text = orderItem.getNoteStr()
         }
 
     }

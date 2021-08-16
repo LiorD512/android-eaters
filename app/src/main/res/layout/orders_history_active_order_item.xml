@@ -27,13 +27,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="152dp">
 
-                <androidx.fragment.app.FragmentContainerView
-                        app:defaultNavHost="true"
+                <ImageView
                         android:id="@+id/activeOrderFragContainer"
-                        android:name="androidx.navigation.fragment.NavHostFragment"
-                        app:navGraph="@navigation/checkout_nav"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
+
+<!--                <androidx.fragment.app.FragmentContainerView-->
+<!--                        app:defaultNavHost="true"-->
+<!--                        android:id="@+id/activeOrderFragContainer"-->
+<!--                        android:name="androidx.navigation.fragment.NavHostFragment"-->
+<!--                        app:navGraph="@navigation/checkout_nav"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"/>-->
 
             </androidx.cardview.widget.CardView>
 
@@ -67,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"
-                    tools:text="Your order"/>
+                    android:text="Your order"/>
 
             <TextView
                     android:letterSpacing="0.03"
@@ -77,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/activeOrderSubtitle"
-                    tools:text="Waiting for home chef confirmation"/>
+                    android:text="Waiting for home chef confirmation"/>
 
             <com.bupp.wood_spoon_eaters.views.OrderProgressBar
                     android:id="@+id/activeOrderPb"

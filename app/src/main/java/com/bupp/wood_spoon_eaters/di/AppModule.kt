@@ -133,7 +133,7 @@ val appModule = module {
 
     viewModel { UpdateRequiredViewModel(get()) }
 
-    viewModel { ActiveOrderTrackerViewModel(get(), get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile

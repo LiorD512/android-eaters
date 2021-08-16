@@ -19,7 +19,6 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePick
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
-import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
@@ -39,7 +38,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
     OrderDateChooserDialog.OrderDateChooserDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView2.OrderItemsListener,
-    WSTitleValueView.WSTitleValueListener, OrderItemsView.OrderItemsListener, HeaderView.HeaderViewListener, WSErrorDialog.WSErrorListener,
+    WSTitleValueView.WSTitleValueListener, HeaderView.HeaderViewListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()

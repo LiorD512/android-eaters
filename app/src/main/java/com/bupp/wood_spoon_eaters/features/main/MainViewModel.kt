@@ -202,6 +202,7 @@ class MainViewModel(
 
     val getTraceableOrder = eaterDataManager.getTraceableOrders()
 
+
 //    fun checkCartStatus() {
 //        if(!cartManager.isEmpty()){
 //            val totalPrice = cartManager.calcTotalDishesPrice()
@@ -445,6 +446,7 @@ class MainViewModel(
     fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
         startRestaurantActivity.postValue(restaurantInitParams)
     }
+
 
 
 }

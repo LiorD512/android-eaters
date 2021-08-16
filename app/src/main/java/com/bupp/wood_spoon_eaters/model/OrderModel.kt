@@ -125,34 +125,33 @@ data class OrderItem(
     @Json(name = "dish") val dish: Dish,
     @Json(name = "quantity") var quantity: Int,
     @Json(name = "matching_menu") var menuItem: MenuItem?,
-    @Json(name = "removed_ingredients") var removedIngredients: List<Ingredient>,
+//    @Json(name = "removed_ingredients") var removedIngredients: List<Ingredient>,
     @Json(name = "price") val price: Price,
     @Json(name = "notes") var notes: String?,
     @Json(name = "_destroy") var _destroy: Boolean? = null
 ): Parcelable {
-     fun getRemovedIngredientsIds(): List<Long>{
-         return removedIngredients.mapNotNull { it.id }
-     }
+//     fun getRemovedIngredientsIds(): List<Long>{
+//         return removedIngredients.mapNotNull { it.id }
+//     }
     fun toOrderItemRequest(): OrderItemRequest{
         return OrderItemRequest(
             id = id,
             notes = notes,
             dishId = dish.id,
             quantity = quantity,
-            removedIngredientsIds = getRemovedIngredientsIds(),
             _destroy = _destroy
         )
     }
-    fun getRemovedIngredients(): String?{
-        var removedIngredientsStr: String? = null
-        if(removedIngredients.isNotEmpty()){
-            removedIngredientsStr = "Without: "
-            removedIngredients.forEach {
-                removedIngredientsStr += "${it.name}, "
-            }
-        }
-        return removedIngredientsStr?.substring(0, removedIngredientsStr.length - 2)
-    }
+//    fun getRemovedIngredients(): String?{
+//        var removedIngredientsStr: String? = null
+////        if(removedIngredients.isNotEmpty()){
+////            removedIngredientsStr = "Without: "
+////            removedIngredients.forEach {
+////                removedIngredientsStr += "${it.name}, "
+////            }
+////        }
+//        return removedIngredientsStr?.substring(0, removedIngredientsStr.length - 2)
+//    }
     fun getNoteStr(): String?{
         if(notes.isNullOrEmpty()){
             return null

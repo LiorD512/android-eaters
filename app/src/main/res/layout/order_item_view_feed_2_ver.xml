@@ -44,15 +44,30 @@
                 android:lineSpacingExtra="6.7sp"
                 tools:text="$7.00"/>
 
-
-    <androidx.recyclerview.widget.RecyclerView
+    <TextView
+            android:id="@+id/orderItemNote"
+            android:layout_marginTop="7.7dp"
             app:layout_constraintStart_toStartOf="@+id/orderItemName"
             app:layout_constraintTop_toBottomOf="@+id/orderItemName"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/orderItemIngredientsRecyclerView"
-            android:layout_marginTop="7.7dp"
-            android:paddingBottom="14.4dp"
+            app:layout_constraintEnd_toStartOf="@+id/orderItemPrice"
+            android:maxLines="5"
+            android:paddingEnd="7.7dp"
+            style="@style/LatoReg13MediumGrey"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:paddingBottom="7.7dp"
+            android:visibility="gone"
+            tools:text="Special requests: Please add some extra parmesan on the side sfsdfsdfsdf"/>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--            app:layout_constraintStart_toStartOf="@+id/orderItemName"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/orderItemName"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:id="@+id/orderItemIngredientsRecyclerView"-->
+<!--            android:layout_marginTop="7.7dp"-->
+<!--            android:paddingBottom="14.4dp"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

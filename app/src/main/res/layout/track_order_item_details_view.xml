@@ -43,12 +43,6 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/trackOrderItemIngredientsList"
-            android:layout_marginTop="15.9dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
     <TextView
             android:id="@+id/trackOrderItemNote"
             style="@style/Reg13Dark_50"

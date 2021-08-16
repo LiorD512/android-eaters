@@ -16,14 +16,18 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
 
     val TAG = "wowOrderHistoryVM"
 
-//    var archiveOrderData: MutableList<OrderAdapterItemOrder> = mutableListOf()
-//    var activeOrderData: MutableList<OrderAdapterItemActiveOrder> = mutableListOf()
-    private val orderListData: MutableList<OrderHistoryBaseItem> = mutableListOf()
+    private val orderListData: MutableMap<Int, MutableList<OrderHistoryBaseItem>> = mutableMapOf()//add skeleton ads default here
 
     val orderLiveData = MutableLiveData<List<OrderHistoryBaseItem>>()
 
+
+    fun initList(){
+        orderListData.put(SECTION_ACTIVE, mutableListOf<OrderHistoryBaseItem>())
+        orderListData.put(SECTION_ARCHIVE, mutableListOf<OrderHistoryBaseItem>())
+    }
+
     fun fetchData() {
-        orderListData.clear()
+        initList()
         getArchivedOrders()
         getActiveOrders()
     }
@@ -33,45 +37,54 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
             val result = orderRepository.getAllOrders()
             when (result.type) {
                 OrderRepository.OrderRepoStatus.GET_All_ORDERS_SUCCESS -> {
-                    handleData(result.data, TYPE_ARCHIVE_ORDER)
+                    if (result.data != null && result.data.isNotEmpty()) {
+                        val tempList = mutableListOf<OrderHistoryBaseItem>()
+                        tempList.add(OrderAdapterItemTitle("Past orders"))
+                        result.data.forEach {
+                            tempList.add(OrderAdapterItemOrder(it))
+                        }
+                        orderListData[SECTION_ARCHIVE]?.clear()
+                        orderListData[SECTION_ARCHIVE]?.addAll(tempList)
+                        arrangeData()
+                    }
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
+    }
+
+    private fun arrangeData() {
+        val finalList = mutableListOf<OrderHistoryBaseItem>()
+        orderListData[SECTION_ACTIVE]?.let{
+            finalList.addAll(it)
+        }
+        orderListData[SECTION_ARCHIVE]?.let{
+            finalList.addAll(it)
+        }
+        orderLiveData.postValue(finalList)
     }
 
     fun getActiveOrders() {
         viewModelScope.launch {
             val data = eaterDataManager.checkForTraceableOrders()
-            handleData(data, TYPE_ACTIVE_ORDER)
-        }
-    }
-
-    private fun handleData(data: List<Order>?, type: String) {
-        Log.d(TAG, "handleData: $type")
-        when (type) {
-            TYPE_ACTIVE_ORDER -> {
-                data?.let{ it ->
-                    it.forEach {
-                        orderListData.add(OrderAdapterItemActiveOrder(it))
-                    }
+            data?.let { it ->
+                val tempList = mutableListOf<OrderHistoryBaseItem>()
+                it.forEach {
+                    tempList.add(OrderAdapterItemActiveOrder(it))
                 }
-            }
-            TYPE_ARCHIVE_ORDER -> {
-                data?.let{ it ->
-                    orderListData.add(OrderAdapterItemTitle("Past orders"))
-                    it.forEach {
-                        orderListData.add(OrderAdapterItemOrder(it))
-                    }
-                }
+                orderListData[SECTION_ACTIVE]?.clear()
+                orderListData[SECTION_ACTIVE]?.addAll(tempList)
+                arrangeData()
             }
         }
-        orderLiveData.postValue(orderListData)
     }
 
 
     companion object {
         const val TAG = "wowOrderHistoryVM"
+        const val SECTION_ACTIVE = 0
+        const val SECTION_ARCHIVE = 1
         const val TYPE_ACTIVE_ORDER = "active"
         const val TYPE_ARCHIVE_ORDER = "archive"
     }
