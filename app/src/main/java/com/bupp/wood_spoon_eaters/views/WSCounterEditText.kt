@@ -52,6 +52,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val title = attr.getString(R.styleable.WSCounterEditText_title)
                 title?.let { setTitle(it) }
 
+                val textSize = attr.getInt(R.styleable.WSCounterEditText_textSize, 16)
+                textSize?.let { setTextSize(it) }
+
 
                 maxChar = attr.getInt(R.styleable.WSCounterEditText_maxChar, -1)
                 //limit edit text length
@@ -105,6 +108,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
             }
         }
+    }
+
+    private fun setTextSize(textSize: Int) {
+        binding.counterEditTextInput.textSize = textSize.toFloat()
     }
 
     private fun setTitle(title: String) {

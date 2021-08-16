@@ -33,6 +33,16 @@
         <enum name="CUSTOM_CLICK" value="6" />
     </attr>
 
+    <attr name="floating_button_type" format="enum">
+        <enum name="VIEW_CART" value="0" />
+        <enum name="ADD_TO_CART" value="1" />
+        <enum name="PLACE_ORDER" value="2" />
+    </attr>
+
+    <declare-styleable name="WSFloatingButton">
+        <attr name="floating_button_type" />
+    </declare-styleable>
+
     <declare-styleable name="WSEditText">
         <attr name="inputType" />
         <attr name="isEditable" />
@@ -43,13 +53,13 @@
     <declare-styleable name="WSLongBtn">
         <attr name="title" />
         <attr name="WSicon" />
-        <attr name="showSep"/>
+        <attr name="showSep" />
     </declare-styleable>
 
     <declare-styleable name="WSTitleValueView">
         <attr name="title" />
         <attr name="subTitle" />
-        <attr name="tip_type"/>
+        <attr name="tip_type" />
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">
@@ -76,6 +86,7 @@
         <attr name="maxLines" />
         <attr name="hint" />
         <attr name="error" />
+        <attr name="textSize" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="WSSimpleBtn">
@@ -136,8 +147,8 @@
         <attr name="isSelectionGray" format="boolean" />
         <attr name="showSep" />
         <attr name="btnTitle" format="string" />
-        <attr name="WSicon"/>
-        <attr name="title"/>
+        <attr name="WSicon" />
+        <attr name="title" />
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">
@@ -188,16 +199,20 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="PlusMinusView">
+        <attr name="iconsSize" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="OrderItemsView">
-       <attr name="showAddBtn" format="boolean"/>
+        <attr name="showAddBtn" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BlueBtnAttrs">
         <attr name="title" />
-        <attr name="textColor" format="reference|color"/>
-        <attr name="background" format="reference"/>
-        <attr name="makeItRed" format="boolean"/>
-        <attr name="makeItOrange" format="boolean"/>
+        <attr name="textColor" format="reference|color" />
+        <attr name="background" format="reference" />
+        <attr name="makeItRed" format="boolean" />
+        <attr name="makeItOrange" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SelectableBtn">

@@ -123,21 +123,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dishFragTags">
 
-        <include
-                android:id="@+id/dishFragMainListLayout"
-                layout="@layout/dish_main_list_layout" />
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never">
 
-        <include
-                tools:visibility="gone"
-                android:id="@+id/dishFragMainListLayoutSkeleton"
-                layout="@layout/dish_main_list_layout_skeleton" />
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <include
+                        android:id="@+id/dishFragMainListLayout"
+                        layout="@layout/dish_main_list_layout" />
+
+                <include
+                        android:id="@+id/dishFragMainListLayoutSkeleton"
+                        layout="@layout/dish_main_list_layout_skeleton"
+                        tools:visibility="gone" />
+
+                <View
+                        android:id="@+id/dishFragHeightCorrection"
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/floating_cart_btn_height"
+                        android:visibility="gone" />
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
 
     </FrameLayout>
 
-    <com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingAddToCartButton
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
             android:id="@+id/dishFragAddToCartBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:floating_button_type="ADD_TO_CART"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

@@ -2,14 +2,10 @@ package com.bupp.wood_spoon_eaters.views.feed_header
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FeedHeaderViewBinding
-import com.bupp.wood_spoon_eaters.databinding.FloatingCartButtonBinding
-import java.text.DecimalFormat
 
 class FeedHeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :

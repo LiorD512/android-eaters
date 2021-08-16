@@ -252,6 +252,12 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoReg14DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">14.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
     <style name="LatoReg13MediumGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>

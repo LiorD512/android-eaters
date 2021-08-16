@@ -226,7 +226,7 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <com.bupp.wood_spoon_eaters.views.floating_buttons.FloatingCartButton
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
             android:id="@+id/restaurantFragFloatingCartBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.DishItemAvailabilityBinding
 import com.bupp.wood_spoon_eaters.model.AvailabilityDate
-import com.bupp.wood_spoon_eaters.model.AvailableAt
 
 class DishAvailabilityAdapter() :
-    ListAdapter<AvailableAt, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<AvailabilityDate, RecyclerView.ViewHolder>(DiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -23,19 +22,18 @@ class DishAvailabilityAdapter() :
         holder as ViewHolder
         val item = getItem(position)
         holder.binding.apply {
-            //Any listeners or binding goes here
+            itemAvailabilityDate.text = item.getStartEndAtTag()
         }
     }
 
     class ViewHolder(val binding: DishItemAvailabilityBinding) : RecyclerView.ViewHolder(binding.root)
-    private class DiffCallback : DiffUtil.ItemCallback<AvailableAt>() {
+    private class DiffCallback : DiffUtil.ItemCallback<AvailabilityDate>() {
 
-        override fun areItemsTheSame(oldItem: AvailableAt, newItem: AvailableAt): Boolean {
+        override fun areItemsTheSame(oldItem: AvailabilityDate, newItem: AvailabilityDate): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: AvailableAt, newItem: AvailableAt): Boolean {
-//            return oldItem.id == oldItem.id
+        override fun areContentsTheSame(oldItem: AvailabilityDate, newItem: AvailabilityDate): Boolean {
             return oldItem == newItem
         }
     }
