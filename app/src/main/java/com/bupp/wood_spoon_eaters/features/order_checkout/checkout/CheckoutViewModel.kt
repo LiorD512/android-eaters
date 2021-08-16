@@ -145,7 +145,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
             val result = cartManager.finalizeOrder(paymentMethodId)
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
-                    Log.d(NewOrderMainViewModel.TAG, "finalizeOrder - success")
+                    Log.d(TAG, "finalizeOrder - success")
                     cartManager.onCartCleared()
                     onCheckoutDone.postRawValue(true)
                 }

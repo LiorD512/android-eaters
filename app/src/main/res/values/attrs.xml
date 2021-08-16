@@ -43,13 +43,22 @@
     <declare-styleable name="WSLongBtn">
         <attr name="title" />
         <attr name="WSicon" />
-        <attr name="showSep"/>
+        <attr name="showSep" />
     </declare-styleable>
+
+    <declare-styleable name="ResizableTagsView">
+        <attr name="tagType" />
+    </declare-styleable>
+
+    <attr name="tagType" format="enum">
+        <enum name="TAG_TYPE_FEED" value="0" />
+        <enum name="TAG_TYPE_DISH" value="1" />
+    </attr>
 
     <declare-styleable name="WSTitleValueView">
         <attr name="title" />
         <attr name="subTitle" />
-        <attr name="tip_type"/>
+        <attr name="tip_type" />
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">
@@ -136,8 +145,8 @@
         <attr name="isSelectionGray" format="boolean" />
         <attr name="showSep" />
         <attr name="btnTitle" format="string" />
-        <attr name="WSicon"/>
-        <attr name="title"/>
+        <attr name="WSicon" />
+        <attr name="title" />
     </declare-styleable>
 
     <declare-styleable name="InputTitleView">
@@ -189,15 +198,15 @@
     </declare-styleable>
 
     <declare-styleable name="OrderItemsView">
-       <attr name="showAddBtn" format="boolean"/>
+        <attr name="showAddBtn" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BlueBtnAttrs">
         <attr name="title" />
-        <attr name="textColor" format="reference|color"/>
-        <attr name="background" format="reference"/>
-        <attr name="makeItRed" format="boolean"/>
-        <attr name="makeItOrange" format="boolean"/>
+        <attr name="textColor" format="reference|color" />
+        <attr name="background" format="reference" />
+        <attr name="makeItRed" format="boolean" />
+        <attr name="makeItOrange" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SelectableBtn">

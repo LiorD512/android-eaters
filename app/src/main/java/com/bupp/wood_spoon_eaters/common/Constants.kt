@@ -91,6 +91,10 @@ class Constants {
         const val LOTTIE_ANIM_SELECT_ADDRESS = 1
         const val LOTTIE_ANIM_LOCATION_PERMISSION = 2
 
+        //TagView types
+        const val TAG_VIEW_FEED = 0
+        const val TAG_VIEW_DISH = 1
+
 
         //input title view input type
         const val INPUT_TYPE_TEXT = 0

@@ -200,8 +200,8 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
                 when(item){
                     is CartAdapterItem -> {
-                        val dishId = item.customCartItem.orderItem.dish.id
-                        viewModel.removeOrderItemsByDishId(dishId)
+                        val orderItemId = item.customCartItem.orderItem.id
+                        viewModel.removeSingleOrderItemId(orderItemId)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}

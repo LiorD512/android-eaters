@@ -220,9 +220,15 @@ class CartManager(
     /**
      * this functions is called whenever a user swiped out (right) a dish.
      * it updates the order with a "destroyed" orderItems list.
+     * @param dishId = could be dish id or orderItem id
      */
-    suspend fun removeOrderItems(dishId: Long): OrderRepository.OrderRepoStatus? {
-        val orderRequest = buildOrderRequest(getDestroyedOrderItemsRequestByDishId(dishId))
+    suspend fun removeOrderItems(dishId: Long, removeSingle: Boolean = false): OrderRepository.OrderRepoStatus? {
+        var orderRequest: OrderRequest? = null
+        if(removeSingle){
+            orderRequest = buildOrderRequest(getDestroyedOrderItemRequestByOrderIdItem(dishId))
+        }else{
+            orderRequest = buildOrderRequest(getDestroyedOrderItemsRequestByDishId(dishId))
+        }
         val result = orderRepository.updateOrder(getCurOrderId(), orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
             result.data?.let {
@@ -250,6 +256,22 @@ class CartManager(
                     parsed._destroy = true
                     destroyedOrderItemRequest.add(parsed)
                 }
+            }
+            return destroyedOrderItemRequest.toList()
+        }
+        return listOf()
+    }
+
+    fun getDestroyedOrderItemRequestByOrderIdItem(orderItemId: Long): List<OrderItemRequest> {
+        currentOrderResponse?.let {
+            val destroyedOrderItemRequest = mutableListOf<OrderItemRequest>()
+            val updatedOrderItem = it.orderItems?.firstOrNull {
+                it.id == orderItemId
+            }
+            updatedOrderItem?.let{
+                val parsed = it.toOrderItemRequest()
+                parsed._destroy = true
+                destroyedOrderItemRequest.add(parsed)
             }
             return destroyedOrderItemRequest.toList()
         }

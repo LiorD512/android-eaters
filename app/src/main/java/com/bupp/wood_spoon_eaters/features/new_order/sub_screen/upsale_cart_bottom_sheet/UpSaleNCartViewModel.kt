@@ -101,9 +101,16 @@ class UpSaleNCartViewModel(
         }
     }
 
+    fun removeSingleOrderItemId(orderItemId: Long) {
+        viewModelScope.launch {
+            cartManager.removeOrderItems(orderItemId, true)
+        }
+    }
+
     fun onCartItemClicked(customCartItem: CustomCartItem) {
         onDishCartClick.postRawValue(customCartItem)
     }
+
 
 //    /**
 //     * this function is being called when user swiped out all of his

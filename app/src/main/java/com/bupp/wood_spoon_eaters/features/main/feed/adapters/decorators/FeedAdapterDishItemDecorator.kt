@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.views.ResizableTagsView
 import java.util.*
 import kotlin.math.abs
 
@@ -24,10 +25,12 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
                         val titleView: TextView
                         var priceView: TextView? = null
                         var seeMoreView: BlueBtnCornered? = null
+                        var tagsView: ResizableTagsView? = null
                         if (child.id == R.id.feedRestaurantDishItem) {
                             //this is a dish item
                             titleView = child.findViewById(R.id.feedRestaurantItemName)
                             priceView = child.findViewById(R.id.feedRestaurantItemPrice)
+                            tagsView = child.findViewById(R.id.feedRestaurantItemTags)
                         } else {
                             //this is a see more item
                             titleView = child.findViewById(R.id.feedRestaurantSeeMoreItemQuantityLeft)
@@ -37,6 +40,8 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
                         priceView?.alpha = 1 - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
                         titleView.alpha = 1 - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
                         titleView.translationX = 1.0f + (abs(dx) / 3)
+                        tagsView?.alpha = 1 - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
+                        tagsView?.translationX = 1.0f + (abs(dx) / 4)
                         seeMoreView?.alpha = 1.0f - Utils.lerp(abs(dx), 0f, 1080f, 0f, 1f)
                     }
                 }

@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantDishItemBindi
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantSeeMoreItemBinding
 import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.views.ResizableTagsView
 import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
 import jp.wasabeef.glide.transformations.BlurTransformation
 
@@ -73,7 +74,7 @@ private var parentItemPosition: Int = -1
         private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
         private val name: TextView = binding.feedRestaurantItemName
         private val price: TextView = binding.feedRestaurantItemPrice
-        private val tagView: DishTagsView = binding.feedRestaurantItemTags
+        private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemPosition: Int) {
             Log.d("feedItemPosition", "bindItem: $parentItemPosition")
@@ -88,7 +89,7 @@ private var parentItemPosition: Int = -1
             name.text = dish.name
             price.text = dish.formatted_price
 
-            tagView.initTagView(dish.tags)
+            tagView.setTags(dish.tags)
 
             layout.setOnClickListener{
                 Log.d("feedItemPosition", "parentItemPosition: $parentItemPosition")

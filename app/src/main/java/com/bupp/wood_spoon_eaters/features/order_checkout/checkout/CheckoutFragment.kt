@@ -141,6 +141,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
         if (isCartEmpty) {
+            viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
             mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY)
         } else {
             viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
