@@ -33,7 +33,7 @@ class RestaurantPageViewModel(
     val timePickerEvent = LiveEventData<CookingSlot>()
 
     var dishListData: List<DishSections> = emptyList()
-    val dishListLiveData = LiveEventData<DishListData>()
+    val dishListLiveData = MutableLiveData<DishListData>()
 
     data class DishListData(val dishes: List<DishSections>, val animateList: Boolean = true)
 
@@ -56,7 +56,7 @@ class RestaurantPageViewModel(
                 Log.d("orderFlow - restPage","initRestaurantFullData")
                 dishListData = getDishSkeletonItems()
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
-                dishListLiveData.postRawValue(DishListData(dishListData))
+                dishListLiveData.postValue(DishListData(dishListData))
                 val result = restaurantRepository.getRestaurant(restaurantId)
                 if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
                     result.restaurant?.let { restaurant ->
@@ -168,7 +168,7 @@ class RestaurantPageViewModel(
 
 
     fun onTimePickerClicked() {
-        //when picker is clicked we send from viewModel the selected cooking slot
+        // when picker is clicked we send from viewModel the selected cooking slot
         // so we can highlight it for the user inside the dialog
         currentCookingSlot?.let {
             timePickerEvent.postRawValue(it)
@@ -274,12 +274,12 @@ class RestaurantPageViewModel(
             }
             dishListData = updatedSectionList
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
-            dishListLiveData.postRawValue(DishListData(dishListData, animateList))
+            dishListLiveData.postValue(DishListData(dishListData, animateList))
 //            dishListLiveData.postRawValue(DishListData(updatedSectionList, animateList))
         } else {
             Log.d("orderFlow - restPage","updateDishCountUi2")
             dishListData = dishSectionsList
-            dishListLiveData.postRawValue(DishListData(dishListData, animateList))
+            dishListLiveData.postValue(DishListData(dishListData, animateList))
         }
     }
 

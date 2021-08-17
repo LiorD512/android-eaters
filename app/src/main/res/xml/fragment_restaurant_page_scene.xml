@@ -102,9 +102,8 @@
         <Constraint
                 android:id="@+id/coverPhotoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="300dp"
                 android:alpha="0"
-                motion:layout_constraintBottom_toTopOf="@id/space"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent" />
         <Constraint

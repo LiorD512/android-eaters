@@ -24,11 +24,11 @@ import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
-import com.bupp.wood_spoon_eaters.model.CookingSlot
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -53,10 +53,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("orderFlow - rest","onViewCreated")
+        Log.d("orderFlow - rest", "onViewCreated")
 
         initUi()
         initObservers()
@@ -80,17 +79,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             detailsSkeleton.visibility = View.VISIBLE
             detailsLayout.visibility = View.INVISIBLE
 
-            restaurantTimePickerView.setOnClickListener {
-                Log.d(TAG, "restaurantTimePicker clicker")
-                viewModel.onTimePickerClicked()
-            }
+            handleTimerPickerUi()
             restaurantDeliveryDates.setTabListener(this@RestaurantPageFragment)
 
 
             adapterDishes = DishesMainAdapter(getDishesAdapterListener())
-                    val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-                    restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
-                    restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
+            val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
+            restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
+            restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
 //            if(!isAdapterInitialized){
 //                adapterDishes?.let { adapter ->
 //                    Log.d("orderFlow - rest","init restaurant adapter")
@@ -101,6 +97,19 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 //                restaurantDishesList.adapter = adapterDishes
 //                restaurantDishesList.initTouchHelpers(adapterDishes!!)
 //            }
+        }
+    }
+
+
+    private fun handleTimerPickerUi() {
+        with(binding.restaurantMainListLayout) {
+            restaurantTimePickerView.setOnClickListener {
+                restaurantDeliveryDates.getCurrentSelection()?.let { date ->
+                    if (date.cookingSlots.size > 1) {
+                        viewModel.onTimePickerClicked()
+                    }
+                }
+            }
         }
     }
 
@@ -136,7 +145,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             handleCookingSlotUiChange(it)
         })
         viewModel.dishListLiveData.observe(viewLifecycleOwner, {
-            handleDishesList(it.getContentIfNotHandled())
+            handleDishesList(it)
         })
         viewModel.initialParamData.observe(viewLifecycleOwner, {
             handleInitialParamData(it)
@@ -153,8 +162,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.timePickerEvent.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { it1 -> handleTimePickerClick(it1) }
         })
-        viewModel.onCookingSlotForceChange.observe(viewLifecycleOwner , {
-            it.getContentIfNotHandled()?.let{ viewModel.forceCookingSlotUiChange(it) }
+        viewModel.onCookingSlotForceChange.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { viewModel.forceCookingSlotUiChange(it) }
         })
         viewModel.floatingBtnEvent.observe(viewLifecycleOwner, {
             handleFloatingBtnEvent(it)
@@ -162,23 +171,32 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleCookingSlotUiChange(uiChange: RestaurantPageViewModel.CookingSlotUi?) {
-        uiChange?.let{
-            //timer picker ui
-            handleTimePickerUi(uiChange.timePickerString)
-            //delivery dates tabLayout
-            binding.restaurantMainListLayout.restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
-            //current menu list
+        uiChange?.let {
+            with(binding.restaurantMainListLayout) {
+                //delivery dates tabLayout
+                restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+
+                //timer picker ui
+                restaurantDeliveryDates.getCurrentSelection()?.let { date ->
+                    if (date.cookingSlots.size > 1) {
+//                        restaurantTimePickerView.setCompoundDrawables
+                    } else {
+
+                    }
+                }
+                handleTimePickerUi(uiChange.timePickerString)
+            }
         }
     }
 
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
-        event?.let{
+        event?.let {
             binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
         }
     }
 
     private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
-        binding.restaurantMainListLayout.restaurantDeliveryDates.getSelectedDate()?.let { deliveryDate ->
+        binding.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
             val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
             timePickerBottomSheet.setCookingSlots(selectedCookingSlot, deliveryDate.cookingSlots)
             timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
@@ -186,13 +204,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleClearCartEvent(event: LiveEvent<CartManager.ClearCartEvent>) {
-        event.getContentIfNotHandled()?.let{
-            when(it.dialogType){
+        event.getContentIfNotHandled()?.let {
+            when (it.dialogType) {
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
-                    ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this).show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
+                    ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this)
+                        .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                 }
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
-                    ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this).show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
+                    ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this)
+                        .show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
                 }
             }
         }
@@ -218,6 +238,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         Log.d("orderFlow - rest", "handleDishesList ${dishSections?.dishes?.size}")
 //        adapterDishes?.submitList(emptyList())
         adapterDishes?.submitList(dishSections?.dishes)
+        binding.restaurantMainListLayout.restaurantDishesList.smoothScrollToPosition(0)
     }
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
@@ -360,8 +381,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onResume() {
         super.onResume()
-        if (hasMotionScrolled){
-            binding.motionLayout.transitionToEnd()
+        if (hasMotionScrolled) {
+            binding.motionLayout.progress = 1F
         }
 
     }
@@ -383,7 +404,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         private const val MOTION_TRANSITION_INITIAL = 0F
         private const val TAG = "RestaurantPageFragment"
     }
-
 
 
 }

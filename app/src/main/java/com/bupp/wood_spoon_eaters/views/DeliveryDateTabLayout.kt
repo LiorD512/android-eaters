@@ -123,7 +123,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun getSelectedDate(): SortedCookingSlots? {
+    fun getCurrentSelection(): SortedCookingSlots? {
         with(binding) {
             val position = tabLayout.selectedTabPosition
             return datesList?.getOrNull(position)

@@ -1,18 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.dish_page;
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
-import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
@@ -31,7 +29,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     WSFloatingButton.WSFloatingButtonListener,
     WSErrorDialog.WSErrorListener {
 
-    private val binding: FragmentDishPageBinding by viewBinding()
+    private var binding: FragmentDishPageBinding? = null
 
 //    private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<DishPageViewModel>()
@@ -40,6 +38,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentDishPageBinding.bind(view)
+
         val navArgs: DishPageFragmentArgs by navArgs()
         viewModel.initData(navArgs.extras)
 
@@ -48,7 +48,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             dishFragBackButton.setOnClickListener {
                 activity?.onBackPressed()
             }
@@ -65,12 +65,12 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun onAddToCartClick() {
-        val note = binding.dishFragMainListLayout.dishFragUserRequestInput.getText() ?: ""
+        val note = binding!!.dishFragMainListLayout.dishFragUserRequestInput.getText() ?: ""
         viewModel.onDishPageCartClick(note.toString())
     }
 
     private fun initDishQuantityButtons(initialCounter: Int? = 1, maxQuantity: Int) {
-        with(binding.dishFragMainListLayout) {
+        with(binding!!.dishFragMainListLayout) {
             dishFragPlusMinus.initSimplePlusMinus(this@DishPageFragment, initialCounter!!, maxQuantity)
         }
     }
@@ -102,7 +102,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             handleFinishPage(it)
         })
         viewModel.shakeAddToCartBtn.observe(viewLifecycleOwner, {
-            AnimationUtil().shakeView(binding.dishFragAddToCartBtn)
+            AnimationUtil().shakeView(binding!!.dishFragAddToCartBtn)
         })
         viewModel.dishQuantityChange.observe(viewLifecycleOwner, {
             handleAddToCartBtn(it)
@@ -125,12 +125,12 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleAddToCartBtn(event: DishPageViewModel.DishQuantityData?) {
         event?.let{
-            binding.dishFragAddToCartBtn.updateFloatingBtnPrice(it.overallPrice)
+            binding!!.dishFragAddToCartBtn.updateFloatingBtnPrice(it.overallPrice)
         }
     }
 
     private fun handleSkeleton(isLoading: Boolean) {
-        with(binding) {
+        with(binding!!) {
             if (isLoading) {
                 dishFragMainListLayout.root.isVisible = false
                 dishFragMainListLayoutSkeleton.root.isVisible = true
@@ -154,7 +154,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     /** Headers data **/
     private fun handleDishData(menuItem: MenuItem) {
-        with(binding) {
+        with(binding!!) {
             //update counter -> must be after menuItemLiveData is posted and can be read.
             viewModel.updateDishQuantity(1)
 
@@ -174,7 +174,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun handleOrderItemData(orderItem: OrderItem) {
-        with(binding) {
+        with(binding!!) {
             //update counter -> must be after menuItemLiveData is posted and can be read.
             viewModel.updateDishQuantity(orderItem.quantity)
 
@@ -196,7 +196,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun handleDishFullData(dish: FullDish) {
-        with(binding.dishFragMainListLayout) {
+        with(binding!!.dishFragMainListLayout) {
             handleDietaryList(dish.dietaries)
             handleAvailableTimes(dish.availableTimes)
             //Description
@@ -219,7 +219,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleAvailableTimes(availableTimes: List<AvailabilityDate>) {
         availableTimes.let{ list->
-            with(binding.dishFragMainListLayout){
+            with(binding!!.dishFragMainListLayout){
                 dishFragAvailabilityList.adapter = availableTimesAdapter
                 if(list.size > 3){
                     dishFragAvailabilityViewMore.isVisible = true
@@ -243,7 +243,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleDietaryList(dietaries: List<DietaryIcon>?) {
         val adapter = DietariesAdapter()
-        with(binding.dishFragMainListLayout) {
+        with(binding!!.dishFragMainListLayout) {
             dishFragDietaryList.adapter = adapter
             adapter.submitList(dietaries)
             dishFragDietaryList.isVisible = !dietaries.isNullOrEmpty()
@@ -251,7 +251,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun handleUserRequestData(userRequest: DishPageViewModel.UserRequest?) {
-        with(binding.dishFragMainListLayout) {
+        with(binding!!.dishFragMainListLayout) {
             userRequest?.let {
                 dishFragChefName.text = userRequest.cook.getFullName()
                 userRequest.cook.thumbnail?.url?.let{
@@ -280,7 +280,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
-        binding.dishFragHeightCorrection.isVisible = isShowing
+        binding!!.dishFragHeightCorrection.isVisible = isShowing
     }
 
 
@@ -296,7 +296,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         private const val TAG = "RestaurantPageFragment"
     }
 
+
     override fun onDestroyView() {
+        binding = null
         availableTimesAdapter = null
         super.onDestroyView()
     }
