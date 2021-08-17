@@ -19,7 +19,7 @@
 //import com.bupp.wood_spoon_eaters.common.Constants
 //import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 //import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
-//import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
+//import com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
 //import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 //import com.bupp.wood_spoon_eaters.model.*
 //import com.bupp.wood_spoon_eaters.utils.DateUtils

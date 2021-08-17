@@ -122,6 +122,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             showRateTheAppDialog()
             viewModel.checkForActiveOrder()
             refreshActiveCampaigns()
+
 //            viewModel.refreshFloatingCartBtn()
         }
     }

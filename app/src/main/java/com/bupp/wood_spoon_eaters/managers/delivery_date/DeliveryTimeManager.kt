@@ -57,7 +57,7 @@ class DeliveryTimeManager {
 
     private fun getDeliveryDateUiString(): String {
         getDeliveryTimeDate()?.let{
-            return DateUtils.parseDateToDayDateSplash(it)
+            return DateUtils.parseDateToDayDateNumber(it)
         }
         return "Now"
     }

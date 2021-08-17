@@ -93,7 +93,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleTimerPickerUi() {
         with(binding.restaurantMainListLayout) {
-            restaurantTimePickerView.setOnClickListener {
+            restaurantTimePickerViewLayout.setOnClickListener {
                 restaurantDeliveryDates.getCurrentSelection()?.let { date ->
                     if (date.cookingSlots.size > 1) {
                         viewModel.onTimePickerClicked()
@@ -164,14 +164,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         uiChange?.let {
             with(binding.restaurantMainListLayout) {
                 //delivery dates tabLayout
-                restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+                if(uiChange.forceTabChnage){
+                    restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+                }
 
                 //timer picker ui
                 restaurantDeliveryDates.getCurrentSelection()?.let { date ->
                     if (date.cookingSlots.size > 1) {
-//                        restaurantTimePickerView.setCompoundDrawables
+                        restaurantTimePickerViewIcon.visibility = View.VISIBLE
                     } else {
-
+                        restaurantTimePickerViewIcon.visibility = View.GONE
                     }
                 }
                 handleTimePickerUi(uiChange.timePickerString)
@@ -290,6 +292,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
         object : DishesMainAdapter.DishesMainAdapterListener {
             override fun onDishClick(menuItem: MenuItem) {
+//                val curCookingSlot = viewModel.currentCookingSlot
                 val curCookingSlot = viewModel.currentCookingSlot
                 mainViewModel.openDishPage(menuItem, curCookingSlot)
             }
@@ -308,7 +311,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot) {
         //callback from TimePickerDialog - for changing cooking slot
-        viewModel.onCookingSlotSelected(cookingSlot)
+        viewModel.onCookingSlotSelected(cookingSlot, false)
     }
 
     override fun onDateSelected(date: SortedCookingSlots?) {

@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
@@ -27,7 +28,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     ClearCartCookingSlotBottomSheet.ClearCartListener,
     PlusMinusView.PlusMinusInterface,
     WSFloatingButton.WSFloatingButtonListener,
-    WSErrorDialog.WSErrorListener {
+    WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener {
 
     private var binding: FragmentDishPageBinding? = null
 
@@ -155,6 +156,10 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             when(it.dialogType){
                 CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
                     ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this).show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
+                }
+                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
+                    ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this)
+                        .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                 }
                 else -> {}
             }

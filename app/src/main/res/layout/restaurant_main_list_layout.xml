@@ -82,23 +82,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-
-            <TextView
-                    android:id="@+id/restaurantTimePickerView"
-                    style="@style/LatoBold15DarkGrey"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="23dp"
+            <LinearLayout
+                    android:animateLayoutChanges="true"
                     android:background="@drawable/grey_white_cornered_rag15_rect"
-                    android:drawablePadding="3dp"
-                    android:gravity="center"
+                    android:id="@+id/restaurantTimePickerViewLayout"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:text="Now"
-                    app:drawableEndCompat="@drawable/ic_arrow"
-                    app:drawableStartCompat="@drawable/ic_time_rest" />
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="23dp"
+                    android:layout_marginStart="15.4dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/restaurantTimePickerView"
+                        style="@style/LatoBold15DarkGrey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="3dp"
+                        android:gravity="center"
+                        android:text="Now"
+                        app:drawableStartCompat="@drawable/ic_time_rest" />
+
+                <ImageView
+                        android:id="@+id/restaurantTimePickerViewIcon"
+                        android:src="@drawable/ic_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

@@ -77,10 +77,19 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
-    fun parseDateToDayDateSplash(date: Date): String {
+    fun parseDateToDayDateNumber(date: Date): String {
         //Fri, Feb 12
-        val sdf = SimpleDateFormat("EE, MM/dd")
+        val sdf = SimpleDateFormat("EEE, MMM d")
         return sdf.format(date.time)
+    }
+
+    fun parseDateToDayDateNumberOrToday(date: Date): String {
+        //Fri, Feb 12 / Today
+        if(isToday(date)){
+            return "Today"
+        }else{
+            return parseDateToDayDateNumber(date)
+        }
     }
 
     fun parseDateToDayDateAndTime(date: Date): String {

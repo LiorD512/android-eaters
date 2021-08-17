@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
-import android.os.Handler
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.databinding.DeliveryDateTabLayoutBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDayDateSplash
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.google.android.material.tabs.TabLayout
 import com.trading212.stickyheader.dpToPx
@@ -36,7 +35,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         with(binding) {
             datesList.forEachIndexed() { index, deliveryDate ->
                 tabLayout.addTab(tabLayout.newTab())
-                tabLayout.getTabAt(index)?.text = parseDateToDayDateSplash(deliveryDate.date)
+                tabLayout.getTabAt(index)?.text = DateUtils.parseDateToDayDateNumberOrToday(deliveryDate.date)
             }
         }
         setCurvedEdges()

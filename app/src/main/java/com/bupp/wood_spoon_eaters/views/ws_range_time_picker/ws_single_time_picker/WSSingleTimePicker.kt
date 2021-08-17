@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.databinding.WsSingleTimePickerBinding
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.DeliveryDates
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.*
 import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSSingleTimePicker
 import java.util.*
@@ -23,19 +24,20 @@ import java.util.*
 
 class WSSingleTimePicker @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr), SnapOnScrollListener.OnSnapPositionChangeListener {
+    LinearLayout(context, attrs, defStyleAttr) {
 
     val viewModel = WSRangeTimePickerViewModel()
     lateinit var snapHelper: SnapHelper
 
-    var wsTimePickerCustomAdapter: WSTimePickerCustomAdapter? = null
+    var wsTimePickerCustomAdapter: WSTimePickerStringAdapter? = null
     private var binding: WsSingleTimePickerBinding = WsSingleTimePickerBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private val datesList: MutableList<WSBaseTimePicker> = mutableListOf()
+    private val datesList: MutableList<Date> = mutableListOf()
+    private val cookingSlotList: MutableList<CookingSlot> = mutableListOf()
+    private val stringPair: MutableList<Pair<String?, String?>> = mutableListOf()
 
     init {
         initView(attrs)
-        initDateAndHoursUi()
     }
 
     private fun initView(attrs: AttributeSet?) {
@@ -45,40 +47,43 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
 
         //dates
-        wsTimePickerCustomAdapter = WSTimePickerCustomAdapter()
+        wsTimePickerCustomAdapter = WSTimePickerStringAdapter()
         binding.wsRangeTimePickerDateList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.wsRangeTimePickerDateList.adapter = wsTimePickerCustomAdapter
 
         snapHelper = LinearSnapHelper()
         binding.wsRangeTimePickerDateList.attachSnapHelperWithListener(
             snapHelper,
-            SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
-            this@WSSingleTimePicker
-        )
+            SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, null)
 
         ViewCompat.setNestedScrollingEnabled(binding.wsRangeTimePickerDateList, false)
+    }
 
+    fun getChosenDate(): Date? {
+        val chosenDateView = snapHelper.findSnapView(binding.wsRangeTimePickerDateList.layoutManager)
+        val chosenDatePos = chosenDateView?.let { binding.wsRangeTimePickerDateList.getChildLayoutPosition(it) }
+        chosenDatePos?.let {
+            Log.d(TAG, "chosenDate: ${datesList[it].date}")
+            return datesList[it]
+        }
+        return null
     }
 
     fun initSimpleDatesData(daysFromNow: Int) {
+        stringPair.clear()
         datesList.clear()
         val dates = getDaysFromNow(daysFromNow)
         dates.let {
             it.forEach {
-                datesList.add(WSSingleTimePicker(date = it))
+                if (DateUtils.isToday(it)) {
+                    stringPair.add(Pair("Today", null))
+                } else {
+                    stringPair.add(Pair(DateUtils.parseDateToFullDayDate(it), null))
+                }
+                datesList.add(it)
             }
         }
-        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSSingleTimePicker>?)
-    }
-
-    private fun initDateAndHoursUi() {
-//        wsTimePickerCustomAdapter?.submitList(datesList as List<WSBaseTimePicker>?)
-    }
-
-    override fun onSnapPositionChange(position: Int) {
-        Log.d(TAG, "onDatesSnapPositionChange: $position")
-//        wsRangeTimePickerHoursAdapter?.submitList(datesAndHours[position].hours)
-//        binding.wsRangeTimePickerHoursList.scrollToPosition(datesAndHours[0].hours.size/2)
+        wsTimePickerCustomAdapter?.submitList(stringPair)
     }
 
     private fun getDaysFromNow(daysFromNow: Int): List<Date> {
@@ -97,70 +102,42 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return dates
     }
 
-//    fun setDatesByMenuItems(menuItems: List<MenuItem>) {
-//        datesList.clear()
-//        val dates = getDaysForMenuItems(menuItems)
-//        dates.let {
-//            it.forEachIndexed { index, date ->
-//                val currentMenuItem = menuItems[index]
-//                currentMenuItem.cookingSlot?.let{
-//                    datesList.add(WSSingleTimePicker(date = dates[index]))
-//                }
-//            }
-//        }
-//        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSSingleTimePicker>?)
-////        initDateAndHoursUi()
-//    }
-//
-//    private fun getDaysForMenuItems(menuItems: List<MenuItem>): List<Date> {
-//        val dates = mutableListOf<Date>()
-//        menuItems.forEach { item ->
-//            item.cookingSlot?.orderFrom?.let{
-//                dates.add(it)
-//            }
-//        }
-//        return dates
-//    }
-
-    fun getChosenDate(): Date? {
-        val chosenDateView = snapHelper.findSnapView(binding.wsRangeTimePickerDateList.layoutManager)
-        val chosenDatePos = chosenDateView?.let { binding.wsRangeTimePickerDateList.getChildLayoutPosition(it) }
-        chosenDatePos?.let {
-            Log.d(TAG, "chosenDate: ${datesList[it].date}")
-            return datesList[it].date
-        }
-        return null
-    }
 
     fun setDatesByDeliveryDates(deliveryDates: List<DeliveryDates>) {
         datesList.clear()
+        stringPair.clear()
         deliveryDates.let {
-            it.forEachIndexed { index, date ->
-                    datesList.add(WSSingleTimePicker(date = date.from))
+            it.forEach { date ->
+                datesList.add(date.from)
+                stringPair.add(Pair(DateUtils.parseDateToFullDayDate(date.from), DateUtils.parseDateToStartToEnd(date.from, date.to)))
             }
         }
-        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSCookingSlotTimePicker>?)
+        wsTimePickerCustomAdapter?.submitList(stringPair)
     }
 
     fun setDatesByCookingSlots(cookingSlots: List<CookingSlot>) {
-    datesList.clear()
-        val dates = getCookingSlotsDates(cookingSlots)
-        dates.let {
-            it.forEachIndexed { index, date ->
-                val currentCookingSlot = cookingSlots[index]
-                currentCookingSlot?.let{
-                    datesList.add(WSCookingSlotTimePicker(title = it.name, cookingSlot = it))
-                }
+        datesList.clear()
+        stringPair.clear()
+        val datesAndNames = getCookingSlotsDates(cookingSlots)
+        datesAndNames.forEachIndexed { index, dateAndName ->
+            val currentCookingSlot = cookingSlots[index]
+            cookingSlotList.add(currentCookingSlot)
+            var cookingSlotName = dateAndName.second
+            var cookingSlotDate = ""
+            if(DateUtils.isNowInRange(currentCookingSlot.orderFrom, currentCookingSlot.endsAt)){
+                cookingSlotName = "Now"
             }
+            cookingSlotDate = "${DateUtils.parseDateToUsTime(currentCookingSlot.orderFrom)} - ${DateUtils.parseDateToUsTime(currentCookingSlot.endsAt)}"
+            stringPair.add(Pair(cookingSlotName, cookingSlotDate))
         }
-        wsTimePickerCustomAdapter?.submitList(datesList.toList() as List<WSCookingSlotTimePicker>?)
-//        initDateAndHoursUi()
+        wsTimePickerCustomAdapter?.submitList(stringPair)
     }
+
 
     private fun getCookingSlotsDates(cookingSlots: List<CookingSlot>): List<Pair<Date, String?>> {
         val dates = mutableListOf<Pair<Date, String?>>()
         cookingSlots.forEach { item ->
-            item.orderFrom.let{
+            item.orderFrom.let {
                 dates.add(Pair(it, item.name))
             }
         }
@@ -171,8 +148,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val chosenDateView = snapHelper.findSnapView(binding.wsRangeTimePickerDateList.layoutManager)
         val chosenDatePos = chosenDateView?.let { binding.wsRangeTimePickerDateList.getChildLayoutPosition(it) }
         chosenDatePos?.let {
-            Log.d(TAG, "chosenDate: ${datesList[it].date}")
-            return (datesList[it] as WSCookingSlotTimePicker).cookingSlot
+            Log.d(TAG, "chosenCookingSlot: ${cookingSlotList[it]}")
+            return cookingSlotList[it]
         }
         return null
     }

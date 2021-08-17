@@ -19,6 +19,7 @@ class CartManager(
 
     // global params -
     private var currentOrderResponse: Order? = null
+    private var currentOrderDeliveryDates: List<DeliveryDates?>? = null
 
     var currentCookingSlotId: Long? = null
     fun getDeliverAt() = deliveryTimeManager.getTempDeliveryTimeStamp()
@@ -27,7 +28,7 @@ class CartManager(
     private var tempCookingSlotId = LiveEventData<Long>()
     fun getOnCookingSlotIdChange() = tempCookingSlotId
 
-    private val orderLiveData = MutableLiveData<Order>()
+    private val orderLiveData = MutableLiveData<Order?>()
     fun getCurrentOrderData() = orderLiveData
 
     private val wsErrorEvent = LiveEventData<String>()
@@ -240,7 +241,17 @@ class CartManager(
         val result = orderRepository.updateOrder(getCurOrderId(), orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
             result.data?.let {
-                updateCartManagerParams(it.copy())
+                if(it.orderItems.isNullOrEmpty()){
+                    /**
+                     * if cart returns empty (orderItem.size == 0) - clear cart and update floating btn
+                     */
+                    onCartCleared()
+//                    updateCartManagerParams(it.copy())
+//                    updateCartManagerParams(it.copy())
+//                    updateFloatingCartBtn(it.copy())
+                }else{
+                    updateCartManagerParams(it.copy())
+                }
             }
 //            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }?
 //            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data?.id, currentAddedDish))
@@ -327,13 +338,56 @@ class CartManager(
         orderId?.let {
             val result = orderRepository.getOrderDeliveryTimes(it)
             if (result.type == OrderRepository.OrderRepoStatus.GET_DELIVERY_DATES_SUCCESS) {
+                this.currentOrderDeliveryDates = result.data
                 return result.data
             }
         }
         return null
     }
 
+    /**
+     * This function is called everytime we call getDeliveryDates (in checkout)
+     * this function calculates the current order delivery time based on user selection and server response
+     */
+    private val deliveryDateUi = MutableLiveData<String>()
+    fun getDeliveryDatesUi() = deliveryDateUi
+    fun calcCurrentOrderDeliveryTime() {
+        Log.d("orderFlowTime", "calcCurrentOrderDeliveryTime")
+        currentOrderDeliveryDates?.let{ deliveryDates ->
+            currentOrderResponse?.let{ order ->
+                val firstDeliveryDate = deliveryDates[0]!!
+                if(order.deliverAt == null){
+                    Log.d("orderFlowTime", "deliverAt == null")
+                    /**
+                     * when deliver_at is null - it means no change of delivery time made by user.
+                     */
+                    if(DateUtils.isNowInRange(firstDeliveryDate.from, firstDeliveryDate.to)){
+                        Log.d("orderFlowTime", "is now")
+                        deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from)})")
+                    }else{
+                        Log.d("orderFlowTime", "first delivery time")
+                        deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
+                    }
+                }else{
+                    val matchedDate = deliveryDates.find {
+                        DateUtils.isSameDay(order.deliverAt, it?.from ?: Date())
+                    }
+                    if(matchedDate == null){
+                        Log.d("orderFlowTime", "future order but not in a valid delivery time")
+                        deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
+                        //todo - update server for the choosen delivery time
+                    }else{
+                        Log.d("orderFlowTime", "future order ")
+                        deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(order.deliverAt))
+                    }
+                }
+            }
+        }
+    }
 
+    /**
+     * this function is called when user change address or delivery time
+     */
     suspend fun updateOrderDeliveryParam(): OrderRepository.OrderRepoResult<Order>? {
         val orderRequest = buildOrderRequest(emptyList())
         return updateOrderParams(orderRequest)
@@ -395,14 +449,14 @@ class CartManager(
     }
 
 
-    fun updateFloatingCartBtn(order: Order) {
-        Log.d("orderFlow - cartManager", "updateFloatingCartBtn")
-        floatingCartBtnEvent.postValue(FloatingCartEvent(order.restaurant?.restaurantName ?: "", order.getAllOrderItemsQuantity()))
+    fun updateFloatingCartBtn(order: Order?) {
+        Log.d("orderFlow - cartManager", "updateFloatingCartBtn: ${order?.getAllOrderItemsQuantity()}")
+        floatingCartBtnEvent.postValue(FloatingCartEvent(order?.restaurant?.restaurantName ?: "", order?.getAllOrderItemsQuantity() ?: 0))
     }
 
     fun refreshFloatingCartBtn() {
         currentOrderResponse.let {
-            Log.d("orderFlow - cartManager", "refreshFloatingCartBtn")
+            Log.d("orderFlow - cartManager", "refreshFloatingCartBtn quantity: ${it?.getAllOrderItemsQuantity() ?: 0}")
             floatingCartBtnEvent.postValue(FloatingCartEvent(it?.restaurant?.restaurantName ?: "", it?.getAllOrderItemsQuantity() ?: 0))
         }
     }
@@ -420,7 +474,10 @@ class CartManager(
     fun onCartCleared() {
         Log.d("orderFlow - cartManager", "onCartCleared")
         currentOrderResponse = null
-        refreshFloatingCartBtn()
+        currentOrderDeliveryDates = null
+        orderLiveData.postValue(null)
+        updateFloatingCartBtn(null)
+//        refreshFloatingCartBtn()
     }
 
     /**
@@ -442,10 +499,11 @@ class CartManager(
         return null
     }
 
-    private fun updateCartManagerParams(order: Order) {
+    private fun updateCartManagerParams(order: Order?) {
         Log.d(TAG, "updateCartParams")
         this.currentOrderResponse = order
         orderLiveData.postValue(order)
+        updateFloatingCartBtn(order)
     }
 
     fun handleWsError(wsError: List<WSError>?) {

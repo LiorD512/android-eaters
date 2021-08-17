@@ -124,7 +124,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 deliveryAddress?.apply{
                     singleOrderDetailsLocation.updateDeliveryFullDetails(this)
                 }
-                singleOrderDetailsStatus.updateDeliveryDetails(status ?: "N/A")
+                singleOrderDetailsStatus.updateDeliveryTimeUi(status ?: "N/A")
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
                 orderItems?.let{
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)

@@ -101,7 +101,7 @@ class RestaurantPageViewModel(
             orderCookingSlot?.let {
                 val currentCookingSlot = getCookingSlotById(orderCookingSlot.id)
                 currentCookingSlot?.let {
-                    onCookingSlotSelected(currentCookingSlot)
+                    onCookingSlotSelected(currentCookingSlot, true)
                 }
             }
         } else {
@@ -121,14 +121,14 @@ class RestaurantPageViewModel(
                          * 2. update restaurant screen ui
                          * **/
                         timeManager.setTemporaryDeliveryTimeDate(it.orderFrom)
-                        onCookingSlotSelected(it)
+                        onCookingSlotSelected(it, true)
                         return
                     }
                 }
             }
             /**  case3 : no open cart, no chosen date - get first cooking slot in list **/
             sortedCookingSlots.getOrNull(0)?.cookingSlots?.getOrNull(0)?.let {
-                onCookingSlotSelected(it)
+                onCookingSlotSelected(it, false)
             }
         }
     }
@@ -136,17 +136,18 @@ class RestaurantPageViewModel(
     data class CookingSlotUi(
         val cookingSlotId: Long,
         val timePickerString: String,
+        val forceTabChnage: Boolean = false
     )
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
-    fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot) {
+    fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot, forceTabChnage: Boolean) {
         Log.d("orderFlow - restPage", "updateCookingSlotRelatedUi")
-        onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot)))
+        onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot), forceTabChnage))
     }
 
-    fun onCookingSlotSelected(cookingSlot: CookingSlot) {
+    fun onCookingSlotSelected(cookingSlot: CookingSlot, forceTabChange: Boolean) {
         Log.d("orderFlow - restPage", "onCookingSlotSelected: $cookingSlot")
-        updateCookingSlotRelatedUi(cookingSlot)
+        updateCookingSlotRelatedUi(cookingSlot, forceTabChange)
         currentCookingSlot = cookingSlot
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
         handleDishesSection(sortedCookingSlot)
@@ -319,7 +320,7 @@ class RestaurantPageViewModel(
      */
     fun onDeliveryDateChanged(date: SortedCookingSlots?) {
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
-            onCookingSlotSelected(cookingSlot)
+            onCookingSlotSelected(cookingSlot, false)
         }
     }
 
@@ -352,15 +353,13 @@ class RestaurantPageViewModel(
     fun handleCartData(order: Order?) {
         Log.d("orderFlow - restPage", "handleCartData")
         Log.d(TAG, "handleCartData")
-        order?.let {
-            dishListData.let {
-                updateDishCountUi(it, false)
-                updateFloatingCartButtonUi(order)
-            }
+        dishListData.let {
+            updateDishCountUi(it, false)
         }
+//        updateFloatingCartButtonUi(order)
     }
 
-    private fun updateFloatingCartButtonUi(order: Order) {
+    private fun updateFloatingCartButtonUi(order: Order?) {
         cartManager.updateFloatingCartBtn(order)
     }
 
@@ -376,12 +375,12 @@ class RestaurantPageViewModel(
     }
 
     fun refreshRestaurantUi() {
-        currentCookingSlot?.let { onCookingSlotSelected(it) }
+        currentCookingSlot?.let { onCookingSlotSelected(it, false) }
     }
 
     fun forceCookingSlotUiChange(cookingSlotId: Long) {
         Log.d(TAG, "forceCookingSlotUiChange")
-        getCookingSlotById(cookingSlotId)?.let { onCookingSlotSelected(it) }
+        getCookingSlotById(cookingSlotId)?.let { onCookingSlotSelected(it, true) }
     }
 
     private fun getCookingSlotById(cookingSlotId: Long): CookingSlot? {

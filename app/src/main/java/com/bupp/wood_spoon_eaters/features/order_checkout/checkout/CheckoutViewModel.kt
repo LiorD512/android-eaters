@@ -23,6 +23,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     val progressData = ProgressData()
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
     val orderLiveData = cartManager.getCurrentOrderData()
+    val deliveryDatesUi = cartManager.getDeliveryDatesUi()
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
 
     val onCheckoutDone = LiveEventData<Boolean>()
@@ -38,14 +39,21 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     init{
         fetchOrderDeliveryTimes()
+
+    }
+
+    private fun refreshDeliveyTime() {
+        cartManager.calcCurrentOrderDeliveryTime()
     }
 
     private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
+        Log.d(TAG, "fetchOrderDeliveryTimes: $isPendingRequest")
         orderLiveData.value?.let{
             viewModelScope.launch {
                 val result = cartManager.fetchOrderDeliveryTimes(it.id)
                 result?.let{
                     deliveryDatesLiveData.postValue(it)
+                    refreshDeliveyTime()
                 }
             }
             if(isPendingRequest){
@@ -178,6 +186,27 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
             return false
         }
         return true
+    }
+
+    fun onDeliveyTimeChanged() {
+        viewModelScope.launch {
+            val result = cartManager.updateOrderDeliveryParam()
+            result?.let {
+                when (result.type) {
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        refreshDeliveyTime()
+                    }
+                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        cartManager.onLocationInvalid()
+                        cartManager.handleWsError(result.wsError)
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
     }
 
 

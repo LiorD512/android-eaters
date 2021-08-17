@@ -116,7 +116,9 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     private fun initObservers() {
         checkoutViewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
-            updateCheckoutMap(orderData)
+            if (orderData != null) {
+                updateCheckoutMap(orderData)
+            }
         })
         mainViewModel.newAddressLiveData.observe(viewLifecycleOwner, {
             it?.let { address ->

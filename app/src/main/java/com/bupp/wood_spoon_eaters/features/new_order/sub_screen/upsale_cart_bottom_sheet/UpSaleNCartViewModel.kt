@@ -51,7 +51,7 @@ class UpSaleNCartViewModel(
     }
 
 
-    val upsaleNCartLiveData = MutableLiveData<CartData>()
+    val upsaleNCartLiveData = MutableLiveData<CartData?>()
 
     data class CartData(
         val items: List<CartBaseAdapterItem>?
@@ -61,10 +61,10 @@ class UpSaleNCartViewModel(
     private fun fetchCartData(): CartData? {
         val list = mutableListOf<CartBaseAdapterItem>()
         val orderItems = currentOrderData.value?.orderItems
-        if(orderItems?.isEmpty() == true){
+        if(orderItems.isNullOrEmpty()){
             return null
         }
-        orderItems?.forEach {
+        orderItems.forEach {
             val customCartItem = CustomCartItem(
                 orderItem = it,
                 cookingSlot = currentCookingSlot

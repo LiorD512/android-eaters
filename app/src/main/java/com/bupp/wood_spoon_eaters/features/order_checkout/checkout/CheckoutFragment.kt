@@ -19,11 +19,10 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePick
 import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
-import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView2
+import com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
@@ -122,6 +121,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+        viewModel.deliveryDatesUi.observe(viewLifecycleOwner, {
+            binding.checkoutFragDeliveryTime.updateDeliveryTimeUi(it)
+        })
     }
 
     private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
@@ -170,8 +172,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         }
 
-//        mainViewModel.getLastOrderDetails()
-
     }
 
     private fun openOrderTimeBottomSheet(deliveryDates: List<DeliveryDates>) {
@@ -181,7 +181,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onTimerPickerChange() {
-//        mainViewModel.onDeliveryTimeChange()
+        viewModel.onDeliveyTimeChanged()
 //        mainViewModel.refreshFullDish()
     }
 
@@ -221,12 +221,12 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
                     checkoutFragDeliveryAddress.updateDeliveryFullDetails(it.deliveryAddress)
 
-                    if (it.estDeliveryTime != null) {
-                        val time = DateUtils.parseDateToDayDateAndTime(it.estDeliveryTime)
-                        checkoutFragDeliveryTime.updateDeliveryDetails(time)
-                    } else if (it.estDeliveryTimeText != null) {
-                        checkoutFragDeliveryTime.updateDeliveryDetails(it.estDeliveryTimeText)
-                    }
+//                    if (it.estDeliveryTime != null) {
+//                        val time = DateUtils.parseDateToDayDateAndTime(it.estDeliveryTime)
+//                        checkoutFragDeliveryTime.updateDeliveryDetails(time)
+//                    } else if (it.estDeliveryTimeText != null) {
+//                        checkoutFragDeliveryTime.updateDeliveryDetails(it.estDeliveryTimeText)
+//                    }
 
                     checkoutFragDetailsHeader.text = "Your Order From home chef ${cook?.firstName}"
                     checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
@@ -363,9 +363,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //        }
     }
 
-    override fun onAddBtnClicked() {
-        //Place an order click
-        viewModel.finalizeOrder()
+    override fun onEditOrderBtnClicked() {
+        activity?.finish()
     }
 
     override fun onCustomToolTipClick() {
