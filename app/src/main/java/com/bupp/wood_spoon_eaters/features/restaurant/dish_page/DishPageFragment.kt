@@ -89,6 +89,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         viewModel.dishFullData.observe(viewLifecycleOwner, {
             handleDishFullData(it)
         })
+        viewModel.counterBtnsState.observe(viewLifecycleOwner, {
+            handleCounterBtnsUi(it)
+        })
         viewModel.userRequestData.observe(viewLifecycleOwner, {
             handleUserRequestData(it)
         })
@@ -110,6 +113,12 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+    }
+
+    private fun handleCounterBtnsUi(counterBtnState: DishPageViewModel.CounterBtnState?) {
+        counterBtnState?.let{
+            initDishQuantityButtons(initialCounter = counterBtnState.initialCounter, maxQuantity = counterBtnState.maxQuantity)
+        }
     }
 
     private fun handleFinishPage(type: DishPageViewModel.FinishNavigation) {
@@ -168,8 +177,6 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             } else{
                 dishFragTags.setTags(listOf(menuItem.availableLater?.getStartEndAtTag()?:""))
             }
-            initDishQuantityButtons(maxQuantity = menuItem.quantity)
-        // todo - add dish initial counter when in edit
         }
     }
 
@@ -190,8 +197,6 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragMainListLayout.dishFragRemoveBtn.setOnClickListener {
                 viewModel.onDishRemove(orderItem.dish.id)
             }
-
-            initDishQuantityButtons(initialCounter = orderItem.quantity, maxQuantity = orderItem.menuItem?.quantity ?: -1)
         }
     }
 

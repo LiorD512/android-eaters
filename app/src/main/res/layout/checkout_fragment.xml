@@ -123,6 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    app:showAddBtn="true"
                     android:paddingLeft="15.4dp"
                     android:paddingRight="15.4dp" />
 

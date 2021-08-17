@@ -20,7 +20,6 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListe
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
-import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
@@ -190,7 +189,10 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
                 when(item){
                     is CartAdapterItem -> {
                         val dishId = item.customCartItem.orderItem.dish.id
-                        viewModel.addDishToCart(1, dishId)
+                        val note = item.customCartItem.orderItem.notes
+                        val orderId = item.customCartItem.orderItem.id
+                        val currentQuantity = item.customCartItem.orderItem.quantity
+                        viewModel.updateDishInCart(currentQuantity+1, dishId, note, orderId)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}

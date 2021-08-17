@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -40,6 +41,7 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
     private val binding: ClearCartCookingSlotBottomSheetBinding by viewBinding()
     var curCookingSlotName: String = ""
     var newCookingSlotName: String = ""
+    var notifyType: Int = NOTIFY_CANCEL_CLEAR_CART
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.clear_cart_cooking_slot_bottom_sheet, container, false)
@@ -86,11 +88,11 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
             clearCartCookingSlotFuture.text = newCookingSlotName
 
             clearCartCookingSlotClearBtn.setOnClickListener {
-                listener.onPerformClearCart()
+                notifyType = NOTIFY_CLEAR_CART
                 dismiss()
             }
             clearCartCookingSlotCancelBtn.setOnClickListener {
-                listener.onClearCartCanceled()
+                notifyType = NOTIFY_CANCEL_CLEAR_CART
                 dismiss()
             }
         }
@@ -99,6 +101,9 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
     companion object{
         private const val CUR_DATA_ARGS = "cur_data_args"
         private const val NEW_DATA_ARGS = "new_data_args"
+
+        private const val NOTIFY_CLEAR_CART = 0
+        private const val NOTIFY_CANCEL_CLEAR_CART = 1
 
         fun newInstance(curData: String, newData: String, listener: ClearCartListener): ClearCartCookingSlotBottomSheet{
             val bottomSheetFragment = ClearCartCookingSlotBottomSheet(listener)
@@ -109,5 +114,18 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
             return bottomSheetFragment
         }
     }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        when(notifyType){
+            NOTIFY_CLEAR_CART -> {
+                listener.onPerformClearCart()
+            }
+            NOTIFY_CANCEL_CLEAR_CART -> {
+                listener.onClearCartCanceled()
+            }
+        }
+        super.onDismiss(dialog)
+    }
+
 
 }

@@ -20,6 +20,7 @@ data class RestaurantInitParams(
 
 @Parcelize
 data class DishInitParams(
+    val quantityInCart: Int = 0,
     val menuItem: MenuItem?,
     val orderItem: OrderItem?,
     val cookingSlot: CookingSlot?,

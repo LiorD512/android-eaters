@@ -87,16 +87,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
             restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
             restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
-//            if(!isAdapterInitialized){
-//                adapterDishes?.let { adapter ->
-//                    Log.d("orderFlow - rest","init restaurant adapter")
-//                }
-//                isAdapterInitialized = true
-//            }else{
-//                Log.d("orderFlow - rest","init restaurant adapter 2")
-//                restaurantDishesList.adapter = adapterDishes
-//                restaurantDishesList.initTouchHelpers(adapterDishes!!)
-//            }
         }
     }
 

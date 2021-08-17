@@ -15,6 +15,11 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/restaurant_nav" />
 
+    <com.bupp.wood_spoon_eaters.views.MessageSnackBar
+            android:id="@+id/restaurantActMsgSnacBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/restaurantAct"

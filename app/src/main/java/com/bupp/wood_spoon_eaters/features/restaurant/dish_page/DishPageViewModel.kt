@@ -36,6 +36,12 @@ class DishPageViewModel(
     val menuItemData = MutableLiveData<MenuItem>()
     val orderItemData = MutableLiveData<OrderItem>()
     val dishFullData = MutableLiveData<FullDish>()
+    val counterBtnsState = MutableLiveData<CounterBtnState>()
+
+    data class CounterBtnState(
+        val initialCounter: Int = 1,
+        val maxQuantity: Int = 0
+    )
 
     enum class FinishNavigation{
         FINISH_AND_BACK,
@@ -83,14 +89,18 @@ class DishPageViewModel(
 
     private fun handleMenuItemData(menuItem: MenuItem) {
         Log.d("orderFlow - dishPage","handleMenuItemData")
+        val quantityInCart = cartManager.getQuantityInCart(menuItem.dishId)
         menuItemData.postValue(menuItem)
-        dishMaxQuantity = menuItem.quantity
+        dishMaxQuantity = menuItem.getQuantityCount() - quantityInCart
+        counterBtnsState.postValue(CounterBtnState(1, dishMaxQuantity))
     }
 
     private fun handleOrderItemData(orderItem: OrderItem) {
         Log.d("orderFlow - dishPage","handleOrderItemData")
         orderItemData.postValue(orderItem)
-        dishMaxQuantity = orderItem.menuItem?.quantity ?: -1
+        val quantityInCart = cartManager.getQuantityInCart(orderItem.dish.id)
+        dishMaxQuantity = (orderItem.menuItem?.getQuantityCount() ?: 0) - quantityInCart + orderItem.quantity
+        counterBtnsState.postValue(CounterBtnState(orderItem.quantity, dishMaxQuantity))
     }
 
     private fun getFullDish(menuItemId: Long) {
@@ -163,7 +173,7 @@ class DishPageViewModel(
             val quantity = dishQuantity
             val dishId = dishFullData.value?.id ?: -1
             orderItemData.value?.let {
-                val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it)
+                val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it.id)
                 if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                     onFinishDishPage.postValue(getFinishPageType())
                 }

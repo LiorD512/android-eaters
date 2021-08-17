@@ -10,18 +10,22 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-        <TextView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/orderItemCounter"
-                style="@style/LatoBold13Teal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing="0.03"
-                android:lineSpacingExtra="6.7sp"
-                tools:text="1X"/>
+    <TextView
+            android:id="@+id/orderItemCounter"
+            style="@style/LatoBold11White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/orderItemName"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemName"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="3dp"
+            android:background="@drawable/teal_blue_circle"
+            tools:text="1" />
 
         <TextView
+                android:gravity="center"
+                android:layout_marginBottom="7.7dp"
                 android:layout_marginStart="7.7dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/orderItemCounter"
@@ -45,8 +49,8 @@
                 tools:text="$7.00"/>
 
     <TextView
+            android:visibility="gone"
             android:id="@+id/orderItemNote"
-            android:layout_marginTop="7.7dp"
             app:layout_constraintStart_toStartOf="@+id/orderItemName"
             app:layout_constraintTop_toBottomOf="@+id/orderItemName"
             app:layout_constraintEnd_toStartOf="@+id/orderItemPrice"
@@ -57,7 +61,6 @@
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
             android:paddingBottom="7.7dp"
-            android:visibility="gone"
             tools:text="Special requests: Please add some extra parmesan on the side sfsdfsdfsdf"/>
 
 <!--    <androidx.recyclerview.widget.RecyclerView-->

@@ -87,9 +87,9 @@ class UpSaleNCartViewModel(
     }
 
 
-    fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
+    fun updateDishInCart(quantity: Int, dishId: Long, note: String? = null, orderItemId: Long) {
         viewModelScope.launch {
-            cartManager.addOrUpdateCart(quantity, dishId, note)
+            cartManager.updateDishInExistingCart(quantity, note, dishId, orderItemId)
         }
     }
 
