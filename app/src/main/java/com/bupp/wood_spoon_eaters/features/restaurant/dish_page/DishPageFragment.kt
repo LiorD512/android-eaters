@@ -36,7 +36,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 //    private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<DishPageViewModel>()
 
-    var availableTimesAdapter = DishAvailabilityAdapter()
+    var availableTimesAdapter: DishAvailabilityAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +59,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
                 onAddToCartClick()
             }
             dishFragAddToCartBtn.setWSFloatingBtnListener(this@DishPageFragment)
+
+            availableTimesAdapter = DishAvailabilityAdapter()
         }
     }
 
@@ -221,19 +223,19 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
                 dishFragAvailabilityList.adapter = availableTimesAdapter
                 if(list.size > 3){
                     dishFragAvailabilityViewMore.isVisible = true
-                    availableTimesAdapter.submitList(list.subList(0,3))
+                    availableTimesAdapter?.submitList(list.subList(0,3))
                     dishFragAvailabilityViewMore.setOnClickListener {
                         dishFragAvailabilityList.scheduleLayoutAnimation()
-                        if(availableTimesAdapter.itemCount > 3){
+                        if((availableTimesAdapter?.itemCount ?: 0)!! > 3){
                             dishFragAvailabilityViewMore.text = "View More"
-                            availableTimesAdapter.submitList(list.subList(0,3))
+                            availableTimesAdapter?.submitList(list.subList(0,3))
                         } else {
                             dishFragAvailabilityViewMore.text = "View Less"
-                            availableTimesAdapter.submitList(list)
+                            availableTimesAdapter?.submitList(list)
                         }
                     }
                 } else{
-                    availableTimesAdapter.submitList(list)
+                    availableTimesAdapter?.submitList(list)
                 }
             }
         }
@@ -292,6 +294,11 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     companion object {
         private const val TAG = "RestaurantPageFragment"
+    }
+
+    override fun onDestroyView() {
+        availableTimesAdapter = null
+        super.onDestroyView()
     }
 
 

@@ -47,13 +47,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
+    private var isAdapterInitialized = false
 
-    var adapterDishes: DishesMainAdapter? = DishesMainAdapter(getDishesAdapterListener())
+    var adapterDishes: DishesMainAdapter? = null
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("orderFlow - rest","onViewCreated")
 
         initUi()
         initObservers()
@@ -82,11 +85,22 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 viewModel.onTimePickerClicked()
             }
             restaurantDeliveryDates.setTabListener(this@RestaurantPageFragment)
-            adapterDishes?.let { adapter ->
-                val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-                restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
-                restaurantDishesList.initSwipeableRecycler(adapter)
-            }
+
+
+            adapterDishes = DishesMainAdapter(getDishesAdapterListener())
+                    val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
+                    restaurantDishesList.addItemDecoration(DividerItemDecoratorDish(divider))
+                    restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
+//            if(!isAdapterInitialized){
+//                adapterDishes?.let { adapter ->
+//                    Log.d("orderFlow - rest","init restaurant adapter")
+//                }
+//                isAdapterInitialized = true
+//            }else{
+//                Log.d("orderFlow - rest","init restaurant adapter 2")
+//                restaurantDishesList.adapter = adapterDishes
+//                restaurantDishesList.initTouchHelpers(adapterDishes!!)
+//            }
         }
     }
 
@@ -121,8 +135,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.onCookingSlotUiChange.observe(viewLifecycleOwner, {
             handleCookingSlotUiChange(it)
         })
-        viewModel.dishListData.observe(viewLifecycleOwner, {
-            handleDishesList(it)
+        viewModel.dishListLiveData.observe(viewLifecycleOwner, {
+            handleDishesList(it.getContentIfNotHandled())
         })
         viewModel.initialParamData.observe(viewLifecycleOwner, {
             handleInitialParamData(it)
@@ -198,10 +212,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData) {
-        if (dishSections.animateList)
+    private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
+        if (dishSections?.animateList == true)
             binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
-        adapterDishes?.submitList(dishSections.dishes)
+        Log.d("orderFlow - rest", "handleDishesList ${dishSections?.dishes?.size}")
+//        adapterDishes?.submitList(emptyList())
+        adapterDishes?.submitList(dishSections?.dishes)
     }
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
@@ -353,6 +369,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onPause() {
         super.onPause()
         hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
+    }
+
+    override fun onDestroyView() {
+        adapterDishes = null
+        adapterCuisines = null
+        super.onDestroyView()
     }
 
 

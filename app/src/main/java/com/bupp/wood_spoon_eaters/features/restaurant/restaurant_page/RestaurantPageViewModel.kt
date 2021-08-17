@@ -32,7 +32,8 @@ class RestaurantPageViewModel(
     val deliveryDatesData = MutableLiveData<List<SortedCookingSlots>>()
     val timePickerEvent = LiveEventData<CookingSlot>()
 
-    val dishListData = MutableLiveData<DishListData>()
+    var dishListData: List<DishSections> = emptyList()
+    val dishListLiveData = LiveEventData<DishListData>()
 
     data class DishListData(val dishes: List<DishSections>, val animateList: Boolean = true)
 
@@ -52,7 +53,10 @@ class RestaurantPageViewModel(
     private fun initRestaurantFullData(restaurantId: Long?) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
-                dishListData.postValue(DishListData(getDishSkeletonItems()))
+                Log.d("orderFlow - restPage","initRestaurantFullData")
+                dishListData = getDishSkeletonItems()
+//                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
+                dishListLiveData.postRawValue(DishListData(dishListData))
                 val result = restaurantRepository.getRestaurant(restaurantId)
                 if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
                     result.restaurant?.let { restaurant ->
@@ -69,12 +73,13 @@ class RestaurantPageViewModel(
     /** Creating  Delivery date list
      * Sorting the cooking slots by dates - cooking slot on the same date goes together  **/
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
+        Log.d("orderFlow - restPage","handleDeliveryTimingSection")
         val deliveryDates = mutableListOf<SortedCookingSlots>()
         restaurant.cookingSlots.forEach { cookingSlot ->
-            val relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.orderFrom) }
+            val  relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.orderFrom) }
             if (relevantDeliveryDate == null) {
                 deliveryDates.add(SortedCookingSlots(cookingSlot.orderFrom, mutableListOf(cookingSlot)))
-            } else {
+            } else { 
                 relevantDeliveryDate.cookingSlots.add(cookingSlot)
                 relevantDeliveryDate.cookingSlots.sortBy { it.orderFrom }
             }
@@ -88,6 +93,7 @@ class RestaurantPageViewModel(
      * Checking which cooking slot should be selected when first entering restaurant page
      */
     private fun chooseStartingCookingSlot(restaurant: Restaurant, sortedCookingSlots: List<SortedCookingSlots>) {
+        Log.d("orderFlow - restPage","chooseStartingCookingSlot")
         if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
             /**  case1 : has open cart - get the cooking slot of the current order **/
             //todo - nicole - this will work? - cooking slot sections is not returned with order
@@ -129,10 +135,12 @@ class RestaurantPageViewModel(
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
     fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot) {
+        Log.d("orderFlow - restPage","updateCookingSlotRelatedUi")
         onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot)))
     }
 
     fun onCookingSlotSelected(cookingSlot: CookingSlot) {
+        Log.d("orderFlow - restPage","onCookingSlotSelected: $cookingSlot")
         updateCookingSlotRelatedUi(cookingSlot)
         currentCookingSlot = cookingSlot
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
@@ -173,6 +181,7 @@ class RestaurantPageViewModel(
      * @param cookingSlot CookingSlot the chosenCookingSlot
      */
     private fun sortCookingSlotDishes(cookingSlot: CookingSlot): CookingSlot {
+        Log.d("orderFlow - restPage","sortCookingSlotDishes")
         dishes?.let { dishes ->
             val tempHash = dishes.toMutableMap()
             cookingSlot.sections.forEach { section ->
@@ -227,6 +236,7 @@ class RestaurantPageViewModel(
      * @param cookingSlot CookingSlot the chosenCookingSlot
      */
     private fun handleDishesSection(cookingSlot: CookingSlot) {
+        Log.d("orderFlow - restPage","handleDishesSection")
         val dishSectionsList = mutableListOf<DishSections>()
         cookingSlot.sections.forEach { section ->
             if (section.menuItems.isNotEmpty()) {
@@ -254,20 +264,27 @@ class RestaurantPageViewModel(
             // we need to check matching cooking slots inorder to prevent count change of diffrent menus - with same dishes
             // we need to check current cart orderItems - to update relevent dishes count to mach current order.
             val updatedSectionList = resetSectionItemsCounter(dishSectionsList)
+            Log.d("orderFlow - restPage","updateDishCountUi")
             orderItems?.forEach { orderItem ->
                 val dishSection = updatedSectionList.find { it.menuItem?.dishId == orderItem.dish.id }
                 dishSection?.let {
                     dishSection.cartQuantity += orderItem.quantity
+                    Log.d("orderFlow - restPage", "updating dish quantity - ${dishSection.cartQuantity}, ${it.menuItem?.dish?.name}")
                 }
             }
-            Log.d("wowSingleDish", "updateDishCountUi - same c.s")
-            dishListData.postValue(DishListData(updatedSectionList, animateList))
+            dishListData = updatedSectionList
+//                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
+            dishListLiveData.postRawValue(DishListData(dishListData, animateList))
+//            dishListLiveData.postRawValue(DishListData(updatedSectionList, animateList))
         } else {
-            dishListData.postValue(DishListData(dishSectionsList, animateList))
+            Log.d("orderFlow - restPage","updateDishCountUi2")
+            dishListData = dishSectionsList
+            dishListLiveData.postRawValue(DishListData(dishListData, animateList))
         }
     }
 
     private fun resetSectionItemsCounter(dishSectionsList: List<DishSections>): MutableList<DishSections> {
+        Log.d("orderFlow - restPage","resetSectionItemsCounter")
         val updatedSectionList = mutableListOf<DishSections>()
         dishSectionsList.forEach { dishSection ->
             if (dishSection is DishSectionSingleDish) {
@@ -302,6 +319,7 @@ class RestaurantPageViewModel(
     }
 
     fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
+        Log.d("orderFlow - restPage","addDishToCart")
         currentCookingSlot?.let { currentCookingSlot ->
             val currentRestaurant = restaurantFullData.value!!
             if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot.id, currentCookingSlot.orderFrom, currentCookingSlot.endsAt)) {
@@ -327,9 +345,10 @@ class RestaurantPageViewModel(
      * Called on any change to cart - updating UI accordingly
      */
     fun handleCartData(order: Order?) {
+        Log.d("orderFlow - restPage","handleCartData")
         Log.d(TAG, "handleCartData")
         order?.let {
-            dishListData.value?.dishes?.let {
+            dishListData.let {
                 updateDishCountUi(it, false)
                 updateFloatingCartButtonUi(order)
             }

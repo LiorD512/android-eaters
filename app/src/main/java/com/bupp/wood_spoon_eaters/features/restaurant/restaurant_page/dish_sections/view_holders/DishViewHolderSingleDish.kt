@@ -21,7 +21,6 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionSingleDish
         val dish = section.menuItem.dish
-//        Log.d("wowSingleDish","bind ${dish?.name}")
         with(binding) {
             dish?.let { dish ->
                 Glide.with(root.context).load(dish.thumbnail?.url).into(dishPhoto)
@@ -31,6 +30,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
 
                 dishQuantity.text = section.cartQuantity.toString()
                 dishQuantity.isVisible = section.cartQuantity > 0
+                Log.d("orderFlow - adapter","bind ${dish.name} ${section.cartQuantity}")
                 dishTagsView.isVisible = false
                 if (section.menuItem.availableLater == null) {
 //                    Log.d("wowSingleDish","availableLater = null ${dish?.name}")

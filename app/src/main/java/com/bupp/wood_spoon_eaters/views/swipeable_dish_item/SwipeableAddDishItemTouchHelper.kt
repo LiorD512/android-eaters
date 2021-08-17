@@ -13,6 +13,7 @@ class SwipeableAddDishItemTouchHelper() : ItemTouchHelper.SimpleCallback(0, Item
     var adapter: SwipeableAdapter<*>? = null
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        Log.d("orderFlow - itemDecor", "onSwiped: ${viewHolder.absoluteAdapterPosition}")
         adapter?.updateItemQuantityAdd(viewHolder.absoluteAdapterPosition)
         adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
     }

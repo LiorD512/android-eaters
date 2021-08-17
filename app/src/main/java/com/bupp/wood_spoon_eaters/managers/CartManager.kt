@@ -117,8 +117,8 @@ class CartManager(
      * this function checks if this is the first item is the cart - and post a new cart
      * or cart is allready existed and it just updates the cart with the new dish
      */
-    suspend fun addOrUpdateCart(quantity: Int, dishId: Long, note: String?) {
-        if (currentOrderResponse == null) {
+    suspend fun addOrUpdateCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
+        return if (currentOrderResponse == null) {
             //order response is null therefore post new order
             addDishToNewCart(quantity, dishId, note)
         } else {
@@ -131,6 +131,7 @@ class CartManager(
      * this function simply crates new order and adds a new instance of a dish to the cart
      */
     suspend fun addDishToNewCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
+        Log.d("orderFlow - cartManager","addDishToNewCart")
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         val result = orderRepository.addNewDish(orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
@@ -148,7 +149,8 @@ class CartManager(
         return result.type
     }
 
-    private suspend fun addDishToExistingCart(quantity: Int, dishId: Long, note: String?) {
+    private suspend fun addDishToExistingCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
+        Log.d("orderFlow - cartManager","addDishToExistingCart")
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         currentOrderResponse?.let {
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
@@ -166,12 +168,14 @@ class CartManager(
                     handleWsError(result.wsError)
                 }
             }
-
+            return result.type
         }
+        return OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED
     }
 
     suspend fun updateDishInExistingCart(quantity: Int, note: String?, dishId: Long, orderItem: OrderItem): OrderRepository.OrderRepoStatus {
-        Log.d(TAG, "updateDishInExistingCart")
+        Log.d("orderFlow - cartManager","updateDishInExistingCart")
+//        Log.d(TAG, "updateDishInExistingCart")
         val updatedOrderItem = OrderItemRequest(
             id = orderItem.id, dishId = dishId,
             quantity = quantity, notes = note
@@ -203,6 +207,7 @@ class CartManager(
      * @return OrderRepository.OrderRepoResult<Order>?
      */
     suspend fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
+        Log.d("orderFlow - cartManager","updateOrderParams")
         Log.d(TAG, "updateOrderParams")
         currentOrderResponse?.let {
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
@@ -223,6 +228,7 @@ class CartManager(
      * @param dishId = could be dish id or orderItem id
      */
     suspend fun removeOrderItems(dishId: Long, removeSingle: Boolean = false): OrderRepository.OrderRepoStatus? {
+        Log.d("orderFlow - cartManager","removeOrderItems")
         var orderRequest: OrderRequest? = null
         if(removeSingle){
             orderRequest = buildOrderRequest(getDestroyedOrderItemRequestByOrderIdItem(dishId))
@@ -282,6 +288,7 @@ class CartManager(
      * Dish Page related functions
      */
     suspend fun getFullDish(menuItemId: Long): OrderRepository.OrderRepoResult<FullDish>? {
+        Log.d("orderFlow - cartManager","getFullDish")
         val result = orderRepository.getFullDish(menuItemId)
         if(result.type == OrderRepository.OrderRepoStatus.FULL_DISH_SUCCESS){
             return result
@@ -325,6 +332,7 @@ class CartManager(
     }
 
     suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {
+        Log.d("orderFlow","finalizeOrder")
         this.currentOrderResponse?.id?.let { it ->
             val result = orderRepository.finalizeOrder(it, paymentMethodId)
             val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
@@ -369,22 +377,26 @@ class CartManager(
       * @param currentCookingSlotId Long
      */
     fun forceCookingSlotChange(currentCookingSlotId: Long){
+        Log.d("orderFlow - cartManager","forceCookingSlotChange")
         tempCookingSlotId.postRawValue(currentCookingSlotId)
     }
 
 
     fun updateFloatingCartBtn(order: Order) {
+        Log.d("orderFlow - cartManager","updateFloatingCartBtn")
         floatingCartBtnEvent.postValue(FloatingCartEvent(order.restaurant?.restaurantName ?: "", order.getAllOrderItemsQuantity()))
     }
 
     fun refreshFloatingCartBtn() {
         currentOrderResponse.let{
+            Log.d("orderFlow - cartManager","refreshFloatingCartBtn")
             floatingCartBtnEvent.postValue(FloatingCartEvent(it?.restaurant?.restaurantName ?: "", it?.getAllOrderItemsQuantity() ?: 0))
         }
     }
 
     fun refreshOrderLiveData() {
         currentOrderResponse?.let{
+            Log.d("orderFlow - cartManager","refreshOrderLiveData")
             orderLiveData.postValue(it)
         }
     }
@@ -393,6 +405,7 @@ class CartManager(
      * this function is being called when user decided to clear the cart via ClearCart dialog.
      */
      fun onCartCleared() {
+        Log.d("orderFlow - cartManager","onCartCleared")
         currentOrderResponse = null
         refreshFloatingCartBtn()
     }
@@ -406,9 +419,10 @@ class CartManager(
      */
     suspend fun checkForPendingActions(): OrderRepository.OrderRepoStatus? {
         pendingRequestParam?.let {
+            Log.d("orderFlow - cartManager","checkForPendingActions")
             updateCurCookingSlotId(it.cookingSlotId)
             forceCookingSlotChange(it.cookingSlotId)
-            val result = addDishToNewCart(it.quantity, it.dishId, it.note)
+            val result = addOrUpdateCart(it.quantity, it.dishId, it.note)
             pendingRequestParam = null
             return result
         }

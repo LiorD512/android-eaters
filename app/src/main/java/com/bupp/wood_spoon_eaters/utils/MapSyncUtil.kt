@@ -148,7 +148,7 @@ class MapSyncUtil(val context: Context) : OnMapReadyCallback {
                     listener.onBitmapReady(it)
                     mMapView?.onDestroy()
                 }
-            }, 100)
+            }, 200)
 
         }
     }

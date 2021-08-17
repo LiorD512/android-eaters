@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/restaurant_page_navigation"
         app:startDestination="@id/restaurantPageFragment">
 
@@ -11,13 +11,13 @@
             android:label="fragment_restaurant_page"
             tools:layout="@layout/fragment_restaurant_page">
         <action
+                android:id="@+id/action_restaurantPageFragment_to_dishPageFragment"
+                app:destination="@id/dishPageFragment"
                 app:enterAnim="@anim/slide_right_enter"
                 app:exitAnim="@anim/slide_right_exit"
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/restaurantPageFragment"
-                android:id="@+id/action_restaurantPageFragment_to_dishPageFragment"
-                app:destination="@id/dishPageFragment">
+                app:popUpTo="@+id/restaurantPageFragment">
             <argument
                     android:name="extras"
                     app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams" />
@@ -33,8 +33,6 @@
                 android:name="extras"
                 app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams" />
     </fragment>
-
-
 
 
 </navigation>
