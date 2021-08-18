@@ -98,6 +98,7 @@ class MapSyncUtil()  {
                     "zoom=15&&" +
                     "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
         return url
+//                    "markers=color:blue|37.446754,-77.572746"
 //                    "markers=icon:http://foursquare.com/img/categories_v2/shops/financial_bg_64.png|37.446754,-77.572746"
 
 //        https://maps.googleapis.com/maps/api/staticmap?size=512x512&maptype=roadmap\

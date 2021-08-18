@@ -76,18 +76,6 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         }
     }
 
-
-    class DiffCallback : DiffUtil.ItemCallback<OrderHistoryBaseItem>() {
-
-        override fun areItemsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
-            return oldItem == newItem
-        }
-    }
-
     inner class SkeletonItemViewHolder(val binding: OrderHistoryItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }
@@ -128,14 +116,18 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
         fun bindItem(data: OrderAdapterItemActiveOrder) {
             val order = data.order
-
+            Log.d("wowStatus","bindItem: ${order.id}")
 //            val url = MapSyncUtil().getMapImage(order)
 //            MapSyncUtil.initMap(context, mapContainer, context.frag)
 
             val lat = order.deliveryAddress?.lat
             val lng = order.deliveryAddress?.lng
 
-            val url = "http://maps.google.com/maps/api/staticmap?center=$lat,$lng&zoom=15&size=200x200&sensor=false&key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
+            val url = "http://maps.google.com/maps/api/staticmap?center=$lat,$lng&zoom=17&" +
+                    "size=600x400&" +
+                    "sensor=false&" +
+                    "markers=color:blue|$lat,$lng&" +
+                    "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
 
             Glide.with(context).load(url).into(mapContainer)
 
@@ -168,13 +160,45 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             }
             subtitle.text = statusStr
 
+        }
     }
-}
 
-inner class OrderHistoryTitleViewHolder(val binding: OrdersHistoryTitleItemBinding) : RecyclerView.ViewHolder(binding.root) {
-    private val title = binding.orderHistoryTitle
-    fun bindItem(titleItem: OrderAdapterItemTitle) {
-        title.text = titleItem.title
+    inner class OrderHistoryTitleViewHolder(val binding: OrdersHistoryTitleItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val title = binding.orderHistoryTitle
+        fun bindItem(titleItem: OrderAdapterItemTitle) {
+            title.text = titleItem.title
+        }
     }
-}
+
+    class DiffCallback : DiffUtil.ItemCallback<OrderHistoryBaseItem>() {
+
+        override fun areItemsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
+            var isSame = oldItem == newItem
+            if(oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder){
+                isSame = oldItem.order.deliveryStatus == newItem.order.deliveryStatus &&
+                        oldItem.order.preparationStatus == newItem.order.preparationStatus
+                Log.d("wowStatus","isSame: $isSame ${oldItem.order.id}")
+            }
+            Log.d("wowStatus","adapter - areItemsTheSame $isSame")
+            return isSame
+        }
+
+        override fun areContentsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
+            var isSame = oldItem == newItem
+            if(oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder){
+                isSame = oldItem.order.deliveryStatus == newItem.order.deliveryStatus &&
+                        oldItem.order.preparationStatus == newItem.order.preparationStatus
+                Log.d("wowStatus","isSame: $isSame ${oldItem.order.id}")
+            }
+//            else{
+//                isSame = oldItem == newItem
+//            }
+//            Log.d("wowStatus","isSame: $isSame ${oldItem.type}")
+
+            Log.d("wowStatus","adapter - areContentsTheSame $isSame")
+            return isSame
+
+        }
+    }
+
 }

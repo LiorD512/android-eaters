@@ -62,7 +62,7 @@
             android:letterSpacing="0.03"
             android:lineSpacingExtra="3.7sp"
             android:gravity="center_horizontal"
-            tools:text="Would you like to change your delivery timing
+            android:text="Would you like to change your delivery timing
 And start a new cart?"/>
 
 

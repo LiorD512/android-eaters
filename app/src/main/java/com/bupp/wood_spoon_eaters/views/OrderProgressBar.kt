@@ -47,12 +47,18 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 enableIcon(binding.orderPbReceived)
             }
             in (18..50) -> {
+                enableIcon(binding.orderPbReceived)
                 enableIcon(binding.orderPbPrepared)
             }
             in (50..83) -> {
+                enableIcon(binding.orderPbReceived)
+                enableIcon(binding.orderPbPrepared)
                 enableIcon(binding.orderPbOnTheWay)
             }
             in (83..100) -> {
+                enableIcon(binding.orderPbReceived)
+                enableIcon(binding.orderPbPrepared)
+                enableIcon(binding.orderPbOnTheWay)
                 enableIcon(binding.orderPbDelivered)
             }
         }

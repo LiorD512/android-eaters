@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
@@ -33,6 +34,8 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     val viewModel by viewModel<OrdersHistoryViewModel>()
     val mainViewModel by sharedViewModel<MainViewModel>()
     lateinit var adapter: OrdersHistoryAdapter
+
+    val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
     companion object{
         fun newInstance() = OrdersHistoryFragment()
@@ -62,14 +65,16 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     }
 
     private fun initUi() {
+        Log.d("wowStatus","initUi")
         with(binding){
-            ordersHistoryFragRecyclerView.layoutManager = LinearLayoutManager(context)
+            ordersHistoryFragRecyclerView.layoutManager = layoutManager
 
             val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
             ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
             ordersHistoryFragRecyclerView.addItemDecoration(decoration)
 
             adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
+            adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             ordersHistoryFragRecyclerView.adapter = adapter
 
         }

@@ -37,6 +37,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         initList()
         getArchivedOrders()
         getActiveOrders()
+        startSilentUpdate()
     }
 
     fun getSkeletonList(): MutableList<OrderAdapterItemSkeleton>{
@@ -55,14 +56,6 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
                     if (result.data != null && result.data.isNotEmpty()) {
                         updateArchivedOrders(result.data)
                         updateListData()
-//                        val tempList = mutableListOf<OrderHistoryBaseItem>()
-//                        tempList.add(OrderAdapterItemTitle("Past orders"))
-//                        result.data.forEach {
-//                            tempList.add(OrderAdapterItemOrder(it))
-//                        }
-//                        orderListData[SECTION_ARCHIVE]?.clear()
-//                        orderListData[SECTION_ARCHIVE]?.addAll(tempList)
-//                        updateListData()
                     }
                 }
                 else -> {
@@ -73,9 +66,6 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
 
     private fun updateArchivedOrders(newData: List<Order>) {
         val currentList = orderListData[SECTION_ARCHIVE]
-//        if(currentList!!.isEmpty()){
-//            currentList.add(OrderAdapterItemTitle("Past orders"))
-//        }
         newData.forEach { order ->
             val itemInList = currentList!!.find { order.id == (it as OrderAdapterItemOrder).order.id }
             if(itemInList == null){
@@ -93,12 +83,6 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
             data?.let { it ->
                 updateActiveOrders(data)
                 updateListData()
-//                val tempList = mutableListOf<OrderHistoryBaseItem>()
-//                it.forEach {
-//                    tempList.add(OrderAdapterItemActiveOrder(it))
-//                }
-//                orderListData[SECTION_ACTIVE]?.clear()
-//                orderListData[SECTION_ACTIVE]?.addAll(tempList)
             }
         }
     }
@@ -109,31 +93,30 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
             val itemInList = currentList.find { order.id == (it as OrderAdapterItemActiveOrder).order.id }
             if(itemInList == null){
                 currentList.add(OrderAdapterItemActiveOrder(order))
+                Log.d("wowStatus","add new to list ${order.id}")
             }else{
-                (itemInList as OrderAdapterItemActiveOrder).order = order
+                var isSame = false
+                if(itemInList is OrderAdapterItemActiveOrder){
+                    Log.d("wowStatus","itemInList: ${itemInList.order.id} ${order.id}")
+                    Log.d("wowStatus","order.deliveryStatus: ${order.deliveryStatus} ${itemInList.order.deliveryStatus}")
+                    Log.d("wowStatus","order.preparationStatus: ${order.preparationStatus} ${itemInList.order.preparationStatus}")
+                    isSame = order.deliveryStatus == itemInList.order.deliveryStatus &&
+                            order.preparationStatus == itemInList.order.preparationStatus
+                    Log.d("wowStatus","isSame: $isSame ${order.id}")
+                    if(!isSame){
+                            currentList.remove(itemInList)
+                        currentList.add(OrderAdapterItemActiveOrder(order))
+//                        (itemInList as OrderAdapterItemActiveOrder).order = order
+                    }
+                }
             }
         }
     }
-
-
-//    private fun updateActiveOrders(newData: List<Order>) {
-//        val currentList = orderListData[SECTION_ACTIVE]
-//        currentList?.forEach { item ->
-//            item as OrderAdapterItemActiveOrder
-//            var adapterOrder = item.order
-//            newData.forEach {
-//                if(it.id == adapterOrder.id){
-//                    adapterOrder = it
-//                }
-//            }
-//        }
-//    }
 
     private fun updateListData() {
         val finalList = mutableListOf<OrderHistoryBaseItem>()
         orderListData[SECTION_ACTIVE]?.let {
             finalList.addAll(it)
-            startSilentUpdate()
         }
         orderListData[SECTION_ARCHIVE]?.let {
             finalList.addAll(it)
