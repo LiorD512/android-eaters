@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.databinding.SingleTimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.DeliveryDates
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -115,6 +116,8 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
             deliveryDates?.let{
                 timePickerTimePicker.setDatesByDeliveryDates(it)
                 timePickerAsapBtn.visibility = View.GONE
+                timePickerSubtitle.visibility = View.VISIBLE
+                timePickerSubtitle.text = DateUtils.parseDateToFullDayDate(it[0].from)
             }
 
             daysFromNow?.let{

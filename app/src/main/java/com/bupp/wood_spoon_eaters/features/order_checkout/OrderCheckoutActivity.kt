@@ -24,7 +24,7 @@ class OrderCheckoutActivity : AppCompatActivity() {
     private val startAddressChooserForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         Log.d(NewOrderActivity.TAG, "Activity For Result - startAddressChooserForResult")
         if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
+            viewModel.onLocationChanged()
         }
     }
 

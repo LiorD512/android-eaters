@@ -122,7 +122,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                     singleOrderDetailsHeader.setTitle("Home chef $firstName")
                 }
                 deliveryAddress?.apply{
-                    singleOrderDetailsLocation.updateDeliveryFullDetails(this)
+                    singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }
                 singleOrderDetailsStatus.updateDeliveryTimeUi(status ?: "N/A")
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")

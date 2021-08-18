@@ -1,7 +1,9 @@
 package com.bupp.wood_spoon_eaters.views.ws_range_time_picker
 
 import android.annotation.SuppressLint
+import android.view.Gravity.CENTER
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -36,6 +38,11 @@ class WSTimePickerStringAdapter :
             }
             data.second?.let{
                 cookingSlotDate.text = it
+
+                if(data.first == null){
+                    cookingSlotName.visibility = View.GONE
+                    cookingSlotDate.gravity = CENTER
+                }
             }
         }
     }

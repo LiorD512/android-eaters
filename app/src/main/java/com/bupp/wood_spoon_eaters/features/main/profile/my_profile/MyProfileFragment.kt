@@ -136,7 +136,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
         })
         mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.myProfileFragAddress.updateDeliveryFullDetails(it.address)
+            binding.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
             binding.myProfileFragHeightCorrection.isVisible = isVisible

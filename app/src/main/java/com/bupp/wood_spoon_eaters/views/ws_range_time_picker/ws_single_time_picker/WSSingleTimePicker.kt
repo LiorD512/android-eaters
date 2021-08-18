@@ -107,9 +107,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         datesList.clear()
         stringPair.clear()
         deliveryDates.let {
-            it.forEach { date ->
-                datesList.add(date.from)
-                stringPair.add(Pair(DateUtils.parseDateToFullDayDate(date.from), DateUtils.parseDateToStartToEnd(date.from, date.to)))
+            it.forEachIndexed { index, deliveryDates ->
+                datesList.add(deliveryDates.from)
+                val prefix = "ASAP"
+                val isNow = DateUtils.isToday(deliveryDates.from) && index == 0
+                var timeRangeStr = DateUtils.parseDateToStartToEnd(deliveryDates.from, deliveryDates.to)
+                if(isNow){
+                    timeRangeStr = "$prefix ($timeRangeStr)"
+                }
+                stringPair.add(Pair(null, timeRangeStr))
             }
         }
         wsTimePickerCustomAdapter?.submitList(stringPair)

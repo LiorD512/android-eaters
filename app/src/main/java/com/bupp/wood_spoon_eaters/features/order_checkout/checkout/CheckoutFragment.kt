@@ -181,7 +181,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onTimerPickerChange() {
-        viewModel.onDeliveyTimeChanged()
+        viewModel.onDeliveryTimeChanged()
 //        mainViewModel.refreshFullDish()
     }
 
@@ -219,7 +219,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 if (!it.orderItems.isNullOrEmpty()) {
                     var cook = it.restaurant
 
-                    checkoutFragDeliveryAddress.updateDeliveryFullDetails(it.deliveryAddress)
+                    checkoutFragDeliveryAddress.updateDeliveryAddressFullDetails(it.deliveryAddress)
 
 //                    if (it.estDeliveryTime != null) {
 //                        val time = DateUtils.parseDateToDayDateAndTime(it.estDeliveryTime)

@@ -188,7 +188,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         return true
     }
 
-    fun onDeliveyTimeChanged() {
+    fun onDeliveryTimeChanged() {
         viewModelScope.launch {
             val result = cartManager.updateOrderDeliveryParam()
             result?.let {
