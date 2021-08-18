@@ -138,9 +138,7 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
     override fun onMapReady(googleMap: GoogleMap?) {
         if(mMap == null){
             mMap = googleMap
-            mMap?.uiSettings?.isScrollGesturesEnabled = false
-            mMap?.uiSettings?.isZoomControlsEnabled = false
-
+            mMap?.uiSettings?.setAllGesturesEnabled(false)
             try {
                 // Customise the styling of the base map using a JSON object defined
                 // in a raw resource file.

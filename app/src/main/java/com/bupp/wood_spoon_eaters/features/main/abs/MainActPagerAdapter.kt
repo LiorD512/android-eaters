@@ -18,13 +18,13 @@ class MainActPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
             0 -> {
                 FeedFragment()
             }
+//            1 -> {
+//                SearchFragment()
+//            }
             1 -> {
-                SearchFragment()
-            }
-            2 -> {
                 OrdersHistoryFragment()
             }
-            3 -> {
+            2 -> {
                 MyProfileFragment()
             }
             else -> {
@@ -34,7 +34,7 @@ class MainActPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     }
 
     companion object {
-        const val NUM_PAGES = 4
+        const val NUM_PAGES = 3
         const val TAG = "wowMainActPagerAdapter"
     }
 }

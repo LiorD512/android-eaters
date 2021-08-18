@@ -7,17 +7,22 @@ sealed class OrderHistoryBaseItem(
 )
 
 enum class OrderHistoryViewType{
+    SKELETON,
     ACTIVE_ORDER,
     TITLE,
     ORDER
 }
 
+data class OrderAdapterItemSkeleton(
+    val id: Long? = null
+): OrderHistoryBaseItem(OrderHistoryViewType.SKELETON)
+
 data class OrderAdapterItemActiveOrder(
-    val order: Order
+    var order: Order
 ): OrderHistoryBaseItem(OrderHistoryViewType.ACTIVE_ORDER)
 
 data class OrderAdapterItemOrder(
-    val order: Order
+    var order: Order
 ): OrderHistoryBaseItem(OrderHistoryViewType.ORDER)
 
 data class OrderAdapterItemTitle(

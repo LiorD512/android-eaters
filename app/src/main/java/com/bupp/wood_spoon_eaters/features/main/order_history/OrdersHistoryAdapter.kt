@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.databinding.OrderHistoryItemSkeletonBinding
 import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryActiveOrderItemBinding
 import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryOrderItemBinding
 import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryTitleItemBinding
@@ -43,6 +44,10 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
                 val binding = OrdersHistoryActiveOrderItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 ActiveOrderItemViewHolder(binding)
             }
+            OrderHistoryViewType.SKELETON.ordinal -> {
+                val binding = OrderHistoryItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                SkeletonItemViewHolder(binding)
+            }
             else -> { //OrderHistoryViewType.TITLE
                 val binding = OrdersHistoryTitleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 OrderHistoryTitleViewHolder(binding)
@@ -53,6 +58,9 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (item) {
+            is OrderAdapterItemSkeleton -> {
+                holder as SkeletonItemViewHolder
+            }
             is OrderAdapterItemTitle -> {
                 holder as OrderHistoryTitleViewHolder
                 holder.bindItem(item)
@@ -78,6 +86,10 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         override fun areContentsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
             return oldItem == newItem
         }
+    }
+
+    inner class SkeletonItemViewHolder(val binding: OrderHistoryItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root) {
+
     }
 
     inner class OrderItemViewHolder(val binding: OrdersHistoryOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -117,15 +129,15 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         fun bindItem(data: OrderAdapterItemActiveOrder) {
             val order = data.order
 
-            MapSyncUtil(context).sync(object: MapSyncUtil.MapSyncListener{
-                override fun onBitmapReady(bitmap: Bitmap?) {
-                    Log.d("wowOrderMap","bitmap: $bitmap")
-                    Glide.with(context).load(bitmap).into(mapContainer)
-//                    mapContainer.setImageBitmap(bitmap)
-                }
-
-            }, order)
+//            val url = MapSyncUtil().getMapImage(order)
 //            MapSyncUtil.initMap(context, mapContainer, context.frag)
+
+            val lat = order.deliveryAddress?.lat
+            val lng = order.deliveryAddress?.lng
+
+            val url = "http://maps.google.com/maps/api/staticmap?center=$lat,$lng&zoom=15&size=200x200&sensor=false&key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
+
+            Glide.with(context).load(url).into(mapContainer)
 
             title.text = order.restaurant?.getFullName() ?: ""
             val orderState = order.getOrderState()
