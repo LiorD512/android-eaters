@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FavoriteBtnViewModel: KoinComponent {
+class FavoriteBtnViewModelOld: KoinComponent {
 
     var listener: FavVMListener? = null
     interface FavVMListener{

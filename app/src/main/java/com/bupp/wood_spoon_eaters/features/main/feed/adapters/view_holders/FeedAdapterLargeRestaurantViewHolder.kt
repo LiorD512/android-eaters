@@ -27,8 +27,8 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
-                feedRestaurantItemRating.text = restaurant.avgRating
-                feedRestaurantItemRating.isVisible = restaurant.avgRating != "0.0"
+                feedRestaurantItemRating.text = restaurant.avgRating.toString()
+                feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0.0 > 0
 
                 adapter.setParentItemPosition(parentAdapterPosition)
 

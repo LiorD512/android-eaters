@@ -394,7 +394,19 @@ class RestaurantPageViewModel(
     fun shouldShowCartBtn(restaurantId: Long): Boolean {
         return  restaurantId == currentRestaurantId
     }
-    
+
+    fun addToFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            restaurantRepository.likeCook(currentRestaurantId)
+        }
+    }
+
+    fun removeFromFavoriteClick() {
+        viewModelScope.launch(Dispatchers.IO) {
+            restaurantRepository.unlikeCook(currentRestaurantId)
+        }
+    }
+
     companion object {
         const val TAG = "wowRestaurantPageVM"
     }

@@ -76,7 +76,7 @@ data class FeedRestaurantSection(
     @Json(name = "chef_id") val chefId: Long?,
     @Json(name = "chef_thumbnail") val chefThumbnail: WSImage?,
     @Json(name = "chef_cover") val chefCover: WSImage?,
-    @Json(name = "avg_rating") val avgRating: String?,
+    @Json(name = "avg_rating") val avgRating: Double?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
     fun toRestaurantInitParams(): RestaurantInitParams {
         return RestaurantInitParams(

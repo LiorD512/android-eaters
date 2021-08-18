@@ -87,6 +87,12 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null
     ): ServerResponse<Restaurant>
 
+    //cook likes
+    @POST("cooks/{cook_id}/likes")
+    suspend fun likeCook(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Any>
+
+    @DELETE("cooks/{cook_id}/likes")
+    suspend fun unlikeCook(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Any>
 
     @FormUrlEncoded
     @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
@@ -231,6 +237,7 @@ interface ApiService {
 
     @DELETE("dishes/{dish_id}/likes")
     fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Any>>
+
 
     //Reports
 

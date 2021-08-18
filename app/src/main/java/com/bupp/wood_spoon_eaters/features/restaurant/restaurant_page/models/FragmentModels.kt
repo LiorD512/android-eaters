@@ -12,7 +12,7 @@ data class RestaurantInitParams(
     var restaurantId: Long?,
     var chefThumbnail: WSImage?,
     var coverPhoto: WSImage?,
-    var rating: String?,
+    var rating: Double?,
     var restaurantName: String?,
     var chefName: String?,
     var isFavorite: Boolean
