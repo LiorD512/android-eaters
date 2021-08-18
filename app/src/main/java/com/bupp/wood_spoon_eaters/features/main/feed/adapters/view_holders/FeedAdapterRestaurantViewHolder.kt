@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
 import android.content.Context
 import android.util.Log
-import android.view.Gravity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.bumptech.glide.Glide
@@ -10,7 +10,10 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedRestaurantDishPagerAdapter
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.FeedAdapterRestaurant
+import com.bupp.wood_spoon_eaters.model.FeedRestaurantItemTypeDish
+import com.bupp.wood_spoon_eaters.model.FeedRestaurantSection
+import com.bupp.wood_spoon_eaters.model.FeedRestaurantSectionItem
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
@@ -35,6 +38,7 @@ class FeedAdapterRestaurantViewHolder(
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
+                feedRestaurantItemRating.isVisible = restaurant.avgRating != "0.0"
 
                 adapter.setParentItemPosition(parentAdapterPosition)
 
@@ -42,7 +46,7 @@ class FeedAdapterRestaurantViewHolder(
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
                         object : SnapOnScrollListener.OnSnapPositionChangeListener {
                             override fun onSnapPositionChange(position: Int) {
-                                if(absoluteAdapterPosition == parentAdapterPosition){
+                                if (absoluteAdapterPosition == parentAdapterPosition){
                                     //todo - this method id been called for recycled items as well - need fix when have time
                                     handleArrows(position, it.size, binding)
                                 }

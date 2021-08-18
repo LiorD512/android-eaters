@@ -21,6 +21,8 @@ class RestaurantPageViewModel(
     private val timeManager: DeliveryTimeManager,
     private val cartManager: CartManager,
 ) : ViewModel() {
+    var currentRestaurantId: Long = -1
+
     var currentCookingSlot: CookingSlot? = null
     val currentCookingSlotData = MutableLiveData<CookingSlot>()
 
@@ -46,6 +48,7 @@ class RestaurantPageViewModel(
     val progressData = ProgressData()
 
     fun handleInitialParamData(params: RestaurantInitParams) {
+        currentRestaurantId = params.restaurantId ?: -1
         initialParamData.postValue(params)
         initRestaurantFullData(params.restaurantId)
     }
@@ -359,13 +362,13 @@ class RestaurantPageViewModel(
 //        updateFloatingCartButtonUi(order)
     }
 
-    private fun updateFloatingCartButtonUi(order: Order?) {
-        cartManager.updateFloatingCartBtn(order)
-    }
-
-    private fun refreshFloatingCartButtonUi() {
-        cartManager.refreshFloatingCartBtn()
-    }
+//    private fun updateFloatingCartButtonUi(order: Order?) {
+//        cartManager.updateFloatingCartBtn(order)
+//    }
+//
+//    private fun refreshFloatingCartButtonUi() {
+//        cartManager.refreshFloatingCartBtn()
+//    }
 
     fun onPerformClearCart() {
         cartManager.onCartCleared()
@@ -388,7 +391,10 @@ class RestaurantPageViewModel(
         return result?.cookingSlots?.find { it.id == cookingSlotId }
     }
 
-
+    fun shouldShowCartBtn(restaurantId: Long): Boolean {
+        return  restaurantId == currentRestaurantId
+    }
+    
     companion object {
         const val TAG = "wowRestaurantPageVM"
     }

@@ -34,7 +34,7 @@ class CartManager(
     private val wsErrorEvent = LiveEventData<String>()
     fun getWsErrorEvent() = wsErrorEvent
 
-    data class FloatingCartEvent(val restaurantName: String, val allOrderItemsQuantity: Int)
+    data class FloatingCartEvent(val restaurantId: Long, val restaurantName: String, val allOrderItemsQuantity: Int)
 
     private val floatingCartBtnEvent = MutableLiveData<FloatingCartEvent>()
     fun getFloatingCartBtnEvent() = floatingCartBtnEvent
@@ -331,6 +331,10 @@ class CartManager(
         return null
     }
 
+    fun getCurrentRestaurantId():Long {
+        return currentOrderResponse?.restaurant?.id ?: -1
+    }
+
     /**
      * this function returns current order other available cooking slots
      */
@@ -449,15 +453,15 @@ class CartManager(
     }
 
 
-    fun updateFloatingCartBtn(order: Order?) {
+    private fun updateFloatingCartBtn(order: Order?) {
         Log.d("orderFlow - cartManager", "updateFloatingCartBtn: ${order?.getAllOrderItemsQuantity()}")
-        floatingCartBtnEvent.postValue(FloatingCartEvent(order?.restaurant?.restaurantName ?: "", order?.getAllOrderItemsQuantity() ?: 0))
+        floatingCartBtnEvent.postValue(FloatingCartEvent(order?.restaurant?.id ?: -1,order?.restaurant?.restaurantName ?: "", order?.getAllOrderItemsQuantity() ?: 0))
     }
 
     fun refreshFloatingCartBtn() {
         currentOrderResponse.let {
             Log.d("orderFlow - cartManager", "refreshFloatingCartBtn quantity: ${it?.getAllOrderItemsQuantity() ?: 0}")
-            floatingCartBtnEvent.postValue(FloatingCartEvent(it?.restaurant?.restaurantName ?: "", it?.getAllOrderItemsQuantity() ?: 0))
+            floatingCartBtnEvent.postValue(FloatingCartEvent(it?.restaurant?.id ?: -1,it?.restaurant?.restaurantName ?: "", it?.getAllOrderItemsQuantity() ?: 0))
         }
     }
 

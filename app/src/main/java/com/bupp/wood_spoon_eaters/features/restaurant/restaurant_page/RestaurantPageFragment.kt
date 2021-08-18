@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
@@ -47,7 +48,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
-    private var isAdapterInitialized = false
 
     var adapterDishes: DishesMainAdapter? = null
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
@@ -55,6 +55,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navArgs: RestaurantPageFragmentArgs by navArgs()
+        viewModel.handleInitialParamData(navArgs.extras)
         Log.d("orderFlow - rest", "onViewCreated")
 
         initUi()
@@ -120,11 +122,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun initObservers() {
-        mainViewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let { params ->
-                viewModel.handleInitialParamData(params)
-            }
-        })
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
         })
@@ -164,7 +161,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         uiChange?.let {
             with(binding.restaurantMainListLayout) {
                 //delivery dates tabLayout
-                if(uiChange.forceTabChnage){
+                if (uiChange.forceTabChnage) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
                 }
 
@@ -183,7 +180,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
         event?.let {
-            binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            if (viewModel.shouldShowCartBtn(event.restaurantId)) {
+                binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            } else {
+                binding.restaurantFragFloatingCartBtn.hide()
+            }
         }
     }
 

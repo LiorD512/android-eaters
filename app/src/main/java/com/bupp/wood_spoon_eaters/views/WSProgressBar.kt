@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.airbnb.lottie.LottieDrawable
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WoodspoonProgressBarBinding
@@ -38,17 +39,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun show() {
         Log.d(TAG, "pb - show called")
 //        if (!binding.progressBarLayoutLottie.isAnimating) {
-            pendingShow = false
-            Log.d(TAG, "pb - show action")
+        pendingShow = false
+        Log.d(TAG, "pb - show action")
 //            binding.progressBarLayoutLottie.visibility = View.VISIBLE
 
-            val imageFadeIn = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 0f, 1f)
-            imageFadeIn.duration = DURATION
-
-            showAnimationSet = AnimatorSet()
-            showAnimationSet?.play(imageFadeIn)
-            showAnimationSet?.start()
-
+        val imageFadeIn = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 0f, 1f)
+        imageFadeIn.duration = DURATION
+        isVisible = true
+        showAnimationSet = AnimatorSet()
+        showAnimationSet?.play(imageFadeIn)
+        showAnimationSet?.start()
 
 
 //            showAnimationSet?.addListener(object : Animator.AnimatorListener {
@@ -73,11 +73,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 //
 //            })
 
-            binding.progressBarLayout.isClickable = true
-            binding.progressBarLayoutLottie.setAnimation("dish_loader.json")
-            binding.progressBarLayoutLottie.repeatCount = LottieDrawable.INFINITE
-            binding.progressBarLayoutLottie.playAnimation()
-            binding.progressBarLayoutLottie.enableMergePathsForKitKatAndAbove(true)
+        binding.progressBarLayout.isClickable = true
+        binding.progressBarLayoutLottie.setAnimation("dish_loader.json")
+        binding.progressBarLayoutLottie.repeatCount = LottieDrawable.INFINITE
+        binding.progressBarLayoutLottie.playAnimation()
+        binding.progressBarLayoutLottie.enableMergePathsForKitKatAndAbove(true)
 
 //        }
 //        else {
@@ -92,6 +92,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         pendingHide = false
         Log.d(TAG, "pb - hide action")
 //        binding.progressBarLayoutLottie.visibility = View.GONE
+        isVisible = false
         binding.progressBarLayoutLottie.cancelAnimation()
 
         val imageFadeOut = ObjectAnimator.ofFloat(binding.progressBarLayout, "alpha", 1f, 0f)

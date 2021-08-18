@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
 import android.content.Context
 import android.util.Log
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
@@ -27,6 +28,7 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating
+                feedRestaurantItemRating.isVisible = restaurant.avgRating != "0.0"
 
                 adapter.setParentItemPosition(parentAdapterPosition)
 

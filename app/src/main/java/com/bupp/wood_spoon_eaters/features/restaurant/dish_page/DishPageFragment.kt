@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
@@ -31,8 +32,6 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener {
 
     private var binding: FragmentDishPageBinding? = null
-
-//    private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<DishPageViewModel>()
 
     var availableTimesAdapter: DishAvailabilityAdapter? = null
@@ -96,7 +95,10 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         viewModel.userRequestData.observe(viewLifecycleOwner, {
             handleUserRequestData(it)
         })
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        viewModel.progressData.observe(viewLifecycleOwner,{
+            (activity as RestaurantActivity).handleProgressBar(it)
+        })
+        viewModel.skeletonProgressData.observe(viewLifecycleOwner, {
             handleSkeleton(it)
         })
         viewModel.clearCartEvent.observe(viewLifecycleOwner, {
@@ -114,6 +116,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+
     }
 
     private fun handleCounterBtnsUi(counterBtnState: DishPageViewModel.CounterBtnState?) {
