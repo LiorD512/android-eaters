@@ -121,6 +121,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         if(isAfterPurchase!!){
             showRateTheAppDialog()
             viewModel.checkForActiveOrder()
+            viewModel.forceFeedRefresh()
             refreshActiveCampaigns()
 
 //            viewModel.refreshFloatingCartBtn()
@@ -650,6 +651,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     override fun onBackPressed() {
+        super.onBackPressed()
 //        when (currentFragmentTag) {
 //            Constants.ADD_NEW_ADDRESS_TAG -> {
 //                when (lastFragmentTag) {

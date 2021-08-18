@@ -61,6 +61,7 @@ class MainViewModel(
     val campaignLiveData = campaignManager.getCampaignLiveData()
 
     val startRestaurantActivity = MutableLiveData<RestaurantInitParams>()
+    val forceFeedRefresh = MutableLiveData<Boolean>()
 //    fun checkCampaignForFeed() {
 //        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)
 //    }
@@ -447,6 +448,9 @@ class MainViewModel(
         startRestaurantActivity.postValue(restaurantInitParams)
     }
 
+    fun forceFeedRefresh() {
+        forceFeedRefresh.postValue(true)
+    }
 
 
 }

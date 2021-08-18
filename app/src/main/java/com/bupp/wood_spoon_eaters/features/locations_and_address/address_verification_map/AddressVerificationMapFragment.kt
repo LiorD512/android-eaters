@@ -206,6 +206,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             val builder = LatLngBounds.Builder()
 
             googleMap?.clear()
+            googleMap?.uiSettings?.setAllGesturesEnabled(false)
 
             val chefLat = curOrderData.restaurant?.pickupAddress?.lat
             val chefLng = curOrderData.restaurant?.pickupAddress?.lng

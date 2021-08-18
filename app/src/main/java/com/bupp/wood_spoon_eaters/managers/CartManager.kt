@@ -365,7 +365,7 @@ class CartManager(
                     /**
                      * when deliver_at is null - it means no change of delivery time made by user.
                      */
-                    if(DateUtils.isNowInRange(firstDeliveryDate.from, firstDeliveryDate.to)){
+                    if(DateUtils.isToday(firstDeliveryDate.from)){
                         Log.d("orderFlowTime", "is now")
                         deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from)})")
                     }else{

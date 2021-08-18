@@ -1,19 +1,21 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
+//import com.bupp.wood_spoon_eaters.model.Report
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.model.Order
-//import com.bupp.wood_spoon_eaters.model.Report
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager) : ViewModel() {
 
+    private var isUpdating: Boolean = false
+    private var refreshRepeatedJob: Job? = null
     val TAG = "wowOrderHistoryVM"
 
     private val orderListData: MutableMap<Int, MutableList<OrderHistoryBaseItem>> = mutableMapOf()//add skeleton ads default here
@@ -21,7 +23,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     val orderLiveData = MutableLiveData<List<OrderHistoryBaseItem>>()
 
 
-    fun initList(){
+    fun initList() {
         orderListData.put(SECTION_ACTIVE, mutableListOf<OrderHistoryBaseItem>())
         orderListData.put(SECTION_ARCHIVE, mutableListOf<OrderHistoryBaseItem>())
     }
@@ -56,13 +58,43 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
 
     private fun arrangeData() {
         val finalList = mutableListOf<OrderHistoryBaseItem>()
-        orderListData[SECTION_ACTIVE]?.let{
+        orderListData[SECTION_ACTIVE]?.let {
             finalList.addAll(it)
+            startSilentUpdate()
         }
-        orderListData[SECTION_ARCHIVE]?.let{
+        orderListData[SECTION_ARCHIVE]?.let {
             finalList.addAll(it)
         }
         orderLiveData.postValue(finalList)
+    }
+
+    private fun repeatRequest(): Job {
+        return viewModelScope.launch {
+            while (isActive) {
+                //do your request
+                Log.d(TAG,"fetching FromServer")
+                getActiveOrders()
+                getArchivedOrders()
+
+                delay(10000)
+            }
+        }
+    }
+
+    fun startSilentUpdate() {
+        if(refreshRepeatedJob == null){
+            refreshRepeatedJob = repeatRequest()
+        }
+    }
+
+    private fun endUpdates() {
+        refreshRepeatedJob?.cancel()
+    }
+
+    override fun onCleared() {
+        Log.d(TAG,"onCleared")
+        endUpdates()
+        super.onCleared()
     }
 
     fun getActiveOrders() {

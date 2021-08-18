@@ -130,10 +130,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             cookingSlotList.add(currentCookingSlot)
             var cookingSlotName = dateAndName.second
             var cookingSlotDate = ""
-            if(DateUtils.isNowInRange(currentCookingSlot.orderFrom, currentCookingSlot.endsAt)){
+            if(DateUtils.isNowInRange(currentCookingSlot.startsAt, currentCookingSlot.endsAt)){
                 cookingSlotName = "Now"
             }
-            cookingSlotDate = "${DateUtils.parseDateToUsTime(currentCookingSlot.orderFrom)} - ${DateUtils.parseDateToUsTime(currentCookingSlot.endsAt)}"
+            cookingSlotDate = "${DateUtils.parseDateToUsTime(currentCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(currentCookingSlot.endsAt)}"
             stringPair.add(Pair(cookingSlotName, cookingSlotDate))
         }
         wsTimePickerCustomAdapter?.submitList(stringPair)

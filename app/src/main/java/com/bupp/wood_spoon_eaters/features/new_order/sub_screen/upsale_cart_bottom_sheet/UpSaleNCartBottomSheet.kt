@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Dialog
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -105,8 +106,15 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
 //            Log.d(TAG, "initial binding.floatingCartBtnLayout.height: ${binding.floatingCartBtnLayout.height}")
 //            Log.d(TAG, "initial defaultPeekHeight: ${defaultPeekHeight}")
-//            Log.d(TAG, "initial height: $height")
+            Log.d(TAG, "initial height: $height")
 //            Log.d(TAG, "initial yPos: $yPos")
+            val resources: Resources = requireContext().resources
+            val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            val navigationBarHeight = if (resourceId > 0) {
+                resources.getDimensionPixelSize(resourceId)
+            } else
+                0
+            Log.d(TAG, "navigationBarHeight: $navigationBarHeight")
         }
     }
 

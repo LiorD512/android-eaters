@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
@@ -20,6 +21,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
@@ -158,6 +160,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.floatingBtnEvent.observe(viewLifecycleOwner, {
             handleFloatingBtnEvent(it)
         })
+        viewModel.favoriteEvent.observe(viewLifecycleOwner,{
+            handleFavoriteEvent(it)
+        })
+    }
+
+    private fun handleFavoriteEvent(event: LiveEvent<Boolean>?) {
+        event?.getContentIfNotHandled()?.let{ isSuccess->
+            if(!isSuccess)
+                binding.restHeaderFavorite.onFail()
+        }
     }
 
     private fun handleCookingSlotUiChange(uiChange: RestaurantPageViewModel.CookingSlotUi?) {
@@ -378,6 +390,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
         binding.restaurantFragHeightCorrection.isVisible = isShowing
     }
+
 
     override fun onAddToFavoriteClick() {
         viewModel.addToFavorite()

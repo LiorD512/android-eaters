@@ -75,7 +75,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         if (quantity > 0) {
             binding.wsFloatingBtnSubTitle.text = "$restaurantName"
             binding.wsFloatingBtnPrice.text = "$quantity"
-//            binding.floatingCartBtnLayout.visibility = View.VISIBLE
+            binding.floatingCartBtnLayout.visibility = View.VISIBLE
             if (!isShowing) {
                 show()
             }
@@ -88,13 +88,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         isShowing = true
         AnimationUtil().enterFromBottomWithAlpha(binding.floatingCartBtnLayout)
         listener?.onFloatingCartStateChanged(isShowing)
-//        binding.floatingCartBtnLayout.visibility = View.VISIBLE
+        binding.floatingCartBtnLayout.visibility = View.VISIBLE
     }
 
     fun hide() {
         isShowing = false
         AnimationUtil().exitToBottomWithAlpha(binding.floatingCartBtnLayout)
-//        binding.floatingCartBtnLayout.visibility = View.GONE
+        binding.floatingCartBtnLayout.visibility = View.GONE
         listener?.onFloatingCartStateChanged(false)
     }
 

@@ -118,6 +118,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
             binding.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
         })
+        mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner, {
+            viewModel.onPullToRefresh()
+        })
 //        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
 //            Log.d(TAG, "campaign: $it")
 //            mainViewModel.checkCampaignForFeed()

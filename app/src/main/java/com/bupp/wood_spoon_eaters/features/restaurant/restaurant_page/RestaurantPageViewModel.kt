@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
+import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRepoStatus.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import kotlinx.coroutines.Dispatchers
@@ -61,7 +62,7 @@ class RestaurantPageViewModel(
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
                 dishListLiveData.postValue(DishListData(dishListData))
                 val result = restaurantRepository.getRestaurant(restaurantId)
-                if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
+                if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
                         restaurantFullData.postValue(restaurant)
                         dishes = restaurant.dishes.associateBy({ it.id }, { it })
@@ -162,8 +163,8 @@ class RestaurantPageViewModel(
      */
     private fun getTimerPickerStr(selectedCookingSlot: CookingSlot?): String {
         selectedCookingSlot?.let {
-            val isNow = DateUtils.isNowInRange(selectedCookingSlot.orderFrom, selectedCookingSlot.endsAt)
-            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.orderFrom)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
+            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
+            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
             var uiStr = ""
             if (isNow) {
                 uiStr = "Now ($datesStr)"
@@ -395,15 +396,18 @@ class RestaurantPageViewModel(
         return  restaurantId == currentRestaurantId
     }
 
+    val favoriteEvent = LiveEventData<Boolean>()
     fun addToFavorite() {
         viewModelScope.launch(Dispatchers.IO) {
-            restaurantRepository.likeCook(currentRestaurantId)
+            val result = restaurantRepository.likeCook(currentRestaurantId)
+            favoriteEvent.postRawValue(result.type == SUCCESS)
         }
     }
 
     fun removeFromFavoriteClick() {
         viewModelScope.launch(Dispatchers.IO) {
-            restaurantRepository.unlikeCook(currentRestaurantId)
+            val result = restaurantRepository.unlikeCook(currentRestaurantId)
+            favoriteEvent.postRawValue(result.type == SUCCESS)
         }
     }
 

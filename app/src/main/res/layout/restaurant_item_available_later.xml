@@ -15,6 +15,6 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="19dp"
                 android:gravity="center"
-                android:text="Available Later"/>
+                android:text="Available at other times"/>
 
 </LinearLayout>
