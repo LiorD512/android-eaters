@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/floating_cart_btn_height"
         android:clickable="false"
-        android:visibility="gone"
+        android:alpha="0"
         tools:visibility="visible"
         android:id="@+id/floatingCartBtnLayout"
         android:background="@drawable/transparent_to_white_80_gradient">

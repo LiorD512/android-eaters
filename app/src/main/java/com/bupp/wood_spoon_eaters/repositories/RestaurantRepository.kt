@@ -44,6 +44,58 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         }
     }
 
+    suspend fun likeCook(cookId: Long): RestaurantResult {
+        val result = withContext(Dispatchers.IO) {
+            apiService.likeCook(cookId)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getRestaurant - NetworkError")
+                    RestaurantResult(RestaurantRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getRestaurant - GenericError")
+                    RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getRestaurant - Success")
+                    RestaurantResult(RestaurantRepoStatus.SUCCESS)
+                }
+                else -> {
+                    Log.d(TAG, "getRestaurant - wsError")
+                    RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+    suspend fun unlikeCook(cookId: Long): RestaurantResult {
+        val result = withContext(Dispatchers.IO) {
+            apiService.unlikeCook(cookId)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getRestaurant - NetworkError")
+                    RestaurantResult(RestaurantRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getRestaurant - GenericError")
+                    RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getRestaurant - Success")
+                    RestaurantResult(RestaurantRepoStatus.SUCCESS)
+                }
+                else -> {
+                    Log.d(TAG, "getRestaurant - wsError")
+                    RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
     companion object {
         const val TAG = "wowFeedRepo"
     }

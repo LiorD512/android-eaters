@@ -72,9 +72,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="23dp"
-                    android:layout_marginBottom="16dp"
                     android:paddingHorizontal="15.4dp"
-                    android:text="Delivery Timing" />
+                    android:text="Delivery Day" />
+
+
+            <TextView
+                    style="@style/LatoReg13LightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11.5dp"
+                    android:layout_marginBottom="19dp"
+                    android:paddingHorizontal="15.4dp"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/ic_delivery_man"
+                    android:text="Choose an exact delivery time at checkout" />
 
 
             <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -83,9 +94,9 @@
                     android:layout_height="wrap_content" />
 
             <LinearLayout
+                    android:id="@+id/restaurantTimePickerViewLayout"
                     android:animateLayoutChanges="true"
                     android:background="@drawable/grey_white_cornered_rag15_rect"
-                    android:id="@+id/restaurantTimePickerViewLayout"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
                     android:layout_marginTop="15dp"

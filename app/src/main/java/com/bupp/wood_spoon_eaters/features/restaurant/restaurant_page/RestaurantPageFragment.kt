@@ -2,12 +2,14 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
@@ -15,6 +17,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_re
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
@@ -41,13 +44,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener,
     ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener,
     WSFloatingButton.WSFloatingButtonListener,
+    FavoriteBtn.FavoriteBtnListener,
     UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
-    private var isAdapterInitialized = false
 
     var adapterDishes: DishesMainAdapter? = null
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
@@ -55,6 +58,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val navArgs: RestaurantPageFragmentArgs by navArgs()
+        viewModel.handleInitialParamData(navArgs.extras)
         Log.d("orderFlow - rest", "onViewCreated")
 
         initUi()
@@ -120,11 +125,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun initObservers() {
-        mainViewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let { params ->
-                viewModel.handleInitialParamData(params)
-            }
-        })
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
         })
@@ -164,7 +164,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         uiChange?.let {
             with(binding.restaurantMainListLayout) {
                 //delivery dates tabLayout
-                if(uiChange.forceTabChnage){
+                if (uiChange.forceTabChnage) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
                 }
 
@@ -183,7 +183,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
         event?.let {
-            binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            if (viewModel.shouldShowCartBtn(event.restaurantId)) {
+                binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            } else {
+                binding.restaurantFragFloatingCartBtn.hide()
+            }
         }
     }
 
@@ -249,7 +253,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderRestName.text = params.restaurantName
             restHeaderChefName.text = "by ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
-            rating.text = "${params.rating}"// (${cook.reviewCount} ratings)"
+            rating.text = "${params.rating}"
+            ratingLayout.isVisible = params.rating ?: 0.0 > 0
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "by ${params.chefName}"
@@ -264,6 +269,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             } else {
                 //show video icon
             }
+//            ratingCount.visibility = View.VISIBLE
+            ratingCount.text = "(${restaurant.reviewCount} ratings)"
+            restHeaderFavorite.setIsFavorite(restaurant.isFavorite)
+            restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
         }
         with(binding.restaurantMainListLayout) {
 
@@ -370,27 +379,35 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         binding.restaurantFragHeightCorrection.isVisible = isShowing
     }
 
+    override fun onAddToFavoriteClick() {
+        viewModel.addToFavorite()
+    }
+
+    override fun onRemoveFromFavoriteClick() {
+        viewModel.removeFromFavoriteClick()
+    }
+
     private var hasMotionScrolled = false
 
     override fun onResume() {
         super.onResume()
         if (hasMotionScrolled) {
-            binding.motionLayout.progress = 1F
+//            binding.motionLayout.progress = 1F
         }
 
     }
 
     override fun onPause() {
         super.onPause()
-        hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
+//        hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
     }
+
 
     override fun onDestroyView() {
         adapterDishes = null
         adapterCuisines = null
         super.onDestroyView()
     }
-
 
     companion object {
         private const val MOTION_TRANSITION_COMPLETED = 1F

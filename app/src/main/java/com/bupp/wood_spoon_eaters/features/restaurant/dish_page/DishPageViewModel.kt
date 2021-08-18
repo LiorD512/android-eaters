@@ -31,6 +31,7 @@ class DishPageViewModel(
     //this param indicates if the current menuItem is matching the selected cooking slot in parent
 
     val progressData = ProgressData()
+    val skeletonProgressData = ProgressData()
     val wsErrorEvent = cartManager.getWsErrorEvent()
 
     val menuItemData = MutableLiveData<MenuItem>()
@@ -106,7 +107,7 @@ class DishPageViewModel(
     private fun getFullDish(menuItemId: Long) {
         Log.d("orderFlow - dishPage","getFullDish")
         menuItemId.let {
-            progressData.startProgress()
+            skeletonProgressData.startProgress()
             viewModelScope.launch {
                 val fullDishResult = cartManager.getFullDish(it)
                 val fullDish = fullDishResult?.data
@@ -114,7 +115,7 @@ class DishPageViewModel(
                     dishFullData.postValue(it)
                     getUserRequestData(it.restaurant)
                 }
-                progressData.endProgress()
+                skeletonProgressData.endProgress()
             }
         }
     }
@@ -212,6 +213,7 @@ class DishPageViewModel(
                 }
                 if (isValid) {
                     viewModelScope.launch {
+                        progressData.startProgress()
                         cartManager.updateCurCookingSlotId(cookingSlotId)
                         val result = cartManager.addOrUpdateCart(quantity, it, note)
                         if (result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
@@ -220,6 +222,7 @@ class DishPageViewModel(
                         }else if(result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                             onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
                         }
+                        progressData.endProgress()
                     }
                 }else{
                     cartManager.setPendingRequestParams(cookingSlotId, quantity, dishId, note)

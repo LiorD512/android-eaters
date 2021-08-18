@@ -21,7 +21,7 @@
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/rating"/>
+                            motion:motionTarget="@+id/ratingMainLayout"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
@@ -107,7 +107,7 @@
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
-                android:id="@+id/rating"
+                android:id="@+id/ratingMainLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"

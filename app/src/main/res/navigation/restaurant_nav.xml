@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/restaurant_page_navigation"
-        app:startDestination="@id/restaurantPageFragment">
+        android:id="@+id/restaurant_page_navigation">
 
     <fragment
             android:id="@+id/restaurantPageFragment"
@@ -22,6 +21,9 @@
                     android:name="extras"
                     app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams" />
         </action>
+        <argument
+                android:name="extras"
+                app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams" />
     </fragment>
 
     <fragment

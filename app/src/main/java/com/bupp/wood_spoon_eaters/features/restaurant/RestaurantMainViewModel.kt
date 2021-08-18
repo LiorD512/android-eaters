@@ -12,17 +12,6 @@ import com.bupp.wood_spoon_eaters.model.MenuItem
 
 class RestaurantMainViewModel : ViewModel() {
 
-//    var currentRestaurant: RestaurantInitParams? = null
-    val restaurantInitParamsLiveData = LiveEventData<RestaurantInitParams>()
-    fun initExtras(restaurantInitParams: RestaurantInitParams?, customCartItem: CustomCartItem?) {
-        restaurantInitParams?.let{
-            restaurantInitParamsLiveData.postRawValue(it)
-        }
-        customCartItem?.let{
-            openDishPageWithOrderItem(it, true)
-        }
-    }
-
     enum class NavigationType{
         OPEN_DISH_PAGE,
         START_ORDER_CHECKOUT_ACTIVITY,

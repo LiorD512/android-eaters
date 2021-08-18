@@ -50,7 +50,7 @@
                     android:layout_margin="10.6dp"
                     app:imageSize="SMALL" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+            <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtnOld
                     android:id="@+id/singleDishInfoFavorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
