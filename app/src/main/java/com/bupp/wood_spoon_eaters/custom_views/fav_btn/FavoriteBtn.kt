@@ -12,27 +12,34 @@ import com.bupp.wood_spoon_eaters.databinding.FavoriteBtnBinding
 
 class FavoriteBtn @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr), FavoriteBtnViewModel.FavVMListener {
+    FrameLayout(context, attrs, defStyleAttr) {
 
-    var dishId: Long? = null
-    val viewModel = FavoriteBtnViewModel()
     var isFavSelected = false
+
+    var listener: FavoriteBtnListener? = null
+
+    interface FavoriteBtnListener {
+        fun onAddToFavoriteClick()
+        fun onRemoveFromFavoriteClick()
+    }
 
     private var binding: FavoriteBtnBinding = FavoriteBtnBinding.inflate(LayoutInflater.from(context), this, true)
 
-    init {
-        viewModel.setFavListener(this)
+    fun setIsFavorite(isFavorite: Boolean?) {
+        isFavorite?.let {
+            isFavSelected = isFavorite
+            binding.favBtn.isSelected = isFavorite
+        }
+    }
+
+    fun setClickListener(listener: FavoriteBtnListener) {
+        this.listener = listener
         binding.favBtn.setOnClickListener {
-            animateView()
             onClick()
         }
     }
 
-    fun setDishId(dishId: Long) {
-        this.dishId = dishId
-    }
-
-    override fun onFail() {
+    fun onFail() {
         //reverseBtnState
         isFavSelected = !isFavSelected
         updateUi()
@@ -40,19 +47,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
 
     private fun onClick() {
+        if (isFavSelected) {
+            listener?.onRemoveFromFavoriteClick()
+        } else {
+            listener?.onAddToFavoriteClick()
+        }
         animateView()
         updateUi()
-        viewModel.onClick(dishId, isFavSelected)
     }
 
     private fun animateView() {
         val anim = ScaleAnimation(
-            1f, 1.2f, // Start and end values for the X axis scaling
-            1f, 1.2f, // Start and end values for the Y axis scaling
+            1f, 1.1f, // Start and end values for the X axis scaling
+            1f, 1.1f, // Start and end values for the Y axis scaling
             Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
             Animation.RELATIVE_TO_SELF, 0.5f
         ) // Pivot point of Y scaling
-//        anim.fillAfter =  // Needed to keep the result of the animation
         anim.duration = 150
         anim.repeatMode = ScaleAnimation.REVERSE
         anim.interpolator = OvershootInterpolator()
@@ -63,13 +73,4 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         isFavSelected = !isFavSelected
         binding.favBtn.isSelected = isFavSelected
     }
-
-    fun setIsFav(isFavorite: Boolean?) {
-        isFavorite?.let{
-            isFavSelected = isFavorite
-            binding.favBtn.isSelected = isFavorite
-        }
-    }
-
-
 }

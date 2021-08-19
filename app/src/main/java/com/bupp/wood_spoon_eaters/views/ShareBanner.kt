@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.databinding.ShareBannerBinding
 import com.bupp.wood_spoon_eaters.model.Campaign
-import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
+//import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
 
 
 class ShareBanner @JvmOverloads
@@ -41,7 +41,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
         binding.customBannerLayout.visibility = View.VISIBLE
     }
-
 
 
 }

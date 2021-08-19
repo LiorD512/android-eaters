@@ -45,7 +45,7 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
             ratingsDialogDeliveryRating.text = "${ratings.deliveryRating}"
             ratingsDialogTasteRating.text = "${ratings.dishRating}"
 
-            ratings.comments?.let{
+            ratings.comments.let{
                 ratingsDialogDishesRecyclerView.layoutManager = LinearLayoutManager(context)
                 ratingsDialogDishesRecyclerView.addItemDecoration(RatingItemDecoration())
                 adapter = RatingsAdapter(requireContext(), ratings.comments)

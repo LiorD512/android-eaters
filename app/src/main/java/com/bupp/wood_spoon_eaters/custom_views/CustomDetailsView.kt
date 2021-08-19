@@ -158,7 +158,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.customDetailsViewSubtitle.text = input
     }
 
-    fun updateDeliveryDetails(input: String) {
+    fun updateDeliveryTimeUi(input: String) {
         binding.customDetailsViewTitle.text = "Delivery Time"
         binding.customDetailsViewSubtitle.text = input
     }
@@ -166,7 +166,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun handleAddressData(address: LocationManager.FinalAddressParam){
         when(address.addressType){
             LocationManager.AddressDataType.FULL_ADDRESS -> {
-                updateDeliveryFullDetails(address.address)
+                updateDeliveryAddressFullDetails(address.address)
             }
             LocationManager.AddressDataType.DEVICE_LOCATION -> {
                 updateSubTitle("Select an address")
@@ -179,7 +179,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun updateDeliveryFullDetails(address: Address?) {
+    fun updateDeliveryAddressFullDetails(address: Address?) {
         with(binding){
             address?.let {
                 val street1 = it.streetLine1?.let{"${it},"} ?: ""

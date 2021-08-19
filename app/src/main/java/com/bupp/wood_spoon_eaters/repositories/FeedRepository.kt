@@ -11,21 +11,27 @@ import kotlinx.coroutines.withContext
 class FeedRepository(private val apiService: FeedRepositoryImpl) {
 
 
+    private var lastFeedDataResult: FeedResult? = null
+
     data class ReviewResult(val type: FeedRepoStatus, val review: Review? = null)
     data class CookResult(val type: FeedRepoStatus, val cook: Cook? = null)
-    data class FeedRepoResult(val type: FeedRepoStatus, val feed: List<FeedAdapterItem>? = null)
+    data class FeedRepoResult(val type: FeedRepoStatus, val feed: List<FeedAdapterItem>? = null, val isLargeItems: Boolean = false)
     enum class FeedRepoStatus {
         EMPTY,
         SUCCESS,
+        HREF_SUCCESS,
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
     }
 
+    //todo - change this when server is ready
+    val isLargeItems = false
 
     @SuppressLint("LogNotTimber")
     suspend fun getFeed(feedRequest: FeedRequest): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
             apiService.getFeed(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
+//            apiService.getFeed(40.845381, -73.866364, null, feedRequest.timestamp)
         }
         result.let {
             return when (result) {
@@ -40,7 +46,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
                 is ResultHandler.Success -> {
                     Log.d(TAG, "getFeed - Success")
                     val feedData = processFeedData(result.value.data)
-                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData)
+                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
                 }
                 else -> {
                     Log.d(TAG, "getFeed - wsError")
@@ -50,25 +56,90 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
         }
     }
 
+    @SuppressLint("LogNotTimber")
+    suspend fun getFeedHref(href: String): FeedRepoResult {
+        val result = withContext(Dispatchers.IO) {
+            apiService.getHrefCollection(href)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getFeedHref - NetworkError")
+                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getFeedHref - GenericError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getFeedHref - Success")
+                    val feedData = processFeedHrefData(result.value.data, href)
+//                    val feedData = processFeedHrefData(emptyList(), href) //todo = check campaigns
+                    FeedRepoResult(FeedRepoStatus.HREF_SUCCESS, feedData, isLargeItems)
+                }
+                else -> {
+                    Log.d(TAG, "getFeed - wsError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEach { section ->
             section.title?.let {
                 feedData.add(FeedAdapterTitle(it))
             }
+            section.href?.let {
+                feedData.add(FeedAdapterHref(it))
+            }
             section.collections?.forEach { collectionItem ->
                 when (collectionItem) {
                     is FeedCampaignSection -> {
                         feedData.add(FeedAdapterCoupons(collectionItem))
                     }
+                    is FeedIsEmptySection -> {
+                        feedData.add(FeedAdapterEmptyFeed(collectionItem))
+                    }
+                    is FeedSingleEmptySection -> {
+                        feedData.add(FeedAdapterEmptySection(collectionItem))
+                    }
                     is FeedRestaurantSection -> {
-                        feedData.add(FeedAdapterRestaurant(collectionItem))
+                        if (isLargeItems) {
+                            feedData.add(FeedAdapterLargeRestaurant(collectionItem))
+                        } else {
+                            feedData.add(FeedAdapterRestaurant(collectionItem))
+                        }
                     }
                 }
             }
         }
+        lastFeedDataResult = feedResult
         return feedData
     }
+
+
+    private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
+        lastFeedDataResult?.sections?.forEachIndexed { index, section ->
+            section.href?.let {
+                if (it == href) {
+                    data?.let { data ->
+                        if(data.isEmpty()){
+                            //remove title incase Href data is empty
+                            lastFeedDataResult?.sections!![index].title = ""
+                        }
+                        section.href = null
+                        lastFeedDataResult?.sections!![index].collections = data.toMutableList()
+                    }
+                }
+
+            }
+        }
+        return processFeedData(lastFeedDataResult)
+    }
+
 
     suspend fun getCookById(cookId: Long, addressId: Long?, lat: Double?, lng: Double?): CookResult {
         val result = withContext(Dispatchers.IO) {

@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.custom_views.many_cooks_view.ManyCooksView
 import com.bupp.wood_spoon_eaters.databinding.SearchCuisineItemBinding
 import com.bupp.wood_spoon_eaters.databinding.SearchDishCooksItemBinding
 import com.bupp.wood_spoon_eaters.databinding.SearchDishItemBinding
+import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.CuisineLabel
 import com.bupp.wood_spoon_eaters.model.Dish
@@ -55,7 +56,8 @@ class SearchAdapter(val context: Context, val cuisineLabels: List<CuisineLabel>,
                 }
                 val dish: Dish = dishes[curPosition]
                 Glide.with(context).load(dish.thumbnail).into((holder as DishItemViewHolder).bkgImg)
-                (holder as DishItemViewHolder).cookImg.setImage(dish.cook?.thumbnail)
+//                GlideApp.with(context).load(dish.cook?.thumbnail?.url).into(cooki)
+                (holder as DishItemViewHolder).cookImg.setImage(dish.cook?.thumbnail?.url)
                 holder.name.text = dish.name
                 holder.cookName.text = "By ${dish.cook?.getFullName()}"
                 holder.rating.text = "${dish.rating}"

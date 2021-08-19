@@ -42,21 +42,20 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val orderItem = getItem(position).copy()
         holder as OrderItemViewHolder
-        holder.bindItem(context, orderItem)
+        holder.bindItem(orderItem)
     }
 
     class OrderItemViewHolder(view: OrderItemViewFeed2VerBinding) : RecyclerView.ViewHolder(view.root) {
-        private lateinit var adapter: IngredientsCheckoutAdapter
         private val priceView: TextView = view.orderItemPrice
         private val name: TextView = view.orderItemName
         private val counter: TextView = view.orderItemCounter
-        private val ingredientsList = view.orderItemIngredientsRecyclerView!!
+        private val note: TextView = view.orderItemNote
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(context: Context, orderItem: OrderItem){
+        fun bindItem(orderItem: OrderItem){
             val dish: Dish = orderItem.dish
 
-            counter.text = "${orderItem.quantity}X"
+            counter.text = "${orderItem.quantity}"
             name.text = "${dish.name} x${orderItem.quantity}"
 
             var price = 0.0
@@ -66,10 +65,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
             }
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
-
-            ingredientsList.layoutManager = LinearLayoutManager(context)
-            adapter = IngredientsCheckoutAdapter(context, listOfNotNull(orderItem.getRemovedIngredients(), orderItem.getNoteStr()))
-            ingredientsList.adapter = adapter
+            note.text = orderItem.getNoteStr()
         }
 
     }

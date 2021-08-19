@@ -44,7 +44,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
-                <com.bupp.wood_spoon_eaters.views.UserImageView
+                <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                         app:imageSize="SMALL"
                         android:id="@+id/searchDishItemUserImg"
                         android:layout_marginTop="7.7dp"
@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+                <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtnOld
                         android:id="@+id/searchDishItemFavorite"
                         android:layout_marginRight="7.7dp"
                         android:layout_marginBottom="7.7dp"

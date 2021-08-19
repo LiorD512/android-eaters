@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.TagViewItemBinding
-import com.bupp.wood_spoon_eaters.model.Tag
 
-class DishTagsViewAdapter: ListAdapter<Tag, RecyclerView.ViewHolder>(DiffCallback()) {
-
+class DishTagsViewAdapter: ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = TagViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,19 +27,19 @@ class DishTagsViewAdapter: ListAdapter<Tag, RecyclerView.ViewHolder>(DiffCallbac
     class TagItemViewHolder(view: TagViewItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val tagView: TextView = view.tagViewItem
 
-        fun bindItem(tag: Tag){
-            tagView.text = tag.text
+        fun bindItem(tag: String){
+            tagView.text = tag
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Tag>() {
+    class DiffCallback : DiffUtil.ItemCallback<String>() {
 
-        override fun areItemsTheSame(oldItem: Tag, newItem: Tag): Boolean {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: Tag, newItem: Tag): Boolean {
-            return oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
         }
     }
 }

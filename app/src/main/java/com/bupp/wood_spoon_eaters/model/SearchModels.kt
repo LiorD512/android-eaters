@@ -2,13 +2,11 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
-import com.google.gson.annotations.SerializedName
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
-import kotlin.collections.ArrayList
 
 @JsonClass(generateAdapter = true)
 data class SearchRequest(
@@ -99,7 +97,7 @@ data class Cook(
     @Json(name = "id") val id: Long,
     @Json(name = "first_name") val firstName: String,
     @Json(name = "last_name") val lastName: String,
-    @Json(name = "thumbnail") val thumbnail: String,
+    @Json(name = "thumbnail") val thumbnail: WSImage,
     @Json(name = "video") val video: String?,
     @Json(name = "profession") val profession: String?,
     @Json(name = "about") val about: String?,
@@ -127,7 +125,8 @@ data class Dish(
     @Json(name = "price") val price: Price?,
     @Json(name = "description") val description: String,
     @Json(name = "avg_rating") val rating: Double?,
-    @Json(name = "thumbnail") val thumbnail: String?,
+    @Json(name = "thumbnail") val thumbnail: WSImage?,
+    @Json(name = "video") val video:String?,
     @Json(name = "is_favorite") val isFavorite: Boolean?,
     @Json(name = "nationwide_shipping") val worldwide: Boolean?,
     @Json(name = "is_recurring") val isRecurring: Boolean?,

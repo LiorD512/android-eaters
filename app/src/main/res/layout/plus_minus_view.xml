@@ -16,10 +16,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <ImageButton
                     android:id="@+id/plusMinusMinus"
                     android:layout_gravity="center"
                     android:background="@drawable/plus_minus_minus_selector"
+                    android:scaleType="fitXY"
                     android:layout_width="31dp"
                     android:layout_height="31dp"/>
 
@@ -32,10 +33,11 @@
                     android:gravity="center"
                     android:text="0"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <ImageButton
                     android:id="@+id/plusMinusPlus"
                     android:layout_gravity="center"
                     android:background="@drawable/plus_minus_plus_selector"
+                    android:scaleType="fitXY"
                     android:layout_width="31dp"
                     android:layout_height="31dp"/>
 

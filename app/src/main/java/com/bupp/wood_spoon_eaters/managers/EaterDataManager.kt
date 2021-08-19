@@ -53,6 +53,11 @@ class EaterDataManager(
         locationManager.forceStopLocationUpdates(true)
     }
 
+    fun rollBackToPreviousAddress() {
+        locationManager.rollBackToPreviousAddress()
+    }
+
+
     /////////////////////////////////////////
     ///////////      FEED         ///////////
     /////////////////////////////////////////
@@ -70,7 +75,7 @@ class EaterDataManager(
     fun getTraceableOrders() = traceableOrders
     private val traceableOrders = MutableLiveData<List<Order>?>()
 
-    suspend fun checkForTraceableOrders() {
+    suspend fun checkForTraceableOrders(): List<Order>? {
         val result = eaterDataRepository.getTraceableOrders()
         when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_SUCCESS -> {
@@ -78,6 +83,7 @@ class EaterDataManager(
                     Log.d(TAG, "checkForTraceableOrders - success")
                     traceableOrdersList = it
                     traceableOrders.postValue(it)
+                    return traceableOrdersList
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_FAILED -> {
@@ -88,9 +94,9 @@ class EaterDataManager(
 
             }
             else -> {
-
             }
         }
+        return null
     }
 
     suspend fun cancelOrder(orderId: Long?, note: String?): EaterDataRepository.EaterDataRepoResult<Any>? {
@@ -229,6 +235,12 @@ class EaterDataManager(
     fun logUxCamEvent(eventName: String, params: Map<String, String>? = null) {
         eventsManager.logEvent(eventName, params)
     }
+
+    fun getCartAddressId(): Long? {
+        return getLastChosenAddress()?.id
+    }
+
+
 
 
     companion object {

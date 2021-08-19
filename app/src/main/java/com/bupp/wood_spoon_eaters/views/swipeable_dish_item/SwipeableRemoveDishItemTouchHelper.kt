@@ -1,22 +1,22 @@
 package com.bupp.wood_spoon_eaters.views.swipeable_dish_item
 
-import android.annotation.SuppressLint
 import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.util.Log
-import android.view.MotionEvent
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet.UpSaleAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 
-abstract class SwipeableRemoveDishItemTouchHelper() : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+class SwipeableRemoveDishItemTouchHelper() :
+    ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
+    var adapter: SwipeableAdapter<*>? = null
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        adapter?.updateItemQuantityRemoved(viewHolder.absoluteAdapterPosition)
+        adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+    }
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        Log.d(TAG, "onMove")
         return false
     }
 
@@ -24,15 +24,24 @@ abstract class SwipeableRemoveDishItemTouchHelper() : ItemTouchHelper.SimpleCall
         c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
         dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
     ) {
-//        Log.d(TAG, "onChildDraw: $dX state: $actionState, isActive: $isCurrentlyActive")
         val reachedMaxSwipe = dX < SWIPE_THRESHOLD
         if (!reachedMaxSwipe) {
             super.onChildDraw(c, recyclerView, viewHolder, dX / 3, dY, actionState, isCurrentlyActive)
         }
     }
 
+    override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        if(viewHolder is SwipeableBaseItemViewHolder){
+            val isSwipeable = viewHolder.isSwipeable
+            if (isSwipeable) {
+                return super.getSwipeDirs(recyclerView, viewHolder)
+            }
+        }
+        return 0
+    }
+
     companion object {
         const val TAG = "wowSwipeableItemHelper"
-        const val SWIPE_THRESHOLD = -600
+        const val SWIPE_THRESHOLD = -800
     }
 }

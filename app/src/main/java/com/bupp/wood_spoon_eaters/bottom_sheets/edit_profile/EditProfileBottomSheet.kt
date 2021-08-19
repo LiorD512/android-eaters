@@ -15,7 +15,7 @@ import com.bupp.wood_spoon_eaters.databinding.EditProfileBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageView.UserImageViewListener, HeaderView.HeaderViewListener{
+class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageViewListener, HeaderView.HeaderViewListener{
 
 
     val binding: EditProfileBottomSheetBinding by viewBinding()

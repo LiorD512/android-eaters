@@ -24,19 +24,21 @@ import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileViewModel
-import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeeAndTaxViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.promo_code.PromoCodeViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.SingleDishInfoViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_ingredients.SingleDishIngredientViewModel
-import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
@@ -61,6 +63,8 @@ val appModule = module {
     single { FeedRepository(get()) }
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
+    single { RestaurantRepository(get())}
+    single { RestaurantRepositoryImpl(get())}
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get()) }
@@ -79,7 +83,8 @@ val appModule = module {
     single { MediaUploadManager(get(), get()) }
     single { OrderManager(get(), get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
-    single { CartManager(get(), get(), get(), get(), get()) }
+    single { OldCartManager(get(), get(), get(), get(), get()) }
+    single { CartManager(get(), get(), get(), get()) }
     single { SearchManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get(), get()) }
 
@@ -112,10 +117,12 @@ val appModule = module {
     viewModel { SingleDishIngredientViewModel(get()) }
     viewModel { CheckoutViewModel(get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get()) }
+    viewModel { FeesAndTaxViewModel(get()) }
 
+    viewModel { UpSaleNCartViewModel(get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { CookProfileViewModel(get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get()) }
@@ -123,18 +130,17 @@ val appModule = module {
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
     viewModel { FeedLoaderViewModel(get()) }
-    viewModel { FeesAndTaxViewModel(get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
 
-    viewModel { ActiveOrderTrackerViewModel(get(), get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get()) }
-    viewModel { OrdersHistoryViewModel(get()) }
+    viewModel { OrdersHistoryViewModel(get(), get()) }
 
     //support
     viewModel { SupportViewModel(get(), get()) }
@@ -146,8 +152,9 @@ val appModule = module {
 
     //RestaurantPage
     viewModel { RestaurantMainViewModel() }
-    viewModel { RestaurantPageViewModel(get(),get()) }
-
+    viewModel { RestaurantPageViewModel(get(), get(), get()) }
+    viewModel { DishPageViewModel(get(),get(), get()) }
+    viewModel { OrderCheckoutViewModel(get(), get()) }
 
 
 }

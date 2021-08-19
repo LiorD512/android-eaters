@@ -206,6 +206,38 @@
 
         </LinearLayout>
 
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:paddingStart="23dp"
+                android:paddingEnd="23dp">
+
+            <TextView
+                    android:id="@+id/trackOrderDetailsSectionMinOrderFeeTitle"
+                    android:visibility="gone"
+                    style="@style/Reg13Dark"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:letterSpacing="0.03"
+                    android:text="Minimum order fee" />
+
+            <TextView
+                    android:visibility="gone"
+                    android:id="@+id/trackOrderDetailsSectionMinOrderFee"
+                    style="@style/SemiBold13Dark50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:letterSpacing="0.03"
+                    tools:text="$7" />
+
+        </LinearLayout>
+
         <LinearLayout
                 android:id="@+id/trackOrderDetailsSectionTipLayout"
                 android:layout_width="match_parent"

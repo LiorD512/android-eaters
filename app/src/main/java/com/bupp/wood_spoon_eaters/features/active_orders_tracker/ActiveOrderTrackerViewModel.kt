@@ -10,13 +10,14 @@ import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 
-class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, private val paymentManager: PaymentManager) : ViewModel() {
+class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, private val paymentManager: PaymentManager, private val metaDataRepository: MetaDataRepository) : ViewModel() {
 
     var orderId: Long? = null
     val traceableOrdersLiveData = eaterDataManager.getTraceableOrders()
@@ -88,6 +89,10 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
     fun sendOpenEvent() {
         eaterDataManager.logUxCamEvent(Constants.EVENT_TRACK_ORDER_CLICK)
+    }
+
+    fun getContactUsPhoneNumber(): String {
+        return metaDataRepository.getContactUsPhoneNumber()
     }
 
 

@@ -8,23 +8,31 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.upsale_bottom_sheet.UpSaleAdapter
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 import java.util.*
+import kotlin.math.abs
 
-class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: Drawable?, private val selectedShape: Drawable?) :
+class SwipeableAddDishItemDecorator(
+    context: Context,
+    private val defaultShape: Drawable?,
+    private val selectedShape: Drawable?,
+) :
     RecyclerView.ItemDecoration() {
 
-    private val addIcon = ContextCompat.getDrawable(context, R.drawable.ic_check_add)
+    private val addIcon = ContextCompat.getDrawable(context, R.drawable.ic_plus_1)
     private val intrinsicWidth = addIcon?.intrinsicWidth
     private val intrinsicHeight = addIcon?.intrinsicHeight
+
+    init {
+        addIcon?.alpha = 0
+    }
 
     @SuppressLint("LogNotTimber")
     override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = parent.paddingLeft
         var right = 10
         val verticalPadding = Utils.toPx(3)
-
         defaultShape?.let {
             selectedShape?.let {
                 parent.adapter?.let {
@@ -36,19 +44,23 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
                             val bottom = child.bottom - verticalPadding
 
                             val adapterPosition = parent.getChildAdapterPosition(child)
-                            val isInCart = (parent.adapter as UpSaleAdapter).isInCart(adapterPosition)
-                            if (isInCart) {
-                                right = 15
-                                selectedShape.setBounds(left, top, right, bottom)
-                                selectedShape.draw(canvas)
-                            } else {
-                                right = 10
-                                val defaultAlpha = calcDefaultAlpha(child.translationX)
-                                defaultShape.alpha = defaultAlpha
-                                defaultShape.setBounds(left, top, right, bottom)
-                                defaultShape.draw(canvas)
+                            if (adapterPosition >= 0) {
+                                val isSwipeable = (parent.adapter as SwipeableAdapter<*>).isSwipeable(adapterPosition)
+                                if (isSwipeable) {
+                                    val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
+                                    if (isInCart) {
+                                        right = 15
+                                        selectedShape.setBounds(left, top, right, bottom)
+                                        selectedShape.draw(canvas)
+                                    } else {
+                                        right = 10
+                                        val defaultAlpha = calcDefaultAlpha(child.translationX)
+                                        defaultShape.alpha = defaultAlpha
+                                        defaultShape.setBounds(left, top, right, bottom)
+                                        defaultShape.draw(canvas)
+                                    }
+                                }
                             }
-
                         }
                     }
                 }
@@ -56,7 +68,6 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
         }
     }
 
-    var lastDx = 0f
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = 0
         var right = 10
@@ -70,47 +81,43 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
                         val top = child.top + verticalPadding
                         val bottom = child.bottom - verticalPadding
 
-                        if(child.translationX == 360f){
+                        if (child.translationX == 360f) {
                             child.translationX = 0f
                         }
 
                         val selectedAlpha = calcAlpha(child.translationX)
 
-                        val adapterPosition = parent.getChildAdapterPosition(child)
-
                         val selectedCopy = selectedShape.constantState?.newDrawable()?.mutate()
                         selectedCopy?.alpha = selectedAlpha
 
-                        val isInCart = (parent.adapter as UpSaleAdapter).isInCart(adapterPosition)
-                        if (isInCart) {
-                            right = 20
-                            selectedCopy?.alpha = 255
+                        val adapterPosition = parent.getChildAdapterPosition(child)
+                        if (adapterPosition >= 0) {
+                            val isInCart = (parent.adapter as SwipeableAdapter<*>).isInCart(adapterPosition)
+                            if (isInCart) {
+                                right = 20
+                                selectedCopy?.alpha = 255
+                            }
+
+                            if (child.translationX > 0) {
+                                right = child.translationX.toInt()
+                            }
+
+
+                            selectedCopy?.setBounds(left, top, right, bottom)
+                            selectedCopy?.draw(canvas)
+
+                            val itemHeight = bottom - top
+                            val addIconTop = top + (itemHeight - intrinsicHeight!!) / 2
+                            val addIconMargin = (child.translationX.toInt() / 3)
+                            val addIconLeft = right - addIconMargin - intrinsicWidth!!
+                            val addIconRight = right - addIconMargin
+                            val addIconBottom = addIconTop + intrinsicHeight
+                            calcIconAlpha(abs(child.translationX))
+                            // Draw the delete icon
+//                            addIcon?.alpha = selectedAlpha
+                            addIcon?.setBounds(addIconLeft, addIconTop, addIconRight, addIconBottom)
+                            addIcon?.draw(canvas)
                         }
-
-                        if (child.translationX > 0) {
-                            right = child.translationX.toInt()
-                        }
-
-                        if(lastDx != child.translationX){
-                            lastDx = child.translationX
-                        }
-                        Log.d(TAG, "right: ${child.translationX},  ${lastDx}")
-//                        Log.d(TAG, "right: $right")
-
-                        selectedCopy?.setBounds(left, top, right, bottom)
-                        selectedCopy?.draw(canvas)
-
-                        val itemHeight = bottom - top
-                        val addIconTop = top + (itemHeight - intrinsicHeight!!) / 2
-                        val addIconMargin = child.translationX.toInt() / 3
-                        val addIconLeft = right - addIconMargin - intrinsicWidth!!
-                        val addIconRight = right - addIconMargin
-                        val addIconBottom = addIconTop + intrinsicHeight
-
-                        // Draw the delete icon
-                        addIcon?.setBounds(addIconLeft, addIconTop, addIconRight, addIconBottom)
-                        addIcon?.draw(canvas)
-
                     }
                 }
             }
@@ -134,13 +141,22 @@ class SwipeableAddDishItemDecorator(context: Context, private val defaultShape: 
         if (current > result) {
             result = current
         }
-//        Log.d(TAG, "translationX: $translationX, current -> $current, result: $result")
         return result.toInt()
     }
 
+
+    private fun calcIconAlpha(translationX: Float) { //225..0
+//        Log.d(TAG, translationX.toString())
+        if (translationX > 0) {
+            addIcon?.alpha = Utils.lerp(abs(translationX), 0f, SWIPE_THRESHOLD, 50f, ALPHA_THRESHOLD).toInt()
+        }
+    }
+
+
     companion object {
-        const val TAG = "wowItemDecorator"
-        const val ALPHA_THRESHOLD = 250
+        const val TAG = "wowItemDecoratorAdd"
+        const val SWIPE_THRESHOLD = 300f
+        const val ALPHA_THRESHOLD = 255f
     }
 
 }

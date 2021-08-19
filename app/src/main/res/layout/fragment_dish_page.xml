@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layoutDescription="@xml/fragment_dish_page_scene">
+
+    <Space
+            android:id="@+id/dishFragSpace"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="300dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+            android:id="@+id/dishFragCoverPhotoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/dishFragSpace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+                android:id="@+id/dishFragCoverPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/my_dishes_pic" />
+
+    </FrameLayout>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/dishFragTopHeader"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:alpha="0"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:cardElevation="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/dishFragTopHeaderDishName"
+            style="@style/LatoBlack19DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="2dp"
+            android:alpha="0"
+            android:elevation="15dp"
+            android:text="Labneh"
+            app:layout_constraintBottom_toBottomOf="@+id/dishFragBackButton"
+            app:layout_constraintStart_toEndOf="@id/dishFragBackButton" />
+
+    <ImageView
+            android:id="@+id/dishFragBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:elevation="5dp"
+            android:src="@drawable/ic_back_grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/dishFragShareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:elevation="5dp"
+            android:src="@drawable/ic_share_grey"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+            android:id="@+id/dishFragDishHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_white_top_cornered"
+            android:orientation="horizontal"
+            android:padding="23dp"
+            app:layout_constraintBottom_toTopOf="@id/dishFragSpace"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+                android:id="@+id/dishFragHeaderName"
+                style="@style/Bold19Dark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Labneh" />
+
+        <TextView
+                android:id="@+id/dishFragHeaderPrice"
+                style="@style/Bold19Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="$7" />
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.ResizableTagsView
+            android:id="@+id/dishFragTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="23dp"
+            android:paddingBottom="15dp"
+            app:tagType="TAG_TYPE_DISH"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dishFragDishHeader" />
+
+    <FrameLayout
+            android:id="@+id/dishFragMainList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:overScrollMode="never"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dishFragTags">
+
+        <androidx.core.widget.NestedScrollView
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <include
+                        android:id="@+id/dishFragMainListLayout"
+                        layout="@layout/dish_main_list_layout" />
+
+                <include
+                        android:id="@+id/dishFragMainListLayoutSkeleton"
+                        layout="@layout/dish_main_list_layout_skeleton"
+                        tools:visibility="gone" />
+
+                <View
+                        android:id="@+id/dishFragHeightCorrection"
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/floating_cart_btn_height"
+                        android:visibility="gone" />
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+            android:id="@+id/dishFragAddToCartBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:floating_button_type="ADD_TO_CART"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

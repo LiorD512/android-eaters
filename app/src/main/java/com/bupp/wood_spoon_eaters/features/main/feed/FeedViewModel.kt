@@ -64,33 +64,34 @@ class FeedViewModel(
 
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
-    data class FeedLiveData(val feedData: List<FeedAdapterItem>?)
+    data class FeedLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
     private fun getFeedWith(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)){
             feedSkeletonEvent.postValue(getSkeletonItems())
             viewModelScope.launch {
-                progressData.startProgress()
+//                progressData.startProgress()
                 val feedRepository = feedRepository.getFeed(feedRequest)
                 when (feedRepository.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         MTLogger.c(TAG, "getFeedWith - NetworkError")
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                        progressData.endProgress()
+//                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                         MTLogger.c(TAG, "getFeedWith - GenericError")
 //                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-                        progressData.endProgress()
+//                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getFeedWith - Success")
-                        feedResultData.postValue(FeedLiveData(feedRepository.feed))
-                        progressData.endProgress()
+                        handleHrefApiCalls(feedRepository.feed)
+                        feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
+//                        progressData.endProgress()
                     }
                     else -> {
                         MTLogger.c(TAG, "getFeedWith - NetworkError")
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                        progressData.endProgress()
+//                        progressData.endProgress()
                     }
                 }
 //                progressData.endProgress()
@@ -99,6 +100,34 @@ class FeedViewModel(
             MTLogger.c("wowFeedVM","getFeed setLocationListener")
             feedResultData.postValue(FeedLiveData(null))
             progressData.endProgress()
+        }
+    }
+
+    private fun handleHrefApiCalls(feed: List<FeedAdapterItem>?) {
+        viewModelScope.launch {
+            feed?.forEach { feedAdapterItem ->
+                if(feedAdapterItem is FeedAdapterHref){
+                    feedAdapterItem.href?.let{
+                        val feedRepository = feedRepository.getFeedHref(it)
+                        when (feedRepository.type) {
+                            FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
+                                MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
+                            }
+                            FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
+                                MTLogger.c(TAG, "handleHrefApiCalls - GenericError")
+                            }
+                            FeedRepository.FeedRepoStatus.HREF_SUCCESS -> {
+                                MTLogger.c(TAG, "handleHrefApiCalls - Success")
+                                feedResultData.postValue(FeedLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
+                            }
+                            else -> {
+                                MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 

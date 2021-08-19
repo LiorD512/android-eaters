@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -127,8 +126,8 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
             mMap?.clear()
 
-            val chefLat = curOrderData.cook?.pickupAddress?.lat
-            val chefLng = curOrderData.cook?.pickupAddress?.lng
+            val chefLat = curOrderData.restaurant?.pickupAddress?.lat
+            val chefLng = curOrderData.restaurant?.pickupAddress?.lng
             chefLat?.let{
                 chefLng?.let{
                     val chefLocation = LatLng(chefLat, chefLng)

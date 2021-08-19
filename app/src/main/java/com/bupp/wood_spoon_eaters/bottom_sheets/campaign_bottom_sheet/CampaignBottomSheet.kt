@@ -73,7 +73,7 @@ class CampaignBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun initUi() {
-        with(binding!!) {
+        with(binding) {
             campaignBSBtn.setOnClickListener {
                 listener?.handleCampaignAction(campaign)
                 dismiss()

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/shimmerFrameStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingHorizontal="23dp"
+            android:paddingBottom="50dp">
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15.4dp"
+                android:background="@color/grey_white" />
+
+        <TextView
+                style="@style/LatoReg13BrownishGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shimmer_cornered_rad13"
+                android:lines="3" />
+
+        <TextView
+                style="@style/LatoReg13NobelGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7.7dp"
+                android:background="@drawable/shimmer_cornered_rad13"
+                android:lines="1" />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15.7dp"
+                android:layout_marginBottom="22dp"
+                android:background="@color/grey_white" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="21dp">
+
+            <View
+                    android:layout_width="87dp"
+                    android:layout_height="23dp"
+                    android:layout_marginEnd="7.9dp"
+                    android:background="@drawable/shimmer_cornered_rad7" />
+
+            <View
+                    android:layout_width="87dp"
+                    android:layout_height="23dp"
+                    android:layout_marginEnd="7.9dp"
+                    android:background="@drawable/shimmer_cornered_rad7" />
+
+            <View
+                    android:layout_width="87dp"
+                    android:layout_height="23dp"
+                    android:layout_marginEnd="7.9dp"
+                    android:background="@drawable/shimmer_cornered_rad7" />
+
+        </LinearLayout>
+
+
+        <TextView
+                style="@style/LatoReg13BrownishGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shimmer_cornered_rad7"
+                android:lines="1"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="20dp" />
+
+
+        <TextView
+                style="@style/LatoReg13BrownishGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.7dp"
+                android:background="@drawable/shimmer_cornered_rad7"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="20dp" />
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:gravity="center">
+
+            <ImageButton
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/shimmer_circle" />
+
+            <TextView
+                    android:id="@+id/dishQuantity"
+                    style="@style/LatoBold15Teal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="12dp" />
+
+            <ImageButton
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/shimmer_circle" />
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/dishModificationHeader"
+                style="@style/LatoBlack19DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Modifications"
+                android:visibility="gone" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:orientation="horizontal">
+
+            <View
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/shimmer_circle" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="1dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="1dp"
+                    android:background="@drawable/shimmer_cornered_rad7"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="25dp"
+                    android:paddingVertical="16dp">
+
+                <TextView
+                        style="@style/LatoBold13Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="1" />
+
+                <TextView
+                        style="@style/LatoReg15BrownishGrey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="1" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <EditText
+                android:id="@+id/dishUserRequestInput"
+                style="@style/LatoReg15BrownishGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="24dp"
+                android:background="@color/pinkish_grey_20"
+                android:gravity="start"
+                android:minHeight="130dp"
+                android:padding="15dp" />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="22dp"
+                android:background="@color/grey_white" />
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shimmer_cornered_rad7"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="20dp">
+
+            <TextView
+                    style="@style/LatoBold15DarkGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:paddingBottom="3dp" />
+
+            <TextView
+                    style="@style/LatoReg13BrownishGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:paddingBottom="3dp" />
+
+        </LinearLayout>
+
+
+        <TextView
+                android:id="@+id/dishAvailabilityLisLayout"
+                style="@style/LatoBlack19DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="47dp"
+                android:text="Dish Availability"
+                android:visibility="gone" />
+
+    </LinearLayout>
+
+</com.facebook.shimmer.ShimmerFrameLayout>
+

@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dishes.AdditionalDishesDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
@@ -22,16 +21,10 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityNewOrderBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.NewOrderMainFragmentDirections
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragment
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.checkout.CheckoutFragmentDirections
-import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.utils.navigateSafe
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
-import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -94,9 +87,9 @@ class NewOrderActivity : BaseActivity(),
         })
         viewModel.mainActionEvent.observe(this, {
             when (it) {
-                NewOrderMainViewModel.NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG -> {
-                    AdditionalDishesDialog().show(supportFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
-                }
+//                NewOrderMainViewModel.NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG -> {
+//                    AdditionalDishesDialog().show(supportFragmentManager, Constants.ADDITIONAL_DISHES_DIALOG)
+//                }
                 NewOrderMainViewModel.NewOrderActionEvent.INITIALIZE_STRIPE -> {
                     viewModel.reInitStripe(this)
                 }

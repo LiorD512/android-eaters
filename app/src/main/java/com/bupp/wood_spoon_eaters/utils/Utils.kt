@@ -13,6 +13,7 @@ import android.os.Vibrator
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
@@ -21,6 +22,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators.FeedAdapterDishItemDecorator
 import java.util.*
 
 
@@ -33,6 +35,13 @@ object Utils {
     fun String.splitAtIndex(index: Int) = require(index in 0..length).let {
         take(index) to substring(index)
     }
+
+    fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
+        val percentage = (value - min) / (max - min)
+        val result = (percentage * (max2 - min2)) + min2
+        return result
+    }
+
 
     fun callPhone(activity: FragmentActivity, phone: String){
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -124,17 +133,17 @@ object Utils {
         activity.startActivity(Intent.createChooser(shareIntent, "Share"))
     }
 
-    fun vibrate(context: Context){
+    fun vibrate(context: Context, milliseconds: Long = 150){
         val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         // Vibrate for 500 milliseconds
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(
-                VibrationEffect.createOneShot(150,
+                VibrationEffect.createOneShot(milliseconds,
                     VibrationEffect.DEFAULT_AMPLITUDE))
         }
         else {
-            v.vibrate(150)
+            v.vibrate(milliseconds)
         }
     }
 

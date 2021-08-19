@@ -7,6 +7,8 @@ class Constants {
 
         const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
         const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
+        const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
+        const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
         const val RESTAURANT_SECTION_TYPE_DISH = "dish"
         const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
 
@@ -89,6 +91,10 @@ class Constants {
         const val LOTTIE_ANIM_SELECT_ADDRESS = 1
         const val LOTTIE_ANIM_LOCATION_PERMISSION = 2
 
+        //TagView types
+        const val TAG_VIEW_FEED = 0
+        const val TAG_VIEW_DISH = 1
+
 
         //input title view input type
         const val INPUT_TYPE_TEXT = 0
@@ -135,11 +141,17 @@ class Constants {
         const val FEED_VIEW_STUB_SHARE = 0
         const val FEED_VIEW_STUB_PROMO = 1
 
+        //Floating button type
+        const val VIEW_CART = 0
+        const val ADD_TO_CART = 1
+        const val PLACE_ORDER = 2
+
 
 
         //activity / dialog tags
         const val ARG_COOK_ID = "args_cook_id"
         const val ARG_RESTAURANT = "args_restaurant"
+        const val ARG_DISH = "args_dish"
 
         const val WELCOME_DIALOG_TAG = "welcome_dialog_tag"
         const val CREATE_ACCOUNT_TAG = "create_account_tag"
@@ -182,7 +194,8 @@ class Constants {
         const val TRACK_ORDER_DIALOG_TAG = "track_order_dialog_tag"
         const val RATE_LAST_ORDER_DIALOG_TAG = "rate_last_order_dialog_tag"
         const val RATINGS_DIALOG_TAG = "ratings_dialog_tag"
-        const val CLEAR_CART_DIALOG_TAG = "clear_cart_dialog"
+        const val CLEAR_CART_RESTAURANT_DIALOG_TAG = "clear_cart_rest_dialog"
+        const val CLEAR_CART_COOKING_SLOT_DIALOG_TAG = "clear_cart_cooking_slot_dialog"
         const val REPORT_TAG = "report_tag"
         const val ORDER_DETAILS_TAG = "order_details_tag"
         const val ORDER_HISTORY_TAG = "order_history_tag"
@@ -231,6 +244,7 @@ class Constants {
         const val DELETE_ACCOUNT_BOTTOM_SHEET = "delete_account_bottom_sheet"
         const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val FEES_AND_tAX_BOTTOM_SHEET = "fees_and_tax_bottom_sheet"
+        const val UPSALE_AND_CART_BOTTOM_SHEET = "upsale_and_cart_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

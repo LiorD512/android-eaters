@@ -3,10 +3,19 @@ package com.bupp.wood_spoon_eaters.model
 import android.os.Parcelable
 import androidx.annotation.Nullable
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
+import com.bupp.wood_spoon_eaters.features.main.order_history.OrderHistoryViewType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
+
+enum class OrderState{
+    NONE,
+    RECEIVED,
+    PREPARED,
+    ON_THE_WAY,
+    DELIVERED
+}
 
 @JsonClass(generateAdapter = true)
 data class OrderRequest(
@@ -33,6 +42,14 @@ data class OrderItemRequest(
     @Json(name = "_destroy") var _destroy: Boolean? = false
 )
 
+@JsonClass(generateAdapter = true)
+data class DeliveryDates(
+    val from: Date,
+    val to: Date
+)
+
+
+
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Order (
@@ -55,7 +72,8 @@ data class Order (
     @Json(name = "total") val total: Price?,
     @Json(name = "eta_to_display") val etaToDisplay: String?,
     @Json(name = "total_before_tip") val totalBeforeTip: Price?,
-    @Json(name = "cook") val cook: Cook?,
+//    @Json(name = "cook") val cook: Cook?,
+    @Json(name = "cook") val restaurant: Restaurant?,
     @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
     @Json(name = "order_items") val orderItems: List<OrderItem>?,
     @Json(name = "subtotal") val subtotal: Price?,
@@ -68,7 +86,37 @@ data class Order (
     @Json(name = "discount") val discount: Price?,
     @Json(name = "was_rated") val wasRated: Boolean?,
     @Json(name = "nationwide_shipping") val isNationwide: Boolean?
-): Parcelable
+): Parcelable {
+    fun getOrderState(): OrderState {
+        var curOrderStage =  OrderState.NONE
+        when (preparationStatus) {
+            "in_progress" -> {
+                curOrderStage = OrderState.RECEIVED
+            }
+            "completed" -> {
+                curOrderStage = OrderState.PREPARED
+            }
+        }
+
+        when (deliveryStatus) {
+            "on_the_way" -> {
+                curOrderStage = OrderState.ON_THE_WAY
+            }
+            "shipped" -> {
+                curOrderStage = OrderState.DELIVERED
+            }
+        }
+        return curOrderStage
+    }
+
+    fun getAllOrderItemsQuantity(): Int {
+        var allOrderItemsQuantity = 0
+        orderItems?.forEach {
+            allOrderItemsQuantity += it.quantity
+        }
+        return allOrderItemsQuantity
+    }
+}
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -77,34 +125,33 @@ data class OrderItem(
     @Json(name = "dish") val dish: Dish,
     @Json(name = "quantity") var quantity: Int,
     @Json(name = "matching_menu") var menuItem: MenuItem?,
-    @Json(name = "removed_ingredients") var removedIngredients: List<Ingredient>,
+//    @Json(name = "removed_ingredients") var removedIngredients: List<Ingredient>,
     @Json(name = "price") val price: Price,
     @Json(name = "notes") var notes: String?,
     @Json(name = "_destroy") var _destroy: Boolean? = null
 ): Parcelable {
-     fun getRemovedIngredientsIds(): List<Long>{
-         return removedIngredients.mapNotNull { it.id }
-     }
+//     fun getRemovedIngredientsIds(): List<Long>{
+//         return removedIngredients.mapNotNull { it.id }
+//     }
     fun toOrderItemRequest(): OrderItemRequest{
         return OrderItemRequest(
             id = id,
             notes = notes,
             dishId = dish.id,
             quantity = quantity,
-            removedIngredientsIds = getRemovedIngredientsIds(),
             _destroy = _destroy
         )
     }
-    fun getRemovedIngredients(): String?{
-        var removedIngredientsStr: String? = null
-        if(removedIngredients.isNotEmpty()){
-            removedIngredientsStr = "Without: "
-            removedIngredients.forEach {
-                removedIngredientsStr += "${it.name}, "
-            }
-        }
-        return removedIngredientsStr?.substring(0, removedIngredientsStr.length - 2)
-    }
+//    fun getRemovedIngredients(): String?{
+//        var removedIngredientsStr: String? = null
+////        if(removedIngredients.isNotEmpty()){
+////            removedIngredientsStr = "Without: "
+////            removedIngredients.forEach {
+////                removedIngredientsStr += "${it.name}, "
+////            }
+////        }
+//        return removedIngredientsStr?.substring(0, removedIngredientsStr.length - 2)
+//    }
     fun getNoteStr(): String?{
         if(notes.isNullOrEmpty()){
             return null

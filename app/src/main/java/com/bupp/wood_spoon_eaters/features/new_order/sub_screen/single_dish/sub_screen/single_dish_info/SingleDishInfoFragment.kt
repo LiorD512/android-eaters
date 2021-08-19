@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.databinding.FragmentSingleDishInfoBinding
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.dialogs.VideoPlayerDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
@@ -28,7 +28,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageView.UserImageViewListener,
+class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageVideoView.UserImageViewListener,
     DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener,
     WSCounterEditText.WSCounterListener {
 
@@ -51,7 +51,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     private fun initUi() {
         with(binding){
-            singleDishPlusMinus.setViewEnabled(true)
+//            singleDishPlusMinus.setViewEnabled(true)
             singleDishInfoCook.setUserImageViewListener(this@SingleDishInfoFragment)
             singleDishInfoRating.setOnClickListener { onRatingClick() }
 
@@ -94,11 +94,11 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
         with(binding){
             singleDishNote.setText("")
-            singleDishInfoCook.setUser(fullDish.cook)
+//            singleDishInfoCook.setUser(fullDish.restaurant)
             singleDishInfoFavorite.setIsFav(fullDish.isFavorite)
             singleDishInfoFavorite.setDishId(fullDish.id)
             singleDishInfoName.text = fullDish.name
-            singleDishInfoCookName.text = "By ${fullDish.cook.getFullName()}"
+            singleDishInfoCookName.text = "By ${fullDish.restaurant.getFullName()}"
             singleDishInfoDescription.text = fullDish.description
             singleDishInfoPrice.text = fullDish.getPriceObj().formatedValue
 
@@ -108,9 +108,9 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
                 singleDishInfoCircleIndicator.setViewPager(singleDishInfoImagePager)
             }
 
-            fullDish.cook.country?.let{
-                Glide.with(requireContext()).load(fullDish.cook.country.flagUrl).into(singleDishInfoCookFlag)
-            }
+//            fullDish.restaurant.country?.let{
+//                Glide.with(requireContext()).load(fullDish.restaurant.country.flagUrl).into(singleDishInfoCookFlag)
+//            }
 
             val menuItem = fullDish.menuItem
             if (menuItem != null) {

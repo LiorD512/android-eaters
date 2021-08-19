@@ -21,6 +21,7 @@ import kotlin.math.sqrt
 
 open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener {
 
+    private var superUserDialog: SuperUserDialog? = null
     private var sensorManager: SensorManager? = null
     private var acceleration = 0f
     private var currentAcceleration = 0f
@@ -44,8 +45,12 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 //            Log.d(TAG, "shake acceleration: $acceleration")
-            if (acceleration > SHAKING_RESISTANCE) {
-                SuperUserDialog().show(supportFragmentManager, Constants.SUPER_USER_DIALOG)
+            if (acceleration > SHAKING_RESISTANCE && (
+                        superUserDialog == null ||
+                        superUserDialog?.isVisible == false)
+            ) {
+                superUserDialog = SuperUserDialog()
+                superUserDialog!!.show(supportFragmentManager, Constants.SUPER_USER_DIALOG)
                 Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
             }
         }

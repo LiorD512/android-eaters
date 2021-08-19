@@ -15,18 +15,15 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.stripe.android.model.PaymentMethod
-import com.stripe.android.view.PaymentMethodsActivityStarter
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 class NewOrderMainViewModel(
     private val feedRepository: FeedRepository,
-    private val cartManager: CartManager,
+    private val oldCartManager: OldCartManager,
     private val orderManager: OrderManager,
     private val eaterDataManager: EaterDataManager,
     private val deliveryTimeManager: DeliveryTimeManager,
@@ -93,12 +90,12 @@ class NewOrderMainViewModel(
         menuItemId?.let {
             viewModelScope.launch {
                 progressData.startProgress()
-                val getFullDishResult = cartManager.getFullDish(it)
+                val getFullDishResult = oldCartManager.getFullDish(it)
                 getFullDishResult?.let {
                     dishInfoEvent.postValue(it.fullDish)
-                    dishCookEvent.postValue(it.fullDish.cook)
+//                    dishCookEvent.postValue(it.fullDish.restaurant)
 
-                    if(!cartManager.isInCheckout()){
+                    if(!oldCartManager.isInCheckout()){
                         checkCartStatusAndUpdateUi()
                     }
                     sendClickOnDishEvent()
@@ -116,9 +113,9 @@ class NewOrderMainViewModel(
     }
 
     fun checkCartStatusAndUpdateUi() {
-        val cartStatus = cartManager.getCartStatus()
+        val cartStatus = oldCartManager.getCartStatus()
         when (cartStatus.type) {
-            CartManager.CartStatusEventType.CART_IS_EMPTY -> {
+            OldCartManager.CartStatusEventType.CART_IS_EMPTY -> {
 //                singleDishStatusBar.handleBottomBar(showCheckout = false)
                 updateCartBottomBarByType(
                     type = CartBottomBar.BottomBarTypes.ADD_TO_CART,
@@ -126,7 +123,7 @@ class NewOrderMainViewModel(
                     itemCount = cartStatus.currentOrderItemCounter,
                 )
             }
-            CartManager.CartStatusEventType.SHOWING_CURRENT_CART -> {
+            OldCartManager.CartStatusEventType.SHOWING_CURRENT_CART -> {
                 updateCartBottomBarByType(
                     type = CartBottomBar.BottomBarTypes.ADD_TO_CART_OR_CHECKOUT,
                     price = cartStatus.currentOrderItemPrice,
@@ -162,11 +159,11 @@ class NewOrderMainViewModel(
         viewModelScope.launch {
             val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()?.id
             progressData.startProgress()
-            val result = cartManager.finalizeOrder(paymentMethodId)
+            val result = oldCartManager.finalizeOrder(paymentMethodId)
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
                     Log.d(TAG, "finalizeOrder - success")
-                    cartManager.clearCart()
+                    oldCartManager.clearCart()
                     handleNavigation(NewOrderScreen.FINISH_ACTIVITY_AFTER_PURCHASE)
                 }
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
@@ -183,7 +180,7 @@ class NewOrderMainViewModel(
 
     fun handleAddToCartClick() {
         //check if user set an address and add to cart
-        val newCartData = cartManager.shouldForceClearCart()
+        val newCartData = oldCartManager.shouldForceClearCart()
         if (newCartData != null) {
             startNewCartEvent.postValue(newCartData.inCartCookName?.let { newCartData.currentShowingCookName?.let { it1 -> NewCartDialog(it, it1) } })
         } else if (eaterDataManager.hasUserSetAnAddress()) {
@@ -196,14 +193,14 @@ class NewOrderMainViewModel(
     private fun addToCart() {
         Log.d(TAG, "addToCart")
         progressData.startProgress()
-        cartManager.addCurrentOrderItemToCart()
+        oldCartManager.addCurrentOrderItemToCart()
 
         viewModelScope.launch {
-            val result = cartManager.postNewOrUpdateCart()
+            val result = oldCartManager.postNewOrUpdateCart()
             result?.let {
                 when (it.type) {
                     OrderRepository.OrderRepoStatus.POST_ORDER_SUCCESS -> {
-                        if (cartManager.shouldShowAdditionalDishesDialog()) {
+                        if (oldCartManager.shouldShowAdditionalDishesDialog()) {
                             mainActionEvent.postValue(NewOrderActionEvent.SHOW_ADDITIONAL_DISH_DIALOG)
                         } else {
                             handleNavigation(NewOrderScreen.LOCK_SINGLE_DISH_COOK)
@@ -234,11 +231,11 @@ class NewOrderMainViewModel(
     }
 
     private fun handleAddItemToCartError() {
-        val cartStatus = cartManager.getCartStatus()
-        if(cartStatus == CartManager.CartStatus(CartManager.CartStatusEventType.CART_IS_EMPTY)){
+        val cartStatus = oldCartManager.getCartStatus()
+        if(cartStatus == OldCartManager.CartStatus(OldCartManager.CartStatusEventType.CART_IS_EMPTY)){
             clearCart()
         }else{
-            cartManager.removeLastOrderItem()
+            oldCartManager.removeLastOrderItem()
         }
     }
 
@@ -246,7 +243,7 @@ class NewOrderMainViewModel(
         Log.d(TAG, "updateOrderItem -> orderItem: $orderItem")
         viewModelScope.launch {
             progressData.startProgress()
-            val result = cartManager.updateInCartOrderItem(orderItem)
+            val result = oldCartManager.updateInCartOrderItem(orderItem)
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -269,8 +266,8 @@ class NewOrderMainViewModel(
 
     fun initAdditionalDishes() {
         Log.d(TAG, "initAdditionalDishes")
-        val orderItems = cartManager.getCurrentOrderItems()
-        val additionalDishes = cartManager.getAdditionalDishes()
+        val orderItems = oldCartManager.getCurrentOrderItems()
+        val additionalDishes = oldCartManager.getAdditionalDishes()
         additionalDishesEvent.postValue(AdditionalDishesEvent(orderItems, additionalDishes))
     }
 
@@ -278,12 +275,12 @@ class NewOrderMainViewModel(
         val newOrderItem = OrderItemRequest(dishId = dish.id, quantity = quantity)
         Log.d(TAG, "addNewDishToCart: $newOrderItem")
         viewModelScope.launch {
-            val result = cartManager.addNewOrderItemToCart(newOrderItem)
+            val result = oldCartManager.addNewOrderItemToCart(newOrderItem)
             progressData.startProgress()
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
-                        cartManager.sendFBAdditioanlDishEvent(dish)
+                        oldCartManager.sendFBAdditioanlDishEvent(dish)
                         initAdditionalDishes()
                     }
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
@@ -291,7 +288,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
-                            cartManager.removeLastOrderItem()
+                            oldCartManager.removeLastOrderItem()
                         }
                     }
                     else -> {
@@ -304,7 +301,7 @@ class NewOrderMainViewModel(
 
 
     fun getDishReview(cookId: Long?) {
-        val cookId = cookId ?: cartManager.currentShowingDish?.cook?.id
+        val cookId = cookId ?: oldCartManager.currentShowingDish?.restaurant?.id
         cookId?.let{
             progressData.startProgress()
             viewModelScope.launch {
@@ -340,7 +337,7 @@ class NewOrderMainViewModel(
     }
 
     private fun validateOrder(): Boolean {
-        if (cartManager.checkShippingMethodValidation()) {
+        if (oldCartManager.checkShippingMethodValidation()) {
             validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
             return false
         }
@@ -407,7 +404,7 @@ class NewOrderMainViewModel(
             NewOrderScreen.CHECKOUT -> {
                 Log.d(TAG, "handleNavigation: MAIN_TO_CHECKOUT")
                 navigationEvent.postValue(NewOrderNavigationEvent.MAIN_TO_CHECKOUT)
-                cartManager.setIsInCheckout(true)
+                oldCartManager.setIsInCheckout(true)
             }
             NewOrderScreen.PROMO_CODE -> {
                 Log.d(TAG, "handleNavigation: PROMO_CODE")
@@ -442,11 +439,11 @@ class NewOrderMainViewModel(
 
 
     // Checkout section
-    val orderData = cartManager.getCurrentOrderData()
+    val orderData = oldCartManager.getCurrentOrderData()
 
     fun onLocationChanged() {
         viewModelScope.launch {
-            val result = cartManager.updateOrderDeliveryParam()
+            val result = oldCartManager.updateOrderDeliveryParam()
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -455,7 +452,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
                     }
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                        cartManager.onLocationInvalid()
+                        oldCartManager.onLocationInvalid()
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
                         }
@@ -469,7 +466,7 @@ class NewOrderMainViewModel(
 
     fun onDeliveryTimeChange() {
         viewModelScope.launch {
-            val result = cartManager.refreshOrderParams()
+            val result = oldCartManager.refreshOrderParams()
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -478,7 +475,7 @@ class NewOrderMainViewModel(
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
                     }
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                        cartManager.onDeliveryTimeInvalid()
+                        oldCartManager.onDeliveryTimeInvalid()
                         result.wsError?.let {
                             wsErrorEvent.postValue(it)
                         }
@@ -519,15 +516,15 @@ class NewOrderMainViewModel(
     }
 
     private fun showProceedToCartBottomBar() {
-        updateCartBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = cartManager.calcTotalDishesPrice())
+        updateCartBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = oldCartManager.calcTotalDishesPrice())
     }
 
     fun onNewOrderFinish() {
-        cartManager.onNewOrderFinish()
+        oldCartManager.onNewOrderFinish()
     }
 
     fun clearCart() {
-        cartManager.clearCart()
+        oldCartManager.clearCart()
         getFullDish()
     }
 
@@ -570,7 +567,7 @@ class NewOrderMainViewModel(
     }
 
     private fun sendClickOnDishEvent() {
-        cartManager.sendClickOnDishEvent()
+        oldCartManager.sendClickOnDishEvent()
     }
 
     fun proceedToCheckoutEvent() {

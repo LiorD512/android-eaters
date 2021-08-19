@@ -20,9 +20,9 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
     val viewModel by viewModel<FeesAndTaxViewModel>()
 
     companion object {
-        private const val VALUE_ARGS_FEE = "free_text_title"
-        private const val VALUE_ARGS_TAX = "free_text_body"
-        private const val VALUE_ARGS_MIN_FEE = "min_order_fee"
+        private const val VALUE_ARGS_FEE = "args_fee"
+        private const val VALUE_ARGS_TAX = "args_tax"
+        private const val VALUE_ARGS_MIN_FEE = "args_min_fee"
         fun newInstance(fee: String?, tax: String?, minFee: String?): FeesAndTaxBottomSheet {
             return FeesAndTaxBottomSheet().apply {
                 arguments = Bundle().apply {
@@ -67,18 +67,18 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
         arguments?.let {
             val fee = it.getString(VALUE_ARGS_FEE)
             val tax = it.getString(VALUE_ARGS_TAX)
-            val minFee = it.getString(VALUE_ARGS_MIN_FEE)
             binding.feesTaxBSFeeTitle.text = "Service fee: $fee"
             binding.feesTaxBSTaxTitle.text = "Estimated tax: $tax"
-
-            minFee?.let{
+            val minOrderFee = it.getString(VALUE_ARGS_MIN_FEE)
+            minOrderFee?.let{
+                binding.feesTaxBSMinFeeSubTitle.visibility = View.VISIBLE
                 binding.feesTaxBSMinFeeTitle.visibility = View.VISIBLE
-                binding.feesTaxBSMinFeeSub.visibility = View.VISIBLE
-                binding.feesTaxBSFeeTitle.text = "Minimum order fee: $it"
-                binding.feesTaxBSMinFeeSub.text = "To reduce this fee your order value should be bigger than ${viewModel.getGlobalMinimumOrderFee()}"
-
+                binding.feesTaxBSMinFeeTitle.text = "Minimum order fee: $minOrderFee"
             }
         }
+
+        val globalMinimumOrderFee = viewModel.getGlobalMinimumFee()
+        binding.feesTaxBSMinFeeSubTitle.text = "To reduce this fee your order value should be bigger than $globalMinimumOrderFee"
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
