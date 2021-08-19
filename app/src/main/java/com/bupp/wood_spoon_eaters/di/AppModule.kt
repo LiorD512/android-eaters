@@ -24,6 +24,7 @@ import com.bupp.wood_spoon_eaters.features.main.feed_loader.FeedLoaderViewModel
 import com.bupp.wood_spoon_eaters.features.main.filter.PickFiltersViewModel
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
@@ -122,6 +123,7 @@ val appModule = module {
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
     viewModel { FeedLoaderViewModel(get()) }
+    viewModel { FeesAndTaxViewModel(get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
 

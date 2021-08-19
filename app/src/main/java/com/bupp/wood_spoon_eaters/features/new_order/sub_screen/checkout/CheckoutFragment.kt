@@ -88,7 +88,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         }
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
         })
         mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
             if (emptyCartEvent) {

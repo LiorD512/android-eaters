@@ -85,12 +85,12 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     }
 
-    data class FeesAndTaxData(val fee: String?, val tax: String?)
+    data class FeesAndTaxData(val fee: String?, val tax: String?, val minFee: String?)
     val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         val curOrder = cartManager.getCurrentOrderData().value
         curOrder?.let{
-            feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue))
+            feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue, curOrder.minOrderFee?.formatedValue))
         }
 
     }

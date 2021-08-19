@@ -67,6 +67,30 @@
             android:lineSpacingExtra="6.7sp"
             android:text="Finalized tax will be shown on your order receipt."/>
 
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/feesTaxBSMinFeeTitle"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="23dp"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            tools:text="Minimum order fee: $7.89"/>
+
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/feesTaxBSMinFeeSub"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="1dp"
+            style="@style/LatoReg13MediumGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="To reduce this fee your order value should be bigger than $"/>
+
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             app:title="OK"
             android:layout_marginHorizontal="8dp"
