@@ -42,7 +42,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private var googleMap: GoogleMap? = null
     private var currentBoundSize = 100
     private var zoomLevel: Float = 18f
-
+    private var mapFragment: SupportMapFragment? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,7 +86,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             googleMap?.isBuildingsEnabled = false
         }
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.addressMapFragMap) as? SupportMapFragment
+        mapFragment = childFragmentManager.findFragmentById(R.id.addressMapFragMap) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
     }
 
@@ -267,6 +267,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     override fun onDestroy() {
         googleMap?.clear()
         googleMap = null
+        mapFragment = null
         super.onDestroy()
     }
 

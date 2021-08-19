@@ -69,7 +69,7 @@
         <attr name="title" />
         <attr name="subTitle" />
         <attr name="tip_type"/>
-        <attr name="is_bold" format="boolean"/>
+        <attr name="isBold" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">

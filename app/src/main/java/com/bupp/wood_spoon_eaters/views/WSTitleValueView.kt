@@ -41,7 +41,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val value = attr.getString(R.styleable.WSTitleValueView_subTitle)
                 setValue(value)
 
-                val isBold = attr.getBoolean(R.styleable.WSTitleValueView_is_bold, false)
+                val isBold = attr.getBoolean(R.styleable.WSTitleValueView_isBold, false)
                 setStyle(isBold)
 
                 val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)

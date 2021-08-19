@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,9 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
-import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
+import com.bupp.wood_spoon_eaters.utils.google_api_utils.GeoCoderUtil
+import com.bupp.wood_spoon_eaters.utils.google_api_utils.GoogleAddressParserUtil
+import com.bupp.wood_spoon_eaters.utils.google_api_utils.LoadDataCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
@@ -104,9 +107,44 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
         }
     }
 
-    fun updateAutoCompleteAddressFound(place: Place) {
+    fun updateAutoCompleteAddressFound(context: Context, place: Place) {
         //called when user select address via auto complete
         val address = GoogleAddressParserUtil.parsePlaceToAddressRequest(place)
+        if(validateAddressParams(address)){
+            saveAndPostAddress(address)
+        }else{
+            geoCodeAddress(context, address)
+        }
+
+    }
+
+    private fun geoCodeAddress(context: Context, address: AddressRequest) {
+        address.lat?.let{ lat ->
+            address.lng?.let{ lng ->
+                GeoCoderUtil.execute(context, address, object :
+                    LoadDataCallback<AddressRequest> {
+                    override fun onDataLoaded(response: AddressRequest) {
+                        if(validateAddressParams(response)){
+                            saveAndPostAddress(response)
+                        }else{
+                            val dummyAddress = GeoCoderUtil.parseDummyAddress(address)
+                            saveAndPostAddress(dummyAddress)
+                        }
+                    }
+                    override fun onDataNotAvailable(errorCode: Int, reasonMsg: String) {
+                        val dummyAddress = GeoCoderUtil.parseDummyAddress(address)
+                        saveAndPostAddress(dummyAddress)
+                    }
+                })
+            }
+        }
+    }
+
+    private fun validateAddressParams(address: AddressRequest): Boolean {
+        return address.streetLine1 != null || address.streetNumber != null
+    }
+
+    fun saveAndPostAddress(address: AddressRequest){
         address.let{
             unsavedNewAddress = address
             mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN)

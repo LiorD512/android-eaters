@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.utils
+package com.bupp.wood_spoon_eaters.utils.google_api_utils
 
 import android.location.Address
 import android.util.Log
@@ -31,7 +31,7 @@ object GoogleAddressParserUtil {
 
         val addressComponents = place.addressComponents?.asList()
         addressComponents?.forEach {
-            val data = it.types.intersect(this.allowed_types).toString().replace("[", "").replace("]", "")
+            val data = it.types.intersect(allowed_types).toString().replace("[", "").replace("]", "")
             var result = data.split(",").map { it.trim() }
             result.forEach { data ->
                 Log.d(TAG, "parseLocationToAddress: $data")
@@ -59,10 +59,11 @@ object GoogleAddressParserUtil {
                     }
                 }
             }
-
+//            replaceNullFields(addressRequest)
         }
         return addressRequest
     }
+
 
     fun parseMyLocationToAddressRequest(location: Address): AddressRequest {
         val addressRequest = AddressRequest()
