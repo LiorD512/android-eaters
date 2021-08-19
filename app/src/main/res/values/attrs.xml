@@ -69,6 +69,7 @@
         <attr name="title" />
         <attr name="subTitle" />
         <attr name="tip_type"/>
+        <attr name="isTotal" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">

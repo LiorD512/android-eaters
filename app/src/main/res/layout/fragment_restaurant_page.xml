@@ -39,8 +39,14 @@
                 tools:src="@drawable/event_logo_bkg" />
 
         <ImageView
+                android:id="@+id/restFragVideoBtn"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:visibility="gone"
+                android:layout_marginBottom="50dp"
+                android:src="@drawable/ic_play_grey"
+                android:background="@drawable/transparent_to_black_60_gradient"/>
 
     </FrameLayout>
 

@@ -154,7 +154,7 @@
         </activity>
         <activity
                 android:name=".features.restaurant.RestaurantActivity"
-                android:windowSoftInputMode="adjustResize|adjustPan"
+                android:windowSoftInputMode="adjustPan"
                 android:screenOrientation="portrait" />
 
         <provider

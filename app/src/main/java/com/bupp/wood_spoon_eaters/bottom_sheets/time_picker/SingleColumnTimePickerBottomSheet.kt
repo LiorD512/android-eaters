@@ -103,6 +103,8 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
             cookingSlots?.let{
                 timePickerTimePicker.setDatesByCookingSlots(it)
                 timePickerAsapBtn.visibility = View.GONE
+                timePickerTitle.text = "Change menu"
+                timePickerScheduleBtn.setTitle("Select")
 
                 timePickerScheduleBtn.setOnClickListener {
                     val selectedCookingSlot = timePickerTimePicker.getChosenCookingSlot()

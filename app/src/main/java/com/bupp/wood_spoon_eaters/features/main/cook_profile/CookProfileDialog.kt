@@ -155,7 +155,7 @@ class CookProfileDialog(val listener: CookProfileDialogListener) : DialogFragmen
 
     override fun onUserImageClick(cook: Cook?) {
         if(cook != null && !cook.video.isNullOrEmpty()){
-            VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+            VideoViewDialog(cook.getFullName(),cook.video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
         }
     }
 

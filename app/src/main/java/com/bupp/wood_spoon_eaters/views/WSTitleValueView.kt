@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.TextViewCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.WsTitleValueViewBinding
@@ -15,16 +16,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var binding: WsTitleValueViewBinding = WsTitleValueViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    interface WSTitleValueListener{
+    interface WSTitleValueListener {
         fun onCustomToolTipClick()
     }
 
     init {
-         initUi(attrs)
+        initUi(attrs)
     }
 
     private var listener: WSTitleValueListener? = null
-    fun setWSTitleValueListener(listener: WSTitleValueListener){
+    fun setWSTitleValueListener(listener: WSTitleValueListener) {
         this.listener = listener
     }
 
@@ -40,12 +41,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val value = attr.getString(R.styleable.WSTitleValueView_subTitle)
                 setValue(value)
 
+                val isTotal = attr.getBoolean(R.styleable.WSTitleValueView_isTotal, false)
+                if (isTotal)
+                    setTotalUi()
+
                 val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
-                if(toolTip != 0){
+                if (toolTip != 0) {
                     titleValueViewToolTip.customInit(context, attrs)
                     titleValueViewToolTip.visibility = View.VISIBLE
 
-                    if(toolTip == Constants.TOOL_TIP_CUSTOM_CLICK){
+                    if (toolTip == Constants.TOOL_TIP_CUSTOM_CLICK) {
                         titleValueViewToolTip.disable()
                         titleValueViewToolTip.setOnClickListener {
                             listener?.onCustomToolTipClick()
@@ -58,14 +63,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    private fun setTotalUi() {
+        TextViewCompat.setTextAppearance(binding.titleValueViewTitle, R.style.LatoBold13Black);
+        TextViewCompat.setTextAppearance(binding.titleValueViewValue, R.style.LatoBlack13Teal);
+    }
+
     fun setValue(value: String?) {
-        value?.let{
+        value?.let {
             binding.titleValueViewValue.text = it
         }
     }
 
     fun setTitle(title: String?) {
-        title?.let{
+        title?.let {
             binding.titleValueViewTitle.text = it
         }
     }
