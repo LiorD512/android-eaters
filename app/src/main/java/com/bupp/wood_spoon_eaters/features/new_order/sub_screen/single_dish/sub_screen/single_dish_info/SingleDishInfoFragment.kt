@@ -208,7 +208,7 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
 
     override fun onUserImageClick(cook: Cook?) {
         cook?.video?.let{
-            VideoViewDialog(cook).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+            VideoViewDialog(cook.getFullName(),cook.video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
         }
     }
 

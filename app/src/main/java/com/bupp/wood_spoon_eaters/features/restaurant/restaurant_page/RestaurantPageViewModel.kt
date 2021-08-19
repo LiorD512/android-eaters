@@ -49,9 +49,11 @@ class RestaurantPageViewModel(
     val progressData = ProgressData()
 
     fun handleInitialParamData(params: RestaurantInitParams) {
-        currentRestaurantId = params.restaurantId ?: -1
-        initialParamData.postValue(params)
-        initRestaurantFullData(params.restaurantId)
+        if(initialParamData.value == null){
+            currentRestaurantId = params.restaurantId ?: -1
+            initialParamData.postValue(params)
+            initRestaurantFullData(params.restaurantId)
+        }
     }
 
     private fun initRestaurantFullData(restaurantId: Long?) {
@@ -390,10 +392,6 @@ class RestaurantPageViewModel(
     private fun getCookingSlotById(cookingSlotId: Long): CookingSlot? {
         val result = sortedCookingSlots?.find { it.cookingSlots.find { it.id == cookingSlotId } != null }
         return result?.cookingSlots?.find { it.id == cookingSlotId }
-    }
-
-    fun shouldShowCartBtn(restaurantId: Long): Boolean {
-        return  restaurantId == currentRestaurantId
     }
 
     val favoriteEvent = LiveEventData<Boolean>()

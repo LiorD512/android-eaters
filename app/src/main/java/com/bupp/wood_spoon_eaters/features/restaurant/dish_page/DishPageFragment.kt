@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
@@ -138,6 +139,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleAddToCartBtn(event: DishPageViewModel.DishQuantityData?) {
         event?.let{
+            binding!!.dishFragAddToCartBtn.updateFloatingBtnTitle("Add ${it.quantity} to cart")
             binding!!.dishFragAddToCartBtn.updateFloatingBtnPrice(it.overallPrice)
         }
     }
@@ -209,6 +211,15 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun handleDishFullData(dish: FullDish) {
+        with(binding!!){
+            // video
+            dishFragVideoBtn.isVisible = !dish.restaurant.video.isNullOrEmpty()
+            dishFragVideoBtn.setOnClickListener {
+                dish.restaurant.video?.let { video ->
+                    VideoViewDialog(dish.restaurant.getFullName(), video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+                }
+            }
+        }
         with(binding!!.dishFragMainListLayout) {
             handleDietaryList(dish.dietaries)
             handleAvailableTimes(dish.availableTimes)
