@@ -139,7 +139,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleAddToCartBtn(event: DishPageViewModel.DishQuantityData?) {
         event?.let{
-            binding!!.dishFragAddToCartBtn.updateFloatingBtnTitle("Add ${it.quantity} to cart")
+            if(viewModel.currentFragmentState == DishPageViewModel.DishFragmentState.ADD_DISH){
+                binding!!.dishFragAddToCartBtn.updateFloatingBtnTitle("Add ${it.quantity} to cart")
+            }
             binding!!.dishFragAddToCartBtn.updateFloatingBtnPrice(it.overallPrice)
         }
     }
@@ -203,6 +205,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             Glide.with(requireContext()).load(dish.thumbnail?.url).into(dishFragCoverPhoto)
                 dishFragTags.setTags(orderItem.menuItem?.tags)
 
+
+            dishFragAddToCartBtn.updateFloatingBtnTitle("Update cart")
             dishFragMainListLayout.dishFragRemoveBtn.visibility = View.VISIBLE
             dishFragMainListLayout.dishFragRemoveBtn.setOnClickListener {
                 viewModel.onDishRemove(orderItem.dish.id)

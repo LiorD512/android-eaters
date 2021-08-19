@@ -35,6 +35,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -76,6 +77,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
             shareButton.setOnClickListener {
                 viewModel.restaurantFullData.value?.shareUrl?.let {
+                    Utils.shareText(requireActivity(), it)
                 }
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
