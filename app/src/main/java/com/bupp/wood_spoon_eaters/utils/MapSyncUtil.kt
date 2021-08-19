@@ -88,15 +88,13 @@ class MapSyncUtil()  {
 
 
     fun getMapImage(order: Order): String {
-        val myLat = order.deliveryAddress?.lat
-        val myLng = order.deliveryAddress?.lng
-        val url =
-            "http://maps.googleapis.com/maps/api/staticmap?" +
-                    "center=$myLat,$myLng" +
-                    "sensor=false&" +
-                    "scale=2&" +
-                    "zoom=15&&" +
-                    "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
+        val lat = order.deliveryAddress?.lat
+        val lng = order.deliveryAddress?.lng
+        val url = "http://maps.google.com/maps/api/staticmap?center=$lat,$lng&zoom=17&" +
+                "size=600x400&" +
+                "sensor=false&" +
+                "markers=icon:https://res.cloudinary.com/woodspoon/image/upload/c_scale,h_64/uploads/app/assets/map_pin.png|$lat,$lng&" +
+                "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
         return url
 //                    "markers=color:blue|37.446754,-77.572746"
 //                    "markers=icon:http://foursquare.com/img/categories_v2/shops/financial_bg_64.png|37.446754,-77.572746"

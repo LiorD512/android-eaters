@@ -57,6 +57,20 @@ class EaterDataManager(
         locationManager.rollBackToPreviousAddress()
     }
 
+    /**
+     * this function is called when we receive device location when in SelectAddress Screen
+     * we want to update user location to this device location when he has no other available address
+     */
+    fun updateLocationIfNeeded(addressRequest: AddressRequest) {
+        val noAddressAvailable = currentEater?.addresses?.isNullOrEmpty() ?: true
+        if(noAddressAvailable){
+            updateSelectedAddress(addressRequest.toAddress(), LocationManager.AddressDataType.DEVICE_LOCATION)
+        }
+
+
+
+    }
+
 
     /////////////////////////////////////////
     ///////////      FEED         ///////////
@@ -239,7 +253,6 @@ class EaterDataManager(
     fun getCartAddressId(): Long? {
         return getLastChosenAddress()?.id
     }
-
 
 
 

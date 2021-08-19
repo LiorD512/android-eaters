@@ -170,7 +170,7 @@
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             app:title="Total"
                             android:id="@+id/singleOrderDetailsTotal2"
-                            app:isTotal="true"
+                            app:isBold="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 

@@ -117,17 +117,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         fun bindItem(data: OrderAdapterItemActiveOrder) {
             val order = data.order
             Log.d("wowStatus","bindItem: ${order.id}")
-//            val url = MapSyncUtil().getMapImage(order)
-//            MapSyncUtil.initMap(context, mapContainer, context.frag)
-
-            val lat = order.deliveryAddress?.lat
-            val lng = order.deliveryAddress?.lng
-
-            val url = "http://maps.google.com/maps/api/staticmap?center=$lat,$lng&zoom=17&" +
-                    "size=600x400&" +
-                    "sensor=false&" +
-                    "markers=icon:https://res.cloudinary.com/woodspoon/image/upload/c_scale,h_64/uploads/app/assets/map_pin.png|$lat,$lng&" +
-                    "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
+            val url = MapSyncUtil().getMapImage(order)
 
             Log.d("wowSTtaicMap","url $url")
             Glide.with(context).load(url).into(mapContainer)

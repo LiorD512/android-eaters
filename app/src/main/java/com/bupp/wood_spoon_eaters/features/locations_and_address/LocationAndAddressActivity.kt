@@ -186,7 +186,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 data?.let {
                     val place = Autocomplete.getPlaceFromIntent(data)
                     Log.i(TAG, "Place: ${place.name}, ${place.addressComponents}, ${place.latLng}")
-                    viewModel.updateAutoCompleteAddressFound(place)
+                    viewModel.updateAutoCompleteAddressFound(this, place)
                 }
             }
             AutocompleteActivity.RESULT_ERROR -> {

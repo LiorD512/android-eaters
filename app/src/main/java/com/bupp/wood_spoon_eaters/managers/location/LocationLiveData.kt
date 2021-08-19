@@ -6,10 +6,8 @@ import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
-import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
+import com.bupp.wood_spoon_eaters.utils.google_api_utils.GoogleAddressParserUtil
 import com.google.android.gms.location.*
 import java.io.IOException
 import java.util.*
