@@ -1,4 +1,4 @@
-git package com.bupp.wood_spoon_eaters.managers.delivery_date
+package com.bupp.wood_spoon_eaters.managers.delivery_date
 
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.utils.DateUtils

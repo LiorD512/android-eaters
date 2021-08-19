@@ -48,6 +48,12 @@ class DishPageViewModel(
         FINISH_AND_BACK,
         FINISH_ACTIVITY
     }
+
+    var currentFragmentState : DishFragmentState = DishFragmentState.ADD_DISH
+    enum class DishFragmentState{
+        ADD_DISH,
+        UPDATE_DISH
+    }
     val onFinishDishPage = MutableLiveData<FinishNavigation>()
 
     val clearCartEvent = cartManager.getClearCartUiEvent()
@@ -72,6 +78,7 @@ class DishPageViewModel(
         Log.d("orderFlow - dishPage","initData")
         this.extras = extras
         if (extras.menuItem != null) {
+            currentFragmentState = DishFragmentState.ADD_DISH
             handleMenuItemData(extras.menuItem)
             getFullDish(extras.menuItem.id)
 
@@ -80,6 +87,7 @@ class DishPageViewModel(
                 dishMatchCookingSlot = false
             }
         }else if(extras.orderItem != null){
+            currentFragmentState = DishFragmentState.UPDATE_DISH
             finishToFeed = extras.finishToFeed
             isEditMode = true
             handleOrderItemData(extras.orderItem)
