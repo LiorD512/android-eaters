@@ -126,7 +126,8 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             val url = "http://maps.google.com/maps/api/staticmap?center=$lat,$lng&zoom=17&" +
                     "size=600x400&" +
                     "sensor=false&" +
-                    "markers=color:blue|$lat,$lng&" +
+//                    "markers=color:blue|$lat,$lng&" +
+                    "markers=icon:https://res.cloudinary.com/woodspoon/image/upload/uploads/app/assets/map_pin.png|$lat,$lng&" +
                     "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
 
             Glide.with(context).load(url).into(mapContainer)
