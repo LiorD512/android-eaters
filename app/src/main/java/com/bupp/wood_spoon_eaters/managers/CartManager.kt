@@ -24,6 +24,7 @@ class CartManager(
     var currentCookingSlotId: Long? = null
     fun getDeliverAt() = deliveryTimeManager.getTempDeliveryTimeStamp()
     fun getAddressId() = eaterDataManager.getCartAddressId()
+    fun getTipPercentage() = currentOrderResponse?.tipPercentage
 
     private var tempCookingSlotId = LiveEventData<Long>()
     fun getOnCookingSlotIdChange() = tempCookingSlotId
@@ -51,7 +52,8 @@ class CartManager(
             cookingSlotId = currentCookingSlotId,
             deliveryAt = getDeliverAt(),
             deliveryAddressId = getAddressId(),
-            orderItemRequests = cart
+            orderItemRequests = cart,
+            tipPercentage = getTipPercentage()?.toFloat()
         )
     }
 

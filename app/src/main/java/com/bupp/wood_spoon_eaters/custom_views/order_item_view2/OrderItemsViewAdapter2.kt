@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.custom_views.order_item_view2
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -56,7 +57,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
             val dish: Dish = orderItem.dish
 
             counter.text = "${orderItem.quantity}"
-            name.text = "${dish.name} x${orderItem.quantity}"
+            name.text = "${dish.name}"
 
             var price = 0.0
             orderItem.price.value?.let{
@@ -65,7 +66,11 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
             }
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
-            note.text = orderItem.getNoteStr()
+
+            if(!orderItem.getNoteStr().isNullOrEmpty()){
+                note.visibility = View.VISIBLE
+                note.text = orderItem.getNoteStr()
+            }
         }
 
     }

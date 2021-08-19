@@ -223,7 +223,7 @@
             android:layout_marginLeft="10.4dp"
             android:background="@null"
             android:padding="7dp"
-            android:src="@drawable/icons_back"
+            android:src="@drawable/ic_back_grey"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

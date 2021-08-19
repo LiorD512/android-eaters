@@ -77,7 +77,7 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
             }
         }
 
-        val globalMinimumOrderFee = viewModel.getGlobalMinimumFee()
+        val globalMinimumOrderFee = viewModel.getGlobalMinimumOrderFee()
         binding.feesTaxBSMinFeeSubTitle.text = "To reduce this fee your order value should be bigger than $globalMinimumOrderFee"
 
         val parent = view.parent as View

@@ -62,6 +62,10 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
             isValid = false
             binding.addressDetailsApt.showError()
         }
+        if(binding.addressDetailsZipcode.getText().isNullOrEmpty()){
+            isValid = false
+            binding.addressDetailsZipcode.showError()
+        }
         return isValid
     }
 

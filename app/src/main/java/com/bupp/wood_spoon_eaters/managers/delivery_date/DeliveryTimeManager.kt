@@ -59,7 +59,7 @@ class DeliveryTimeManager {
         getDeliveryTimeDate()?.let{
             return DateUtils.parseDateToDayDateNumberOrToday(it)
         }
-        return "Now"
+        return "Today"
     }
 //
 //    fun rollBackToPreviousDeliveryTime(){

@@ -54,6 +54,7 @@ class UpSaleNCartViewModel(
     val upsaleNCartLiveData = MutableLiveData<CartData?>()
 
     data class CartData(
+        val restaurantName: String? = null,
         val items: List<CartBaseAdapterItem>?
     )
 
@@ -76,14 +77,17 @@ class UpSaleNCartViewModel(
         subTotal?.let {
             list.add(CartAdapterSubTotalItem(it))
         }
-        return CartData(list)
+
+        val restaurantName = currentOrderData.value?.restaurant?.restaurantName
+
+        return CartData(restaurantName, list)
     }
 
 
     private fun fetchUpSaleData(): CartData {
         val list = mutableListOf<CartBaseAdapterItem>()
 
-        return CartData(list)
+        return CartData("Buy more", list)
     }
 
 

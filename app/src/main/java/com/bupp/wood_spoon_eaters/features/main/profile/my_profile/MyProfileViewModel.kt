@@ -51,7 +51,7 @@ class MyProfileViewModel(
     }
 
     init {
-        fetchProfileData()
+
         refreshFavorites()
         setVersionData()
         viewModelScope.launch {
@@ -66,7 +66,8 @@ class MyProfileViewModel(
 
     data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>)
 
-    private fun fetchProfileData() {
+    fun fetchProfileData() {
+        Log.d(TAG, "fetchProfileData")
         val eater = getUserDetails()
         val dietaries = metaDataRepository.getDietaryList()
         profileData.postValue(ProfileData(eater, dietaries))

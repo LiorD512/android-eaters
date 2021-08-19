@@ -54,7 +54,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:letterSpacing="0.03"
-                        android:text="cart page" />
+                        tools:text="cart page" />
 
 
             </FrameLayout>

@@ -44,7 +44,7 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, 
         }
     }
 
-    data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
+    data class FeesAndTaxData(val fee: String?, val tax: String?, val minFee: String? = null)
     val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         curOrder?.let{

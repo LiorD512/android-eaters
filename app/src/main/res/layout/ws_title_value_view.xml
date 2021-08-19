@@ -8,7 +8,7 @@
 
     <TextView
             android:id="@+id/titleValueViewTitle"
-            style="@style/LatoBold13Black"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Total before tip"
@@ -29,7 +29,7 @@
 
     <TextView
             android:id="@+id/titleValueViewValue"
-            style="@style/LatoBlack13Teal"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

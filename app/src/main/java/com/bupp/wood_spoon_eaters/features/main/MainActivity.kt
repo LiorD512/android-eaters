@@ -123,6 +123,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             viewModel.checkForActiveOrder()
             viewModel.forceFeedRefresh()
             refreshActiveCampaigns()
+            binding.mainActBottomTabLayout.forceOrdersClick()
 
 //            viewModel.refreshFloatingCartBtn()
         }

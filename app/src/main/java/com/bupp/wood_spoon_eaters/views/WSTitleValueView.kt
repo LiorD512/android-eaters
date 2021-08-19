@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.TextViewCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.WsTitleValueViewBinding
@@ -40,6 +41,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val value = attr.getString(R.styleable.WSTitleValueView_subTitle)
                 setValue(value)
 
+                val isBold = attr.getBoolean(R.styleable.WSTitleValueView_is_bold, false)
+                setStyle(isBold)
+
                 val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
                 if(toolTip != 0){
                     titleValueViewToolTip.customInit(context, attrs)
@@ -55,6 +59,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
                 attr.recycle()
             }
+        }
+    }
+
+    private fun setStyle(isBold: Boolean) {
+        if(isBold){
+            TextViewCompat.setTextAppearance(binding.titleValueViewTitle, R.style.LatoBold13Black)
+            TextViewCompat.setTextAppearance(binding.titleValueViewValue, R.style.LatoBold13Black)
         }
     }
 

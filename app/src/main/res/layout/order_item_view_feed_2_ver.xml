@@ -38,7 +38,7 @@
 
     <TextView
             android:id="@+id/orderItemPrice"
-            style="@style/LatoBlack13Teal"
+            style="@style/LatoBold13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -50,7 +50,7 @@
 
     <TextView
             android:id="@+id/orderItemNote"
-            style="@style/LatoReg13MediumGrey"
+            style="@style/LatoReg13PurpelyGrey"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"

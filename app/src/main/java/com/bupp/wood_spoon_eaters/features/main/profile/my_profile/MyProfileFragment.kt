@@ -50,6 +50,12 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
         initClicks()
         initObservers()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchProfileData()
     }
 
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {

@@ -40,6 +40,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    fun forceOrdersClick() {
+        binding.mainActTabLayout.selectTab(binding.mainActTabLayout.getTabAt(1))
+    }
+
 //    fun handleTabGestures(forceLock: Boolean){
 //        val tabStrip = binding.mainActTabLayout.getChildAt(0) as LinearLayout
 //        for (i in 0 until tabStrip.childCount) {

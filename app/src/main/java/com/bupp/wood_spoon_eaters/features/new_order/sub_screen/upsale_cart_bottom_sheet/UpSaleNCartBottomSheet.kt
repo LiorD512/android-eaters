@@ -182,6 +182,11 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     private fun handleCartData(data: UpSaleNCartViewModel.CartData?) {
         Log.d(TAG, "handleCartData data: $data")
         if(data != null){
+
+            data.restaurantName?.let{
+                binding.upsaleCartTitle.text = it
+            }
+
             cartAdapter = UpSaleNCartAdapter(getAdapterListener())
             binding.cartFragList.initSwipeableRecycler(cartAdapter)
             cartAdapter.submitList(data.items)
