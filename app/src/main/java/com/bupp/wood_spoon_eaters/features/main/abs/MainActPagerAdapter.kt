@@ -7,7 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
-import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 
 class MainActPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun getItemCount(): Int = NUM_PAGES

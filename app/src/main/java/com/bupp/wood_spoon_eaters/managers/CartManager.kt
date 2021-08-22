@@ -50,12 +50,12 @@ class CartManager(
     private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
         return OrderRequest(
             cookingSlotId = currentCookingSlotId,
-            deliveryAt = getDeliverAt(),
             deliveryAddressId = getAddressId(),
             orderItemRequests = cart,
             tipPercentage = getTipPercentage()?.toFloat()
         )
     }
+
 
 //    fun addItemRequest(dishId: Long, quantity: Int, note: String? = null) {
 //        val orderItemRequest = OrderItemRequest(dishId, quantity = quantity, notes = note)
@@ -283,7 +283,7 @@ class CartManager(
         return listOf()
     }
 
-    fun getDestroyedOrderItemRequestByOrderIdItem(orderItemId: Long): List<OrderItemRequest> {
+    private fun getDestroyedOrderItemRequestByOrderIdItem(orderItemId: Long): List<OrderItemRequest> {
         currentOrderResponse?.let {
             val destroyedOrderItemRequest = mutableListOf<OrderItemRequest>()
             val updatedOrderItem = it.orderItems?.firstOrNull {
@@ -394,7 +394,7 @@ class CartManager(
     /**
      * this function is called when user change address or delivery time
      */
-    suspend fun updateOrderDeliveryParam(): OrderRepository.OrderRepoResult<Order>? {
+    suspend fun updateOrderDeliveryAddressParam(): OrderRepository.OrderRepoResult<Order>? {
         val orderRequest = buildOrderRequest(emptyList())
         return updateOrderParams(orderRequest)
     }

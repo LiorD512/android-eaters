@@ -18,13 +18,13 @@ class SearchManager(private val feedRepository: FeedRepository, val eaterDataMan
         return feedRepository.getSearch(searchRequest)
     }
 
-    suspend fun getCookById(cookId: Long): FeedRepository.CookResult {
-        val feedRequest = eaterDataManager.getLastFeedRequest()
-        val lat = feedRequest.lat
-        val lng = feedRequest.lng
-        val addressId = feedRequest.addressId
-        return feedRepository.getCookById(cookId, addressId, lat, lng)
-    }
+//    suspend fun getCookById(cookId: Long): FeedRepository.CookResult {
+////        val feedRequest = eaterDataManager.getLastFeedRequest()
+////        val lat = feedRequest.lat
+////        val lng = feedRequest.lng
+////        val addressId = feedRequest.addressId
+////        return feedRepository.getCookById(cookId, addressId, lat, lng)
+//    }
 
     fun updateCurSearch(lat: Double? = null,
                         lng: Double? = null,

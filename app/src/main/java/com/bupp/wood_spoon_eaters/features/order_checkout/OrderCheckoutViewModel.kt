@@ -5,20 +5,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
-import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
@@ -42,12 +31,12 @@ class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private
     //stripe
     val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
     fun startStripeOrReInit(){
-        MTLogger.c(CheckoutViewModel.TAG, "startStripeOrReInit")
+        MTLogger.c(TAG, "startStripeOrReInit")
         if(paymentManager.hasStripeInitialized){
-            Log.d(CheckoutViewModel.TAG, "start payment method")
+            Log.d(TAG, "start payment method")
             navigationEvent.postValue(NavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         }else{
-            MTLogger.c(NewOrderMainViewModel.TAG, "re init stripe")
+            MTLogger.c(TAG, "re init stripe")
             navigationEvent.postValue(NavigationEvent.INITIALIZE_STRIPE)
         }
     }
@@ -66,7 +55,7 @@ class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private
 
     fun onLocationChanged() {
         viewModelScope.launch {
-            val result = cartManager.updateOrderDeliveryParam()
+            val result = cartManager.updateOrderDeliveryAddressParam()
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -82,6 +71,10 @@ class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private
                 }
             }
         }
+    }
+
+    companion object{
+        const val TAG = "wowOrderCheckoutVM"
     }
 
 

@@ -27,7 +27,7 @@ class EaterDataManager(
     ////////    DELIVERY_TIME       /////////
     /////////////////////////////////////////
 
-    fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
+//    fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
 
 
     /////////////////////////////////////////
@@ -175,29 +175,29 @@ class EaterDataManager(
 //        }
     }
 
-    fun getLastFeedRequest(): FeedRequest {
-        //being used in NewOrderActivity, uses params to init new Order.
-        var feedRequest = FeedRequest()
-        val lastAddress = getFinalAddressLiveDataParam().value
-        lastAddress?.let {
-            //address
-            if (lastAddress.id != null) {
-                feedRequest.addressId = lastAddress.id
-            } else {
-                feedRequest.lat = lastAddress.lat
-                feedRequest.lng = lastAddress.lng
-            }
-        }
+//    fun getLastFeedRequest(): FeedRequest {
+//        //being used in NewOrderActivity, uses params to init new Order.
+//        var feedRequest = FeedRequest()
+//        val lastAddress = getFinalAddressLiveDataParam().value
+//        lastAddress?.let {
+//            //address
+//            if (lastAddress.id != null) {
+//                feedRequest.addressId = lastAddress.id
+//            } else {
+//                feedRequest.lat = lastAddress.lat
+//                feedRequest.lng = lastAddress.lng
+//            }
+//        }
+//
+//        //time
+//        feedRequest.timestamp = getDeliveryTimestamp()
+//
+//        return feedRequest
+//    }
 
-        //time
-        feedRequest.timestamp = getDeliveryTimestamp()
-
-        return feedRequest
-    }
-
-    fun getDeliveryTimestamp(): String? {
-        return deliveryTimeManager.getDeliveryTimestamp()
-    }
+//    fun getDeliveryTimestamp(): String? {
+//        return deliveryTimeManager.getDeliveryTimestamp()
+//    }
 
 
     /////////////////////////////////////////

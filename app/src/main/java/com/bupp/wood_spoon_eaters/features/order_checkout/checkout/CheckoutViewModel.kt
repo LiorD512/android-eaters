@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
@@ -42,7 +41,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     }
 
-    private fun refreshDeliveyTime() {
+    private fun refreshDeliveryTime() {
         cartManager.calcCurrentOrderDeliveryTime()
     }
 
@@ -53,7 +52,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 val result = cartManager.fetchOrderDeliveryTimes(it.id)
                 result?.let{
                     deliveryDatesLiveData.postValue(it)
-                    refreshDeliveyTime()
+                    refreshDeliveryTime()
                 }
             }
             if(isPendingRequest){
@@ -73,6 +72,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
             progressData.endProgress()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                    cartManager.calcCurrentOrderDeliveryTime()
                 }
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
                 }
@@ -188,26 +188,26 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         return true
     }
 
-    fun onDeliveryTimeChanged() {
-        viewModelScope.launch {
-            val result = cartManager.updateOrderDeliveryParam()
-            result?.let {
-                when (result.type) {
-                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
-                        refreshDeliveyTime()
-                    }
-                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
-                    }
-                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                        cartManager.onLocationInvalid()
-                        cartManager.handleWsError(result.wsError)
-                    }
-                    else -> {
-                    }
-                }
-            }
-        }
-    }
+//    fun onDeliveryTimeChanged() {
+//        viewModelScope.launch {
+//            val result = cartManager.updateOrderDeliveryParam()
+//            result?.let {
+//                when (result.type) {
+//                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+//                        refreshDeliveyTime()
+//                    }
+//                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+//                    }
+//                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+//                        cartManager.onLocationInvalid()
+//                        cartManager.handleWsError(result.wsError)
+//                    }
+//                    else -> {
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
 
