@@ -84,7 +84,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         with(binding){
             if(orderHistory.isNotEmpty()){
                 adapter.submitList(orderHistory)
-                ordersHistoryFragRecyclerView.smoothScrollToPosition(0)
+//                ordersHistoryFragRecyclerView.smoothScrollToPosition(0)
                 ordersHistoryFragEmpty.visibility = View.GONE
                 ordersHistoryFragRecyclerView.visibility = View.VISIBLE
             }else{

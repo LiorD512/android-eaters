@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
 
@@ -85,7 +86,7 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     private fun initUi() {
         with(binding){
             timePickerAsapBtn.setOnClickListener {
-                viewModel.setDeliveryTime(null, isTemporary)
+                viewModel.setDeliveryTime(Date(), isTemporary)
                 listener?.onTimerPickerChange()
                 dismiss()
             }

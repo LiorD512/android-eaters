@@ -89,6 +89,7 @@ data class Order (
 ): Parcelable {
     fun getOrderState(): OrderState {
         var curOrderStage =  OrderState.NONE
+
         when (preparationStatus) {
             "in_progress" -> {
                 curOrderStage = OrderState.RECEIVED

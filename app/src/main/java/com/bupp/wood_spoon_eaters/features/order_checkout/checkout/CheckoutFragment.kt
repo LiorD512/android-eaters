@@ -354,7 +354,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //        mainViewModel.updateDeliveryTime(newChosenDate)
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
+        super.onHeaderCloseClick()
         activity?.onBackPressed()
 //        if (mainViewModel.isCheckout) {
 //            mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
