@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
@@ -36,7 +35,7 @@ import kotlin.collections.ArrayList
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
     OrderDateChooserDialog.OrderDateChooserDialogListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, TimePickerBottomSheet.TimePickerListener, OrderItemsView2.OrderItemsListener,
+    NationwideShippingChooserDialog.NationwideShippingChooserListener, OrderItemsView2.OrderItemsListener,
     WSTitleValueView.WSTitleValueListener, HeaderView.HeaderViewListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
 

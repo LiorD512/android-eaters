@@ -26,7 +26,7 @@ class TimePickerViewModel(
         }
     }
 
-    private fun getEventData(time: Date): Map<String, String>? {
+    private fun getEventData(time: Date): Map<String, String> {
         val data = mutableMapOf<String, String>("delivery_time" to time.toString())
         return data
     }

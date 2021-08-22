@@ -37,7 +37,7 @@ class FeedViewModel(
     val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
     val campaignLiveData = campaignManager.getCampaignLiveData()
 
-    val favoritesLiveData = feedDataManager.getFavoritesLiveData
+//    val favoritesLiveData = feedDataManager.getFavoritesLiveData
     fun refreshFavorites() {
         viewModelScope.launch {
             feedDataManager.refreshFavorites()

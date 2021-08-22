@@ -8,7 +8,6 @@ import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
@@ -29,7 +28,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), PlusMinusView.PlusMinusInterface, UserImageVideoView.UserImageViewListener,
-    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener, TimePickerBottomSheet.TimePickerListener,
+    DishMediaAdapter.DishMediaAdapterListener, InputTitleView.InputTitleViewListener,
     WSCounterEditText.WSCounterListener {
 
     val binding: FragmentSingleDishInfoBinding by viewBinding()
@@ -168,14 +167,14 @@ class SingleDishInfoFragment : Fragment(R.layout.fragment_single_dish_info), Plu
     }
 
     private fun openOrderTimeBottomSheet(menuItems: List<MenuItem>) {
-        val timePickerBottomSheet = TimePickerBottomSheet(this)
-        timePickerBottomSheet.setMenuItems(menuItems)
-        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+//        val timePickerBottomSheet = TimePickerBottomSheet(this)
+//        timePickerBottomSheet.setMenuItems(menuItems)
+//        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
-    override fun onTimerPickerChange() {
-        mainViewModel.refreshFullDish()
-    }
+//    override fun onTimerPickerChange() {
+//        mainViewModel.refreshFullDish()
+//    }
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateCurrentOrderItem(quantity = counter)

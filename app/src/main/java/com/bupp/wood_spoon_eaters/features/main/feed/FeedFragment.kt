@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
@@ -73,7 +72,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             binding.feedFragHeader.setAddress(it?.shortTitle)
         })
         viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+            Log.d(TAG, "getLocationLiveData observer called")
             binding.feedFragHeader.setDate(it?.deliveryDateUi)
+            refreshList()
         })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
             it.feedData?.let { skeletons ->
@@ -93,10 +94,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             Log.d(TAG, "getLocationLiveData observer called")
             viewModel.refreshFeedByLocationIfNeeded()
         })
-        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called")
-            refreshList()
-        })
+//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+//
+//        })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
             viewModel.refreshFavorites()
