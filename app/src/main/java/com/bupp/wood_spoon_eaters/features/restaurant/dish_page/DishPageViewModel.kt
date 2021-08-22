@@ -8,7 +8,6 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.OldCartManager
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -19,7 +18,6 @@ import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class DishPageViewModel(
-    val oldCartManager: OldCartManager,
     val userRepository: UserRepository,
     val cartManager: CartManager
 ) : ViewModel() {

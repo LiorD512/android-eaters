@@ -55,7 +55,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     private fun initObservers() {
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.orderHistoryFragHeightCorrection.isVisible = isVisible
+            binding.orderHistoryFragHeightCorrection.isVisible = it
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { event ->
             event.let{

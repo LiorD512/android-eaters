@@ -11,8 +11,8 @@ class DeliveryTimeManager {
     private var hasChangedTime: Boolean = false
     private var previousDeliveryTime: Date? = null
     private var deliveryTime: Date? = null
-    private val deliveryTimeDateLiveData = MutableLiveData<DeliveryTimeLiveData?>()
-    fun getDeliveryTimeLiveData() = deliveryTimeDateLiveData
+//    private val deliveryTimeDateLiveData = MutableLiveData<DeliveryTimeLiveData?>()
+//    fun getDeliveryTimeLiveData() = deliveryTimeDateLiveData
 
     private var tempDeliveryTime: Date? = null
     private var tempDeliveryTimeStamp: String? = null
@@ -22,7 +22,7 @@ class DeliveryTimeManager {
         this.deliveryTime = newDeliveryTime
         tempDeliveryTime = newDeliveryTime
         tempDeliveryTimeStamp = getDeliveryTimestamp()
-        deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryDateUiString()))
+//        deliveryTimeDateLiveData.postValue(DeliveryTimeLiveData(getDeliveryTimeDate(), getDeliveryTimestamp(), getDeliveryDateUiString()))
     }
 
     fun setTemporaryDeliveryTimeDate(tempDate: Date?){
@@ -60,6 +60,12 @@ class DeliveryTimeManager {
             return DateUtils.parseDateToDayDateNumberOrToday(it)
         }
         return "Today"
+    }
+
+    fun getDeliverAtUnixParam(): String? {
+        //future date - checkout - timePicker
+        //else null
+        return ""
     }
 //
 //    fun rollBackToPreviousDeliveryTime(){

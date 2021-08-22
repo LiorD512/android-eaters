@@ -267,8 +267,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
-            showErrorToast(it, binding.motionLayout)
-//            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+//            showErrorToast(it, binding.motionLayout)
+            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
         }
     }
 

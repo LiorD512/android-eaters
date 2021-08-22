@@ -15,13 +15,13 @@ import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.dialogs.order_date_chooser.OrderDateChooserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
@@ -34,7 +34,6 @@ import kotlin.collections.ArrayList
 
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
-    OrderDateChooserDialog.OrderDateChooserDialogListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, OrderItemsView2.OrderItemsListener,
     WSTitleValueView.WSTitleValueListener, HeaderView.HeaderViewListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
@@ -179,9 +178,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
-    override fun onTimerPickerChange() {
-        viewModel.onDeliveryTimeChanged()
-//        mainViewModel.refreshFullDish()
+    override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        viewModel.updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryTimeParam?.date)))
     }
 
 
@@ -311,6 +309,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 //        viewModel.refreshUi()
 //    }
 
+
     override fun onTipIconClick(tipSelection: Int?) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
@@ -349,9 +348,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-    override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
+//    override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
+
 //        mainViewModel.updateDeliveryTime(newChosenDate)
-    }
+//    }
 
     override fun onHeaderCloseClick() {
         super.onHeaderCloseClick()

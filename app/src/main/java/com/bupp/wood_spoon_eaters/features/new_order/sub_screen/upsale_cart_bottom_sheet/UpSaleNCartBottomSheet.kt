@@ -47,6 +47,8 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     private var behavior: BottomSheetBehavior<View>? = null
     private lateinit var currentSheetView: View
 
+    private val buttonHeight = Utils.toPx(88)
+
     private lateinit var cartAdapter: UpSaleNCartAdapter
 
 
@@ -79,10 +81,16 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             behavior!!.peekHeight = defaultPeekHeight
             behavior!!.addBottomSheetCallback(object : SimpleBottomSheetCallback() {
                 override fun onSlide(view: View, v: Float) {
-                    val yPos = height - (binding.floatingCartBtnLayout.height).toFloat() - view.y
-                    if (yPos > binding.floatingCartBtnLayout.height) {
+                    val yPos = height - (buttonHeight).toFloat() - view.y// - 86
+//                    val yPos = height - (binding.floatingCartBtnLayout.height).toFloat() - view.y - 86
+//                    val yPos = (view.y - (binding.floatingCartBtnLayout.height).toFloat())
+                    if (yPos > buttonHeight) {
                         binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
-                        Log.d(TAG, "yPos: $yPos")
+                        Log.d(TAG, "yPos: ${view.y}")
+                        Log.d(TAG, "view.measuredHeight: ${view.measuredHeight}")
+                        Log.d(TAG, "top: ${view.top}")
+                        Log.d(TAG, "bottom: ${view.bottom}")
+                        Log.d(TAG, "final: $yPos")
                     }
                     currentParentHeight = height - view.y.toInt()
                 }
@@ -102,11 +110,16 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
             var height = displayMetrics.heightPixels
 //            val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
-            val yPos = height - (binding.floatingCartBtnLayout.height).toFloat() - currentSheetView.y
-            binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+//            val yPos = height - currentSheetView.y - 150
+//            val yPos = height - (binding.floatingCartBtnLayout.measuredHeight).toFloat() - currentSheetView.y
+//            binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
 //            Log.d(TAG, "initial binding.floatingCartBtnLayout.height: ${binding.floatingCartBtnLayout.height}")
 //            Log.d(TAG, "initial defaultPeekHeight: ${defaultPeekHeight}")
+//            currentSheetView.getLocationOnScreen(intArrayOf(0,0))
             Log.d(TAG, "initial height: $height")
+            Log.d(TAG, "initial currentSheetView.y: ${currentSheetView.y}")
+            Log.d(TAG, "initial binding.floatingCartBtnLayout.measuredHeight: ${binding.floatingCartBtnLayout.measuredHeight}")
+            Log.d(TAG, "initial binding.floatingCartBtnLayout.y: ${binding.floatingCartBtnLayout.y}")
 //            Log.d(TAG, "initial yPos: $yPos")
             val resources: Resources = requireContext().resources
             val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")

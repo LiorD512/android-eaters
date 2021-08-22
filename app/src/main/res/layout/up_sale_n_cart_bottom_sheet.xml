@@ -83,6 +83,7 @@
             android:layout_height="@dimen/floating_cart_btn_height"
             android:layout_gravity="bottom"
             android:background="@drawable/transparent_to_white_80_gradient">
+<!--            android:background="@color/dark_40">-->
 
         <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                 android:id="@+id/upSaleCartBtn"

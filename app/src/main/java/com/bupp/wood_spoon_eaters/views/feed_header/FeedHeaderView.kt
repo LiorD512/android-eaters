@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.databinding.FeedHeaderViewBinding
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 
 class FeedHeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -14,17 +16,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var binding: FeedHeaderViewBinding = FeedHeaderViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     var listener: FeedHeaderViewListener? = null
-    fun setFeedHeaderViewListener(listener: FeedHeaderViewListener){
+    fun setFeedHeaderViewListener(listener: FeedHeaderViewListener) {
         this.listener = listener
     }
 
-    interface FeedHeaderViewListener{
+    interface FeedHeaderViewListener {
         fun onHeaderAddressClick()
         fun onHeaderDateClick()
     }
 
     init {
-         initUi(attrs)
+        initUi(attrs)
     }
 
 
@@ -46,17 +48,26 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.feedHeaderAddress.text = setAddress ?: "Address"
     }
 
-    fun setDate(date: String?) {
-        binding.feedHeaderDate.text = date ?: "When"
+    fun setDate(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        var dateStr = "when"
+        deliveryTimeParam?.let {
+            when (deliveryTimeParam.deliveryTimeType) {
+                SingleColumnTimePickerBottomSheet.DeliveryType.TODAY -> {
+                    dateStr = "Today"
+                }
+                SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE -> {
+                    dateStr = deliveryTimeParam.date?.let { DateUtils.parseDateToDayDateNumberOrToday(it) } ?: "ERROR"
+                }
+                else -> {} //DeliveryType.NON_FILTERED
+            }
+        }
+        binding.feedHeaderDate.text = dateStr
     }
 
 
-
-
-    companion object{
+    companion object {
         const val TAG = "wowFeedHeaderView"
     }
-
 
 
 }

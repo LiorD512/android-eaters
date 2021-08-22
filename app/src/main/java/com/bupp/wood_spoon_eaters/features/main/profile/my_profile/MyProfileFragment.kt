@@ -24,7 +24,6 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBott
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ShareBanner
@@ -128,7 +127,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             binding.myProfileFragVersion.text = "$it"
         })
         mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
-            Log.d(NewOrderActivity.TAG, "stripeInitializationEvent status: $it")
+            Log.d(TAG, "stripeInitializationEvent status: $it")
             when (it) {
                 PaymentManager.StripeInitializationStatus.START -> {
                     binding.myProfileFragPb.show()
@@ -145,7 +144,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             binding.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.myProfileFragHeightCorrection.isVisible = isVisible
+            binding.myProfileFragHeightCorrection.isVisible = it
         })
     }
 
