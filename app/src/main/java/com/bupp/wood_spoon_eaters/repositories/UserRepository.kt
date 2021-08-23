@@ -282,6 +282,11 @@ class UserRepository(
         return this.currentUser
     }
 
+    suspend fun fetchUser(): Eater? {
+        initUserRepo()
+        return this.currentUser
+    }
+
     companion object{
         const val TAG = "wowUserRepository"
     }

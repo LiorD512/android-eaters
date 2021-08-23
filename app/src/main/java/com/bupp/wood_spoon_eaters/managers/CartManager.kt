@@ -136,7 +136,6 @@ class CartManager(
      * this function simply crates new order and adds a new instance of a dish to the cart
      */
     suspend fun addDishToNewCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
-        Log.d("orderFlow - cartManager", "addDishToNewCart")
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         val result = orderRepository.addNewDish(orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {

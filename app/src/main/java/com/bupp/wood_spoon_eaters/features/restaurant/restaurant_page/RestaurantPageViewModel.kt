@@ -62,7 +62,7 @@ class RestaurantPageViewModel(
     private fun initRestaurantFullData(restaurantId: Long?) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
-                Log.d("orderFlow - restPage", "initRestaurantFullData")
+                Log.d(TAG, "initRestaurantFullData")
                 dishListData = getDishSkeletonItems()
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
                 dishListLiveData.postValue(DishListData(dishListData))
@@ -82,7 +82,7 @@ class RestaurantPageViewModel(
     /** Creating  Delivery date list
      * Sorting the cooking slots by dates - cooking slot on the same date goes together  **/
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
-        Log.d("orderFlow - restPage", "handleDeliveryTimingSection")
+        Log.d(TAG, "handleDeliveryTimingSection")
         val deliveryDates = mutableListOf<SortedCookingSlots>()
         restaurant.cookingSlots.forEach { cookingSlot ->
             val relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.orderFrom) }
@@ -102,7 +102,7 @@ class RestaurantPageViewModel(
      * Checking which cooking slot should be selected when first entering restaurant page
      */
     private fun chooseStartingCookingSlot(restaurant: Restaurant, sortedCookingSlots: List<SortedCookingSlots>) {
-        Log.d("orderFlow - restPage", "chooseStartingCookingSlot")
+        Log.d(TAG, "chooseStartingCookingSlot")
         if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
             /**  case1 : has open cart - get the cooking slot of the current order **/
             //todo - nicole - this will work? - cooking slot sections is not returned with order
@@ -150,12 +150,12 @@ class RestaurantPageViewModel(
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
     fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot, forceTabChnage: Boolean) {
-        Log.d("orderFlow - restPage", "updateCookingSlotRelatedUi")
+        Log.d(TAG, "updateCookingSlotRelatedUi")
         onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot), forceTabChnage))
     }
 
     fun onCookingSlotSelected(cookingSlot: CookingSlot, forceTabChange: Boolean) {
-        Log.d("orderFlow - restPage", "onCookingSlotSelected: $cookingSlot")
+        Log.d(TAG, "onCookingSlotSelected: $cookingSlot")
         updateCookingSlotRelatedUi(cookingSlot, forceTabChange)
         currentCookingSlot = cookingSlot
         val sortedCookingSlot = sortCookingSlotDishes(cookingSlot)
@@ -196,7 +196,7 @@ class RestaurantPageViewModel(
      * @param cookingSlot CookingSlot the chosenCookingSlot
      */
     private fun sortCookingSlotDishes(cookingSlot: CookingSlot): CookingSlot {
-        Log.d("orderFlow - restPage", "sortCookingSlotDishes")
+        Log.d(TAG, "sortCookingSlotDishes")
         dishes?.let { dishes ->
             val tempHash = dishes.toMutableMap()
             cookingSlot.sections.forEach { section ->
@@ -251,7 +251,7 @@ class RestaurantPageViewModel(
      * @param cookingSlot CookingSlot the chosenCookingSlot
      */
     private fun handleDishesSection(cookingSlot: CookingSlot) {
-        Log.d("orderFlow - restPage", "handleDishesSection")
+        Log.d(TAG, "handleDishesSection")
         val dishSectionsList = mutableListOf<DishSections>()
         cookingSlot.sections.forEach { section ->
             if (section.menuItems.isNotEmpty()) {
@@ -279,12 +279,12 @@ class RestaurantPageViewModel(
             // we need to check matching cooking slots inorder to prevent count change of diffrent menus - with same dishes
             // we need to check current cart orderItems - to update relevent dishes count to mach current order.
             val updatedSectionList = resetSectionItemsCounter(dishSectionsList)
-            Log.d("orderFlow - restPage", "updateDishCountUi")
+            Log.d(TAG, "updateDishCountUi")
             orderItems?.forEach { orderItem ->
                 val dishSection = updatedSectionList.find { it.menuItem?.dishId == orderItem.dish.id }
                 dishSection?.let {
                     dishSection.cartQuantity += orderItem.quantity
-                    Log.d("orderFlow - restPage", "updating dish quantity - ${dishSection.cartQuantity}, ${it.menuItem?.dish?.name}")
+                    Log.d(TAG, "updating dish quantity - ${dishSection.cartQuantity}, ${it.menuItem?.dish?.name}")
                 }
             }
             dishListData = updatedSectionList
@@ -292,14 +292,14 @@ class RestaurantPageViewModel(
             dishListLiveData.postValue(DishListData(dishListData, animateList))
 //            dishListLiveData.postRawValue(DishListData(updatedSectionList, animateList))
         } else {
-            Log.d("orderFlow - restPage", "updateDishCountUi2")
+            Log.d(TAG, "updateDishCountUi2")
             dishListData = dishSectionsList
             dishListLiveData.postValue(DishListData(dishListData, animateList))
         }
     }
 
     private fun resetSectionItemsCounter(dishSectionsList: List<DishSections>): MutableList<DishSections> {
-        Log.d("orderFlow - restPage", "resetSectionItemsCounter")
+        Log.d(TAG, "resetSectionItemsCounter")
         val updatedSectionList = mutableListOf<DishSections>()
         dishSectionsList.forEach { dishSection ->
             if (dishSection is DishSectionSingleDish) {
@@ -334,7 +334,7 @@ class RestaurantPageViewModel(
     }
 
     fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
-        Log.d("orderFlow - restPage", "addDishToCart")
+        Log.d(TAG, "addDishToCart")
         currentCookingSlot?.let { currentCookingSlot ->
             val currentRestaurant = restaurantFullData.value!!
             if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot.id, currentCookingSlot.orderFrom, currentCookingSlot.endsAt)) {
@@ -360,7 +360,6 @@ class RestaurantPageViewModel(
      * Called on any change to cart - updating UI accordingly
      */
     fun handleCartData(order: Order?) {
-        Log.d("orderFlow - restPage", "handleCartData")
         Log.d(TAG, "handleCartData")
         dishListData.let {
             updateDishCountUi(it, false)
