@@ -69,7 +69,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return null
     }
 
-    fun initSimpleDatesData(daysFromNow: Int) {
+    fun initSimpleDatesData(daysFromNow: Int, selectedDate: Date? = null) {
         stringPair.clear()
         datesList.clear()
         val dates = getDaysFromNow(daysFromNow)
@@ -84,6 +84,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
         wsTimePickerCustomAdapter?.submitList(stringPair)
+
+        selectedDate?.let{
+            setSelectedDate(it)
+        }
+    }
+
+    fun setSelectedDate(selectedDate: Date){
+            Log.d(TAG, "setSelectedDate: $selectedDate")
+            datesList.forEachIndexed { index, date ->
+                if(DateUtils.isSameDay(selectedDate, date) && index > 0){
+                    binding.wsRangeTimePickerDateList.scrollToPosition(index)
+                }
+            }
     }
 
     private fun getDaysFromNow(daysFromNow: Int): List<Date> {
@@ -102,8 +115,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return dates
     }
 
-
-    fun setDatesByDeliveryDates(deliveryDates: List<DeliveryDates>) {
+    fun setDatesByDeliveryDates(deliveryDates: List<DeliveryDates>, selectedDeliveryDate: Date? = null) {
         datesList.clear()
         stringPair.clear()
         deliveryDates.let {
@@ -119,6 +131,21 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
         wsTimePickerCustomAdapter?.submitList(stringPair)
+
+        selectedDeliveryDate?.let{
+            setSelectedDeliveryDate(it)
+        }
+    }
+
+
+    private fun setSelectedDeliveryDate(selectedDeliveryDate: Date){
+        Log.d(TAG, "setSelectedDeliveryDate: $selectedDeliveryDate")
+        datesList.forEachIndexed { index, date ->
+            val diff: Long = selectedDeliveryDate.time - date.time
+            if(diff.toInt() == 0 && index > 0){
+                binding.wsRangeTimePickerDateList.scrollToPosition(index)
+            }
+        }
     }
 
     fun setDatesByCookingSlots(cookingSlots: List<CookingSlot>) {
@@ -139,7 +166,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         wsTimePickerCustomAdapter?.submitList(stringPair)
     }
 
-
     private fun getCookingSlotsDates(cookingSlots: List<CookingSlot>): List<Pair<Date, String?>> {
         val dates = mutableListOf<Pair<Date, String?>>()
         cookingSlots.forEach { item ->
@@ -148,6 +174,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
         }
         return dates
+    }
+
+    fun setSelectedCookingSlot(selectedCookingSlot: CookingSlot?){
+        selectedCookingSlot?.let{
+            Log.d(TAG, "setSelectedCookingSlot: $it")
+            cookingSlotList.forEachIndexed { index, cookingSlot ->
+                if(cookingSlot.id == selectedCookingSlot.id && index > 0){
+                    binding.wsRangeTimePickerDateList.scrollToPosition(index)
+                }
+            }
+        }
     }
 
     fun getChosenCookingSlot(): CookingSlot? {

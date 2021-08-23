@@ -43,6 +43,12 @@ class FeedDataManager(
         return null
     }
 
+    fun getCurrentDeliveryDate(): Date?{
+        currentDeliveryParam.let{
+            return it?.date
+        }
+    }
+
 
 //    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
 

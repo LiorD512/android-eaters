@@ -440,6 +440,10 @@ class CartManager(
         return null
     }
 
+    fun getCurrentDeliveryAt(): Date?{
+        return currentOrderResponse?.deliverAt
+    }
+
     fun updateCurCookingSlotId(currentCookingSlotId: Long) {
         //updating the current cooking slot everytime before starting a new cart
         this.currentCookingSlotId = currentCookingSlotId

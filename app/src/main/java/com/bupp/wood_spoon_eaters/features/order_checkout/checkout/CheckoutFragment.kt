@@ -13,7 +13,6 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
-import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
@@ -173,9 +172,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     }
 
-    private fun openOrderTimeBottomSheet(deliveryDates: List<DeliveryDates>) {
+    private fun openOrderTimeBottomSheet(deliveryDatesData: CheckoutViewModel.TimePickerData) {
         val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
-        timePickerBottomSheet.setDeliveryDates(deliveryDates)
+        timePickerBottomSheet.setDeliveryDates(deliveryDatesData.selectedDate, deliveryDatesData.deliveryDates)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 

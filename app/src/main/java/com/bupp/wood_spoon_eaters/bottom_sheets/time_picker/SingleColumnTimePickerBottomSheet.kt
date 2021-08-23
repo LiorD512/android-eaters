@@ -23,7 +23,6 @@ import java.util.*
 
 class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
 
-//    var listener: TimePickerListener? = null
     data class DeliveryTimeParam(
     val deliveryTimeType: DeliveryType,
     val date: Date? = null
@@ -35,18 +34,19 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     }
     interface TimePickerListener{
         fun onTimerPickerChange(deliveryTimeParam: DeliveryTimeParam?){}
-//        fun onTimerPickerChange(date: Date?){}
         fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot){}
     }
 
     private val binding: SingleTimePickerBottomSheetBinding by viewBinding()
-    val viewModel by viewModel<TimePickerViewModel>()
+    private val viewModel by viewModel<TimePickerViewModel>()
     private var isTemporary: Boolean = false
 
-//    private var menuItems: List<MenuItem>? = null
     private var daysFromNow: Int? = null
     private var cookingSlots: List<CookingSlot>? = null
     private var deliveryDates: List<DeliveryDates>? = null
+
+    private var selectedData: Date? = null
+    private var selectedDeliveryDate: Date? = null
     private var selectedCookingSlot: CookingSlot? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,20 +95,10 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
 
     private fun initUi() {
         with(binding){
-//            timePickerAsapBtn.setOnClickListener {
-//                viewModel.setDeliveryTime(Date(), isTemporary)
-//                listener?.onTimerPickerChange(timePickerTimePicker.getChosenDate())
-//                dismiss()
-//            }
-//            timePickerScheduleBtn.setOnClickListener {
-//                viewModel.setDeliveryTime(timePickerTimePicker.getChosenDate(), isTemporary)
-//                listener?.onTimerPickerChange(null)
-//                dismiss()
-//            }
-
 
             cookingSlots?.let{
                 timePickerTimePicker.setDatesByCookingSlots(it)
+                timePickerTimePicker.setSelectedCookingSlot(selectedCookingSlot)
                 timePickerAsapBtn.visibility = View.GONE
                 timePickerTitle.text = "Change menu"
                 timePickerScheduleBtn.setTitle("Select")
@@ -123,7 +113,7 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
             }
 
             deliveryDates?.let{
-                timePickerTimePicker.setDatesByDeliveryDates(it)
+                timePickerTimePicker.setDatesByDeliveryDates(it, selectedDeliveryDate)
                 timePickerAsapBtn.visibility = View.GONE
                 timePickerSubtitle.visibility = View.VISIBLE
                 timePickerSubtitle.text = DateUtils.parseDateToFullDayDate(it[0].from)
@@ -135,7 +125,9 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
             }
 
             daysFromNow?.let{
-                binding.timePickerTimePicker.initSimpleDatesData(it)
+                val selectedDate = viewModel.getSelectedData()
+
+                binding.timePickerTimePicker.initSimpleDatesData(it, selectedDate)
 
                 binding.timePickerAsapBtn.setOnClickListener {
                     listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.TODAY))
@@ -159,18 +151,17 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
         this.selectedCookingSlot = curCookingSlot
     }
 
-    fun setDeliveryDates(deliveryDates: List<DeliveryDates>){
+    fun setDeliveryDates(selectedDeliveryDate: Date?, deliveryDates: List<DeliveryDates>){
         //checkout
         this.isTemporary = true
         this.deliveryDates = deliveryDates
+        this.selectedDeliveryDate = selectedDeliveryDate
     }
 
     fun setDatesFromNow(daysFromNow: Int = 7){
         //feed
         this.isTemporary = false
         this.daysFromNow = daysFromNow
-
-
     }
 
 }

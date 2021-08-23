@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager, private val eventsManager: EventsManager) :
@@ -34,7 +35,8 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         PAYMENT_METHOD_MISSING
     }
 
-    val timeChangeEvent = LiveEventData<List<DeliveryDates>>()
+    data class TimePickerData(val deliveryDates: List<DeliveryDates>, val selectedDate: Date? = null)
+    val timeChangeEvent = LiveEventData<TimePickerData>()
 
     init{
         fetchOrderDeliveryTimes()
@@ -93,7 +95,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     fun onTimeChangeClick() {
         if(deliveryDatesLiveData.value != null){
-            timeChangeEvent.postRawValue(deliveryDatesLiveData.value!!)
+            timeChangeEvent.postRawValue(TimePickerData(deliveryDatesLiveData.value!!, cartManager.getCurrentDeliveryAt()))
         }else{
             fetchOrderDeliveryTimes(true)
         }

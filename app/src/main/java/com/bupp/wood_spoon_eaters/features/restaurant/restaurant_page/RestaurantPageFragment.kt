@@ -173,13 +173,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding) {
             Glide.with(requireContext()).load(params.coverPhoto?.url).into(coverPhoto)
             restHeaderRestName.text = params.restaurantName
-            restHeaderChefName.text = "by ${params.chefName}"
+            restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             rating.text = "${params.rating}"
             ratingLayout.isVisible = params.rating ?: 0.0 > 0
 
             topHeaderRestaurantName.text = params.restaurantName
-            topHeaderChefName.text = "by ${params.chefName}"
+            topHeaderChefName.text = "By ${params.chefName}"
         }
     }
 

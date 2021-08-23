@@ -4,13 +4,15 @@ import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import java.util.*
 
 
 class TimePickerViewModel(
-    private val deliveryTimeManager: DeliveryTimeManager,
-    private val eaterDataManager: EaterDataManager
+    private val feedDataManager: FeedDataManager,
+    private val eventsManager: EventsManager
 ) : ViewModel() {
 
     fun logDeliveryTimeEvent(date: Date?, isTempDeliveryTime: Boolean = false) {
@@ -22,8 +24,12 @@ class TimePickerViewModel(
 //            deliveryTimeManager.setNewDeliveryTime(date)
 //        }
         date?.let{
-            eaterDataManager.logUxCamEvent(Constants.EVENT_FUTURE_DELIVERY, getEventData(date))
+            eventsManager.logEvent(Constants.EVENT_FUTURE_DELIVERY, getEventData(date))
         }
+    }
+
+    fun getSelectedData(): Date?{
+        return feedDataManager.getCurrentDeliveryDate()
     }
 
     private fun getEventData(time: Date): Map<String, String> {
