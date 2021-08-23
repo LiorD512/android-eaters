@@ -215,6 +215,8 @@ class CartManager(
         Log.d("orderFlow - cartManager", "updateOrderParams")
         Log.d(TAG, "updateOrderParams")
         currentOrderResponse?.let {
+            orderRequest.tipPercentage = getTipPercentage()?.toFloat()
+
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
             handleEvent(eventType)
             result.data?.let {

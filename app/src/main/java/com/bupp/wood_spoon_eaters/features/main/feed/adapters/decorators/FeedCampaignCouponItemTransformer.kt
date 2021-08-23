@@ -10,7 +10,7 @@ import kotlin.math.abs
 class FeedCampaignCouponItemTransformer() : ViewPager2.PageTransformer {
 
     override fun transformPage(page: View, position: Float) {
-        Log.d("wowFeedCampaignTrans", "position: $position")
+//        Log.d("wowFeedCampaignTrans", "position: $position")
         page.apply {
 
             val titleView: TextView = findViewById(R.id.customBannerTitle)
