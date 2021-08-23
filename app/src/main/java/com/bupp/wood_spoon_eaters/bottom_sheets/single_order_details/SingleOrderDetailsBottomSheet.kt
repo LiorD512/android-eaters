@@ -135,7 +135,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 if (!promoCode.isNullOrEmpty()) {
                     singleOrderDetailsPromoCode.visibility = View.VISIBLE
                     singleOrderDetailsPromoCode.setTitle("Promo code $promoCode")
-                    singleOrderDetailsPromoCode.setValue("(${discount?.formatedValue?.replace("-", "")})")
+                    singleOrderDetailsPromoCode.setValue("${discount?.formatedValue}")
                 }
 
                 if(status == "cancelled"){
