@@ -79,7 +79,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("wowFeedAdapter", "position: $position")
+//        Log.d("wowFeedAdapter", "position: $position")
         val section = getItem(position)
         when (section) {
             is FeedAdapterTitle -> {
@@ -141,7 +141,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onPageClick(position: Int) {
-        Log.d("wowFeedAdapter", "position:")
+        Log.d("wowFeedAdapter", "onClick - position: $position")
         val section = getItem(position)
         when (section) {
             is FeedAdapterRestaurant -> {

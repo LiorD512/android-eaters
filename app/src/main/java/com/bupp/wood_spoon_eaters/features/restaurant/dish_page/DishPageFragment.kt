@@ -31,7 +31,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     ClearCartCookingSlotBottomSheet.ClearCartListener,
     PlusMinusView.PlusMinusInterface,
     WSFloatingButton.WSFloatingButtonListener,
-    WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener {
+    ClearCartRestaurantBottomSheet.ClearCartListener {
 
     private var binding: FragmentDishPageBinding? = null
     private val viewModel by viewModel<DishPageViewModel>()
@@ -293,13 +293,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
-            showErrorToast(it, binding!!.dishPageMainLayout)
-//            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+            showErrorToast(it, binding!!.root)
         }
-    }
-
-    override fun onWSErrorDone() {
-
     }
 
     /**

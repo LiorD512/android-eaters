@@ -40,6 +40,8 @@ class FeedAdapterRestaurantViewHolder(
                 feedRestaurantItemRating.text = restaurant.avgRating.toString()
                 feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0.0 > 0
 
+
+                Log.d("feedItemPosition", "name : ${restaurant.chefName} setParentItemPosition: $parentAdapterPosition")
                 adapter.setParentItemPosition(parentAdapterPosition)
 
                 restaurant.items?.let {

@@ -77,7 +77,7 @@ private var parentItemPosition: Int = -1
         private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemPosition: Int) {
-            Log.d("feedItemPosition", "bindItem: $parentItemPosition")
+            Log.d("feedItemPosition", "bindItem:${dish.name} position: $parentItemPosition")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
 //                    .blurPlaceHolder(it, thumbnail, blurHash)
@@ -92,7 +92,7 @@ private var parentItemPosition: Int = -1
             tagView.setTags(dish.tags)
 
             layout.setOnClickListener{
-                Log.d("feedItemPosition", "parentItemPosition: $parentItemPosition")
+                Log.d("feedItemPosition", "onClick - parentItemPosition: $parentItemPosition")
                 listener.onPageClick(parentItemPosition)
             }
         }

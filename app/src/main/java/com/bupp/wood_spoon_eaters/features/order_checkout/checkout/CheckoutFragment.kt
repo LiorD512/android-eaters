@@ -263,7 +263,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             if (!promo.isNullOrEmpty()) {
                 checkoutFragPromoCode2.visibility = View.VISIBLE
                 checkoutFragPromoCode2.setTitle("Promo code $promo")
-                checkoutFragPromoCode2.setValue("(${curOrder.discount?.formatedValue})")
+                checkoutFragPromoCode2.setValue("${curOrder.discount?.formatedValue}")
                 checkoutFragPromoCode.updateSubTitle("$promo")
             }
 

@@ -124,22 +124,25 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
 
 
     private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
+        val tempFeedResult = mutableListOf<FeedSection>()
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
             section.href?.let {
                 if (it == href) {
                     data?.let { data ->
                         if(data.isEmpty()){
+                            return@forEachIndexed
                             //remove title incase Href data is empty
-                            lastFeedDataResult?.sections!![index].title = ""
+//                            val sections = tempFeedResult?.sections?.toMutableList()?.removeAt(index)
+//                            lastFeedDataResult?.sections = sections
                         }
                         section.href = null
                         lastFeedDataResult?.sections!![index].collections = data.toMutableList()
                     }
                 }
-
             }
+            tempFeedResult.add(section)
         }
-        return processFeedData(lastFeedDataResult)
+        return processFeedData(FeedResult(tempFeedResult))
     }
 
 
