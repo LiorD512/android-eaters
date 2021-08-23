@@ -49,15 +49,13 @@ interface ApiService {
 //        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
 //    ): ServerResponse<List<FeedFlow>>
 
-//    @GET("eaters/me/feed")
-    @GET
+    @GET("eaters/me/feed")
     suspend fun getFeed(
-        @Url url: String,
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
     ): ServerResponse<FeedResult>
 
-    @GET
+    @GET()
     suspend fun getHrefCollection(
         @Url url: String,
     ): ServerResponse<List<FeedSectionCollectionItem>>

@@ -3,14 +3,16 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Dialog
+import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Point
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -45,7 +47,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     private val viewModel by viewModel<UpSaleNCartViewModel>()
     private var currentParentHeight: Int = defaultPeekHeight
     private var behavior: BottomSheetBehavior<View>? = null
-    private lateinit var currentSheetView: View
+    private var currentSheetView: View? = null
 
     private val buttonHeight = Utils.toPx(88)
 
@@ -61,17 +63,51 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
+    private fun getStatusBarSize(): Int {
+        val resources: Resources = resources
+        val resourceId: Int = resources.getIdentifier("status_bar_height", "dimen", "android")
+        return if (resourceId > 0) {
+            resources.getDimensionPixelSize(resourceId)
+        } else 0
+    }
+
+    /**
+     * this function calculates the height of the screen without the status bar height
+     */
+    fun getScreenHeight(): Int{
+        val display: Display = requireActivity().windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+
+        val realSize = Point()
+        val realDisplay: Display = requireActivity().windowManager.defaultDisplay
+        realDisplay.getRealSize(realSize)
+
+        var maxWidth = size.x
+        var maxHeight = size.y
+
+//        maxHeight = size.y - getStatusBarSize()
+//        Log.d(TAG, "realSize: ${realSize.y}")
+//        Log.d(TAG, "size: ${size.y}")
+//        Log.d(TAG, "maxHeight: $maxHeight")
+        if (size.y + getBottomBarHeight() == realSize.y){// || realSize.y == size.y) {
+            // if we reached here it means that screenSize includes status bar inside - there fore subtract status bar height
+//        if (realSize.y - getBottomBarHeight() == size.y || realSize.y == size.y) {
+            Log.d(TAG, "getSize() includes the status bar size");
+            maxHeight = size.y - getStatusBarSize()
+        }else{
+            maxHeight = size.y
+        }
+        return maxHeight
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
-        val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        var height = displayMetrics.heightPixels
+        var height = getScreenHeight()
 
         dialog.setOnShowListener {
-//            Log.d(TAG, "setOnShowListener")
-//            Log.d(TAG, "defaultPeekHeight $defaultPeekHeight")
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
             sheet?.let{ sheet ->
@@ -81,24 +117,19 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             behavior!!.peekHeight = defaultPeekHeight
             behavior!!.addBottomSheetCallback(object : SimpleBottomSheetCallback() {
                 override fun onSlide(view: View, v: Float) {
-                    val yPos = height - (buttonHeight).toFloat() - view.y// - 86
-//                    val yPos = height - (binding.floatingCartBtnLayout.height).toFloat() - view.y - 86
-//                    val yPos = (view.y - (binding.floatingCartBtnLayout.height).toFloat())
+                    val yPos = height - (buttonHeight).toFloat() - view.y //- 81
                     if (yPos > buttonHeight) {
                         binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
-                        Log.d(TAG, "yPos: ${view.y}")
-                        Log.d(TAG, "view.measuredHeight: ${view.measuredHeight}")
-                        Log.d(TAG, "top: ${view.top}")
-                        Log.d(TAG, "bottom: ${view.bottom}")
-                        Log.d(TAG, "final: $yPos")
+//                        Log.d(TAG, "yPos: ${view.y}")
+//                        Log.d(TAG, "view.measuredHeight: ${view.measuredHeight}")
+//                        Log.d(TAG, "top: ${view.top}")
+//                        Log.d(TAG, "bottom: ${view.bottom}")
+//                        Log.d(TAG, "final: $yPos")
                     }
                     currentParentHeight = height - view.y.toInt()
                 }
             })
-
             refreshButtonPosition()
-
-//            currentParentHeight = behavior!!.peekHeight
         }
 
         return dialog
@@ -106,29 +137,43 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
 
     private fun refreshButtonPosition() {
         binding.floatingCartBtnLayout.waitForLayout {
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            var height = displayMetrics.heightPixels
-//            val yPos = height - (height - defaultPeekHeight).toFloat() - binding.floatingCartBtnLayout.height
-//            val yPos = height - currentSheetView.y - 150
-//            val yPos = height - (binding.floatingCartBtnLayout.measuredHeight).toFloat() - currentSheetView.y
-//            binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
-//            Log.d(TAG, "initial binding.floatingCartBtnLayout.height: ${binding.floatingCartBtnLayout.height}")
-//            Log.d(TAG, "initial defaultPeekHeight: ${defaultPeekHeight}")
-//            currentSheetView.getLocationOnScreen(intArrayOf(0,0))
-            Log.d(TAG, "initial height: $height")
-            Log.d(TAG, "initial currentSheetView.y: ${currentSheetView.y}")
-            Log.d(TAG, "initial binding.floatingCartBtnLayout.measuredHeight: ${binding.floatingCartBtnLayout.measuredHeight}")
-            Log.d(TAG, "initial binding.floatingCartBtnLayout.y: ${binding.floatingCartBtnLayout.y}")
-//            Log.d(TAG, "initial yPos: $yPos")
-            val resources: Resources = requireContext().resources
+            val height = getScreenHeight()
+            val yPos = height - (buttonHeight).toFloat() - currentSheetView!!.y
+            binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+//            Log.d(TAG, "initial height: $height")
+//            Log.d(TAG, "initial currentSheetView.y: ${currentSheetView?.y}")
+//            Log.d(TAG, "initial binding.floatingCartBtnLayout.measuredHeight: ${binding.floatingCartBtnLayout.measuredHeight}")
+//            Log.d(TAG, "initial binding.floatingCartBtnLayout.y: ${binding.floatingCartBtnLayout.y}")
+//            Log.d(TAG, "initial getScreenSizeIncludingTopBottomBar: ${getScreenSizeIncludingTopBottomBar(requireContext())[1]}")
+//            Log.d(TAG, "initial getStatusBarSize(): ${getStatusBarSize()}")
+//            Log.d(TAG, "initial getBottomBarHeight: ${getBottomBarHeight()}")
+        }
+    }
+
+    fun getScreenSizeIncludingTopBottomBar(context: Context): IntArray {
+        val screenDimensions = IntArray(2) // width[0], height[1]
+        val x: Int
+        val y: Int
+        val orientation = context.resources.configuration.orientation
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = wm.defaultDisplay
+        val screenSize = Point()
+        display.getRealSize(screenSize)
+        x = screenSize.x
+        y = screenSize.y
+        screenDimensions[0] = if (orientation == Configuration.ORIENTATION_PORTRAIT) x else y // width
+        screenDimensions[1] = if (orientation == Configuration.ORIENTATION_PORTRAIT) y else x // height
+        return screenDimensions
+    }
+
+    fun getBottomBarHeight(): Int{
+        val resources: Resources = requireContext().resources
             val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
             val navigationBarHeight = if (resourceId > 0) {
                 resources.getDimensionPixelSize(resourceId)
             } else
                 0
-            Log.d(TAG, "navigationBarHeight: $navigationBarHeight")
-        }
+        return navigationBarHeight
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -322,6 +367,12 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     companion object {
         const val TAG = "wowUpSaleNCartBS"
 
+    }
+
+    override fun onDestroy() {
+        currentSheetView = null
+        behavior = null
+        super.onDestroy()
     }
 
 }

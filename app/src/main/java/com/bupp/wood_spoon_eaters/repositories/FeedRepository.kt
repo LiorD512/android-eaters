@@ -2,13 +2,14 @@ package com.bupp.wood_spoon_eaters.repositories
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.base_repos.FeedRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FeedRepository(private val apiService: FeedRepositoryImpl) {
+class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfigManager: FlavorConfigManager) {
 
 
     private var lastFeedDataResult: FeedResult? = null
@@ -59,7 +60,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl) {
     @SuppressLint("LogNotTimber")
     suspend fun getFeedHref(href: String): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
-            apiService.getHrefCollection(href)
+            val baseUrl = flavorConfigManager.getBaseUrl()
+            apiService.getHrefCollection(baseUrl+href)
         }
         result.let {
             return when (result) {
