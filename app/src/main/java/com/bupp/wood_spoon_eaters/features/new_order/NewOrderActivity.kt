@@ -11,7 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.dialogs.AddressMissingDialog
 import com.bupp.wood_spoon_eaters.dialogs.StartNewCartDialog
@@ -210,8 +210,9 @@ class NewOrderActivity : BaseActivity(),
                 findNavController(R.id.newOrderContainer).navigateSafe(R.id.action_newOrderMainFragment_to_checkoutFragment)
             }
             NewOrderMainViewModel.NewOrderNavigationEvent.REDIRECT_TO_SELECT_PROMO_CODE -> {
-                val promoCodeBottomSheet = PromoCodeBottomSheet()
-                promoCodeBottomSheet.show(supportFragmentManager, Constants.COUNTRY_CODE_BOTTOM_SHEET)
+                //todo: open fragment
+//                val promoCodeBottomSheet = PromoCodeFragment()
+//                promoCodeBottomSheet.show(supportFragmentManager, Constants.COUNTRY_CODE_BOTTOM_SHEET)
 //                binding.singleDishStatusBar.hide()
 //                val action = CheckoutFragmentDirections.actionCheckoutFragmentToPromoCodeFragment()
 //                findNavController(R.id.newOrderContainer).navigate(action)

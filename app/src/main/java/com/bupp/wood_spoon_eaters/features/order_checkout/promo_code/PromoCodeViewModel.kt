@@ -33,8 +33,9 @@ class PromoCodeViewModel(private val cartManager: CartManager) : ViewModel() {
                     errorEvent.postValue(result.wsError)
                 }
             }
+            progressData.endProgress()
         }
-        progressData.endProgress()
+
     }
 
 

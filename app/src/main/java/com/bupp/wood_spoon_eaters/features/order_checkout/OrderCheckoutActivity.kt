@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
@@ -64,8 +65,11 @@ class OrderCheckoutActivity : AppCompatActivity() {
             }
             OrderCheckoutViewModel.NavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE -> {
                 intent.putExtra("isAfterPurchase", true)
-                setResult(Activity.RESULT_OK, intent)
+                setResult(RESULT_OK, intent)
                 finish()
+            }
+            OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT -> {
+                findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_promoCodeFragment)
             }
         }
     }
