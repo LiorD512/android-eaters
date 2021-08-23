@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/promoCodeFragmentMainLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
 
     <LinearLayout
             android:id="@+id/promoCodeFragmentLayout"
@@ -39,22 +40,27 @@
                 app:error="Please enter promo code"
                 app:hint="Enter promo code" />
 
-        <View
-                android:layout_weight="1"
-                android:layout_width="1dp"
-                android:layout_height="0dp"/>
-
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/illus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15.4dp"
-            android:src="@drawable/illus_gift"
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:gravity="bottom|center_horizontal"
             app:layout_constraintBottom_toTopOf="@+id/promoCodeFragSubmit"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/promoCodeFragmentLayout">
+
+
+        <ImageView
+                android:id="@+id/illus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15.4dp"
+                android:src="@drawable/illus_gift" />
+
+    </LinearLayout>
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             android:id="@+id/promoCodeFragSubmit"
@@ -70,4 +76,5 @@
             android:id="@+id/promoCodeFragPb"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

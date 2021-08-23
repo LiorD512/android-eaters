@@ -22,6 +22,7 @@ class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private
         START_PAYMENT_METHOD_ACTIVITY,
         FINISH_CHECKOUT_ACTIVITY,
         INITIALIZE_STRIPE,
+        OPEN_PROMO_CODE_FRAGMENT
     }
 
     fun handleMainNavigation(type: NavigationEvent) {

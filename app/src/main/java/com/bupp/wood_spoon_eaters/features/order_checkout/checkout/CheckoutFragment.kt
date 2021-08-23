@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
-import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeFragment
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
@@ -162,8 +162,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
             checkoutFragPromoCode.setOnClickListener {
-                val promoCodeBottomSheet = PromoCodeBottomSheet()
-                promoCodeBottomSheet.show(childFragmentManager, Constants.PROMO_CODE_TAG)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
+//                val promoCodeBottomSheet = PromoCodeFragment()
+//                promoCodeBottomSheet.show(childFragmentManager, Constants.PROMO_CODE_TAG)
             }
             checkoutFragPlaceOrderBtn.setOnClickListener {
                 viewModel.onPlaceOrderClick()

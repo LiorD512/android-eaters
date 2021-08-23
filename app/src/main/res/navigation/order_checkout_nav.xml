@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/order_checkout_nav.xml"
         app:startDestination="@id/checkoutFragment">
 
     <fragment
             android:id="@+id/checkoutFragment"
             android:name="com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragment"
-            android:label="CheckoutFragment" />
+            android:label="CheckoutFragment"
+            tools:layout="@layout/checkout_fragment">
+        <action
+                android:id="@+id/action_checkoutFragment_to_promoCodeFragment"
+                app:destination="@id/promoCodeFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/checkoutFragment" />
+    </fragment>
+
+
+    <fragment
+            android:id="@+id/promoCodeFragment"
+            android:name="com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeFragment"
+            android:label="fragment_promo_code"
+            tools:layout="@layout/promo_code_fragment"/>
+
 
 </navigation>
 
