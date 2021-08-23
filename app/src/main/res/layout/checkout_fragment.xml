@@ -15,7 +15,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:title="Checkout"
-            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
     <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -210,6 +210,7 @@
                         android:id="@+id/checkoutFragTotalBeforeTip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:isBold="true"
                         style="@style/LatoBold13Black"
                         app:title="Total before tip" />
 

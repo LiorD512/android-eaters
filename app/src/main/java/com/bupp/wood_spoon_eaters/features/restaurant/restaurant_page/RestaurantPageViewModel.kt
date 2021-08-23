@@ -1,3 +1,4 @@
+
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
 import android.util.Log
@@ -8,6 +9,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
@@ -19,8 +21,9 @@ import kotlinx.coroutines.launch
 
 class RestaurantPageViewModel(
     private val restaurantRepository: RestaurantRepository,
-    private val timeManager: DeliveryTimeManager,
     private val cartManager: CartManager,
+    private val feedDataManager: FeedDataManager
+
 ) : ViewModel() {
     var currentRestaurantId: Long = -1
 
@@ -112,7 +115,7 @@ class RestaurantPageViewModel(
             }
         } else {
             /**  case2 : no open cart, has chosen date from feed - search for cookingSlot that contains chosen date  **/
-            timeManager.getTempDeliveryTimeDate()?.let { feedDate ->
+            feedDataManager.getFeedDeliveryParams()?.let { feedDate ->
                 sortedCookingSlots.forEach { date ->
                     var feedTimeCookingSlot: CookingSlot? = null
                     if (DateUtils.isSameDay(date.date, feedDate)) {
@@ -126,7 +129,7 @@ class RestaurantPageViewModel(
                          * 1. update cartManager to be set to the "orderFrom" date, order can be made
                          * 2. update restaurant screen ui
                          * **/
-                        timeManager.setTemporaryDeliveryTimeDate(it.orderFrom)
+//                        timeManager.setTemporaryDeliveryTimeDate(it.orderFrom)
                         onCookingSlotSelected(it, true)
                         return
                     }

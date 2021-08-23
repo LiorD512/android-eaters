@@ -141,7 +141,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     private fun validateAddressParams(address: AddressRequest): Boolean {
-        return address.streetLine1 != null || address.streetNumber != null
+        return address.streetLine1 != null && address.streetNumber != null
     }
 
     fun saveAndPostAddress(address: AddressRequest){

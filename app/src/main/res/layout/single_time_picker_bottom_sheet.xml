@@ -64,6 +64,6 @@
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
             android:gravity="center"
-            android:text="Deliver Now"/>
+            android:text="Deliver Today"/>
 
 </LinearLayout>

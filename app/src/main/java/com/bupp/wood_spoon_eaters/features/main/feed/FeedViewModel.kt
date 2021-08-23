@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
@@ -32,12 +33,12 @@ class FeedViewModel(
 
     fun getLocationLiveData() = feedDataManager.getLocationLiveData()
     fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
-    fun getDeliveryTimeLiveData() = feedDataManager.getDeliveryTimeLiveData()
+//    fun getDeliveryTimeLiveData() = feedDataManager.getDeliveryTimeLiveData()
 
     val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
     val campaignLiveData = campaignManager.getCampaignLiveData()
 
-    val favoritesLiveData = feedDataManager.getFavoritesLiveData
+//    val favoritesLiveData = feedDataManager.getFavoritesLiveData
     fun refreshFavorites() {
         viewModelScope.launch {
             feedDataManager.refreshFavorites()
@@ -143,10 +144,14 @@ class FeedViewModel(
         return (feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null
     }
 
-    fun getEaterFirstName(): String?{
-        return feedDataManager.getUser()?.firstName
-    }
+//    fun getEaterFirstName(): String?{
+//        return feedDataManager.getUser()?.firstName
+//    }
 
+    fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        feedDataManager.onTimePickerChanged(deliveryTimeParam)
+        onPullToRefresh()
+    }
 
 
     companion object{

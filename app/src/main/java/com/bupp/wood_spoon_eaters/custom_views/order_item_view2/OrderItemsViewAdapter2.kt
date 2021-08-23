@@ -61,7 +61,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
 
             var price = 0.0
             orderItem.price.value?.let{
-                price = it*orderItem.quantity
+                price = it
 
             }
             val priceStr = DecimalFormat("##.##").format(price)

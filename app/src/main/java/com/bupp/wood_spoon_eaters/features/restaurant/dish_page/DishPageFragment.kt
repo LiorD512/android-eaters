@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.Modific
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -292,7 +293,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
-            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+            showErrorToast(it, binding!!.dishPageMainLayout)
+//            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
         }
     }
 

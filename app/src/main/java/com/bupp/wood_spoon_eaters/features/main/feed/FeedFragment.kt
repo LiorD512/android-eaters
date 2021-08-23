@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.TimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
@@ -18,6 +17,7 @@ import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
@@ -26,10 +26,11 @@ import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed),
-     FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener {
+     FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener, SingleColumnTimePickerBottomSheet.TimePickerListener {
 
 
     companion object {
@@ -72,9 +73,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             binding.feedFragHeader.setAddress(it?.shortTitle)
         })
-        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-            binding.feedFragHeader.setDate(it?.deliveryDateUi)
-        })
+//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+//            Log.d(TAG, "getLocationLiveData observer called")
+//            binding.feedFragHeader.setDate(it?.deliveryDateUi)
+//            refreshList()
+//        })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
             it.feedData?.let { skeletons ->
                 handleFeedResult(skeletons)
@@ -93,10 +96,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             Log.d(TAG, "getLocationLiveData observer called")
             viewModel.refreshFeedByLocationIfNeeded()
         })
-        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called")
-            refreshList()
-        })
+//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+//
+//        })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
             viewModel.refreshFavorites()
@@ -142,10 +144,19 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onHeaderDateClick() {
 //        val timePickerBottomSheet = TimePickerBottomSheet()
-        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet()
+        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
         timePickerBottomSheet.setDatesFromNow(7)
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
+
+    override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        viewModel.onTimePickerChanged(deliveryTimeParam)
+        binding.feedFragHeader.setDate(deliveryTimeParam)
+    }
+//    override fun onTimerPickerChange(date: Date?) {
+//        //Date () - delivery today
+//        //Future date
+//    }
 
     private fun handleShareCampaign(campaigns: List<Campaign>?) {
         campaigns?.let {

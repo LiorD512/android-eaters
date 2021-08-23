@@ -12,9 +12,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderMainViewModel
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,7 +20,7 @@ class OrderCheckoutActivity : AppCompatActivity() {
 
     //activityLauncher Results
     private val startAddressChooserForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        Log.d(NewOrderActivity.TAG, "Activity For Result - startAddressChooserForResult")
+        Log.d(TAG, "Activity For Result - startAddressChooserForResult")
         if (result.resultCode == Activity.RESULT_OK) {
             viewModel.onLocationChanged()
         }
@@ -92,6 +89,8 @@ class OrderCheckoutActivity : AppCompatActivity() {
         }
     }
 
-
+    companion object{
+        const val TAG = "wowOrderCheckoutAct"
+    }
 
 }

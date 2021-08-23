@@ -13,20 +13,20 @@ class TimePickerViewModel(
     private val eaterDataManager: EaterDataManager
 ) : ViewModel() {
 
-    fun setDeliveryTime(date: Date?, isTempDeliveryTime: Boolean = false) {
+    fun logDeliveryTimeEvent(date: Date?, isTempDeliveryTime: Boolean = false) {
         MTLogger.c(TAG, "changing delivery time -> date: $date, isTemp: $isTempDeliveryTime")
-        if(isTempDeliveryTime){
-            //set temporary time when user change deliveryTime from singleDishInfo - set temp so that global time wont change (and mess feed)
-            deliveryTimeManager.setTemporaryDeliveryTimeDate(date)
-        }else{
-            deliveryTimeManager.setNewDeliveryTime(date)
-        }
+//        if(isTempDeliveryTime){
+//            //set temporary time when user change deliveryTime from singleDishInfo - set temp so that global time wont change (and mess feed)
+//            deliveryTimeManager.setTemporaryDeliveryTimeDate(date)
+//        }else{
+//            deliveryTimeManager.setNewDeliveryTime(date)
+//        }
         date?.let{
             eaterDataManager.logUxCamEvent(Constants.EVENT_FUTURE_DELIVERY, getEventData(date))
         }
     }
 
-    private fun getEventData(time: Date): Map<String, String>? {
+    private fun getEventData(time: Date): Map<String, String> {
         val data = mutableMapOf<String, String>("delivery_time" to time.toString())
         return data
     }

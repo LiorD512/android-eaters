@@ -33,6 +33,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun setProgress(progress: Int) {
+        disableAllView()
         val currentProgress = binding.OrderPb.progress
         ObjectAnimator.ofInt(
             binding.OrderPb, "progress",
@@ -62,6 +63,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 enableIcon(binding.orderPbDelivered)
             }
         }
+    }
+
+    private fun disableAllView() {
+        binding.orderPbReceived.isSelected = false
+        binding.orderPbPrepared.isSelected = false
+        binding.orderPbOnTheWay.isSelected = false
+        binding.orderPbDelivered.isSelected = false
     }
 
     fun next() {

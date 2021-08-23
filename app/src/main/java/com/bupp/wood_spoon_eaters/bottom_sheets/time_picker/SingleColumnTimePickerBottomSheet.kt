@@ -19,12 +19,23 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
 
 //    var listener: TimePickerListener? = null
+    data class DeliveryTimeParam(
+    val deliveryTimeType: DeliveryType,
+    val date: Date? = null
+    )
+    enum class DeliveryType{
+        NON_FILTERED,
+        TODAY,
+        FUTURE
+    }
     interface TimePickerListener{
-        fun onTimerPickerChange(){}
+        fun onTimerPickerChange(deliveryTimeParam: DeliveryTimeParam?){}
+//        fun onTimerPickerChange(date: Date?){}
         fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot){}
     }
 
@@ -84,21 +95,17 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
 
     private fun initUi() {
         with(binding){
-            timePickerAsapBtn.setOnClickListener {
-                viewModel.setDeliveryTime(null, isTemporary)
-                listener?.onTimerPickerChange()
-                dismiss()
-            }
-            timePickerScheduleBtn.setOnClickListener {
-                viewModel.setDeliveryTime(timePickerTimePicker.getChosenDate(), isTemporary)
-                listener?.onTimerPickerChange()
-                dismiss()
-            }
-
-//            menuItems?.let{
-//                timePickerTimePicker.setDatesByMenuItems(it)
-//                timePickerAsapBtn.visibility = View.GONE
+//            timePickerAsapBtn.setOnClickListener {
+//                viewModel.setDeliveryTime(Date(), isTemporary)
+//                listener?.onTimerPickerChange(timePickerTimePicker.getChosenDate())
+//                dismiss()
 //            }
+//            timePickerScheduleBtn.setOnClickListener {
+//                viewModel.setDeliveryTime(timePickerTimePicker.getChosenDate(), isTemporary)
+//                listener?.onTimerPickerChange(null)
+//                dismiss()
+//            }
+
 
             cookingSlots?.let{
                 timePickerTimePicker.setDatesByCookingSlots(it)
@@ -120,38 +127,49 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
                 timePickerAsapBtn.visibility = View.GONE
                 timePickerSubtitle.visibility = View.VISIBLE
                 timePickerSubtitle.text = DateUtils.parseDateToFullDayDate(it[0].from)
+
+                binding.timePickerScheduleBtn.setOnClickListener {
+                    listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.FUTURE, timePickerTimePicker.getChosenDate()))
+                    dismiss()
+                }
             }
 
             daysFromNow?.let{
                 binding.timePickerTimePicker.initSimpleDatesData(it)
+
+                binding.timePickerAsapBtn.setOnClickListener {
+                    listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.TODAY))
+                    dismiss()
+                }
+
+                binding.timePickerScheduleBtn.setOnClickListener {
+                    listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.FUTURE, timePickerTimePicker.getChosenDate()))
+                    dismiss()
+                }
             }
-
-
-
         }
     }
 
-//    fun setMenuItems(menuItems: List<MenuItem>){
-//        val menuItemsData = menuItems.filter { it.quantity > 0 }
-//        this.isTemporary = true
-//        this.menuItems = menuItemsData
-//    }
 
     fun setCookingSlots(selectedCookingSlot: CookingSlot, cookingSlots: MutableList<CookingSlot>) {
-        this.isTemporary = true
+        //restaurant
+//        this.isTemporary = true
         this.cookingSlots = cookingSlots
         val curCookingSlot = cookingSlots.find { it.id == selectedCookingSlot.id }
         this.selectedCookingSlot = curCookingSlot
     }
 
     fun setDeliveryDates(deliveryDates: List<DeliveryDates>){
+        //checkout
         this.isTemporary = true
         this.deliveryDates = deliveryDates
     }
 
     fun setDatesFromNow(daysFromNow: Int = 7){
+        //feed
         this.isTemporary = false
         this.daysFromNow = daysFromNow
+
 
     }
 
