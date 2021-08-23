@@ -23,7 +23,7 @@ class DietariesAdapter: ListAdapter<DietaryIcon, RecyclerView.ViewHolder>(DiffCa
         holder as ViewHolder
         val item = getItem(position)
         holder.binding.apply {
-            Glide.with(dietaryIcon).load(item.icon)
+            Glide.with(root.context).load(item.iconDish).into(dietaryIcon)
             dietaryName.text = item.name
         }
     }
