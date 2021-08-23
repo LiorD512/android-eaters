@@ -143,7 +143,7 @@
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             app:title="Fees &amp; Estimated tax"
-                            app:tip_type="CUSTOM_CLICK"
+                            app:tip_type="FEES_AND_ESTIMATED_TAX"
                             android:id="@+id/singleOrderDetailsFees"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>

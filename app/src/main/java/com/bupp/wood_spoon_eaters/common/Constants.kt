@@ -130,7 +130,7 @@ class Constants {
         const val TOOL_TIP_CHECKOUT_DELIVERY_FEE = 3
         const val TOOL_TIP_MINMUM_ORDER_FEE = 4
         const val TOOL_TIP_COURIER_TIP = 5
-        const val TOOL_TIP_CUSTOM_CLICK = 6
+        const val FEES_AND_ESTIMATED_TAX = 6
 
         //status bottom bar types
         const val CART_BOTTOM_BAR_TYPE_CART = 0

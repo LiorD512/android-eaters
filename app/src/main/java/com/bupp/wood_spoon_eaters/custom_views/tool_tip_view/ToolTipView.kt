@@ -107,9 +107,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 135.toPx().toFloat()
             }
-            Constants.TOOL_TIP_CUSTOM_CLICK -> {
-
-            }
+//            Constants.TOOL_TIP_CUSTOM_CLICK -> {
+//
+//            }
         }
     }
 

@@ -4,20 +4,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:background="@drawable/top_cornered_bkg"
         android:orientation="vertical">
 
-    <ImageView
-            android:layout_marginTop="11dp"
-            android:layout_gravity="center"
-            android:src="@drawable/silver_rounded_rect"
-            android:layout_width="27dp"
-            android:layout_height="5dp"/>
-
     <TextView
-            android:layout_marginStart="8dp"
             android:layout_marginTop="15.4dp"
-            style="@style/LatoBlack17Dark"
+            style="@style/LatoBlack19DarkGrey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -25,9 +18,8 @@
 
     <TextView
             android:id="@+id/feesTaxBSFeeTitle"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="23dp"
-            style="@style/LatoBold13Black"
+            style="@style/LatoBold13Teal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -36,9 +28,8 @@
 
     <TextView
             android:id="@+id/feesTaxBSFeeSubTitle"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="1dp"
-            style="@style/LatoReg13MediumGrey"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -47,9 +38,8 @@
 
     <TextView
             android:id="@+id/feesTaxBSTaxTitle"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="23dp"
-            style="@style/LatoBold13Black"
+            style="@style/LatoBold13Teal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -58,9 +48,8 @@
 
     <TextView
             android:id="@+id/feesTaxBSTaxSubTitle"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="1dp"
-            style="@style/LatoReg13MediumGrey"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -70,9 +59,8 @@
     <TextView
             android:visibility="gone"
             android:id="@+id/feesTaxBSMinFeeTitle"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="23dp"
-            style="@style/LatoBold13Black"
+            style="@style/LatoBold13Teal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -82,9 +70,8 @@
     <TextView
             android:visibility="gone"
             android:id="@+id/feesTaxBSMinFeeSubTitle"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="1dp"
-            style="@style/LatoReg13MediumGrey"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -93,7 +80,7 @@
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             app:title="OK"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="15.4dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="30dp"
             android:id="@+id/feesTaxBSTaxBtn"

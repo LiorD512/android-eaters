@@ -46,7 +46,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     val mainViewModel by sharedViewModel<OrderCheckoutViewModel>()
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -57,7 +56,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         initObservers()
 
     }
-    
+
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
@@ -91,11 +90,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
             FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
         })
-//        mainViewModel.clearCartEvent.observe(viewLifecycleOwner, { emptyCartEvent ->
-//            if (emptyCartEvent) {
-//                ClearCartDialog(this@CheckoutFragment).show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
-//            }
-//        })
         viewModel.shippingMethodsEvent.observe(viewLifecycleOwner, {
             it?.let {
                 if (it.isNotEmpty()) {
@@ -124,18 +118,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
-        if(deliveryDates.isEmpty()){
+        if (deliveryDates.isEmpty()) {
             binding.checkoutFragDeliveryTime.setChangeable(false)
         }
     }
-
-//    private fun updateBottomBar(totalPrice: Price?) {
-//        mainViewModel.updateCartBottomBarByType(CartBottomBar.BottomBarTypes.PLACE_AN_ORDER, totalPrice?.value, null)
-//    }
-
-//    override fun onCancelUpdateOrderError() {
-////        ordersViewModel.rollBackToPreviousAddress()
-//    }
 
     override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
         if (isCartEmpty) {
@@ -158,15 +144,18 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragHeaderView.setHeaderViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragDeliveryFee.setWSTitleValueListener(this)
         binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
             checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
-//                val promoCodeBottomSheet = PromoCodeFragment()
-//                promoCodeBottomSheet.show(childFragmentManager, Constants.PROMO_CODE_TAG)
             }
             checkoutFragPlaceOrderBtn.setOnClickListener {
                 viewModel.onPlaceOrderClick()
+            }
+
+            checkoutFragCourierTip.setOnClickListener {
+                onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
             }
         }
 
@@ -218,13 +207,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
                     checkoutFragDeliveryAddress.updateDeliveryAddressFullDetails(it.deliveryAddress)
 
-//                    if (it.estDeliveryTime != null) {
-//                        val time = DateUtils.parseDateToDayDateAndTime(it.estDeliveryTime)
-//                        checkoutFragDeliveryTime.updateDeliveryDetails(time)
-//                    } else if (it.estDeliveryTimeText != null) {
-//                        checkoutFragDeliveryTime.updateDeliveryDetails(it.estDeliveryTimeText)
-//                    }
-
                     checkoutFragDetailsHeader.text = "Your Order From home chef ${cook?.firstName}"
                     checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }
@@ -239,7 +221,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragNationwideSelect.visibility = View.GONE
                     }
                 }
-//                checkoutFragSmallOrderFee.isNationWide(it.cookingSlot?.isNationwide) //fix this
                 it.tipPercentage?.let { tip ->
                     if (tip != 0) {
                         checkoutFragTipPercentView.selectDefaultTip(tip)
@@ -276,10 +257,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
             checkoutFragFees.setValue("$$feeAndTaxStr")
 
-
-
             checkoutFragDeliveryFee.setValue("$$deliveryFee")
-
 
             val allDishSubTotal = curOrder.subtotal?.value
             val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
@@ -299,24 +277,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
     }
 
-//    override fun onClearCart() {
-////        mainViewModel.clearCart()
-////        mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
-//    }
-//
-//    override fun onCancelClearCart() {
-//        //refresh orderItem counter (set to 0 by user and canceled)
-//        viewModel.refreshUi()
-//    }
-
-
     override fun onTipIconClick(tipSelection: Int?) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
             TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
         } else {
             if (tipSelection == TIP_NOT_SELECTED) {
                 viewModel.updateOrderParams(
-                    OrderRequest(tipPercentage = null, tip = 0),
+                    OrderRequest(tipPercentage = 0f, tip = 0),
                     Constants.EVENT_TIP
                 ) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
             } else {
@@ -348,27 +315,42 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-//    override fun onDateChoose(selectedMenuItem: MenuItem, newChosenDate: Date) {
-
-//        mainViewModel.updateDeliveryTime(newChosenDate)
-//    }
 
     override fun onHeaderCloseClick() {
         super.onHeaderCloseClick()
         activity?.onBackPressed()
-//        if (mainViewModel.isCheckout) {
-//            mainViewModel.handleNavigation(NewOrderMainViewModel.NewOrderScreen.FINISH_ACTIVITY)
-//        } else {
-//            activity?.onBackPressed()
-//        }
     }
 
     override fun onEditOrderBtnClicked() {
         activity?.finish()
     }
 
-    override fun onCustomToolTipClick() {
-        viewModel.onFeesAndTaxInfoClick()
+    override fun onToolTipClick(type: Int) {
+        var titleText = ""
+        var bodyText = ""
+        if (type == Constants.FEES_AND_ESTIMATED_TAX) {
+            viewModel.onFeesAndTaxInfoClick()
+        } else {
+            when (type) {
+                Constants.TOOL_TIP_SERVICE_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                }
+                Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                }
+                Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_delivery_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_delivery_fee_body)
+                }
+                Constants.TOOL_TIP_COURIER_TIP -> {
+                    titleText = resources.getString(R.string.tool_tip_courier_title)
+                    bodyText = resources.getString(R.string.tool_tip_courier_body)
+                }
+            }
+            ToolTipBottomSheet.newInstance(titleText, bodyText).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
+        }
     }
 
     override fun onWSErrorDone() {

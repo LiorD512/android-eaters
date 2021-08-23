@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet
 
-import FreeTextBottomSheet
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle

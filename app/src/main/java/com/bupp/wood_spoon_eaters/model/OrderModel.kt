@@ -90,23 +90,39 @@ data class Order (
     fun getOrderState(): OrderState {
         var curOrderStage =  OrderState.NONE
 
-        when (preparationStatus) {
-            "in_progress" -> {
-                curOrderStage = OrderState.RECEIVED
-            }
-            "completed" -> {
-                curOrderStage = OrderState.PREPARED
-            }
+        if(status == "finalized" && preparationStatus == "idle"){
+            curOrderStage = OrderState.RECEIVED
         }
 
-        when (deliveryStatus) {
-            "on_the_way" -> {
-                curOrderStage = OrderState.ON_THE_WAY
-            }
-            "shipped" -> {
-                curOrderStage = OrderState.DELIVERED
-            }
+        if((preparationStatus == "received" || preparationStatus == "in_progress")
+            || (preparationStatus == "completed" && deliveryStatus == "idle")){
+            curOrderStage = OrderState.PREPARED
         }
+
+        if(preparationStatus == "completed" && deliveryStatus != "idle"){
+            curOrderStage = OrderState.ON_THE_WAY
+        }
+
+        if(deliveryStatus == "shipped"){
+            curOrderStage = OrderState.DELIVERED
+        }
+//        when (preparationStatus) {
+//            "in_progress" -> {
+//                curOrderStage = OrderState.RECEIVED
+//            }
+//            "completed" -> {
+//                curOrderStage = OrderState.PREPARED
+//            }
+//        }
+//
+//        when (deliveryStatus) {
+//            "on_the_way" -> {
+//                curOrderStage = OrderState.ON_THE_WAY
+//            }
+//            "shipped" -> {
+//                curOrderStage = OrderState.DELIVERED
+//            }
+//        }
         return curOrderStage
     }
 

@@ -196,7 +196,7 @@
                         android:id="@+id/checkoutFragFees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tip_type="CUSTOM_CLICK"
+                        app:tip_type="FEES_AND_ESTIMATED_TAX"
                         app:title="Fees &amp; Estimated tax" />
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView
@@ -238,12 +238,15 @@
                         android:paddingVertical="15.4dp"
                         android:text="Tip your courier" />
 
-                <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+                <ImageButton
                         android:id="@+id/checkoutFragCourierTip"
+                        android:background="@null"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icons_tooltip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="5dp"
-                        app:tip_type="CHECKOUT_COURIER_TIP" />
+                        android:paddingStart="5dp"/>
 
             </LinearLayout>
 

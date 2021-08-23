@@ -2,12 +2,12 @@ package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.TextViewCompat
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.WsTitleValueViewBinding
 
 class WSTitleValueView @JvmOverloads
@@ -15,9 +15,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var binding: WsTitleValueViewBinding = WsTitleValueViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private var currentToolType: Int = 0
 
     interface WSTitleValueListener{
-        fun onCustomToolTipClick()
+        fun onToolTipClick(type: Int)
     }
 
     init {
@@ -44,20 +45,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val isBold = attr.getBoolean(R.styleable.WSTitleValueView_isBold, false)
                 setStyle(isBold)
 
-                val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
-                if(toolTip != 0){
-                    titleValueViewToolTip.customInit(context, attrs)
-                    titleValueViewToolTip.visibility = View.VISIBLE
+                val toolTipType = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
+                if(toolTipType != 0){
+                    currentToolType = toolTipType
+//                    titleValueViewToolTip.customInit(context, attrs)
+                    titleValueViewToolTipBtn.visibility = View.VISIBLE
 
-                    if(toolTip == Constants.TOOL_TIP_CUSTOM_CLICK){
-                        titleValueViewToolTip.disable()
-                        titleValueViewToolTip.setOnClickListener {
-                            listener?.onCustomToolTipClick()
-                        }
-                    }
+//                    titleValueViewToolTip.disable()
+
                 }
 
                 attr.recycle()
+
+                titleValueViewToolTipBtn.setOnClickListener {
+                    Log.d("wowToolTip","currentToolType: $currentToolType $listener")
+                    listener?.onToolTipClick(currentToolType)
+                }
             }
         }
     }

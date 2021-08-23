@@ -7,35 +7,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxViewModel
-import com.bupp.wood_spoon_eaters.databinding.FeesAndTaxBottomSheetBinding
+import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.databinding.FreeTextBottomSheetBinding
+import com.bupp.wood_spoon_eaters.databinding.ToolTipBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
+class ToolTipBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: FeesAndTaxBottomSheetBinding
-    val viewModel by viewModel<FeesAndTaxViewModel>()
+    private lateinit var binding: ToolTipBottomSheetBinding
 
     companion object {
-        private const val VALUE_ARGS_FEE = "args_fee"
-        private const val VALUE_ARGS_TAX = "args_tax"
-        private const val VALUE_ARGS_MIN_FEE = "args_min_fee"
-        fun newInstance(fee: String?, tax: String?, minFee: String?): FeesAndTaxBottomSheet {
-            return FeesAndTaxBottomSheet().apply {
+        private const val TOOL_TIP_TITLE = "tool_tip_title"
+        private const val TOOL_TIP_BODY = "tool_tip_body"
+        fun newInstance(title: String, body: String): ToolTipBottomSheet {
+            return ToolTipBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putString(VALUE_ARGS_FEE, fee)
-                    putString(VALUE_ARGS_TAX, tax)
-                    putString(VALUE_ARGS_MIN_FEE, minFee)
+                    putString(TOOL_TIP_TITLE, title)
+                    putString(TOOL_TIP_BODY, body)
                 }
             }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fees_and_tax_bottom_sheet, container, false)
+        return inflater.inflate(R.layout.tool_tip_bottom_sheet, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,23 +61,14 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FeesAndTaxBottomSheetBinding.bind(view)
+        binding = ToolTipBottomSheetBinding.bind(view)
 
         arguments?.let {
-            val fee = it.getString(VALUE_ARGS_FEE)
-            val tax = it.getString(VALUE_ARGS_TAX)
-            binding.feesTaxBSFeeTitle.text = "Service fee: $fee"
-            binding.feesTaxBSTaxTitle.text = "Estimated tax: $tax"
-            val minOrderFee = it.getString(VALUE_ARGS_MIN_FEE)
-            minOrderFee?.let{
-                binding.feesTaxBSMinFeeSubTitle.visibility = View.VISIBLE
-                binding.feesTaxBSMinFeeTitle.visibility = View.VISIBLE
-                binding.feesTaxBSMinFeeTitle.text = "Minimum order fee: $minOrderFee"
-            }
+            val title = it.getString(TOOL_TIP_TITLE) ?: ""
+            val body = it.getString(TOOL_TIP_BODY)
+            binding.toolTipTitle.text = title
+            binding.toolTipBody.text = body
         }
-
-        val globalMinimumOrderFee = viewModel.getGlobalMinimumOrderFee()
-        binding.feesTaxBSMinFeeSubTitle.text = "To reduce this fee your order value should be bigger than $globalMinimumOrderFee"
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
@@ -90,12 +78,11 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
 
     private fun initUI() {
         with(binding) {
-            feesTaxBSTaxBtn.setOnClickListener {
+            toolTipBtn.setOnClickListener {
                 dismiss()
             }
         }
     }
-
 
 }
 

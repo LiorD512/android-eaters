@@ -121,17 +121,13 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
             progressData.endProgress()
         }
     }
-//
-//    fun refreshUi(){
-//        oldCartManager.refreshOrderUi()
-//    }
-//
+
+
     fun updateOrderShippingMethod(shippingService: String) {
         viewModelScope.launch {
             cartManager.updateShippingService(shippingService)
         }
     }
-
 
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
     val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
@@ -148,7 +144,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         }
     }
 
-    fun finalizeOrder() {
+    private fun finalizeOrder() {
         viewModelScope.launch {
             val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()?.id
             progressData.startProgress()
@@ -172,12 +168,12 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     }
 
     fun onPlaceOrderClick() {
-        if (validteOrderData()) {
+        if (validateOrderData()) {
             finalizeOrder()
         }
     }
 
-    private fun validteOrderData(): Boolean {
+    private fun validateOrderData(): Boolean {
         if (cartManager.checkShippingMethodValidation()) {
             validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
             return false
@@ -189,47 +185,6 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
         }
         return true
     }
-
-//    fun onDeliveryTimeChanged() {
-//        viewModelScope.launch {
-//            val result = cartManager.updateOrderDeliveryParam()
-//            result?.let {
-//                when (result.type) {
-//                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
-//                        refreshDeliveyTime()
-//                    }
-//                    OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
-//                    }
-//                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
-//                        cartManager.onLocationInvalid()
-//                        cartManager.handleWsError(result.wsError)
-//                    }
-//                    else -> {
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-
-
-    /**Stripe related functions
-     *
-     */
-//    private fun validateOrder(): Boolean {
-////        if (cartManager.checkShippingMethodValidation()) {
-////            validationError.postValue(NewOrderMainViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING)
-////            return false
-////        }
-//        val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
-//        if (paymentMethod == null) {
-//            startStripeOrReInit()
-////            handleNavigation(NewOrderScreen.START_PAYMENT_METHOD_ACTIVITY)
-//            validationError.postValue(NewOrderMainViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING)
-//            return false
-//        }
-//        return true
-//    }
 
 
 
