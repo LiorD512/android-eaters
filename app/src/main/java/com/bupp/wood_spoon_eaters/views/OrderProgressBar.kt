@@ -33,6 +33,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun setProgress(progress: Int) {
+        Log.d(TAG, "orderPb: $progress")
         disableAllView()
         val currentProgress = binding.OrderPb.progress
         ObjectAnimator.ofInt(
@@ -44,7 +45,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             start()
         }
         when(progress){
-            in (0..17) -> {
+            in (1..17) -> {
                 enableIcon(binding.orderPbReceived)
             }
             in (18..50) -> {
@@ -72,37 +73,35 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.orderPbDelivered.isSelected = false
     }
 
-    fun next() {
-        when(currentState){
-            OrderState.NONE -> {
-                currentState = OrderState.RECEIVED
-                setProgress(17) // <- 33/2 - center of the first third
-            }
-            OrderState.RECEIVED -> {
-                currentState = OrderState.PREPARED
-                setProgress(50)
-            }
-            OrderState.PREPARED -> {
-                currentState = OrderState.ON_THE_WAY
-                setProgress(83) // <- 100 - 17 - center of the last third
-            }
-            OrderState.ON_THE_WAY -> {
-                currentState = OrderState.DELIVERED
-                setProgress(100)
-            }
-            OrderState.DELIVERED -> {
-
-            }
-        }
-    }
-
     private fun enableIcon(iconView: ImageView) {
         iconView.isSelected = true
     }
 
     fun setState(orderState: OrderState) {
+        Log.d(TAG, "orderState: $orderState")
         currentState = orderState
-        next()
+        when(currentState){
+            OrderState.NONE -> {
+                currentState = OrderState.NONE
+                setProgress(0) // <- 33/2 - center of the first third
+            }
+            OrderState.RECEIVED -> {
+                currentState = OrderState.RECEIVED
+                setProgress(17) // <- 33/2 - center of the first third
+            }
+            OrderState.PREPARED -> {
+                currentState = OrderState.PREPARED
+                setProgress(50)
+            }
+            OrderState.ON_THE_WAY -> {
+                currentState = OrderState.ON_THE_WAY
+                setProgress(83) // <- 100 - 17 - center of the last third
+            }
+            OrderState.DELIVERED -> {
+                currentState = OrderState.DELIVERED
+                setProgress(100)
+            }
+        }
     }
 
 

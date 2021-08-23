@@ -103,6 +103,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
     }
 
     inner class ActiveOrderItemViewHolder(val binding: OrdersHistoryActiveOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val mainLayout: FrameLayout = binding.orderHistoryMainLayout
         private val title: TextView = binding.activeOrderRestaurantName
         private val subtitle: TextView = binding.activeOrderSubtitle
         private val orderPb: OrderProgressBar = binding.activeOrderPb
@@ -126,7 +127,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             val orderState = order.getOrderState()
             orderPb.setState(orderState)
 
-            viewOrder.setOnClickListener {
+            mainLayout.setOnClickListener {
                 order.id?.let { it1 ->
                     listener.onViewActiveOrderClicked(it1)
                 }

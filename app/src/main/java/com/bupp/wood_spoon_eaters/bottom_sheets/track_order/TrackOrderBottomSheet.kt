@@ -68,7 +68,7 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
 //    }
 
     companion object {
-        const val CUR_ORDER_ID_PARAM = "curOrderId"
+        private const val CUR_ORDER_ID_PARAM = "curOrderId"
         fun newInstance(curOrderId: Long): TrackOrderBottomSheet {
             val fragment = TrackOrderBottomSheet()
             try {

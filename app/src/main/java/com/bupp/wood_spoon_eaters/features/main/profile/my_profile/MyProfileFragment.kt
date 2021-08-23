@@ -110,9 +110,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         viewModel.paymentLiveData.observe(viewLifecycleOwner, { cardsEvent ->
             handleCustomerCards(cardsEvent)
         })
-        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
-        })
+//        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
+//            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
+//        })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
                 binding.myProfileFragPb.show()

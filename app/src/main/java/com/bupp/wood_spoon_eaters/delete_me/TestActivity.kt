@@ -25,7 +25,7 @@ class TestActivity : ComponentActivity() {
 //        }
 
         binding.btn.setOnClickListener {
-            binding.orderPb.next()
+//            binding.orderPb.next()
         }
         binding.clearBtn.setOnClickListener {
             binding.orderPb.setProgress(0)

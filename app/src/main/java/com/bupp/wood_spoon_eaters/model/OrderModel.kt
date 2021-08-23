@@ -106,23 +106,7 @@ data class Order (
         if(deliveryStatus == "shipped"){
             curOrderStage = OrderState.DELIVERED
         }
-//        when (preparationStatus) {
-//            "in_progress" -> {
-//                curOrderStage = OrderState.RECEIVED
-//            }
-//            "completed" -> {
-//                curOrderStage = OrderState.PREPARED
-//            }
-//        }
-//
-//        when (deliveryStatus) {
-//            "on_the_way" -> {
-//                curOrderStage = OrderState.ON_THE_WAY
-//            }
-//            "shipped" -> {
-//                curOrderStage = OrderState.DELIVERED
-//            }
-//        }
+
         return curOrderStage
     }
 

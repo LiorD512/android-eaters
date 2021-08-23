@@ -37,7 +37,7 @@ class MyProfileViewModel(
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     val paymentLiveData = paymentManager.getPaymentsLiveData()
-    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
+//    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
     val profileData: SingleLiveEvent<ProfileData> = SingleLiveEvent()
     val versionLiveData = SingleLiveEvent<String>()
 

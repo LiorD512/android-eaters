@@ -95,10 +95,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="7.7dp"/>
 
-            <com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
-                    android:id="@+id/myProfileFragFavorites"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+<!--            <com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView-->
+<!--                    android:id="@+id/myProfileFragFavorites"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content" />-->
 
             <TextView
                     android:layout_marginTop="15.4dp"
