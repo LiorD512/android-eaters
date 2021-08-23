@@ -140,18 +140,37 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         listener.onRestaurantClick(restaurant.toRestaurantInitParams())
     }
 
-    override fun onPageClick(position: Int) {
+//    override fun onPageClick(position: Int) {
+//        Log.d("wowFeedAdapter", "position:")
+//        val section = getItem(position)
+//        when (section) {
+//            is FeedAdapterRestaurant -> {
+//                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+//            }
+//            is FeedAdapterLargeRestaurant  -> {
+//                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+//            }
+//            else -> {}
+//        }
+//    }
+
+    override fun onPageClick(itemLocalId: Long?) {
         Log.d("wowFeedAdapter", "position:")
-        val section = getItem(position)
-        when (section) {
-            is FeedAdapterRestaurant -> {
-                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+        currentList.forEachIndexed { index, feedAdapterItem ->
+            if(feedAdapterItem.id == itemLocalId){
+                val section = getItem(index)
+                when (section) {
+                    is FeedAdapterRestaurant -> {
+                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+                    }
+                    is FeedAdapterLargeRestaurant  -> {
+                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+                    }
+                    else -> {}
+                }
             }
-            is FeedAdapterLargeRestaurant  -> {
-                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
-            }
-            else -> {}
         }
+
     }
 }
 

@@ -150,7 +150,9 @@ enum class FeedRestaurantSectionItemViewType{
 
 sealed class FeedAdapterItem(
     var type: FeedAdapterViewType?
-) : Parcelable
+) : Parcelable{
+    abstract val id: Long?
+}
 
 enum class FeedAdapterViewType {
     TITLE,
@@ -165,42 +167,42 @@ enum class FeedAdapterViewType {
 
 @Parcelize
 data class FeedAdapterSkeleton(
-    val id: Long? = null
+    override var id: Long? = null
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON)
 
 @Parcelize
 data class FeedAdapterHref(
-    val href: String? = null
+    val href: String? = null, override val id: Long?
 ): Parcelable, FeedAdapterItem(FeedAdapterViewType.HREF)
 
 @Parcelize
 data class FeedAdapterTitle(
-    val title: String
+    val title: String, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.TITLE)
 
 @Parcelize
 data class FeedAdapterCoupons(
-    val couponSection: FeedCampaignSection
+    val couponSection: FeedCampaignSection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.COUPONS)
 
 @Parcelize
 data class FeedAdapterRestaurant(
-    val restaurantSection: FeedRestaurantSection
+    val restaurantSection: FeedRestaurantSection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)
 
 @Parcelize
 data class FeedAdapterEmptyFeed(
-    val emptyFeedSection: FeedIsEmptySection
+    val emptyFeedSection: FeedIsEmptySection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_FEED)
 
 @Parcelize
 data class FeedAdapterEmptySection(
-    val emptySection: FeedSingleEmptySection
+    val emptySection: FeedSingleEmptySection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SECTION)
 
 @Parcelize
 data class FeedAdapterLargeRestaurant(
-    val restaurantSection: FeedRestaurantSection
+    val restaurantSection: FeedRestaurantSection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
 
 @Parcelize

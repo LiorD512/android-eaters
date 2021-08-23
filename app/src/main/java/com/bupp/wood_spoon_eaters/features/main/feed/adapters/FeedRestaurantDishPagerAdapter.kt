@@ -28,14 +28,21 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
 
 //    val blurHash: BlurHash = BlurHash(context, lruSize = 20, punch = 1F)
 private var parentItemPosition: Int = -1
+private var parentItemId: Long? = null
     interface FeedRestaurantDishPagerAdapterListener {
-        fun onPageClick(position: Int)
+//        fun onPageClick(position: Int)
+        fun onPageClick(itemLocalId: Long?)
     }
 
     @JvmName("setChefId1")
     fun setParentItemPosition(position: Int) {
         Log.d("feedItemPosition", "setParentItemPosition: $position")
         this.parentItemPosition = position
+    }
+
+    fun setItemLocalId(id: Long?) {
+        Log.d("feedItemPosition", "setItemLocalId: $id")
+        this.parentItemId = id
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -58,11 +65,11 @@ private var parentItemPosition: Int = -1
         when (item.data) {
             is FeedRestaurantItemDish -> {
                 holder as FeedDishViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemPosition)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemId)
             }
             is FeedRestaurantItemSeeMore -> {
                 holder as FeedDishSeeMoreViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore, parentItemPosition)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore, parentItemId)
             }
         }
     }
@@ -76,8 +83,8 @@ private var parentItemPosition: Int = -1
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemPosition: Int) {
-            Log.d("feedItemPosition", "bindItem: $parentItemPosition")
+        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemId: Long?) {
+            Log.d("feedItemPosition", "bindItem: $parentItemId")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
 //                    .blurPlaceHolder(it, thumbnail, blurHash)
@@ -92,8 +99,8 @@ private var parentItemPosition: Int = -1
             tagView.setTags(dish.tags)
 
             layout.setOnClickListener{
-                Log.d("feedItemPosition", "parentItemPosition: $parentItemPosition")
-                listener.onPageClick(parentItemPosition)
+                Log.d("feedItemPosition", "parentItemPosition: $parentItemId")
+                listener.onPageClick(parentItemId)
             }
         }
 
@@ -105,7 +112,7 @@ private var parentItemPosition: Int = -1
         private val thumbnail: ImageView = binding.feedRestaurantSeeMoreItemImg
         private val quantityLeft: TextView = binding.feedRestaurantSeeMoreItemQuantityLeft
 
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore, parentItemPosition: Int) {
+        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore, parentItemId: Long?) {
             quantityLeft.text = dish.title
             val multiTransformation = MultiTransformation(BlurTransformation( 10, 2), CenterCrop())
             GlideApp.with(context)
@@ -115,7 +122,7 @@ private var parentItemPosition: Int = -1
                 .placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
 
             layout.setOnClickListener{
-                listener.onPageClick(parentItemPosition)
+                listener.onPageClick(parentItemId)
             }
         }
     }

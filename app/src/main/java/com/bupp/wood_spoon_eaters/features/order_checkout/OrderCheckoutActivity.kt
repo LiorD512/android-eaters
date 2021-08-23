@@ -10,12 +10,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OrderCheckoutActivity : AppCompatActivity() {
+class OrderCheckoutActivity : BaseActivity() {
 
 
     //activityLauncher Results

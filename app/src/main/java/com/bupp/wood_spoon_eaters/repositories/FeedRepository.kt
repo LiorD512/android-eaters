@@ -89,30 +89,34 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
 
 
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
+        var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEach { section ->
             section.title?.let {
-                feedData.add(FeedAdapterTitle(it))
+                localId++
+                feedData.add(FeedAdapterTitle(it, localId))
             }
             section.href?.let {
-                feedData.add(FeedAdapterHref(it))
+                localId++
+                feedData.add(FeedAdapterHref(it, localId))
             }
             section.collections?.forEach { collectionItem ->
+                localId++
                 when (collectionItem) {
                     is FeedCampaignSection -> {
-                        feedData.add(FeedAdapterCoupons(collectionItem))
+                        feedData.add(FeedAdapterCoupons(collectionItem, localId))
                     }
                     is FeedIsEmptySection -> {
-                        feedData.add(FeedAdapterEmptyFeed(collectionItem))
+                        feedData.add(FeedAdapterEmptyFeed(collectionItem, localId))
                     }
                     is FeedSingleEmptySection -> {
-                        feedData.add(FeedAdapterEmptySection(collectionItem))
+                        feedData.add(FeedAdapterEmptySection(collectionItem, localId))
                     }
                     is FeedRestaurantSection -> {
                         if (isLargeItems) {
-                            feedData.add(FeedAdapterLargeRestaurant(collectionItem))
+                            feedData.add(FeedAdapterLargeRestaurant(collectionItem, localId))
                         } else {
-                            feedData.add(FeedAdapterRestaurant(collectionItem))
+                            feedData.add(FeedAdapterRestaurant(collectionItem, localId))
                         }
                     }
                 }
@@ -123,23 +127,49 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
     }
 
 
+//    private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
+//        lastFeedDataResult?.sections?.forEachIndexed { index, section ->
+//            section.href?.let {
+//                if (it == href) {
+//                    data?.let { data ->
+//                        if(data.isEmpty()){
+//                            //remove title incase Href data is empty
+//                            lastFeedDataResult?.sections!![index].title = ""
+//                        }
+//                        section.href = null
+//                        lastFeedDataResult?.sections!![index].collections = data.toMutableList()
+//                    }
+//                }
+//
+//            }
+//        }
+//        return processFeedData(lastFeedDataResult)
+//    }
+
     private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
+        val tempFeedResult = mutableListOf<FeedSection>()
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
             section.href?.let {
                 if (it == href) {
+                    Log.d("hrefSucks","handeling href - $href")
                     data?.let { data ->
                         if(data.isEmpty()){
+                            Log.d("hrefSucks","href empty")
+                            return@forEachIndexed
+
                             //remove title incase Href data is empty
-                            lastFeedDataResult?.sections!![index].title = ""
+//                            val sections = tempFeedResult?.sections?.toMutableList()?.removeAt(index)
+//                            lastFeedDataResult?.sections = sections
                         }
+                        Log.d("hrefSucks","update href section")
                         section.href = null
                         lastFeedDataResult?.sections!![index].collections = data.toMutableList()
                     }
                 }
-
             }
+            tempFeedResult.add(section)
         }
-        return processFeedData(lastFeedDataResult)
+        return processFeedData(FeedResult(tempFeedResult))
     }
 
 

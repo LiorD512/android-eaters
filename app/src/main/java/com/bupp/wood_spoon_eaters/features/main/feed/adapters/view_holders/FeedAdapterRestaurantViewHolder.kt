@@ -40,7 +40,10 @@ class FeedAdapterRestaurantViewHolder(
                 feedRestaurantItemRating.text = restaurant.avgRating.toString()
                 feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0.0 > 0
 
-                adapter.setParentItemPosition(parentAdapterPosition)
+//                adapter.setParentItemPosition(restaurantSection.id)
+                adapter.setItemLocalId(restaurantSection.id)
+                Log.d("feedPosition", "restaurant.chefName - ${restaurant.chefName}")
+                Log.d("feedPosition", "parentAdapterPosition - $parentAdapterPosition")
 
                 restaurant.items?.let {
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
@@ -102,7 +105,10 @@ class FeedAdapterRestaurantViewHolder(
         }
     }
 
-    override fun onPageClick(position: Int) {
+//    override fun onPageClick(position: Int) {
+//
+//    }
 
+    override fun onPageClick(itemLocalId: Long?) {
     }
 }

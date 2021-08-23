@@ -86,11 +86,11 @@ interface ApiService {
     ): ServerResponse<Restaurant>
 
     //cook likes
-    @POST("cooks/{cook_id}/likes")
-    suspend fun likeCook(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Any>
+    @POST("eaters/me/likes/cooks/{id}")
+    suspend fun likeCook(@Path(value = "id", encoded = true) cookId: Long): ServerResponse<Any>
 
-    @DELETE("cooks/{cook_id}/likes")
-    suspend fun unlikeCook(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Any>
+    @DELETE("eaters/me/likes/cooks/{id}")
+    suspend fun unlikeCook(@Path(value = "id", encoded = true) cookId: Long): ServerResponse<Any>
 
     @FormUrlEncoded
     @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
