@@ -8,9 +8,11 @@
 
     <ImageView
             android:id="@+id/dietaryIcon"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:scaleType="fitXY"/>
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:scaleType="fitXY"
+            android:padding="2dp"
+            android:background="@drawable/pale_grey_cornered_rect"/>
 
     <TextView
             android:id="@+id/dietaryName"

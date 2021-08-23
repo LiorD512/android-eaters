@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 data class FeedResult(
-    val sections: List<FeedSection>
+    var sections: List<FeedSection>
 )
 
 @Parcelize

@@ -36,6 +36,7 @@ import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -43,8 +44,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
-    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener, WSErrorDialog.WSErrorListener, ClearCartRestaurantBottomSheet.ClearCartListener,
-    ClearCartCookingSlotBottomSheet.ClearCartListener, SingleColumnTimePickerBottomSheet.TimePickerListener,
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
+    ClearCartRestaurantBottomSheet.ClearCartListener,
+    ClearCartCookingSlotBottomSheet.ClearCartListener,
+    SingleColumnTimePickerBottomSheet.TimePickerListener,
     WSFloatingButton.WSFloatingButtonListener,
     FavoriteBtn.FavoriteBtnListener,
     UpSaleNCartBottomSheet.UpsaleNCartBSListener {
@@ -268,7 +271,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
-            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+            showErrorToast(errorEvent, binding.root)
+            viewModel.refreshRestaurantUi()
         }
     }
 
@@ -349,12 +353,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
         binding.restaurantFragHeightCorrection.isVisible = isShowing
     }
-
-
-    override fun onWSErrorDone() {
-        viewModel.refreshRestaurantUi()
-    }
-
 
     override fun onAddToFavoriteClick() {
         viewModel.addToFavorite()

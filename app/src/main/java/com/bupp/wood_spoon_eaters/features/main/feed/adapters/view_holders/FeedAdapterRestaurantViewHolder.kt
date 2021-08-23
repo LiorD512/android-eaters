@@ -42,8 +42,8 @@ class FeedAdapterRestaurantViewHolder(
 
 //                adapter.setParentItemPosition(restaurantSection.id)
                 adapter.setItemLocalId(restaurantSection.id)
-                Log.d("feedPosition", "restaurant.chefName - ${restaurant.chefName}")
-                Log.d("feedPosition", "parentAdapterPosition - $parentAdapterPosition")
+//                Log.d("feedPosition", "restaurant.chefName - ${restaurant.chefName}")
+//                Log.d("feedPosition", "parentAdapterPosition - $parentAdapterPosition")
 
                 restaurant.items?.let {
                     binding.feedRestaurantItemList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
