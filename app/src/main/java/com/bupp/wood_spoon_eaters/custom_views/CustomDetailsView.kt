@@ -76,7 +76,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
                 a.recycle()
             }
-            customDetailsViewChangeBtn.setOnClickListener { onChange() }
+            root.setOnClickListener { onChange() }
 
         }
     }
@@ -151,7 +151,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun onChange() {
         listener?.onCustomDetailsClick(type)
-
     }
 
     fun updateSubTitle(input: String) {

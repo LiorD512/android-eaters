@@ -142,6 +142,15 @@
         <attr name="isWithSep" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="CheckoutHeaderView">
+        <attr name="iconType" format="enum">
+            <enum name="HEADER_ICON_BACK" value="0" />
+            <enum name="HEADER_ICON_CLOSE" value="1" />
+        </attr>
+        <attr name="title" />
+        <attr name="subtitle" />
+    </declare-styleable>
+
     <declare-styleable name="CustomDetailsAttrs">
         <attr name="detailsType" format="enum">
             <enum name="DELIVERY_DETAILS_LOCATION" value="0" />

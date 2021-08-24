@@ -81,6 +81,10 @@ class Constants {
         const val HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT = 9
         const val HEADER_VIEW_TYPE_EVENT = 10
 
+        //Checkout header icon types
+        const val HEADER_ICON_BACK = 0
+        const val HEADER_ICON_CLOSE = 1
+
         //Resizeable image sizes
         const val RESIZEABLE_IMAGE_SMALL = 0
         const val RESIZEABLE_IMAGE_MEDIUM = 1

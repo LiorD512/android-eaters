@@ -209,11 +209,10 @@
 
             <TextView
                     android:id="@+id/restHeaderChefName"
-                    style="@style/Reg13Black"
+                    style="@style/LatoReg13VeryLightGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="3dp"
-                    android:textColor="@color/very_light_grey"
                     tools:text="by Assaf Beer" />
 
         </LinearLayout>

@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRe
 
 interface RestaurantRepositoryInterface{
     suspend fun getRestaurant(lat: Double?, lng: Double?, addressId: Long?, cookId: Long): ResultHandler<ServerResponse<Restaurant>>
+    suspend fun getCookReview(cookId: Long): ResultHandler<ServerResponse<Review>>
     suspend fun likeCook(cookId: Long): ResultHandler<ServerResponse<Any>>
     suspend fun unlikeCook(cookId: Long): ResultHandler<ServerResponse<Any>>
 }
@@ -16,6 +17,10 @@ class RestaurantRepositoryImpl(private val service: ApiService) : RestaurantRepo
     override suspend fun getRestaurant(lat: Double?, lng: Double?, addressId: Long?, restaurantId: Long): ResultHandler<ServerResponse<Restaurant>> {
 //        val tempUrl = "https://woodspoon-server-pr-167.herokuapp.com/api/v2/cooks/1" // todo - remove this shit !
         return safeApiCall { service.getRestaurant(restaurantId, lat, lng, addressId) }
+    }
+
+    override suspend fun getCookReview(cookId: Long): ResultHandler<ServerResponse<Review>> {
+        return safeApiCall { service.getCookReview(cookId = cookId) }
     }
 
     override suspend fun likeCook(cookId: Long): ResultHandler<ServerResponse<Any>> {

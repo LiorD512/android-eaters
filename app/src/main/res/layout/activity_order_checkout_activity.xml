@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -8,20 +8,47 @@
         android:animateLayoutChanges="true"
         android:background="@color/white">
 
+    <androidx.cardview.widget.CardView
+            android:id="@+id/checkoutActHeaderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+    <com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
+            android:id="@+id/checkoutActHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Checkout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.cardview.widget.CardView>
+
     <androidx.fragment.app.FragmentContainerView
             android:id="@+id/checkoutActContainer"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/order_checkout_nav" />
-
+            app:navGraph="@navigation/order_checkout_nav"
+            app:layout_constraintTop_toBottomOf="@id/checkoutActHeaderLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/restaurantAct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:visibility="gone" />
+            tools:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

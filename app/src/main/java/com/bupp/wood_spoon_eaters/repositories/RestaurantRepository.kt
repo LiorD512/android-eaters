@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
 
     data class RestaurantResult(val type: RestaurantRepoStatus, val restaurant: Restaurant? = null)
+    data class ReviewResult(val type: RestaurantRepoStatus, val review: Review? = null)
     enum class RestaurantRepoStatus {
         EMPTY,
         SUCCESS,
@@ -39,6 +40,32 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
                 else -> {
                     Log.d(TAG, "getRestaurant - wsError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+    suspend fun getCookReview(cookId: Long): ReviewResult {
+        val result = withContext(Dispatchers.IO) {
+            apiService.getCookReview(cookId)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(FeedRepository.TAG, "getCookReview - NetworkError")
+                    ReviewResult(RestaurantRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(FeedRepository.TAG, "getCookReview - GenericError")
+                    ReviewResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(FeedRepository.TAG, "getCookReview - Success")
+                    ReviewResult(RestaurantRepoStatus.SUCCESS, result.value.data)
+                }
+                else -> {
+                    Log.d(FeedRepository.TAG, "getCookReview - wsError")
+                    ReviewResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
         }

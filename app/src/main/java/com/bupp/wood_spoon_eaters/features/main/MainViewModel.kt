@@ -5,27 +5,27 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.*
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
-import com.bupp.wood_spoon_eaters.common.AppSettings
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.bupp.wood_spoon_eaters.common.MediaUtils
-import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
-    private val cartManager: CartManager): ViewModel()  {
+    private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository
+) : ViewModel() {
 
 //    val progressData = ProgressData()
 
@@ -35,7 +35,8 @@ class MainViewModel(
     }
 
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
-    enum class MainNavigationEvent{
+
+    enum class MainNavigationEvent {
         START_LOCATION_AND_ADDRESS_ACTIVITY,
         START_PAYMENT_METHOD_ACTIVITY,
         INITIALIZE_STRIPE,
@@ -49,12 +50,13 @@ class MainViewModel(
     }
 
 
-    fun startLocationAndAddressAct(){
+    fun startLocationAndAddressAct() {
         mainNavigationEvent.postValue(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
     val floatingCartBtnEvent = cartManager.getFloatingCartBtnEvent()
-//    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
+
+    //    val activeCampaignEvent = SingleLiveEvent<ActiveCampaign?>()
 //    val campaignUpdateEvent = campaignManager.getCampaignUpdateEvent()
     val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
     val campaignLiveData = campaignManager.getCampaignLiveData()
@@ -92,12 +94,12 @@ class MainViewModel(
 
     //stripe
     val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
-    fun startStripeOrReInit(){
+    fun startStripeOrReInit() {
         MTLogger.c(TAG, "startStripeOrReInit")
-        if(paymentManager.hasStripeInitialized){
+        if (paymentManager.hasStripeInitialized) {
             Log.d(TAG, "start payment method")
             mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
-        }else{
+        } else {
             MTLogger.c(TAG, "re init stripe")
             mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
         }
@@ -111,12 +113,12 @@ class MainViewModel(
     ///////////////////////////////
 
 
-    fun getDefaultLocationName(): String{
+    fun getDefaultLocationName(): String {
         return metaDataRepository.getDefaultFeedLocationName()
     }
 
 
-//    var waitingForAddressAction: Boolean = false
+    //    var waitingForAddressAction: Boolean = false
     private var hasPendingOrder: Boolean = false
     private var hasActiveOrder: Boolean = false
     val addressUpdateActionEvent: SingleLiveEvent<AddressUpdateEvent> = SingleLiveEvent()
@@ -198,6 +200,7 @@ class MainViewModel(
 //    }
 
     data class MainBottomBarEvent(val hasPendingOrder: Boolean, val totalPrice: Double?, val activeOrders: List<Order>? = null, val hasBoth: Boolean)
+
     val mainBottomBarEvent = MutableLiveData<MainBottomBarEvent>()
 
     val getTraceableOrder = eaterDataManager.getTraceableOrders()
@@ -216,7 +219,7 @@ class MainViewModel(
         }
     }
 
-    fun refreshActiveCampaigns(){
+    fun refreshActiveCampaigns() {
         viewModelScope.launch {
             campaignManager.onFlowEventFired(FlowEventsManager.FlowEvents.VISIT_FEED)
         }
@@ -229,54 +232,49 @@ class MainViewModel(
         }
     }
 
-    val getCookEvent: SingleLiveEvent<CookEvent> = SingleLiveEvent()
-
-    data class CookEvent(val isSuccess: Boolean = false, val cook: Cook?)
-
-    fun getCurrentCook(id: Long) {// todo - nycccc
-//        val currentAddress = eaterDataManager.getLastChosenAddress()
-//        api.getCook(cookId = id, lat = currentAddress?.lat, lng = currentAddress?.lng).enqueue(object : Callback<ServerResponse<Cook>> {
-//            override fun onResponse(call: Call<ServerResponse<Cook>>, response: Response<ServerResponse<Cook>>) {
-//                if (response.isSuccessful) {
-//                    val cook = response.body()?.data
-//                    Log.d("wowFeedVM", "getCurrentCook success: ")
-//                    getCookEvent.postValue(CookEvent(true, cook))
-//                } else {
-//                    Log.d("wowFeedVM", "getCurrentCook fail")
-//                    getCookEvent.postValue(CookEvent(false, null))
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ServerResponse<Cook>>, t: Throwable) {
-//                Log.d("wowFeedVM", "getCurrentCook big fail")
-//                getCookEvent.postValue(CookEvent(false, null))
-//            }
-//        })
+    fun getRestaurant(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = restaurantRepository.getRestaurant(id)
+            if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
+                result.restaurant?.let { restaurant ->
+                    val param = RestaurantInitParams(
+                        restaurantId = restaurant.id,
+                        chefThumbnail = restaurant.thumbnail,
+                        coverPhoto = restaurant.cover,
+                        rating = restaurant.rating,
+                        restaurantName = restaurant.restaurantName,
+                        chefName = restaurant.getFullName(),
+                        isFavorite = restaurant.isFavorite?:false
+                    )
+                    startRestaurantActivity(param)
+                }
+            }
+        }
     }
 
 
-    fun getCurrentEater(): Eater? {
-        return eaterDataManager.currentEater
-    }
 
-    fun hasAddress(): Boolean {// todo - nyc
+fun getCurrentEater(): Eater? {
+    return eaterDataManager.currentEater
+}
+
+fun hasAddress(): Boolean {// todo - nyc
 //        return eaterDataManager.getLastChosenAddress() != null
-        return true
-    }
+    return true
+}
 
 //    fun initLocationFalse() {
 ////        eaterDataManager.onLocationEmpty()
 //    }
 
-    val getUserCampaignDataEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
-    fun checkForUserCampaignData() {
+val getUserCampaignDataEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
+fun checkForUserCampaignData() {
 //        getUserCampaignDataEvent.postValue(eaterDataManager.currentEater)
-    }
+}
 
 
-    //move to eater data manager
-    val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
-
+//move to eater data manager
+val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
 
 
 //    fun checkForCampaignReferrals() {
@@ -361,13 +359,13 @@ class MainViewModel(
 //        eaterDataManager.initGpsStatus(activity)
 //    }
 
-    fun getContactUsPhoneNumber(): String {
-        return metaDataRepository.getContactUsPhoneNumber()
-    }
+fun getContactUsPhoneNumber(): String {
+    return metaDataRepository.getContactUsPhoneNumber()
+}
 
-    fun getContactUsTextNumber(): String {
-        return metaDataRepository.getContactUsTextNumber()
-    }
+fun getContactUsTextNumber(): String {
+    return metaDataRepository.getContactUsTextNumber()
+}
 
 //    fun test() {
 //        val cloudinery = metaDataRepository.getCloudinaryTransformations()
@@ -375,9 +373,9 @@ class MainViewModel(
 //        Log.d(TAG, "coudirery: $cloudinery")
 //    }
 
-    fun onUserImageClick() {
-        mainNavigationEvent.postValue(MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE)
-    }
+fun onUserImageClick() {
+    mainNavigationEvent.postValue(MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE)
+}
 //
 //    fun checkIfHaveReferral() {
 //        viewModelScope.launch {
@@ -385,71 +383,71 @@ class MainViewModel(
 //        }
 //    }
 
-    fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
-        viewModelScope.launch {
-            campaign.userInteractionId?.let{
-                campaignManager.updateCampaignStatus(it, status)
-            }
+fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
+    viewModelScope.launch {
+        campaign.userInteractionId?.let {
+            campaignManager.updateCampaignStatus(it, status)
         }
     }
+}
 
-    fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
-        paymentMethod?.let{
-            paymentManager.updateSelectedPaymentMethod(it)
-        }
+fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
+    paymentMethod?.let {
+        paymentManager.updateSelectedPaymentMethod(it)
     }
+}
 
-    val shareEvent = MutableLiveData<String>()
-    fun onShareCampaignClick(campaign: Campaign?) {
-        val shareUrl = campaign?.shareUrl
-        val shareText = campaign?.shareText ?: ""
-        shareEvent.postValue("$shareText \n $shareUrl")
-        eventsManager.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
-    }
+val shareEvent = MutableLiveData<String>()
+fun onShareCampaignClick(campaign: Campaign?) {
+    val shareUrl = campaign?.shareUrl
+    val shareText = campaign?.shareText ?: ""
+    shareEvent.postValue("$shareText \n $shareUrl")
+    eventsManager.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
+}
 
-    fun deleteAccount(){
-        viewModelScope.launch {
-            userRepository.deleteAccount()
-            logout()
-        }
+fun deleteAccount() {
+    viewModelScope.launch {
+        userRepository.deleteAccount()
+        logout()
     }
+}
 
-    fun logout() {
-        val logoutResult = userRepository.logout()
-        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
-            mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
-        }
+fun logout() {
+    val logoutResult = userRepository.logout()
+    if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
+        mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
     }
+}
 
-    val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
-    fun onMediaUtilsResultSuccess(result: MediaUtils.MediaUtilResult) {
-        //use this liveData when using MediaUtils out side of MainActivity scope (for example - EditProfileBottomSheet)
-        mediaUtilsResultLiveData.postValue(result)
-    }
+val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
+fun onMediaUtilsResultSuccess(result: MediaUtils.MediaUtilResult) {
+    //use this liveData when using MediaUtils out side of MainActivity scope (for example - EditProfileBottomSheet)
+    mediaUtilsResultLiveData.postValue(result)
+}
 
-     val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
-    fun onFloatingCartStateChanged(isShowing: Boolean) {
-        onFloatingBtnHeightChange.postValue(isShowing)
-    }
+val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
+fun onFloatingCartStateChanged(isShowing: Boolean) {
+    onFloatingBtnHeightChange.postValue(isShowing)
+}
 
-    /**
-     * Refreshing Floating cart button ui after order was updated.
-     */
-    fun refreshFloatingCartBtn() {
-        cartManager.refreshFloatingCartBtn()
-    }
+/**
+ * Refreshing Floating cart button ui after order was updated.
+ */
+fun refreshFloatingCartBtn() {
+    cartManager.refreshFloatingCartBtn()
+}
 
-    /**
-     * Starts Restaurant Activity with the initial params
-     * we start it from here, beacuse we need to update stuff when order is successfully done.
-     */
-    fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
-        startRestaurantActivity.postValue(restaurantInitParams)
-    }
+/**
+ * Starts Restaurant Activity with the initial params
+ * we start it from here, beacuse we need to update stuff when order is successfully done.
+ */
+fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
+    startRestaurantActivity.postValue(restaurantInitParams)
+}
 
-    fun forceFeedRefresh() {
-        forceFeedRefresh.postValue(true)
-    }
+fun forceFeedRefresh() {
+    forceFeedRefresh.postValue(true)
+}
 
 
 }

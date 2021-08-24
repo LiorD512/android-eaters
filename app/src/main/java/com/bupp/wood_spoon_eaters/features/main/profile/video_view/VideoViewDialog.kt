@@ -23,7 +23,7 @@ class VideoViewDialog(val cookFullName: String, val video: String) : DialogFragm
 
 
     private var player: SimpleExoPlayer? = null
-    val binding: VideoViewDialogBinding by viewBinding  ()
+    val binding: VideoViewDialogBinding by viewBinding()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.video_view_dialog, null)
@@ -46,11 +46,12 @@ class VideoViewDialog(val cookFullName: String, val video: String) : DialogFragm
     }
 
     private fun initUi() {
-        with(binding){
-            videoViewHeaderView.setHeaderViewListener(this@VideoViewDialog)
-            videoViewHeaderView.setTitle("Story by $cookFullName")
+        with(binding) {
+            videoViewExitBtn.setOnClickListener {
+                dismiss()
+            }
 
-            video.let{
+            video.let {
                 Log.d("wowVideoView", "video url: $it")
                 player = SimpleExoPlayer.Builder(requireContext()).build()
 

@@ -60,6 +60,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val parent = view.parent as View
+        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
         Analytics.with(requireContext()).screen("Profile edit")
 
         initUi()
@@ -179,6 +181,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         result.fileUri?.let {
             binding.editMyProfileFragUserImageView.setImage(it)
+            binding.editMyProfileFragUserImageBtn.setTitle("Change photo")
             viewModel.updateTempThumbnail(it)
             this.photoUploaded = true
         }

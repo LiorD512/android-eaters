@@ -10,12 +10,6 @@
         android:paddingHorizontal="23dp"
         android:paddingBottom="40dp">
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="15.4dp"
-            android:background="@color/grey_white" />
-
     <com.bupp.wood_spoon_eaters.views.ExpandableTextView
             android:id="@+id/dishFragDescription"
             style="@style/LatoReg13BrownishGrey"
@@ -125,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             app:iconsSize="39"/>
 
     <TextView
@@ -161,7 +155,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
+            android:layout_marginTop="31dp"
             android:orientation="horizontal">
 
         <com.bupp.wood_spoon_eaters.views.UserImageView
@@ -183,8 +177,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingHorizontal="25dp"
-                    android:paddingVertical="16dp">
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="15dp">
 
                 <TextView
                         android:id="@+id/dishFragChefName"
@@ -212,7 +206,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="14dp"
             app:hint="Type Your Request here…"
             app:maxLines="5"
             app:textSize="16"/>
@@ -228,6 +222,7 @@
             android:id="@+id/dishFragAdditionalDetailsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginHorizontal="1dp"
             android:layout_marginBottom="23dp"
             android:elevation="7dp"

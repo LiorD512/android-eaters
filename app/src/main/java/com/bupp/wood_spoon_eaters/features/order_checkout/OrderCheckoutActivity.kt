@@ -7,9 +7,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.IconCompat
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
+import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
+import com.bupp.wood_spoon_eaters.databinding.ActivityOrderCheckoutActivityBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
@@ -17,7 +21,6 @@ import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderCheckoutActivity : BaseActivity() {
-
 
     //activityLauncher Results
     private val startAddressChooserForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -28,10 +31,13 @@ class OrderCheckoutActivity : BaseActivity() {
     }
 
     val viewModel by viewModel<OrderCheckoutViewModel>()
+    lateinit var binding: ActivityOrderCheckoutActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_order_checkout_activity)
+
+        binding = ActivityOrderCheckoutActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initUi()
         initObservers()
@@ -72,7 +78,6 @@ class OrderCheckoutActivity : BaseActivity() {
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -88,6 +93,11 @@ class OrderCheckoutActivity : BaseActivity() {
 
             }
         }
+    }
+
+    fun updateMainHeader(title: String, subtitle: String, icon: Int){
+        binding.checkoutActHeader.updateHeaderUi(title, subtitle,icon)
+        binding.checkoutActHeader.setOnIconClickListener { onBackPressed() }
     }
 
     companion object{

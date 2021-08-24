@@ -23,7 +23,6 @@ data class Restaurant(
     @Json(name = "is_favorite") val isFavorite: Boolean? = false,
     @Json(name = "share_ulr")val shareUrl: String? = "",
     @Json(name = "tags") val tags: MutableList<String> = mutableListOf(),
-    @Json(name = "cuisines") val cuisines: MutableList<CuisineLabel> = mutableListOf(),
     @Json(name = "dishes") val dishes: MutableList<Dish> = mutableListOf(),
     @Json(name = "cooking_slots") var cookingSlots: MutableList<CookingSlot> = mutableListOf(),
 

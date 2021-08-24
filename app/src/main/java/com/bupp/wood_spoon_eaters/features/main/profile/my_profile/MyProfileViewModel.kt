@@ -92,7 +92,6 @@ class MyProfileViewModel(
     }
 
     fun updateClientAccount(cuisineIcons: List<SelectableIcon>? = null, dietaryIcons: List<SelectableIcon>? = null, forceUpdate: Boolean = false) {
-        progressData.startProgress()
         val eater = EaterRequest()
 
         var arrayOfCuisinesIds: MutableList<Int>? = null
@@ -139,7 +138,6 @@ class MyProfileViewModel(
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                 }
             }
-            progressData.endProgress()
         }
     }
 

@@ -1,4 +1,3 @@
-
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
 import android.util.Log
@@ -10,7 +9,6 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRepoStatus.*
@@ -52,7 +50,7 @@ class RestaurantPageViewModel(
     val progressData = ProgressData()
 
     fun handleInitialParamData(params: RestaurantInitParams) {
-        if(initialParamData.value == null){
+        if (initialParamData.value == null) {
             currentRestaurantId = params.restaurantId ?: -1
             initialParamData.postValue(params)
             initRestaurantFullData(params.restaurantId)
@@ -330,6 +328,32 @@ class RestaurantPageViewModel(
     fun onDeliveryDateChanged(date: SortedCookingSlots?) {
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
             onCookingSlotSelected(cookingSlot, false)
+        }
+    }
+
+    val reviewEvent = LiveEventData<Review?>()
+    fun getRestaurantReview() {
+        currentRestaurantId.let { id ->
+            viewModelScope.launch {
+                progressData.startProgress()
+                val result = restaurantRepository.getCookReview(id)
+                when (result.type) {
+                    EMPTY -> {
+                        Log.e(TAG, "Empty")
+                    }
+                    SUCCESS -> {
+                        Log.e(TAG, "Success")
+                        reviewEvent.postRawValue(result.review)
+                    }
+                    SERVER_ERROR -> {
+                        Log.e(TAG, "Server Error")
+                    }
+                    SOMETHING_WENT_WRONG -> {
+                        Log.e(TAG, "Something went wrong")
+                    }
+                }
+                progressData.endProgress()
+            }
         }
     }
 

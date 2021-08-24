@@ -15,12 +15,12 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
-import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
@@ -32,9 +32,11 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
+import com.bupp.wood_spoon_eaters.model.Review
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -82,6 +84,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 viewModel.restaurantFullData.value?.shareUrl?.let {
                     Utils.shareText(requireActivity(), it)
                 }
+            }
+            ratingLayout.setOnClickListener{
+                viewModel.getRestaurantReview()
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
@@ -168,6 +173,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.favoriteEvent.observe(viewLifecycleOwner, {
             handleFavoriteEvent(it)
         })
+        viewModel.reviewEvent.observe(viewLifecycleOwner, {
+            handleReviewData(it)
+        })
     }
 
     /** Headers data **/
@@ -211,8 +219,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantDescription.text = restaurant.about
 
             //Cuisines
-            adapterCuisines?.submitList(restaurant.cuisines)
-            restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
+            adapterCuisines?.submitList(restaurant.tags)
+            restaurantCuisinesList.isVisible = !restaurant.tags.isNullOrEmpty()
 
             detailsLayout.visibility = View.VISIBLE
             detailsSkeletonLayout.root.visibility = View.GONE
@@ -288,6 +296,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         if (dishSections?.animateList == true)
             binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
         adapterDishes?.submitList(dishSections?.dishes)
+    }
+
+
+    private fun handleReviewData(it: LiveEvent<Review?>?) {
+        it?.getContentIfNotHandled()?.let{ reviews->
+            RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+        }
     }
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
