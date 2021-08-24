@@ -191,6 +191,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             Glide.with(requireContext()).load(dish?.thumbnail?.url).into(dishFragCoverPhoto)
             if(menuItem.availableLater == null) {
                 dishFragTags.setTags(menuItem.tags)
+                dishFragTags.isVisible = !menuItem.tags.isNullOrEmpty()
             } else{
                 dishFragTags.setTags(listOf(menuItem.availableLater?.getStartEndAtTag()?:""))
             }
@@ -209,6 +210,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragTopHeaderDishName.text = dish.name
             Glide.with(requireContext()).load(dish.thumbnail?.url).into(dishFragCoverPhoto)
                 dishFragTags.setTags(orderItem.menuItem?.tags)
+
+            dishFragMainListLayout.dishFragUserRequestInput.setText(orderItem.notes)
 
 
             dishFragAddToCartBtn.updateFloatingBtnTitle("Update cart")

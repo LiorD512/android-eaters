@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:letterSpacing="-0.01"
                 android:paddingStart="7dp"
+                android:paddingTop="3dp"
                 app:layout_constraintTop_toBottomOf="@+id/cartItemName"
                 app:layout_constraintStart_toStartOf="@+id/cartItemName"
                 tools:text="No olive oil • Pita on the side" />

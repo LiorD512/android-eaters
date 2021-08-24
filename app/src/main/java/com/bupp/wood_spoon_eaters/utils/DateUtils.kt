@@ -44,10 +44,11 @@ object DateUtils {
     fun parseDateToStartAndEnd(startDate: Date, endDate: Date): String {
         //Mon, Jun 9 2pm - 5pm
         val dateFormat = SimpleDateFormat("EEE, MMM d", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("hha", Locale.getDefault())
         val date = dateFormat.format(startDate)
-        val startTime = timeFormat.format(startDate).lowercase(Locale.getDefault())
-        val endTime = timeFormat.format(endDate).lowercase(Locale.getDefault())
+        val timeFormat1 = SimpleDateFormat("h:mm")
+        val timeFormat2 = SimpleDateFormat("h:mm a")
+        val startTime = timeFormat1.format(startDate).lowercase(Locale.getDefault())
+        val endTime = timeFormat2.format(endDate).lowercase(Locale.getDefault())
         return "$date  $startTime - $endTime"
     }
 
@@ -117,9 +118,14 @@ object DateUtils {
         c.time = date
         c.add(Calendar.MINUTE, 30)
 
-        val sdf = SimpleDateFormat("h:mma")
-        val hour1 = sdf.format(date.time)
-        val hour2 = sdf.format(c.time)
+        val sdf1 = SimpleDateFormat("h:mm")
+        val sdf2 = SimpleDateFormat("h:mm a")
+        val hour1 = sdf1.format(date.time)
+        val hour2 = sdf2.format(c.time).lowercase(Locale.getDefault())
+
+        //        val startTime = timeFormat.format(startDate).lowercase(Locale.getDefault())
+//        val endTime = timeFormat.format(endDate).lowercase(Locale.getDefault())
+
         return "$hour1 - $hour2"
     }
 

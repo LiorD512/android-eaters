@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -160,6 +161,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
                     Log.d(TAG, "finalizeOrder - ws error")
+                    wsErrorEvent.postRawValue(result.wsError?.getErrorsMsg()?:"")
 
                 }
             }

@@ -58,6 +58,7 @@
             android:paddingEnd="7.7dp"
             android:paddingBottom="7.7dp"
             android:visibility="gone"
+            android:paddingTop="3dp"
             app:layout_constraintEnd_toStartOf="@+id/orderItemPrice"
             app:layout_constraintStart_toStartOf="@+id/orderItemName"
             app:layout_constraintTop_toBottomOf="@+id/orderItemName"

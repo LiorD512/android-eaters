@@ -35,11 +35,11 @@
                 android:id="@+id/dishFragVideoBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="center"
-                android:visibility="gone"
                 android:layout_marginBottom="50dp"
+                android:background="@drawable/transparent_to_black_60_gradient"
+                android:scaleType="center"
                 android:src="@drawable/ic_play_grey"
-                android:background="@drawable/transparent_to_black_60_gradient"/>
+                android:visibility="gone" />
 
     </FrameLayout>
 
@@ -95,7 +95,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_white_top_cornered"
             android:orientation="horizontal"
-            android:padding="23dp"
+            android:paddingHorizontal="23dp"
+            android:paddingTop="23dp"
+            android:paddingBottom="10dp"
             app:layout_constraintBottom_toTopOf="@id/dishFragSpace"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -115,15 +117,24 @@
                 tools:text="$7" />
     </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.views.ResizableTagsView
-            android:id="@+id/dishFragTags"
+
+    <FrameLayout
+            android:id="@+id/dishFragTagsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="23dp"
-            android:paddingBottom="15dp"
-            app:tagType="TAG_TYPE_DISH"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dishFragDishHeader" />
+            app:layout_constraintTop_toBottomOf="@id/dishFragDishHeader">
+
+        <com.bupp.wood_spoon_eaters.views.ResizableTagsView
+                android:id="@+id/dishFragTags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="23dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="15dp"
+                app:tagType="TAG_TYPE_DISH" />
+
+    </FrameLayout>
 
     <FrameLayout
             android:id="@+id/dishFragMainList"
@@ -132,7 +143,7 @@
             android:animateLayoutChanges="true"
             android:overScrollMode="never"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dishFragTags">
+            app:layout_constraintTop_toBottomOf="@+id/dishFragTagsLayout">
 
         <androidx.core.widget.NestedScrollView
                 android:id="@+id/test"

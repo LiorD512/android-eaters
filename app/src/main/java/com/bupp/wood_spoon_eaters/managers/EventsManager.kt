@@ -264,6 +264,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         const val IS_FIRST_PURCHASE = "is_first_purchase"
         const val TAG = "wowEventsManager"
 
+
     }
 
 }

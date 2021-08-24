@@ -182,7 +182,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val menuItemId = intent.getLongExtra("menu_item_id", -1)
             Log.d("wowMain", "branch: cook $cookId, menuItem: $menuItemId")
             if (cookId > 0) {
-                viewModel.getCurrentCook(cookId)
+                viewModel.getRestaurant(cookId)
             } else if (menuItemId > 0) {
                 if (viewModel.hasAddress()) {
 //                    loadNewOrderActivity(menuItemId)

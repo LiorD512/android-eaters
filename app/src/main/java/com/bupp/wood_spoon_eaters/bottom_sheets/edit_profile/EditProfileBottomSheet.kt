@@ -64,6 +64,9 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 //        Analytics.with(requireContext()).screen("Profile edit")
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_EDIT_ACCOUNT)
 
+        val parent = view.parent as View
+        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
+
         initUi()
         initObservers()
     }
@@ -181,6 +184,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         result.fileUri?.let {
             binding.editMyProfileFragUserImageView.setImage(it)
+            binding.editMyProfileFragUserImageBtn.setTitle("Change photo")
             viewModel.updateTempThumbnail(it)
             this.photoUploaded = true
         }

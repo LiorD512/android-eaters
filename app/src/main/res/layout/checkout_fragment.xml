@@ -7,23 +7,12 @@
         android:background="@color/white"
         tools:context=".features.order_checkout.checkout.CheckoutFragment">
 
-    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-            android:id="@+id/checkoutFragHeaderView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="Checkout"
-            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
-
     <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/checkoutFragHeaderView"
             android:background="@color/grey_white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkoutFragHeaderView">
+            app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -123,10 +112,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    app:showAddBtn="true"
-                    android:paddingBottom="15.4dp"
                     android:paddingLeft="15.4dp"
-                    android:paddingRight="15.4dp" />
+                    android:paddingRight="15.4dp"
+                    android:paddingBottom="15.4dp"
+                    app:showAddBtn="true" />
 
             <View
                     android:layout_width="match_parent"
@@ -153,7 +142,8 @@
                     android:id="@+id/checkoutFragPromoCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:changeable="false"
+                    app:btnTitle="Add"
+                    app:changeable="true"
                     app:detailsType="DELIVERY_DETAILS_PROMO_CODE"
                     app:showSep="false" />
 
@@ -201,17 +191,17 @@
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                         android:id="@+id/checkoutFragPromoCode2"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:title="Promo code" />
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                         android:id="@+id/checkoutFragTotalBeforeTip"
+                        style="@style/LatoBold13Black"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:isBold="true"
-                        style="@style/LatoBold13Black"
                         app:title="Total before tip" />
 
             </LinearLayout>
@@ -240,13 +230,13 @@
 
                 <ImageButton
                         android:id="@+id/checkoutFragCourierTip"
-                        android:background="@null"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/icons_tooltip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="5dp"/>
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:paddingStart="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icons_tooltip" />
 
             </LinearLayout>
 
@@ -256,17 +246,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15.4dp" />
 
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-
     <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/checkoutFragPlaceOrderBtn"
             app:floating_button_type="PLACE_ORDER"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/checkoutFragmentPb"

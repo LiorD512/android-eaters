@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -144,10 +145,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun initUi() {
         binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
         binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragHeaderView.setHeaderViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
         binding.checkoutFragDeliveryFee.setWSTitleValueListener(this)
+        binding.checkoutFragPromoCode.setDeliveryDetailsViewListener(this)
         binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
             checkoutFragPromoCode.setOnClickListener {
@@ -206,6 +207,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun handleOrderDetails(order: Order?) {
         order?.let {
             with(binding) {
+
+                (activity as OrderCheckoutActivity).updateMainHeader(
+                    title = "Checkout", subtitle = it.restaurant?.restaurantName?:"", icon = Constants.HEADER_ICON_CLOSE)
 
                 if (!it.orderItems.isNullOrEmpty()) {
                     var cook = it.restaurant
@@ -317,6 +321,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
             Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
                 viewModel.onNationwideShippingSelectClick()
+            }
+            Constants.DELIVERY_DETAILS_PROMO_CODE -> {
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
             }
         }
     }

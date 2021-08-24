@@ -2,14 +2,22 @@ package com.bupp.wood_spoon_eaters.custom_views.order_item_view2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
 import com.bupp.wood_spoon_eaters.databinding.OrderItemViewBinding
 import com.bupp.wood_spoon_eaters.databinding.OrderItemViewFeed2VerBinding
@@ -69,7 +77,15 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
 
             if(!orderItem.getNoteStr().isNullOrEmpty()){
                 note.visibility = View.VISIBLE
-                note.text = orderItem.getNoteStr()
+
+                val builder = SpannableStringBuilder(orderItem.getNoteStr())
+                builder.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(itemView.context, R.color.greyish_brown)),
+                    0, 17,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                note.text = builder
             }
         }
 

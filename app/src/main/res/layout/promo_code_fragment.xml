@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/promoCodeFragmentMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
 
-
     <LinearLayout
             android:id="@+id/promoCodeFragmentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent">
-
-        <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-                android:id="@+id/promoCodeFragHeaderView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="Enter promo code"
-                app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
         <TextView
                 style="@style/LatoReg13Black"
@@ -69,12 +63,15 @@
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="15.4dp"
             android:layout_marginBottom="15.4dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:title="Submit" />
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/promoCodeFragPb"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

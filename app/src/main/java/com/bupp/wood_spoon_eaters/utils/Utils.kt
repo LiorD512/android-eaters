@@ -23,6 +23,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators.FeedAdapterDishItemDecorator
+import com.bupp.wood_spoon_eaters.model.WSError
 import java.util.*
 
 
@@ -145,6 +146,14 @@ object Utils {
         else {
             v.vibrate(milliseconds)
         }
+    }
+
+    fun List<WSError>.getErrorsMsg(): String {
+        var errorList = ""
+        this?.forEach {
+            errorList += "${it.msg} \n"
+        }
+        return errorList
     }
 
 

@@ -98,24 +98,22 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_TRACK_ORDER)
     }
 
+    private lateinit var behavior: BottomSheetBehavior<View>
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
-        val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        var height = displayMetrics.heightPixels
-
         dialog.setOnShowListener {
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            val behavior = BottomSheetBehavior.from(sheet!!)
+            behavior = BottomSheetBehavior.from(sheet!!)
             behavior.isFitToContents = true
             behavior.isDraggable = true
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            behavior.expandedOffset = Utils.toPx(230)
         }
 
         return dialog
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

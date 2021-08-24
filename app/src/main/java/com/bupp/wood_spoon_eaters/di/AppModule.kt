@@ -112,13 +112,13 @@ val appModule = module {
 //    viewModel { SingleDishInfoViewModel(get(), get()) }
 //    viewModel { SingleDishIngredientViewModel(get()) }
     viewModel { CheckoutViewModel(get(), get(), get(), get()) }
-    viewModel { PromoCodeViewModel(get()) }
+    viewModel { PromoCodeViewModel(get(), get()) }
     viewModel { FeesAndTaxViewModel(get()) }
 
-    viewModel { UpSaleNCartViewModel(get(), get(), get()) }
+    viewModel { UpSaleNCartViewModel(get(), get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
@@ -146,10 +146,10 @@ val appModule = module {
     viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
 
     //RestaurantPage
-    viewModel { RestaurantMainViewModel(get()) }
-    viewModel { RestaurantPageViewModel(get(), get(), get()) }
+    viewModel { RestaurantMainViewModel(get(), get()) }
+    viewModel { RestaurantPageViewModel(get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
-    viewModel { OrderCheckoutViewModel(get(), get(), get()) }
+    viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
 
 
 }

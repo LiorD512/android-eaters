@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
@@ -41,9 +43,9 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
     private fun initUi() {
         with(binding) {
-
-            promoCodeFragHeaderView.setHeaderViewListener(this@PromoCodeFragment)
-            promoCodeFragHeaderView.setSaveButtonClickable(false)
+            (activity as OrderCheckoutActivity).updateMainHeader(
+                title = "Promo code", "", icon = Constants.HEADER_ICON_BACK
+            )
             promoCodeFragCodeInput.setWSEditTextListener(this@PromoCodeFragment)
 
             openKeyboard(promoCodeFragCodeInput)
@@ -80,7 +82,7 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
     private fun showWrongPromoCodeNotification(msg: String?) {
         snackbar = TSnackbar.make(
-            binding.promoCodeFragHeaderView,
+            binding.promoCodeFragmentLayout,
             msg ?: "The promo code seems to be invalid. \nplease check again",
             TSnackbar.LENGTH_LONG
         ).apply {
@@ -90,7 +92,7 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
         snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
         val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
         textView.setTextAppearance(R.style.SemiBold13Dark)
-        textView.gravity = Gravity.CENTER_HORIZONTAL
+        textView.gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
         textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         snackbar.show()
     }
