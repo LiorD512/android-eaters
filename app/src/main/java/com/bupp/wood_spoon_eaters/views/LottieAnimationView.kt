@@ -62,6 +62,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 binding.lottieAnimationView.repeatCount = INFINITE
                 binding.lottieAnimationView.scale = 0.6f
             }
+            Constants.LOTTIE_ANIM_EMPTY_FEED -> {
+                binding.lottieAnimationView.setAnimation("empty_feed.json")
+                binding.lottieAnimationView.repeatCount = INFINITE
+                binding.lottieAnimationView.scale = 0.6f
+            }
         }
         binding.lottieAnimationView.playAnimation()
     }

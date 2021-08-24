@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
@@ -59,7 +60,8 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
-        Analytics.with(requireContext()).screen("Support center")
+//        Analytics.with(requireContext()).screen("Support center")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_SUPPORT_CENTER)
 
         initUI()
     }

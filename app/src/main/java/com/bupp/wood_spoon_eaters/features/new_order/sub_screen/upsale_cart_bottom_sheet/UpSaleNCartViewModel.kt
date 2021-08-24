@@ -3,12 +3,19 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(
-    val cartManager: CartManager
+    val cartManager: CartManager,
+    val eaterDataManager: EaterDataManager,
+    private val flowEventsManager: FlowEventsManager,
+    private val eventsManager: EventsManager
 ) : ViewModel() {
 
     var currentPageState = PageState.CART
@@ -23,7 +30,8 @@ class UpSaleNCartViewModel(
 
     enum class NavigationEvent {
         GO_TO_CHECKOUT,
-        GO_TO_UP_SALE
+        GO_TO_UP_SALE,
+        GO_TO_SELECT_ADDRESS
     }
 
     val navigationEvent = MutableLiveData<NavigationEvent>()
@@ -34,8 +42,12 @@ class UpSaleNCartViewModel(
             currentPageState = PageState.UPSALE
             navigationEvent.postValue(NavigationEvent.GO_TO_UP_SALE)
         } else {
-            currentPageState = PageState.CART
-            navigationEvent.postValue(NavigationEvent.GO_TO_CHECKOUT)
+            if(eaterDataManager.hasUserSetAnAddress()){
+                currentPageState = PageState.CART
+                navigationEvent.postValue(NavigationEvent.GO_TO_CHECKOUT)
+            }else{
+                navigationEvent.postValue(NavigationEvent.GO_TO_SELECT_ADDRESS)
+            }
         }
     }
 
@@ -115,6 +127,31 @@ class UpSaleNCartViewModel(
         onDishCartClick.postRawValue(customCartItem)
     }
 
+    fun updateAddressAndProceedToCheckout() {
+        viewModelScope.launch {
+            val result = cartManager.updateOrderDeliveryAddressParam()
+            if(result?.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS){
+                navigationEvent.postValue(NavigationEvent.GO_TO_CHECKOUT)
+            }
+        }
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
+
+    fun logSwipeDishInCart(eventName: String, item: CustomCartItem) {
+        eventsManager.logEvent(eventName, getSwipeDishData(item))
+    }
+
+    private fun getSwipeDishData(item: CustomCartItem): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["dish_name"] = item.orderItem.dish.name
+        data["dish_id"] = item.orderItem.dish.id.toString()
+        data["dish_price"] = item.orderItem.dish.price?.formatedValue.toString()
+        data["dish_quantity"] = item.orderItem.quantity.toString()
+        return data
+    }
 
 //    /**
 //     * this function is being called when user swiped out all of his

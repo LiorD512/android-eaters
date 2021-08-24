@@ -7,8 +7,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
 
-class SwipeableRemoveDishItemTouchHelper() :
-    ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+class SwipeableRemoveDishItemTouchHelper: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     var adapter: SwipeableAdapter<*>? = null
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -18,6 +17,10 @@ class SwipeableRemoveDishItemTouchHelper() :
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
         return false
+    }
+
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        return 1.1f
     }
 
     override fun onChildDraw(
@@ -42,6 +45,6 @@ class SwipeableRemoveDishItemTouchHelper() :
 
     companion object {
         const val TAG = "wowSwipeableItemHelper"
-        const val SWIPE_THRESHOLD = -800
+        const val SWIPE_THRESHOLD = -600
     }
 }

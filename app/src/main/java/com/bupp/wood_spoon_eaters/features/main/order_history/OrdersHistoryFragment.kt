@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
@@ -44,11 +45,16 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     override fun onResume() {
         super.onResume()
         viewModel.fetchData()
+
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ORDERS)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Analytics.with(requireContext()).screen("Order history")
+//        Analytics.with(requireContext()).screen("Order history")
+
+
+
         initUi()
         initObservers()
     }

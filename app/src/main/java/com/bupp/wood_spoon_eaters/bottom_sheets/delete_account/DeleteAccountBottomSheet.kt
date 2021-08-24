@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.databinding.DeleteAccountBottomSheetBinding
@@ -62,6 +63,8 @@ class DeleteAccountBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
+
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_DELETE_ACCOUNT)
 
         initUI()
     }

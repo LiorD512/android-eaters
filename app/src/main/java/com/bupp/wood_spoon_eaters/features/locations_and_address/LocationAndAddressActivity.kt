@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
@@ -45,7 +46,8 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         setContentView(binding.root)
 
 
-        Analytics.with(this).screen("Manage addresses")
+//        Analytics.with(this).screen("Manage addresses")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ADDRESSES)
 //        viewModel.checkIntentParam(intent)
 
         initUi()

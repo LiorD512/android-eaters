@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
@@ -49,7 +50,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Checkout page")
+//        Analytics.with(requireContext()).screen("Checkout page")
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CHECKOUT)
+        mainViewModel.logEvent(Constants.EVENT_PROCEED_TO_CHECKOUT)
 //        mainViewModel.proceedToCheckoutEvent()
 
         initUi()
@@ -148,6 +151,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding.checkoutFragFees.setWSTitleValueListener(this)
         with(binding) {
             checkoutFragPromoCode.setOnClickListener {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
             }
             checkoutFragPlaceOrderBtn.setOnClickListener {
@@ -169,6 +173,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
         viewModel.updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryTimeParam?.date)))
+        mainViewModel.logChangeTime(deliveryTimeParam?.date)
     }
 
 
@@ -307,6 +312,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 viewModel.onTimeChangeClick()
             }
             Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_PAYMENT)
                 mainViewModel.startStripeOrReInit()
             }
             Constants.DELIVERY_DETAILS_NATIONWIDE_SHIPPING -> {
@@ -317,11 +323,12 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
 
     override fun onHeaderCloseClick() {
-        super.onHeaderCloseClick()
+        mainViewModel.logEvent(Constants.EVENT_CLICK_BACK_fROM_CHECKOUT)
         activity?.onBackPressed()
     }
 
     override fun onEditOrderBtnClicked() {
+        mainViewModel.logEvent(Constants.EVENT_CLICK_EDIT_ORDER)
         activity?.finish()
     }
 

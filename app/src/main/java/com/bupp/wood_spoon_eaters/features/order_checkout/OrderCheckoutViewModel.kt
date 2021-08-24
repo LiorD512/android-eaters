@@ -5,14 +5,20 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
+import java.util.*
 
-class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private val cartManager: CartManager) : ViewModel() {
+class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private val cartManager: CartManager, private val flowEventsManager: FlowEventsManager,
+private val eventsManager: EventsManager) : ViewModel() {
 
 
     val navigationEvent = MutableLiveData<NavigationEvent>()
@@ -60,18 +66,39 @@ class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
+                        eventsManager.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", true)))
                     }
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
+                        eventsManager.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", false)))
                     }
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         cartManager.onLocationInvalid()
                         cartManager.handleWsError(result.wsError)
+                        eventsManager.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", false)))
                     }
                     else -> {
                     }
                 }
             }
         }
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
+
+    fun logEvent(eventName: String) {
+        eventsManager.logEvent(eventName)
+    }
+
+    fun logChangeTime(date: Date?) {
+        eventsManager.logEvent(Constants.EVENT_CHANGE_DELIVERY_TIME, getChangedTimeData(date))
+    }
+
+    private fun getChangedTimeData(date: Date?): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["selected_date"] = DateUtils.parseDateToUsDate(date)
+        return data
     }
 
     companion object{

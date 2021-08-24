@@ -256,15 +256,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15.4dp" />
 
-            <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
-                    android:id="@+id/checkoutFragPlaceOrderBtn"
-                    app:floating_button_type="PLACE_ORDER"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/checkoutFragPlaceOrderBtn"
+            app:floating_button_type="PLACE_ORDER"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/checkoutFragmentPb"

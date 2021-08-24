@@ -100,7 +100,7 @@ val appModule = module {
 
 
     //location
-    viewModel { LocationAndAddressViewModel(get(), get(), get()) }
+    viewModel { LocationAndAddressViewModel(get(), get(), get(), get()) }
     viewModel { SelectAddressViewModel(get(), get(), get(), get()) }
     viewModel { AddressMapVerificationViewModel(get(), get()) }
 
@@ -115,12 +115,12 @@ val appModule = module {
     viewModel { PromoCodeViewModel(get()) }
     viewModel { FeesAndTaxViewModel(get()) }
 
-    viewModel { UpSaleNCartViewModel(get()) }
+    viewModel { UpSaleNCartViewModel(get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
-    viewModel { FeedViewModel(get(), get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
     viewModel { PickFiltersViewModel(get(), get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
@@ -128,7 +128,7 @@ val appModule = module {
 
     viewModel { UpdateRequiredViewModel(get()) }
 
-    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
@@ -138,18 +138,18 @@ val appModule = module {
     viewModel { OrdersHistoryViewModel(get(), get()) }
 
     //support
-    viewModel { SupportViewModel(get(), get()) }
-    viewModel { WebDocsViewModel(get()) }
+    viewModel { SupportViewModel(get(), get(), get()) }
+    viewModel { WebDocsViewModel(get(), get()) }
 
 
     //settings
-    viewModel { SettingsViewModel(get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
 
     //RestaurantPage
-    viewModel { RestaurantMainViewModel() }
+    viewModel { RestaurantMainViewModel(get()) }
     viewModel { RestaurantPageViewModel(get(), get(), get()) }
-    viewModel { DishPageViewModel(get(), get()) }
-    viewModel { OrderCheckoutViewModel(get(), get()) }
+    viewModel { DishPageViewModel(get(), get(), get(), get()) }
+    viewModel { OrderCheckoutViewModel(get(), get(), get()) }
 
 
 }

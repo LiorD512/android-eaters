@@ -4,10 +4,14 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -18,8 +22,10 @@ import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class DishPageViewModel(
-    val userRepository: UserRepository,
-    val cartManager: CartManager
+    private val userRepository: UserRepository,
+    private val cartManager: CartManager,
+    private val flowEventsManager: FlowEventsManager,
+    private val eventsManager: EventsManager
 ) : ViewModel() {
 
     private var isEditMode = false
@@ -84,6 +90,8 @@ class DishPageViewModel(
                 Log.d(TAG, "this is a different Cooking slot")
                 dishMatchCookingSlot = false
             }
+            eventsManager.logEvent(Constants.EVENT_CLICK_ON_DISH, getDishClicked(extras))
+
         }else if(extras.orderItem != null){
             currentFragmentState = DishFragmentState.UPDATE_DISH
             finishToFeed = extras.finishToFeed
@@ -100,6 +108,17 @@ class DishPageViewModel(
         menuItemData.postValue(menuItem)
         dishMaxQuantity = menuItem.getQuantityCount() - quantityInCart
         counterBtnsState.postValue(CounterBtnState(1, dishMaxQuantity))
+
+    }
+
+    private fun getDishClicked(dishParam: DishInitParams): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["dish_name"] = dishParam.menuItem?.dish?.name.toString()
+        data["dish_id"] = dishParam.menuItem?.dish?.id.toString()
+        data["dish_price"] = dishParam.menuItem?.dish?.price?.formatedValue.toString()
+        data["dish_tags"] = dishParam.menuItem?.tags.isNullOrEmpty().not().toString()
+        data["cuisine"] = dishParam.menuItem?.dish?.cuisines.toString()
+        return data
     }
 
     private fun handleOrderItemData(orderItem: OrderItem) {
@@ -125,6 +144,7 @@ class DishPageViewModel(
             }
         }
     }
+
 
     private fun getUserRequestData(restaurant: Restaurant) {
         // params for the ui of "Hey $eaterName... add your special request"
@@ -156,6 +176,7 @@ class DishPageViewModel(
 
     fun onPerformClearCart() {
         Log.d("orderFlow - dishPage","onPerformClearCart")
+        eventsManager.logEvent(Constants.EVENT_CLEAR_CART)
         cartManager.onCartCleared()
         viewModelScope.launch {
             val startNewCartAction = cartManager.checkForPendingActions()
@@ -172,6 +193,9 @@ class DishPageViewModel(
         }else{
             addDishToCart(note)
         }
+        note?.let{
+            logDishNote(it)
+        }
     }
 
     private fun updateOrderItem(note: String? = null){
@@ -182,6 +206,7 @@ class DishPageViewModel(
             orderItemData.value?.let {
                 val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it.id)
                 if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
+                    logUpdateDish()
                     onFinishDishPage.postValue(getFinishPageType())
                 }
             }
@@ -249,6 +274,45 @@ class DishPageViewModel(
         }
     }
 
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
+
+    fun logDishQuantity() {
+        eventsManager.logEvent(Constants.EVENT_CHANGE_DISH_QUANTITY, getDishQuantityData())
+    }
+
+    private fun logDishNote(note: String) {
+        eventsManager.logEvent(Constants.EVENT_CHANGE_DISH_QUANTITY, getDishNoteData(note))
+    }
+
+    private fun logUpdateDish() {
+        eventsManager.logEvent(Constants.EVENT_UPDATE_DISH, getUpdateDishData())
+    }
+
+    private fun getUpdateDishData(): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["dish_name"] = dishFullData.value?.name.toString()
+        data["dish_id"] = dishFullData.value?.id.toString()
+        data["dish_price"] = dishFullData.value?.price?.formatedValue.toString()
+        data["dish_quantity"] = dishQuantity.toString()
+        return data
+    }
+
+    private fun getDishQuantityData(): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["dish_name"] = dishFullData.value?.name.toString()
+        data["dish_id"] = dishFullData.value?.id.toString()
+        return data
+    }
+
+    private fun getDishNoteData(note: String): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["dish_name"] = dishFullData.value?.name.toString()
+        data["dish_id"] = dishFullData.value?.id.toString()
+        data["note"] = note
+        return data
+    }
 
     companion object{
         const val TAG = "dishPageVM"

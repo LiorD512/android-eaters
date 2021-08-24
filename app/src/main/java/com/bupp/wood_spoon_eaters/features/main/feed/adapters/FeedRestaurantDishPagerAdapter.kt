@@ -26,11 +26,9 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapterListener) :
     ListAdapter<FeedRestaurantSectionItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
-//    val blurHash: BlurHash = BlurHash(context, lruSize = 20, punch = 1F)
 private var parentItemPosition: Int = -1
 private var parentItemId: Long? = null
     interface FeedRestaurantDishPagerAdapterListener {
-//        fun onPageClick(position: Int)
         fun onPageClick(itemLocalId: Long?)
     }
 

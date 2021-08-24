@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_re
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
@@ -69,6 +70,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.handleInitialParamData(navArgs.extras)
         Log.d("orderFlow - rest", "onViewCreated")
 
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_HOME_CHEF)
+
         initUi()
         initObservers()
     }
@@ -81,6 +84,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             shareButton.setOnClickListener {
                 viewModel.restaurantFullData.value?.shareUrl?.let {
                     Utils.shareText(requireActivity(), it)
+                    viewModel.logEvent(Constants.EVENT_SHARE_RESTAURANT)
                 }
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
@@ -317,11 +321,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             override fun onDishSwipedAdd(item: DishSectionSingleDish) {
                 item.menuItem.dishId?.let {
                     viewModel.addDishToCart(1, it)
+                    mainViewModel.logDishSwipeEvent(Constants.EVENT_SWIPED_ADD_DISH, item)
                 }
             }
 
             override fun onDishSwipedRemove(item: DishSectionSingleDish) {
                 viewModel.removeOrderItemsByDishId(item.menuItem.dishId)
+                mainViewModel.logDishSwipeEvent(Constants.EVENT_SWIPED_REMOVE_DISH, item)
             }
 
         }
@@ -329,6 +335,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot) {
         //callback from TimePickerDialog - for changing cooking slot
         viewModel.onCookingSlotSelected(cookingSlot, false)
+        viewModel.logEvent(Constants.EVENT_CHANGE_COOKING_SLOT_DATE)
     }
 
     override fun onDateSelected(date: SortedCookingSlots?) {

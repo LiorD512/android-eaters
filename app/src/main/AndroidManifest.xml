@@ -79,12 +79,12 @@
         <activity
                 android:name=".features.locations_and_address.LocationAndAddressActivity"
                 android:screenOrientation="portrait" />
-        <activity
-                android:name=".features.new_order.NewOrderActivity"
-                android:label="@string/title_activity_new_order"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:windowSoftInputMode="adjustResize" />
+<!--        <activity-->
+<!--                android:name=".features.new_order.NewOrderActivity"-->
+<!--                android:label="@string/title_activity_new_order"-->
+<!--                android:screenOrientation="portrait"-->
+<!--                android:theme="@style/AppTheme.NoActionBar"-->
+<!--                android:windowSoftInputMode="adjustResize" />-->
         <activity
                 android:name=".features.splash.SplashActivity"
                 android:launchMode="singleTask"

@@ -1,8 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -104,7 +102,8 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
     inner class ActiveOrderItemViewHolder(val binding: OrdersHistoryActiveOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val mainLayout: FrameLayout = binding.orderHistoryMainLayout
-        private val title: TextView = binding.activeOrderRestaurantName
+        private val restaurantName: TextView = binding.activeOrderRestaurantName
+        private val title: TextView = binding.activeOrderTitle
         private val subtitle: TextView = binding.activeOrderSubtitle
         private val orderPb: OrderProgressBar = binding.activeOrderPb
         private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
@@ -123,34 +122,20 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             Log.d("wowSTtaicMap","url $url")
             Glide.with(context).load(url).into(mapContainer)
 
-            title.text = order.restaurant?.getFullName() ?: ""
+            restaurantName.text = order.restaurant?.getFullName() ?: ""
             val orderState = order.getOrderState()
             orderPb.setState(orderState)
+
+            title.text = order.getOrderStateTitle(orderState)
+            subtitle.text = order.getOrderStateSubTitle(orderState)
+
 
             mainLayout.setOnClickListener {
                 order.id?.let { it1 ->
                     listener.onViewActiveOrderClicked(it1)
                 }
             }
-            var statusStr = "Waiting for home chef confirmation"
-            when (order.preparationStatus) {
-                "in_progress" -> {
-                    statusStr = "Food is being prepared"
-                }
-                "completed" -> {
-                    statusStr = "Food is being prepared"
-                }
-            }
 
-            when (order.deliveryStatus) {
-                "on_the_way" -> {
-                    statusStr = "Your order is on its way"
-                }
-                "shipped" -> {
-                    statusStr = "Delivered"
-                }
-            }
-            subtitle.text = statusStr
 
         }
     }

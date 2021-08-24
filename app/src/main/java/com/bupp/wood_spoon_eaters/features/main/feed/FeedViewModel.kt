@@ -5,18 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
     private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager,
-    private val campaignManager: CampaignManager
+    private val campaignManager: CampaignManager, private val eventsManager: EventsManager
 ): ViewModel() {
 
     val progressData = ProgressData()
@@ -150,7 +153,26 @@ class FeedViewModel(
 
     fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
         feedDataManager.onTimePickerChanged(deliveryTimeParam)
+        logEvent(Constants.EVENT_CHANGE_DELIVERY_DATE, getDateChangedData(deliveryTimeParam))
         onPullToRefresh()
+    }
+
+    fun logEvent(eventName: String, params: Map<String, String>?) {
+        when(eventName){
+            Constants.EVENT_CHANGE_DELIVERY_DATE -> {
+                eventsManager.logEvent(eventName, params)
+            }
+            else -> {
+                eventsManager.logEvent(eventName)
+            }
+        }
+    }
+
+    private fun getDateChangedData(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["selected_date"] = DateUtils.parseDateToUsDate(deliveryTimeParam?.date)
+        data["day"] = DateUtils.parseDateToDayName(deliveryTimeParam?.date)
+        return data
     }
 
 

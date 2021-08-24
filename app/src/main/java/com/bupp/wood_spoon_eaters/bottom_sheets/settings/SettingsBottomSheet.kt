@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SettingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.settings.NotificationsGroupAdapter
@@ -41,7 +42,8 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
 
-        Analytics.with(requireContext()).screen("Communication settings")
+//        Analytics.with(requireContext()).screen("Communication settings")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_COMMUNICATION_SETTINGS)
 
         binding.settingsFragHeader.setHeaderViewListener(this)
 

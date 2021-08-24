@@ -59,10 +59,13 @@ object DateUtils {
         return ""
     }
 
-    fun parseDateToUsDate(date: Date): String {
+    fun parseDateToUsDate(date: Date?): String {
         //August 2, 2019
-        val sdf = SimpleDateFormat("MMMM dd, yyyy")
-        return sdf.format(date.time)
+        date?.let{
+            val sdf = SimpleDateFormat("MMMM dd, yyyy")
+            return sdf.format(date.time)
+        }
+        return ""
     }
 
     fun parseDateToDayDate(date: Date): String {
@@ -77,6 +80,14 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
+    fun parseDateToDayName(date: Date?): String {
+        //Friday
+        date?.let{
+            val sdf = SimpleDateFormat("EEEE")
+            return sdf.format(date.time)
+        }
+        return ""
+    }
     fun parseDateToDayDateNumber(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EEE, MMM d")

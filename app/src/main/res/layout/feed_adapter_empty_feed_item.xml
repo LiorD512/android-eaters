@@ -24,6 +24,16 @@ in this area quite yet"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--    <com.bupp.wood_spoon_eaters.views.LottieAnimationView-->
+<!--            android:src="@drawable/illus_feed_empty"-->
+<!--            android:background="@color/dark_40"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/emptyFeedSubtitle"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/emptyFeedTitle"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="126dp"/>-->
+
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

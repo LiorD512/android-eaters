@@ -586,8 +586,8 @@ class CartManager(
         val dishesName = getCurrentOrderDishNames()
         val cuisine = getCurrentOrderChefCuisine()
         val data =
-            mutableMapOf<String, Any>("revenue" to totalCostStr.toString(), "currency" to "USD", "cook_name" to chefsName, "success" to isSuccess.toString())
-        data["cook_id"] = chefsId
+            mutableMapOf<String, Any>("revenue" to totalCostStr.toString(), "currency" to "USD", "home_chef_name" to chefsName, "success" to isSuccess.toString())
+        data["home_chef_id"] = chefsId
         dishesName.let {
             data["dishes"] = it
         }

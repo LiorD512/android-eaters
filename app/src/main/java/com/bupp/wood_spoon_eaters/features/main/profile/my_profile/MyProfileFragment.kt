@@ -21,6 +21,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSh
 import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
@@ -47,6 +48,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         initClicks()
         initObservers()
 
@@ -55,6 +57,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onResume() {
         super.onResume()
         viewModel.fetchProfileData()
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ACCOUNT)
     }
 
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {
@@ -183,6 +186,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
             myProfileFragLogout.setOnClickListener {
                 LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
+                mainViewModel.logEvent(Constants.EVENT_CLICK_SIGN_OUT)
+
             }
             myProfileFragDeleteAccount.setOnClickListener {
                 DeleteAccountBottomSheet().show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
@@ -226,6 +231,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
 
             Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_PAYMENT)
                 mainViewModel.startStripeOrReInit()
             }
         }

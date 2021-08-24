@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
@@ -93,6 +94,8 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
 
         curOrderId = requireArguments().getLong(TrackOrderFragment.CUR_ORDER_ID_PARAM)
         Log.d("wowTrackOrderFragment", "newInstance ARGS: $curOrderId")
+
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_TRACK_ORDER)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

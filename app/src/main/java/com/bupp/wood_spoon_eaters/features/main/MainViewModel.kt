@@ -20,18 +20,23 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
-    private val cartManager: CartManager): ViewModel()  {
+    private val cartManager: CartManager, private val flowEventsManager: FlowEventsManager): ViewModel()  {
 
 //    val progressData = ProgressData()
 
     init {
         eaterDataManager.refreshSegment()
 //        fcmManager.initFcmListener()
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
     }
 
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
@@ -444,11 +449,24 @@ class MainViewModel(
      * we start it from here, beacuse we need to update stuff when order is successfully done.
      */
     fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
+        eventsManager.logEvent(Constants.EVENT_CLICK_RESTAURANT, getRestaurantClicked(restaurantInitParams))
         startRestaurantActivity.postValue(restaurantInitParams)
+    }
+
+    private fun getRestaurantClicked(restaurantInitParams: RestaurantInitParams): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
+        data["home_chef_name"] = restaurantInitParams.restaurantName.toString()
+        data["home_chef_rating"] = restaurantInitParams.rating.toString()
+        return data
     }
 
     fun forceFeedRefresh() {
         forceFeedRefresh.postValue(true)
+    }
+
+    fun logEvent(eventName: String) {
+        eventsManager.logEvent(eventName)
     }
 
 

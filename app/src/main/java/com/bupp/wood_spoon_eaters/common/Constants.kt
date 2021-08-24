@@ -90,6 +90,7 @@ class Constants {
         const val LOTTIE_ANIM_PB = 0
         const val LOTTIE_ANIM_SELECT_ADDRESS = 1
         const val LOTTIE_ANIM_LOCATION_PERMISSION = 2
+        const val LOTTIE_ANIM_EMPTY_FEED = 3
 
         //TagView types
         const val TAG_VIEW_FEED = 0
@@ -324,21 +325,47 @@ class Constants {
         const val ANDROID_SETTINGS_REQUEST_CODE = 113
 
         //UXCAM Events
+        const val EVENT_SEND_OTP = "send_otp"
+        const val EVENT_VERIFY_OTP = "verify_otp"
+        const val EVENT_CREATE_ACCOUNT = "create_account"
+        const val EVENT_CLICK_GET_STARTED = "click_get_started"
+        const val EVENT_ON_BOARDING_FINISHED = "onboarding_finished"
+        const val EVENT_SWIPE_BETWEEN_DISHES = "swipe_between_dishes_feed"
+        const val EVENT_CLICK_RESTAURANT = "click_on_home_chef"
+        const val EVENT_CLICK_ON_DISH = "click_on_dish"
+        const val EVENT_CAMPAIGN_INVITE = "campaign_invite"
         const val EVENT_ORDER_PLACED = "order_placed"
+        const val EVENT_LOCATION_PERMISSION = "location_persuasion"
+        const val EVENT_SWIPED_ADD_DISH = "swipe_add_dish_in_chef_page"
+        const val EVENT_SWIPED_REMOVE_DISH = "swipe_remove_dish_in_chef_page"
+        const val EVENT_LIKE_RESTAURANT = "add_chef_to_favorites"
+        const val EVENT_SHARE_RESTAURANT = "share_home_chef"
+        const val EVENT_CHANGE_DELIVERY_DATE = "change_delivery_date" //feed
+        const val EVENT_CHANGE_COOKING_SLOT_DATE = "change_cooking_slot_date" //restaurant header
+        const val EVENT_CHANGE_COOKING_SLOT = "change_cooking_slot" //restaurant picker
+        const val EVENT_CHANGE_DELIVERY_TIME = "change_delivery_time" //checkout
         const val EVENT_ADD_DISH = "add_dish_to_cart"
+        const val EVENT_CHANGE_DISH_QUANTITY = "change_dish_quantity"
+        const val EVENT_SWIPE_ADD_DISH_IN_CART = "swipe_add_dish_in_cart"
+        const val EVENT_SWIPE_REMOVE_DISH_IN_CART = "swipe_remove_dish_in_cart"
+        const val EVENT_CLICK_DISH_IN_CART = "click_on_dish_from_cart"
+        const val EVENT_UPDATE_DISH = "update_dish_information"
+        const val EVENT_UPDATE_DELIVERY_ADDRESS = "change_delivery_address"
+        const val EVENT_CLICK_EDIT_ORDER = "click_edit_order"
+        const val EVENT_CLICK_BACK_fROM_CHECKOUT = "click_back_from_checkout"
+        const val EVENT_CLICK_ON_PROMO_CODE = "click_on_promo_code_section"
+        const val EVENT_SUBMIT_PROMO_CODE = "submit_promo_code"
+        const val EVENT_CLEAR_CART = "clear_cart"
+        const val EVENT_CLICK_PAYMENT = "click_payment"
+        const val EVENT_CLICK_SIGN_OUT = "sign_out"
+
         const val EVENT_ADD_ADDITIONAL_DISH = "add_upsale_dish_to_cart"
         const val EVENT_TRACK_ORDER_CLICK = "clicked_track_your_order"
         const val EVENT_SEARCHED_ITEM = "searched_an_item"
         const val EVENT_FUTURE_DELIVERY = "scheduled_future_delivery"
-        const val EVENT_CLICK_ON_DISH = "click_on_dish"
         const val EVENT_SEARCH = "search"
-        const val EVENT_PROCEED_TO_CART = "proceed_checkout"
-        const val EVENT_SEND_OTP = "send_otp"
-        const val EVENT_VERIFY_OTP = "verify_otp"
-        const val EVENT_CREATE_ACCOUNT = "create_account"
-        const val EVENT_CAMPAIGN_INVITE = "campaign_invite"
+        const val EVENT_PROCEED_TO_CHECKOUT = "proceed_checkout"
         const val EVENT_TIP = "tip"
-        const val EVENT_LOCATION_PERMISSION = "location_persuasion"
 
 
 

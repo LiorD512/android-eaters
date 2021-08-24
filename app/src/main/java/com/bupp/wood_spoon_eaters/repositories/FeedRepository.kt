@@ -153,17 +153,19 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
                 if (it == href) {
                     Log.d("hrefSucks","handeling href - $href")
                     data?.let { data ->
-                        if(data.isEmpty()){
-                            Log.d("hrefSucks","href empty")
-                            return@forEachIndexed
+                        if(data.isNotEmpty() && data[0].items!!.isNotEmpty()){
+                            Log.d("hrefSucks","update href section")
+                            section.href = null
+                            lastFeedDataResult?.sections!![index].collections = data.toMutableList()
 
                             //remove title incase Href data is empty
 //                            val sections = tempFeedResult?.sections?.toMutableList()?.removeAt(index)
 //                            lastFeedDataResult?.sections = sections
+                        }else{
+                            Log.d("hrefSucks","href empty")
+                            return@forEachIndexed
                         }
-                        Log.d("hrefSucks","update href section")
-                        section.href = null
-                        lastFeedDataResult?.sections!![index].collections = data.toMutableList()
+
                     }
                 }
             }

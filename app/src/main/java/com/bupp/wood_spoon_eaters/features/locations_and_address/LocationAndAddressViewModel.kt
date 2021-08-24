@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.EVENT_LOCATION_PERMISSION
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
@@ -21,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
-class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager) : ViewModel() {
+class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager, private val flowEventsManager: FlowEventsManager) : ViewModel() {
 
     var tempSelectAddress: Address? = null
 
@@ -253,10 +254,9 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
         return data
     }
 
-//    fun setDefaultActivityHeaderTitle() {
-//        Log.d(TAG, "setDefaultActivityHeaderTitle")
-////        actionEvent.postValue(ActionEvent.RESET_HEADER_TITLE)
-//    }
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
 
     companion object{
         const val TAG = "wowLocationAndAddressVM"

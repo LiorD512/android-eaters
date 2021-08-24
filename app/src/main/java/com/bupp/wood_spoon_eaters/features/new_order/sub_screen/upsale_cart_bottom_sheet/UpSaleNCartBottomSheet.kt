@@ -2,27 +2,32 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bot
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListener
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
@@ -53,6 +58,14 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
 
     private lateinit var cartAdapter: UpSaleNCartAdapter
 
+    private val addLocationResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        Log.d(TAG, "Activity For Result - addLocationResult")
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            viewModel.updateAddressAndProceedToCheckout()
+            //check if location changed and refresh ui
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
@@ -182,6 +195,8 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_30_bkg)
 
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CART)
+
         initUI()
         initObservers()
 
@@ -217,6 +232,9 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
                 }
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_UP_SALE -> {
                     navToUpSale()
+                }
+                UpSaleNCartViewModel.NavigationEvent.GO_TO_SELECT_ADDRESS -> {
+                    addLocationResult.launch(Intent(requireContext(), LocationAndAddressActivity::class.java))
                 }
             }
         })
@@ -264,6 +282,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
                         val orderId = item.customCartItem.orderItem.id
                         val currentQuantity = item.customCartItem.orderItem.quantity
                         viewModel.updateDishInCart(currentQuantity+1, dishId, note, orderId)
+                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, item.customCartItem)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}
@@ -275,6 +294,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
                     is CartAdapterItem -> {
                         val orderItemId = item.customCartItem.orderItem.id
                         viewModel.removeSingleOrderItemId(orderItemId)
+                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customCartItem)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}
@@ -284,6 +304,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             override fun onCartItemClicked(customCartItem: CustomCartItem) {
                 Log.d(TAG, "onCartItemClicked: $customCartItem")
                 viewModel.onCartItemClicked(customCartItem)
+                viewModel.logSwipeDishInCart(Constants.EVENT_CLICK_DISH_IN_CART, customCartItem)
                 dismiss()
             }
         }

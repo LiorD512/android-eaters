@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,17 +10,15 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
-import com.segment.analytics.Analytics
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -48,7 +45,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Feed")
         initUi()
 
         initObservers()
@@ -316,6 +312,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 //        startActivity(Intent(requireContext(), RestaurantActivity::class.java)
 //            .putExtra(Constants.ARG_RESTAURANT, restaurantInitParams)
 //        )
+    }
+
+    override fun onDishSwiped() {
+        viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES, viewModel.getDateChangedData(deliveryTimeParam))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_FEED)
     }
 
 

@@ -5,10 +5,13 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -18,11 +21,13 @@ import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class RestaurantPageViewModel(
     private val restaurantRepository: RestaurantRepository,
     private val cartManager: CartManager,
-    private val feedDataManager: FeedDataManager
+    private val feedDataManager: FeedDataManager,
+    private val eventsManager: EventsManager
 
 ) : ViewModel() {
     var currentRestaurantId: Long = -1
@@ -149,7 +154,7 @@ class RestaurantPageViewModel(
     )
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
-    fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot, forceTabChnage: Boolean) {
+    private fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot, forceTabChnage: Boolean) {
         Log.d(TAG, "updateCookingSlotRelatedUi")
         onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot), forceTabChnage))
     }
@@ -330,6 +335,7 @@ class RestaurantPageViewModel(
     fun onDeliveryDateChanged(date: SortedCookingSlots?) {
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
             onCookingSlotSelected(cookingSlot, false)
+            logEvent(Constants.EVENT_CHANGE_COOKING_SLOT)
         }
     }
 
@@ -376,6 +382,7 @@ class RestaurantPageViewModel(
 //    }
 
     fun onPerformClearCart() {
+        eventsManager.logEvent(Constants.EVENT_CLEAR_CART)
         cartManager.onCartCleared()
         viewModelScope.launch {
             cartManager.checkForPendingActions()
@@ -401,7 +408,41 @@ class RestaurantPageViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val result = restaurantRepository.likeCook(currentRestaurantId)
             favoriteEvent.postRawValue(result.type == SUCCESS)
+            logEvent(Constants.EVENT_LIKE_RESTAURANT)
         }
+    }
+
+    fun logEvent(eventName: String){
+        when(eventName){
+            Constants.EVENT_LIKE_RESTAURANT -> {
+                eventsManager.logEvent(eventName, getLikeRestaurantData())
+            }
+            Constants.EVENT_SHARE_RESTAURANT -> {
+                eventsManager.logEvent(eventName, getLikeRestaurantData())
+            }
+            Constants.EVENT_CHANGE_COOKING_SLOT -> {
+                eventsManager.logEvent(eventName, getCookingSlotChangeData())
+            }
+            else -> {
+                eventsManager.logEvent(eventName)
+            }
+        }
+    }
+
+    private fun getLikeRestaurantData(): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["home_chef_id"] = currentRestaurantId.toString()
+        data["home_chef_name"] = initialParamData.value?.restaurantName.toString()
+        return data
+    }
+
+    private fun getCookingSlotChangeData(): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        currentCookingSlot?.let{
+            data["selected_date"] = DateUtils.parseDateToUsDate(it.startsAt)
+            data["day"] = DateUtils.parseDateToDayName(it.startsAt)
+        }
+        return data
     }
 
     fun removeFromFavoriteClick() {

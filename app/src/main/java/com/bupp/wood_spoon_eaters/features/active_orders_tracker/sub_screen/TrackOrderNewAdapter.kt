@@ -192,9 +192,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
                 }
 
-//                binding.trackOrderBottomShareImageBtn.setOnClickListener {
-//                    listener.onShareImageClick(order)
-//                }
             }
         }
     }

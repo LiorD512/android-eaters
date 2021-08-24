@@ -20,10 +20,13 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     FeedCouponSectionPagerAdapter.FeedCouponSectionListener, FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
     FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
+
+
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
         fun onRestaurantClick(cook: RestaurantInitParams)
         fun onChangeAddressClick()
+        fun onDishSwiped()
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -138,6 +141,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
 
     override fun onRestaurantClick(restaurant: FeedRestaurantSection) {
         listener.onRestaurantClick(restaurant.toRestaurantInitParams())
+    }
+
+    override fun onDishSwiped() {
+        listener.onDishSwiped()
     }
 
 //    override fun onPageClick(position: Int) {

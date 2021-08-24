@@ -2,15 +2,18 @@ package com.bupp.wood_spoon_eaters.features.restaurant
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 
-class RestaurantMainViewModel : ViewModel() {
+class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, private val eventsManager: EventsManager) : ViewModel() {
 
     enum class NavigationType{
         OPEN_DISH_PAGE,
@@ -46,5 +49,20 @@ class RestaurantMainViewModel : ViewModel() {
         navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }
 
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
+
+    fun logDishSwipeEvent(eventName: String, item: DishSectionSingleDish) {
+        eventsManager.logEvent(eventName, getDishSwipedData(item))
+    }
+
+    private fun getDishSwipedData(item: DishSectionSingleDish): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        data["dish_name"] = item.menuItem.dish?.name.toString()
+        data["dish_id"] = item.menuItem.dish?.id.toString()
+        data["dish_price"] = item.menuItem.dish?.price?.formatedValue.toString()
+        return data
+    }
 
 }

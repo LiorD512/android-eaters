@@ -67,6 +67,7 @@
             </LinearLayout>
 
             <TextView
+                    android:id="@+id/activeOrderTitle"
                     android:layout_marginTop="7.9dp"
                     style="@style/LatoBlack19DarkThree"
                     android:layout_width="wrap_content"

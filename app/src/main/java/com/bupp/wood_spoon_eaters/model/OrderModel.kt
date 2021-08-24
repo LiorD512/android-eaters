@@ -1,9 +1,11 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.Nullable
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrderHistoryViewType
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -88,26 +90,43 @@ data class Order (
     @Json(name = "nationwide_shipping") val isNationwide: Boolean?
 ): Parcelable {
     fun getOrderState(): OrderState {
+        Log.d("wowOrderState","orderNumber: $orderNumber")
+        Log.d("wowOrderState","deliveryStatus: $deliveryStatus")
+        Log.d("wowOrderState","preparationStatus: $preparationStatus")
         var curOrderStage =  OrderState.NONE
 
-        if(status == "finalized" && preparationStatus == "idle"){
-            curOrderStage = OrderState.RECEIVED
+        when(preparationStatus){
+            "idle" -> { OrderState.NONE }
+            "received" -> { OrderState.RECEIVED }
+            "in_progress" -> { OrderState.PREPARED }
+            "completed" -> { OrderState.PREPARED }
         }
-
-        if((preparationStatus == "received" || preparationStatus == "in_progress")
-            || (preparationStatus == "completed" && deliveryStatus == "idle")){
-            curOrderStage = OrderState.PREPARED
+        when(deliveryStatus){
+            "enroute" -> { OrderState.ON_THE_WAY }
+            "on_the_way" -> { OrderState.ON_THE_WAY }
+            "shipped" -> { OrderState.DELIVERED }
         }
-
-        if(preparationStatus == "completed" && deliveryStatus != "idle"){
-            curOrderStage = OrderState.ON_THE_WAY
-        }
-
-        if(deliveryStatus == "shipped"){
-            curOrderStage = OrderState.DELIVERED
-        }
-
+        Log.d("wowOrderState","curOrderStage: $curOrderStage")
         return curOrderStage
+    }
+
+    fun getOrderStateTitle(orderState: OrderState): String?{
+        return when(orderState){
+            OrderState.NONE -> "Your order"
+            OrderState.RECEIVED -> "Order confirmed"
+            OrderState.PREPARED -> "Preparing your order"
+            OrderState.ON_THE_WAY -> "Delivery in progress"
+            OrderState.DELIVERED -> "Delivered"
+        }
+    }
+
+    fun getOrderStateSubTitle(orderState: OrderState): String?{
+        return when(orderState){
+            OrderState.NONE -> "Waiting for home chef confirmation"
+            OrderState.RECEIVED, OrderState.PREPARED, OrderState.ON_THE_WAY, OrderState.DELIVERED -> {
+                "Arriving at ${deliverAt?.let { DateUtils.parseDateHalfHourInterval(it) }}"
+            }
+        }
     }
 
     fun getAllOrderItemsQuantity(): Int {

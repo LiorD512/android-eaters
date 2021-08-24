@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.EditProfileBottomSheetBinding
@@ -60,7 +61,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Profile edit")
+//        Analytics.with(requireContext()).screen("Profile edit")
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_EDIT_ACCOUNT)
 
         initUi()
         initObservers()

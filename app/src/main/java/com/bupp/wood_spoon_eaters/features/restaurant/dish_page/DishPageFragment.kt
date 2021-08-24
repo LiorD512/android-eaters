@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
@@ -44,6 +45,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
         val navArgs: DishPageFragmentArgs by navArgs()
         viewModel.initData(navArgs.extras)
+
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_DISH)
 
         initUi()
         initObservers()
@@ -79,6 +82,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateDishQuantity(counter)
+        viewModel.logDishQuantity()
     }
 
     private fun initObservers() {

@@ -23,7 +23,7 @@ android {
         targetSdkVersion 29
 
         applicationId "com.bupp.wood_spoon_eater"
-        versionCode 86
+        versionCode 88
         versionName "2.3.0"
 
     }
@@ -107,7 +107,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
     implementation 'androidx.fragment:fragment-ktx:1.3.6'
 
-
+    //Support libraries
+    implementation 'com.android.support:appcompat-v7:26.0.1'
+    implementation 'com.android.support:support-v4:26.0.1'
 
     //Paging - Flow
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
