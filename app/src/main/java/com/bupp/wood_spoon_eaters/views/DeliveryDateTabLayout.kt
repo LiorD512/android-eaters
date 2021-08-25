@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.databinding.DeliveryDateTabLayoutBinding
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.SortedCookingSlots
+import com.bupp.wood_spoon_eaters.model.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout

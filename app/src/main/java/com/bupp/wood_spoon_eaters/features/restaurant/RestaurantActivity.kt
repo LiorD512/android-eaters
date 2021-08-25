@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,10 +16,9 @@ import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.model.DishInitParams
+import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RestaurantActivity : BaseActivity(){

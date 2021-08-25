@@ -17,13 +17,13 @@
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
                 app:popUpTo="@+id/restaurantPageFragment">
-            <argument
-                    android:name="extras"
-                    app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams" />
+<!--            <argument-->
+<!--                    android:name="extras"-->
+<!--                    app:argType="com.bupp.wood_spoon_eaters.model.DishInitParams" />-->
         </action>
         <argument
                 android:name="extras"
-                app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams" />
+                app:argType="com.bupp.wood_spoon_eaters.model.RestaurantInitParams" />
     </fragment>
 
     <fragment
@@ -33,7 +33,7 @@
             tools:layout="@layout/fragment_dish_page">
         <argument
                 android:name="extras"
-                app:argType="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams" />
+                app:argType="com.bupp.wood_spoon_eaters.model.DishInitParams" />
     </fragment>
 
 
