@@ -76,7 +76,7 @@ data class FeedRestaurantSection(
     @Json(name = "chef_id") val chefId: Long?,
     @Json(name = "chef_thumbnail") val chefThumbnail: WSImage?,
     @Json(name = "chef_cover") val chefCover: WSImage?,
-    @Json(name = "avg_rating") val avgRating: Double?,
+    @Json(name = "avg_rating") val avgRating: Float?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
     fun toRestaurantInitParams(sectionTitle: String? = null,
                                sectionOrder: Int? = null,
@@ -204,7 +204,8 @@ data class FeedAdapterRestaurant(
 
 @Parcelize
 data class FeedAdapterEmptyFeed(
-    val emptyFeedSection: FeedIsEmptySection, override val id: Long?
+    val emptyFeedSection: FeedIsEmptySection, override val id: Long?,
+    val shouldShowBtn: Boolean = true
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_FEED)
 
 @Parcelize

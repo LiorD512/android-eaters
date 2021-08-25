@@ -51,10 +51,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        Analytics.with(requireContext()).screen("Checkout page")
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CHECKOUT)
         mainViewModel.logEvent(Constants.EVENT_PROCEED_TO_CHECKOUT)
-//        mainViewModel.proceedToCheckoutEvent()
 
         initUi()
         initObservers()
@@ -163,7 +161,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
             }
         }
-
     }
 
     private fun openOrderTimeBottomSheet(deliveryDatesData: CheckoutViewModel.TimePickerData) {
@@ -176,7 +173,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryTimeParam?.date)))
         mainViewModel.logChangeTime(deliveryTimeParam?.date)
     }
-
 
     private fun setEmptyPaymentMethod() {
         with(binding) {
@@ -215,8 +211,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     var cook = it.restaurant
 
                     checkoutFragDeliveryAddress.updateDeliveryAddressFullDetails(it.deliveryAddress)
-
-                    checkoutFragDetailsHeader.text = "Your Order From home chef ${cook?.firstName}"
                     checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }
 
@@ -237,7 +231,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 }
             }
             updatePriceUi(it)
-
         }
     }
 
@@ -278,7 +271,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 checkoutFragPlaceOrderBtn.updateFloatingBtnPrice(it)
             }
         }
-
     }
 
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
@@ -306,7 +298,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_TIP)
     }
 
-
     override fun onCustomDetailsClick(type: Int) {
         when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
@@ -328,7 +319,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-
     override fun onHeaderCloseClick() {
         mainViewModel.logEvent(Constants.EVENT_CLICK_BACK_fROM_CHECKOUT)
         activity?.onBackPressed()
@@ -336,7 +326,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onEditOrderBtnClicked() {
         mainViewModel.logEvent(Constants.EVENT_CLICK_EDIT_ORDER)
-        activity?.finish()
+        (activity as OrderCheckoutActivity).onEditOrderClick()
     }
 
     override fun onToolTipClick(type: Int) {

@@ -5,9 +5,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingVertical="15.4dp">
+        android:paddingTop="23dp"
+        android:paddingBottom="4dp">
 
     <TextView
+            android:paddingStart="15.4dp"
             android:id="@+id/orderHistoryTitle"
             style="@style/LatoBlack19DarkThree"
             android:layout_width="wrap_content"

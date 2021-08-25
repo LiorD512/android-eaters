@@ -47,7 +47,7 @@
                     android:letterSpacing="0.03"
                     android:lineSpacingExtra="7.7sp"
                     android:padding="23dp"
-                    android:text="Delicious homemade food from local home chefs delivered to your door!" />
+                    android:text="Delicious homemade food, from local home chefs, delivered to your door!" />
 
             <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                     android:id="@+id/welcomeFragmentLogin"

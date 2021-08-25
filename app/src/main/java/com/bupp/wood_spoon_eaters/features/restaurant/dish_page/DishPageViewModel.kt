@@ -247,6 +247,7 @@ class DishPageViewModel(
                         val result = cartManager.addOrUpdateCart(quantity, it, note)
                         if (result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
                             cartManager.forceCookingSlotChange(cookingSlotId)
+                            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(note))
                             onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
                         }else if(result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                             onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
@@ -260,6 +261,19 @@ class DishPageViewModel(
         } else {
             shakeAddToCartBtn.postRawValue(true)
         }
+    }
+
+    private fun getAddDishData(note: String? = null): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+
+        data["dish_name"] = dishFullData.value?.name.toString()
+        data["dish_id"] = dishFullData.value?.id.toString()
+        data["dish_price"] = dishFullData.value?.price?.formatedValue.toString()
+        data["dish_tags"] = extras.menuItem?.tags.isNullOrEmpty().not().toString()
+        data["dish_quantity"] = dishQuantity.toString()
+        data["dish_special_requests"] = note.isNullOrEmpty().not().toString()
+
+        return data
     }
 
     fun onDishRemove(dishId: Long){

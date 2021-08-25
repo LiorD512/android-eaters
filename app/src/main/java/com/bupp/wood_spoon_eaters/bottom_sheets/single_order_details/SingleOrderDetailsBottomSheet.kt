@@ -126,7 +126,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 deliveryAddress?.apply{
                     singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }
-                singleOrderDetailsStatus.updateDeliveryTimeUi(status ?: "N/A")
+                singleOrderDetailsStatus.updateSubTitle(status?.uppercase() ?: "N/A")
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
                 orderItems?.let{
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
@@ -165,7 +165,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
                 singleOrderDetailsSubtotal.setValue("$$allDishSubTotalStr")
-                singleOrderDetailsTotalBeforeTip.setValue(totalBeforeTip?.formatedValue ?: "")
                 singleOrderDetailsTotal2.setValue(total?.formatedValue ?: "N/A")
 
                 if(wasRated == true){

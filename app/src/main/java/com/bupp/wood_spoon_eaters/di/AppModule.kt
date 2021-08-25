@@ -56,7 +56,7 @@ val appModule = module {
     //repos
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get()) }
-    single { FeedRepository(get(), get()) }
+    single { FeedRepository(get(), get(), get()) }
     single { FeedRepositoryImpl(get()) }
     single { UserRepositoryImpl(get()) }
     single { RestaurantRepository(get())}
@@ -128,7 +128,7 @@ val appModule = module {
 
     viewModel { UpdateRequiredViewModel(get()) }
 
-    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile

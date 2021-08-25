@@ -35,6 +35,7 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.CartBottomBar
+import com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
@@ -50,7 +51,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     ShareDialog.ShareDialogListener,
     ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
     CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
-    WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener {
+    WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener, MainActivityTabLayout.MainActivityTabLayoutListener {
 
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
@@ -83,7 +84,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             mainActViewPager.offscreenPageLimit = 1
             mainActViewPager.isUserInputEnabled = false
 
-            mainActBottomTabLayout.setViewPager(mainActViewPager)
+            mainActBottomTabLayout.setViewPager(mainActViewPager, this@MainActivity)
         }
     }
 
@@ -112,6 +113,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         Log.d(TAG, "Activity For Result - startCheckoutForResult")
         if (result.resultCode == Activity.RESULT_OK) {
             updateUiAfterOrderSuccess(result.data)
+            val data = result.data
+            val editOrderClicked = data?.getBooleanExtra("editOrderClick", false)
+            if(editOrderClicked!!){
+                UpSaleNCartBottomSheet(this@MainActivity).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+            }
         }
     }
 
@@ -726,6 +732,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.onMediaUtilsResultSuccess(result)
     }
 
+    override fun onHomeTabReClicked() {
+        viewModel.scrollFeedToTop()
+    }
 
 
 }

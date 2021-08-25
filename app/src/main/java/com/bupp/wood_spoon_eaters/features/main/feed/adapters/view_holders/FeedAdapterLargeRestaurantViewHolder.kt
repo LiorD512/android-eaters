@@ -28,7 +28,7 @@ class FeedAdapterLargeRestaurantViewHolder(val context: Context, val binding: Fe
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.avgRating.toString()
-                feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0.0 > 0
+                feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0f > 0
 
                 adapter.setParentItemPosition(parentAdapterPosition)
 

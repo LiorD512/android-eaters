@@ -96,15 +96,15 @@ data class Order (
         var curOrderStage =  OrderState.NONE
 
         when(preparationStatus){
-            "idle" -> { OrderState.NONE }
-            "received" -> { OrderState.RECEIVED }
-            "in_progress" -> { OrderState.PREPARED }
-            "completed" -> { OrderState.PREPARED }
+            "idle" -> { curOrderStage = OrderState.NONE }
+            "received" -> { curOrderStage = OrderState.RECEIVED }
+            "in_progress" -> { curOrderStage = OrderState.PREPARED }
+            "completed" -> { curOrderStage = OrderState.PREPARED }
         }
         when(deliveryStatus){
-            "enroute" -> { OrderState.ON_THE_WAY }
-            "on_the_way" -> { OrderState.ON_THE_WAY }
-            "shipped" -> { OrderState.DELIVERED }
+            "enroute" -> { curOrderStage = OrderState.ON_THE_WAY }
+            "on_the_way" -> { curOrderStage = OrderState.ON_THE_WAY }
+            "shipped" -> { curOrderStage = OrderState.DELIVERED }
         }
         Log.d("wowOrderState","curOrderStage: $curOrderStage")
         return curOrderStage

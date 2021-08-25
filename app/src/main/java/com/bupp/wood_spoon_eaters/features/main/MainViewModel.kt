@@ -68,6 +68,7 @@ class MainViewModel(
 
     val startRestaurantActivity = MutableLiveData<RestaurantInitParams>()
     val forceFeedRefresh = MutableLiveData<Boolean>()
+    val scrollFeedToTop = MutableLiveData<Boolean>()
 //    fun checkCampaignForFeed() {
 //        campaignManager.checkCampaignFor(FlowEventsManager.FlowEvents.VISIT_FEED)
 //    }
@@ -454,7 +455,7 @@ fun onFloatingCartStateChanged(isShowing: Boolean) {
     private fun getRestaurantClicked(restaurantInitParams: RestaurantInitParams): Map<String, String> {
         val data = mutableMapOf<String, String>()
         data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
-        data["home_chef_name"] = restaurantInitParams.restaurantName.toString()
+        data["home_chef_name"] = restaurantInitParams.chefName.toString()
         data["home_chef_rating"] = restaurantInitParams.rating.toString()
         data["section_title"] = restaurantInitParams.sectionTitle.toString()
         data["section_index"] = restaurantInitParams.sectionOrder.toString()
@@ -465,6 +466,10 @@ fun onFloatingCartStateChanged(isShowing: Boolean) {
 
     fun forceFeedRefresh() {
         forceFeedRefresh.postValue(true)
+    }
+
+    fun scrollFeedToTop() {
+        scrollFeedToTop.postValue(true)
     }
 
     fun logEvent(eventName: String) {

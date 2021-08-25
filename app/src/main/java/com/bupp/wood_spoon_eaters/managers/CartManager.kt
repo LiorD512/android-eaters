@@ -143,7 +143,7 @@ class CartManager(
                 updateCartManagerParams(it.copy())
             }
             val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
-            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
+
         } else {
             //check for errors
             if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
@@ -382,11 +382,18 @@ class CartManager(
                     }
                     if(matchedDate == null){
                         Log.d("orderFlowTime", "future order but not in a valid delivery time")
+
                         deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
                         //todo - update server for the choosen delivery time
                     }else{
                         Log.d("orderFlowTime", "future order ")
-                        deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(order.deliverAt))
+                        if(DateUtils.isNowInRange(matchedDate.from, matchedDate.to)){
+                            Log.d("orderFlowTime", "is now")
+                            deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(order.deliverAt)})")
+                        }else{
+                            Log.d("orderFlowTime", "first delivery time")
+                            deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(order.deliverAt))
+                        }
                     }
                 }
             }
@@ -573,9 +580,9 @@ class CartManager(
 
     private fun getTipData(): Map<String, String> {
         val data = mutableMapOf<String, String>()
-        data["order_total_before_tip"] = currentOrderResponse?.totalBeforeTip?.formatedValue ?: "0"
-        data["order_total_including_tip"] = currentOrderResponse?.total?.formatedValue ?: "0"
-        data["tip_quantity"] = currentOrderResponse?.tip?.formatedValue ?: "0"
+        data["precentage"] = currentOrderResponse?.tipPercentage.toString() ?: "0"
+        data["value"] = currentOrderResponse?.tip?.formatedValue ?: "0"
+        data["subtotal_price"] = currentOrderResponse?.total?.formatedValue ?: "0"
         return data
     }
 
@@ -658,7 +665,7 @@ class CartManager(
         return dishNames.toList()
     }
 
-    private fun getAddDishData(orderId: Long? = null, orderItem: OrderItem? = null): Map<String, String> {
+    fun getAddDishData(orderId: Long? = null, orderItem: OrderItem? = null): Map<String, String> {
         val currentDishName = getCurrentDishName(orderItem?.dish)
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
@@ -738,6 +745,10 @@ class CartManager(
         currentOrderResponse.let {
             return it?.restaurant?.getFullName() ?: "no_name"
         }
+    }
+
+    fun isCartEmpty(): Boolean {
+        return getCurrentOrderItems().isNullOrEmpty()
     }
 
 

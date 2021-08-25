@@ -39,7 +39,10 @@ object Utils {
 
     fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
         val percentage = (value - min) / (max - min)
-        val result = (percentage * (max2 - min2)) + min2
+        var result = (percentage * (max2 - min2)) + min2
+        if(result > max2){
+            result = max2
+        }
         return result
     }
 

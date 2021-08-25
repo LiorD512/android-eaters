@@ -3,13 +3,14 @@ package com.bupp.wood_spoon_eaters.repositories
 import android.annotation.SuppressLint
 import android.util.Log
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.base_repos.FeedRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfigManager: FlavorConfigManager) {
+class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
 
 
     private var lastFeedDataResult: FeedResult? = null
@@ -107,7 +108,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
                         feedData.add(FeedAdapterCoupons(feedSectionCollectionItem, localId))
                     }
                     is FeedIsEmptySection -> {
-                        feedData.add(FeedAdapterEmptyFeed(feedSectionCollectionItem, localId))
+                        feedData.add(FeedAdapterEmptyFeed(feedSectionCollectionItem, localId, isCartEmpty()))
                     }
                     is FeedSingleEmptySection -> {
                         feedData.add(FeedAdapterEmptySection(feedSectionCollectionItem, localId))
@@ -132,6 +133,10 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
         }
         lastFeedDataResult = feedResult
         return feedData
+    }
+
+    fun isCartEmpty(): Boolean{
+        return cartManager.isCartEmpty()
     }
 
 

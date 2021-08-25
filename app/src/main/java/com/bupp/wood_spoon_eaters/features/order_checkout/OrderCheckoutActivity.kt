@@ -100,6 +100,12 @@ class OrderCheckoutActivity : BaseActivity() {
         binding.checkoutActHeader.setOnIconClickListener { onBackPressed() }
     }
 
+    fun onEditOrderClick() {
+        intent.putExtra("editOrderClick", true)
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+
     companion object{
         const val TAG = "wowOrderCheckoutAct"
     }

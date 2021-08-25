@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/status_bottom_bar_height">
+                android:paddingBottom="@dimen/floating_cart_btn_height">
 
             <fragment
                     android:id="@+id/checkoutFragMap"
@@ -34,17 +34,6 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="-20dp"
                     android:background="@drawable/white_to_transparent_rect2" />
-
-            <TextView
-                    android:id="@+id/checkoutFragDetailsHeader"
-                    style="@style/LatoBlack17Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginTop="15.4dp"
-                    android:layout_marginBottom="7.7dp"
-                    android:letterSpacing="0.03"
-                    tools:text="Your order from home chef Oded" />
 
             <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                     android:id="@+id/checkoutFragNationwideSelect"
@@ -243,8 +232,13 @@
             <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
                     android:id="@+id/checkoutFragTipPercentView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15.4dp" />
+                    android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
             app:layout_constraintBottom_toBottomOf="parent"
@@ -252,10 +246,6 @@
             app:floating_button_type="PLACE_ORDER"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/checkoutFragmentPb"

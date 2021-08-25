@@ -1,11 +1,13 @@
 package com.bupp.wood_spoon_eaters.features.restaurant
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
@@ -18,7 +20,7 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
     enum class NavigationType {
         OPEN_DISH_PAGE,
         START_ORDER_CHECKOUT_ACTIVITY,
-        FINISH_RESTAURANT_ACTIVITY
+        FINISH_RESTAURANT_ACTIVITY,
     }
 
     data class NavigationEvent(
@@ -27,6 +29,7 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
     )
 
     val navigationEvent = LiveEventData<NavigationEvent>()
+    val reOpenCartEvent = MutableLiveData<Boolean>()
 
     fun handleNavigation(navigationType: NavigationType?) {
         when (navigationType) {
@@ -37,6 +40,10 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
                 navigationEvent.postRawValue(NavigationEvent(navigationType, null))
             }
         }
+    }
+
+    fun reOpenCart() {
+        reOpenCartEvent.postValue(true)
     }
 
     fun openDishPage(menuItem: MenuItem, curCookingSlot: CookingSlot?) {
@@ -80,8 +87,11 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
         data["dish_name"] = item.menuItem.dish?.name.toString()
         data["dish_id"] = item.menuItem.dish?.id.toString()
         data["dish_price"] = item.menuItem.dish?.price?.formatedValue.toString()
+        data["dish_section_title"] = item.menuItem.sectionTitle.toString()
+        data["dish_index"] = item.menuItem.dishOrderInSection.toString()
         return data
     }
+
 
 
 }

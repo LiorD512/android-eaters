@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterEmptyFeedItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterEmptySectionItemBinding
@@ -14,8 +15,13 @@ class FeedAdapterEmptyFeedViewHolder(val binding: FeedAdapterEmptyFeedItemBindin
                     binding.emptyFeedTitle.text = it.title
                     binding.emptyFeedSubtitle.text = it.subtitle
 
-                    binding.emptyFeedChangeAddress.setOnClickListener {
-                        listener.onChangeAddressClick()
+                    if(noChefSection.shouldShowBtn){
+                        binding.emptyFeedChangeAddress.visibility = View.VISIBLE
+                        binding.emptyFeedChangeAddress.setOnClickListener {
+                            listener.onChangeAddressClick()
+                        }
+                    }else{
+                        binding.emptyFeedChangeAddress.visibility = View.INVISIBLE
                     }
                 }
             }

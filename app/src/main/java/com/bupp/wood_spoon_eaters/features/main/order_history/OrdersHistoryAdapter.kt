@@ -3,10 +3,13 @@ package com.bupp.wood_spoon_eaters.features.main.order_history
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -82,7 +85,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         private val title: TextView = binding.orderHistoryItemChef
         private val price: TextView = binding.orderHistoryItemPrice
         private val date: TextView = binding.orderHistoryItemDate
-        val mainLayout = binding.orderHistoryMainLayout
+        private val mainLayout = binding.orderHistoryArchiveMainLayout
 
         fun bindItem(data: OrderAdapterItemOrder) {
             val order = data.order
@@ -101,13 +104,14 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
     }
 
     inner class ActiveOrderItemViewHolder(val binding: OrdersHistoryActiveOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val mainLayout: FrameLayout = binding.orderHistoryMainLayout
+        private val mainLayout: LinearLayout = binding.orderHistoryActiveMainLayout
         private val restaurantName: TextView = binding.activeOrderRestaurantName
         private val title: TextView = binding.activeOrderTitle
         private val subtitle: TextView = binding.activeOrderSubtitle
         private val orderPb: OrderProgressBar = binding.activeOrderPb
-        private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
+//        private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
         private val mapContainer: ImageView = binding.activeOrderFragContainer
+        private val sep: View = binding.activeOrderSep
 
 //        fun getForegroundFragment(): Fragment? {
 //            val navHostFragment: Fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)
@@ -136,6 +140,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
                 }
             }
 
+            sep.isVisible = data.isLast
 
         }
     }

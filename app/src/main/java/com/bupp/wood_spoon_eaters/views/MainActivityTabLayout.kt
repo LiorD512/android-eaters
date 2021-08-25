@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.MainActTabLayoutBinding
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -21,7 +22,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var binding: MainActTabLayoutBinding = MainActTabLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setViewPager(viewPager: ViewPager2){
+    var listener: MainActivityTabLayoutListener? = null
+    interface MainActivityTabLayoutListener{
+        fun onHomeTabReClicked()
+    }
+
+    fun setViewPager(viewPager: ViewPager2, listener: MainActivityTabLayoutListener){
+        this.listener = listener
+
         TabLayoutMediator(binding.mainActTabLayout, viewPager, true, false) { tab, position ->
             when(position){
                 0 -> tab.setCustomView(R.layout.feed_tab_home)
@@ -30,6 +38,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 2 -> tab.setCustomView(R.layout.feed_tab_account)
             }
         }.attach()
+
+        binding.mainActTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                if(tab?.position == 0){
+                    this@MainActivityTabLayout.listener?.onHomeTabReClicked()
+                }
+            }
+
+        })
     }
 
     fun handleOrdersIndicator(shouldShow: Boolean){
@@ -43,14 +68,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun forceOrdersClick() {
         binding.mainActTabLayout.selectTab(binding.mainActTabLayout.getTabAt(1))
     }
-
-//    fun handleTabGestures(forceLock: Boolean){
-//        val tabStrip = binding.mainActTabLayout.getChildAt(0) as LinearLayout
-//        for (i in 0 until tabStrip.childCount) {
-//            tabStrip.getChildAt(i).setOnTouchListener { v, event -> forceLock }
-//        }
-//    }
-
 
 
 

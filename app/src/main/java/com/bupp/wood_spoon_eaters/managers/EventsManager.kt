@@ -90,11 +90,13 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("dish_name") as String?)
+            val formattedPrice = (eventData?.get("dish_price") as String).replace("$","")
+
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData.get("dish_name") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("dish_id") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, eventData?.get("dish_price").toString().toDouble(), params)
+            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, formattedPrice.toDouble(), params)
         }
     }
 
@@ -104,11 +106,13 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("dish_name") as String?)
+            val formattedPrice = (eventData?.get("dish_price") as String).replace("$","")
+
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData.get("dish_name") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish-Upsale")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("dish_id") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, eventData?.get("dish_price").toString().toDouble(), params)
+            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, formattedPrice.toDouble(), params)
         }
     }
 
@@ -125,7 +129,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
 
     fun logOnRestaurantClickEvent(eventData: Map<String, Any>?) {
         if(shouldFireEvent) {
-            Log.d(TAG, "logOnDishClickEvent")
+            Log.d(TAG, "logFBOnRestaurantClickEvent")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
@@ -143,11 +147,13 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("dish_name") as String?)
+            val formattedPrice = (eventData?.get("dish_price") as String).replace("$","")
+
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData["dish_name"] as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "dISH")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("dish_id") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData["dish_id"] as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, (eventData?.get("dish_price") as String).toDouble(), params)
+            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, formattedPrice.toDouble(), params)
         }
     }
 

@@ -76,9 +76,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         dates.let {
             it.forEach {
                 if (DateUtils.isToday(it)) {
-                    stringPair.add(Pair("Today", null))
+                    stringPair.add(Pair(null, "Today"))
                 } else {
-                    stringPair.add(Pair(DateUtils.parseDateToFullDayDate(it), null))
+                    stringPair.add(Pair(null, DateUtils.parseDateToFullDayDate(it)))
                 }
                 datesList.add(it)
             }

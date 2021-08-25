@@ -179,6 +179,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.reviewEvent.observe(viewLifecycleOwner, {
             handleReviewData(it)
         })
+        mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
+            reOpenCart()
+        })
+    }
+
+    private fun reOpenCart() {
+        UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     /** Headers data **/
@@ -190,7 +197,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             rating.text = "${params.rating}"
-            ratingLayout.isVisible = params.rating ?: 0.0 > 0
+            ratingLayout.isVisible = params.rating ?: 0f > 0
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"

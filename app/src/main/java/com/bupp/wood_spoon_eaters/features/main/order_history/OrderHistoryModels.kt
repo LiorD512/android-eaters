@@ -18,7 +18,8 @@ data class OrderAdapterItemSkeleton(
 ): OrderHistoryBaseItem(OrderHistoryViewType.SKELETON)
 
 data class OrderAdapterItemActiveOrder(
-    var order: Order
+    var order: Order,
+    var isLast: Boolean = false
 ): OrderHistoryBaseItem(OrderHistoryViewType.ACTIVE_ORDER)
 
 data class OrderAdapterItemOrder(

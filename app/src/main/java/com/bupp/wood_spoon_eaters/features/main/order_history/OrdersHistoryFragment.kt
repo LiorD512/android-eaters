@@ -31,6 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderView.HeaderViewListener,
     OrdersHistoryAdapter.OrdersHistoryAdapterListener {
 
+    private var listItemDecorator: OrderHistoryItemDecorator? = null
     val binding: FragmentOrdersHistoryBinding by viewBinding()
     val viewModel by viewModel<OrdersHistoryViewModel>()
     val mainViewModel by sharedViewModel<MainViewModel>()
@@ -75,10 +76,6 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         with(binding){
             ordersHistoryFragRecyclerView.layoutManager = layoutManager
 
-            val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-            ContextCompat.getDrawable(requireContext(), R.drawable.chooser_divider)?.let { decoration.setDrawable(it) }
-            ordersHistoryFragRecyclerView.addItemDecoration(decoration)
-
             adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
             adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             ordersHistoryFragRecyclerView.adapter = adapter
@@ -89,6 +86,15 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     private fun initList(orderHistory: List<OrderHistoryBaseItem>) {
         with(binding){
             if(orderHistory.isNotEmpty()){
+
+                val activeCount = orderHistory.filterIsInstance<OrderAdapterItemActiveOrder>().size
+                val defaultCount = orderHistory.filterIsInstance<OrderAdapterItemOrder>().size
+                listItemDecorator?.let{
+                    ordersHistoryFragRecyclerView.removeItemDecoration(it)
+                }
+                listItemDecorator = OrderHistoryItemDecorator(requireContext(), activeCount, defaultCount)
+                ordersHistoryFragRecyclerView.addItemDecoration(listItemDecorator!!)
+
                 adapter.submitList(orderHistory)
 //                ordersHistoryFragRecyclerView.smoothScrollToPosition(0)
                 ordersHistoryFragEmpty.visibility = View.GONE

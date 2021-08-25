@@ -17,12 +17,13 @@ import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.RestaurantInitParams
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class RestaurantActivity : BaseActivity() {
+class RestaurantActivity : BaseActivity(){
 
     lateinit var binding: ActivityRestaurantBinding
     private val viewModel by viewModel<RestaurantMainViewModel>()
@@ -39,6 +40,10 @@ class RestaurantActivity : BaseActivity() {
                 intent.putExtra("isAfterPurchase", isAfterPurchase)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
+            }
+            val editOrderClicked = data.getBooleanExtra("editOrderClick", false)
+            if(editOrderClicked){
+                viewModel.reOpenCart()
             }
         }
     }

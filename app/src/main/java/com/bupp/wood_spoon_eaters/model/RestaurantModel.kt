@@ -16,7 +16,7 @@ data class Restaurant(
     @Json(name = "cover") val cover: WSImage?,
     @Json(name = "thumbnail") val thumbnail: WSImage?,
     @Json(name = "video") val video: String?,
-    @Json(name = "avg_rating") val rating: Double?,
+    @Json(name = "avg_rating") val rating: Float?,
     @Json(name = "reviews_count") var reviewCount: Int = 0,
     @Json(name = "about") val about: String?,
     @Json(name = "pickup_address") var pickupAddress: Address? = null,

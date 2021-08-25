@@ -27,7 +27,7 @@
             android:layout_marginTop="7.7dp"
             android:letterSpacing="0.03"
             android:paddingStart="15.4dp"
-            android:text="Enter Your Mobile Number"
+            android:text="Enter your mobile number"
             app:layout_constraintTop_toBottomOf="@+id/verificationFragCloseBtn"
             app:layout_constraintStart_toStartOf="parent" />
 

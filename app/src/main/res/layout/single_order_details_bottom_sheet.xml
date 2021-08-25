@@ -156,12 +156,6 @@
                             android:layout_height="wrap_content"/>
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Total before tip"
-                            android:id="@+id/singleOrderDetailsTotalBeforeTip"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                    <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             app:title="Tip for your courier"
                             android:id="@+id/singleOrderDetailsTip"
                             android:layout_width="match_parent"

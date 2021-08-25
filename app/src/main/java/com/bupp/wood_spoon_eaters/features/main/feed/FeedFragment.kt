@@ -119,6 +119,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner, {
             viewModel.onPullToRefresh()
         })
+        mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner, {
+            binding.feedFragList.smoothScrollToPosition(0)
+        })
 //        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
 //            Log.d(TAG, "campaign: $it")
 //            mainViewModel.checkCampaignForFeed()
@@ -258,7 +261,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
                 .anchor(feedFragHeader, 0, -30, true)
                 .text(text)
                 .arrow(true)
-//                .floatingAnimation(Tooltip.Animation.SLOW)
                 .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
                 .fadeDuration(250)
                 .showDuration(10000)

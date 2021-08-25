@@ -461,7 +461,7 @@ class RestaurantPageViewModel(
     private fun getLikeRestaurantData(): Map<String, String> {
         val data = mutableMapOf<String, String>()
         data["home_chef_id"] = currentRestaurantId.toString()
-        data["home_chef_name"] = initialParamData.value?.restaurantName.toString()
+        data["home_chef_name"] = initialParamData.value?.chefName.toString()
         return data
     }
 

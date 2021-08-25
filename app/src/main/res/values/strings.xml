@@ -28,7 +28,7 @@
     <string name="welcome_fragment_sign_up_btn">I already have an account</string>
 
     <string name="phone_verification_fragment_next_btn">Next</string>
-    <string name="phone_verification_fragment_title">Enter Your mobile number</string>
+    <string name="phone_verification_fragment_title">Enter your mobile number</string>
     <string name="phone_verification_fragment_phone_hint">+1 (201) 555 - 0123</string>
 
     <string name="details_setup_fragment_address">Address</string>

@@ -40,11 +40,9 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         startSilentUpdate()
     }
 
-    fun getSkeletonList(): MutableList<OrderAdapterItemSkeleton>{
+    fun getSkeletonList(): MutableList<OrderAdapterItemSkeleton> {
         val skeletons = mutableListOf<OrderAdapterItemSkeleton>()
-        for (i in 0 until 10){
-            skeletons.add(OrderAdapterItemSkeleton())
-        }
+        skeletons.add(OrderAdapterItemSkeleton())
         return skeletons
     }
 
@@ -66,11 +64,20 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
 
     private fun updateArchivedOrders(newData: List<Order>) {
         val currentList = orderListData[SECTION_ARCHIVE]
+        if (currentList?.isEmpty() == true && newData.isNotEmpty()) {
+            currentList.add(OrderAdapterItemTitle("Past orders"))
+        }
         newData.forEach { order ->
-            val itemInList = currentList!!.find { order.id == (it as OrderAdapterItemOrder).order.id }
-            if(itemInList == null){
+            val itemInList = currentList!!.find {
+                if (it is OrderAdapterItemOrder) {
+                    order.id == it.order.id
+                } else {
+                    false
+                }
+            }
+            if (itemInList == null) {
                 currentList.add(OrderAdapterItemOrder(order))
-            }else{
+            } else {
                 (itemInList as OrderAdapterItemOrder).order = order
             }
         }
@@ -89,24 +96,22 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
 
     private fun updateActiveOrders(newData: List<Order>) {
         val currentList = orderListData[SECTION_ACTIVE]!!
-        newData.forEach { order ->
+        newData.forEachIndexed { index, order ->
             val itemInList = currentList.find { order.id == (it as OrderAdapterItemActiveOrder).order.id }
-            if(itemInList == null){
-                currentList.add(OrderAdapterItemActiveOrder(order))
-                Log.d("wowStatus","add new to list ${order.id}")
-            }else{
+            val isLast = (index == newData.size-1)
+                Log.d("wowStatus", "isLast $isLast")
+            if (itemInList == null) {
+                currentList.add(OrderAdapterItemActiveOrder(order, isLast))
+                Log.d("wowStatus", "add new to list ${order.id}")
+            } else {
                 var isSame = false
-                if(itemInList is OrderAdapterItemActiveOrder){
-                    Log.d("wowStatus","itemInList: ${itemInList.order.id} ${order.id}")
-                    Log.d("wowStatus","order.deliveryStatus: ${order.deliveryStatus} ${itemInList.order.deliveryStatus}")
-                    Log.d("wowStatus","order.preparationStatus: ${order.preparationStatus} ${itemInList.order.preparationStatus}")
+                if (itemInList is OrderAdapterItemActiveOrder) {
                     isSame = order.deliveryStatus == itemInList.order.deliveryStatus &&
                             order.preparationStatus == itemInList.order.preparationStatus
-                    Log.d("wowStatus","isSame: $isSame ${order.id}")
-                    if(!isSame){
-                            currentList.remove(itemInList)
-                        currentList.add(OrderAdapterItemActiveOrder(order))
-//                        (itemInList as OrderAdapterItemActiveOrder).order = order
+                    Log.d("wowStatus", "isSame: $isSame ${order.id}")
+                    if (!isSame) {
+                        currentList.remove(itemInList)
+                        currentList.add(OrderAdapterItemActiveOrder(order, isLast))
                     }
                 }
             }
@@ -128,7 +133,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         return viewModelScope.launch {
             while (isActive) {
                 //do your request
-                Log.d(TAG,"fetching FromServer")
+                Log.d(TAG, "fetching FromServer")
                 getActiveOrders()
                 delay(10000)
             }
@@ -136,7 +141,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     }
 
     fun startSilentUpdate() {
-        if(refreshRepeatedJob == null){
+        if (refreshRepeatedJob == null) {
             refreshRepeatedJob = repeatRequest()
         }
     }
@@ -146,11 +151,10 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     }
 
     override fun onCleared() {
-        Log.d(TAG,"onCleared")
+        Log.d(TAG, "onCleared")
         endUpdates()
         super.onCleared()
     }
-
 
 
     companion object {

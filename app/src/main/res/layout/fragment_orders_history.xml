@@ -23,7 +23,6 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layoutAnimation="@anim/restaurant_layout_animation"
                 android:id="@+id/ordersHistoryFragRecyclerView"
-                android:paddingHorizontal="15.4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
