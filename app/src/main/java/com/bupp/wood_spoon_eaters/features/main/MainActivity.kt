@@ -183,11 +183,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             Log.d("wowMain", "branch: cook $cookId, menuItem: $menuItemId")
             if (cookId > 0) {
                 viewModel.getRestaurant(cookId)
+                viewModel.logDeepLinkEvent(cookId)
             } else if (menuItemId > 0) {
                 if (viewModel.hasAddress()) {
-//                    loadNewOrderActivity(menuItemId)
                 } else {
-//                    handlePb(true)
                     Log.d("wowMain", "brnach intent observing address change")
 //                    viewModel.waitingForAddressAction = true
                     viewModel.addressUpdateActionEvent.observe(this, Observer { newAddressEvent ->

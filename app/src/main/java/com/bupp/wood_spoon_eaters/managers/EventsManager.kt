@@ -123,17 +123,31 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
-    fun logOnDishClickEvent(eventData: Map<String, Any>?) {
+    fun logOnRestaurantClickEvent(eventData: Map<String, Any>?) {
+        if(shouldFireEvent) {
+            Log.d(TAG, "logOnDishClickEvent")
+            val logger = AppEventsLogger.newLogger(context)
+            val params = Bundle()
+
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("home_chef_name") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Home Chef")
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("home_chef_id") as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
+            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, 0.0, params)
+        }
+    }
+
+    private fun logOnDishClickEvent(eventData: Map<String, Any>?) {
         if(shouldFireEvent) {
             Log.d(TAG, "logOnDishClickEvent")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("dish_name") as String?)
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish-Upsale")
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "dISH")
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("dish_id") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, eventData?.get("dish_price").toString().toDouble(), params)
+            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, (eventData?.get("dish_price") as String).toDouble(), params)
         }
     }
 
@@ -171,9 +185,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
             eventData.putValue(it.key, it.value)
         }
         when(eventName){
-            Constants.EVENT_ORDER_PLACED -> {
-                Analytics.with(context).track(Constants.EVENT_ORDER_PLACED, eventData)
-            }
             Constants.EVENT_ADD_ADDITIONAL_DISH -> {
                 Analytics.with(context).track(Constants.EVENT_ADD_ADDITIONAL_DISH, eventData)
                 logFBAddAdditionalToCart(params)
@@ -182,15 +193,17 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
                 Analytics.with(context).track(Constants.EVENT_ADD_DISH, eventData)
                 logFBAddToCart(params)
             }
-            Constants.EVENT_SEARCHED_ITEM -> {
-                Analytics.with(context).track(Constants.EVENT_SEARCH, eventData)
-            }
             Constants.EVENT_CREATE_ACCOUNT -> {
                 Analytics.with(context).track(Constants.EVENT_CREATE_ACCOUNT, eventData)
                 logFBCreateAccount(params)
             }
-            Constants.EVENT_CAMPAIGN_INVITE -> {
-                Analytics.with(context).track(Constants.EVENT_CAMPAIGN_INVITE, eventData)
+            Constants.EVENT_CLICK_RESTAURANT -> {
+                Analytics.with(context).track(Constants.EVENT_CLICK_RESTAURANT, eventData)
+                logOnRestaurantClickEvent(eventData)
+            }
+            Constants.EVENT_CLICK_ON_DISH -> {
+                Analytics.with(context).track(Constants.EVENT_CLICK_ON_DISH, eventData)
+                logOnDishClickEvent(eventData)
             }
             else -> {
                 Analytics.with(context).track(eventName, eventData)

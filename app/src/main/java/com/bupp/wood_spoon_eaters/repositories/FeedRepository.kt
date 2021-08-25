@@ -61,7 +61,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
     suspend fun getFeedHref(href: String): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
             val baseUrl = flavorConfigManager.getBaseUrl()
-            apiService.getHrefCollection(baseUrl+href)
+            apiService.getHrefCollection(baseUrl + href)
         }
         result.let {
             return when (result) {
@@ -91,32 +91,40 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
         var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
-        feedResult?.sections?.forEach { section ->
-            section.title?.let {
+        feedResult?.sections?.forEachIndexed { feedSectionIndex, feedSection ->
+            feedSection.title?.let {
                 localId++
                 feedData.add(FeedAdapterTitle(it, localId))
             }
-            section.href?.let {
+            feedSection.href?.let {
                 localId++
                 feedData.add(FeedAdapterHref(it, localId))
             }
-            section.collections?.forEach { collectionItem ->
+            feedSection.collections?.forEachIndexed { index, feedSectionCollectionItem ->
                 localId++
-                when (collectionItem) {
+                when (feedSectionCollectionItem) {
                     is FeedCampaignSection -> {
-                        feedData.add(FeedAdapterCoupons(collectionItem, localId))
+                        feedData.add(FeedAdapterCoupons(feedSectionCollectionItem, localId))
                     }
                     is FeedIsEmptySection -> {
-                        feedData.add(FeedAdapterEmptyFeed(collectionItem, localId))
+                        feedData.add(FeedAdapterEmptyFeed(feedSectionCollectionItem, localId))
                     }
                     is FeedSingleEmptySection -> {
-                        feedData.add(FeedAdapterEmptySection(collectionItem, localId))
+                        feedData.add(FeedAdapterEmptySection(feedSectionCollectionItem, localId))
                     }
                     is FeedRestaurantSection -> {
                         if (isLargeItems) {
-                            feedData.add(FeedAdapterLargeRestaurant(collectionItem, localId))
+                            feedData.add(FeedAdapterLargeRestaurant(feedSectionCollectionItem, localId))
                         } else {
-                            feedData.add(FeedAdapterRestaurant(collectionItem, localId))
+                            feedData.add(
+                                FeedAdapterRestaurant(
+                                    id = localId,
+                                    restaurantSection = feedSectionCollectionItem,
+                                    sectionTitle = feedSection.title,
+                                    sectionOrder = feedSectionIndex+1,
+                                    restaurantOrderInSection = index+1
+                                )
+                            )
                         }
                     }
                 }
@@ -151,18 +159,18 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
             section.href?.let {
                 if (it == href) {
-                    Log.d("hrefSucks","handeling href - $href")
+                    Log.d("hrefSucks", "handeling href - $href")
                     data?.let { data ->
-                        if(data.isNotEmpty() && data[0].items!!.isNotEmpty()){
-                            Log.d("hrefSucks","update href section")
+                        if (data.isNotEmpty() && data[0].items!!.isNotEmpty()) {
+                            Log.d("hrefSucks", "update href section")
                             section.href = null
                             lastFeedDataResult?.sections!![index].collections = data.toMutableList()
 
                             //remove title incase Href data is empty
 //                            val sections = tempFeedResult?.sections?.toMutableList()?.removeAt(index)
 //                            lastFeedDataResult?.sections = sections
-                        }else{
-                            Log.d("hrefSucks","href empty")
+                        } else {
+                            Log.d("hrefSucks", "href empty")
                             return@forEachIndexed
                         }
 

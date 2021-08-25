@@ -117,7 +117,8 @@ class DishPageViewModel(
         data["dish_id"] = dishParam.menuItem?.dish?.id.toString()
         data["dish_price"] = dishParam.menuItem?.dish?.price?.formatedValue.toString()
         data["dish_tags"] = dishParam.menuItem?.tags.isNullOrEmpty().not().toString()
-        data["cuisine"] = dishParam.menuItem?.dish?.cuisines.toString()
+        data["dish_section_title"] = dishParam.dishSectionTitle.toString()
+        data["dish_index"] = dishParam.dishOrderInSection.toString()
         return data
     }
 
@@ -192,9 +193,6 @@ class DishPageViewModel(
             updateOrderItem(note)
         }else{
             addDishToCart(note)
-        }
-        note?.let{
-            logDishNote(it)
         }
     }
 
@@ -278,12 +276,15 @@ class DishPageViewModel(
         flowEventsManager.logPageEvent(eventType)
     }
 
-    fun logDishQuantity() {
-        eventsManager.logEvent(Constants.EVENT_CHANGE_DISH_QUANTITY, getDishQuantityData())
-    }
-
-    private fun logDishNote(note: String) {
-        eventsManager.logEvent(Constants.EVENT_CHANGE_DISH_QUANTITY, getDishNoteData(note))
+    fun logEvent(eventName: String) {
+        when(eventName){
+            Constants.EVENT_CHANGE_DISH_QUANTITY -> {
+                eventsManager.logEvent(eventName, getDishQuantityData())
+            }
+            else -> {
+                eventsManager.logEvent(eventName)
+            }
+        }
     }
 
     private fun logUpdateDish() {

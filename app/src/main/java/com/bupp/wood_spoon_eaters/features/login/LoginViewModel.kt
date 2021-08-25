@@ -193,7 +193,7 @@ class LoginViewModel(
                             if (userRepository.isUserSignedUp()) {
                                 paymentManager.initPaymentManager(context)
                                 navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
-                                eventsManager.logEvent(Constants.EVENT_ON_BOARDING_FINISHED)
+                                eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
                             } else {
                                 navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
@@ -250,7 +250,7 @@ class LoginViewModel(
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
                     navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
-                    eventsManager.logEvent(Constants.EVENT_ON_BOARDING_FINISHED)
+                    eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
 //                    eventsManager.sendRegistrationCompletedEvent()
                     eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))
                 }

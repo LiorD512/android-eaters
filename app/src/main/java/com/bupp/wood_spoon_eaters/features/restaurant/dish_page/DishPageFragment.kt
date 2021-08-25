@@ -24,6 +24,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
+import com.bupp.wood_spoon_eaters.views.ExpandableTextView
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,7 +33,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     ClearCartCookingSlotBottomSheet.ClearCartListener,
     PlusMinusView.PlusMinusInterface,
     WSFloatingButton.WSFloatingButtonListener,
-    ClearCartRestaurantBottomSheet.ClearCartListener {
+    ClearCartRestaurantBottomSheet.ClearCartListener, ExpandableTextView.ExpandableTextViewListener {
 
     private var binding: FragmentDishPageBinding? = null
     private val viewModel by viewModel<DishPageViewModel>()
@@ -66,6 +67,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragAddToCartBtn.setWSFloatingBtnListener(this@DishPageFragment)
 
             availableTimesAdapter = DishAvailabilityAdapter()
+            dishFragMainListLayout.dishFragDescription.initExpandableTextView(this@DishPageFragment)
         }
     }
 
@@ -82,7 +84,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     override fun onPlusMinusChange(counter: Int, position: Int) {
         viewModel.updateDishQuantity(counter)
-        viewModel.logDishQuantity()
+        viewModel.logEvent(Constants.EVENT_CHANGE_DISH_QUANTITY)
     }
 
     private fun initObservers() {
@@ -335,6 +337,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         super.onDestroyView()
     }
 
+    override fun onTextViewExpanded() {
+        viewModel.logEvent(Constants.EVENT_CLICK_VIEW_MORE)
+    }
 
 
 }

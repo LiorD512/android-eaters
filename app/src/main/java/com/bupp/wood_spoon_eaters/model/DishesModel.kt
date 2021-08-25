@@ -45,7 +45,11 @@ data class MenuItem(
     var dish: Dish? = null,
     /** when menu item is available at other times - the AvailabilityDate is not null and indicates the closest availability date **/
     var cookingSlotId: Long? = null,
-    var availableLater: AvailabilityDate? = null
+    var availableLater: AvailabilityDate? = null,
+
+    var sectionTitle: String? = null,
+    var sectionOrder: Int? = null,
+    var dishOrderInSection: Int? = null,
 ) : Parcelable {
     fun getQuantityLeftString(): String {
         val left = quantity - unitsSold

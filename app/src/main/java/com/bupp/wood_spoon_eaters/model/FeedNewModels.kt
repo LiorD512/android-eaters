@@ -78,7 +78,10 @@ data class FeedRestaurantSection(
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Double?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
-    fun toRestaurantInitParams(): RestaurantInitParams {
+    fun toRestaurantInitParams(sectionTitle: String? = null,
+                               sectionOrder: Int? = null,
+                               restaurantOrderInSection: Int? = null,
+                               dishIndexInRestaurant: Int? = null): RestaurantInitParams {
         return RestaurantInitParams(
             chefId,
             chefThumbnail,
@@ -86,7 +89,11 @@ data class FeedRestaurantSection(
             avgRating,
             restaurantName,
             chefName,
-            false
+            false,
+            sectionTitle,
+            sectionOrder,
+            restaurantOrderInSection,
+            dishIndexInRestaurant
         )
     }
 }
@@ -187,7 +194,12 @@ data class FeedAdapterCoupons(
 
 @Parcelize
 data class FeedAdapterRestaurant(
-    val restaurantSection: FeedRestaurantSection, override val id: Long?
+    val restaurantSection: FeedRestaurantSection, override val id: Long?,
+
+    /** ANALYTICS PARAMS **/
+    val sectionTitle: String? = null,
+    val sectionOrder: Int? = null,
+    val restaurantOrderInSection: Int? = null,
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT)
 
 @Parcelize
@@ -202,7 +214,12 @@ data class FeedAdapterEmptySection(
 
 @Parcelize
 data class FeedAdapterLargeRestaurant(
-    val restaurantSection: FeedRestaurantSection, override val id: Long?
+    val restaurantSection: FeedRestaurantSection, override val id: Long?,
+
+    /** ANALYTICS PARAMS **/
+    val sectionTitle: String? = null,
+    val sectionOrder: Int? = null,
+    val restaurantOrderInSection: Int? = null,
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
 
 @Parcelize

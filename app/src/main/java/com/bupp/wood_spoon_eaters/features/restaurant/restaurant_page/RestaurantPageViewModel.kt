@@ -148,7 +148,7 @@ class RestaurantPageViewModel(
     data class CookingSlotUi(
         val cookingSlotId: Long,
         val timePickerString: String,
-        val forceTabChnage: Boolean = false
+        val forceTabChange: Boolean = false
     )
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
@@ -202,12 +202,17 @@ class RestaurantPageViewModel(
         Log.d(TAG, "sortCookingSlotDishes")
         dishes?.let { dishes ->
             val tempHash = dishes.toMutableMap()
-            cookingSlot.sections.forEach { section ->
-                section.menuItems.forEach { menuItem ->
+            cookingSlot.sections.forEachIndexed { sectionIndex, section ->
+                section.menuItems.forEachIndexed { restaurantIndex, menuItem ->
                     dishes[menuItem.dishId]?.let { dish ->
                         menuItem.dish = dish
                         menuItem.cookingSlotId = cookingSlot.id
                         menuItem.availableLater = null
+
+                        menuItem.sectionTitle = section.title
+                        menuItem.sectionOrder = sectionIndex +1
+                        menuItem.dishOrderInSection = restaurantIndex+1
+
                         tempHash.remove(dish.id)
                     }
                 }

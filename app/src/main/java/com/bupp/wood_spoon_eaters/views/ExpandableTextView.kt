@@ -23,6 +23,11 @@ class ExpandableTextView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     AppCompatTextView(context, attrs, defStyleAttr), View.OnClickListener {
 
+    var listener: ExpandableTextViewListener? = null
+    interface ExpandableTextViewListener{
+        fun onTextViewExpanded()
+    }
+
     private var viewMoreText = "...View More "
     private var viewLessText = "  View Less "
     private var collapseMaxLines = 2
@@ -32,7 +37,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var originalText: CharSequence? = null
 
     private var isExpandable = false
-    private var savedState:CharSequence? = null
+    private var savedState: CharSequence? = null
 
     init {
         initUi(attrs)
@@ -45,7 +50,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         attrs?.let {
             val attr = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView)
 
-            val maxLines = attr.getInt(R.styleable.ExpandableTextView_collapseMaxLines,2)
+            val maxLines = attr.getInt(R.styleable.ExpandableTextView_collapseMaxLines, 2)
             maxLines.let { collapseMaxLines = it }
 
             val viewMoreText = attr.getString(R.styleable.ExpandableTextView_viewMoreText)
@@ -90,9 +95,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    fun initExpandableTextView(listener: ExpandableTextViewListener){
+        this.listener = listener
+    }
+
     override fun setText(text: CharSequence, type: BufferType) {
         originalText = text
-        if(!savedState.isNullOrEmpty()){
+        if (!savedState.isNullOrEmpty()) {
             super.setText(savedState, type)
             return
         }
@@ -115,7 +124,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
 
         val builder = SpannableStringBuilder(text)
-        builder.replace(end-viewMoreText.length, end, viewMoreText+"\n")
+        builder.replace(end - viewMoreText.length, end, viewMoreText + "\n")
         builder.setSpan(
             ForegroundColorSpan(Color.BLACK),
             end - viewMoreText.length, end,
@@ -170,6 +179,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     override fun onClick(v: View?) {
+        listener?.onTextViewExpanded()
         if (animator!!.isRunning) {
             animatorReverse()
             return
@@ -199,9 +209,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private val paddingHeight: Int
-        private get() = compoundPaddingBottom + compoundPaddingTop
+        get() = compoundPaddingBottom + compoundPaddingTop
     private val isCollapsed: Boolean
-        private get() = Int.MAX_VALUE != maxLines
+        get() = Int.MAX_VALUE != maxLines
 
     private fun updateHeight(animatedValue: Int) {
         val layoutParams = layoutParams

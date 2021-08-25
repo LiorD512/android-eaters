@@ -10,7 +10,6 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedRestaurantDishPagerAdapter
-import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.FeedAdapterRestaurant
 import com.bupp.wood_spoon_eaters.model.FeedRestaurantSection
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
@@ -110,6 +109,6 @@ class FeedAdapterRestaurantViewHolder(
 //
 //    }
 
-    override fun onPageClick(itemLocalId: Long?) {
+    override fun onPageClick(itemLocalId: Long?, position: Int) {
     }
 }

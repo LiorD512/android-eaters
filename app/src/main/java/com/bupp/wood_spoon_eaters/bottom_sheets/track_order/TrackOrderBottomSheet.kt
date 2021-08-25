@@ -96,6 +96,7 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
         Log.d("wowTrackOrderFragment", "newInstance ARGS: $curOrderId")
 
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_TRACK_ORDER)
+        viewModel.logEvent(Constants.EVENT_CLICK_TRACK_YOUR_ORDER)
     }
 
     private lateinit var behavior: BottomSheetBehavior<View>

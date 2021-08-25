@@ -19,7 +19,6 @@ import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantSeeMoreItemBi
 import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ResizableTagsView
-import com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 
@@ -29,7 +28,7 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
 private var parentItemPosition: Int = -1
 private var parentItemId: Long? = null
     interface FeedRestaurantDishPagerAdapterListener {
-        fun onPageClick(itemLocalId: Long?)
+        fun onPageClick(itemLocalId: Long?, position: Int)
     }
 
     @JvmName("setChefId1")
@@ -63,11 +62,11 @@ private var parentItemId: Long? = null
         when (item.data) {
             is FeedRestaurantItemDish -> {
                 holder as FeedDishViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemId)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemId, position)
             }
             is FeedRestaurantItemSeeMore -> {
                 holder as FeedDishSeeMoreViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore, parentItemId)
+                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemSeeMore, parentItemId, position)
             }
         }
     }
@@ -81,7 +80,7 @@ private var parentItemId: Long? = null
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemId: Long?) {
+        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemId: Long?, position: Int) {
             Log.d("feedItemPosition", "bindItem: $parentItemId")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
@@ -98,7 +97,7 @@ private var parentItemId: Long? = null
 
             layout.setOnClickListener{
                 Log.d("feedItemPosition", "parentItemPosition: $parentItemId")
-                listener.onPageClick(parentItemId)
+                listener.onPageClick(parentItemId, position)
             }
         }
 
@@ -110,7 +109,7 @@ private var parentItemId: Long? = null
         private val thumbnail: ImageView = binding.feedRestaurantSeeMoreItemImg
         private val quantityLeft: TextView = binding.feedRestaurantSeeMoreItemQuantityLeft
 
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore, parentItemId: Long?) {
+        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemSeeMore, parentItemId: Long?, position: Int) {
             quantityLeft.text = dish.title
             val multiTransformation = MultiTransformation(BlurTransformation( 10, 2), CenterCrop())
             GlideApp.with(context)
@@ -120,7 +119,7 @@ private var parentItemId: Long? = null
                 .placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
 
             layout.setOnClickListener{
-                listener.onPageClick(parentItemId)
+                listener.onPageClick(parentItemId, position)
             }
         }
     }

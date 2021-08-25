@@ -147,37 +147,38 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         listener.onDishSwiped()
     }
 
-//    override fun onPageClick(position: Int) {
-//        Log.d("wowFeedAdapter", "position:")
-//        val section = getItem(position)
-//        when (section) {
-//            is FeedAdapterRestaurant -> {
-//                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
-//            }
-//            is FeedAdapterLargeRestaurant  -> {
-//                listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
-//            }
-//            else -> {}
-//        }
-//    }
-
-    override fun onPageClick(itemLocalId: Long?) {
+    override fun onPageClick(itemLocalId: Long?, position: Int) {
         Log.d("wowFeedAdapter", "position:")
         currentList.forEachIndexed { index, feedAdapterItem ->
             if(feedAdapterItem.id == itemLocalId){
                 val section = getItem(index)
                 when (section) {
                     is FeedAdapterRestaurant -> {
-                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+                        val sectionTitle = section.sectionTitle
+                        val sectionOrder = section.sectionOrder
+                        val restaurantOrderInSection = section.restaurantOrderInSection
+                        val dishIndexInRestaurant = position +1
+//                        Log.d("wowFeedAdapter", "onPageClick sectionTitle: $sectionTitle, sectionOrder: $sectionOrder, restaurantOrderInSection: $restaurantOrderInSection, dishIndexInRestaurant: $dishIndexInRestaurant")
+                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams(sectionTitle, sectionOrder, restaurantOrderInSection, dishIndexInRestaurant))
                     }
                     is FeedAdapterLargeRestaurant  -> {
-                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams())
+                        val sectionTitle = section.sectionTitle
+                        val sectionOrder = section.sectionOrder
+                        val restaurantOrderInSection = section.restaurantOrderInSection
+                        val dishIndexInRestaurant = position +1
+                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams(
+                            sectionTitle,
+                            sectionOrder,
+                            restaurantOrderInSection,
+                            dishIndexInRestaurant
+                        )
+                        )
                     }
                     else -> {}
                 }
             }
         }
-
     }
+
 }
 

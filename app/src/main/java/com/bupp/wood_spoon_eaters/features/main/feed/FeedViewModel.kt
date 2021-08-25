@@ -157,7 +157,7 @@ class FeedViewModel(
         onPullToRefresh()
     }
 
-    fun logEvent(eventName: String, params: Map<String, String>?) {
+    fun logEvent(eventName: String, params: Map<String, String>? = null) {
         when(eventName){
             Constants.EVENT_CHANGE_DELIVERY_DATE -> {
                 eventsManager.logEvent(eventName, params)

@@ -435,12 +435,12 @@ fun onFloatingCartStateChanged(isShowing: Boolean) {
     onFloatingBtnHeightChange.postValue(isShowing)
 }
 
-/**
- * Refreshing Floating cart button ui after order was updated.
- */
-fun refreshFloatingCartBtn() {
-    cartManager.refreshFloatingCartBtn()
-}
+///**
+// * Refreshing Floating cart button ui after order was updated.
+// */
+//fun refreshFloatingCartBtn() {
+//    cartManager.refreshFloatingCartBtn()
+//}
 
     /**
      * Starts Restaurant Activity with the initial params
@@ -456,6 +456,10 @@ fun refreshFloatingCartBtn() {
         data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
         data["home_chef_name"] = restaurantInitParams.restaurantName.toString()
         data["home_chef_rating"] = restaurantInitParams.rating.toString()
+        data["section_title"] = restaurantInitParams.sectionTitle.toString()
+        data["section_index"] = restaurantInitParams.sectionOrder.toString()
+        data["home_chef_index"] = restaurantInitParams.restaurantOrderInSection.toString()
+        data["dish_tapped_index"] = restaurantInitParams.dishIndexInRestaurant.toString()
         return data
     }
 
@@ -465,6 +469,10 @@ fun refreshFloatingCartBtn() {
 
     fun logEvent(eventName: String) {
         eventsManager.logEvent(eventName)
+    }
+
+    fun logDeepLinkEvent(restaurantId: Long){
+        eventsManager.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
     }
 
 

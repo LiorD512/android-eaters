@@ -315,7 +315,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onDishSwiped() {
-        viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES, viewModel.getDateChangedData(deliveryTimeParam))
+        viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES)
     }
 
     override fun onResume() {
