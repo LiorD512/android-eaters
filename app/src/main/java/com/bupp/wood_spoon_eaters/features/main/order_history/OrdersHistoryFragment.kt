@@ -114,7 +114,10 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
-
+    override fun onPause() {
+        viewModel.endUpdates()
+        super.onPause()
+    }
 
 
 }

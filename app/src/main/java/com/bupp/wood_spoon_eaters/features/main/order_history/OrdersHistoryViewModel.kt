@@ -146,15 +146,11 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         }
     }
 
-    private fun endUpdates() {
+    fun endUpdates() {
         refreshRepeatedJob?.cancel()
+        refreshRepeatedJob = null
     }
 
-    override fun onCleared() {
-        Log.d(TAG, "onCleared")
-        endUpdates()
-        super.onCleared()
-    }
 
 
     companion object {
