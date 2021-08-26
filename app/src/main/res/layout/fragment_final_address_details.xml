@@ -207,7 +207,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:WSicon="@drawable/delivery_to_door_selector"
+                        app:WSicon="@drawable/pickup_outside_selector"
                         app:title="Meet outside" />
 
             </LinearLayout>

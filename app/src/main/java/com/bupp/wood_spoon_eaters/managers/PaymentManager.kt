@@ -107,13 +107,13 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
 //                            MTLogger.c(TAG, "getStripeCustomerCards $paymentMethods")
                             if(lastSelectedCardIdRes != null){
                                 val lastSelectedCard = paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
-                                lastSelectedCard?.let{
-                                    payments.value = it
+                                if(lastSelectedCard != null){
+                                    payments.value = lastSelectedCard
+                                }else{
+                                    getFirstPaymentOrNull(paymentMethods)
                                 }
                             }else{
-                                if(paymentMethods.isNotEmpty()) {
-                                    payments.value = paymentMethods[0]
-                                }
+                                getFirstPaymentOrNull(paymentMethods)
                             }
                         }
 
@@ -125,9 +125,15 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
         } else {
             initStripe(context)
         }
-//        return paymentsLiveData
     }
 
+    private fun getFirstPaymentOrNull(paymentMethods: List<PaymentMethod>) {
+        if(paymentMethods.isNotEmpty()) {
+            payments.value = paymentMethods[0]
+        }else{
+            payments.value = null
+        }
+    }
 
     fun getStripeCurrentPaymentMethod(): PaymentMethod? {
         return if (payments.value != null) {
@@ -137,9 +143,13 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
         }
     }
 
-    fun updateSelectedPaymentMethod(paymentMethod: PaymentMethod) {
-        payments.value = paymentMethod
-        lastSelectedCardIdRes = paymentMethod.card?.last4
+    fun updateSelectedPaymentMethod(context: Context, paymentMethod: PaymentMethod?) {
+        if(paymentMethod == null){
+            getStripeCustomerCards(context)
+        }else{
+            payments.value = paymentMethod
+            lastSelectedCardIdRes = paymentMethod.card?.last4
+        }
     }
 
     fun clearPaymentMethods(){

@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import java.util.*
 
 class CartManager(
@@ -378,16 +379,16 @@ class CartManager(
                     }
                 }else{
                     val matchedDate = deliveryDates.find {
-                        DateUtils.isSameDay(order.deliverAt, it?.from ?: Date())
+                        DateUtils.isDateInRange(order.deliverAt, it?.from, it?.to)
                     }
                     if(matchedDate == null){
                         Log.d("orderFlowTime", "future order but not in a valid delivery time")
 
                         deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
-                        //todo - update server for the choosen delivery time
                     }else{
                         Log.d("orderFlowTime", "future order ")
-                        if(DateUtils.isNowInRange(matchedDate.from, matchedDate.to)){
+                        val isFirst = DateUtils.isSameTime(deliveryDates[0]?.from, matchedDate.from)
+                        if(DateUtils.isNowInRange(matchedDate.from, matchedDate.to) || isFirst){
                             Log.d("orderFlowTime", "is now")
                             deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(order.deliverAt)})")
                         }else{

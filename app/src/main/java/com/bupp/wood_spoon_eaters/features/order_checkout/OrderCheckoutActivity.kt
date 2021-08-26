@@ -87,7 +87,7 @@ class OrderCheckoutActivity : BaseActivity() {
                     val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
                     result?.let {
                         MTLogger.c(MainActivity.TAG, "payment method success")
-                        viewModel.updatePaymentMethod(result.paymentMethod)
+                        viewModel.updatePaymentMethod(this, result.paymentMethod)
                     }
                 }
 

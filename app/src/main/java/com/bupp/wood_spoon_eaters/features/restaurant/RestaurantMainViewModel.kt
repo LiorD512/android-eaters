@@ -16,6 +16,8 @@ import com.bupp.wood_spoon_eaters.model.MenuItem
 
 class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, private val eventsManager: EventsManager) : ViewModel() {
 
+    private var shouldForceRefresh = false
+
     enum class NavigationType {
         OPEN_DISH_PAGE,
         START_ORDER_CHECKOUT_ACTIVITY,
@@ -91,6 +93,12 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
         return data
     }
 
+    fun forceFeedRefresh() {
+        shouldForceRefresh = true
+    }
+    fun shouldForceFeedRefresh(): Boolean {
+        return shouldForceRefresh
+    }
 
 
 }

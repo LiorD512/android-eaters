@@ -54,10 +54,8 @@ private val eventsManager: EventsManager) : ViewModel() {
         }
     }
 
-    fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
-        paymentMethod?.let{
-            paymentManager.updateSelectedPaymentMethod(it)
-        }
+    fun updatePaymentMethod(context: Context, paymentMethod: PaymentMethod?) {
+        paymentManager.updateSelectedPaymentMethod(context, paymentMethod)
     }
 
     fun onLocationChanged() {

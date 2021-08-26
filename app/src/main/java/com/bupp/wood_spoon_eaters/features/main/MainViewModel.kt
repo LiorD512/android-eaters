@@ -23,7 +23,7 @@ class MainViewModel(
     val api: ApiService, val settings: AppSettings, private val metaDataRepository: MetaDataRepository,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, private val globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
-   private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository
+    private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository
 ) : ViewModel() {
 
 //    val progressData = ProgressData()
@@ -248,7 +248,7 @@ class MainViewModel(
                         rating = restaurant.rating,
                         restaurantName = restaurant.restaurantName,
                         chefName = restaurant.getFullName(),
-                        isFavorite = restaurant.isFavorite?:false
+                        isFavorite = restaurant.isFavorite ?: false
                     )
                     startRestaurantActivity(param)
                 }
@@ -257,28 +257,27 @@ class MainViewModel(
     }
 
 
+    fun getCurrentEater(): Eater? {
+        return eaterDataManager.currentEater
+    }
 
-fun getCurrentEater(): Eater? {
-    return eaterDataManager.currentEater
-}
-
-fun hasAddress(): Boolean {// todo - nyc
+    fun hasAddress(): Boolean {// todo - nyc
 //        return eaterDataManager.getLastChosenAddress() != null
-    return true
-}
+        return true
+    }
 
 //    fun initLocationFalse() {
 ////        eaterDataManager.onLocationEmpty()
 //    }
 
-val getUserCampaignDataEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
-fun checkForUserCampaignData() {
+    val getUserCampaignDataEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
+    fun checkForUserCampaignData() {
 //        getUserCampaignDataEvent.postValue(eaterDataManager.currentEater)
-}
+    }
 
 
-//move to eater data manager
-val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
+    //move to eater data manager
+    val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
 
 
 //    fun checkForCampaignReferrals() {
@@ -387,52 +386,50 @@ val getShareCampaignEvent: SingleLiveEvent<Campaign?> = SingleLiveEvent()
 //        }
 //    }
 
-fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
-    viewModelScope.launch {
-        campaign.userInteractionId?.let {
-            campaignManager.updateCampaignStatus(it, status)
+    fun updateCampaignStatus(campaign: Campaign, status: UserInteractionStatus) {
+        viewModelScope.launch {
+            campaign.userInteractionId?.let {
+                campaignManager.updateCampaignStatus(it, status)
+            }
         }
     }
-}
 
-fun updatePaymentMethod(paymentMethod: PaymentMethod?) {
-    paymentMethod?.let {
-        paymentManager.updateSelectedPaymentMethod(it)
+    fun updatePaymentMethod(context: Context, paymentMethod: PaymentMethod?) {
+        paymentManager.updateSelectedPaymentMethod(context, paymentMethod)
     }
-}
 
-val shareEvent = MutableLiveData<String>()
-fun onShareCampaignClick(campaign: Campaign?) {
-    val shareUrl = campaign?.shareUrl
-    val shareText = campaign?.shareText ?: ""
-    shareEvent.postValue("$shareText \n $shareUrl")
-    eventsManager.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
-}
-
-fun deleteAccount() {
-    viewModelScope.launch {
-        userRepository.deleteAccount()
-        logout()
+    val shareEvent = MutableLiveData<String>()
+    fun onShareCampaignClick(campaign: Campaign?) {
+        val shareUrl = campaign?.shareUrl
+        val shareText = campaign?.shareText ?: ""
+        shareEvent.postValue("$shareText \n $shareUrl")
+        eventsManager.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
     }
-}
 
-fun logout() {
-    val logoutResult = userRepository.logout()
-    if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
-        mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
+    fun deleteAccount() {
+        viewModelScope.launch {
+            userRepository.deleteAccount()
+            logout()
+        }
     }
-}
 
-val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
-fun onMediaUtilsResultSuccess(result: MediaUtils.MediaUtilResult) {
-    //use this liveData when using MediaUtils out side of MainActivity scope (for example - EditProfileBottomSheet)
-    mediaUtilsResultLiveData.postValue(result)
-}
+    fun logout() {
+        val logoutResult = userRepository.logout()
+        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
+            mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
+        }
+    }
 
-val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
-fun onFloatingCartStateChanged(isShowing: Boolean) {
-    onFloatingBtnHeightChange.postValue(isShowing)
-}
+    val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
+    fun onMediaUtilsResultSuccess(result: MediaUtils.MediaUtilResult) {
+        //use this liveData when using MediaUtils out side of MainActivity scope (for example - EditProfileBottomSheet)
+        mediaUtilsResultLiveData.postValue(result)
+    }
+
+    val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
+    fun onFloatingCartStateChanged(isShowing: Boolean) {
+        onFloatingBtnHeightChange.postValue(isShowing)
+    }
 
 ///**
 // * Refreshing Floating cart button ui after order was updated.
@@ -474,7 +471,7 @@ fun onFloatingCartStateChanged(isShowing: Boolean) {
         eventsManager.logEvent(eventName)
     }
 
-    fun logDeepLinkEvent(restaurantId: Long){
+    fun logDeepLinkEvent(restaurantId: Long) {
         eventsManager.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
     }
 

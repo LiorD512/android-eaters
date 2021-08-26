@@ -219,8 +219,13 @@ object DateUtils {
         return true
     }
 
-    fun isDateInRange(dateToCheck: Date, startDate: Date, endDate: Date): Boolean {
-        return dateToCheck.time > startDate.time && dateToCheck.time < endDate.time
+    fun isDateInRange(dateToCheck: Date, startDate: Date?, endDate: Date?): Boolean {
+        startDate?.let{
+            endDate?.let{
+                return dateToCheck.time >= startDate.time && dateToCheck.time <= endDate.time
+            }
+        }
+        return false
     }
 
     fun isNowInRange(startDate: Date, endDate: Date): Boolean {
@@ -292,6 +297,13 @@ object DateUtils {
         } else {
             "${parseDateToDayAndUsTime(startsAt)} - ${parseDateToUsTime(endsAt)}"
         }
+    }
+
+    fun isSameTime(from: Date?, from1: Date): Boolean {
+        from?.let{
+            return from.time == from1.time
+        }
+        return false
     }
 }
 

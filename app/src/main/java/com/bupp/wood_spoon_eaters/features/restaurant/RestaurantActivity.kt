@@ -118,6 +118,13 @@ class RestaurantActivity : BaseActivity(){
         }
     }
 
+    override fun finish() {
+        val shouldForceFeedRefresh = viewModel.shouldForceFeedRefresh()
+        intent.putExtra("refreshFeed", shouldForceFeedRefresh)
+        setResult(Activity.RESULT_OK, intent)
+        super.finish()
+    }
+
     companion object {
         private const val TAG = "wowRestaurantActivity"
     }

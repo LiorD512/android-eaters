@@ -104,7 +104,14 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         Log.d(TAG, "Activity For Result - new order")
         //check if has order and refresh ui
         if (result.resultCode == Activity.RESULT_OK) {
-            updateUiAfterOrderSuccess(result.data)
+            val data = result.data
+            val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)!!
+            val forceFeedRefresh = data?.getBooleanExtra("refreshFeed", false)!!
+            if(isAfterPurchase){
+                updateUiAfterOrderSuccess(result.data)
+            }else if(forceFeedRefresh){
+                viewModel.forceFeedRefresh()
+            }
         }
     }
 
@@ -487,7 +494,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
+//        if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
                     MTLogger.c(TAG, "Stripe")
@@ -495,12 +502,12 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
                     result?.let {
                         MTLogger.c(TAG, "payment method success")
-                        viewModel.updatePaymentMethod(result.paymentMethod)
+                        viewModel.updatePaymentMethod(this, result.paymentMethod)
                     }
                 }
 
             }
-        }
+//        }
     }
 
 

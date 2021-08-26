@@ -326,8 +326,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFavoriteEvent(event: LiveEvent<Boolean>?) {
         event?.getContentIfNotHandled()?.let { isSuccess ->
-            if (!isSuccess)
+            if (isSuccess){
+                mainViewModel.forceFeedRefresh()
+            }else{
                 binding.restHeaderFavorite.onFail()
+            }
         }
     }
 
@@ -421,33 +424,3 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
 }
 
-
-///    fun setFadeInOnScrollRecycler(
-//        fadingView: View,
-//        recyclerView: RecyclerView,
-//        startFadeAtChild: Int = 0,
-//        fadeDuration: Int = 500
-//    ) {
-//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//
-//            var startFadeAt: Float? = null
-//
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                val currentChildIndex =
-//                    (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//                if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
-//                    startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
-//                }
-//                startFadeAt?.let { itemHeight ->
-//                    // The length that is currently scrolled
-//                    val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
-//                    // The distance you need to scroll to end the animation
-//                    val totalScrollableLength = fadeDuration
-//                    if (abs(scrolledLength) > 0) {
-//                        val alpha = scrolledLength.div(totalScrollableLength)
-//                        fadingView.alpha = alpha
-//                    }
-//                }
-//            }
-//        })
-//    }
