@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view
+package com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.GridItemDecoration
 import com.bupp.wood_spoon_eaters.databinding.IconsGridViewBinding
-import com.bupp.wood_spoon_eaters.databinding.WsSelectableBtnBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
 class EmptyIconsGridView @JvmOverloads

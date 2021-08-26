@@ -2,17 +2,14 @@ package com.bupp.wood_spoon_eaters.features.order_checkout
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.graphics.drawable.IconCompat
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
-import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.databinding.ActivityOrderCheckoutActivityBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
@@ -80,7 +77,6 @@ class OrderCheckoutActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
                     MTLogger.c(MainActivity.TAG, "Stripe")
@@ -92,7 +88,6 @@ class OrderCheckoutActivity : BaseActivity() {
                 }
 
             }
-        }
     }
 
     fun updateMainHeader(title: String, subtitle: String, icon: Int){
@@ -105,6 +100,8 @@ class OrderCheckoutActivity : BaseActivity() {
         setResult(RESULT_OK, intent)
         finish()
     }
+
+
 
     companion object{
         const val TAG = "wowOrderCheckoutAct"

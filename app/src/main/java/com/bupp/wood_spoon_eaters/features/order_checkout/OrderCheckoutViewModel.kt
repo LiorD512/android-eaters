@@ -95,7 +95,8 @@ private val eventsManager: EventsManager) : ViewModel() {
 
     private fun getChangedTimeData(date: Date?): Map<String, String> {
         val data = mutableMapOf<String, String>()
-        data["selected_date"] = DateUtils.parseDateToUsDate(date)
+        data["selected_date"] = DateUtils.parseDateToFullTime(date)
+        data["day"] = DateUtils.parseDateToDayName(date)
         return data
     }
 

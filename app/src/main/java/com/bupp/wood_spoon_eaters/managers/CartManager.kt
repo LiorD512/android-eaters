@@ -8,7 +8,6 @@ import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import java.util.*
 
 class CartManager(
@@ -166,7 +165,7 @@ class CartManager(
 
                 //todo - check analytics for updated order.....
                 val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
-                eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(result.data.id, currentAddedDish))
+//                eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
                 //check for errors
                 if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
@@ -193,7 +192,7 @@ class CartManager(
                     updateCartManagerParams(it.copy())
                 }
                 val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
-                eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(result.data.id, currentAddedDish))
+//                eventsManager.logEvent(Constants.EVENT_UPDATE_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
 //                check for errors
                 if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR) {
@@ -219,9 +218,9 @@ class CartManager(
             orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
 
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
-            handleEvent(eventType)
             result.data?.let {
                 updateCartManagerParams(it.copy())
+                handleEvent(eventType)
                 return result
             }
             return result
@@ -572,7 +571,7 @@ class CartManager(
     private fun handleEvent(eventType: String?) {
         eventType?.let {
             when (it) {
-                Constants.EVENT_TIP -> {
+                Constants.EVENT_CLICK_TIP -> {
                     eventsManager.logEvent(eventType, getTipData())
                 }
             }
@@ -583,7 +582,7 @@ class CartManager(
         val data = mutableMapOf<String, String>()
         data["precentage"] = currentOrderResponse?.tipPercentage.toString() ?: "0"
         data["value"] = currentOrderResponse?.tip?.formatedValue ?: "0"
-        data["subtotal_price"] = currentOrderResponse?.total?.formatedValue ?: "0"
+        data["subtotal_price"] = currentOrderResponse?.subtotal?.formatedValue ?: "0"
         return data
     }
 
@@ -594,7 +593,7 @@ class CartManager(
         val dishesName = getCurrentOrderDishNames()
         val cuisine = getCurrentOrderChefCuisine()
         val data =
-            mutableMapOf<String, Any>("revenue" to totalCostStr.toString(), "currency" to "USD", "home_chef_name" to chefsName, "success" to isSuccess.toString())
+            mutableMapOf<String, Any>("currency" to "USD", "home_chef_name" to chefsName, "success" to isSuccess.toString())
         data["home_chef_id"] = chefsId
         dishesName.let {
             data["dishes"] = it
@@ -607,8 +606,19 @@ class CartManager(
         data["ASAP"] = isAsap
 
         if (isSuccess) {
+            data["revenue"] = totalCostStr
+
+            currentOrderResponse?.id?.let {
+                data["order_id"] = it
+            }
+            currentOrderResponse?.subtotal?.value?.let {
+                data["subtotal_price"] = it
+            }
+            currentOrderResponse?.discount?.value?.let {
+                data["promo_discount"] = it
+            }
             currentOrderResponse?.tip?.value?.let {
-                data["tip_amount"] = it
+                data["tip"] = it
             }
             currentOrderResponse?.tax?.value?.let {
                 data["tax"] = it
@@ -617,7 +627,7 @@ class CartManager(
                 data["delivery_fee"] = it
             }
             currentOrderResponse?.cooksServiceFee?.value?.let {
-                data["cook_service_fee"] = it
+                data["home_chef_service_fee"] = it
             }
             currentOrderResponse?.serviceFee?.value?.let {
                 data["woodspoon_service_fee"] = it
@@ -658,7 +668,7 @@ class CartManager(
     }
 
     private fun getCurrentOrderDishNames(): List<String> {
-        val dishNames = mutableSetOf<String>()
+        val dishNames = mutableListOf<String>()
         val chefsName = currentOrderResponse?.restaurant?.firstName ?: ""
         currentOrderResponse?.orderItems?.forEach {
             dishNames.add("${chefsName}_${it.dish.name}")
@@ -666,28 +676,28 @@ class CartManager(
         return dishNames.toList()
     }
 
-    fun getAddDishData(orderId: Long? = null, orderItem: OrderItem? = null): Map<String, String> {
-        val currentDishName = getCurrentDishName(orderItem?.dish)
-        val chefsName = getCurrentOrderChefName()
-        val chefsId = getCurrentOrderChefId()
-        val cuisine = getCurrentOrderChefCuisine()
-        val dishId = getCurrentDishId(orderItem?.dish)
-        val dishPrice = orderItem?.price?.value
-        val data = mutableMapOf<String, String>("cook_name" to chefsName)
-
-        data["cook_id"] = chefsId
-        data["dish_id"] = "$dishId"
-        data["dish_price"] = dishPrice.toString()
-        data["dish_name"] = currentDishName
-        if (cuisine.isNotEmpty()) {
-            data["cuisine"] = cuisine[0]
-        }
-        orderId?.let {
-            data["order_id"] = orderId.toString()
-        }
-
-        return data
-    }
+//    fun getAddDishData(orderId: Long? = null, orderItem: OrderItem? = null): Map<String, String> {
+//        val currentDishName = getCurrentDishName(orderItem?.dish)
+//        val chefsName = getCurrentOrderChefName()
+//        val chefsId = getCurrentOrderChefId()
+//        val cuisine = getCurrentOrderChefCuisine()
+//        val dishId = getCurrentDishId(orderItem?.dish)
+//        val dishPrice = orderItem?.price?.value
+//        val data = mutableMapOf<String, String>("cook_name" to chefsName)
+//
+//        data["cook_id"] = chefsId
+//        data["dish_id"] = "$dishId"
+//        data["dish_price"] = dishPrice.toString()
+//        data["dish_name"] = currentDishName
+//        if (cuisine.isNotEmpty()) {
+//            data["cuisine"] = cuisine[0]
+//        }
+//        orderId?.let {
+//            data["order_id"] = orderId.toString()
+//        }
+//
+//        return data
+//    }
 
     private fun getCurrentDishName(dish: Dish? = null): String {
         dish?.name?.let {
@@ -697,7 +707,7 @@ class CartManager(
     }
 
     fun sendFBAdditionalDishEvent(orderItem: OrderItem?) {
-        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(orderItem = orderItem))
+//        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(orderItem = orderItem))
     }
 
     private fun getCurrentOrderChefId(): String {
@@ -721,13 +731,10 @@ class CartManager(
     }
 
     fun calcTotalDishesPrice(): Double {
-        var total = 0.0
-        currentOrderResponse?.orderItems?.let {
-            it.forEach {
-                total += (it.price.value?.times(it.quantity)!!)
-            }
+        currentOrderResponse?.total?.value?.let {
+            return it
         }
-        return total
+        return 0.0
     }
 
     private fun getCurrentOrderChefCuisine(): List<String> {

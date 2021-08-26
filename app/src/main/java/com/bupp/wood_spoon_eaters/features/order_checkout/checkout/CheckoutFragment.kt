@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
-import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
@@ -24,7 +24,6 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
-import com.segment.analytics.Analytics
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,7 +35,7 @@ import kotlin.collections.ArrayList
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener, OrderItemsView2.OrderItemsListener,
-    WSTitleValueView.WSTitleValueListener, HeaderView.HeaderViewListener, WSErrorDialog.WSErrorListener,
+    WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
@@ -47,12 +46,24 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     val viewModel by viewModel<CheckoutViewModel>()
     val mainViewModel by sharedViewModel<OrderCheckoutViewModel>()
 
+    var isEnabled = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(isEnabled) {
+            override fun handleOnBackPressed() {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_BACK_FROM_CHECKOUT)
+                isEnabled = false
+                activity?.onBackPressed()
+            }
+        })
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CHECKOUT)
-        mainViewModel.logEvent(Constants.EVENT_PROCEED_TO_CHECKOUT)
+
 
         initUi()
         initObservers()
@@ -285,17 +296,17 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             if (tipSelection == TIP_NOT_SELECTED) {
                 viewModel.updateOrderParams(
                     OrderRequest(tipPercentage = 0f, tip = 0),
-                    Constants.EVENT_TIP
+                    Constants.EVENT_CLICK_TIP
                 ) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
             } else {
-                viewModel.updateOrderParams(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_TIP)
+                viewModel.updateOrderParams(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_CLICK_TIP)
             }
         }
     }
 
     override fun onTipDone(tipAmount: Int) {
         binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_TIP)
+        viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_CLICK_TIP)
     }
 
     override fun onCustomDetailsClick(type: Int) {
@@ -314,15 +325,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 viewModel.onNationwideShippingSelectClick()
             }
             Constants.DELIVERY_DETAILS_PROMO_CODE -> {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
             }
         }
     }
 
-    override fun onHeaderCloseClick() {
-        mainViewModel.logEvent(Constants.EVENT_CLICK_BACK_fROM_CHECKOUT)
-        activity?.onBackPressed()
-    }
+
 
     override fun onEditOrderBtnClicked() {
         mainViewModel.logEvent(Constants.EVENT_CLICK_EDIT_ORDER)
@@ -360,4 +369,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onWSErrorDone() {
         viewModel.refreshCheckoutPage()
     }
+
+
 }

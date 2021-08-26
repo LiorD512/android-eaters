@@ -227,6 +227,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         viewModel.navigationEvent.observe(viewLifecycleOwner, {
             when (it) {
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_CHECKOUT -> {
+                    viewModel.logEvent(Constants.EVENT_PROCEED_TO_CHECKOUT)
                     listener?.onGoToCheckoutClicked()
                     dismiss()
                 }

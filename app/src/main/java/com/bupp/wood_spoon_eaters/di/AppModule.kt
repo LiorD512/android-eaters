@@ -29,6 +29,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewMode
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
+import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartViewModel
@@ -136,6 +137,7 @@ val appModule = module {
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get()) }
     viewModel { OrdersHistoryViewModel(get(), get()) }
+    viewModel { CuisineChooserViewModel(get(), get()) }
 
     //support
     viewModel { SupportViewModel(get(), get(), get()) }

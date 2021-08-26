@@ -336,7 +336,7 @@ class RestaurantPageViewModel(
     fun onDeliveryDateChanged(date: SortedCookingSlots?) {
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
             onCookingSlotSelected(cookingSlot, false)
-            logEvent(Constants.EVENT_CHANGE_COOKING_SLOT)
+            logEvent(Constants.EVENT_CHANGE_COOKING_SLOT_DATE)
         }
     }
 
@@ -447,7 +447,7 @@ class RestaurantPageViewModel(
             Constants.EVENT_SHARE_RESTAURANT -> {
                 eventsManager.logEvent(eventName, getLikeRestaurantData())
             }
-            Constants.EVENT_CHANGE_COOKING_SLOT -> {
+            Constants.EVENT_CHANGE_COOKING_SLOT_DATE -> {
                 eventsManager.logEvent(eventName, getCookingSlotChangeData())
             }
             else -> {

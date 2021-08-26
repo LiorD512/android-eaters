@@ -360,7 +360,7 @@ class Constants {
         const val EVENT_UPDATE_DISH = "update_dish"
         const val EVENT_UPDATE_DELIVERY_ADDRESS = "change_delivery_address"
         const val EVENT_CLICK_EDIT_ORDER = "click_edit_order"
-        const val EVENT_CLICK_BACK_fROM_CHECKOUT = "click_back_from_checkout"
+        const val EVENT_CLICK_BACK_FROM_CHECKOUT = "click_back_from_checkout"
         const val EVENT_CLICK_ON_PROMO_CODE = "click_on_promo_code_section"
         const val EVENT_SUBMIT_PROMO_CODE = "submit_promo_code"
         const val EVENT_CLEAR_CART = "clear_cart"
@@ -373,7 +373,7 @@ class Constants {
         const val EVENT_FUTURE_DELIVERY = "scheduled_future_delivery"
         const val EVENT_SEARCH = "search"
         const val EVENT_PROCEED_TO_CHECKOUT = "proceed_checkout"
-        const val EVENT_TIP = "tip"
+        const val EVENT_CLICK_TIP = "click_tip"
 
 
 

@@ -151,7 +151,7 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
 
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData["dish_name"] as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "dISH")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData["dish_id"] as String?)
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
             logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, formattedPrice.toDouble(), params)
         }

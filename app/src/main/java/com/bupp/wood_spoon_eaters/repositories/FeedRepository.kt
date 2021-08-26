@@ -90,30 +90,37 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
 
 
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
+        Log.d("processFeedData", "start ----")
         var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEachIndexed { feedSectionIndex, feedSection ->
             feedSection.title?.let {
                 localId++
                 feedData.add(FeedAdapterTitle(it, localId))
+                Log.d("processFeedData", "adding title - $localId")
             }
             feedSection.href?.let {
                 localId++
                 feedData.add(FeedAdapterHref(it, localId))
+                Log.d("processFeedData", "adding href  - $localId")
             }
             feedSection.collections?.forEachIndexed { index, feedSectionCollectionItem ->
                 localId++
                 when (feedSectionCollectionItem) {
                     is FeedCampaignSection -> {
+                        Log.d("processFeedData", "adding camp  - $localId")
                         feedData.add(FeedAdapterCoupons(feedSectionCollectionItem, localId))
                     }
                     is FeedIsEmptySection -> {
+                        Log.d("processFeedData", "adding empty - $localId")
                         feedData.add(FeedAdapterEmptyFeed(feedSectionCollectionItem, localId, isCartEmpty()))
                     }
                     is FeedSingleEmptySection -> {
+                        Log.d("processFeedData", "adding empty2 - $localId")
                         feedData.add(FeedAdapterEmptySection(feedSectionCollectionItem, localId))
                     }
                     is FeedRestaurantSection -> {
+                        Log.d("processFeedData", "adding rest  - $localId")
                         if (isLargeItems) {
                             feedData.add(FeedAdapterLargeRestaurant(feedSectionCollectionItem, localId))
                         } else {

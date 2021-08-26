@@ -176,6 +176,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                     }
                     else -> {}
                 }
+                return@forEachIndexed
             }
         }
     }

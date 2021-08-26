@@ -112,6 +112,15 @@ object DateUtils {
         return "$dateVal, $hours"
     }
 
+    fun parseDateToFullTime(date: Date?): String {
+        //16
+        date?.let{
+            val sdf = SimpleDateFormat("HH")
+            return sdf.format(date.time)
+        }
+        return ""
+    }
+
     fun parseDateHalfHourInterval(date: Date): String {
         //4:30 PM - 5:00 PM
         val c = Calendar.getInstance()

@@ -16,7 +16,7 @@ import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.bottom_sheets.delete_account.DeleteAccountBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.CuisinesChooserDialog
+import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
@@ -94,8 +94,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
                 myProfileFragCuisine.setIsEditable(true, object : WSEditText.WSEditTextListener {
                     override fun onWSEditUnEditableClick() {
-                        val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment, viewModel.getCuisineList(), Constants.ENDLESS_SELECTION)
-                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
+                        val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment)
+//                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
                         cuisineFragment.show(childFragmentManager, "CookingCuisine")
                     }
                 })

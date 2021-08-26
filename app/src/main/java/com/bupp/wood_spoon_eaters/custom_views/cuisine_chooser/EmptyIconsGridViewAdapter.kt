@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view
+package com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,10 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.DishMediaItemBinding
-import com.bupp.wood_spoon_eaters.databinding.IconsGridViewBinding
 import com.bupp.wood_spoon_eaters.databinding.IconsGridViewItemBinding
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.single_dish.sub_screen.single_dish_info.DishMediaAdapter
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 
 class EmptyIconsGridViewAdapter(val context: Context, val icons: ArrayList<SelectableIcon>, val listener: EmptyIconGridViewAdapterListener): RecyclerView.Adapter<EmptyIconsGridViewAdapter.ViewHolder>() {

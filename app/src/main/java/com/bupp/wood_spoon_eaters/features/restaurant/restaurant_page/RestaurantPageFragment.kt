@@ -83,7 +83,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 activity?.onBackPressed()
             }
             shareButton.setOnClickListener {
-                viewModel.restaurantFullData.value?.shareUrl?.let {
+                viewModel.restaurantFullData.value?.getShareTextStr()?.let {
                     Utils.shareText(requireActivity(), it)
                     viewModel.logEvent(Constants.EVENT_SHARE_RESTAURANT)
                 }
@@ -360,7 +360,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot) {
         //callback from TimePickerDialog - for changing cooking slot
         viewModel.onCookingSlotSelected(cookingSlot, false)
-        viewModel.logEvent(Constants.EVENT_CHANGE_COOKING_SLOT_DATE)
+        viewModel.logEvent(Constants.EVENT_CHANGE_COOKING_SLOT)
     }
 
     override fun onDateSelected(date: SortedCookingSlots?) {

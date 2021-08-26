@@ -144,11 +144,15 @@ class UpSaleNCartViewModel(
         eventsManager.logEvent(eventName, getSwipeDishData(item))
     }
 
+    fun logEvent(eventName: String) {
+        eventsManager.logEvent(eventName)
+    }
+
     private fun getSwipeDishData(item: CustomCartItem): Map<String, String> {
         val data = mutableMapOf<String, String>()
         data["dish_name"] = item.orderItem.dish.name
         data["dish_id"] = item.orderItem.dish.id.toString()
-        data["dish_price"] = item.orderItem.dish.price?.formatedValue.toString()
+        data["dish_price"] = item.orderItem.price.formatedValue.toString()
         data["dish_quantity"] = item.orderItem.quantity.toString()
         return data
     }
