@@ -135,7 +135,7 @@ class FeedViewModel(
         }
     }
 
-    private fun getSkeletonItems(): FeedLiveData? {
+    private fun getSkeletonItems(): FeedLiveData {
         val skeletons = mutableListOf<FeedAdapterSkeleton>()
         for(i in 0 until 2){
             skeletons.add(FeedAdapterSkeleton())

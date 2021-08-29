@@ -387,7 +387,7 @@ class CartManager(
                     }else{
                         Log.d("orderFlowTime", "future order ")
                         val isFirst = DateUtils.isSameTime(deliveryDates[0]?.from, matchedDate.from)
-                        if(DateUtils.isNowInRange(matchedDate.from, matchedDate.to) || isFirst){
+                        if(DateUtils.isNowInRange(matchedDate.from, matchedDate.to) && isFirst){
                             Log.d("orderFlowTime", "is now")
                             deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(order.deliverAt)})")
                         }else{
