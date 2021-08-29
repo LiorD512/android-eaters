@@ -10,16 +10,13 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
+class FeedRepository(private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
 
 
     private var lastFeedDataResult: FeedResult? = null
 
-    data class ReviewResult(val type: FeedRepoStatus, val review: Review? = null)
-    data class CookResult(val type: FeedRepoStatus, val cook: Cook? = null)
     data class FeedRepoResult(val type: FeedRepoStatus, val feed: List<FeedAdapterItem>? = null, val isLargeItems: Boolean = false)
     enum class FeedRepoStatus {
-        EMPTY,
         SUCCESS,
         HREF_SUCCESS,
         SERVER_ERROR,
@@ -27,7 +24,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
     }
 
     //todo - change this when server is ready
-    val isLargeItems = false
+    private val isLargeItems = false
 
     @SuppressLint("LogNotTimber")
     suspend fun getFeed(feedRequest: FeedRequest): FeedRepoResult {
@@ -142,31 +139,11 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
         return feedData
     }
 
-    fun isCartEmpty(): Boolean{
+    private fun isCartEmpty(): Boolean{
         return cartManager.isCartEmpty()
     }
 
-
-//    private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
-//        lastFeedDataResult?.sections?.forEachIndexed { index, section ->
-//            section.href?.let {
-//                if (it == href) {
-//                    data?.let { data ->
-//                        if(data.isEmpty()){
-//                            //remove title incase Href data is empty
-//                            lastFeedDataResult?.sections!![index].title = ""
-//                        }
-//                        section.href = null
-//                        lastFeedDataResult?.sections!![index].collections = data.toMutableList()
-//                    }
-//                }
-//
-//            }
-//        }
-//        return processFeedData(lastFeedDataResult)
-//    }
-
-    private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem>? {
+    private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem> {
         val tempFeedResult = mutableListOf<FeedSection>()
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
             section.href?.let {
@@ -177,10 +154,6 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
                             Log.d("hrefSucks", "update href section")
                             section.href = null
                             lastFeedDataResult?.sections!![index].collections = data.toMutableList()
-
-                            //remove title incase Href data is empty
-//                            val sections = tempFeedResult?.sections?.toMutableList()?.removeAt(index)
-//                            lastFeedDataResult?.sections = sections
                         } else {
                             Log.d("hrefSucks", "href empty")
                             return@forEachIndexed
@@ -192,97 +165,6 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, val flavorConfi
             tempFeedResult.add(section)
         }
         return processFeedData(FeedResult(tempFeedResult))
-    }
-
-
-    suspend fun getCookById(cookId: Long, addressId: Long?, lat: Double?, lng: Double?): CookResult {
-        val result = withContext(Dispatchers.IO) {
-            apiService.getCookById(cookId, addressId, lat, lng)
-        }
-        result.let {
-            return when (result) {
-                is ResultHandler.NetworkError -> {
-                    Log.d(TAG, "getCookById - NetworkError")
-                    CookResult(FeedRepoStatus.SERVER_ERROR)
-                }
-                is ResultHandler.GenericError -> {
-                    Log.d(TAG, "getCookById - GenericError")
-                    CookResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-                }
-                is ResultHandler.Success -> {
-                    Log.d(TAG, "getCookById - Success")
-                    CookResult(FeedRepoStatus.SUCCESS, result.value.data)
-                }
-                else -> {
-                    Log.d(TAG, "getCookById - wsError")
-                    CookResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-                }
-            }
-        }
-    }
-
-    suspend fun getCookReview(cookId: Long): ReviewResult {
-        val result = withContext(Dispatchers.IO) {
-            apiService.getCookReview(cookId)
-        }
-        result.let {
-            return when (result) {
-                is ResultHandler.NetworkError -> {
-                    Log.d(TAG, "getCookReview - NetworkError")
-                    ReviewResult(FeedRepoStatus.SERVER_ERROR)
-                }
-                is ResultHandler.GenericError -> {
-                    Log.d(TAG, "getCookReview - GenericError")
-                    ReviewResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-                }
-                is ResultHandler.Success -> {
-                    Log.d(TAG, "getCookReview - Success")
-                    ReviewResult(FeedRepoStatus.SUCCESS, result.value.data)
-                }
-                else -> {
-                    Log.d(TAG, "getCookReview - wsError")
-                    ReviewResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-                }
-            }
-        }
-    }
-
-    data class SearchResult(val type: SearchStatus, val feed: List<Search>? = null)
-    enum class SearchStatus {
-        EMPTY,
-        SUCCESS,
-        SERVER_ERROR,
-        SOMETHING_WENT_WRONG,
-    }
-
-    suspend fun getSearch(searchRequest: SearchRequest): SearchResult {
-        val result = withContext(Dispatchers.IO) {
-            apiService.search(searchRequest)
-        }
-        result.let {
-            return when (result) {
-                is ResultHandler.NetworkError -> {
-                    Log.d(TAG, "getSearch - NetworkError")
-                    SearchResult(SearchStatus.SERVER_ERROR)
-                }
-                is ResultHandler.GenericError -> {
-                    Log.d(TAG, "getSearch - GenericError")
-                    SearchResult(SearchStatus.SOMETHING_WENT_WRONG)
-                }
-                is ResultHandler.Success -> {
-                    Log.d(TAG, "getSearch - Success")
-                    if (result.value.data.isNullOrEmpty()) {
-                        SearchResult(SearchStatus.EMPTY)
-                    } else {
-                        SearchResult(SearchStatus.SUCCESS, result.value.data)
-                    }
-                }
-                else -> {
-                    Log.d(TAG, "getSearch - wsError")
-                    SearchResult(SearchStatus.SOMETHING_WENT_WRONG)
-                }
-            }
-        }
     }
 
     companion object {

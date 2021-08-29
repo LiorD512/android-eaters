@@ -42,7 +42,7 @@ class SnapOnScrollListener(
             val snapPosition = recyclerView.getChildAdapterPosition(snapView)
             val snapPositionChanged = this.snapPosition != snapPosition
             if (snapPositionChanged) {
-                Log.d("wowFeedPager", "recyclerView: ${recyclerView}")
+                Log.d("wowFeedPager", "recyclerView: $recyclerView")
                 onSnapPositionChangeListener?.onSnapPositionChange(snapPosition)
                 this.snapPosition = snapPosition
             }

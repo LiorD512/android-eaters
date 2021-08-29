@@ -23,7 +23,7 @@ object GoogleAddressParserUtil {
 
     fun parsePlaceToAddressRequest(place: Place): AddressRequest {
 
-        var addressRequest: AddressRequest = AddressRequest()
+        var addressRequest = AddressRequest()
         place.latLng?.let {
             addressRequest.lat = it.latitude
             addressRequest.lng = it.longitude
@@ -158,18 +158,6 @@ object GoogleAddressParserUtil {
              * The set of states addressed by abbreviations.
              */
             private val STATES_BY_ABBR: MutableMap<String, State> = HashMap()
-
-            /**
-             * Gets the enum constant with the specified abbreviation.
-             *
-             * @param abbr the state's abbreviation.
-             * @return the enum constant with the specified abbreviation.
-             * @throws SunlightException if the abbreviation is invalid.
-             */
-            fun valueOfIso(abbr: String): State {
-                val state = STATES_BY_ABBR[abbr]
-                return state ?: UNKNOWN
-            }
 
             fun valueOfState(name: String): State? {
                 val enumName = name.toUpperCase().replace(" ".toRegex(), "_")

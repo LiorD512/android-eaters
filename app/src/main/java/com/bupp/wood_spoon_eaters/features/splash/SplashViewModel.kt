@@ -7,7 +7,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
+import com.bupp.wood_spoon_eaters.managers.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository

@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.promo_code
 
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData

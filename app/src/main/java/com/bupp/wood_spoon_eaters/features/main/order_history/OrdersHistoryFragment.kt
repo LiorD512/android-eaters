@@ -1,14 +1,11 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -19,11 +16,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -65,9 +58,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             binding.orderHistoryFragHeightCorrection.isVisible = it
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { event ->
-            event.let{
-                initList(it)
-            }
+            initList(event)
         })
     }
 
@@ -86,13 +77,10 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     private fun initList(orderHistory: List<OrderHistoryBaseItem>) {
         with(binding){
             if(orderHistory.isNotEmpty()){
-
-                val activeCount = orderHistory.filterIsInstance<OrderAdapterItemActiveOrder>().size
-                val defaultCount = orderHistory.filterIsInstance<OrderAdapterItemOrder>().size
                 listItemDecorator?.let{
                     ordersHistoryFragRecyclerView.removeItemDecoration(it)
                 }
-                listItemDecorator = OrderHistoryItemDecorator(requireContext(), activeCount, defaultCount)
+                listItemDecorator = OrderHistoryItemDecorator(requireContext())
                 ordersHistoryFragRecyclerView.addItemDecoration(listItemDecorator!!)
 
                 adapter.submitList(orderHistory)

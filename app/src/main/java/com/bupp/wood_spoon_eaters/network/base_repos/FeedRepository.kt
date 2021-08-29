@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.network.base_repos
 
-import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
@@ -17,8 +16,6 @@ interface FeedRepositoryInterface{
 
 class FeedRepositoryImpl(private val service: ApiService) : FeedRepositoryInterface {
     override suspend fun getFeed(lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<FeedResult>> {
-//        val tempUrl = "https://woodspoon-server-pr-167.herokuapp.com/api/v2/eaters/me/feed" // todo - remove this shit !
-//        val tempUrl = "https://woodspoon-server-pr-167.herokuapp.com/api/v2/eaters/me/feed"
         return safeApiCall { service.getFeed(lat, lng, addressId, timestamp) }
     }
 

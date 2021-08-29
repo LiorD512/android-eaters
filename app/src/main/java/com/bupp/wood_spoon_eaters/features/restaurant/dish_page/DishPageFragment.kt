@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.restaurant.dish_page;
+package com.bupp.wood_spoon_eaters.features.restaurant.dish_page
 
 import android.os.Bundle
 import android.view.View
@@ -6,15 +6,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
-import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
@@ -73,7 +72,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun onAddToCartClick() {
         val note = binding!!.dishFragMainListLayout.dishFragUserRequestInput.getText() ?: ""
-        viewModel.onDishPageCartClick(note.toString())
+        viewModel.onDishPageCartClick(note)
     }
 
     private fun initDishQuantityButtons(initialCounter: Int? = 1, maxQuantity: Int) {
@@ -230,7 +229,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragVideoBtn.isVisible = !dish.restaurant.video.isNullOrEmpty()
             dishFragVideoBtn.setOnClickListener {
                 dish.restaurant.video?.let { video ->
-                    VideoViewDialog(dish.restaurant.getFullName(), video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+                    VideoViewDialog(video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
                 }
             }
         }

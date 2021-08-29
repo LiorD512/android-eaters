@@ -221,10 +221,3 @@ data class FeedAdapterLargeRestaurant(
     val sectionOrder: Int? = null,
     val restaurantOrderInSection: Int? = null,
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
-
-@Parcelize
-data class Tag(
-    val id: Long?,
-    val text: String,
-    val icon_url: String? = null
-) : Parcelable

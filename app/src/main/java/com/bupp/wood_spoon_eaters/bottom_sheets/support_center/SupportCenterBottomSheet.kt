@@ -20,7 +20,6 @@ import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {

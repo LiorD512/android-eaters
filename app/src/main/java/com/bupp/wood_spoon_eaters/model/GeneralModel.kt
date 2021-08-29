@@ -154,10 +154,6 @@ data class CuisineLabel(
     @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 
-interface SelectableString {
-    val id: Long
-    val name: String
-}
 
 @JsonClass(generateAdapter = true)
 data class PreSignedUrl(

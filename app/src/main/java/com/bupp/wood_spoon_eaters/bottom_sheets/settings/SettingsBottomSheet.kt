@@ -15,14 +15,13 @@ import com.bupp.wood_spoon_eaters.databinding.SettingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.settings.NotificationsGroupAdapter
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener, HeaderView.HeaderViewListener {
 
     private val binding: SettingsBottomSheetBinding by viewBinding()
     private var adapter: NotificationsGroupAdapter? = null
-    private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
+    private val viewModel: SettingsViewModel by viewModel()
     var lastClickedSwitchId: Long = -1
 
 

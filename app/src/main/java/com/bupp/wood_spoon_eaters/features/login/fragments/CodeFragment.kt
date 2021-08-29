@@ -7,7 +7,6 @@ import android.text.Editable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -18,7 +17,7 @@ import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class CodeFragment() : Fragment(R.layout.fragment_code) {
+class CodeFragment : Fragment(R.layout.fragment_code) {
 
     val binding: FragmentCodeBinding by viewBinding()
     private val viewModel: LoginViewModel by sharedViewModel()
@@ -40,7 +39,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     }
 
     private fun initObservers() {
-        viewModel.errorEvents.observe(viewLifecycleOwner, Observer{
+        viewModel.errorEvents.observe(viewLifecycleOwner, {
             when(it){
                 ErrorEventType.CODE_EMPTY -> {
                     binding.codeFragInputError.visibility = View.VISIBLE

@@ -10,17 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.databinding.StackableTextViewBinding
 import com.bupp.wood_spoon_eaters.databinding.ToolTipViewBinding
 import com.daasuu.bl.ArrowDirection
 import com.daasuu.bl.BubbleLayout
 import com.daasuu.bl.BubblePopupHelper
-import com.example.matthias.mvvmcustomviewexample.custom.ToolTipViewModel
 
 
 class ToolTipView @JvmOverloads
@@ -41,10 +38,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     val viewModel = ToolTipViewModel()
 
     init {
-        initUi(context, attrs)
-    }
-
-    fun customInit(context: Context, attrs: AttributeSet?){
         initUi(context, attrs)
     }
 
@@ -70,7 +63,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
     fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     private fun customBubble() {
@@ -96,20 +88,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             Constants.TOOL_TIP_MINMUM_ORDER_FEE -> {
                 titleText = resources.getString(R.string.tool_tip_min_order_fee_title)
                 bodyText =
-                    "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} ${resources.getString(com.bupp.wood_spoon_eaters.R.string.tool_tip_min_order_fee_body2)}"
+                    "${resources.getString(R.string.tool_tip_min_order_fee_body)} ${viewModel.getMinOrderFeeString()} ${resources.getString(R.string.tool_tip_min_order_fee_body2)}"
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 95.toPx().toFloat()
             }
             Constants.TOOL_TIP_COURIER_TIP -> {
                 titleText = resources.getString(R.string.tool_tip_courier_title)
                 bodyText =
-                    "${resources.getString(R.string.tool_tip_courier_body)}"
+                    resources.getString(R.string.tool_tip_courier_body)
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 135.toPx().toFloat()
             }
-//            Constants.TOOL_TIP_CUSTOM_CLICK -> {
-//
-//            }
         }
     }
 
@@ -149,7 +138,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun locateView(v: View?): Rect? {
+    private fun locateView(v: View?): Rect? {
         val loc_int = IntArray(2)
         if (v == null) return null
         try {
@@ -171,9 +160,5 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         viewModel.isNationwide = nationwide!!
     }
 
-    fun disable() {
-        binding.toolTipBtn.setOnClickListener(null)
-        binding.toolTipBtn.isEnabled = false
-        binding.toolTipBtn.isClickable = false
-    }
+
 }

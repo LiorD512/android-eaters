@@ -48,7 +48,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                         dishTagsView.isVisible = true
                     }
                 }
-                root.setOnClickListener() {
+                root.setOnClickListener {
                     listener.onDishClick(section.menuItem)
                 }
             }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
@@ -13,7 +12,7 @@ import com.bupp.wood_spoon_eaters.repositories.UserRepository
 
 class EaterDataManager(
     val context: Context, private val locationManager: LocationManager, private val eventsManager: EventsManager,
-    private val deliveryTimeManager: DeliveryTimeManager, private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository
+    private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository
 ) {
 
     val currentEater: Eater?
@@ -22,12 +21,6 @@ class EaterDataManager(
     suspend fun refreshCurrentEater() {
         userRepository.initUserRepo()
     }
-
-    /////////////////////////////////////////
-    ////////    DELIVERY_TIME       /////////
-    /////////////////////////////////////////
-
-//    fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
 
 
     /////////////////////////////////////////
@@ -143,64 +136,6 @@ class EaterDataManager(
 
 
     /////////////////////////////////////////
-    /////////      Favorites         ////////
-    /////////////////////////////////////////
-
-    var favoritesDishList: List<Dish>? = null
-    fun getFavoritesLiveData() = favoritesDishLiveData
-    private val favoritesDishLiveData = MutableLiveData<List<Dish>>()
-
-    suspend fun refreshMyFavorites() {
-//        val result = eaterDataRepository.getFavorites(getLastFeedRequest())
-//        when (result.type) {
-//            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_SUCCESS -> {
-//                result.data?.let {
-//                    Log.d(TAG, "refreshMyFavorites - success")
-//                    favoritesDishLiveData.postValue(it)
-//                    favoritesDishList = it
-//                }
-//            }
-//            EaterDataRepository.EaterDataRepoStatus.GET_FAVORITES_FAILED -> {
-//                Log.d(TAG, "refreshMyFavorites - failed")
-//                favoritesDishLiveData.postValue(listOf())
-//                favoritesDishList = null
-//            }
-//            EaterDataRepository.EaterDataRepoStatus.WS_ERROR -> {
-//                Log.d(TAG, "refreshMyFavorites - es error")
-//
-//            }
-//            else -> {
-//
-//            }
-//        }
-    }
-
-//    fun getLastFeedRequest(): FeedRequest {
-//        //being used in NewOrderActivity, uses params to init new Order.
-//        var feedRequest = FeedRequest()
-//        val lastAddress = getFinalAddressLiveDataParam().value
-//        lastAddress?.let {
-//            //address
-//            if (lastAddress.id != null) {
-//                feedRequest.addressId = lastAddress.id
-//            } else {
-//                feedRequest.lat = lastAddress.lat
-//                feedRequest.lng = lastAddress.lng
-//            }
-//        }
-//
-//        //time
-//        feedRequest.timestamp = getDeliveryTimestamp()
-//
-//        return feedRequest
-//    }
-
-//    fun getDeliveryTimestamp(): String? {
-//        return deliveryTimeManager.getDeliveryTimestamp()
-//    }
-
-
-    /////////////////////////////////////////
     /////////      Triggers         /////////
     /////////////////////////////////////////
 
@@ -228,12 +163,6 @@ class EaterDataManager(
             }
         }
     }
-
-
-    /////////////////////////////////////////
-    ///////         Referrals         ///////
-    /////////////////////////////////////////
-
 
 
     /////////////////////////////////////////

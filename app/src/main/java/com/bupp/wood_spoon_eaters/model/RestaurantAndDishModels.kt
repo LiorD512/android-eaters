@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.model.*
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 

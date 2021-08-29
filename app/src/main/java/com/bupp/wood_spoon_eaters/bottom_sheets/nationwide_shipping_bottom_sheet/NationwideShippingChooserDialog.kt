@@ -12,16 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
-import com.bupp.wood_spoon_eaters.databinding.CountryChooserBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.NationwideShippingChooserDialogBinding
 import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {
+class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {
 
     private val binding: NationwideShippingChooserDialogBinding by viewBinding()
-    private var newSelectedItem: ShippingMethod? = null
     private var adapter: NationwideShippingChooserAdapter? = null
     private var listener: NationwideShippingChooserListener? = null
 
@@ -60,9 +58,6 @@ class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), Nationwi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val parent = view.parent as View
-//        parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
-
         initUi()
     }
 
@@ -97,7 +92,7 @@ class NationwideShippingChooserDialog() :  BottomSheetDialogFragment(), Nationwi
             this.listener = parentFragment as NationwideShippingChooserListener
         }
         else {
-            throw RuntimeException(context.toString() + " must implement NationwideShippingAdapterListener")
+            throw RuntimeException("$context must implement NationwideShippingAdapterListener")
         }
     }
 

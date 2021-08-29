@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
 import com.bupp.wood_spoon_eaters.databinding.TrackOrderItemDetailsViewBinding
 import com.bupp.wood_spoon_eaters.model.OrderItem
 

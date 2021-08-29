@@ -1,32 +1,23 @@
 package com.bupp.wood_spoon_eaters.managers
 
-import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.base_repos.CampaignRepositoryImpl
-import com.bupp.wood_spoon_eaters.network.base_repos.EaterDataRepositoryImpl
+import com.bupp.wood_spoon_eaters.model.Campaign
+import com.bupp.wood_spoon_eaters.model.UserInteractionStatus
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.repositories.CampaignRepository
-import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
-import com.bupp.wood_spoon_eaters.repositories.OrderRepository
-import com.bupp.wood_spoon_eaters.utils.Utils
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.parcelize.Parcelize
 
-class CampaignManager(private val campaignRepository: CampaignRepository, private val eaterDataManager: EaterDataManager) {
+class CampaignManager(private val campaignRepository: CampaignRepository) {
 
 
     private val campaignLiveData = MutableLiveData<List<Campaign>?>()
     fun getCampaignLiveData() = campaignLiveData
 
     var curCampaigns: List<Campaign>? = null
-
-    private var userDidDismissBanner = false
 
     private var referralToken: String? = null
     suspend fun setUserReferralToken(token: String? = null) {

@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details
 
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +18,6 @@ import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBindi
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
-import com.daasuu.bl.ArrowDirection
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -30,12 +31,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
     private var curOrderId: Long = -1
 
-//    var listener: SingleOrderDetailsListener? = null
-//    interface SingleOrderDetailsListener{
-//        fun onOrderAgainClick(orderId: Long){}
-//        fun onRateOrderClick(orderId: Long){}
-//        fun onReportOrderClick(orderId: Long){}
-//    }
 
     companion object {
         private const val SINGLE_ORDER_ARGS = "single_order_args"

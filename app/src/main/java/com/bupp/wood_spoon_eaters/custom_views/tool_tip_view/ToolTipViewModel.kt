@@ -1,4 +1,4 @@
-package com.example.matthias.mvvmcustomviewexample.custom
+package com.bupp.wood_spoon_eaters.custom_views.tool_tip_view
 
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import org.koin.core.component.KoinComponent

@@ -95,7 +95,7 @@ class LocationLiveData(val context: Context) : LiveData<AddressRequest>() {
 
     private fun getAddressRequestFromLocation(location: Location): AddressRequest? {
         var addresses: List<android.location.Address> = arrayListOf()
-        val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
+        val geocoder = Geocoder(context, Locale.getDefault())
 
         try {
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)

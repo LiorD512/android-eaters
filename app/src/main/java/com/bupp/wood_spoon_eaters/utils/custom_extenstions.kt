@@ -19,14 +19,6 @@ import androidx.navigation.Navigator
 import com.bupp.wood_spoon_eaters.R
 
 
-fun Fragment.showKeyboard() {
-    requireContext().let { activity?.showKeyboard(it) }
-}
-
-fun Fragment.hideKeyboard() {
-    view?.let { activity?.hideKeyboard(it) }
-}
-
 fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
 }
@@ -59,7 +51,7 @@ fun Fragment.showErrorToast(title: String, anchorView: ViewGroup) {
 }
 
 
-fun Context.showKeyboard(context: Context) {
+fun showKeyboard(context: Context) {
     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
         InputMethodManager.SHOW_FORCED,
         InputMethodManager.HIDE_IMPLICIT_ONLY

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,7 +21,6 @@ import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryTitleItemBinding
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
 import com.bupp.wood_spoon_eaters.views.OrderProgressBar
-import com.bupp.wood_spoon_eaters.views.WSSimpleBtn
 
 
 class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdapterListener) :
@@ -77,9 +75,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         }
     }
 
-    inner class SkeletonItemViewHolder(val binding: OrderHistoryItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    }
+    inner class SkeletonItemViewHolder(val binding: OrderHistoryItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root)
 
     inner class OrderItemViewHolder(val binding: OrdersHistoryOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val title: TextView = binding.orderHistoryItemChef

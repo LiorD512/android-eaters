@@ -2,12 +2,9 @@ package com.bupp.wood_spoon_eaters.common
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 
 class AppSettings(private val context: Context, private val sharedPreferences: SharedPreferences) {
 

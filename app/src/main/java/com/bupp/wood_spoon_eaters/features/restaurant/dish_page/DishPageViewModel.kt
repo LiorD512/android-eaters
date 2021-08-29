@@ -320,14 +320,6 @@ class DishPageViewModel(
         return data
     }
 
-    private fun getDishNoteData(note: String): Map<String, String> {
-        val data = mutableMapOf<String, String>()
-        data["dish_name"] = dishFullData.value?.name.toString()
-        data["dish_id"] = dishFullData.value?.id.toString()
-        data["note"] = note
-        return data
-    }
-
     companion object{
         const val TAG = "dishPageVM"
     }

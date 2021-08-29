@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.views.swipeable_dish_item
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
@@ -44,7 +43,7 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
                                     child.translationX = 0f
                                 }
 
-                                right = child.width.toInt()
+                                right = child.width
                                 if (child.translationX < 0) {
                                     left = right - abs(child.translationX.toInt())
                                 }

@@ -24,10 +24,10 @@ public class CustomItemAnimator extends SimpleItemAnimator {
 
     private static TimeInterpolator sDefaultInterpolator;
 
-    private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
-    private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<>();
-    private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
-    private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<>();
+    final private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
+    final private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<>();
+    final private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
+    final private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<>();
 
     ArrayList<ArrayList<RecyclerView.ViewHolder>> mAdditionsList = new ArrayList<>();
     ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<>();

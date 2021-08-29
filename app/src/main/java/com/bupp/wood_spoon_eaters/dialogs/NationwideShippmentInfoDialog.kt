@@ -17,7 +17,7 @@ class NationwideShippmentInfoDialog: DialogFragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

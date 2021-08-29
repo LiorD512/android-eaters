@@ -2,9 +2,7 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import android.util.Log
-import androidx.annotation.Nullable
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
-import com.bupp.wood_spoon_eaters.features.main.order_history.OrderHistoryViewType
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -110,7 +108,7 @@ data class Order (
         return curOrderStage
     }
 
-    fun getOrderStateTitle(orderState: OrderState): String?{
+    fun getOrderStateTitle(orderState: OrderState): String{
         return when(orderState){
             OrderState.NONE -> "Your order"
             OrderState.RECEIVED -> "Order confirmed"
@@ -120,7 +118,7 @@ data class Order (
         }
     }
 
-    fun getOrderStateSubTitle(orderState: OrderState): String?{
+    fun getOrderStateSubTitle(orderState: OrderState): String{
         return when(orderState){
             OrderState.NONE -> "Waiting for home chef confirmation"
             OrderState.RECEIVED, OrderState.PREPARED, OrderState.ON_THE_WAY, OrderState.DELIVERED -> {

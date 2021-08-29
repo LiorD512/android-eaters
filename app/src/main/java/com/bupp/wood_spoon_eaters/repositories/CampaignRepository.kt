@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.ServerResponse

@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +36,7 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
             } else {
                 eaterPrefs.add(notificationGroup.id)
             }
-            Log.d("wowSettings", "list ${eaterPrefs}")
+            Log.d("wowSettings", "list $eaterPrefs")
             listener.onNotificationChange(eaterPrefs)
         }
 
@@ -62,13 +60,9 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
         notifyDataSetChanged()
     }
 
-    fun getSelectedIds(): List<Long>{
-        return eaterPrefs
-    }
 }
 
 class ItemViewHolder(view: NotificationGroupItemBinding) : RecyclerView.ViewHolder(view.root) {
-    val mainLayout: LinearLayout = view.NotificationGroupMainLayout
     val name: TextView = view.NotificationGroupName
     val description: TextView = view.NotificationGroupDescription
     val switch: SwitchCompat = view.NotificationGroupSwitch

@@ -45,13 +45,6 @@ android {
         }
     }
 
-    sourceSets {
-        main {
-            java {
-                srcDirs += 'build/generated/source/navigation-args'
-            }
-        }
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -168,9 +161,9 @@ dependencies {
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
 
     //exo player
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.2'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.2'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.15.0'
 
     //camera util
     implementation 'com.github.dhaval2404:imagepicker:1.8'

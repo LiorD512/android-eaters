@@ -39,7 +39,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val attr = context.obtainStyledAttributes(attrs, R.styleable.WSFloatingButton)
 
                 val type = attr.getInt(R.styleable.WSFloatingButton_floating_button_type, 0)
-                type.let { updateUiByType(it) }
+                updateUiByType(type)
 
                 attr.recycle()
             }
@@ -73,7 +73,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun updateFloatingCartButton(restaurantName: String, quantity: Int) {
         Log.d(TAG, "updateFloatingCartButton: $quantity")
         if (quantity > 0) {
-            binding.wsFloatingBtnSubTitle.text = "$restaurantName"
+            binding.wsFloatingBtnSubTitle.text = restaurantName
             binding.wsFloatingBtnPrice.text = "$quantity"
             binding.floatingCartBtnLayout.visibility = View.VISIBLE
             if (!isShowing) {

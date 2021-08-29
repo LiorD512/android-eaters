@@ -9,7 +9,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.common.*
@@ -21,19 +20,16 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrac
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
-//import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
-import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
-import com.bupp.wood_spoon_eaters.views.CartBottomBar
 import com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
@@ -48,8 +44,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
-    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener,
-    CartBottomBar.OrderBottomBatListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
+    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
     WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener, MainActivityTabLayout.MainActivityTabLayoutListener {
 
     lateinit var binding: ActivityMainBinding
@@ -68,8 +63,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         initMainViewPager()
 
         initUiRelatedProcesses()
-
-        loadFeedProgressBarFragment()
     }
 
     fun initUi(){
@@ -87,18 +80,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-
-
-    private var lastFragmentTag: String? = null
-    private var currentFragmentTag: String? = null
-
     private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
         Log.d(TAG, "Activity For Result - location")
-//        binding.mainActHeaderView.enableLocationClick(true)
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            //check if location changed and refresh ui
-        }
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val data = result.data
+//        }
     }
     private val afterOrderResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
         Log.d(TAG, "Activity For Result - new order")
@@ -135,8 +121,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             viewModel.forceFeedRefresh()
             refreshActiveCampaigns()
             binding.mainActBottomTabLayout.forceOrdersClick()
-
-//            viewModel.refreshFloatingCartBtn()
         }
     }
 
@@ -171,12 +155,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    private fun loadFeedProgressBarFragment() {
-//        loadFragment(FeedLoaderFragment(), Constants.FEED_LOADER_TAG)
-//        FeedLoaderDialog().show(supportFragmentManager, Constants.FEED_LOADER_TAG)
-    }
-
-
     ////////////////////////////////////////////////
     ///////       Ui processes - start       ///////
     ////////////////////////////////////////////////
@@ -196,19 +174,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             if (cookId > 0) {
                 viewModel.getRestaurant(cookId)
                 viewModel.logDeepLinkEvent(cookId)
-            } else if (menuItemId > 0) {
-                if (viewModel.hasAddress()) {
-                } else {
-                    Log.d("wowMain", "brnach intent observing address change")
-//                    viewModel.waitingForAddressAction = true
-                    viewModel.addressUpdateActionEvent.observe(this, Observer { newAddressEvent ->
-                        Log.d("wowMain", "brnach intent observing address - ON CHANGE")
-                        if (newAddressEvent != null) {
-//                            handlePb(false)
-//                            loadNewOrderActivity(menuItemId)
-                        }
-                    })
-                }
             }
         }
     }
@@ -231,31 +196,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.startRestaurantActivity.observe(this, {
             startRestaurantActivity(it)
         })
-        //header event
-//        viewModel.getFinalAddressParams().observe(this, {
-//            binding.mainActHeaderView.setLocationTitle(it?.shortTitle)
-//        })
-//        viewModel.getDeliveryTimeLiveData().observe(this, {
-//            binding.mainActHeaderView.setDeliveryTime(it?.deliveryDateUi)
-//        })
-
-        viewModel.dishClickEvent.observe(this, {
-            val event = it.getContentIfNotHandled()
-            event?.let {
-
-            }
-        })
-
-        viewModel.addressUpdateEvent.observe(this, { newAddressEvent ->
-            if (newAddressEvent != null) {
-                if (newAddressEvent.currentAddress != null) {
-                    refreshFeedIfNecessary()
-                }
-            }
-        })
-        viewModel.mainBottomBarEvent.observe(this, {
-            handleMainBottomBarUi(it)
-        })
         viewModel.getTraceableOrder.observe(this, { traceableOrders ->
             handleTraceableOrderData(traceableOrders)
         })
@@ -267,14 +207,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
             }
         })
-
-        viewModel.getShareCampaignEvent.observe(this, {
-            it?.let {
-                SharingCampaignDialog.newInstance(it).show(supportFragmentManager, Constants.SHARE_CAMPAIGN_DIALOG)
-            }
-        })
         viewModel.campaignLiveData.observe(this, {
-//            Log.d(TAG, "campaignLiveData: $it")
             it?.let {
                 handleCampaignData(it)
             }
@@ -372,73 +305,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     }
 
-    private fun handleMainBottomBarUi(bottomBarEvent: MainViewModel.MainBottomBarEvent?) {
-//        if (bottomBarEvent?.hasBoth == true) {
-//            val totalPrice = bottomBarEvent.totalPrice
-//            binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT, price = totalPrice)
-//        } else {
-//            bottomBarEvent?.activeOrders?.let {
-//                binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, itemCount = it.size)
-//            }
-//            if (bottomBarEvent?.hasPendingOrder == true) {
-//                val totalPrice = bottomBarEvent.totalPrice
-//                binding.mainActOrdersBB.updateStatusBottomBarByType(type = CartBottomBar.BottomBarTypes.PROCEED_TO_CHECKOUT, price = totalPrice)
-//            }
-//        }
-    }
-
-
-    private fun refreshFeedIfNecessary() {
-        if (currentFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG || lastFragmentTag == Constants.NO_LOCATIONS_AVAILABLE_TAG) {
-//            loadFeed()
-        }
-    }
-
-    override fun onCartBottomBarOrdersClick(type: CartBottomBar.BottomBarTypes) {
-        when (type) {
-            CartBottomBar.BottomBarTypes.TRACK_YOUR_ORDER, CartBottomBar.BottomBarTypes.TRACK_ORDER_OR_CHECKOUT -> {
-                //show track your order dialog
-                ActiveOrderTrackerDialog().show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
-            }
-        }
-    }
-
-    override fun onBottomBarCheckoutClick() {
-//        afterOrderResult.launch(Intent(this, NewOrderActivity::class.java).putExtra(Constants.NEW_ORDER_IS_CHECKOUT, true))
-    }
-
     override fun onContactUsClick() {
         val phone = viewModel.getContactUsPhoneNumber()
         Utils.callPhone(this, phone)
     }
-
-//    private fun loadFragment(fragment: Fragment, tag: String) {
-////        // todo - check status bar status??
-////        lastFragmentTag = currentFragmentTag
-////        currentFragmentTag = tag
-////        supportFragmentManager.beginTransaction()
-////            .replace(R.id.mainActContainer, fragment, tag)
-////            .commit()
-//    }
-//
-//    private fun getFragmentByTag(tag: String): Fragment? {
-//        val fragmentManager = this@MainActivity.supportFragmentManager
-//        val fragments = fragmentManager.fragments
-//        for (fragment in fragments) {
-//            if (fragment.tag == tag)
-//                return fragment
-//        }
-//        return null
-//    }
-
-
-//    fun handlePb(shouldShow: Boolean) {
-//        if (shouldShow) {
-//            mainActPb.show()
-//        } else {
-//            mainActPb.hide()
-//        }
-//    }
 
 
     //fragment and sub features
@@ -466,35 +336,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-//    override fun handleHeaderSep(shouldShow: Boolean) {
-//        Log.d(TAG, "handleHeaderSep: $shouldShow")
-//        binding.headerCard.elevation = if (shouldShow) Utils.toPx(5).toFloat() else 0f
-//    }
-//
-//    private fun loadFeed() {
-//        loadFragment(FeedFragment.newInstance(), Constants.FEED_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
-//    }
-//
-//    private fun loadSearchFragment() {
-//        loadFragment(SearchFragment.newInstance(), Constants.SEARCH_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_SEARCH)
-//    }
-//
-//    fun loadMyProfile() {
-//        loadFragment(MyProfileFragment.newInstance(), Constants.MY_PROFILE_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_CLOSE_NO_TITLE)
-//    }
-//
-//    fun loadEditMyProfile() {
-////        RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
-//        loadFragment(EditMyProfileFragment.newInstance(), Constants.EDIT_MY_PROFILE_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Hey ${viewModel.getUserName()}!")
-//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
                     MTLogger.c(TAG, "Stripe")
@@ -507,37 +351,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 }
 
             }
-//        }
     }
-
-
-//    fun loadReport(orderId: Long) {
-////        loadFragment(ReportIssueFragment.newInstance(orderId), Constants.REPORT_TAG)
-////        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Report issue")
-//    }
-//
-//    fun loadRateOrder(orderId: Long) {
-////        RateLastOrderDialog(orderId, this).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
-//    }
-//
-////    override fun onRatingDone() {
-//////        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
-////        if (getFragmentByTag(Constants.ORDER_HISTORY_TAG) != null) {
-////            (getFragmentByTag(Constants.ORDER_HISTORY_TAG) as OrdersHistoryFragment).onRatingDone()
-////        }
-////    }
-//
-//    fun loadSettingsFragment() {
-//
-////        loadFragment(SettingsFragment.newInstance(), Constants.SETTINGS_TAG)
-////        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Location and Communication settings")
-//    }
-
-//    fun loadOrderHistoryFragment() {
-//        loadFragment(OrdersHistoryFragment.newInstance(), Constants.ORDER_HISTORY_TAG)
-//        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_BACK_TITLE, "Order History")
-//    }
-
 
     override fun onTipDone(tipAmount: Int) {
         Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
@@ -556,29 +370,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
 
-    fun loadDishOfferedDialog() {//todo - fix
-//        NewSuggestionSuccessDialog().show(supportFragmentManager, Constants.DISH_OFFERED_TAG)
-//        if (getFragmentByTag(Constants.SEARCH_TAG) != null) {
-//            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged("")
-//        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
-//            invokeLocationAction()
             }
-//            Constants.LOCATION_PERMISSION_REQUEST_CODE -> {
-//                Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
-//                if(grantResults.isNotEmpty()){
-//                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                        viewModel.startLocationUpdates()
-//                    } else {
-//                        viewModel.initLocationFalse()
-//                    }
-//                }
-//            }
             Constants.PHONE_CALL_PERMISSION_REQUEST_CODE -> {
                 Log.d("wowMainVM", "onRequestPermissionsResult: LOCATION_PERMISSION_REQUEST_CODE")
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -602,8 +398,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         startActivity(smsIntent)
     }
 
-//
-
 
     //HeaderView Listener interface
     override fun onHeaderBackClick() {
@@ -614,126 +408,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         onBackPressed()
     }
 
-    override fun onHeaderSearchClick() {
-//        loadSearchFragment()
-    }
-
-    override fun onHeaderSettingsClick() {
-//        loadSettingsFragment()
-    }
-
-    override fun onHeaderFilterClick() {
-//        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
-//            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).openFilterDialog()
-//        }
-    }
-
-    override fun onHeaderTimeClick() {
-//        val timePickerBottomSheet = TimePickerBottomSheet()
-//        timePickerBottomSheet.show(supportFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
-    }
-
-    override fun onHeaderAddressClick() {
-//        updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
-//        binding.mainActHeaderView.enableLocationClick(false)
-    }
-
-
-    override fun onHeaderTextChange(str: String) {
-//        if (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment? != null) {
-//            (getFragmentByTag(Constants.SEARCH_TAG) as SearchFragment).onSearchInputChanged(str)
-//        }
-    }
-
-    fun setHeaderViewSaveBtnClickable(isClickable: Boolean) {
-//        binding.mainActHeaderView.setSaveButtonClickable(isClickable)
-    }
-
-
-    override fun onHeaderSaveClick() {
-//        if (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) != null) {
-//            (getFragmentByTag(Constants.EDIT_MY_PROFILE_TAG) as EditMyProfileFragment).saveEaterDetails()
-//        }
-    }
-
-    override fun onHeaderProfileClick() {
-//        loadMyProfile()
-    }
-
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-//        when (currentFragmentTag) {
-//            Constants.ADD_NEW_ADDRESS_TAG -> {
-//                when (lastFragmentTag) {
-//                    Constants.MY_PROFILE_TAG -> {
-//                        loadMyProfile()
-//                    }
-//                    Constants.DELIVERY_DETAILS_TAG -> {
-//                    }
-//                }
-//            }
-//            Constants.SETTINGS_TAG, Constants.EDIT_MY_PROFILE_TAG,
-//            Constants.SUPPORT_TAG -> {
-//                loadMyProfile()
-//            }
-//            Constants.REPORT_TAG -> {
-//                loadOrderHistoryFragment()
-//            }
-//            Constants.DELIVERY_DETAILS_TAG -> {
-//                when (lastFragmentTag) {
-//                    Constants.NO_LOCATIONS_AVAILABLE_TAG -> {
-//                        binding.mainActHeaderView.setType(Constants.HEADER_VIEW_TYPE_FEED)
-//                    }
-//                    else -> {
-////                        updateAddressTimeView()
-//                        loadFeed()
-//                    }
-//                }
-//            }
-//            Constants.ORDER_HISTORY_TAG -> {
-//                loadMyProfile()
-//            }
-//            Constants.ORDER_DETAILS_TAG -> {
-//                loadOrderHistoryFragment()
-//            }
-//
-//            else -> {
-//                loadFeed()
-//            }
-//        }
-    }
-
-    fun updateSearchBarTitle(str: String) {
-//        binding.mainActHeaderView.updateSearchTitle(str)
-    }
-
-//    fun startPaymentMethodActivity() {
-//        PaymentMethodsActivityStarter(this).startForResult(
-//            PaymentMethodsActivityStarter.Args.Builder()
-//                .build()
-//        )
-//    }
-
-
-//    fun updateFilterUi(isFiltered: Boolean) {
-//        binding.mainActHeaderView.updateFilterUi(isFiltered)
-//    }
-//
-//
-//    fun onReportIssueDone() {
-//        loadFeed()
-//        ThankYouDialog().show(supportFragmentManager, Constants.THANK_YOU_DIALOG_TAG)
-//    }
-//
-//    fun refreshUserUi() {
-//        binding.mainActHeaderView.refreshUserUi(viewModel.getCurrentEater())
-//    }
-
-    companion object {
-        const val TAG = "wowMainAct"
-    }
-
     override fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         viewModel.onMediaUtilsResultSuccess(result)
     }
@@ -742,5 +416,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.scrollFeedToTop()
     }
 
+    companion object {
+        const val TAG = "wowMainAct"
+    }
 
 }

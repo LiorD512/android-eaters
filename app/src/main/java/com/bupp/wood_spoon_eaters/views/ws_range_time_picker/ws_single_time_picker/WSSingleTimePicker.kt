@@ -15,10 +15,9 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithLi
 import com.bupp.wood_spoon_eaters.databinding.WsSingleTimePickerBinding
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.DeliveryDates
-import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
-import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.*
-import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSSingleTimePicker
+import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSRangeTimePickerViewModel
+import com.bupp.wood_spoon_eaters.views.ws_range_time_picker.WSTimePickerStringAdapter
 import java.util.*
 
 

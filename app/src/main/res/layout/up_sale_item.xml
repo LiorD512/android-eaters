@@ -54,14 +54,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/upSaleItemName"
                 tools:text="Labaneh is soft cheese, similar in texture to cream cheese, made from strained..." />
 
-        <com.bupp.wood_spoon_eaters.views.dish_tags_view.DishTagsView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:isScrollable="false"
-                android:layout_marginTop="5.2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/upSaleItemImg"
-                app:layout_constraintEnd_toEndOf="@+id/upSaleItemPrice"
-                app:layout_constraintStart_toStartOf="@+id/upSaleItemDescription"
-                app:layout_constraintTop_toBottomOf="@+id/upSaleItemDescription" />
+<!--        <DishTags-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:isScrollable="false"-->
+<!--                android:layout_marginTop="5.2dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/upSaleItemImg"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/upSaleItemPrice"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/upSaleItemDescription"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/upSaleItemDescription" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

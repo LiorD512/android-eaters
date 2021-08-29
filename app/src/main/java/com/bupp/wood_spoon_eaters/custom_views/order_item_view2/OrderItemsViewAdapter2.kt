@@ -2,24 +2,18 @@ package com.bupp.wood_spoon_eaters.custom_views.order_item_view2
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
-import com.bupp.wood_spoon_eaters.databinding.OrderItemViewBinding
 import com.bupp.wood_spoon_eaters.databinding.OrderItemViewFeed2VerBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -65,7 +59,7 @@ class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewA
             val dish: Dish = orderItem.dish
 
             counter.text = "${orderItem.quantity}"
-            name.text = "${dish.name}"
+            name.text = dish.name
 
             var price = 0.0
             orderItem.price.value?.let{

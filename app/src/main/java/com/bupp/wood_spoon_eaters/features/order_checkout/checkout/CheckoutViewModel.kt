@@ -15,11 +15,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager, private val eventsManager: EventsManager) :
+class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager) :
     ViewModel() {
 
-
-    //////todo - add this -> eventsManager.proceedToCheckoutEvent()
 
     val progressData = ProgressData()
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
@@ -82,6 +80,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
                     handleWsError(result.wsError)
                 }
+                else -> {}
             }
         }
     }

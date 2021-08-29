@@ -5,25 +5,20 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
-import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
-import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
-import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.stripe.android.model.PaymentMethod
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.delete_account.DeleteAccountBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
-import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
+import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
+import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -31,12 +26,13 @@ import com.bupp.wood_spoon_eaters.views.ShareBanner
 import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.bupp.wood_spoon_eaters.views.horizontal_dietary_view.HorizontalDietaryView
+import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
-    SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
-    FavoritesView.FavoritesViewListener, CuisinesChooserDialog.CuisinesChooserListener,
+    LogoutDialog.LogoutDialogListener, CuisinesChooserDialog.CuisinesChooserListener,
     HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageViewListener {
 
     val binding: MyProfileFragmentBinding by viewBinding()
@@ -127,7 +123,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             handleCampaign(it)
         })
         viewModel.versionLiveData.observe(viewLifecycleOwner, {
-            binding.myProfileFragVersion.text = "$it"
+            binding.myProfileFragVersion.text = it
         })
         mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
             Log.d(TAG, "stripeInitializationEvent status: $it")
@@ -205,23 +201,12 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     }
 
-    override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let {
-            mainViewModel.onDishClick(it.id)
-        }
-    }
-
     override fun onCuisineChoose(selectedCuisines: List<SelectableIcon>) {
         viewModel.updateClientAccount(cuisineIcons = selectedCuisines, forceUpdate = true)
     }
 
-
     override fun logout() {
         mainViewModel.logout()
-    }
-
-    private fun openOrderHistoryDialog() {
-        //remove this
     }
 
     override fun onCustomDetailsClick(type: Int) {
@@ -250,21 +235,12 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         if (card != null) {
             Log.d("wowMyProfile", "updateCustomerPaymentMethod: ${paymentMethod.id}")
             binding.myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
-            viewModel.updateUserCustomerCard(paymentMethod)
             binding.myProfileFragPb.hide()
         }
     }
 
     private fun setEmptyPaymentMethod() {
         binding.myProfileFragPayment.updateSubTitle("Insert payment method")
-    }
-
-    fun onAddressChooserSelected() {
-        viewModel.getUserDetails()
-    }
-
-    override fun onWorldwideInfoClick() {
-        NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
     }
 
     override fun onShareBannerClick(campaign: Campaign?) {

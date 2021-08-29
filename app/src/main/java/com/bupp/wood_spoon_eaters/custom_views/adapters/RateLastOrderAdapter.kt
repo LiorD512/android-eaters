@@ -43,9 +43,9 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: List<Or
     }
 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
-        val orderItem: OrderItem? = orderItems!![position]
+        val orderItem: OrderItem = orderItems!![position]
 
-        Glide.with(context).load(orderItem!!.dish.thumbnail).apply(RequestOptions.circleCropTransform())
+        Glide.with(context).load(orderItem.dish.thumbnail).apply(RequestOptions.circleCropTransform())
             .into(holder.image)
 
         holder.name.text = "${orderItem.dish.name} x${orderItem.quantity}"

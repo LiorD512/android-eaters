@@ -23,7 +23,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
     val binding: CancelOrderDialogLayoutBinding by viewBinding()
     var listener: CancelOrderDialogListener? = null
-    val viewModel: CancelOrderViewModel by viewModel<CancelOrderViewModel>()
+    val viewModel: CancelOrderViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding) {
             cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
             cancelOrderDialogKeepBtn.setOnClickListener { dismiss() }
             cancelOrderDialogCancelBtn.setOnClickListener { cancelOrder() }
@@ -52,17 +52,17 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
                 Constants.CANCEL_ORDER_STAGE_1 -> {
                     cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
                     cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_1_body)
-    //                cancelOrderDialogReason.visibility = View.VISIBLE
+                    //                cancelOrderDialogReason.visibility = View.VISIBLE
                 }
                 Constants.CANCEL_ORDER_STAGE_2 -> {
                     cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_2_title)
                     cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_2_body)
-    //                cancelOrderDialogReason.visibility = View.GONE
+                    //                cancelOrderDialogReason.visibility = View.GONE
                 }
                 Constants.CANCEL_ORDER_STAGE_3 -> {
                     cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
                     cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_3_body)
-    //                cancelOrderDialogReason.visibility = View.GONE
+                    //                cancelOrderDialogReason.visibility = View.GONE
                 }
             }
 
@@ -80,7 +80,6 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
     private fun cancelOrder() {
         binding.cancelOrderPb.show()
-        val note = ""//cancelOrderDialogReason.getText()
         viewModel.cancelOrder(orderId)
     }
 

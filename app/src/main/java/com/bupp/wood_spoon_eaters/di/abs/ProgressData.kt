@@ -16,10 +16,6 @@ class ProgressData : LiveData<Boolean>() {
         value = progressCounter.get() > 0
     }
 
-    val progressCount = {
-        progressCounter.get()
-    }
-
     fun startProgress() {
         postValue(progressCounter.incrementAndGet() > 0)
     }

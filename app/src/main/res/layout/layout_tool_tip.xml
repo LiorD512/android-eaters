@@ -24,7 +24,7 @@
 
         <TextView
                 tools:text="Service Fee"
-                style="@style/SemiBold15Dark"
+                style="@style/LatoBlack15Dark"
                 android:layout_gravity="center"
                 android:background="@color/white"
                 android:id="@+id/toolTipTextTitle"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
-                style="@style/Reg15Dark"
+                style="@style/LatoReg15Dark"
                 android:id="@+id/toolTipText"
                 tools:text="The service fee goes toward helping us pay couriers, provide quality customer support and logistics, process payments, and other costs associated with running our service."
                 android:layout_gravity="center"

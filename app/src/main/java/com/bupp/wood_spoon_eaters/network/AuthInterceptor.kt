@@ -11,14 +11,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
 
     private val TAG = "wowAuthInterceptor"
-    private var apiService: ApiService? = null
     private var storedAuthToken: String? = null
 
     private val lock = ReentrantReadWriteLock(true)
-
-    fun setApiService(apiService: ApiService) {
-        this.apiService = apiService
-    }
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

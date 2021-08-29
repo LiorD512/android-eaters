@@ -1,36 +1,11 @@
 package com.bupp.wood_spoon_eaters.managers.location
 
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.IntentFilter
-import android.location.Location
-import android.os.Looper
-import android.provider.Settings
 import android.util.Log
-import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.dialogs.OrderUpdateErrorDialog
-import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.Address
-import com.bupp.wood_spoon_eaters.model.City
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
-
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsResponse
-import com.google.android.gms.location.LocationSettingsStatusCodes
-import com.google.android.gms.location.SettingsClient
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import kotlin.math.ln
 
 
 /**

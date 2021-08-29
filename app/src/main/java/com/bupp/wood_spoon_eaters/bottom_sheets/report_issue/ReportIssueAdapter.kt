@@ -1,14 +1,11 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.report_issue
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.custom_views.report_issues.ReportIssueView
-import com.bupp.wood_spoon_eaters.databinding.GridStackableTextViewItemBinding
 import com.bupp.wood_spoon_eaters.databinding.ReportIssueItemBinding
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.ReportTopic

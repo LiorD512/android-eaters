@@ -36,7 +36,6 @@ private val eventsManager: EventsManager) : ViewModel() {
     }
 
     //stripe
-    val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
     fun startStripeOrReInit(){
         MTLogger.c(TAG, "startStripeOrReInit")
         if(paymentManager.hasStripeInitialized){

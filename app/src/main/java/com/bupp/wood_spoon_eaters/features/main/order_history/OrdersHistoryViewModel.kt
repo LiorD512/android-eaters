@@ -1,8 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
-//import com.bupp.wood_spoon_eaters.model.Report
-import android.content.Context
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
-import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -18,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager) : ViewModel() {
 
-    private var isUpdating: Boolean = false
     private var refreshRepeatedJob: Job? = null
     val TAG = "wowOrderHistoryVM"
 
@@ -27,7 +22,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     val orderLiveData = MutableLiveData<List<OrderHistoryBaseItem>>()
 
 
-    fun initList() {
+    private fun initList() {
         orderListData[SECTION_ACTIVE] = mutableListOf()
         orderListData[SECTION_ARCHIVE] = mutableListOf()
         orderLiveData.postValue(getSkeletonList().toMutableList())
@@ -40,13 +35,13 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         startSilentUpdate()
     }
 
-    fun getSkeletonList(): MutableList<OrderAdapterItemSkeleton> {
+    private fun getSkeletonList(): MutableList<OrderAdapterItemSkeleton> {
         val skeletons = mutableListOf<OrderAdapterItemSkeleton>()
         skeletons.add(OrderAdapterItemSkeleton())
         return skeletons
     }
 
-    fun getArchivedOrders() {
+    private fun getArchivedOrders() {
         viewModelScope.launch {
             val result = orderRepository.getAllOrders()
             when (result.type) {
@@ -140,7 +135,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         }
     }
 
-    fun startSilentUpdate() {
+    private fun startSilentUpdate() {
         if (refreshRepeatedJob == null) {
             refreshRepeatedJob = repeatRequest()
         }
@@ -157,8 +152,6 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         const val TAG = "wowOrderHistoryVM"
         const val SECTION_ACTIVE = 0
         const val SECTION_ARCHIVE = 1
-        const val TYPE_ACTIVE_ORDER = "active"
-        const val TYPE_ARCHIVE_ORDER = "archive"
     }
 
 }

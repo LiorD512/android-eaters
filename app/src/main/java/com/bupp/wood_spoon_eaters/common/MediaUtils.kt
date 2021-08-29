@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.common
 
 import android.Manifest
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -58,8 +57,10 @@ class MediaUtils(activity: FragmentActivity? = null, listener: MediaUtilListener
         Log.d(TAG, "Activity For Result - cameraResult")
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             Log.d("wowFiles", "photoURI: $photoURI")
-            val file = File(currentPhotoPath)
-            listener.onMediaUtilResult(MediaUtilResult(MediaUtilsType.MEDIA_UTILS_PHOTO, photoURI, file, currentPhotoPath))
+            currentPhotoPath?.let{
+                val file = File(it)
+                listener.onMediaUtilResult(MediaUtilResult(MediaUtilsType.MEDIA_UTILS_PHOTO, photoURI, file, currentPhotoPath))
+            }
         }
     }
 
@@ -95,12 +96,6 @@ class MediaUtils(activity: FragmentActivity? = null, listener: MediaUtilListener
     fun startPhotoFetcher() {
         activity?.let{
             isPhotoMode = true
-            checkMediaPermission()
-        }
-    }
-    fun startVideoFetcher() {
-        activity?.let{
-            isPhotoMode = false
             checkMediaPermission()
         }
     }

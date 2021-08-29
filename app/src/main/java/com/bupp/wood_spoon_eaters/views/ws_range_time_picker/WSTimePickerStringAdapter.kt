@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.WsTimePickerCookingSlotItemBinding
-import com.bupp.wood_spoon_eaters.databinding.WsTimePickerSingleItemBinding
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 
 class WSTimePickerStringAdapter :
     ListAdapter<Pair<String?, String?>, RecyclerView.ViewHolder>(DiffCallback()) {

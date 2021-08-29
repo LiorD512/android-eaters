@@ -7,7 +7,6 @@ import com.bupp.wood_spoon_eaters.model.Device
 import com.bupp.wood_spoon_eaters.model.DeviceDetails
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -54,7 +53,7 @@ class FcmManager(val apiService: ApiService) : MyFirebaseMessagingService.Fireba
     private suspend fun handleFcmToken(token: String) = withContext(Dispatchers.IO) {
         try {
             val deviceInfo = getDeviceDetails(token)
-            Log.d(TAG,"deviceInfo: ${deviceInfo}")
+            Log.d(TAG,"deviceInfo: $deviceInfo")
             apiService.postDeviceDetails(deviceInfo)
         } catch (ex: Exception) {
             ex.printStackTrace()

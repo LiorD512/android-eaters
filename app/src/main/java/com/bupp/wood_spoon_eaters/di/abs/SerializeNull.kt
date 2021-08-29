@@ -6,7 +6,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonQualifier
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import java.lang.annotation.RetentionPolicy
 import java.lang.reflect.Type
 
 @Retention(AnnotationRetention.RUNTIME)

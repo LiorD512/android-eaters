@@ -17,7 +17,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
 import com.bupp.wood_spoon_eaters.databinding.FragmentActiveOrderTrackerBinding
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderFragment
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -37,17 +36,6 @@ class ActiveOrderTrackerDialog : DialogFragment(),
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
     }
-//
-//    companion object {
-//        const val DIALOG_ARGS = "trackables_data"
-//        @JvmStatic
-//        fun newInstance(trackablesOrder: ArrayList<Order>) =
-//            ActiveOrderTrackerDialog().apply {
-//                arguments = Bundle().apply {
-//                    putParcelableArrayList(DIALOG_ARGS, trackablesOrder)
-//                }
-//            }
-//    }
 
     val binding: FragmentActiveOrderTrackerBinding by viewBinding()
     private lateinit var adapter: OrdersPagerAdapter

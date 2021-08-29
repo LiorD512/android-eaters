@@ -1,13 +1,11 @@
 package com.bupp.wood_spoon_eaters.dialogs.super_user
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
@@ -32,8 +30,7 @@ class SuperUserDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_super_user, null)
-        return view
+        return inflater.inflate(R.layout.dialog_super_user, null)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

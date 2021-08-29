@@ -28,37 +28,7 @@ sealed class Search(
     abstract val id: Long?
     abstract val results: List<Parcelable>?
     abstract val pagination: Pagination
-    fun cooksCount(): Int {
-        results?.let{
-            when (resource) {
-                Constants.RESOURCE_TYPE_COOK -> {
-                    return results!!.size
-                }
-                else -> return 0
-            }
-        }
-        return 0
-    }
 
-    fun dishCount(): Int {
-        results?.let{
-            when (resource) {
-                Constants.RESOURCE_TYPE_DISH -> {
-                    return results!!.size
-                }
-                else -> return 0
-            }
-        }
-        return 0
-    }
-
-    fun hasCooks(): Boolean {
-        return cooksCount() > 0
-    }
-
-    fun hasDishes(): Boolean {
-        return dishCount() > 0
-    }
 }
 
 @Parcelize
@@ -142,8 +112,4 @@ data class Dish(
         }
     }
 
-    fun isSoldOut(): Boolean {
-        val quantityLeft = (menuItem?.quantity ?: 0) - (menuItem?.unitsSold ?: 0)
-        return quantityLeft <= 0
-    }
 }

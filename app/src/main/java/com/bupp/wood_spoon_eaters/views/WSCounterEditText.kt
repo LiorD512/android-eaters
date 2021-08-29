@@ -22,7 +22,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var maxChar = -1
 
     private var binding: WsCounterEditTextBinding = WsCounterEditTextBinding.inflate(LayoutInflater.from(context), this, true)
-    private var isEditable = false
     private var listener: WSCounterListener? = null
 
     init {
@@ -121,15 +120,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-
     fun showError() {
         with(binding) {
             Utils.vibrate(context)
             AnimationUtil().shakeView(counterEditTextLayout)
         }
     }
-
-
 
     fun getText(): String? {
         var textOrNull: String? = null
@@ -143,21 +139,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         text?.let {
             binding.counterEditTextInput.setText(text)
         }
-    }
-
-    fun checkIfValidAndSHowError(): Boolean {
-        val text = binding.counterEditTextInput.text
-        if(minChar > -1){
-            if(text.length < minChar){
-                showError()
-                return false
-            }
-        }
-        if (text.isNullOrEmpty()) {
-            showError()
-            return false
-        }
-        return true
     }
 
 }

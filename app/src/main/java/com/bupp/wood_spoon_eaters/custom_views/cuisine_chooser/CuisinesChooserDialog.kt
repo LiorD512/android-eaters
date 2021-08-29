@@ -7,10 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -22,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CuisinesChooserDialog(val listener: CuisinesChooserListener) : DialogFragment(), HeaderView.HeaderViewListener {
 
     private lateinit var adapter: CuisineChooserAdapter
-    private var selectedCuisine: MutableList<SelectableIcon>? = null
     val binding: FragmentCuisinesChooserBinding by viewBinding()
     val viewModel by viewModel<CuisineChooserViewModel>()
 
@@ -37,7 +33,7 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener) : DialogFragm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_cuisines_chooser, null)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)));
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
 
@@ -67,10 +63,6 @@ class CuisinesChooserDialog(val listener: CuisinesChooserListener) : DialogFragm
             cuisineChooserList.addItemDecoration(DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider)))
             cuisineChooserList.adapter = adapter
         }
-    }
-
-    fun setSelectedCuisine(selectedCuisine: List<SelectableIcon>?){
-        this.selectedCuisine = selectedCuisine?.toMutableList()
     }
 
     override fun onHeaderBackClick() {

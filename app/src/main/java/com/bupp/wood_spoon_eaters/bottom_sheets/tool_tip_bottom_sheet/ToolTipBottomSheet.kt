@@ -1,4 +1,4 @@
-
+package com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.HeaderView
-import com.bupp.wood_spoon_eaters.databinding.FreeTextBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.ToolTipBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog

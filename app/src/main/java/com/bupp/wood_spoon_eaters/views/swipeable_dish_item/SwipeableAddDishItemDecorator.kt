@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
@@ -128,7 +127,7 @@ class SwipeableAddDishItemDecorator(
     }
 
     private fun calcAlpha(translationX: Float): Int { //0..225
-        var result = ALPHA_THRESHOLD.toFloat()
+        var result = ALPHA_THRESHOLD
         if (translationX < result) {
             result = translationX
         }

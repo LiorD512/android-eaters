@@ -29,7 +29,7 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.share_dialog, null)
+        val view = inflater.inflate(R.layout.share_dialog, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }

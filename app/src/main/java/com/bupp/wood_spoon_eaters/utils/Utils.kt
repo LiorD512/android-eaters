@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,18 +12,12 @@ import android.os.Vibrator
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import android.util.Log
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators.FeedAdapterDishItemDecorator
 import com.bupp.wood_spoon_eaters.model.WSError
-import java.util.*
 
 
 object Utils {
@@ -33,9 +26,6 @@ object Utils {
     fun toPx(int: Int): Int = (int * Resources.getSystem().displayMetrics.density).toInt()
     fun toSp(int: Int): Int = (int / Resources.getSystem().displayMetrics.scaledDensity).toInt()
 
-    fun String.splitAtIndex(index: Int) = require(index in 0..length).let {
-        take(index) to substring(index)
-    }
 
     fun lerp(value: Float, min: Float, max: Float, min2: Float, max2: Float): Float {
         val percentage = (value - min) / (max - min)
@@ -90,44 +80,6 @@ object Utils {
         return m.matches()
     }
 
-    fun getFirstAndLastNames(fullName: String): Pair<String, String> {
-        var firstNameEndIndex = fullName.indexOf(" ")
-
-        return if (firstNameEndIndex != -1) {
-            var str = fullName.splitAtIndex(firstNameEndIndex)
-
-            if (!str.first.isNullOrBlank() && !str.second.isNullOrBlank()) {
-                var first: String = str.first
-                var last: String = str.second
-
-                if (first.endsWith(" ")) {
-                    first = str.first.replace(" ", "")
-                }
-
-                if (last.startsWith(" ")) {
-                    last = str.second.replaceFirst(" ", "")
-                }
-
-                Pair(first, last)
-            } else {
-                Pair(fullName, fullName)
-            }
-        } else {
-            Pair(fullName, fullName)
-        }
-    }
-
-
-    fun hideKeyBoard(activity: FragmentActivity) {
-        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        //Find the currently focused view, so we can grab the correct window token from it.
-        var view = activity.getCurrentFocus()
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = View(activity)
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
-    }
 
     fun shareText(activity: FragmentActivity, text: String) {
         val shareIntent = Intent()

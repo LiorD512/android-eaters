@@ -11,9 +11,6 @@ class DishViewHolderUnavailableHeader(val binding: RestaurantItemAvailableLaterB
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionUnavailableHeader
-        with(binding) {
-
-        }
     }
 
 }

@@ -51,10 +51,6 @@ data class MenuItem(
     var sectionOrder: Int? = null,
     var dishOrderInSection: Int? = null,
 ) : Parcelable {
-    fun getQuantityLeftString(): String {
-        val left = quantity - unitsSold
-        return "$left Left"
-    }
 
     fun getQuantityCount(): Int {
         return quantity - unitsSold
@@ -106,47 +102,6 @@ data class FullDish(
     @Json(name = "available_at") val availableMenuItems: List<MenuItem> = listOf(),
     @Json(name = "cooking_methods") val cookingMethods: List<CookingMethods>?,
     @Json(name = "dish_ingredients") val dishIngredients: List<DishIngredient>?
-) {
-    fun getPriceObj(): Price {
-        if (availableMenuItems?.size > 0 && availableMenuItems[0].price != null) {
-            return availableMenuItems[0].price!!
-        } else {
-            return price
-        }
-    }
-
-    fun getMediaList(): List<MediaList> {
-        val mediaList = arrayListOf<MediaList>()
-        imageGallery?.forEach {
-            mediaList.add(MediaList(it, true))
-        }
-        video?.let {
-            mediaList.add(MediaList(it, false))
-        }
-        return mediaList
-    }
-
-    fun getAdditionalDishes(curCookingSlotId: Long? = null): MutableList<Dish> {
-        val availableArr = mutableListOf<Dish>()
-        if (curCookingSlotId != null) {
-            availableArr.addAll(restaurant.dishes.filter { it.menuItem?.cookingSlot?.id == curCookingSlotId && it.menuItem.unitsSold < it.menuItem.quantity })
-        } else {
-            //todo - first case when entering screen and there is not cooking slot yet for order.
-            restaurant.dishes.forEach { dish ->
-                dish.menuItem?.let {
-                    if (it.unitsSold < it.quantity) {
-                        availableArr.add(dish)
-                    }
-                }
-            }
-        }
-        return availableArr
-    }
-}
-
-data class MediaList(
-    val media: String,
-    val isImage: Boolean
 )
 
 @Parcelize

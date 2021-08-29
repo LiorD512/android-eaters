@@ -9,7 +9,7 @@
             android:paddingBottom="15.4dp"
             android:paddingStart="15.4dp"
             tools:text="Sun, Feb 07"
-            style="@style/Reg15Dark"
+            style="@style/LatoReg15Dark"
             android:id="@+id/wsTimePickerItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

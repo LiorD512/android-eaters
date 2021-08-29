@@ -1,12 +1,7 @@
 package com.bupp.wood_spoon_eaters.views.swipeable_dish_item
 
-//import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.abs.ItemTouchHelper
-import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Point
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Display
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter

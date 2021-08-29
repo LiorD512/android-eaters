@@ -4,10 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.HorizontalDietaryViewBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
@@ -47,35 +45,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         adapter.submitList(diets)
     }
 
-    fun initHorizontalDietaryViewShow(diets: List<SelectableIcon>){
-        this.diets = diets
-        binding.horizontalDietaryBkg.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
-        adapter.setSelectable(false)
-        adapter.submitList(diets)
-    }
-
-    public fun setSelectedDietary(diets: List<SelectableIcon>){
+    fun setSelectedDietary(diets: List<SelectableIcon>){
         adapter.setSelected(diets)
-    }
-
-    private fun getSelectedDiets(): List<SelectableIcon> {
-        return adapter.getSelectedDiets()
-    }
-
-    fun getSelectedItemsIds(): List<Long>{
-        val array : MutableList<Long> = mutableListOf()
-        for(item in getSelectedDiets()){
-            array.add(item.id)
-        }
-        return array
-    }
-
-    fun checkIfValidAndSHowError(): Boolean {
-        if (adapter.getSelectedDiets().isNullOrEmpty()) {
-            showError()
-            return false
-        }
-        return true
     }
 
     fun showError() {
@@ -83,21 +54,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             Utils.vibrate(context)
             AnimationUtil().shakeView(horizontalDietaryList)
         }
-    }
-
-    fun setSelectedDietaryIds(dietsIds: List<Long>) {
-        val selectedDiets = mutableListOf<SelectableIcon>()
-
-        diets?.let{ diets->
-            diets.forEach { diet ->
-                dietsIds?.forEach { selectedId ->
-                    if(diet.id == selectedId){
-                        selectedDiets.add(diet)
-                    }
-                }
-            }
-        }
-        adapter.setSelected(selectedDiets)
     }
 
     override fun onDietaryClick(dietary: SelectableIcon) {

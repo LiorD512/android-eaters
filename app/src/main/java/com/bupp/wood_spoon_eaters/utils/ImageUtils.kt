@@ -15,21 +15,12 @@ import com.bupp.wood_spoon_eaters.WoodSpoonApplication
 import java.io.File
 import java.io.FileOutputStream
 
-const val MAX_FILE_SIZE_20MB = 20000000L
-
-private const val CAMERA_FILE_NAME_PREFIX = "CAMERA_"
-private const val VIDEO_OR_IMAGE_MIME = "image/* video/*"
-private const val IMAGE_MIME = "image/*"
 
 private const val EXTERNAL_STORAGE_URI = "com.android.externalstorage.documents"
 private const val DOWNLOADS_URI = "com.android.providers.downloads.documents"
 private const val MEDIA_URI = "com.android.providers.media.documents"
 private const val GOOGLE_PHOTOS_URI = "com.google.android.apps.photos.content"
 private const val GOOGLE_DOCS_URI = "com.google.android.apps.docs.storage"
-
-const val GALLERY_REQUEST_CODE = 183
-const val CAMERA_REQUEST_CODE = 212
-const val FILE_REQUEST_CODE = 189
 
 private fun isExtStorageDocument(uri: Uri): Boolean {
     return EXTERNAL_STORAGE_URI == uri.authority
@@ -181,128 +172,3 @@ private fun getDataColumn(
     }
     return null
 }
-
-//private fun getAppExternalDataDirectoryFile(): File {
-//    val dataDirectoryFile = File(getAppExternalDataDirectoryPath())
-//    dataDirectoryFile.mkdirs()
-//    return dataDirectoryFile
-//}
-//
-//private fun getAppExternalDataDirectoryPath(): String {
-//    val sb = StringBuilder()
-//    sb.append(Environment.getExternalStorageDirectory())
-//        .append(File.separator)
-//        .append("Android")
-//        .append(File.separator)
-//        .append("data")
-//        .append(File.separator)
-//        .append(WoodSpoonApplication.getInstance().packageName)
-//        .append(File.separator)
-//    return sb.toString()
-//}
-
-//fun startFilePicker(activity: FragmentActivity) {
-//    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-//    intent.addCategory(Intent.CATEGORY_OPENABLE)
-//    intent.type = "*/*"
-//    activity.startActivityForResult(intent, FILE_REQUEST_CODE)
-//}
-//
-//fun startMediaPicker(activity: FragmentActivity) {
-//
-//    val takePictureIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//    val takeVideoIntent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.INTERNAL_CONTENT_URI)
-//    val chooserIntent = Intent.createChooser(takePictureIntent, activity.getString(R.string.dlg_choose_file_from))
-//    val intentArray = arrayOf(takeVideoIntent)
-//    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
-//
-//    activity.startActivityForResult(
-//        chooserIntent, GALLERY_REQUEST_CODE
-//    )
-//}
-//
-//fun startCameraPhotoForResult(activity: FragmentActivity) {
-//
-//    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-//        // Ensure that there's a camera activity to handle the intent
-//        takePictureIntent.resolveActivity(WoodSpoonApplication.getInstance().packageManager)?.also {
-//            // Create the File where the photo should go
-//            val photoFile: File? = try {
-//                getTemporaryCameraFile()
-//            } catch (ex: IOException) {
-//                null
-//            }
-//            photoFile?.also {
-//                val authority =
-//                    WoodSpoonApplication.getInstance().applicationContext.packageName + ".provider"
-//                val photoURI: Uri = FileProvider.getUriForFile(
-//                    WoodSpoonApplication.getInstance().applicationContext,
-//                    authority,
-//                    it
-//                )
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-//                activity.startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
-//            }
-//        }
-//    }
-//}
-//
-//fun startCameraVideoForResult(activity: FragmentActivity) {
-//    Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
-//        takeVideoIntent.resolveActivity(WoodSpoonApplication.getInstance().packageManager)?.also {
-//            takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0)
-//            takeVideoIntent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, MAX_FILE_SIZE_20MB)
-//            activity.startActivityForResult(takeVideoIntent, CAMERA_REQUEST_CODE)
-//        }
-//    }
-//}
-//
-//fun getTemporaryCameraFile(): File {
-//    val storageDir = getAppExternalDataDirectoryFile()
-//    val file = File(storageDir, getTemporaryCameraFileName())
-//    try {
-//        file.createNewFile()
-//    } catch (e: IOException) {
-//        e.printStackTrace()
-//    }
-//    return file
-//}
-//
-//fun getLastUsedCameraFile(): File? {
-//    val dataDir = getAppExternalDataDirectoryFile()
-//    val files = dataDir.listFiles()
-//    val filteredFiles = ArrayList<File>()
-//    files?.let {
-//        for (file in it) {
-//            if (file.name.startsWith(CAMERA_FILE_NAME_PREFIX)) {
-//                filteredFiles.add(file)
-//            }
-//        }
-//    }
-//
-//    filteredFiles.sort()
-//    return if (filteredFiles.isNotEmpty()) {
-//        filteredFiles[filteredFiles.size - 1]
-//    } else {
-//        null
-//    }
-//}
-//
-//private fun getValidUri(file: File, context: Context?): Uri {
-//    val outputUri: Uri
-//    outputUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//        val authority = context!!.packageName + ".provider"
-//        FileProvider.getUriForFile(context, authority, file)
-//    } else {
-//        Uri.fromFile(file)
-//    }
-//    return outputUri
-//}
-//
-//private fun getTemporaryCameraFileName(): String {
-//    return CAMERA_FILE_NAME_PREFIX + System.currentTimeMillis() + ".jpg"
-//}
-//
-//private fun getTemporaryCameraVideoFileName(): String {
-//    return CAMERA_FILE_NAME_PREFIX + System.currentTimeMillis() + ".mp4"
-//}

@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators
 
 import android.graphics.Canvas
-import android.util.Log
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
@@ -60,7 +59,6 @@ class FeedAdapterDishItemDecorator: RecyclerView.ItemDecoration() {
 
     companion object {
         const val TAG = "wowFeedDishItemDeco"
-        const val ALPHA_THRESHOLD = 255
     }
 
 }

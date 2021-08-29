@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.WSError
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
 
-class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, private val eaterDataManager: EaterDataManager) : ViewModel() {
+class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository) : ViewModel() {
 
     val progressData = ProgressData()
     val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()

@@ -57,8 +57,6 @@ class FeedDataManager(
     fun getFeedUiStatus() = finalFeedUiStatus
     private val finalFeedUiStatus = SingleLiveEvent<FeedUiStatus>()
 
-    val getFavoritesLiveData = eaterDataManager.getFavoritesLiveData()
-
     private fun isGpsEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return LocationManagerCompat.isLocationEnabled(locationManager)
@@ -192,14 +190,6 @@ class FeedDataManager(
             return it.date
         }
         return null
-    }
-
-    fun getUser(): Eater? {
-        return eaterDataManager.currentEater
-    }
-
-    suspend fun refreshFavorites() {
-        eaterDataManager.refreshMyFavorites()
     }
 
     fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {

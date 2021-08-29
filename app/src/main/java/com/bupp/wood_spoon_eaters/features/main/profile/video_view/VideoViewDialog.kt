@@ -19,15 +19,14 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 
-class VideoViewDialog(val cookFullName: String, val video: String) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
+class VideoViewDialog(val video: String) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
 
 
     private var player: SimpleExoPlayer? = null
     val binding: VideoViewDialogBinding by viewBinding()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.video_view_dialog, null)
-        return view
+        return inflater.inflate(R.layout.video_view_dialog, null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

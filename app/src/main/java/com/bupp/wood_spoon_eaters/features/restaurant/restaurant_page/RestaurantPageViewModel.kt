@@ -29,7 +29,6 @@ class RestaurantPageViewModel(
     var currentRestaurantId: Long = -1
 
     var currentCookingSlot: CookingSlot? = null
-    val currentCookingSlotData = MutableLiveData<CookingSlot>()
 
     val initialParamData = MutableLiveData<RestaurantInitParams>()
     val restaurantFullData = MutableLiveData<Restaurant>()
@@ -122,15 +121,11 @@ class RestaurantPageViewModel(
                     if (DateUtils.isSameDay(date.date, feedDate)) {
                         feedTimeCookingSlot = date.cookingSlots[0]
                     }
-//                    val feedTimeCookingSlot = date.cookingSlots.find { cookingSlot ->
-//                        DateUtils.isDateInRange(feedDate, cookingSlot.orderFrom, cookingSlot.endsAt)
-//                    }
                     feedTimeCookingSlot?.let {
                         /**  case2 : feed time cooking slot found
                          * 1. update cartManager to be set to the "orderFrom" date, order can be made
                          * 2. update restaurant screen ui
                          * **/
-//                        timeManager.setTemporaryDeliveryTimeDate(it.orderFrom)
                         onCookingSlotSelected(it, true)
                         return
                     }
@@ -294,9 +289,7 @@ class RestaurantPageViewModel(
                 }
             }
             dishListData = updatedSectionList
-//                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
             dishListLiveData.postValue(DishListData(dishListData, animateList))
-//            dishListLiveData.postRawValue(DishListData(updatedSectionList, animateList))
         } else {
             Log.d(TAG, "updateDishCountUi2")
             dishListData = dishSectionsList
@@ -394,19 +387,8 @@ class RestaurantPageViewModel(
      */
     fun handleCartData(order: Order?) {
         Log.d(TAG, "handleCartData")
-        dishListData.let {
-            updateDishCountUi(it, false)
-        }
-//        updateFloatingCartButtonUi(order)
+        updateDishCountUi(dishListData, false)
     }
-
-//    private fun updateFloatingCartButtonUi(order: Order?) {
-//        cartManager.updateFloatingCartBtn(order)
-//    }
-//
-//    private fun refreshFloatingCartButtonUi() {
-//        cartManager.refreshFloatingCartBtn()
-//    }
 
     fun onPerformClearCart() {
         eventsManager.logEvent(Constants.EVENT_CLEAR_CART)

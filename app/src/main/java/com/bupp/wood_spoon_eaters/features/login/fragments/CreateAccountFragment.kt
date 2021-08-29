@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.login.fragments
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,7 +10,6 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.segment.analytics.Analytics
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

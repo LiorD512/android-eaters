@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -64,10 +63,10 @@ enum class CampaignShowAfter{
     @Json(name = "homepage_visit") VISIT_HOME_PAGE,
     @Json(name = "feed_visit") VISIT_FEED,
     @Json(name = "profile_visit") VISIT_PROFILE,
-    @Json(name = "add_to_cart_action ") ACTION_ADD_TO_CART,
-    @Json(name = "purchase_action ") ACTION_PURCHASE,
-    @Json(name = "rate_your_order_action ") ACTION_RATE_ORDER,
-    @Json(name = "clear_your_cart_action  ") ACTION_CLEAR_CART,
+    @Json(name = "add_to_cart_action") ACTION_ADD_TO_CART,
+    @Json(name = "purchase_action") ACTION_PURCHASE,
+    @Json(name = "rate_your_order_action") ACTION_RATE_ORDER,
+    @Json(name = "clear_your_cart_action ") ACTION_CLEAR_CART,
 }
 
 enum class CampaignViewType{

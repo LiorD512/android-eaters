@@ -1,13 +1,12 @@
 package com.bupp.wood_spoon_eaters.managers
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
@@ -17,19 +16,13 @@ import com.segment.analytics.Traits
 import com.uxcam.UXCam
 import java.math.BigDecimal
 import java.util.*
-import kotlin.math.log
 
-class EventsManager(val context: Context, private val sharedPreferences: SharedPreferences){
+class EventsManager(val context: Context){
 
     private var currentUserId: String? = null
-    private val shouldFireEvent = true//BuildConfig.BUILD_TYPE.equals("release", true)
-    private var isFirstPurchase: Boolean
-        get() = sharedPreferences.getBoolean(IS_FIRST_PURCHASE, true)
-        set(isFirstTime) = sharedPreferences.edit().putBoolean(IS_FIRST_PURCHASE, isFirstTime).apply()
+    private val shouldFireEvent = true//FlavorClassThing.equals("release", true)
 
     fun initSegment(eater: Eater?, address: Address?){
-//        val user = eaterDataManager.currentEater
-//        Log.d(TAG, "user: $eater")
         eater?.let{ user ->
 
             this.currentUserId = user.id.toString()
@@ -157,25 +150,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
         }
     }
 
-//    fun sendRegistrationCompletedEvent() {
-//        if(shouldFireEvent) {
-//            Log.d(TAG, "sendRegistrationCompletedEvent")
-//            val logger = AppEventsLogger.newLogger(context)
-//            val params = Bundle()
-//            params.putString(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, "onboarding_finished")
-//            logger.logEvent("onboarding_finished", params)
-//        }
-//    }
-
-
-//    fun proceedToCheckoutEvent() {
-//        if(shouldFireEvent) {
-//            Log.d(TAG, "sendRegistrationCompletedEvent")
-//            val logger = AppEventsLogger.newLogger(context)
-//            logger.logEvent(Constants.EVENT_PROCEED_TO_CART)
-//        }
-//    }
-
     fun logEvent(eventName: String, params: Map<String, Any>? = null){
         Log.d(TAG, "logEvent: $eventName PARAMS: $params")
         if(params != null ){
@@ -280,7 +254,6 @@ class EventsManager(val context: Context, private val sharedPreferences: SharedP
     }
 
     companion object{
-        const val IS_FIRST_PURCHASE = "is_first_purchase"
         const val TAG = "wowEventsManager"
 
 

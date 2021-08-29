@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.free_text_bottom_sheet.FreeTextBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CampaignBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.*
@@ -18,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class CampaignBottomSheet() : BottomSheetDialogFragment() {
+class CampaignBottomSheet : BottomSheetDialogFragment() {
 
     private val binding: CampaignBottomSheetBinding by viewBinding()
     private lateinit var campaign: Campaign

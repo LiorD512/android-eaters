@@ -1,16 +1,14 @@
 package com.bupp.wood_spoon_eaters.views.abs
 
-import android.R.attr.path
 import android.content.res.Resources
-import android.graphics.*
-import android.util.Log
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.google.android.play.core.internal.cc
 
 
 class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
@@ -56,7 +54,6 @@ class RecyclerHorizontalIndicatorDecoration: RecyclerView.ItemDecoration()  {
     private val mInterpolator: Interpolator = AccelerateDecelerateInterpolator()
 
     private val mPaint: Paint = Paint()
-    private val clearPaint: Paint = Paint()
 
     init {
         mPaint.strokeCap = Paint.Cap.ROUND

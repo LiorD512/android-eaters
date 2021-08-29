@@ -46,7 +46,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     }
 
-    private fun getCurrentImageView(): ImageView? {
+    private fun getCurrentImageView(): ImageView {
         return if (lastShowingView == 0) {
             lastShowingView = 1
             binding.changingImages1
@@ -56,7 +56,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun getSecondImageView(lastShowingView: Int): ImageView? {
+    private fun getSecondImageView(lastShowingView: Int): ImageView {
         return if (lastShowingView == 0) {
             binding.changingImages1
         } else {
@@ -64,7 +64,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun getCurrentTextView(): TextView? {
+    private fun getCurrentTextView(): TextView {
         return if (lastShowingTextView == 0) {
             lastShowingTextView = 1
             binding.changingImagesText1
@@ -74,7 +74,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun getSecondTextView(lastShowingView: Int): TextView? {
+    private fun getSecondTextView(lastShowingView: Int): TextView {
         return if (lastShowingTextView == 0) {
             binding.changingImagesText1
         } else {
@@ -142,11 +142,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     }
 
-    fun stopAnimation() {
-//        Log.d("wowChangingImages", "stopAnimation")
-        mHandler.removeCallbacks(runnableCode)
-        runnableCode = null
-    }
 
     companion object{
         const val DELAY: Long = 2000

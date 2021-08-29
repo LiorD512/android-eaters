@@ -308,10 +308,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.wsEditTextPrefix.setText(prefix)
     }
 
-    fun getPrefix(): String {
-        return binding.wsEditTextPrefix.text.toString()
-    }
-
     fun setTextFromList(list: List<SelectableIcon>) {
         var text = ""
         if(list.isNotEmpty()){

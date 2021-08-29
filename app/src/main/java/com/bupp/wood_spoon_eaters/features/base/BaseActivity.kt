@@ -10,13 +10,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.FlavorConfig
-import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
-import java.io.*
-import java.util.*
 import kotlin.math.sqrt
 
 
@@ -89,9 +86,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
         val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        if (this is Activity) {
-            (this as Activity).finish()
-        }
+        (this as Activity).finish()
         Runtime.getRuntime().exit(0)
     }
 
