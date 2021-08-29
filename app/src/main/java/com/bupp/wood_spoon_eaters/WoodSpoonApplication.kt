@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
@@ -21,6 +22,8 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration;
+
+
 
 
 class WoodSpoonApplication : Application() {
@@ -50,6 +53,7 @@ class WoodSpoonApplication : Application() {
 
         Branch.enableLogging()
         Branch.getAutoInstance(this)
+        Branch.enableTestMode()
 
 
         UXCam.startWithKey(getString(R.string.ux_cam_app_key))
@@ -68,6 +72,5 @@ class WoodSpoonApplication : Application() {
             .autoTag(true)
             .tagPrefix("wow")
             .build()
-
     }
 }

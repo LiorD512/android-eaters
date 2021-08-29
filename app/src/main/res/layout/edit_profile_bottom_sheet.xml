@@ -1,87 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".features.main.profile.edit_my_profile.EditMyProfileFragment">
+        android:background="@drawable/top_cornered_bkg">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/editMyProfileFragHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="7.7dp"
+            app:isWithSep="true"
+            app:title="Edit account"
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
+
+    <com.bupp.wood_spoon_eaters.views.UserImageVideoView
+            android:id="@+id/editMyProfileFragUserImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            app:imageSize="BIGGEST"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editMyProfileFragHeader"
+            app:placeHolder="@drawable/profile_pic_placeholder_big" />
+
+    <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
+            android:id="@+id/editMyProfileFragUserImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="7.7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editMyProfileFragUserImageView"
+            app:title="Add photo" />
 
     <LinearLayout
+            android:paddingHorizontal="15.4dp"
+            android:id="@+id/name_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="15.4dp"
-            android:paddingRight="15.4dp">
-
-        <com.bupp.wood_spoon_eaters.views.UserImageView
-                android:id="@+id/editMyProfileFragUserImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                app:imageSize="BIGGEST"
-                app:placeHolder="@drawable/profile_pic_placeholder_plus" />
-
-        <LinearLayout
-                android:id="@+id/name_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="37.14dp"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/subtitle">
-
-            <com.bupp.wood_spoon_eaters.views.WSEditText
-                    android:id="@+id/editMyProfileFragFirstName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="15.4dp"
-                    android:layout_weight="1"
-                    app:error="Please enter your name"
-                    app:hint="First name"
-                    app:inputType="INPUT_TYPE_FULL_NAME" />
-
-            <com.bupp.wood_spoon_eaters.views.WSEditText
-                    android:id="@+id/editMyProfileFragLastName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:error="Please enter your last name"
-                    app:hint="Last name"
-                    app:inputType="INPUT_TYPE_FULL_NAME" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37.14dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editMyProfileFragUserImageBtn">
 
         <com.bupp.wood_spoon_eaters.views.WSEditText
-                android:id="@+id/editMyProfileFragEmail"
-                android:layout_width="match_parent"
+                android:id="@+id/editMyProfileFragFirstName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="31dp"
-                app:error="Please enter your email"
-                app:hint="Email address"
-                app:inputType="MAIL"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_layout" />
+                android:layout_marginEnd="15.4dp"
+                android:layout_weight="1"
+                app:error="Please enter your name"
+                app:hint="First name"
+                app:inputType="INPUT_TYPE_FULL_NAME" />
 
         <com.bupp.wood_spoon_eaters.views.WSEditText
-                android:id="@+id/editMyProfileFragPhone"
-                android:layout_width="match_parent"
+                android:id="@+id/editMyProfileFragLastName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="31dp"
-                app:hint="Mobile number"
-                app:inputType="PHONE"
-                app:isEditable="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_layout" />
-
+                android:layout_weight="1"
+                app:error="Please enter your last name"
+                app:hint="Last name"
+                app:inputType="INPUT_TYPE_FULL_NAME" />
 
     </LinearLayout>
 
+    <com.bupp.wood_spoon_eaters.views.WSEditText
+            android:id="@+id/editMyProfileFragEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:paddingHorizontal="15.4dp"
+            app:error="Please enter your email"
+            app:hint="Email address"
+            app:inputType="MAIL"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_layout" />
+
+    <com.bupp.wood_spoon_eaters.views.WSEditText
+            android:id="@+id/editMyProfileFragPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:paddingHorizontal="15.4dp"
+            app:hint="Mobile number"
+            app:inputType="PHONE"
+            app:isEditable="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editMyProfileFragEmail" />
+
+    <View
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editMyProfileFragPhone"
+            app:layout_constraintBottom_toTopOf="@+id/editMyProfileFragSave"
+            android:layout_width="1dp"
+            android:layout_height="60dp"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:paddingHorizontal="15.4dp"
+            android:id="@+id/editMyProfileFragSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15.4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:title="Save" />
+
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
+            tools:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/editMyProfileFragPb"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

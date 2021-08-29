@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
@@ -23,8 +24,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.InputTitleViewListener,
     ReportIssueAdapter.ReportIssueAdapterListener, TitleBodyDialog.TitleBodyDialogListener {
 
-    lateinit var binding: ReportIssueFragmentBinding
-    private lateinit var adapter: ReportIssueAdapter
+    val binding: ReportIssueFragmentBinding by viewBinding()
+    private var adapter: ReportIssueAdapter ? = null
     val viewModel by viewModel<ReportIssueViewModel>()
 
     companion object {
@@ -68,8 +69,6 @@ class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.Inp
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = ReportIssueFragmentBinding.bind(view)
-
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
@@ -96,7 +95,7 @@ class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.Inp
         })
 
         viewModel.reportIssueData.observe(viewLifecycleOwner, {
-            adapter.submitList(it)
+            adapter?.submitList(it)
         })
 
         viewModel.progressData.observe(viewLifecycleOwner, {
@@ -117,13 +116,13 @@ class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.Inp
     }
 
     private fun sendReport() {
-        val reports = Reports(adapter.getReportsRequestArray())
-        viewModel.postReport(reports)
+        adapter?.let{ adapter->
+            val reports = Reports(adapter.getReportsRequestArray())
+            viewModel.postReport(reports)
+        }
     }
 
     override fun onTitleBodyDialogDismiss() {
         dismiss()
     }
-
-
 }

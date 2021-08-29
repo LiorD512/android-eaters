@@ -13,9 +13,6 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@color/white</item>
         <item name="android:windowBackground">@drawable/splash_bkg</item>
 
-<!--        <item name="android:windowFullscreen">true</item>-->
-<!--        <item name="android:windowTranslucentNavigation">true</item>-->
-
         <item name="android:windowActivityTransitions">true</item>
 
     </style>
@@ -40,6 +37,21 @@
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 
+<!--    <style name="NewCartDialog" parent="Theme.AppCompat.Dialog">-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowFullscreen">false</item>-->
+<!--        <item name="android:windowIsFloating">true</item>-->
+<!--        <item name="android:windowMinWidthMajor">96%</item>-->
+<!--        <item name="android:windowMinWidthMinor">96%</item>-->
+<!--        <item name="android:layout_height">260dp</item>-->
+<!--        <item name="android:windowBackground">@color/transparent</item>-->
+<!--    </style>-->
+
+    <style name="NewCartDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/new_cart_overshoot_anim</item>
+        <item name="android:windowExitAnimation">@anim/new_cart_slide_out_anim</item>
+    </style>
+
     <style name="ErrorText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/coral</item>
         <item name="android:textSize">11.5sp</item>
@@ -61,7 +73,7 @@
         <item name="colorControlNormal">@color/white</item>
         <item name="colorControlActivated">@color/teal_blue</item>
         <item name="colorControlHighlight">@color/teal_blue</item>
-<!--        <item name="android:paddingBottom">4dp</item>-->
+        <!--        <item name="android:paddingBottom">4dp</item>-->
     </style>
 
 
@@ -72,128 +84,321 @@
     </style>
 
 
-
     //fonts and colors
+
+    <style name="LatoBold11White">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="LatoBold11White60">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/white_60</item>
-    </style><style name="LatoBold11Teal">
+    </style>
+
+    <style name="LatoBold11Teal">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="LatoBold15Teal">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
+    <style name="LatoBold17Teal">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">17.3sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
     <style name="LatoBold13Black">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="LatoBold13White">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LatoBold19White">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">19.2sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="LatoBold13Dark">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoBold13Watermelon">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/watermelon</item>
+    </style>
+
+    <style name="LatoBold13DarkGrey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="LatoBold13BrownishGrey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
     <style name="LatoBold15White">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="LatoBold15Dark">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
+    <style name="LatoBold15DarkGrey">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
     <style name="LatoReg11Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoReg11PurpleyGreyThree">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/purpley_grey_three</item>
+    </style>
+
     <style name="LatoBlack23Dark">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">23sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="LatoReg15Dark50">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark_50</item>
     </style>
+
     <style name="LatoReg15Dark">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="LatoReg15DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="LatoReg15BrownishGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
+    <style name="LatoReg15WhiteFive">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/white_five</item>
     </style>
     <style name="LatoReg15Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="LatoReg13White">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="LatoReg13Dark">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
+    <style name="LatoReg13NobelGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/nobel_grey</item>
+    </style>
+
+    <style name="LatoReg13BrownishGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey</item>
+    </style>
+
+    <style name="LatoReg13DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="LatoReg13LightGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/light_grey</item>
+    </style>
+
+    <style name="LatoReg13VeryLightGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/very_light_grey</item>
+    </style>
+
+    <style name="LatoReg14DarkGrey">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">14.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
     <style name="LatoReg13MediumGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/medium_grey</item>
     </style>
+
     <style name="LatoReg13Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="LatoReg13TealBlue">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
     <style name="LatoBold9Grey">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">9.6sp</item>
         <item name="android:textColor">@color/purpley_grey</item>
     </style>
+
     <style name="LatoReg13PurpelyGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/purpley_grey</item>
     </style>
+
     <style name="LatoReg13PurpelyGreyTwo">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/purpley_grey_two</item>
     </style>
+
+    <style name="LatoReg19Teal">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">19.2sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+    </style>
+
+    <style name="LatoBold15Black">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="LatoBold13Teal">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="LatoBlack13Teal">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="LatoBlack17Dark">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">17.3sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="LatoBlack15Teal">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="LatoBlack15White">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="LatoBlack19DarkGrey">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">19.2sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+    <style name="LatoBlack19DarkThree">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">19.2sp</item>
+        <item name="android:textColor">@color/dark_three</item>
+    </style>
+
+    <style name="LatoBlack15DarkGrey">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
     <style name="LatoBlack15Dark">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoBlack15DarkThree">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/dark_three</item>
+    </style>
+
+    <style name="LatoBlack13DarkGrey">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="LatoBlack9White">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LatoBlack9Dark">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
     <style name="Reg32Dark">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">32.6sp</item>
@@ -229,10 +434,17 @@
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="Bold19Dark">
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="Bold19DarkGrey">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
     </style>
 
     <style name="Bold23Blue">
@@ -270,11 +482,13 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="Bold11TealBlue">
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="Bold11Dark">
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">11.5sp</item>
@@ -304,11 +518,13 @@
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="Reg11Red">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/red</item>
     </style>
+
     <style name="Reg11Coral">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">11sp</item>
@@ -326,11 +542,13 @@
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/red</item>
     </style>
+
     <style name="Reg15Blue">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/teal_blue</item>
     </style>
+
     <style name="Reg15Black">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">15.4sp</item>
@@ -367,6 +585,7 @@
         <item name="android:textSize">15.1sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="ExtraBold23White">
         <item name="android:fontFamily">@font/open_sans_extra_bold</item>
         <item name="android:textSize">23sp</item>
@@ -384,6 +603,7 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="Bold13Dark_40">
         <item name="android:fontFamily">@font/open_sans_bold</item>
         <item name="android:textSize">13.4sp</item>
@@ -407,11 +627,13 @@
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="SemiBold13Dark">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="SemiBold11PurpelyGrey">
         <item name="android:fontFamily">@font/open_sans_semi_bold</item>
         <item name="android:textSize">11.5sp</item>
@@ -429,16 +651,25 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="Reg13Dark">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="Reg13Coral">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/coral</item>
     </style>
+
+    <style name="Reg12White">
+        <item name="android:fontFamily">@font/open_sans_reg</item>
+        <item name="android:textSize">12.5sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Reg13White">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
@@ -456,6 +687,7 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/purpley_grey_two</item>
     </style>
+
     <style name="Reg13PurpleyGrey">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">13.4sp</item>
@@ -467,6 +699,7 @@
         <item name="android:textSize">11.5sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+
     <style name="Reg11PurpleyGrey">
         <item name="android:fontFamily">@font/open_sans_reg</item>
         <item name="android:textSize">11.5sp</item>
@@ -515,6 +748,7 @@
 
 
     //Calendar view
+
     <style name="CalenderViewCustom" parent="Theme.MaterialComponents">
         <item name="colorAccent">@color/teal_blue</item>
         <item name="android:textColor">@color/calender_text_color_selector</item>
@@ -578,26 +812,26 @@
     <!--</style>-->
 
     <declare-styleable name="CircleView">
-        <attr format="dimension" name="circleRadius"/>
-        <attr format="color" name="circleColor"/>
-        <attr format="boolean" name="circleDrawOnlystroke"/>
-        <attr format="dimension" name="circleStrokeWidth"/>
+        <attr name="circleRadius" format="dimension" />
+        <attr name="circleColor" format="color" />
+        <attr name="circleDrawOnlystroke" format="boolean" />
+        <attr name="circleStrokeWidth" format="dimension" />
     </declare-styleable>
     <declare-styleable name="CircularDotsLoader">
-        <attr format="dimension" name="loader_bigCircleRadius"/>
+        <attr name="loader_bigCircleRadius" format="dimension" />
     </declare-styleable>
     <declare-styleable name="DotsLoaderBaseView">
-        <attr format="color" name="loader_defaultColor"/>
-        <attr format="color" name="loader_selectedColor"/>
-        <attr format="dimension" name="loader_circleRadius"/>
-        <attr format="integer" name="loader_animDur"/>
-        <attr format="boolean" name="loader_showRunningShadow"/>
-        <attr format="color" name="loader_firstShadowColor"/>
-        <attr format="color" name="loader_secondShadowColor"/>
+        <attr name="loader_defaultColor" format="color" />
+        <attr name="loader_selectedColor" format="color" />
+        <attr name="loader_circleRadius" format="dimension" />
+        <attr name="loader_animDur" format="integer" />
+        <attr name="loader_showRunningShadow" format="boolean" />
+        <attr name="loader_firstShadowColor" format="color" />
+        <attr name="loader_secondShadowColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="WoodSpoonProgressBar">
-        <attr format="boolean" name="isBlueStyle"/>
+        <attr name="isBlueStyle" format="boolean" />
     </declare-styleable>
 
     <style name="flashbar_msg_appearence">
@@ -618,6 +852,14 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="shimmerFrameStyle">
+        <item name="shimmer_auto_start">true</item>
+        <item name="shimmer_base_alpha">0.6</item>
+        <item name="shimmer_base_color">@color/whiteTwo</item>
+        <item name="shimmer_highlight_alpha">1</item>
+        <item name="shimmer_highlight_color">@color/grey_white_three</item>
+    </style>
+
     <style name="BottomSheetTransparentStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>
@@ -632,12 +874,45 @@
         <item name="tabTextAppearance">@style/NewOrderTabLayoutTextAppearance</item>
         <item name="tabSelectedTextColor">@color/dark</item>
     </style>
+
     <style name="NewOrderTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/grey_to_black_selector</item>
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="RestaurantTabLayoutStyle">
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:fontFamily">@font/lato_reg</item>
+    </style>
 
-    <color name="medium_grey">#929092</color>
+    <style name="MainActTabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:tabStripEnabled">true</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/MainActTabLayoutTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/dark</item>
+    </style>
+
+    <style name="MainActTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">9.6sp</item>
+        <item name="android:textColor">@color/purpley_grey_two_to_dark_selector</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="roundedCorners7ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">7.7dp</item>
+    </style>
+
+    <style name="roundedTopCorners7ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">7.7dp</item>
+        <item name="cornerSizeTopRight">7.7dp</item>
+    </style>
+
+    <style name="roundedCorners13ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">13.4dp</item>
+    </style>
+
 </resources>

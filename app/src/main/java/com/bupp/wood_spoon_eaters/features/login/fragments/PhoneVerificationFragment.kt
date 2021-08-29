@@ -5,9 +5,11 @@ import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.databinding.CountryCodePickerItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
@@ -23,14 +25,13 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification),
     InputTitleView.InputTitleViewListener{
 
-    lateinit var binding: FragmentPhoneVerificationBinding
+    val binding: FragmentPhoneVerificationBinding by viewBinding()
     private val viewModel: LoginViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentPhoneVerificationBinding.bind(view)
 
-        Analytics.with(requireContext()).screen("getOtpCode")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_GET_OTF_CODE)
 
         initUi()
         initObservers()

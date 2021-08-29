@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.ManyCooksViewItemBinding
 import com.bupp.wood_spoon_eaters.model.Cook
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 
 class ManyCooksViewAdapter(val context: Context, val cooksList: ArrayList<Cook>, val listener: ManyCooksViewListener): RecyclerView.Adapter<ManyCooksViewAdapter.ViewHolder>(),
-    UserImageView.UserImageViewListener {
+    UserImageVideoView.UserImageViewListener {
 
 
     interface ManyCooksViewListener{

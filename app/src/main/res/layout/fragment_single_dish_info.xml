@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools"
@@ -36,20 +37,20 @@
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="22dp"
                     app:ci_animator="@anim/circle_indicator_anim"
-                    app:ci_drawable="@drawable/vp_indicator_selected"
-                    app:ci_drawable_unselected="@drawable/vp_indicator_unselected"
+                    app:ci_drawable="@drawable/vp_dark_indicator_selected"
+                    app:ci_drawable_unselected="@drawable/vp_dark_indicator_unselected"
                     app:ci_gravity="center"
                     app:ci_height="10dp"
                     app:ci_width="10dp" />
 
-            <com.bupp.wood_spoon_eaters.views.UserImageView
+            <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                     android:id="@+id/singleDishInfoCook"
                     android:layout_width="57.6dp"
                     android:layout_height="57.6dp"
                     android:layout_margin="10.6dp"
                     app:imageSize="SMALL" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+            <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtnOld
                     android:id="@+id/singleDishInfoFavorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

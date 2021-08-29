@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.FlavorConfig
 import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
@@ -21,6 +22,7 @@ import kotlin.math.sqrt
 
 open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener {
 
+    private var superUserDialog: SuperUserDialog? = null
     private var sensorManager: SensorManager? = null
     private var acceleration = 0f
     private var currentAcceleration = 0f
@@ -44,8 +46,12 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 //            Log.d(TAG, "shake acceleration: $acceleration")
-            if (acceleration > SHAKING_RESISTANCE) {
-                SuperUserDialog().show(supportFragmentManager, Constants.SUPER_USER_DIALOG)
+            if (acceleration > SHAKING_RESISTANCE && (
+                        superUserDialog == null ||
+                        superUserDialog?.isVisible == false)
+            ) {
+                superUserDialog = SuperUserDialog()
+                superUserDialog!!.show(supportFragmentManager, Constants.SUPER_USER_DIALOG)
                 Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
             }
         }
@@ -54,7 +60,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
     }
 
     override fun onResume() {
-        if (BuildConfig.DEBUG) {
+        if (FlavorConfig.DEBUG) {
             Log.d(TAG, "registered super user listener")
             sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
                     Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
@@ -64,7 +70,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
     }
 
     override fun onPause() {
-        if (BuildConfig.DEBUG) {
+        if (FlavorConfig.DEBUG) {
             Log.d(TAG, "unregister super user listener")
             sensorManager!!.unregisterListener(sensorListener)
         }

@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.ClearCartDialogBinding
 
 class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() {
 
-    lateinit var binding: ClearCartDialogBinding
+    val binding: ClearCartDialogBinding by viewBinding()
+
     interface ClearCartDialogListener {
         fun onClearCart()
         fun onCancelClearCart(){}
@@ -32,7 +34,6 @@ class ClearCartDialog(val listener: ClearCartDialogListener) : DialogFragment() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = ClearCartDialogBinding.bind(view)
         initUi()
     }
 

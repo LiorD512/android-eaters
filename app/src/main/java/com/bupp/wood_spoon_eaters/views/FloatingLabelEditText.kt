@@ -11,7 +11,7 @@
 //import android.widget.LinearLayout
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.common.Constants
-//import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
+//import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 //import com.bupp.wood_spoon_eaters.databinding.FloatingLabelEditTextBinding
 //import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 //import render.animations.Attention

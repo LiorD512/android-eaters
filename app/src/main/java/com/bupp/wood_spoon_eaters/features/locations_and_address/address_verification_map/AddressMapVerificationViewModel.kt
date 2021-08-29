@@ -1,19 +1,13 @@
 package com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.model.Address
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.utils.GoogleAddressParserUtil
 import com.bupp.wood_spoon_eaters.utils.LocationUtils
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.model.Place
 
 class AddressMapVerificationViewModel(val metaDataRepository: MetaDataRepository, val settings: AppSettings) : ViewModel() {
 

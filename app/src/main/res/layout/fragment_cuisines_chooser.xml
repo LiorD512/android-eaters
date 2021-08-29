@@ -9,24 +9,25 @@
     android:layout_height="match_parent">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-        android:id="@+id/cuisineChooserFragHeader"
-        app:type="HEADER_VIEW_TYPE_CLOSE_TITLE_DONE"
-        app:title="Cooking Cuisines"
+        android:id="@+id/cuisineChooserHeader"
+        app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+        app:title="Cuisines"
         android:layout_width="match_parent"
         android:layout_height="@dimen/header_view_height"/>
 
     <TextView
-        style="@style/Reg13Dark_50"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Select the cuisine that most closely applies"/>
+            android:layout_marginStart="15.4dp"
+            android:layout_marginTop="30dp"
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="Select your favourite cuisines "/>
 
-    <com.bupp.wood_spoon_eaters.custom_views.IconsGridView
-        android:id="@+id/cuisineChooserFragGrid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="25dp"
+            android:id="@+id/cuisineChooserList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

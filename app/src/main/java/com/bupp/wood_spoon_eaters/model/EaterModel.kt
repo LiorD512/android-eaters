@@ -2,18 +2,20 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.net.Uri
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import retrofit2.http.Field
 import java.util.*
 
 @kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 data class Eater(
    @Json(name = "id") val id: Long,
-   @Json(name = "phone_number") val phoneNumber: String,
-   @Json(name = "account_status") val accountStatus: String,
+   @Json(name = "phone_number") val phoneNumber: String?,
+   @Json(name = "account_status") val accountStatus: String?,
    @Json(name = "first_name") val firstName: String?,
    @Json(name = "last_name") val lastName: String?,
    @Json(name = "thumbnail") val thumbnail: String?,
@@ -21,11 +23,11 @@ data class Eater(
    @Json(name = "email") val email: String?,
    @Json(name = "created_at") val createdAt: Date?,
    @Json(name = "orders_count") val ordersCount: Int = 0,
-   @Json(name = "addresses") val addresses: List<Address>,
+   @Json(name = "addresses") val addresses: List<Address>?,
    @Json(name = "cuisines") var cuisines: List<CuisineLabel>? = null,
    @Json(name = "diets") var diets: List<DietaryIcon>? = null,
    @Json(name = "share_campaign") val shareCampaign: Campaign? = null,
-   @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>
+   @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>?
 ): Parcelable{
     fun getFullName(): String{
         var first = "Anonymous"
@@ -39,8 +41,10 @@ data class Eater(
 
     fun getNotificationGroupIds(): ArrayList<Long>{
         val array: ArrayList<Long> = arrayListOf()
-        for(item in notificationsGroup){
-            array.add(item.id)
+        if (notificationsGroup != null) {
+            for(item in notificationsGroup){
+                array.add(item.id)
+            }
         }
         return array
     }
@@ -61,6 +65,11 @@ data class EaterRequest(
     @Json(name = "cuisine_ids") var cuisineIds: List<Int>? = null,
     @Json(name = "diet_ids") var dietIds: List<Int>? = null,
     var tempThumbnail: Uri? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class SettingsRequest(
+    @Json(name = "notification_group_ids") @SerializeNulls var notification_group_ids: List<Long>? = null
 )
 
 @JsonClass(generateAdapter = true)

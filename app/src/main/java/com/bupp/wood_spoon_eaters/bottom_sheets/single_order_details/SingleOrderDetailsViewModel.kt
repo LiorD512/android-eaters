@@ -16,6 +16,7 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, 
 
     val progressData = ProgressData()
     val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()
+    var curOrder: Order? = null
 
     val singleOrderLiveData = MutableLiveData<Order>()
     fun initSingleOrder(orderId: Long) {
@@ -25,6 +26,7 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, 
             when(result.type){
                 OrderRepository.OrderRepoStatus.GET_ORDER_BY_ID_SUCCESS -> {
                     result.data?.let{
+                        curOrder = it
                         singleOrderLiveData.postValue(it)
                     }
                 }
@@ -39,6 +41,20 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, 
                 }
             }
             progressData.endProgress()
+        }
+    }
+
+    data class FeesAndTaxData(val fee: String?, val tax: String?, val minFee: String? = null)
+    val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
+    fun onFeesAndTaxInfoClick() {
+        curOrder?.let{
+            var minOrderFee: String? = null
+            it.minOrderFee?.value?.let {
+                if (it > 0) {
+                    minOrderFee = curOrder?.minOrderFee?.formatedValue
+                }
+            }
+            feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder?.serviceFee?.formatedValue, curOrder?.tax?.formatedValue, minOrderFee))
         }
     }
 }

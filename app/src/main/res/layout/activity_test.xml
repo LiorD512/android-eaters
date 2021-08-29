@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -7,20 +7,48 @@
         android:background="@color/white"
         tools:context=".delete_me.TestActivity">
 
-    <com.bupp.wood_spoon_eaters.views.ws_marker.WSMarkerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    <fragment
+    <Button
+            android:layout_gravity="bottom|center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/testContainer"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:id="@+id/btn"
+            android:layout_width="130dp"
+            android:layout_height="130dp"/>
+
+    <Button
+            android:text="clear"
+            android:layout_gravity="bottom|start"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/clearBtn"
+            android:layout_width="130dp"
+            android:layout_height="130dp"/>
+
+    <com.bupp.wood_spoon_eaters.views.OrderProgressBar
+            android:id="@+id/orderPb"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/test_nav" />
+            android:layout_height="wrap_content"/>
+
+<!--    <com.bupp.wood_spoon_eaters.views.ws_marker.WSMarkerView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"/>-->
+
+<!--    <fragment-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            android:id="@+id/testContainer"-->
+<!--            android:name="androidx.navigation.fragment.NavHostFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:defaultNavHost="true"-->
+<!--            app:navGraph="@navigation/test_nav" />-->
+
+<!--    <com.bupp.wood_spoon_eaters.views.swipe_for_options_view.SwipeForOptionsView-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

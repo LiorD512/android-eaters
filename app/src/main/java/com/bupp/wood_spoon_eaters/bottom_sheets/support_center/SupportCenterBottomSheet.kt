@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
@@ -23,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private lateinit var binding: SupportCenterBottomSheetBinding
+    private val binding: SupportCenterBottomSheetBinding by viewBinding()
     private val viewModel: SupportViewModel by viewModel()
 
 
@@ -55,12 +57,11 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = SupportCenterBottomSheetBinding.bind(view)
-
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
-        Analytics.with(requireContext()).screen("Support center")
+//        Analytics.with(requireContext()).screen("Support center")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_SUPPORT_CENTER)
 
         initUI()
     }
@@ -113,9 +114,7 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
         }
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
-
-
 }

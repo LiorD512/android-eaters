@@ -9,9 +9,7 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class EaterDataRepository(
-    private val apiService: EaterDataRepositoryImpl,
-) {
+class EaterDataRepository(private val apiService: EaterDataRepositoryImpl) {
 
     data class EaterDataRepoResult<T>(val type: EaterDataRepoStatus, val data: T? = null, val wsError: List<WSError>? = null)
     enum class EaterDataRepoStatus {
@@ -24,14 +22,17 @@ class EaterDataRepository(
         GET_TRIGGERS_SUCCESS,
         GET_TRIGGERS_FAILED,
 
-        VALIDATE_REFERRAL_TOKEN_SUCCESS,
-        VALIDATE_REFERRAL_TOKEN_FAILED,
+//        VALIDATE_REFERRAL_TOKEN_SUCCESS,
+//        VALIDATE_REFERRAL_TOKEN_FAILED,
+//
+//        UPDATE_CAMPAIGN_STATUS_SUCCESS,
+//        UPDATE_CAMPAIGN_STATUS_FAILED,
 
         CANCEL_ORDER_SUCCESS,
         CANCEL_ORDER_FAILED,
 
-        GET_CAMPAIGN_SUCCESS,
-        GET_CAMPAIGN_FAILED,
+//        GET_CAMPAIGN_SUCCESS,
+//        GET_CAMPAIGN_FAILED,
 
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
@@ -81,8 +82,12 @@ class EaterDataRepository(
                 is ResultHandler.Success -> {
                     MTLogger.c(TAG,"getFavorites - Success")
                     val searchObj = result.value.data
-                    val favOrders = searchObj?.results
-                    EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
+                    if(searchObj?.results != null){
+                        val favOrders = searchObj.results
+                        EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
+                    }else{
+                        EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, listOfNotNull())
+                    }
                 }
                 is ResultHandler.WSCustomError -> {
                     MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
@@ -100,19 +105,19 @@ class EaterDataRepository(
         result.let{
             return  when (result) {
                 is ResultHandler.NetworkError -> {
-                    MTLogger.c(TAG,"getFavorites - NetworkError")
+                    MTLogger.c(TAG,"getTriggers - NetworkError")
                     EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    MTLogger.c(TAG,"getFavorites - GenericError")
+                    MTLogger.c(TAG,"getTriggers - GenericError")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_FAILED)
                 }
                 is ResultHandler.Success -> {
-                    MTLogger.c(TAG,"getFavorites - Success")
+                    MTLogger.c(TAG,"getTriggers - Success")
                     EaterDataRepoResult(EaterDataRepoStatus.GET_TRIGGERS_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
+                    MTLogger.c(OrderRepository.TAG,"getTriggers - wsError")
                     EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }
@@ -145,57 +150,7 @@ class EaterDataRepository(
         }
     }
 
-    suspend fun checkForCampaign(): EaterDataRepoResult<List<Campaign>> {
-        val result = withContext(Dispatchers.IO){
-            apiService.checkForCampaigns()
-        }
-        result.let{
-            return when (result) {
-                is ResultHandler.NetworkError -> {
-                    MTLogger.d(TAG,"checkForCampaigns - NetworkError")
-                    EaterDataRepoResult(EaterDataRepoStatus.GET_CAMPAIGN_FAILED)
-                }
-                is ResultHandler.GenericError -> {
-                    MTLogger.d(TAG,"checkForCampaigns - GenericError")
-                    EaterDataRepoResult(EaterDataRepoStatus.SOMETHING_WENT_WRONG)
-                }
-                is ResultHandler.Success -> {
-                    MTLogger.d(TAG,"checkForCampaigns - Success")
-                    EaterDataRepoResult(EaterDataRepoStatus.GET_CAMPAIGN_SUCCESS, result.value.data)
-                }
-                is ResultHandler.WSCustomError -> {
-                    MTLogger.d(TAG,"checkForCampaigns - something went wrong")
-                    EaterDataRepoResult(EaterDataRepoStatus.SOMETHING_WENT_WRONG)
-                }
-            }
-        }
-    }
 
-    suspend fun validateReferralToken(token: String): EaterDataRepoResult<Any> {
-        val result = withContext(Dispatchers.IO){
-            apiService.validateReferralToken(token)
-        }
-        result.let{
-            return  when (result) {
-                is ResultHandler.NetworkError -> {
-                    MTLogger.c(TAG,"validateReferralToken - NetworkError")
-                    EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
-                }
-                is ResultHandler.GenericError -> {
-                    MTLogger.c(TAG,"validateReferralToken - GenericError")
-                    EaterDataRepoResult(EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_FAILED)
-                }
-                is ResultHandler.Success -> {
-                    MTLogger.c(TAG,"validateReferralToken - Success")
-                    EaterDataRepoResult(EaterDataRepoStatus.VALIDATE_REFERRAL_TOKEN_SUCCESS)
-                }
-                is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"validateReferralToken - wsError ${result.errors?.get(0)?.msg}")
-                    EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
-                }
-            }
-        }
-    }
 
     companion object{
         const val TAG = "wowEaterDataRepo"

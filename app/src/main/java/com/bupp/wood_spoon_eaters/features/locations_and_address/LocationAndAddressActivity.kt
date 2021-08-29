@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
@@ -45,7 +46,8 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         setContentView(binding.root)
 
 
-        Analytics.with(this).screen("Manage addresses")
+//        Analytics.with(this).screen("Manage addresses")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ADDRESSES)
 //        viewModel.checkIntentParam(intent)
 
         initUi()
@@ -186,7 +188,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 data?.let {
                     val place = Autocomplete.getPlaceFromIntent(data)
                     Log.i(TAG, "Place: ${place.name}, ${place.addressComponents}, ${place.latLng}")
-                    viewModel.updateAutoCompleteAddressFound(place)
+                    viewModel.updateAutoCompleteAddressFound(this, place)
                 }
             }
             AutocompleteActivity.RESULT_ERROR -> {
@@ -213,25 +215,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     companion object{
         const val TAG = "wowLocationAndAddresAct"
     }
-
-//    override fun onResume() {
-//        super.onResume()
-////        updateUI()
-//    }
-//
-//    private fun updateUI() {
-//        val decorView = window.decorView
-//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//            }
-//        }
-//    }
 
 
 }

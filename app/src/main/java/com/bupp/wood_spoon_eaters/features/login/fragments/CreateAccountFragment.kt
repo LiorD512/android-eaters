@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -17,20 +19,19 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
-    var binding: FragmentCreateAccountBinding? = null
+    val binding: FragmentCreateAccountBinding by viewBinding()
     val viewModel by sharedViewModel<LoginViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("create_account")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT)
 
-        binding = FragmentCreateAccountBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        with(binding!!){
+        with(binding){
             KeyboardVisibilityEvent.setEventListener(requireActivity(), viewLifecycleOwner,
                 object : KeyboardVisibilityEventListener {
                     override fun onVisibilityChanged(isOpen: Boolean) {
@@ -52,7 +53,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
     private fun updateEater() {
         if(validateFields()){
-            with(binding!!){
+            with(binding){
                 val firstName = createAccountFragFirstName.getText()!!
                 val lastName = createAccountFragLastName.getText()!!
                 val email = createAccountFragEmail.getText()!!
@@ -64,7 +65,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
     private fun validateFields(): Boolean {
         var isValid = true
-        with(binding!!){
+        with(binding){
             if(createAccountFragFirstName.getText().isNullOrEmpty()){
                 createAccountFragFirstName.showError()
                 isValid = false
@@ -80,12 +81,6 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
             }
         }
         return isValid
-    }
-
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
     }
 
 }

@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
-import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtnOld
 import com.bupp.wood_spoon_eaters.databinding.FeedDishItemBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -176,7 +176,7 @@ class DishItemViewHolder(view: FeedDishItemBinding) : RecyclerView.ViewHolder(vi
     val bkgImg: ImageView = view.feedDishItemBkg
     val cookImg: ImageView = view.feedDishItemUserImg
     val cookFlag: ImageView = view.feedDishCookFlag
-    val favBtn: FavoriteBtn = view.feedDishItemFavorite
+    val favBtn: FavoriteBtnOld = view.feedDishItemFavorite
     val name: TextView = view.feedDishItemDishName
     val price: TextView = view.feedDishItemPrice
     val dishCount: TextView = view.feedDishQuantityLeft

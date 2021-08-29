@@ -107,6 +107,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 bubbleLayout.arrowDirection = ArrowDirection.TOP
                 bubbleLayout.arrowPosition = 135.toPx().toFloat()
             }
+//            Constants.TOOL_TIP_CUSTOM_CLICK -> {
+//
+//            }
         }
     }
 
@@ -166,5 +169,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun isNationWide(nationwide: Boolean? = false) {
         viewModel.isNationwide = nationwide!!
+    }
+
+    fun disable() {
+        binding.toolTipBtn.setOnClickListener(null)
+        binding.toolTipBtn.isEnabled = false
+        binding.toolTipBtn.isClickable = false
     }
 }

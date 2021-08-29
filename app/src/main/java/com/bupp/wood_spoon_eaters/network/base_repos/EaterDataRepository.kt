@@ -5,17 +5,14 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
 
-interface EaterDataRepository{
+interface EaterDataRepositoryInterface{
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
     suspend fun getFavorites(feedRequest: FeedRequest): ResultHandler<ServerResponse<Search>>
     suspend fun getTrigger(): ResultHandler<ServerResponse<Trigger>>
     suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Any>>
-    suspend fun checkForCampaigns(): ResultHandler<ServerResponse<List<Campaign>>>
-    suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>>
-
 }
 
-class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataRepository {
+class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataRepositoryInterface {
     override suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>> {
         return safeApiCall { service.getTraceableOrders() }
     }
@@ -29,13 +26,5 @@ class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataReposi
     override suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Any>> {
         return safeApiCall { service.cancelOrder(orderId, note) }
     }
-
-    override suspend fun checkForCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
-        return safeApiCall { service.getUserCampaign() }
-    }
-    override suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.validateReferralToken(token) }
-    }
-
 
 }

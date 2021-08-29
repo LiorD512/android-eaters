@@ -3,32 +3,31 @@ package com.bupp.wood_spoon_eaters.features.main.feed
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.MultiSectionFeedView
-import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
-import com.bupp.wood_spoon_eaters.features.main.cook_profile.CookProfileDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.segment.analytics.Analytics
+import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
+import com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
+import it.sephiroth.android.library.xtooltip.ClosePolicy
+import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 
-class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.MultiSectionFeedViewListener,
-    CookProfileDialog.CookProfileDialogListener {
-
-
-    override fun onEmptyhDishList() {
-        handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-//        NoDishesAvailableDialog().show(childFragmentManager, Constants.NO_DISHES_AVAILABLE_DIALOG)
-    }
+class FeedFragment : Fragment(R.layout.fragment_feed),
+     FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener, SingleColumnTimePickerBottomSheet.TimePickerListener {
 
 
     companion object {
@@ -36,69 +35,146 @@ class FeedFragment : Fragment(R.layout.fragment_feed), MultiSectionFeedView.Mult
         const val TAG = "wowFeedFragment"
     }
 
-lateinit var binding: FragmentFeedBinding
+    private var tooltip: Tooltip? = null
+    val binding: FragmentFeedBinding by viewBinding()
     private val viewModel: FeedViewModel by viewModel<FeedViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
+    private lateinit var feedAdapter: FeedMainAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentFeedBinding.bind(view)
-
-        Analytics.with(requireContext()).screen("Feed")
         initUi()
 
         initObservers()
 
         viewModel.initFeed()
-        binding.feedFragPb.show()
-
-        mainViewModel.checkCampaignForFeed()
     }
 
 
     private fun initUi() {
-        binding.feedFragSectionsView.setMultiSectionFeedViewListener(this)
+        with(binding) {
+            feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
+            feedAdapter = FeedMainAdapter(this@FeedFragment)
+            feedFragList.layoutManager = LinearLayoutManager(requireContext())
+            feedFragList.adapter = feedAdapter
+
+            feedFragRefreshLayout.setOnRefreshListener { refreshList() }
+        }
     }
 
+
     private fun initObservers() {
+        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+            binding.feedFragHeader.setAddress(it?.shortTitle)
+        })
+//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+//            Log.d(TAG, "getLocationLiveData observer called")
+//            binding.feedFragHeader.setDate(it?.deliveryDateUi)
+//            refreshList()
+//        })
+        viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
+            it.feedData?.let { skeletons ->
+                handleFeedResult(skeletons)
+            }
+        })
+        viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
+            handleFeedUi(event.isLargeItems)
+            event.feedData?.let { handleFeedResult(it) }
+        })
+
+
         viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
             handleFeedBannerUi(it)
         })
         viewModel.getLocationLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called ")
+            Log.d(TAG, "getLocationLiveData observer called")
             viewModel.refreshFeedByLocationIfNeeded()
         })
-        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called ")
-            viewModel.onPullToRefresh()
-        })
+//        viewModel.getDeliveryTimeLiveData().observe(viewLifecycleOwner, {
+//
+//        })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
             viewModel.refreshFavorites()
         })
-        viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
-            if(event.isSuccess){
-                event.feedArr?.let { initFeed(it) }
+
+        viewModel.campaignLiveData.observe(viewLifecycleOwner, { campaigns ->
+            handleShareCampaign(campaigns)
+        })
+//        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
+//            binding.feedFragSectionsView.initFavorites(it)
+//        })
+        viewModel.progressData.observe(viewLifecycleOwner, { isLoading ->
+            if (isLoading) {
+//                skeletonView.showSkeleton()
+            } else {
+
             }
         })
-        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            binding.feedFragSectionsView.initFavorites(it)
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+            binding.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
         })
-        viewModel.progressData.observe(viewLifecycleOwner, {
-            if(it){
-                binding.feedFragPb.show()
-            }else{
-                binding.feedFragPb.hide()
+        mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner, {
+            viewModel.onPullToRefresh()
+        })
+        mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner, {
+            binding.feedFragList.smoothScrollToPosition(0)
+        })
+//        mainViewModel.campaignUpdateEvent.observe(viewLifecycleOwner, {
+//            Log.d(TAG, "campaign: $it")
+//            mainViewModel.checkCampaignForFeed()
+//        })
+    }
+
+    private fun handleFeedUi(isLargeItems: Boolean) {
+        Log.d(TAG, "handleFeedUi: $isLargeItems")
+        if(!isLargeItems){
+            (binding.feedFragList as GravitySnapRecyclerView).enableSnapping(isLargeItems)
+        }
+    }
+
+
+    override fun onHeaderAddressClick() {
+//        UpSaleNCartBottomSheet().show(childFragmentManager, "")
+        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+    }
+
+    override fun onHeaderDateClick() {
+//        val timePickerBottomSheet = TimePickerBottomSheet()
+        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
+        timePickerBottomSheet.setDatesFromNow(7)
+        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+    }
+
+    override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        viewModel.onTimePickerChanged(deliveryTimeParam)
+        binding.feedFragHeader.setDate(deliveryTimeParam)
+    }
+//    override fun onTimerPickerChange(date: Date?) {
+//        //Date () - delivery today
+//        //Future date
+//    }
+
+    private fun handleShareCampaign(campaigns: List<Campaign>?) {
+        campaigns?.let {
+            campaigns.forEach { campaign ->
+                campaign.viewTypes?.forEach { viewType ->
+                    when (viewType) {
+                        CampaignViewType.FEED -> {
+//                            binding.feedFragSectionsView.initShareCampaign(campaign)
+                        }
+                    }
+                }
             }
-        })
+        }
     }
 
     private fun handleFeedBannerUi(feedUiStatus: FeedUiStatus?) {
-        feedUiStatus?.let{
+        feedUiStatus?.let {
             Log.d(TAG, "handleFeedUi: ${it.type}")
-            when(it.type){
+            when (it.type) {
                 FeedUiStatusType.CURRENT_LOCATION, FeedUiStatusType.KNOWN_ADDRESS, FeedUiStatusType.HAS_LOCATION -> {
                     handleBannerEvent(Constants.NO_BANNER)
                 }
@@ -111,39 +187,43 @@ lateinit var binding: FragmentFeedBinding
                 FeedUiStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
                     handleBannerEvent(Constants.BANNER_NO_GPS)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
 
-    override fun refreshList() {
+    fun refreshList() {
         viewModel.onPullToRefresh()
     }
 
 
-    override fun onDishClick(menuItemId: Long) {
-        mainViewModel.onDishClick(menuItemId)
+//    override fun onDishClick(menuItemId: Long) {
+//        mainViewModel.onDishClick(menuItemId)
+//    }
+
+    private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
+        if (feedArr.isEmpty()) {
+            showEmptyLayout()
+            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
+        } else {
+            binding.feedFragRefreshLayout.isRefreshing = false
+            binding.feedFragEmptyLayout.visibility = View.GONE
+            feedAdapter.submitList(feedArr)
+        }
     }
 
-    private fun initFeed(feedArr: List<Feed>) {
-        if(feedArr.isEmpty()){
-//            showEmptyLayout()
-            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-        }else{
-            binding.feedFragEmptyLayout.visibility = View.GONE
-            binding.feedFragListLayout.visibility = View.VISIBLE
-            binding.feedFragSectionsView.initFeed(feedArr, stubView = Constants.FEED_VIEW_STUB_SHARE)
-        }
-        binding.feedFragPb.hide()
+    override fun onChangeAddressClick() {
+        mainViewModel.startLocationAndAddressAct()
     }
 
 
     @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
-        with(binding){
-            feedFragListLayout.visibility = View.GONE
+        with(binding) {
+            feedFragList.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
+//            feedFragEmptyFeedTitle.text = "Hey ${viewModel.getEaterFirstName() ?: "Guest"}"
             feedFragEmptyLayout.setOnClickListener {
                 mainViewModel.startLocationAndAddressAct()
             }
@@ -151,11 +231,11 @@ lateinit var binding: FragmentFeedBinding
     }
 
     private fun handleBannerEvent(bannerType: Int) {
-        bannerType.let{
+        bannerType.let {
             Log.d(TAG, "handleBannerEvent: $bannerType")
-            when(bannerType){
+            when (bannerType) {
                 Constants.NO_BANNER -> {
-                    binding.feedFragHeaderError.visibility = View.GONE
+//                    tooltip?.dismiss()
                 }
                 Constants.BANNER_KNOWN_ADDRESS -> {
                     showBanner(getString(R.string.banner_known_address))
@@ -169,64 +249,80 @@ lateinit var binding: FragmentFeedBinding
                 Constants.BANNER_NO_AVAILABLE_DISHES -> {
                     showBanner(getString(R.string.banner_no_available_dishes))
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
 
     private fun showBanner(text: String) {
-        with(binding){
-            feedFragHeaderError.text = text
-            feedFragHeaderError.visibility = View.VISIBLE
-            feedFragHeaderError.setOnClickListener {
-                feedFragHeaderError.visibility = View.GONE
-            }
+        with(binding) {
+            tooltip = Tooltip.Builder(requireContext())
+                .anchor(feedFragHeader, 0, -30, true)
+                .text(text)
+                .arrow(true)
+                .closePolicy(ClosePolicy.TOUCH_INSIDE_NO_CONSUME)
+                .fadeDuration(250)
+                .showDuration(10000)
+                .overlay(false)
+                .maxWidth(feedFragHeader.measuredWidth - 50)
+                .create()
+            tooltip!!
+                .doOnHidden { }
+                .doOnFailure { }
+                .doOnShown { }
+                .show(feedFragHeader, Tooltip.Gravity.BOTTOM, false)
         }
-//        tooltip = Tooltip.Builder(this)
-//            .anchor(headerCard, 0, -30, true)
-//            .text(text)
-//            .arrow(true)
-//            .floatingAnimation(Tooltip.Animation.SLOW)
-//            .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
-//            .overlay(false)
-//            .maxWidth(mainActHeaderView.measuredWidth-50)
-//            .create()
+    }
+
+
+//    override fun onDishClick(dish: Dish) {
+//        dish.menuItem?.let {
+//            mainViewModel.onDishClick(it.id)
+//        }
+//    }
 //
-//        tooltip!!
-//            .doOnHidden { }
-//            .doOnFailure { }
-//            .doOnShown { }
-//            .show(headerCard, Tooltip.Gravity.BOTTOM, false)
-    }
-
-
-    override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let{
-            mainViewModel.onDishClick(it.id)
-        }
-    }
-
-    override fun onCookClick(cook: Cook) {
-        Analytics.with(requireContext()).screen("Home chef page (from feed)")
-        val args = Bundle()
-        args.putLong(Constants.ARG_COOK_ID, cook.id)
-        val cookDialog = CookProfileDialog(this)
-        cookDialog.arguments = args
-        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
-    }
-
-    override fun onShareClick() {
-        val text = mainViewModel.getShareText()
-        activity?.let { Utils.shareText(it, text) }
-    }
-
-    override fun onWorldwideInfoClick() {
-        NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
-    }
+//    override fun onCookClick(cook: Cook) {
+//        Analytics.with(requireContext()).screen("Home chef page (from feed)")
+//        val args = Bundle()
+//        args.putLong(Constants.ARG_COOK_ID, cook.id)
+//        val cookDialog = CookProfileDialog(this)
+//        cookDialog.arguments = args
+//        cookDialog.show(childFragmentManager, Constants.COOK_PROFILE_DIALOG_TAG)
+//    }
+//
+//    override fun onShareClick(campaign: Campaign) {
+//        mainViewModel.onShareCampaignClick(campaign)
+//    }
+//
+//    override fun onWorldwideInfoClick() {
+//        NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
+//    }
 
     fun silentRefresh() {
-        Log.d("wowFeedFrag","silentRefresh")
+        Log.d("wowFeedFrag", "silentRefresh")
 //        viewModel.getFeed()
+    }
+
+    //Feed main adapter interface
+    override fun onShareBannerClick(campaign: Campaign) {
+        mainViewModel.onShareCampaignClick(campaign)
+    }
+
+    override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
+        mainViewModel.startRestaurantActivity(restaurantInitParams)
+//        startActivity(Intent(requireContext(), RestaurantActivity::class.java)
+//            .putExtra(Constants.ARG_RESTAURANT, restaurantInitParams)
+//        )
+    }
+
+    override fun onDishSwiped() {
+        viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_FEED)
     }
 
 

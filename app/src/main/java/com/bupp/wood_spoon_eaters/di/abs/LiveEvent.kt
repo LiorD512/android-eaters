@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.di.abs
 
 import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.DeliveryDates
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
@@ -21,6 +21,10 @@ open class LiveEvent<out T>(private val content: T) {
             hasBeenHandled = true
             content
         }
+    }
+
+    fun forceUnHandled(){
+        hasBeenHandled = false
     }
 
     /**

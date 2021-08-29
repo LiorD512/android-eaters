@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layoutDescription="@xml/fragment_restaurant_page_scene">
+
+    <Space
+            android:id="@+id/spaceTest"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <Space
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="300dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+            android:id="@+id/coverPhotoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+                android:id="@+id/coverPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/event_logo_bkg" />
+
+        <ImageView
+                android:id="@+id/restFragVideoBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:visibility="gone"
+                android:layout_marginBottom="50dp"
+                android:src="@drawable/ic_play_grey"
+                android:background="@drawable/transparent_to_black_60_gradient"/>
+
+    </FrameLayout>
+
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/topHeader"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:alpha="0"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:cardElevation="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:alpha="0"
+            android:elevation="5dp"
+            android:src="@drawable/ic_search_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/topHeaderRestaurantName"
+            style="@style/LatoBlack15DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15.4dp"
+            android:alpha="0"
+            android:elevation="15dp"
+            android:text="Israeli in The Big Apple"
+            app:layout_constraintStart_toEndOf="@id/backButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/topHeaderChefName"
+            style="@style/Reg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:alpha="0"
+            android:elevation="15.4dp"
+            android:paddingTop="3dp"
+            android:text="by Assaf Beer"
+            android:textColor="@color/very_light_grey"
+            app:layout_constraintStart_toEndOf="@id/backButton"
+            app:layout_constraintTop_toBottomOf="@id/topHeaderRestaurantName" />
+
+    <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:elevation="5dp"
+            android:src="@drawable/ic_back_grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/shareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:elevation="5dp"
+            android:src="@drawable/ic_share_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/menuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:src="@drawable/ic_menu_grey"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+            android:id="@+id/ratingMainLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/restaurantHeader"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+                android:id="@+id/ratingLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginBottom="15.4dp"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/background_cornered_rect_grey"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="14dp">
+
+            <TextView
+                    android:id="@+id/rating"
+                    style="@style/Reg12White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    app:drawableStartCompat="@drawable/ic_review_star"
+                    tools:text="4.5" />
+
+            <TextView
+                    android:id="@+id/ratingCount"
+                    style="@style/Reg12White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="4dp"
+                    android:visibility="gone"
+                    tools:text="(415 ratings)" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <LinearLayout
+            android:id="@+id/restaurantHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_white_top_cornered"
+            android:orientation="horizontal"
+            android:padding="15.4dp"
+            app:layout_constraintBottom_toTopOf="@id/mainList"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <com.bupp.wood_spoon_eaters.views.UserImageView
+                android:id="@+id/restHeaderChefThumbnail"
+                android:layout_width="46dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2.5dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="5dp"
+                android:paddingTop="4dp">
+
+            <TextView
+                    android:id="@+id/restHeaderRestName"
+                    style="@style/LatoBlack15DarkGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Israeli in The Big Apple" />
+
+            <TextView
+                    android:id="@+id/restHeaderChefName"
+                    style="@style/LatoReg13VeryLightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    tools:text="by Assaf Beer" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+                android:id="@+id/restHeaderFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:overScrollMode="never"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/space">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <include
+                    android:id="@+id/restaurantMainListLayout"
+                    layout="@layout/restaurant_main_list_layout" />
+
+            <View
+                    android:id="@+id/restaurantFragHeightCorrection"
+                    android:layout_width="1dp"
+                    android:layout_height="@dimen/floating_cart_btn_height"
+                    android:visibility="gone" />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+            android:id="@+id/restaurantFragFloatingCartBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

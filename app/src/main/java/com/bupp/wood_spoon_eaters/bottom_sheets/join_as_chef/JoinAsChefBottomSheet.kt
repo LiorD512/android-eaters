@@ -8,26 +8,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.databinding.JoinAsChefBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.views.WSCounterEditText
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.segment.analytics.Analytics
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private lateinit var binding: JoinAsChefBottomSheetBinding
-//    private val viewModel: SupportViewModel by viewModel()
-
+    private val binding: JoinAsChefBottomSheetBinding by viewBinding()
+    val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.join_as_chef_bottom_sheet, container, false)
@@ -57,10 +60,10 @@ class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = JoinAsChefBottomSheetBinding.bind(view)
-
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
+
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_JOIN_HOME_CHEF)
 
         initUI()
     }
@@ -82,7 +85,7 @@ class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
         startActivity(i)
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
     }
 

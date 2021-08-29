@@ -66,7 +66,9 @@
     <TextView
             android:id="@+id/headerViewTitle"
             style="@style/LatoBlack15Dark"
-            android:layout_width="wrap_content"
+            android:layout_marginHorizontal="55dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +91,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
-        <com.bupp.wood_spoon_eaters.views.UserImageView
+        <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                 android:id="@+id/headerViewProfileBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -221,7 +223,7 @@
             android:layout_marginLeft="10.4dp"
             android:background="@null"
             android:padding="7dp"
-            android:src="@drawable/icons_back"
+            android:src="@drawable/ic_back_grey"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

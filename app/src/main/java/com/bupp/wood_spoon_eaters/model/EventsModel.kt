@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -29,34 +30,40 @@ data class Campaign(
     @Json(name = "user_interaction_id") val userInteractionId: Long?,
     @Json(name = "user_interaction_status") val status: UserInteractionStatus?,
     @Json(name = "name") val name: String?,
-    @Json(name = "show_after") val showAfter: CampaignShowAfter?,
+    @Json(name = "show_after") val showAfter: List<CampaignShowAfter>?,
     @Json(name = "view_types") val viewTypes: List<CampaignViewType>?,
     @Json(name = "header") val header: String?,
     @Json(name = "photo_small") val photoSmall: String?,
     @Json(name = "photo_large") val photoLarge: String?,
     @Json(name = "body_text1") val bodyText1: String?,
-    @Json(name = "body_text2") val bodyText2: String?,
     @Json(name = "button_text") val buttonText: String?,
     @Json(name = "button_action") val buttonAction: CampaignButtonAction?,
     @Json(name = "share_text") val shareText: String?,
     @Json(name = "banner_color") val bannerColor: String?,
     @Json(name = "share_url") val shareUrl: String?,
     @Json(name = "terms_and_conditions") val termsAndConditions: String?
-):Parcelable
+):Parcelable {
+    fun isMatchingEvent(curEvent: FlowEventsManager.FlowEvents): Boolean {
+        showAfter?.forEach {
+            if(it.toString() == curEvent.toString()){
+                return true
+            }
+        }
+        return false
+    }
+}
 
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class CampaignData(val eater: Eater?, val campaign: Campaign):Parcelable
 
 enum class UserInteractionStatus{
     @Json(name = "idle") IDLE,
     @Json(name = "seen") SEEN,
-    @Json(name = "engaged ") ENGAGED,
+    @Json(name = "engaged") ENGAGED,
 }
 
 enum class CampaignShowAfter{
     @Json(name = "homepage_visit") VISIT_HOME_PAGE,
     @Json(name = "feed_visit") VISIT_FEED,
+    @Json(name = "profile_visit") VISIT_PROFILE,
     @Json(name = "add_to_cart_action ") ACTION_ADD_TO_CART,
     @Json(name = "purchase_action ") ACTION_PURCHASE,
     @Json(name = "rate_your_order_action ") ACTION_RATE_ORDER,
@@ -67,6 +74,7 @@ enum class CampaignViewType{
     @Json(name = "banner") BANNER,
     @Json(name = "popup") POPUP,
     @Json(name = "feed") FEED,
+    @Json(name = "profile") PROFILE,
 }
 
 enum class CampaignButtonAction{

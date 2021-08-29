@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
@@ -10,102 +11,97 @@ import com.bupp.wood_spoon_eaters.views.favorites_view.FavoritesView
 import com.bupp.wood_spoon_eaters.custom_views.feed_view.SingleFeedListView
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.utils.Utils
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.content.Intent
-import android.net.Uri
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.CuisinesChooserDialog
-import com.bupp.wood_spoon_eaters.BuildConfig
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bupp.wood_spoon_eaters.bottom_sheets.delete_account.DeleteAccountBottomSheet
+import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDialog
+import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.IconsGridView
-import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.EmptyIconsGridView
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.DishItemViewHolder
-import com.bupp.wood_spoon_eaters.custom_views.feed_view.RoundedCornersTransformation
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
-import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
-import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.views.ShareBanner
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.bupp.wood_spoon_eaters.views.horizontal_dietary_view.HorizontalDietaryView
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
     FavoritesView.FavoritesViewListener, CuisinesChooserDialog.CuisinesChooserListener,
-     HorizontalDietaryView.HorizontalDietaryViewListener {
+    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageViewListener {
 
-    lateinit var binding: MyProfileFragmentBinding
+    val binding: MyProfileFragmentBinding by viewBinding()
     private val viewModel by viewModel<MyProfileViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
+    private lateinit var editProfileBS: EditProfileBottomSheet
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Analytics.with(requireContext()).screen("Profile page")
 
-        binding = MyProfileFragmentBinding.bind(view)
 
         initClicks()
         initObservers()
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchProfileData()
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ACCOUNT)
+    }
+
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {
-        with(binding){
-            profileData.dietary.let{
+        with(binding) {
+            profileData.dietary.let {
                 myProfileFragDietary.initHorizontalDietaryView(it, this@MyProfileFragment)
             }
 
-            profileData.bannerUrl?.let{
-                Glide.with(requireContext()).load(it).transform(CenterCrop(), RoundedCorners(15)).into(myProfileFragBanner)
-                myProfileFragBannerLayout.visibility = View.VISIBLE
-            }
+//            profileData.bannerUrl?.let{
+//                Glide.with(requireContext()).load(it).transform(CenterCrop(), RoundedCorners(15)).into(myProfileFragBanner)
+//                myProfileFragBannerLayout.visibility = View.VISIBLE
+//            }
 
-            profileData.eater?.let{ eater ->
+            profileData.eater?.let { eater ->
 
                 myProfileFragUserHey.text = "Hey, ${eater.firstName}"
                 myProfileFragUserName.text = eater.getFullName()
 
-                if(eater.ordersCount > 0){
+                if (eater.ordersCount > 0) {
                     myProfileFragOrderCount.text = "${eater.ordersCount} Orders"
                 }
 
                 myProfileFragUserImageView.setImage(eater.thumbnail)
+                myProfileFragUserImageView.setUserImageViewListener(this@MyProfileFragment)
+
 
                 //load selected cuisines and dietary
-                eater.cuisines?.let{
+                eater.cuisines?.let {
                     myProfileFragCuisine.setTextFromList(it as List<SelectableIcon>)
                 }
-                eater.diets?.let{
+                eater.diets?.let {
                     myProfileFragDietary.setSelectedDietary(it as List<SelectableIcon>)
                 }
 
-                myProfileFragCuisine.setIsEditable(true, object: WSEditText.WSEditTextListener{
+                myProfileFragCuisine.setIsEditable(true, object : WSEditText.WSEditTextListener {
                     override fun onWSEditUnEditableClick() {
-                        val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment, viewModel.getCuisineList(), Constants.ENDLESS_SELECTION)
-                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
+                        val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment)
+//                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
                         cuisineFragment.show(childFragmentManager, "CookingCuisine")
                     }
                 })
             }
 
-            myProfileFragVersion.text = "Version: ${BuildConfig.VERSION_NAME}"
+
         }
     }
 
@@ -117,28 +113,24 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         viewModel.paymentLiveData.observe(viewLifecycleOwner, { cardsEvent ->
             handleCustomerCards(cardsEvent)
         })
-
-        viewModel.myProfileActionEvent.observe(viewLifecycleOwner, {
-            when(it.type){
-                MyProfileViewModel.MyProfileActionType.LOGOUT -> {
-                    val intent = Intent(context, SplashActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
-                }
-            }
-        })
-        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
-        })
+//        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
+//            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
+//        })
         viewModel.progressData.observe(viewLifecycleOwner, {
-            if(it){
+            if (it) {
                 binding.myProfileFragPb.show()
-            }else{
+            } else {
                 binding.myProfileFragPb.hide()
             }
         })
+        viewModel.campaignLiveData.observe(viewLifecycleOwner, {
+            handleCampaign(it)
+        })
+        viewModel.versionLiveData.observe(viewLifecycleOwner, {
+            binding.myProfileFragVersion.text = "$it"
+        })
         mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
-            Log.d(NewOrderActivity.TAG, "stripeInitializationEvent status: $it")
+            Log.d(TAG, "stripeInitializationEvent status: $it")
             when (it) {
                 PaymentManager.StripeInitializationStatus.START -> {
                     binding.myProfileFragPb.show()
@@ -152,14 +144,29 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
         })
         mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.myProfileFragAddress.updateDeliveryFullDetails(it.address)
+            binding.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
         })
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+            binding.myProfileFragHeightCorrection.isVisible = it
+        })
+    }
+
+    private fun handleCampaign(campaigns: List<Campaign>?) {
+        campaigns?.forEach { campaign ->
+            campaign.viewTypes?.forEach { viewType ->
+                when (viewType) {
+                    CampaignViewType.PROFILE -> {
+                        binding.myProfileFragShareBanner.initCustomBannerByCampaign(campaign, this)
+                    }
+                }
+            }
+        }
     }
 
 
     private fun initClicks() {
         with(binding) {
-            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }
+//            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }//todo - fix this feed 2.0
 
             myProfileFragAddress.setOnClickListener {
                 mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
@@ -176,18 +183,20 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             myProfileFragJoinAsChef.setOnClickListener {
                 JoinAsChefBottomSheet().show(childFragmentManager, Constants.JOIN_AS_CHEF_BOTTOM_SHEET)
             }
-            myProfileFragBanner.setOnClickListener { share() }
-
-            myProfileFragOrderHistory.setOnClickListener { openOrderHistoryDialog() }
 
             myProfileFragLogout.setOnClickListener {
                 LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
+                mainViewModel.logEvent(Constants.EVENT_CLICK_SIGN_OUT)
+
             }
+            myProfileFragDeleteAccount.setOnClickListener {
+                DeleteAccountBottomSheet().show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
+            }
+            myProfileFragEditAccount.setOnClickListener { onUserImageClick(null) }
             myProfileFragAddress.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragPayment.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragAddress.setChangeable(true)
             myProfileFragPayment.setChangeable(true)
-
         }
     }
 
@@ -197,7 +206,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     override fun onDishClick(dish: Dish) {
-        dish.menuItem?.let{
+        dish.menuItem?.let {
             mainViewModel.onDishClick(it.id)
         }
     }
@@ -206,17 +215,13 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         viewModel.updateClientAccount(cuisineIcons = selectedCuisines, forceUpdate = true)
     }
 
-    private fun share() {
-        val text = viewModel.getShareText()
-        Utils.shareText(requireActivity(), text)
-    }
 
     override fun logout() {
-        viewModel.logout()
+        mainViewModel.logout()
     }
 
     private fun openOrderHistoryDialog() {
-        (activity as MainActivity).loadOrderHistoryFragment()
+        //remove this
     }
 
     override fun onCustomDetailsClick(type: Int) {
@@ -226,30 +231,32 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
 
             Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_PAYMENT)
                 mainViewModel.startStripeOrReInit()
             }
         }
     }
 
     private fun handleCustomerCards(paymentMethods: PaymentMethod?) {
-        if(paymentMethods != null){
+        if (paymentMethods != null) {
             updateCustomerPaymentMethod(paymentMethods)
-        }else{
+        } else {
             setEmptyPaymentMethod()
         }
     }
 
     private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
         val card = paymentMethod.card
-        if(card != null){
-            Log.d("wowMyProfile","updateCustomerPaymentMethod: ${paymentMethod.id}")
+        if (card != null) {
+            Log.d("wowMyProfile", "updateCustomerPaymentMethod: ${paymentMethod.id}")
             binding.myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
             viewModel.updateUserCustomerCard(paymentMethod)
+            binding.myProfileFragPb.hide()
         }
     }
 
     private fun setEmptyPaymentMethod() {
-        binding.myProfileFragPayment.updateDeliveryDetails("Insert payment method")
+        binding.myProfileFragPayment.updateSubTitle("Insert payment method")
     }
 
     fun onAddressChooserSelected() {
@@ -260,11 +267,19 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         NationwideShippmentInfoDialog().show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_INFO_DIALOG)
     }
 
+    override fun onShareBannerClick(campaign: Campaign?) {
+        mainViewModel.onShareCampaignClick(campaign)
+    }
+
+    override fun onUserImageClick(cook: Cook?) {
+        editProfileBS = EditProfileBottomSheet()
+        editProfileBS.show(childFragmentManager, Constants.EDIT_PROFILE_BOTTOM_SHEET)
+    }
+
     companion object {
         fun newInstance() = MyProfileFragment()
         const val TAG = "wowMyProfileFrag"
     }
-
 
 
 }

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.DepthPageTransformer
 import com.bupp.wood_spoon_eaters.databinding.FragmentActiveOrderTrackerBinding
@@ -48,7 +49,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
 //            }
 //    }
 
-    var binding: FragmentActiveOrderTrackerBinding? = null
+    val binding: FragmentActiveOrderTrackerBinding by viewBinding()
     private lateinit var adapter: OrdersPagerAdapter
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
@@ -61,7 +62,6 @@ class ActiveOrderTrackerDialog : DialogFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentActiveOrderTrackerBinding.bind(view)
 
         initObservers()
         viewModel.sendOpenEvent()
@@ -74,7 +74,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
     }
 
     private fun handleOrders(orders: List<Order>?) {
-        with(binding!!){
+        with(binding){
             orders?.let {
                 if(!this@ActiveOrderTrackerDialog::adapter.isInitialized){
                     //check if isInitialized to do this only once. when dialog opens for the first time.
@@ -150,11 +150,6 @@ class ActiveOrderTrackerDialog : DialogFragment(),
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
     }
 
     companion object{

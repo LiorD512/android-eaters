@@ -18,7 +18,7 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: List<Or
 
     val NEGATIVE = 0
     val POSITIVE = 1
-    var metricsRequestsMap: LinkedHashMap<Long, DishMetricsRequest> = linkedMapOf()
+    var metricsRequestsMap: LinkedHashMap<Int, DishMetricsRequest> = linkedMapOf()
 
     interface RateOrderAdapterListener{
         fun onRate()
@@ -50,15 +50,15 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: List<Or
 
         holder.name.text = "${orderItem.dish.name} x${orderItem.quantity}"
 
-        holder.positiveBtn.setOnClickListener { setClicked(orderItem.dish.id, POSITIVE) }
-        holder.negativeBtn.setOnClickListener { setClicked(orderItem.dish.id, NEGATIVE) }
+        holder.positiveBtn.setOnClickListener { setClicked(position, orderItem.dish.id, POSITIVE) }
+        holder.negativeBtn.setOnClickListener { setClicked(position, orderItem.dish.id, NEGATIVE) }
 
     }
 
-    private fun setClicked(id: Long, selectedValue: Int) {
+    private fun setClicked(position: Int, id: Long, selectedValue: Int) {
         val metricsRequest =  DishMetricsRequest(id, selectedValue)
         Log.d("wowMetricsView","added metrics: $metricsRequest")
-        metricsRequestsMap[id] = metricsRequest
+        metricsRequestsMap[position] = metricsRequest
         listener.onRate()
     }
 
@@ -67,6 +67,6 @@ class RateLastOrderAdapter(val context: Context, private var orderItems: List<Or
     }
 
     fun isAllRated(): Boolean{
-        return metricsRequestsMap.values.size == getItemCount()
+        return metricsRequestsMap.values.size == itemCount
     }
 }

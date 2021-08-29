@@ -7,10 +7,10 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
@@ -29,14 +29,15 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     CancelOrderDialog.CancelOrderDialogListener, OnMapReadyCallback,
     TrackOrderNewAdapter.TrackOrderNewAdapterListener {
 
-    lateinit var binding: TrackOrderFragmentBinding
+    val binding: TrackOrderFragmentBinding by viewBinding()
+
     private var mMap: GoogleMap? = null
     var curOrderId: Long? = null
     var listener: TrackOrderDialogListener? = null
 
     var currentBoundSize = 100
 
-    private lateinit var adapter: TrackOrderNewAdapter
+    private var adapter: TrackOrderNewAdapter? = null
 //    private lateinit var mainAdapter: TrackOrderMainAdapter
     val viewModel by viewModel<ActiveOrderTrackerViewModel>()
 
@@ -50,7 +51,6 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
     companion object {
         const val CUR_ORDER_ID_PARAM = "curOrderId"
-
         fun newInstance(curOrderId: Long): TrackOrderFragment {
             val fragment = TrackOrderFragment()
             try {
@@ -75,8 +75,6 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = TrackOrderFragmentBinding.bind(view)
 
         initUi()
         initMap()
@@ -128,8 +126,8 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
             mMap?.clear()
 
-            val chefLat = curOrderData.cook?.pickupAddress?.lat
-            val chefLng = curOrderData.cook?.pickupAddress?.lng
+            val chefLat = curOrderData.restaurant?.pickupAddress?.lat
+            val chefLng = curOrderData.restaurant?.pickupAddress?.lng
             chefLat?.let{
                 chefLng?.let{
                     val chefLocation = LatLng(chefLat, chefLng)
@@ -233,9 +231,9 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
         val data = mutableListOf<TrackOrderData<Any>>(
             TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
-            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false),
+            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false)
         )
-        adapter.submitList(data)
+        adapter?.submitList(data)
 //        mainAdapter.updateUi(order, userInfo)
         binding.trackOrderDialogList.scrollToPosition(0)
     }
@@ -288,6 +286,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     override fun onDestroy() {
         mMap?.clear()
         mMap = null
+        adapter = null
 //        binding = null
         super.onDestroy()
     }

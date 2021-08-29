@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val eventsManager: EventsManager,
     private val userRepository: UserRepository,
-    private val eaterDataManager: EaterDataManager,
+    private val flowEventsManager: FlowEventsManager,
     private val metaDataRepository: MetaDataRepository,
     private val deviceDetailsManager: FcmManager,
     private val paymentManager: PaymentManager
@@ -78,6 +79,7 @@ class LoginViewModel(
 //        navigationEvent.postValue(NavigationEventType.OPEN_MAIN_LOGIN_SCREEN)
 //    }
     fun directToPhoneFrag() {
+        eventsManager.logEvent(Constants.EVENT_CLICK_GET_STARTED)
         navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 
@@ -168,7 +170,7 @@ class LoginViewModel(
 
     //code verification methods
 
-    fun sendPhoneAndCodeNumber() {
+    fun sendPhoneAndCodeNumber(context: Context) {
         if (!code.isNullOrEmpty()) {
             phone?.let { phone ->
                 progressData.startProgress()
@@ -189,7 +191,9 @@ class LoginViewModel(
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
                             if (userRepository.isUserSignedUp()) {
+                                paymentManager.initPaymentManager(context)
                                 navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                                eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
                             } else {
                                 navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
@@ -246,6 +250,7 @@ class LoginViewModel(
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
                     navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                    eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
 //                    eventsManager.sendRegistrationCompletedEvent()
                     eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))
                 }
@@ -263,6 +268,10 @@ class LoginViewModel(
         val data = mutableMapOf<String, String>("success" to if(isSuccess) "true" else "false")
         data["user_id"] = userId.toString()
         return data
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
     }
 
 

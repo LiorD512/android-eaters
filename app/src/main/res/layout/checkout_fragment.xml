@@ -5,32 +5,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".features.new_order.sub_screen.checkout.CheckoutFragment">
-
-    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-            android:id="@+id/checkoutFragHeaderView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="Checkout"
-            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+        tools:context=".features.order_checkout.checkout.CheckoutFragment">
 
     <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/checkoutFragHeaderView"
             android:background="@color/grey_white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkoutFragHeaderView">
+            app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/status_bottom_bar_height">
+                android:paddingBottom="@dimen/floating_cart_btn_height">
 
             <fragment
                     android:id="@+id/checkoutFragMap"
@@ -45,17 +34,6 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="-20dp"
                     android:background="@drawable/white_to_transparent_rect2" />
-
-            <TextView
-                    android:id="@+id/checkoutFragDetailsHeader"
-                    style="@style/LatoBlack17Dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginTop="15.4dp"
-                    android:layout_marginBottom="7.7dp"
-                    android:letterSpacing="0.03"
-                    tools:text="Your order from home chef Oded" />
 
             <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                     android:id="@+id/checkoutFragNationwideSelect"
@@ -118,13 +96,15 @@
                     android:layout_height="7.7dp"
                     android:background="@color/light_periwinkle_50" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+            <com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
                     android:id="@+id/checkoutFragOrderItemsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:paddingLeft="15.4dp"
-                    android:paddingRight="15.4dp" />
+                    android:paddingRight="15.4dp"
+                    android:paddingBottom="15.4dp"
+                    app:showAddBtn="true" />
 
             <View
                     android:layout_width="match_parent"
@@ -151,7 +131,8 @@
                     android:id="@+id/checkoutFragPromoCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:changeable="false"
+                    app:btnTitle="Add"
+                    app:changeable="true"
                     app:detailsType="DELIVERY_DETAILS_PROMO_CODE"
                     app:showSep="false" />
 
@@ -194,20 +175,22 @@
                         android:id="@+id/checkoutFragFees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tip_type="CHECKOUT_MINIMUM_FEE"
+                        app:tip_type="FEES_AND_ESTIMATED_TAX"
                         app:title="Fees &amp; Estimated tax" />
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                         android:id="@+id/checkoutFragPromoCode2"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:title="Promo code" />
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                         android:id="@+id/checkoutFragTotalBeforeTip"
+                        style="@style/LatoBold13Black"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:isBold="true"
                         app:title="Total before tip" />
 
             </LinearLayout>
@@ -234,24 +217,35 @@
                         android:paddingVertical="15.4dp"
                         android:text="Tip your courier" />
 
-                <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+                <ImageButton
                         android:id="@+id/checkoutFragCourierTip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
                         android:paddingStart="5dp"
-                        app:tip_type="CHECKOUT_COURIER_TIP" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icons_tooltip" />
 
             </LinearLayout>
 
             <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
                     android:id="@+id/checkoutFragTipPercentView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15.4dp" />
+                    android:layout_height="wrap_content" />
+
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+
+    <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/checkoutFragPlaceOrderBtn"
+            app:floating_button_type="PLACE_ORDER"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/checkoutFragmentPb"

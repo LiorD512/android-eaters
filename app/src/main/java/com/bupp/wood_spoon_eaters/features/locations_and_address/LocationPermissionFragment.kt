@@ -12,7 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentLocationPermissionBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -26,7 +28,7 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
         askLocationPermission()
     }
 
-    private var binding: FragmentLocationPermissionBinding? = null
+    private val binding: FragmentLocationPermissionBinding by viewBinding()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,18 +62,19 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentLocationPermissionBinding.bind(view)
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_LOCATION_PERMISSION)
+
         initUi()
     }
 
     private fun initUi() {
-        binding!!.locationPermissionFragAllow.setOnClickListener {
+        binding.locationPermissionFragAllow.setOnClickListener {
             mainViewModel.locationPermissionEvent(true)
 //            mainViewModel.onLocationPermissionDone()
             askLocationPermission()
         }
 
-        binding!!.locationPermissionFragReject.setOnClickListener {
+        binding.locationPermissionFragReject.setOnClickListener {
             mainViewModel.locationPermissionEvent(false)
 //            mainViewModel.onLocationPermissionDone()
             dismiss()
@@ -107,10 +110,6 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
-    override fun onDestroy() {
-        binding = null
-        super.onDestroy()
-    }
 
     companion object{
         const val TAG = "wowLocationPermission"

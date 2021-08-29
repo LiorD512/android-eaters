@@ -2,13 +2,11 @@ package com.bupp.wood_spoon_eaters.features.new_order.sub_screen.additional_dish
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishItemHeaderBinding
 import com.bupp.wood_spoon_eaters.databinding.AdditionalDishesDialogItemDishBinding
@@ -35,7 +33,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
             }
             VIEW_TYPE_ORDER_ITEM -> {
                 val binding = AdditionalDishesDialogItemOrderItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                OrderItemViewHolder(binding)
+                AdditionalItemsViewHolder(binding)
 //                OrderItemViewHolder(LayoutInflater.from(context).inflate(R.layout.additional_dishes_dialog_item_order_item, parent, false))
             }
             else -> { // VIEW_TYPE_ADDITIONAL
@@ -57,7 +55,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         when (item.viewType) {
             VIEW_TYPE_ORDER_ITEM -> {
                 val orderItem = item.dish as OrderItem
-                (holder as OrderItemViewHolder).bind(orderItem)
+                (holder as AdditionalItemsViewHolder).bind(orderItem)
 
                 orderItem.menuItem?.let{
                     holder.plusMinusView.setPlusMinusListener(this, position, initialCounter = orderItem.quantity, quantityLeft = it.getQuantityCount())
@@ -92,7 +90,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         val body: TextView = binding.additionalHeaderBody
     }
 
-    class OrderItemViewHolder(binding: AdditionalDishesDialogItemOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class AdditionalItemsViewHolder(binding: AdditionalDishesDialogItemOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
 //        val binding = AdditionalDishesDialogItemOrderItemBinding.bind(view)
         val plusMinusView: PlusMinusView = binding.orderItemPlusMinus
         private val name: TextView = binding.orderItemName
@@ -103,7 +101,7 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
         fun bind(orderItem: OrderItem){
             price.text = orderItem.price.formatedValue
             count.text = "${orderItem.quantity}"
-            img.loadResizableImage(orderItem.dish.thumbnail)
+            img.loadResizableImage(orderItem.dish.thumbnail?.url)
             name.text = orderItem.dish.name
         }
     }
@@ -121,9 +119,12 @@ class AdditionalDishesAdapter(val context: Context, val listener: AdditionalDish
             count.text = "${dish.menuItem?.quantity ?: 0}"
             addBtn.setOnClickListener { listener.onAddBtnClick(dish) }
             img.setOnClickListener { listener.onDishClick(dish) }
-            dish.thumbnail?.let{
+            dish.thumbnail?.url?.let{
                 img.loadResizableImage(it)
             }
+//            dish.thumbnail?.url?.let{ //todo restore this when misha is ready
+//                img.loadResizableImage(it)
+//            }
             name.text = dish.name
         }
     }

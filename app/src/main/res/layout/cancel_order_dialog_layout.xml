@@ -84,7 +84,7 @@
 
         <TextView
                 android:id="@+id/cancelOrderDialogCancelBtn"
-                style="@style/SemiBold15Dark"
+                style="@style/SemiBold15Red"
                 android:gravity="center"
                 android:paddingTop="15.5dp"
                 android:paddingBottom="15.5dp"

@@ -28,7 +28,7 @@
     <string name="welcome_fragment_sign_up_btn">I already have an account</string>
 
     <string name="phone_verification_fragment_next_btn">Next</string>
-    <string name="phone_verification_fragment_title">Enter Your mobile number</string>
+    <string name="phone_verification_fragment_title">Enter your mobile number</string>
     <string name="phone_verification_fragment_phone_hint">+1 (201) 555 - 0123</string>
 
     <string name="details_setup_fragment_address">Address</string>
@@ -139,16 +139,17 @@
     <string name="rate_popup_ask_ok">Yes I do</string>
     <string name="rate_popup_ask_no">Not really</string>
 
-<!--    rating bottom sheet-->
+    <!--    rating bottom sheet-->
     <string name="rate_popup_title">Rate this app</string>
     <string name="rate_popup_message">Would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks for your support!</string>
     <string name="rate_popup_ok">Rate it now</string>
     <string name="rate_popup_later">Remind me later</string>
     <string name="rate_popup_no">No, thanks</string>
     <string name="tool_tip_courier_title">Tip your service providers</string>
-    <string name="tool_tip_courier_body">100% of your tip goes to the courier</string>
+    <string name="tool_tip_courier_body">Courier tip is recommended based on the delivery effort and the total distance that they have to drive to pick up and deliver your order. 100% of the tip goes to your courier</string>
     <string name="thank_you">Thank You!</string>
     <string name="report_issue_done_body">Your report has been submitted to our customer service team.  WoodSpoon is working hard to resolve this issue!</string>
     <string name="rate_order_done_body">Your rating has been submitted!</string>
+    <string name="campaign_full_details_title">Terms of use</string>
 
 </resources>

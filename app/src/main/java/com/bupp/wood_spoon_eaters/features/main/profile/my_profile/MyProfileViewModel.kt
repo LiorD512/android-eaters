@@ -1,14 +1,17 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
+import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
@@ -17,14 +20,16 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 class MyProfileViewModel(
     val api: ApiService,
     private val userRepository: UserRepository,
-    val eaterDataManager: EaterDataManager,
-    val metaDataRepository: MetaDataRepository,
-    private val paymentManager: PaymentManager
+    private val eaterDataManager: EaterDataManager,
+    private val metaDataRepository: MetaDataRepository,
+    private val paymentManager: PaymentManager,
+    private val flowEventsManager: FlowEventsManager,
+    private val campaignManager: CampaignManager,
+    private val flavorConfigManager: FlavorConfigManager
 ) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -32,8 +37,11 @@ class MyProfileViewModel(
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     val paymentLiveData = paymentManager.getPaymentsLiveData()
-    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
+//    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
     val profileData: SingleLiveEvent<ProfileData> = SingleLiveEvent()
+    val versionLiveData = SingleLiveEvent<String>()
+
+    val campaignLiveData = campaignManager.getCampaignLiveData()
 
     val myProfileActionEvent = MutableLiveData<MyProfileActionEvent>()
 
@@ -43,17 +51,28 @@ class MyProfileViewModel(
     }
 
     init {
-        fetchProfileData()
+
         refreshFavorites()
+        setVersionData()
+        viewModelScope.launch {
+            flowEventsManager.fireEvent(FlowEventsManager.FlowEvents.VISIT_PROFILE)
+        }
     }
 
-    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>, val bannerUrl: String?)
+    private fun setVersionData() {
+        val versionData = "Version: ${BuildConfig.VERSION_NAME} ${flavorConfigManager.getEnvName()}"
+        versionLiveData.postValue(versionData)
+    }
 
-    private fun fetchProfileData() {
-        val eater = getUserDetails()
-        val dietaries = metaDataRepository.getDietaryList()
-        val bannerUrl = metaDataRepository.getProfileBannerUrl()
-        profileData.postValue(ProfileData(eater, dietaries, bannerUrl))
+    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>)
+
+    fun fetchProfileData() {
+        viewModelScope.launch {
+            Log.d(TAG, "fetchProfileData")
+            val eater =  userRepository.fetchUser()
+            val dietaries = metaDataRepository.getDietaryList()
+            profileData.postValue(ProfileData(eater, dietaries))
+        }
     }
 
     private fun refreshFavorites() {
@@ -73,7 +92,6 @@ class MyProfileViewModel(
     }
 
     fun updateClientAccount(cuisineIcons: List<SelectableIcon>? = null, dietaryIcons: List<SelectableIcon>? = null, forceUpdate: Boolean = false) {
-        progressData.startProgress()
         val eater = EaterRequest()
 
         var arrayOfCuisinesIds: MutableList<Int>? = null
@@ -120,16 +138,10 @@ class MyProfileViewModel(
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                 }
             }
-            progressData.endProgress()
         }
     }
 
-    fun logout() {
-        val logoutResult = userRepository.logout()
-        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
-            myProfileActionEvent.postValue(MyProfileActionEvent(MyProfileActionType.LOGOUT))
-        }
-    }
+
 
 
     fun initStripe(activity: Activity) {
@@ -158,6 +170,13 @@ class MyProfileViewModel(
     fun getCuisineList(): List<SelectableIcon> {
         return metaDataRepository.getCuisineListSelectableIcons()
     }
+
+//    val shareEvent = MutableLiveData<String>()
+//    fun onShareCampaignClick(campaign: Campaign?) {
+//        val shareUrl = metaDataRepository.getShareCampaignUrl()
+//        val shareText = campaign?.shareText ?: ""
+//        shareEvent.postValue("$shareText \n $shareUrl")
+//    }
 
 //    fun getDietaryList(): List<SelectableIcon> {
 //        return metaDataRepository.getDietaryList()
