@@ -75,7 +75,8 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
             }
 
             selectAddressFragList.layoutManager = LinearLayoutManager(requireContext())
-            addressAdapter = SelectAddressAdapter(this@SelectAddressFragment)
+            initAdapterIfNeeded()
+//            addressAdapter = SelectAddressAdapter(this@SelectAddressFragment)
             val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
             selectAddressFragList.addItemDecoration(dividerItemDecoration)
             selectAddressFragList.adapter = addressAdapter
@@ -209,17 +210,24 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
 
     override fun onResume() {
         super.onResume()
+        initAdapterIfNeeded()
         registerGpsBroadcastReceiver()
+    }
+
+    private fun initAdapterIfNeeded() {
+        if(addressAdapter == null){
+            addressAdapter = SelectAddressAdapter(this@SelectAddressFragment)
+        }
     }
 
     override fun onPause() {
         requireContext().unregisterReceiver(gpsBroadcastReceiver)
+        addressAdapter = null
         super.onPause()
     }
 
     override fun onDestroy() {
         gpsBroadcastReceiver = null
-        addressAdapter = null
         super.onDestroy()
     }
 

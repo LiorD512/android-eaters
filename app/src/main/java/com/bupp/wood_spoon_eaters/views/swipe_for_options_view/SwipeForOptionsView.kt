@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.databinding.ShareBannerBinding
 import com.bupp.wood_spoon_eaters.databinding.SwipeForOptionsViewBinding
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
+//import com.bupp.wood_spoon_eaters.model.FeedCampaignSectionItem
 
 
 class SwipeForOptionsView @JvmOverloads

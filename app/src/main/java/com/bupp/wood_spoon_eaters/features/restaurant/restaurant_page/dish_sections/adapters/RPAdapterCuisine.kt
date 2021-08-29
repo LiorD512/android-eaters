@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemCuisineBinding
-import com.bupp.wood_spoon_eaters.model.CuisineLabel
 
-class RPAdapterCuisine() : ListAdapter<CuisineLabel, RecyclerView.ViewHolder>(DiffCallback()) {
+class RPAdapterCuisine() : ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -22,21 +21,21 @@ class RPAdapterCuisine() : ListAdapter<CuisineLabel, RecyclerView.ViewHolder>(Di
         holder as ViewHolder
         val item = getItem(position)
         holder.binding.apply {
-            cuisineName.text = item.name
+            cuisineName.text = item
         }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val binding = RestaurantItemCuisineBinding.bind(itemView.rootView)
     }
-    private class DiffCallback : DiffUtil.ItemCallback<CuisineLabel>() {
+    private class DiffCallback : DiffUtil.ItemCallback<String>() {
 
-        override fun areItemsTheSame(oldItem: CuisineLabel, newItem: CuisineLabel): Boolean {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: CuisineLabel, newItem: CuisineLabel): Boolean {
-            return oldItem.id == oldItem.id
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == oldItem
         }
     }
 }

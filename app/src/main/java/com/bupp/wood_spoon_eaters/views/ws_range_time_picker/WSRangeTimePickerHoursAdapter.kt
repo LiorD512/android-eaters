@@ -32,13 +32,6 @@ class WSRangeTimePickerHoursAdapter :
 
         fun bindItem(date: Date, position: Int, itemCount: Int) {
             itemText.text = DateUtils.parseDateHalfHourInterval(date)
-//            if(itemCount > 1){
-//                if(position+1 == itemCount || position == 0){
-//                    itemText.alpha = 0.3f
-//                }else{
-//                    itemText.alpha = 1f
-//                }
-//            }
         }
     }
 

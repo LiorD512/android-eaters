@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentWelcomeBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
@@ -22,7 +23,8 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         super.onViewCreated(view, savedInstanceState)
         binding.welcomeFragmentLogin.setOnClickListener { onLoginClick() }
 
-        Analytics.with(requireContext()).screen("onboarding")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ON_BOARDING)
+
     }
 
     private fun onLoginClick() {

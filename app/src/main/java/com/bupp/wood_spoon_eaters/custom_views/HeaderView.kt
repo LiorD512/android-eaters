@@ -12,12 +12,12 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.HeaderViewBinding
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 
 
 class HeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr), UserImageView.UserImageViewListener, AddressAndTimeView.AddressAndTimeViewListener {
+    FrameLayout(context, attrs, defStyleAttr), UserImageVideoView.UserImageViewListener, AddressAndTimeView.AddressAndTimeViewListener {
 
     private var binding: HeaderViewBinding = HeaderViewBinding.inflate(LayoutInflater.from(context), this, true)
 

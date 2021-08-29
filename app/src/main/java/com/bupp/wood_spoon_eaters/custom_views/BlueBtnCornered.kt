@@ -64,4 +64,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             binding.blueBtnText.text = btnText
         }
     }
+
+    fun setTitle(title: String){
+        binding.blueBtnText.text = title
+    }
 }

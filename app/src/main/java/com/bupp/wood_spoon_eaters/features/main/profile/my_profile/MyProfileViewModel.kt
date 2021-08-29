@@ -37,7 +37,7 @@ class MyProfileViewModel(
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     val paymentLiveData = paymentManager.getPaymentsLiveData()
-    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
+//    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
     val profileData: SingleLiveEvent<ProfileData> = SingleLiveEvent()
     val versionLiveData = SingleLiveEvent<String>()
 
@@ -51,7 +51,7 @@ class MyProfileViewModel(
     }
 
     init {
-        fetchProfileData()
+
         refreshFavorites()
         setVersionData()
         viewModelScope.launch {
@@ -66,10 +66,13 @@ class MyProfileViewModel(
 
     data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>)
 
-    private fun fetchProfileData() {
-        val eater = getUserDetails()
-        val dietaries = metaDataRepository.getDietaryList()
-        profileData.postValue(ProfileData(eater, dietaries))
+    fun fetchProfileData() {
+        viewModelScope.launch {
+            Log.d(TAG, "fetchProfileData")
+            val eater =  userRepository.fetchUser()
+            val dietaries = metaDataRepository.getDietaryList()
+            profileData.postValue(ProfileData(eater, dietaries))
+        }
     }
 
     private fun refreshFavorites() {
@@ -89,7 +92,6 @@ class MyProfileViewModel(
     }
 
     fun updateClientAccount(cuisineIcons: List<SelectableIcon>? = null, dietaryIcons: List<SelectableIcon>? = null, forceUpdate: Boolean = false) {
-        progressData.startProgress()
         val eater = EaterRequest()
 
         var arrayOfCuisinesIds: MutableList<Int>? = null
@@ -136,7 +138,6 @@ class MyProfileViewModel(
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                 }
             }
-            progressData.endProgress()
         }
     }
 

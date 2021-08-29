@@ -9,13 +9,14 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.EditProfileBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -24,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageView.UserImageViewListener, HeaderView.HeaderViewListener{
+class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageViewListener, HeaderView.HeaderViewListener{
 
 
     val binding: EditProfileBottomSheetBinding by viewBinding()
@@ -60,7 +61,11 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageView.UserIm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("Profile edit")
+//        Analytics.with(requireContext()).screen("Profile edit")
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_EDIT_ACCOUNT)
+
+        val parent = view.parent as View
+        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
         initUi()
         initObservers()
@@ -179,6 +184,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageView.UserIm
     fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         result.fileUri?.let {
             binding.editMyProfileFragUserImageView.setImage(it)
+            binding.editMyProfileFragUserImageBtn.setTitle("Change photo")
             viewModel.updateTempThumbnail(it)
             this.photoUploaded = true
         }

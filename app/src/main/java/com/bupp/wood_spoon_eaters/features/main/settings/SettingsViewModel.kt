@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
@@ -21,7 +22,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.collections.ArrayList
 
-class SettingsViewModel(private val appSettings: AppSettings, val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, val eaterDataManager: EaterDataManager) : ViewModel() {
+class SettingsViewModel(private val appSettings: AppSettings, val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, val eaterDataManager: EaterDataManager,
+private val flowEventsManager: FlowEventsManager) : ViewModel() {
 
     data class SettingsDetails(
         val enableUserLocation: Boolean = false,
@@ -87,5 +89,9 @@ class SettingsViewModel(private val appSettings: AppSettings, val userRepository
         }else{
             arrayListOf()
         }
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
     }
 }

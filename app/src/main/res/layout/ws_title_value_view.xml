@@ -8,7 +8,7 @@
 
     <TextView
             android:id="@+id/titleValueViewTitle"
-            style="@style/LatoBold13Black"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Total before tip"
@@ -16,20 +16,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView
+    <ImageButton
             android:visibility="invisible"
+            android:id="@+id/titleValueViewToolTipBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:layout_gravity="left"
             android:paddingStart="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons_tooltip"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/titleValueViewTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/titleValueViewToolTip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tip_type="CHECKOUT_MINIMUM_FEE" />
+            app:layout_constraintTop_toTopOf="parent"/>
+
+<!--    <com.bupp.wood_spoon_eaters.custom_views.tool_tip_view.ToolTipView-->
+<!--            android:visibility="invisible"-->
+<!--            android:paddingStart="8dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/titleValueViewTitle"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:id="@+id/titleValueViewToolTip"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:tip_type="CHECKOUT_MINIMUM_FEE" />-->
 
     <TextView
             android:id="@+id/titleValueViewValue"
-            style="@style/LatoBlack13Teal"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

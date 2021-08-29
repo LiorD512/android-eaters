@@ -27,7 +27,7 @@ class EaterDataManager(
     ////////    DELIVERY_TIME       /////////
     /////////////////////////////////////////
 
-    fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
+//    fun getDeliveryTimeLiveData() = deliveryTimeManager.getDeliveryTimeLiveData()
 
 
     /////////////////////////////////////////
@@ -53,6 +53,25 @@ class EaterDataManager(
         locationManager.forceStopLocationUpdates(true)
     }
 
+    fun rollBackToPreviousAddress() {
+        locationManager.rollBackToPreviousAddress()
+    }
+
+    /**
+     * this function is called when we receive device location when in SelectAddress Screen
+     * we want to update user location to this device location when he has no other available address
+     */
+    fun updateLocationIfNeeded(addressRequest: AddressRequest) {
+        val noAddressAvailable = currentEater?.addresses?.isNullOrEmpty() ?: true
+        if(noAddressAvailable){
+            updateSelectedAddress(addressRequest.toAddress(), LocationManager.AddressDataType.DEVICE_LOCATION)
+        }
+
+
+
+    }
+
+
     /////////////////////////////////////////
     ///////////      FEED         ///////////
     /////////////////////////////////////////
@@ -70,7 +89,7 @@ class EaterDataManager(
     fun getTraceableOrders() = traceableOrders
     private val traceableOrders = MutableLiveData<List<Order>?>()
 
-    suspend fun checkForTraceableOrders() {
+    suspend fun checkForTraceableOrders(): List<Order>? {
         val result = eaterDataRepository.getTraceableOrders()
         when (result.type) {
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_SUCCESS -> {
@@ -78,6 +97,7 @@ class EaterDataManager(
                     Log.d(TAG, "checkForTraceableOrders - success")
                     traceableOrdersList = it
                     traceableOrders.postValue(it)
+                    return traceableOrdersList
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_TRACEABLE_FAILED -> {
@@ -88,9 +108,9 @@ class EaterDataManager(
 
             }
             else -> {
-
             }
         }
+        return null
     }
 
     suspend fun cancelOrder(orderId: Long?, note: String?): EaterDataRepository.EaterDataRepoResult<Any>? {
@@ -155,29 +175,29 @@ class EaterDataManager(
 //        }
     }
 
-    fun getLastFeedRequest(): FeedRequest {
-        //being used in NewOrderActivity, uses params to init new Order.
-        var feedRequest = FeedRequest()
-        val lastAddress = getFinalAddressLiveDataParam().value
-        lastAddress?.let {
-            //address
-            if (lastAddress.id != null) {
-                feedRequest.addressId = lastAddress.id
-            } else {
-                feedRequest.lat = lastAddress.lat
-                feedRequest.lng = lastAddress.lng
-            }
-        }
+//    fun getLastFeedRequest(): FeedRequest {
+//        //being used in NewOrderActivity, uses params to init new Order.
+//        var feedRequest = FeedRequest()
+//        val lastAddress = getFinalAddressLiveDataParam().value
+//        lastAddress?.let {
+//            //address
+//            if (lastAddress.id != null) {
+//                feedRequest.addressId = lastAddress.id
+//            } else {
+//                feedRequest.lat = lastAddress.lat
+//                feedRequest.lng = lastAddress.lng
+//            }
+//        }
+//
+//        //time
+//        feedRequest.timestamp = getDeliveryTimestamp()
+//
+//        return feedRequest
+//    }
 
-        //time
-        feedRequest.timestamp = getDeliveryTimestamp()
-
-        return feedRequest
-    }
-
-    fun getDeliveryTimestamp(): String? {
-        return deliveryTimeManager.getDeliveryTimestamp()
-    }
+//    fun getDeliveryTimestamp(): String? {
+//        return deliveryTimeManager.getDeliveryTimestamp()
+//    }
 
 
     /////////////////////////////////////////
@@ -229,6 +249,11 @@ class EaterDataManager(
     fun logUxCamEvent(eventName: String, params: Map<String, String>? = null) {
         eventsManager.logEvent(eventName, params)
     }
+
+    fun getCartAddressId(): Long? {
+        return getLastChosenAddress()?.id
+    }
+
 
 
     companion object {

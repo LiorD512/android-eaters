@@ -80,8 +80,7 @@ class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: Ea
 
     fun onMyLocationReceived(addressRequest: AddressRequest) {
         myLocationEvent.postValue(MyLocationStatus.READY)
-
-        eaterDataManager.updateSelectedAddress(addressRequest.toAddress(), LocationManager.AddressDataType.DEVICE_LOCATION)
+        eaterDataManager.updateLocationIfNeeded(addressRequest)
     }
 
 //    fun onAddressSelected(selectedAddress: Address) {

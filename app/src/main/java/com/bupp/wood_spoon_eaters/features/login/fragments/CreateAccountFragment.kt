@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -24,7 +25,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("create_account")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT)
 
         initUi()
     }

@@ -5,7 +5,8 @@
 
     <Transition
             motion:constraintSetEnd="@+id/end"
-            motion:constraintSetStart="@id/start">
+            motion:constraintSetStart="@id/start"
+            motion:duration="10">
         <OnSwipe
                 motion:maxAcceleration="5"
                 motion:dragDirection="dragUp"
@@ -16,26 +17,16 @@
                 motion:touchAnchorSide="top"/>
 
                 <KeyFrameSet>
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="0"-->
-<!--                            motion:framePosition="50"-->
-<!--                            motion:motionTarget="@+id/shareButton"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="0"-->
-<!--                            motion:framePosition="50"-->
-<!--                            motion:motionTarget="@+id/menuButton"/>-->
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/rating"/>
+                            motion:motionTarget="@+id/ratingMainLayout"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
-                            android:alpha="1"
+                            android:alpha="0"
                             motion:framePosition="50"
-                            motion:motionTarget="@+id/coverOverlay"/>
+                            motion:motionTarget="@+id/coverPhotoLayout"/>
                     <KeyAttribute
                             motion:keyPositionType="pathRelative"
                             android:alpha="0"
@@ -79,17 +70,6 @@
                 </KeyFrameSet>
     </Transition>
 
-
-<!--    <Transition-->
-<!--            motion:constraintSetStart="@+id/start"-->
-<!--            motion:constraintSetEnd="@+id/overScroll">-->
-
-<!--        <OnSwipe-->
-<!--                motion:dragDirection="dragDown"-->
-<!--                motion:touchAnchorId="@id/mainList" />-->
-
-<!--    </Transition>-->
-
     <ConstraintSet android:id="@+id/start">
     </ConstraintSet>
 
@@ -122,30 +102,12 @@
         <Constraint
                 android:id="@+id/coverPhotoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                motion:layout_constraintBottom_toTopOf="@id/space"
+                android:layout_height="300dp"
+                android:alpha="0"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintStart_toStartOf="parent" />
-<!--        <Constraint-->
-<!--                android:id="@+id/menuButton"-->
-<!--                motion:layout_constraintEnd_toEndOf="parent"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginEnd="15dp"-->
-<!--                motion:layout_constraintTop_toTopOf="parent"-->
-<!--                android:layout_marginTop="15dp"-->
-<!--                android:alpha="0" />-->
-<!--        <Constraint-->
-<!--                android:id="@+id/shareButton"-->
-<!--                motion:layout_constraintEnd_toStartOf="@id/menuButton"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginEnd="7.4dp"-->
-<!--                motion:layout_constraintTop_toTopOf="parent"-->
-<!--                android:layout_marginTop="15dp"-->
-<!--                android:alpha="0" />-->
         <Constraint
-                android:id="@+id/rating"
+                android:id="@+id/ratingMainLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
@@ -167,24 +129,7 @@
                 motion:layout_constraintBottom_toTopOf="@id/mainList"
                 motion:layout_constraintStart_toStartOf="parent"
                 android:alpha="0" />
-        <Constraint
-                android:id="@+id/coverOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                motion:layout_constraintBottom_toTopOf="@id/space"
-                android:alpha="1"
-                motion:layout_constraintTop_toTopOf="parent"
-                motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
-<!--    <ConstraintSet android:id="@+id/overScroll" >-->
-<!--        <Constraint-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                motion:layout_constraintTop_toTopOf="parent"-->
-<!--                motion:layout_constraintStart_toStartOf="parent"-->
-<!--                android:layout_marginTop="500dp"-->
-<!--                android:id="@+id/space" />-->
-<!--    </ConstraintSet>-->
 
 </MotionScene>

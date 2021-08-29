@@ -4,11 +4,14 @@ import android.content.Context
 import android.location.LocationManager
 import android.util.Log
 import androidx.core.location.LocationManagerCompat
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.utils.LocationUtils
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager.AddressDataType
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.DateUtils
+import java.util.*
 
 
 class FeedDataManager(
@@ -17,10 +20,39 @@ class FeedDataManager(
 ) {
 
     private var isWaitingToLocationUpdate: Boolean = false
+    private var currentDeliveryParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam? = null
 
     fun getFinalAddressLiveDataParam() = eaterDataManager.getFinalAddressLiveDataParam()
     fun getLocationLiveData() = eaterDataManager.getLocationData()
-    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
+
+
+    private fun getFeedUnixTimestamp(): String?{
+        currentDeliveryParam?.let{
+            return when(it.deliveryTimeType){
+                SingleColumnTimePickerBottomSheet.DeliveryType.TODAY -> {
+                    DateUtils.parseUnixTimestamp(Date())
+                }
+                SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE -> {
+                    DateUtils.parseUnixTimestamp(it.date)
+                }
+                else -> { // DeliveryType.NON_FILTERED
+                    null
+                }
+            }
+        }
+        return null
+    }
+
+    fun getCurrentDeliveryDate(): Date?{
+        currentDeliveryParam.let{
+            return it?.date
+        }
+    }
+
+
+//    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
+
+
 
     fun getFeedUiStatus() = finalFeedUiStatus
     private val finalFeedUiStatus = SingleLiveEvent<FeedUiStatus>()
@@ -130,7 +162,7 @@ class FeedDataManager(
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getDeliveryTimestamp()
+        feedRequest.timestamp = getFeedUnixTimestamp()
 
         return feedRequest
     }
@@ -150,9 +182,16 @@ class FeedDataManager(
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getDeliveryTimestamp()
+        feedRequest.timestamp = getFeedUnixTimestamp()
 
         return feedRequest
+    }
+
+    fun getFeedDeliveryParams(): Date?{
+        currentDeliveryParam?.let{
+            return it.date
+        }
+        return null
     }
 
     fun getUser(): Eater? {
@@ -161,6 +200,10 @@ class FeedDataManager(
 
     suspend fun refreshFavorites() {
         eaterDataManager.refreshMyFavorites()
+    }
+
+    fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        this.currentDeliveryParam = deliveryTimeParam
     }
 
     companion object {

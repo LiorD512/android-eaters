@@ -14,9 +14,9 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
-import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
+import com.daasuu.bl.ArrowDirection
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -101,6 +101,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
             singleOrderDetailsHeader.setHeaderViewListener(this@SingleOrderDetailsBottomSheet)
 
             binding.singleOrderDetailsFees.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
+            binding.singleOrderDetailsDeliveryFee.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
         }
     }
 
@@ -112,20 +113,20 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
             handlePb(it)
         })
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
         })
     }
 
     private fun handleOrder(order: Order) {
         with(binding) {
             order.apply {
-                cook?.apply {
+                restaurant?.apply {
                     singleOrderDetailsHeader.setTitle("Home chef $firstName")
                 }
                 deliveryAddress?.apply{
-                    singleOrderDetailsLocation.updateDeliveryFullDetails(this)
+                    singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }
-                singleOrderDetailsStatus.updateDeliveryDetails(status ?: "N/A")
+                singleOrderDetailsStatus.updateSubTitle(status?.uppercase() ?: "N/A")
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
                 orderItems?.let{
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
@@ -136,7 +137,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 if (!promoCode.isNullOrEmpty()) {
                     singleOrderDetailsPromoCode.visibility = View.VISIBLE
                     singleOrderDetailsPromoCode.setTitle("Promo code $promoCode")
-                    singleOrderDetailsPromoCode.setValue("(${discount?.formatedValue?.replace("-", "")})")
+                    singleOrderDetailsPromoCode.setValue("${discount?.formatedValue}")
                 }
 
                 if(status == "cancelled"){
@@ -164,7 +165,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 val allDishSubTotalStr = DecimalFormat("##.##").format(allDishSubTotal)
 
                 singleOrderDetailsSubtotal.setValue("$$allDishSubTotalStr")
-                singleOrderDetailsTotalBeforeTip.setValue(totalBeforeTip?.formatedValue ?: "")
                 singleOrderDetailsTotal2.setValue(total?.formatedValue ?: "N/A")
 
                 if(wasRated == true){
@@ -194,8 +194,32 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         viewModel.initSingleOrder(curOrderId)
     }
 
-    override fun onCustomToolTipClick() {
-        viewModel.onFeesAndTaxInfoClick()
+    override fun onToolTipClick(type: Int) {
+        var titleText = ""
+        var bodyText = ""
+        if (type == Constants.FEES_AND_ESTIMATED_TAX) {
+            viewModel.onFeesAndTaxInfoClick()
+        } else {
+            when (type) {
+                Constants.TOOL_TIP_SERVICE_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                }
+                Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                }
+                Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_delivery_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_delivery_fee_body)
+                }
+                Constants.TOOL_TIP_COURIER_TIP -> {
+                    titleText = resources.getString(R.string.tool_tip_courier_title)
+                    bodyText = resources.getString(R.string.tool_tip_courier_body)
+                }
+            }
+            ToolTipBottomSheet.newInstance(titleText, bodyText).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
+        }
     }
 
 //    override fun onAttach(context: Context) {

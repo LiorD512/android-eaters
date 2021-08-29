@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.6"
+            app:shimmer_base_color="@color/whiteTwo"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/grey_white_three">
+
+    <View
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="298dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:background="@drawable/shimmer_cornered_rad13"
+            android:text="Home Chef Oded" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <View
+            android:layout_marginVertical="23dp"
+            android:background="@color/grey_white"
+            android:layout_width="match_parent"
+            android:layout_height="7.7dp"/>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_marginTop="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.6"
+            app:shimmer_base_color="@color/whiteTwo"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/grey_white_three">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingVertical="15.4dp">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <View
+                        style="@style/LatoBold13Black"
+                        android:layout_width="250dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15.4dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        android:text="Home Chef Oded" />
+
+                <View
+                        style="@style/LatoReg13PurpelyGrey"
+                        android:layout_width="250dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        tools:text="05.04.19, 6:10PM" />
+
+            </LinearLayout>
+
+            <View
+                    style="@style/LatoBold13Black"
+                    android:layout_width="25dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@drawable/shimmer_cornered_rad13"
+                    android:paddingEnd="7.7dp"
+                    tools:text="$6.3" />
+
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_marginTop="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.6"
+            app:shimmer_base_color="@color/whiteTwo"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/grey_white_three">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingVertical="15.4dp">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <View
+                        style="@style/LatoBold13Black"
+                        android:layout_width="250dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15.4dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        android:text="Home Chef Oded" />
+
+                <View
+                        style="@style/LatoReg13PurpelyGrey"
+                        android:layout_width="250dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        tools:text="05.04.19, 6:10PM" />
+
+            </LinearLayout>
+
+            <View
+                    style="@style/LatoBold13Black"
+                    android:layout_width="25dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@drawable/shimmer_cornered_rad13"
+                    android:paddingEnd="7.7dp"
+                    tools:text="$6.3" />
+
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_marginTop="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.6"
+            app:shimmer_base_color="@color/whiteTwo"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/grey_white_three">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingVertical="15.4dp">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <View
+                        style="@style/LatoBold13Black"
+                        android:layout_width="250dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15.4dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        android:text="Home Chef Oded" />
+
+                <View
+                        style="@style/LatoReg13PurpelyGrey"
+                        android:layout_width="250dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        tools:text="05.04.19, 6:10PM" />
+
+            </LinearLayout>
+
+            <View
+                    style="@style/LatoBold13Black"
+                    android:layout_width="25dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@drawable/shimmer_cornered_rad13"
+                    android:paddingEnd="7.7dp"
+                    tools:text="$6.3" />
+
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_marginTop="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.6"
+            app:shimmer_base_color="@color/whiteTwo"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/grey_white_three">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingVertical="15.4dp">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <View
+                        style="@style/LatoBold13Black"
+                        android:layout_width="250dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15.4dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        android:text="Home Chef Oded" />
+
+                <View
+                        style="@style/LatoReg13PurpelyGrey"
+                        android:layout_width="250dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        tools:text="05.04.19, 6:10PM" />
+
+            </LinearLayout>
+
+            <View
+                    style="@style/LatoBold13Black"
+                    android:layout_width="25dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@drawable/shimmer_cornered_rad13"
+                    android:paddingEnd="7.7dp"
+                    tools:text="$6.3" />
+
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_marginTop="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.6"
+            app:shimmer_base_color="@color/whiteTwo"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/grey_white_three">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingVertical="15.4dp">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                <View
+                        style="@style/LatoBold13Black"
+                        android:layout_width="250dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15.4dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        android:text="Home Chef Oded" />
+
+                <View
+                        style="@style/LatoReg13PurpelyGrey"
+                        android:layout_width="250dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shimmer_cornered_rad13"
+                        tools:text="05.04.19, 6:10PM" />
+
+            </LinearLayout>
+
+            <View
+                    style="@style/LatoBold13Black"
+                    android:layout_width="25dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15.4dp"
+                    android:background="@drawable/shimmer_cornered_rad13"
+                    android:paddingEnd="7.7dp"
+                    tools:text="$6.3" />
+
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</LinearLayout>

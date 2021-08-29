@@ -51,6 +51,7 @@
                         android:text="You will no longer be able to log in to WoodSpoon with this account and will lose your account information."/>
 
                 <TextView
+                        android:gravity="center"
                         android:layout_marginHorizontal="23dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="45dp"

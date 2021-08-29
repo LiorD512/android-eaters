@@ -30,6 +30,12 @@ data class WSError(
 )
 
 @JsonClass(generateAdapter = true)
+@Parcelize
+data class WSImage(
+    @Json(name = "url") val url: String?,
+):Parcelable
+
+@JsonClass(generateAdapter = true)
 data class CountriesISO(
     val name: String?,
     val value: String,
@@ -134,6 +140,7 @@ data class DietaryIcon(
     @Json(name = "name") override val name: String,
     @Json(name = "icon") override val icon: String,
     @Json(name = "icon_selected") override val iconSelected: String? = null,
+    @Json(name = "icon_dish") val iconDish: String? = null,
     @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 

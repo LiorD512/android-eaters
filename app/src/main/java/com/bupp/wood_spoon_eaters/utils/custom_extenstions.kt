@@ -3,19 +3,24 @@ package com.bupp.wood_spoon_eaters.utils
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import com.bupp.wood_spoon_eaters.R
 
 
 fun Fragment.showKeyboard() {
-    requireContext()?.let { activity?.showKeyboard(it) }
+    requireContext().let { activity?.showKeyboard(it) }
 }
 
 fun Fragment.hideKeyboard() {
@@ -31,6 +36,29 @@ fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
+fun Activity.showErrorToast(title: String, anchorView: ViewGroup) {
+    val customLayout = layoutInflater.inflate(R.layout.error_toast, anchorView, false)
+    val titleView = customLayout.findViewById<TextView>(R.id.errorTitle)
+    titleView.text = title
+    val toast = Toast(this)
+    toast.duration = Toast.LENGTH_SHORT
+    toast.setGravity(Gravity.TOP or Gravity.FILL_HORIZONTAL, 0, 50)
+    toast.view = customLayout
+    toast.show()
+}
+
+fun Fragment.showErrorToast(title: String, anchorView: ViewGroup) {
+    val customLayout = layoutInflater.inflate(R.layout.error_toast, anchorView, false)
+    val titleView = customLayout.findViewById<TextView>(R.id.errorTitle)
+    titleView.text = title.trim()
+    val toast = Toast(requireContext())
+    toast.duration = Toast.LENGTH_SHORT
+    toast.setGravity(Gravity.TOP or Gravity.FILL_HORIZONTAL, 0, 50)
+    toast.view = customLayout
+    toast.show()
+}
+
+
 fun Context.showKeyboard(context: Context) {
     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
         InputMethodManager.SHOW_FORCED,
@@ -43,7 +71,7 @@ fun IntRange.convert(number: Int, target: IntRange): Int {
     return (ratio * (target.last - target.first)).toInt()
 }
 
-fun Activity.updateScreenUi(){
+fun Activity.updateScreenUi() {
     val decorView = window.decorView
     decorView.setOnSystemUiVisibilityChangeListener { visibility ->
         if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
@@ -57,7 +85,7 @@ fun Activity.updateScreenUi(){
     }
 }
 
-fun DialogFragment.updateScreenUi(){
+fun DialogFragment.updateScreenUi() {
     val decorView = dialog?.window?.decorView
     decorView?.setOnSystemUiVisibilityChangeListener { visibility ->
         if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {

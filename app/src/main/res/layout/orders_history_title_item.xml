@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="23dp"
+        android:paddingBottom="4dp">
+
+    <TextView
+            android:paddingStart="15.4dp"
+            android:id="@+id/orderHistoryTitle"
+            style="@style/LatoBlack19DarkThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            tools:text="Past orders "/>
+
+</FrameLayout>

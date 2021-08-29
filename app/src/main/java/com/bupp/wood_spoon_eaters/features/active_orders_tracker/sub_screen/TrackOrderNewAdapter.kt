@@ -15,11 +15,11 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderItemDetailsAdapter
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 
 
-
-class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener):
+class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener) :
     ListAdapter<TrackOrderData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()) {
 
 
@@ -31,21 +31,21 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
         return when (viewType) {
             VIEW_TYPE_DETAILS -> {
                 val binding = TrackOrderDetailsSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return TrackOrderDetailsViewHolder(binding)
+                TrackOrderDetailsViewHolder(binding)
             }
             else -> { // VIEW_TYPE_PROGRESS
                 val binding = TrackOrderProgressSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return TrackOrderProgressViewHolder(binding)
+                TrackOrderProgressViewHolder(binding)
             }
         }
     }
 
     interface TrackOrderNewAdapterListener {
-        fun onHeaderClick(isExpanded: Boolean){} //HEADER SECTION
+        fun onHeaderClick(isExpanded: Boolean) {} //HEADER SECTION
 
-        fun onContactUsClick(order: Order){} //PROGRESS SECTION
-        fun onShareImageClick(order: Order){} //PROGRESS SECTION
-        fun onOrderCanceled(orderState: Int, orderId: Long){} //PROGRESS SECTION
+        fun onContactUsClick(order: Order) {} //PROGRESS SECTION
+        fun onShareImageClick(order: Order) {} //PROGRESS SECTION
+        fun onOrderCanceled(orderState: Int, orderId: Long) {} //PROGRESS SECTION
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -74,6 +74,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     inner class TrackOrderDetailsViewHolder(val binding: TrackOrderDetailsSectionBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private var sectionHeight = 0
+
         init {
 //            sectionHeight = binding.trackOrderDetailsHeaderLayout.
         }
@@ -98,13 +99,21 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsSectionTax.text = order.tax?.formatedValue ?: ""
             binding.trackOrderDetailsSectionTotal.text = order.total?.formatedValue ?: ""
 
-            order.promoCode?.let{
+            order.minOrderFee?.value?.let {
+                if (it > 0) {
+                    binding.trackOrderDetailsSectionMinOrderFeeTitle.visibility = View.VISIBLE
+                    binding.trackOrderDetailsSectionMinOrderFee.visibility = View.VISIBLE
+                    binding.trackOrderDetailsSectionMinOrderFee.text = order.minOrderFee.formatedValue
+                }
+            }
+
+            order.promoCode?.let {
                 binding.trackOrderDetailsSectionPromoCodeLayout.visibility = View.VISIBLE
                 binding.trackOrderDetailsSectionPromoCodeName.text = "Promo code $it"
                 binding.trackOrderDetailsSectionPromoCode.text = "${order.discount?.formatedValue}"
             }
 
-            order.tip?.let{
+            order.tip?.let {
                 binding.trackOrderDetailsSectionTipLayout.visibility = View.VISIBLE
                 binding.trackOrderDetailsSectionTip.text = it.formatedValue
 
@@ -115,48 +124,49 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
             binding.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
             val address = userInfo?.userLocation
-            address?.let{
+            address?.let {
                 binding.trackOrderDetailsSectionLocation1.text = "${it.streetLine1}, #${it.streetLine2}"
                 binding.trackOrderDetailsSectionLocation2.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
             }
 
-            userInfo?.note?.let{
+            userInfo?.note?.let {
                 binding.trackOrderDetailsSectionNote.text = it
             }
         }
     }
 
     private var curOrderStage: Int = 1
+
     inner class TrackOrderProgressViewHolder(val binding: TrackOrderProgressSectionBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItems(orderItem: OrderTrackProgress) {
             val order = orderItem.order
             order?.let {
-                when (order.preparationStatus) {
-                    "in_progress" -> {
-                        binding.trackOrderProgressCb2.isChecked = true
-                        curOrderStage = 2
-                    }
-                    "completed" -> {
-                        binding.trackOrderProgressCb2.isChecked = true
-                        curOrderStage = 2
-                    }
-                }
 
-                when (order.deliveryStatus) {
-                    "on_the_way" -> {
+                when (it.getOrderState()) {
+                    OrderState.NONE -> {
+
+                    }
+                    OrderState.RECEIVED -> {
+                        binding.trackOrderProgressCb1.isChecked = true
+                        curOrderStage = 0
+                    }
+                    OrderState.PREPARED -> {
+                        binding.trackOrderProgressCb2.isChecked = true
+                        curOrderStage = 1
+                    }
+                    OrderState.ON_THE_WAY -> {
                         binding.trackOrderProgressCb3.isChecked = true
+                        curOrderStage = 2
+                    }
+                    OrderState.DELIVERED -> {
+                        binding.trackOrderProgressCb4.isChecked = true
                         curOrderStage = 3
                     }
-                    "shipped" -> {
-                        binding.trackOrderProgressCb4.isChecked = true
-                        curOrderStage = 4
-                    }
                 }
-
 
                 val typeface = Typeface.createFromAsset(itemView.context.assets, "font/open_sans_bold.ttf")
                 setFontTypeDefault(binding, itemView.context)
-                when(curOrderStage){
+                when (curOrderStage) {
                     1 -> {
                         binding.trackOrderProgressCb1.typeface = typeface
                     }
@@ -182,9 +192,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
                 }
 
-//                binding.trackOrderBottomShareImageBtn.setOnClickListener {
-//                    listener.onShareImageClick(order)
-//                }
             }
         }
     }
@@ -209,12 +216,10 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
 
     companion object {
-//        const val VIEW_TYPE_HEADER = 1
+        //        const val VIEW_TYPE_HEADER = 1
         const val VIEW_TYPE_DETAILS = 2
         const val VIEW_TYPE_PROGRESS = 3
     }
-
-
 
 
 }

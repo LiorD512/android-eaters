@@ -1,45 +1,77 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
-import com.bupp.wood_spoon_eaters.model.Cook
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
+import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.model.SortedCookingSlots
+import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.model.CookingSlot
+import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.Restaurant
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.bupp.wood_spoon_eaters.model.Review
+import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
+import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.abs
 
 
-class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
+class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
+    DeliveryDateTabLayout.DeliveryTimingTabLayoutListener,
+    ClearCartRestaurantBottomSheet.ClearCartListener,
+    ClearCartCookingSlotBottomSheet.ClearCartListener,
+    SingleColumnTimePickerBottomSheet.TimePickerListener,
+    WSFloatingButton.WSFloatingButtonListener,
+    FavoriteBtn.FavoriteBtnListener,
+    UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
     private val binding: FragmentRestaurantPageBinding by viewBinding()
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
 
-    var adapterDishes: DishesMainAdapter? = DishesMainAdapter(getDishesAdapterListener())
+    var adapterDishes: DishesMainAdapter? = null
+
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
+
+    var dishDividerDecoration: RecyclerView.ItemDecoration? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initData(mainViewModel.currentRestaurant)
+        val navArgs: RestaurantPageFragmentArgs by navArgs()
+        viewModel.handleInitialParamData(navArgs.extras)
+        Log.d("orderFlow - rest", "onViewCreated")
+
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_HOME_CHEF)
 
         initUi()
         initObservers()
@@ -51,182 +83,344 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page) {
                 activity?.onBackPressed()
             }
             shareButton.setOnClickListener {
-                viewModel.restaurantFullData.value?.shareUrl?.let {
-                    restaurantMainListLayout.shimmerViewContainer.hideShimmer()
-                    restaurantMainListLayout.test.isVisible = true
-                    restaurantMainListLayout.test1.root.isVisible = false
+                viewModel.restaurantFullData.value?.getShareTextStr()?.let {
+                    Utils.shareText(requireActivity(), it)
+                    viewModel.logEvent(Constants.EVENT_SHARE_RESTAURANT)
                 }
             }
+            ratingLayout.setOnClickListener{
+                viewModel.getRestaurantReview()
+            }
+            restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
+            restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
         with(binding.restaurantMainListLayout) {
-            restaurantDishesList.adapter = adapterDishes
             restaurantCuisinesList.adapter = adapterCuisines
+
+            detailsSkeleton.visibility = View.VISIBLE
+            detailsLayout.visibility = View.INVISIBLE
+
+            handleTimerPickerUi()
+            restaurantDeliveryDates.setTabListener(this@RestaurantPageFragment)
+
+
+            adapterDishes = DishesMainAdapter(getDishesAdapterListener())
+            val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
+            dishDividerDecoration = DividerItemDecoratorDish(divider)
+            dishDividerDecoration?.let {
+                restaurantDishesList.addItemDecoration(it)
+            }
+            restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
         }
     }
 
+
+    private fun handleTimerPickerUi() {
+        with(binding.restaurantMainListLayout) {
+            restaurantTimePickerViewLayout.setOnClickListener {
+                restaurantDeliveryDates.getCurrentSelection()?.let { date ->
+                    if (date.cookingSlots.size > 1) {
+                        viewModel.onTimePickerClicked()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openCartNUpsaleDialog() {
+        UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+    }
+
+    override fun onCartDishCLick(customCartItem: CustomCartItem) {
+        mainViewModel.openDishPageWithOrderItem(customCartItem)
+    }
+
+    override fun onGoToCheckoutClicked() {
+        mainViewModel.handleNavigation(RestaurantMainViewModel.NavigationType.START_ORDER_CHECKOUT_ACTIVITY)
+    }
+
     private fun initObservers() {
-        viewModel.restaurantData.observe(viewLifecycleOwner, {
-            handleRestaurantData(it)
+        viewModel.initialParamData.observe(viewLifecycleOwner, {
+            handleInitialParamData(it)
         })
         viewModel.restaurantFullData.observe(viewLifecycleOwner, {
             handleRestaurantFullData(it)
         })
-        viewModel.deliveryTiming.observe(viewLifecycleOwner, {
-            handleDeliveryTimingData(it)
+        viewModel.deliveryDatesData.observe(viewLifecycleOwner, {
+            initDeliveryDatesTabLayout(it)
         })
-        viewModel.dishesList.observe(viewLifecycleOwner, {
+        viewModel.onCookingSlotUiChange.observe(viewLifecycleOwner, {
+            handleCookingSlotUiChange(it)
+        })
+        viewModel.dishListLiveData.observe(viewLifecycleOwner, {
             handleDishesList(it)
         })
+        viewModel.orderLiveData.observe(viewLifecycleOwner, {
+            viewModel.handleCartData(it)
+        })
+        viewModel.clearCartEvent.observe(viewLifecycleOwner, {
+            handleClearCartEvent(it)
+        })
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+            handleWSError(it.getContentIfNotHandled())
+        })
+        viewModel.timePickerEvent.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { it1 -> handleTimePickerClick(it1) }
+        })
+        viewModel.onCookingSlotForceChange.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { viewModel.forceCookingSlotUiChange(it) }
+        })
+        viewModel.floatingBtnEvent.observe(viewLifecycleOwner, {
+            handleFloatingBtnEvent(it)
+        })
+        viewModel.favoriteEvent.observe(viewLifecycleOwner, {
+            handleFavoriteEvent(it)
+        })
+        viewModel.reviewEvent.observe(viewLifecycleOwner, {
+            handleReviewData(it)
+        })
+        mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
+            reOpenCart()
+        })
     }
 
-    private fun handleDishesList(dishSections: List<DishSections>?) {
-        adapterDishes?.submitList(dishSections)
-    }
-
-    private fun getDishesAdapterListener(): DishesMainAdapter.RestaurantPageMainAdapterListener =
-        object : DishesMainAdapter.RestaurantPageMainAdapterListener {
-        }
-
-    private fun handleDeliveryTimingData(datesList: List<RestaurantPageViewModel.DeliveryDate>?) {
-        datesList?.let {
-            with(binding.restaurantMainListLayout) {
-                restaurantDeliveryTiming.initDates(it)
-                restaurantDeliveryTiming.onDateChangeListener()
-            }
-        }
+    private fun reOpenCart() {
+        UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     /** Headers data **/
-    private fun handleRestaurantData(cook: Cook) {
+    @SuppressLint("SetTextI18n")
+    private fun handleInitialParamData(params: RestaurantInitParams) {
         with(binding) {
-            restHeaderRestName.text = "Restaurant name"
-            restHeaderChefName.text = "by ${cook.getFullName()}"
-            Glide.with(requireContext()).load(cook.thumbnail).transform(CircleCrop()).into(restHeaderChefThumbnail)
-            rating.text = "${cook.rating} (${cook.reviewCount} ratings)"
+            Glide.with(requireContext()).load(params.coverPhoto?.url).into(coverPhoto)
+            restHeaderRestName.text = params.restaurantName
+            restHeaderChefName.text = "By ${params.chefName}"
+            params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
+            rating.text = "${params.rating}"
+            ratingLayout.isVisible = params.rating ?: 0f > 0
 
-            topHeaderRestaurantName.text = "Restaurant name"
-            topHeaderChefName.text = "by ${cook.getFullName()}"
+            topHeaderRestaurantName.text = params.restaurantName
+            topHeaderChefName.text = "By ${params.chefName}"
         }
     }
 
     private fun handleRestaurantFullData(restaurant: Restaurant) {
         with(binding) {
-            //Cover photo/video
-            if (restaurant.video.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(restaurant.cover).into(coverPhoto)
-            } else {
-                handleVideoCover(restaurant.video)
+            //Cover photo + video
+            Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
+            restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
+            restFragVideoBtn.setOnClickListener {
+                restaurant.video?.let { video ->
+                    VideoViewDialog(restaurant.getFullName(), video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+                    mainViewModel.logClickVideo(restaurant.getFullName(), restaurant.id)
+                }
             }
+
+            //ratings
+            ratingCount.isVisible = restaurant.reviewCount > 0
+            ratingCount.text = "(${restaurant.reviewCount} ratings)"
+
+            //favorite
+            restHeaderFavorite.setIsFavorite(restaurant.isFavorite)
+            restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
         }
         with(binding.restaurantMainListLayout) {
+
             //Description
             restaurantDescription.text = restaurant.about
-            handleReadMoreButton()
 
             //Cuisines
-            adapterCuisines?.submitList(restaurant.cuisines)
-            restaurantCuisinesList.isVisible = !restaurant.cuisines.isNullOrEmpty()
+            adapterCuisines?.submitList(restaurant.tags)
+            restaurantCuisinesList.isVisible = !restaurant.tags.isNullOrEmpty()
+
+            detailsLayout.visibility = View.VISIBLE
+            detailsSkeletonLayout.root.visibility = View.GONE
         }
     }
 
-    private fun handleReadMoreButton() {
-        with(binding.restaurantMainListLayout) {
-            restaurantDescriptionViewMore.setOnClickListener {
-                if (restaurantDescription.maxLines == Integer.MAX_VALUE) {
-                    restaurantDescription.maxLines = 2
-                    restaurantDescriptionViewMore.text = "View more"
-                } else {
-                    restaurantDescription.maxLines = Integer.MAX_VALUE
-                    restaurantDescriptionViewMore.text = "View less"
+    private fun handleCookingSlotUiChange(uiChange: RestaurantPageViewModel.CookingSlotUi?) {
+        uiChange?.let {
+            with(binding.restaurantMainListLayout) {
+                //delivery dates tabLayout
+                if (uiChange.forceTabChange) {
+                    restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+                }
+
+                //timer picker ui
+                restaurantDeliveryDates.getCurrentSelection()?.let { date ->
+                    if (date.cookingSlots.size > 1) {
+                        restaurantTimePickerViewIcon.visibility = View.VISIBLE
+                    } else {
+                        restaurantTimePickerViewIcon.visibility = View.GONE
+                    }
+                }
+                handleTimePickerUi(uiChange.timePickerString)
+            }
+        }
+    }
+
+    private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
+        event?.let {
+            binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+        }
+    }
+
+    private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
+        binding.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
+            val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
+            timePickerBottomSheet.setCookingSlots(selectedCookingSlot, deliveryDate.cookingSlots)
+            timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+        }
+    }
+
+    private fun handleClearCartEvent(event: LiveEvent<CartManager.ClearCartEvent>) {
+        event.getContentIfNotHandled()?.let {
+            when (it.dialogType) {
+                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
+                    ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this)
+                        .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
+                }
+                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
+                    ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this)
+                        .show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
+                }
+            }
+        }
+    }
+
+    private fun handleWSError(errorEvent: String?) {
+        errorEvent?.let {
+            showErrorToast(errorEvent, binding.root)
+            viewModel.refreshRestaurantUi()
+        }
+    }
+
+    private fun handleTimePickerUi(timePickerStr: String?) {
+        timePickerStr?.let {
+            with(binding.restaurantMainListLayout) {
+                restaurantTimePickerView.text = it
+            }
+        }
+    }
+
+    private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
+        if (dishSections?.animateList == true)
+            binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+        adapterDishes?.submitList(dishSections?.dishes)
+    }
+
+
+    private fun handleReviewData(it: LiveEvent<Review?>?) {
+        it?.getContentIfNotHandled()?.let{ reviews->
+            RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+        }
+    }
+
+    private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
+        datesList?.let {
+            with(binding.restaurantMainListLayout) {
+                restaurantDeliveryDates.initDates(it)
+            }
+        }
+    }
+
+    private fun handleFavoriteEvent(event: LiveEvent<Boolean>?) {
+        event?.getContentIfNotHandled()?.let { isSuccess ->
+            if (isSuccess){
+                mainViewModel.forceFeedRefresh()
+            }else{
+                binding.restHeaderFavorite.onFail()
+            }
+        }
+    }
+
+    /** All sections click actions **/
+    private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
+        object : DishesMainAdapter.DishesMainAdapterListener {
+            override fun onDishClick(menuItem: MenuItem) {
+//                val curCookingSlot = viewModel.currentCookingSlot
+                val curCookingSlot = viewModel.currentCookingSlot
+                mainViewModel.openDishPage(menuItem, curCookingSlot)
+            }
+
+            override fun onDishSwipedAdd(item: DishSectionSingleDish) {
+                item.menuItem.dishId?.let {
+                    viewModel.addDishToCart(1, it)
+                    mainViewModel.logDishSwipeEvent(Constants.EVENT_SWIPED_ADD_DISH, item)
                 }
             }
 
-            restaurantDescription.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    val l = restaurantDescription.layout
-                    if (l != null) {
-                        val lines = l.lineCount
-                        if (lines > 2)
-                            restaurantDescriptionViewMore.visibility = View.VISIBLE
-                        restaurantDescription.maxLines = 2
-                    }
-                    restaurantDescription.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            })
+            override fun onDishSwipedRemove(item: DishSectionSingleDish) {
+                viewModel.removeOrderItemsByDishId(item.menuItem.dishId)
+                mainViewModel.logDishSwipeEvent(Constants.EVENT_SWIPED_REMOVE_DISH, item)
+            }
+
+        }
+
+    override fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot) {
+        //callback from TimePickerDialog - for changing cooking slot
+        viewModel.onCookingSlotSelected(cookingSlot, false)
+        viewModel.logEvent(Constants.EVENT_CHANGE_COOKING_SLOT)
+    }
+
+    override fun onDateSelected(date: SortedCookingSlots?) {
+        //callback from time tab layout
+        date?.let {
+            viewModel.onDeliveryDateChanged(date)
         }
     }
 
-    private var player: ExoPlayer? = null
-    private fun handleVideoCover(video: String) {
-        player = SimpleExoPlayer.Builder(requireContext()).build()
-        binding.coverVideo.isVisible = true
-        binding.coverVideo.player = player
-        binding.coverVideo.hideController()
-        val mediaItem = MediaItem.fromUri(video)
-        player?.let { player ->
-            player.setMediaItem(mediaItem)
-            player.playWhenReady = true
-            player.repeatMode = REPEAT_MODE_ALL
-            player.volume = 0f
-            player.prepare()
-        }
-
-
-        //todo : ask if plater should play sound?
-//        binding.coverVideo.setOnClickListener {
-//            if (player?.audioComponent?.volume == 0f) {
-//                (player as SimpleExoPlayer).volume = 1f
-//            } else {
-//                (player as SimpleExoPlayer).volume = 0f
-//            }
-//        }
+    override fun onPerformClearCart() {
+        viewModel.onPerformClearCart()
     }
 
-//    /** All sections click actions **/
-//    private fun getMainAdapterListener(): RestaurantPageMainAdapter.RestaurantPageMainAdapterListener =
-//        object: RestaurantPageMainAdapter.RestaurantPageMainAdapterListener{
-//
-//        }
+    override fun onClearCartCanceled() {
+        viewModel.refreshRestaurantUi()
+    }
+
+    override fun refreshParentOnCartCleared() {
+        viewModel.refreshRestaurantUi()
+    }
+
+    override fun onFloatingCartStateChanged(isShowing: Boolean) {
+        binding.restaurantFragHeightCorrection.isVisible = isShowing
+    }
+
+    override fun onAddToFavoriteClick() {
+        viewModel.addToFavorite()
+    }
+
+    override fun onRemoveFromFavoriteClick() {
+        viewModel.removeFromFavoriteClick()
+    }
+
+    private var hasMotionScrolled = false
+
+    override fun onResume() {
+        super.onResume()
+        if (hasMotionScrolled) {
+            binding.motionLayout.progress = 1F
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
+    }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         adapterDishes = null
         adapterCuisines = null
-        player?.release()
-        player = null
+        super.onDestroyView()
     }
+
 
     companion object {
+        private const val MOTION_TRANSITION_COMPLETED = 1F
+        private const val MOTION_TRANSITION_INITIAL = 0F
         private const val TAG = "RestaurantPageFragment"
     }
+
 }
 
-fun setFadeInOnScrollRecycler(
-    fadingView: View,
-    recyclerView: RecyclerView,
-    startFadeAtChild: Int = 0,
-    fadeDuration: Int = 500
-) {
-    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-        var startFadeAt: Float? = null
-
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            val currentChildIndex =
-                (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-            if (startFadeAt == null && currentChildIndex == startFadeAtChild - 1) {
-                startFadeAt = recyclerView.computeVerticalScrollOffset().toFloat()
-            }
-            startFadeAt?.let { itemHeight ->
-                // The length that is currently scrolled
-                val scrolledLength = recyclerView.computeVerticalScrollOffset() - itemHeight
-                // The distance you need to scroll to end the animation
-                val totalScrollableLength = fadeDuration
-                if (abs(scrolledLength) > 0) {
-                    val alpha = scrolledLength.div(totalScrollableLength)
-                    fadingView.alpha = alpha
-                }
-            }
-        }
-    })
-}

@@ -30,7 +30,6 @@ class TrackOrderItemDetailsAdapter(val context: Context) :
         val img = view.trackOrderItemImage
         val title = view.trackOrderItemName
         val price = view.trackOrderItemPrice
-        val ingredientsList = view.trackOrderItemIngredientsList
         val note = view.trackOrderItemNote
     }
 
@@ -51,10 +50,6 @@ class TrackOrderItemDetailsAdapter(val context: Context) :
             holder.note.visibility = View.VISIBLE
             holder.note.text  = item.notes
         }
-
-        holder.ingredientsList.layoutManager = LinearLayoutManager(context)
-        val adapter = IngredientsCheckoutAdapter(context,  listOfNotNull(item.getRemovedIngredients(), item.getNoteStr()))
-        holder.ingredientsList.adapter = adapter
     }
 
 

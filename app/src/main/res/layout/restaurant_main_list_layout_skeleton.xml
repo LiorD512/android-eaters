@@ -1,82 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.facebook.shimmer.ShimmerFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/shimmerFrameStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="15.4dp"
-            android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="7.7dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="15.4dp"
-            android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
+        android:layout_height="wrap_content">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15.4dp"
-            android:layout_marginBottom="24dp">
+            android:background="@color/white"
+            android:orientation="vertical">
+
+        <TextView
+                style="@style/LatoReg13DarkGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginBottom="3.8dp"
+                android:background="@drawable/shimmer_cornered_rad13"
+                android:minLines="2"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginTop="20dp">
+
+            <View
+                    android:layout_width="60dp"
+                    android:layout_height="23dp"
+                    android:layout_marginEnd="7.9dp"
+                    android:background="@drawable/shimmer_cornered_rad7" />
+
+            <View
+                    android:layout_width="60dp"
+                    android:layout_height="23dp"
+                    android:layout_marginEnd="7.9dp"
+                    android:background="@drawable/shimmer_cornered_rad7" />
+
+            <View
+                    android:layout_width="60dp"
+                    android:layout_height="23dp"
+                    android:layout_marginEnd="7.9dp"
+                    android:background="@drawable/shimmer_cornered_rad7" />
+
+        </LinearLayout>
 
         <View
-                android:layout_width="60dp"
-                android:layout_height="23dp"
-                android:layout_marginEnd="7.9dp"
-                android:background="@drawable/shimmer_cornered_rad7" />
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="17.8dp"
+                android:layout_marginTop="23dp"
+                android:background="@color/grey_white" />
+
+
+        <TextView
+                style="@style/LatoBold15DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/shimmer_cornered_rad13"
+                android:text="Delivery Timing"
+                android:textColor="@color/transparent"/>
+
 
         <View
-                android:layout_width="60dp"
-                android:layout_height="23dp"
-                android:layout_marginEnd="7.9dp"
-                android:background="@drawable/shimmer_cornered_rad7" />
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="15.4dp"
+                android:background="@drawable/shimmer_cornered_left_rad13"/>
 
-        <View
-                android:layout_width="60dp"
-                android:layout_height="23dp"
-                android:layout_marginEnd="7.9dp"
-                android:background="@drawable/shimmer_cornered_rad7" />
+        <TextView
+                style="@style/LatoBold15DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15.4dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="23dp"
+                android:background="@drawable/grey_white_cornered_rag15_rect"
+                android:drawablePadding="3dp"
+                android:gravity="center"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="4dp"
+                android:text="Now"
+                android:textColor="@color/transparent"/>
+
 
     </LinearLayout>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginHorizontal="17.8dp"
-            android:background="@color/grey_white" />
-
-    <View
-            android:layout_width="130dp"
-            android:layout_height="15.4dp"
-            android:layout_marginHorizontal="15.4dp"
-            android:layout_marginTop="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="38.4dp"
-            android:layout_marginStart="15.4dp"
-            android:layout_marginTop="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
-
-    <View
-            android:layout_width="88.3dp"
-            android:layout_height="30.7dp"
-            android:layout_marginStart="15.4dp"
-            android:layout_marginTop="15.4dp"
-            android:layout_marginBottom="23dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginHorizontal="17.8dp"
-            android:background="@drawable/shimmer_cornered_rad7" />
-
-</LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>

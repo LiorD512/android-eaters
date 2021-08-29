@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cartSubTotalItemMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="90dp">
+
+
+    <TextView
+            android:id="@+id/cartSubTotalItemName"
+            style="@style/LatoBlack13DarkGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_white"
+            android:letterSpacing="-0.01"
+            android:paddingStart="15.4dp"
+            android:paddingTop="15.4dp"
+            android:paddingBottom="15.4dp"
+            android:text="Subtotal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/cartSubTotalItemPrice"
+            style="@style/LatoBlack13DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15.4dp"
+            android:letterSpacing="-0.01"
+            android:text="$10"
+            app:layout_constraintBottom_toBottomOf="@+id/cartSubTotalItemName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/cartSubTotalItemPb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="9.3dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/cartSubTotalItemName"
+            app:layout_constraintEnd_toEndOf="@+id/cartSubTotalItemPrice"
+            app:layout_constraintTop_toTopOf="@+id/cartSubTotalItemName" />
+
+<!--    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered-->
+<!--            android:id="@+id/cartSubTotalItemBtn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="15.4dp"-->
+<!--            android:layout_marginVertical="15.4dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cartSubTotalItemName"-->
+<!--            app:title="Go to checkout" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

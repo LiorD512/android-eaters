@@ -9,6 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.databinding.CountryCodePickerItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
@@ -30,7 +31,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("getOtpCode")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_GET_OTF_CODE)
 
         initUi()
         initObservers()

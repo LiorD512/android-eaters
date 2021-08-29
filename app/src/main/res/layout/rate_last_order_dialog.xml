@@ -50,7 +50,7 @@
 
                 </FrameLayout>
 
-                <com.bupp.wood_spoon_eaters.views.UserImageView
+                <com.bupp.wood_spoon_eaters.views.UserImageVideoView
                         android:id="@+id/rateLastOrderUserImage"
                         app:imageSize="SMALL"
                         android:layout_marginBottom="7.7dp"
@@ -248,7 +248,8 @@
                         android:id="@+id/rateLastOrderDoneBtn"
                         android:layout_marginBottom="7.3dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="50dp"/>
 
             </LinearLayout>
         </ScrollView>

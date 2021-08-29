@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import android.annotation.SuppressLint
+import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDate
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +41,17 @@ object DateUtils {
         return "$date, $time"
     }
 
+    fun parseDateToStartAndEnd(startDate: Date, endDate: Date): String {
+        //Mon, Jun 9 2pm - 5pm
+        val dateFormat = SimpleDateFormat("EEE, MMM d", Locale.getDefault())
+        val date = dateFormat.format(startDate)
+        val timeFormat1 = SimpleDateFormat("h:mm")
+        val timeFormat2 = SimpleDateFormat("h:mm a")
+        val startTime = timeFormat1.format(startDate).lowercase(Locale.getDefault())
+        val endTime = timeFormat2.format(endDate).lowercase(Locale.getDefault())
+        return "$date  $startTime - $endTime"
+    }
+
     @SuppressLint("SimpleDateFormat")
     fun parseDateToTime(date: Date?): String {
         val sdf = SimpleDateFormat("h:mm a")
@@ -48,10 +60,13 @@ object DateUtils {
         return ""
     }
 
-    fun parseDateToUsDate(date: Date): String {
+    fun parseDateToUsDate(date: Date?): String {
         //August 2, 2019
-        val sdf = SimpleDateFormat("MMMM dd, yyyy")
-        return sdf.format(date.time)
+        date?.let{
+            val sdf = SimpleDateFormat("MMMM dd, yyyy")
+            return sdf.format(date.time)
+        }
+        return ""
     }
 
     fun parseDateToDayDate(date: Date): String {
@@ -60,10 +75,33 @@ object DateUtils {
         return sdf.format(date.time)
     }
 
-    fun parseDateToDayDateSplash(date: Date): String {
+    fun parseDateToFullDayDate(date: Date): String {
         //Fri, Feb 12
-        val sdf = SimpleDateFormat("EE, MM/dd")
+        val sdf = SimpleDateFormat("EEEE, MMM dd")
         return sdf.format(date.time)
+    }
+
+    fun parseDateToDayName(date: Date?): String {
+        //Friday
+        date?.let{
+            val sdf = SimpleDateFormat("EEEE")
+            return sdf.format(date.time)
+        }
+        return ""
+    }
+    fun parseDateToDayDateNumber(date: Date): String {
+        //Fri, Feb 12
+        val sdf = SimpleDateFormat("EEE, MMM d")
+        return sdf.format(date.time)
+    }
+
+    fun parseDateToDayDateNumberOrToday(date: Date): String {
+        //Fri, Feb 12 / Today
+        if(isToday(date)){
+            return "Today"
+        }else{
+            return parseDateToDayDateNumber(date)
+        }
     }
 
     fun parseDateToDayDateAndTime(date: Date): String {
@@ -74,27 +112,47 @@ object DateUtils {
         return "$dateVal, $hours"
     }
 
+    fun parseDateToFullTime(date: Date?): String {
+        //16
+        date?.let{
+            val sdf = SimpleDateFormat("HH")
+            return sdf.format(date.time)
+        }
+        return ""
+    }
+
     fun parseDateHalfHourInterval(date: Date): String {
         //4:30 PM - 5:00 PM
         val c = Calendar.getInstance()
         c.time = date
         c.add(Calendar.MINUTE, 30)
 
-        val sdf = SimpleDateFormat("h:mma")
-        val hour1 = sdf.format(date.time)
-        val hour2 = sdf.format(c.time)
+        val sdf1 = SimpleDateFormat("h:mm")
+        val sdf2 = SimpleDateFormat("h:mm a")
+        val hour1 = sdf1.format(date.time)
+        val hour2 = sdf2.format(c.time).lowercase(Locale.getDefault())
+
+        //        val startTime = timeFormat.format(startDate).lowercase(Locale.getDefault())
+//        val endTime = timeFormat.format(endDate).lowercase(Locale.getDefault())
+
         return "$hour1 - $hour2"
     }
 
     fun parseDateToUsTime(date: Date): String {
-        //4:30 PM
-        val sdf = SimpleDateFormat("h:mma")
-        return sdf.format(date.time)
+        //04:30 pm
+        val sdf = SimpleDateFormat("hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM", "pm")
     }
 
-    fun parseDateToUsDayTime(date: Date?): String{
-        date?.let{
-            if(isToday(it))
+    fun parseDateToDayAndUsTime(date: Date): String {
+        //Fri, 04:30 pm
+        val sdf = SimpleDateFormat("EE, hh:mm a")
+        return sdf.format(date.time).replace("AM", "am").replace("PM", "pm")
+    }
+
+    fun parseDateToUsDayTime(date: Date?): String {
+        date?.let {
+            if (isToday(it))
                 return parseDateToUsTime(it)
             else
                 return parseDateToDayDateHour(it)
@@ -105,7 +163,7 @@ object DateUtils {
     fun parseDateToDate(date: Date?): String {
         //05.04.19
         val sdf = SimpleDateFormat("dd.MM.yy")
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -114,7 +172,7 @@ object DateUtils {
     fun parseDateToDateAndTime(date: Date?): String {
         //05.04.19, 6:10PM
         val sdf = SimpleDateFormat("dd.MM.yy, h:mma")
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -142,7 +200,7 @@ object DateUtils {
 
     fun parseUnixTimestamp(date: Date?): String {
         var yourmilliseconds: Long = Date().time
-        date?.let{
+        date?.let {
             yourmilliseconds = date.time
         }
         val droppedMillis = yourmilliseconds / 1000
@@ -152,7 +210,7 @@ object DateUtils {
 
     fun parseFromUnixTimestamp(milliStr: String?): Date {
         var yourmilliseconds: Long = Date().time
-        milliStr?.let{
+        milliStr?.let {
             yourmilliseconds = it.toLong()
             yourmilliseconds *= 1000
         }
@@ -162,19 +220,37 @@ object DateUtils {
     }
 
 
-
     fun isNow(newChosenDate: Date?): Boolean {
-        newChosenDate?.let{
+        newChosenDate?.let {
             val now = Date().time
-            return it.time-1000 < now
+            return it.time - 1000 < now
         }
         return true
     }
 
+    fun isDateInRange(dateToCheck: Date, startDate: Date?, endDate: Date?): Boolean {
+        startDate?.let{
+            endDate?.let{
+                return dateToCheck.time >= startDate.time && dateToCheck.time <= endDate.time
+            }
+        }
+        return false
+    }
+
+    fun isNowInRange(startDate: Date, endDate: Date): Boolean {
+        return isDateInRange(Date(), startDate, endDate)
+    }
+
     fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
         val sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
         return sameDay
+    }
+
+    fun isSameDay(date1: Date, date2: Date): Boolean {
+        val fmt = SimpleDateFormat("yyyyMMdd")
+//        fmt.setTimeZone(...); // your time zone
+        return fmt.format(date1).equals(fmt.format(date2))
     }
 
     fun isIn30MinutesRangeFromNow(dateToCheck: Date): Boolean {
@@ -204,7 +280,7 @@ object DateUtils {
         return isSameDay(orderDate, today)
     }
 
-    fun truncateDate30MinUp(date: Date): Date{
+    fun truncateDate30MinUp(date: Date): Date {
         val calendar = Calendar.getInstance()
         calendar.time = date
 
@@ -214,6 +290,29 @@ object DateUtils {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         return calendar.time
+    }
+
+//    fun parseCookingSlotForNowOrDates(cookingSlot: CookingSlot): String {
+//        return if (isNowInRange(cookingSlot.startsAt, cookingSlot.endsAt)) {
+//            "Now"
+//        } else {
+//            "${parseDateToDayAndUsTime(cookingSlot.startsAt)} - ${parseDateToUsTime(cookingSlot.endsAt)}"
+//        }
+//    }
+
+    fun parseDatesToNowOrDates(startsAt: Date, endsAt: Date): String {
+        return if (isNowInRange(startsAt, endsAt)) {
+            "Now"
+        } else {
+            "${parseDateToDayAndUsTime(startsAt)} - ${parseDateToUsTime(endsAt)}"
+        }
+    }
+
+    fun isSameTime(from: Date?, from1: Date): Boolean {
+        from?.let{
+            return from.time == from1.time
+        }
+        return false
     }
 }
 

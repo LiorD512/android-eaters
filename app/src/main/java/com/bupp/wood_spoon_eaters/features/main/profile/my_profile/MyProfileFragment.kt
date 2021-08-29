@@ -16,19 +16,19 @@ import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.bottom_sheets.delete_account.DeleteAccountBottomSheet
-import com.bupp.wood_spoon_eaters.custom_views.empty_icons_grid_view.CuisinesChooserDialog
+import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.NationwideShippmentInfoDialog
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.new_order.NewOrderActivity
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ShareBanner
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.bupp.wood_spoon_eaters.views.horizontal_dietary_view.HorizontalDietaryView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -37,7 +37,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
     SingleFeedListView.SingleFeedListViewListener, LogoutDialog.LogoutDialogListener,
     FavoritesView.FavoritesViewListener, CuisinesChooserDialog.CuisinesChooserListener,
-    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageView.UserImageViewListener {
+    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageViewListener {
 
     val binding: MyProfileFragmentBinding by viewBinding()
     private val viewModel by viewModel<MyProfileViewModel>()
@@ -48,8 +48,16 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         initClicks()
         initObservers()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchProfileData()
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ACCOUNT)
     }
 
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {
@@ -86,8 +94,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
                 myProfileFragCuisine.setIsEditable(true, object : WSEditText.WSEditTextListener {
                     override fun onWSEditUnEditableClick() {
-                        val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment, viewModel.getCuisineList(), Constants.ENDLESS_SELECTION)
-                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
+                        val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment)
+//                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
                         cuisineFragment.show(childFragmentManager, "CookingCuisine")
                     }
                 })
@@ -105,9 +113,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         viewModel.paymentLiveData.observe(viewLifecycleOwner, { cardsEvent ->
             handleCustomerCards(cardsEvent)
         })
-        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
-        })
+//        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
+//            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
+//        })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
                 binding.myProfileFragPb.show()
@@ -122,7 +130,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             binding.myProfileFragVersion.text = "$it"
         })
         mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
-            Log.d(NewOrderActivity.TAG, "stripeInitializationEvent status: $it")
+            Log.d(TAG, "stripeInitializationEvent status: $it")
             when (it) {
                 PaymentManager.StripeInitializationStatus.START -> {
                     binding.myProfileFragPb.show()
@@ -136,10 +144,10 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
         })
         mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.myProfileFragAddress.updateDeliveryFullDetails(it.address)
+            binding.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.myProfileFragHeightCorrection.isVisible = isVisible
+            binding.myProfileFragHeightCorrection.isVisible = it
         })
     }
 
@@ -178,6 +186,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
             myProfileFragLogout.setOnClickListener {
                 LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
+                mainViewModel.logEvent(Constants.EVENT_CLICK_SIGN_OUT)
+
             }
             myProfileFragDeleteAccount.setOnClickListener {
                 DeleteAccountBottomSheet().show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
@@ -221,6 +231,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             }
 
             Constants.DELIVERY_DETAILS_PAYMENT -> {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_PAYMENT)
                 mainViewModel.startStripeOrReInit()
             }
         }

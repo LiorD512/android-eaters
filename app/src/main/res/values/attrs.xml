@@ -30,8 +30,18 @@
         <enum name="CHECKOUT_DELIVERY_FEE" value="3" />
         <enum name="CHECKOUT_MINIMUM_FEE" value="4" />
         <enum name="CHECKOUT_COURIER_TIP" value="5" />
-        <enum name="CUSTOM_CLICK" value="6" />
+        <enum name="FEES_AND_ESTIMATED_TAX" value="6" />
     </attr>
+
+    <attr name="floating_button_type" format="enum">
+        <enum name="VIEW_CART" value="0" />
+        <enum name="ADD_TO_CART" value="1" />
+        <enum name="PLACE_ORDER" value="2" />
+    </attr>
+
+    <declare-styleable name="WSFloatingButton">
+        <attr name="floating_button_type" />
+    </declare-styleable>
 
     <declare-styleable name="WSEditText">
         <attr name="inputType" />
@@ -46,16 +56,32 @@
         <attr name="showSep"/>
     </declare-styleable>
 
+    <declare-styleable name="ResizableTagsView">
+        <attr name="tagType" />
+    </declare-styleable>
+
+    <attr name="tagType" format="enum">
+        <enum name="TAG_TYPE_FEED" value="0" />
+        <enum name="TAG_TYPE_DISH" value="1" />
+    </attr>
+
     <declare-styleable name="WSTitleValueView">
         <attr name="title" />
         <attr name="subTitle" />
         <attr name="tip_type"/>
+        <attr name="isBold" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBodyView">
         <attr name="title" />
         <attr name="body" format="string" />
         <attr name="shouldShowDivider" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="collapseMaxLines" format="integer" />
+        <attr name="viewMoreText" format="string" />
+        <attr name="viewLessText" format="string" />
     </declare-styleable>
 
     <declare-styleable name="DishTagsView">
@@ -70,6 +96,7 @@
         <attr name="maxLines" />
         <attr name="hint" />
         <attr name="error" />
+        <attr name="textSize" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="WSSimpleBtn">
@@ -113,6 +140,15 @@
         </attr>
         <attr name="title" />
         <attr name="isWithSep" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CheckoutHeaderView">
+        <attr name="iconType" format="enum">
+            <enum name="HEADER_ICON_BACK" value="0" />
+            <enum name="HEADER_ICON_CLOSE" value="1" />
+        </attr>
+        <attr name="title" />
+        <attr name="subtitle" />
     </declare-styleable>
 
     <declare-styleable name="CustomDetailsAttrs">
@@ -182,16 +218,20 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="PlusMinusView">
+        <attr name="iconsSize" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="OrderItemsView">
-       <attr name="showAddBtn" format="boolean"/>
+        <attr name="showAddBtn" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BlueBtnAttrs">
         <attr name="title" />
-        <attr name="textColor" format="reference|color"/>
-        <attr name="background" format="reference"/>
-        <attr name="makeItRed" format="boolean"/>
-        <attr name="makeItOrange" format="boolean"/>
+        <attr name="textColor" format="reference|color" />
+        <attr name="background" format="reference" />
+        <attr name="makeItRed" format="boolean" />
+        <attr name="makeItOrange" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SelectableBtn">
@@ -250,4 +290,5 @@
 
         </attr>
     </declare-styleable>
+
 </resources>

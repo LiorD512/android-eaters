@@ -6,6 +6,7 @@
         android:gravity="center|top">
 
     <ImageView
+            android:layout_marginTop="3.5dp"
             android:src="@drawable/tab_home_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

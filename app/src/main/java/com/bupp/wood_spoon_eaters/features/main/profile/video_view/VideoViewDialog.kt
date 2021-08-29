@@ -12,7 +12,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.VideoViewDialogBinding
-import com.bupp.wood_spoon_eaters.model.Cook
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -20,11 +19,11 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 
-class VideoViewDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
+class VideoViewDialog(val cookFullName: String, val video: String) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
 
 
     private var player: SimpleExoPlayer? = null
-    val binding: VideoViewDialogBinding by viewBinding  ()
+    val binding: VideoViewDialogBinding by viewBinding()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.video_view_dialog, null)
@@ -47,11 +46,12 @@ class VideoViewDialog(val cook: Cook) : DialogFragment(), HeaderView.HeaderViewL
     }
 
     private fun initUi() {
-        with(binding){
-            videoViewHeaderView.setHeaderViewListener(this@VideoViewDialog)
-            videoViewHeaderView.setTitle("Story by ${cook.getFullName()}")
+        with(binding) {
+            videoViewExitBtn.setOnClickListener {
+                dismiss()
+            }
 
-            cook.video?.let{
+            video.let {
                 Log.d("wowVideoView", "video url: $it")
                 player = SimpleExoPlayer.Builder(requireContext()).build()
 
