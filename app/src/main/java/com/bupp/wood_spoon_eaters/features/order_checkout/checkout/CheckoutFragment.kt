@@ -1,24 +1,31 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.checkout
 
+import FeesAndTaxBottomSheet
+import ToolTipBottomSheet
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
-import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
-import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
+import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.*
@@ -120,6 +127,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 CheckoutViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
                     mainViewModel.startStripeOrReInit()
                 }
+                else -> {
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+                }
             }
         })
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
@@ -216,7 +226,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             with(binding) {
 
                 (activity as OrderCheckoutActivity).updateMainHeader(
-                    title = "Checkout", subtitle = it.restaurant?.restaurantName?:"", icon = Constants.HEADER_ICON_CLOSE)
+                    title = "Checkout", subtitle = it.restaurant?.restaurantName ?: "", icon = Constants.HEADER_ICON_CLOSE
+                )
 
                 if (!it.orderItems.isNullOrEmpty()) {
                     var cook = it.restaurant
@@ -330,7 +341,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         }
     }
-
 
 
     override fun onEditOrderBtnClicked() {

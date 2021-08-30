@@ -13,19 +13,21 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentCodeBinding
+import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class CodeFragment() : Fragment(R.layout.fragment_code) {
+class CodeFragment : Fragment(R.layout.fragment_code) {
 
-    val binding: FragmentCodeBinding by viewBinding()
+    private var binding: FragmentCodeBinding? = null
     private val viewModel: LoginViewModel by sharedViewModel()
     private var timer: CountDownTimer? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCodeBinding.bind(view)
 
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_VERIFY_OTF_CODE)
 
@@ -43,18 +45,18 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
         viewModel.errorEvents.observe(viewLifecycleOwner, Observer{
             when(it){
                 ErrorEventType.CODE_EMPTY -> {
-                    binding.codeFragInputError.visibility = View.VISIBLE
+                    binding?.codeFragInputError?.visibility = View.VISIBLE
                 }
             }
         })
         viewModel.userData.observe(viewLifecycleOwner, {
-            binding.codeFragNumber.text = "+$it"
+            binding?.codeFragNumber?.text = "+$it"
         })
     }
 
     @SuppressLint("SetTextI18n")
     private fun initUi() {
-        with(binding){
+        binding?.apply {
 
             codeFragInput.isEnabled = false
             codeFragNext.setOnClickListener {
@@ -118,15 +120,15 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     }
 
     private fun startResendTimer() {
-        binding.codeFragResendCode.setOnClickListener(null)
+        binding?.codeFragResendCode?.setOnClickListener(null)
         timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding.codeFragResendCode.text = "Resend code in: ${millisUntilFinished/1000}"
+                binding?.codeFragResendCode?.text = "Resend code in: ${millisUntilFinished/1000}"
             }
 
             override fun onFinish() {
-                binding.codeFragResendCode.text = "Press here to resend"
-                binding.codeFragResendCode.setOnClickListener {
+                binding?.codeFragResendCode?.text = "Press here to resend"
+                binding?.codeFragResendCode?.setOnClickListener {
                     resendCode()
                 }
             }
@@ -137,6 +139,7 @@ class CodeFragment() : Fragment(R.layout.fragment_code) {
     override fun onDestroyView() {
         timer?.cancel()
         timer = null
+        binding = null
         super.onDestroyView()
     }
 

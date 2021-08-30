@@ -7,15 +7,26 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.*
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.model.DeliveryDates
+import com.bupp.wood_spoon_eaters.model.OrderRequest
+import com.bupp.wood_spoon_eaters.model.ShippingMethod
+import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class CheckoutViewModel(private val cartManager: CartManager, private val paymentManager: PaymentManager, val eaterDataManager: EaterDataManager, private val eventsManager: EventsManager) :
+class CheckoutViewModel(
+    private val cartManager: CartManager,
+    private val paymentManager: PaymentManager,
+    val eaterDataManager: EaterDataManager,
+    private val eventsManager: EventsManager
+) :
     ViewModel() {
 
 
@@ -31,17 +42,19 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     val wsErrorEvent = cartManager.getWsErrorEvent()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
+
     enum class OrderValidationErrorType {
         SHIPPING_METHOD_MISSING,
-        PAYMENT_METHOD_MISSING
+        PAYMENT_METHOD_MISSING,
+        SHIPPING_ADDRESS_MISSING
     }
 
     data class TimePickerData(val deliveryDates: List<DeliveryDates>, val selectedDate: Date? = null)
+
     val timeChangeEvent = LiveEventData<TimePickerData>()
 
-    init{
+    init {
         fetchOrderDeliveryTimes()
-
     }
 
     private fun refreshDeliveryTime() {
@@ -50,21 +63,21 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
         Log.d(TAG, "fetchOrderDeliveryTimes: $isPendingRequest")
-        orderLiveData.value?.let{
+        orderLiveData.value?.let {
             viewModelScope.launch {
                 val result = cartManager.fetchOrderDeliveryTimes(it.id)
-                result?.let{
+                result?.let {
                     deliveryDatesLiveData.postValue(it)
                     refreshDeliveryTime()
                 }
             }
-            if(isPendingRequest){
+            if (isPendingRequest) {
                 onTimeChangeClick()
             }
         }
     }
 
-    fun refreshCheckoutPage(){
+    fun refreshCheckoutPage() {
         cartManager.refreshOrderLiveData()
     }
 
@@ -95,9 +108,9 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     }
 
     fun onTimeChangeClick() {
-        if(deliveryDatesLiveData.value != null){
+        if (deliveryDatesLiveData.value != null) {
             timeChangeEvent.postRawValue(TimePickerData(deliveryDatesLiveData.value!!, cartManager.getCurrentDeliveryAt()))
-        }else{
+        } else {
             fetchOrderDeliveryTimes(true)
         }
     }
@@ -131,6 +144,7 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
     }
 
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
+
     val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         val curOrder = cartManager.getCurrentOrderData().value
@@ -161,8 +175,11 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
                     Log.d(TAG, "finalizeOrder - ws error")
-                    wsErrorEvent.postRawValue(result.wsError?.getErrorsMsg()?:"")
-
+                    var error = result.wsError?.getErrorsMsg()
+                    if (error.isNullOrEmpty()) {
+                        error = "Failed to create your order please try again later"
+                    }
+                    wsErrorEvent.postRawValue(error)
                 }
             }
             progressData.endProgress()
@@ -171,26 +188,39 @@ class CheckoutViewModel(private val cartManager: CartManager, private val paymen
 
     fun onPlaceOrderClick() {
         if (validateOrderData()) {
+//            if(eaterDataManager.hasUserSetAnAddress()){
+//
+//            }
             finalizeOrder()
         }
     }
 
     private fun validateOrderData(): Boolean {
-        if (cartManager.checkShippingMethodValidation()) {
-            validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
-            return false
-        }
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
         if (paymentMethod == null) {
             validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
             return false
         }
+        if (!eaterDataManager.hasUserSetAnAddress()) {
+            validationError.postValue(OrderValidationErrorType.SHIPPING_ADDRESS_MISSING)
+            return false
+        }
+        if (cartManager.checkShippingMethodValidation()) {
+            validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
+            return false
+        }
         return true
     }
 
+    fun onLocationChanged() {
+        viewModelScope.launch {
+            cartManager.updateOrderDeliveryAddressParam()
+            refreshCheckoutPage()
+        }
+    }
 
 
-    companion object{
+    companion object {
         const val TAG = "wowCheckoutVM"
     }
 

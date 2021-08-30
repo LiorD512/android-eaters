@@ -120,12 +120,13 @@ data class Order (
         }
     }
 
-    fun getOrderStateSubTitle(orderState: OrderState): String?{
+    fun getOrderStateSubTitle(orderState: OrderState): String{
         return when(orderState){
             OrderState.NONE -> "Waiting for home chef confirmation"
-            OrderState.RECEIVED, OrderState.PREPARED, OrderState.ON_THE_WAY, OrderState.DELIVERED -> {
-                "Arriving at ${deliverAt?.let { DateUtils.parseDateHalfHourInterval(it) }}"
-            }
+            OrderState.RECEIVED -> "${restaurant?.firstName} received your order"
+            OrderState.PREPARED -> "${restaurant?.firstName} is preparing your order"
+            OrderState.ON_THE_WAY -> "Hang on! Your food is on its way"
+            OrderState.DELIVERED -> "Enjoy :)"
         }
     }
 
