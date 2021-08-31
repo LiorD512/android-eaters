@@ -32,12 +32,12 @@ object GoogleAddressParserUtil {
         val addressComponents = place.addressComponents?.asList()
         addressComponents?.forEach {
             val data = it.types.intersect(allowed_types).toString().replace("[", "").replace("]", "")
-            var result = data.split(",").map { it.trim() }
-            result.forEach { data ->
-                Log.d(TAG, "parseLocationToAddress: $data")
-                if (data.isNotEmpty()) {
+            val result = data.split(",").map { it.trim() }
+            result.forEach { dataResult ->
+                Log.d(TAG, "parseLocationToAddress: $dataResult")
+                if (dataResult.isNotEmpty()) {
                     Log.d(TAG, "parseLocationToAddress: ${it.name}")
-                    when (data) {
+                    when (dataResult) {
                         "route" -> {
                             addressRequest.streetLine1 = it.name
                         }

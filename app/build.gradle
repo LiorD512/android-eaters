@@ -25,12 +25,16 @@ android {
         applicationId "com.bupp.wood_spoon_eater"
         versionCode 89
         versionName "2.3.0"
-        signingConfig signingConfigs.debug
+//        signingConfig signingConfigs.debug
 
     }
 
 
     buildTypes {
+        debug {
+            debuggable true
+            manifestPlaceholders["isTestMode"] = "true"
+        }
         release {
             debuggable false
             shrinkResources true
@@ -39,9 +43,13 @@ android {
             manifestPlaceholders["isTestMode"] = "false"
 //            signingConfig signingConfigs.signing_config
         }
-        debug {
-            debuggable true
-            manifestPlaceholders["isTestMode"] = "true"
+        benchmark {
+            debuggable false
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders["isTestMode"] = "false"
+            signingConfig signingConfigs.debug
         }
     }
 

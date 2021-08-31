@@ -94,11 +94,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                             counterEditTextCounter.visibility = View.VISIBLE
                         }
                         if (s.isEmpty()) {
-                            val face = ResourcesCompat.getFont(context, R.font.lato_italic)
-                            counterEditTextInput.typeface = face
+                            val faceType = ResourcesCompat.getFont(context, R.font.lato_italic)
+                            counterEditTextInput.typeface = faceType
                         } else {
-                            val face = ResourcesCompat.getFont(context, R.font.lato_bold)
-                            counterEditTextInput.typeface = face
+                            val faceType = ResourcesCompat.getFont(context, R.font.lato_bold)
+                            counterEditTextInput.typeface = faceType
                         }
                         listener?.onInputTitleChange(s.toString())
                         super.afterTextChanged(s)

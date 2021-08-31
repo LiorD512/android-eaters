@@ -97,8 +97,7 @@ object Utils {
             v.vibrate(
                 VibrationEffect.createOneShot(milliseconds,
                     VibrationEffect.DEFAULT_AMPLITUDE))
-        }
-        else {
+        }else {
             v.vibrate(milliseconds)
         }
     }

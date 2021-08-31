@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
             android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -29,6 +30,12 @@
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning"
             tools:replace="supportsRtl, fullBackupContent, allowBackup">
+
+        <!-- Profileable to enable Macrobenchmark profiling -->
+<!--         Suppress AndroidElementNotAllowed -->
+        <profileable android:shell="true"
+                tools:targetApi="q" />
+
         <activity
                 android:name=".features.order_checkout.OrderCheckoutActivity"
                 android:screenOrientation="portrait"/>
