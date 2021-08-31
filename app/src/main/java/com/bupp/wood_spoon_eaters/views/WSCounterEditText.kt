@@ -52,7 +52,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 title?.let { setTitle(it) }
 
                 val textSize = attr.getInt(R.styleable.WSCounterEditText_textSize, 16)
-                textSize?.let { setTextSize(it) }
+                textSize.let { setTextSize(it) }
 
 
                 maxChar = attr.getInt(R.styleable.WSCounterEditText_maxChar, -1)

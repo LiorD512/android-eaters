@@ -86,7 +86,7 @@ class FeedDataManager(
                     Log.d(TAG, "don't have known address")
                     if (myLocation != null) {
                         finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.CURRENT_LOCATION))
-                        myLocation.toAddress()?.let {
+                        myLocation.toAddress().let {
                             eaterDataManager.updateSelectedAddress(it, AddressDataType.DEVICE_LOCATION)
                         }
                     } else {

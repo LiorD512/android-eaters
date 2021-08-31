@@ -27,8 +27,7 @@ class MediaUploadManager(private val context: Context, private val apiService: A
         val results = mutableListOf<MediaUploadResult>()
 
         uploadRequests.forEach { media ->
-            var preSignedResult: PreSignedUrl? = null
-            preSignedResult = apiService.postEaterPreSignedUrl().data
+            val preSignedResult: PreSignedUrl? = apiService.postEaterPreSignedUrl().data
 
             preSignedResult?.let { it ->
                 putFileOnAws(uri = media, preSignedUrl = it.url)

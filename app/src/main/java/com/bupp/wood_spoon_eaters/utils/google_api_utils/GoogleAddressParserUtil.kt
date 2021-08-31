@@ -160,7 +160,7 @@ object GoogleAddressParserUtil {
             private val STATES_BY_ABBR: MutableMap<String, State> = HashMap()
 
             fun valueOfState(name: String): State? {
-                val enumName = name.toUpperCase().replace(" ".toRegex(), "_")
+                val enumName = name.uppercase().replace(" ".toRegex(), "_")
                 return try {
                     valueOf(enumName)
                 } catch (e: IllegalArgumentException) {

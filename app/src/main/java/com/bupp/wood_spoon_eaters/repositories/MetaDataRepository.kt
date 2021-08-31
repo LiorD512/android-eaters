@@ -179,7 +179,6 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
             Log.d("wowMetaDataRepo", "curVersion: $myCurrVersion, minimum version: $minimumVersion")
             return myCurrVersion < minimumVersion
         }
-        return true
     }
 
     private fun getNumberFromStr(str: String): Int {

@@ -77,7 +77,9 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
         binding.webDocsWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
 //                webDocsPb.hide()
-                view?.loadUrl(url)
+                url?.let{
+                    view?.loadUrl(it)
+                }
                 return true
             }
 

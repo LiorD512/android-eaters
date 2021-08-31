@@ -23,14 +23,14 @@ class WSRangeTimePickerHoursAdapter :
         val item = getItem(position)
         val itemViewHolder = holder as ViewHolder
 
-        itemViewHolder.bindItem(item, position, itemCount)
+        itemViewHolder.bindItem(item)
         Log.d("wowWSRangeAdapter","onBind $position, $itemCount")
     }
 
     class ViewHolder(view: WsRangeTimePickerItemBinding) : RecyclerView.ViewHolder(view.root) {
         private val itemText: TextView = view.wsRangeTimePickerItem
 
-        fun bindItem(date: Date, position: Int, itemCount: Int) {
+        fun bindItem(date: Date) {
             itemText.text = DateUtils.parseDateHalfHourInterval(date)
         }
     }

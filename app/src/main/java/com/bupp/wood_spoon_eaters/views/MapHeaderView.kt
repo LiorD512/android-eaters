@@ -53,10 +53,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         render.start()
 
         postDelayed({
-            val render = Render(context)
-            render.setAnimation(Slide().InDown(binding.mapHeaderView2))
-            render.setDuration(350)
-            render.start()
+            val render2 = Render(context)
+            render2.setAnimation(Slide().InDown(binding.mapHeaderView2))
+            render2.setDuration(350)
+            render2.start()
         }, 250)
     }
 
@@ -68,10 +68,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         render.start()
 
         postDelayed({
-            val render = Render(context)
-            render.setAnimation(Slide().InDown(binding.mapHeaderView1))
-            render.setDuration(350)
-            render.start()
+            val render2 = Render(context)
+            render2.setAnimation(Slide().InDown(binding.mapHeaderView1))
+            render2.setDuration(350)
+            render2.start()
         }, 250)
     }
 

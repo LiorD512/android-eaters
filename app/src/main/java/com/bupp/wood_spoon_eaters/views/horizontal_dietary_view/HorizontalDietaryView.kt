@@ -20,7 +20,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var diets: List<SelectableIcon>? = null
 
     init {
-        initUi(attrs)
+        initUi()
     }
 
     var listener: HorizontalDietaryViewListener? = null
@@ -29,7 +29,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         fun onDietaryClick(dietary: SelectableIcon)
     }
 
-    private fun initUi(attrs: AttributeSet?) {
+    private fun initUi() {
 
         adapter = HorizontalDietaryAdapter(this)
         with(binding){

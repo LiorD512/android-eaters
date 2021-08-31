@@ -53,5 +53,5 @@ abstract class InputTextWatcher : TextWatcher {
     }
 
 
-    protected abstract fun handleInputString(string: String)
+    protected abstract fun handleInputString(str: String)
 }

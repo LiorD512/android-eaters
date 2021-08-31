@@ -51,14 +51,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setDate(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
         var dateStr = "when"
         deliveryTimeParam?.let {
-            when (deliveryTimeParam.deliveryTimeType) {
+            dateStr = when (deliveryTimeParam.deliveryTimeType) {
                 SingleColumnTimePickerBottomSheet.DeliveryType.TODAY -> {
-                    dateStr = "Today"
+                    "Today"
                 }
                 SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE -> {
-                    dateStr = deliveryTimeParam.date?.let { DateUtils.parseDateToDayDateNumberOrToday(it) } ?: "ERROR"
+                    deliveryTimeParam.date?.let { DateUtils.parseDateToDayDateNumberOrToday(it) } ?: "ERROR"
                 }
-                else -> {} //DeliveryType.NON_FILTERED
             }
         }
         binding.feedHeaderDate.text = dateStr

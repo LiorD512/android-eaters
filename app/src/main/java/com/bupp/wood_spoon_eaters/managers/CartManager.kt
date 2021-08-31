@@ -139,7 +139,7 @@ class CartManager(
             result.data?.let {
                 updateCartManagerParams(it.copy())
             }
-            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+//            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
 
         } else {
             //check for errors
@@ -552,7 +552,7 @@ class CartManager(
 
     private fun getTipData(): Map<String, String> {
         val data = mutableMapOf<String, String>()
-        data["precentage"] = currentOrderResponse?.tipPercentage.toString() ?: "0"
+        data["precentage"] = currentOrderResponse?.tipPercentage.toString()
         data["value"] = currentOrderResponse?.tip?.formatedValue ?: "0"
         data["subtotal_price"] = currentOrderResponse?.subtotal?.formatedValue ?: "0"
         return data
