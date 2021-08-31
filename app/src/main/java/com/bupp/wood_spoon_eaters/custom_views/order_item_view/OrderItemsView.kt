@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views.order_item_view2
+package com.bupp.wood_spoon_eaters.custom_views.order_item_view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -12,9 +12,9 @@ import com.bupp.wood_spoon_eaters.databinding.OrderItemsViewBinding
 import com.bupp.wood_spoon_eaters.model.OrderItem
 
 
-class OrderItemsView2 @JvmOverloads
+class OrderItemsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr), OrderItemsViewAdapter2.OrderItemsViewAdapterListener {
+    LinearLayout(context, attrs, defStyleAttr), OrderItemsViewAdapter.OrderItemsViewAdapterListener {
 
     private var listener: OrderItemsListener? = null
     interface OrderItemsListener{
@@ -23,7 +23,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private var binding: OrderItemsViewBinding = OrderItemsViewBinding.inflate(LayoutInflater.from(context), this, true)
-    private var adapter: OrderItemsViewAdapter2? = null
+    private var adapter: OrderItemsViewAdapter? = null
 
     init{
         if (attrs != null) {
@@ -52,7 +52,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setOrderItems(context: Context, orderItems: List<OrderItem>, listener: OrderItemsListener? = null) {
         this.listener = listener
-        adapter = OrderItemsViewAdapter2(context, this)
+        adapter = OrderItemsViewAdapter(context, this)
         binding.orderItemsViewRecyclerView.adapter = adapter
         adapter!!.submitList(orderItems)
     }

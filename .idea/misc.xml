@@ -10,6 +10,7 @@
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/activity_splash.xml" value="0.36041666666666666" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/adapter_test.xml" value="0.36041666666666666" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/adasda_fragment.xml" value="0.3572916666666667" />
+        <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/blue_btn.xml" value="0.2484375" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/cancel_order_dialog_layout.xml" value="0.40989583333333335" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/checkout_fragment_backup.xml" value="0.27708333333333335" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/contact_us_dialog.xml" value="0.40989583333333335" />
@@ -17,6 +18,7 @@
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/cook_profile_fragment.xml" value="0.3572916666666667" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/favorite_btn.xml" value="0.27708333333333335" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_big_restaurant_item.xml" value="0.31068840579710144" />
+        <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_campaign_section.xml" value="0.31068840579710144" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/feed_dish_item.xml" value="0.27708333333333335" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/feed_items_indicator_view.xml" value="0.3572916666666667" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/feed_tab_orders.xml" value="0.2911458333333333" />
@@ -37,11 +39,13 @@
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/layout_tool_tip.xml" value="0.3890625" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/multi_section_feed_view.xml" value="0.2911458333333333" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/order_details_fragment.xml" value="0.3572916666666667" />
+        <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/rate_last_order_dialog.xml" value="0.36041666666666666" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/rate_last_order_dialog_backup.xml" value="0.27708333333333335" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/report_issue_fragment.xml" value="0.3572916666666667" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/search_dish_item.xml" value="0.3572916666666667" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/sharing_campaign_dialog.xml" value="0.3572916666666667" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/swipe_for_options_view.xml" value="0.29393115942028986" />
+        <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/track_order_details_section.xml" value="0.31068840579710144" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/up_sale_item.xml" value="0.31068840579710144" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/up_sale_n_cart_bottom_sheet.xml" value="0.31068840579710144" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/user_image_view_backup.xml" value="0.27708333333333335" />

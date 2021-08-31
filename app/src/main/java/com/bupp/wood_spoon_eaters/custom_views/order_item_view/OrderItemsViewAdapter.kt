@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.custom_views.order_item_view2
+package com.bupp.wood_spoon_eaters.custom_views.order_item_view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,7 +19,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import java.text.DecimalFormat
 
-class OrderItemsViewAdapter2(val context: Context, val listener: OrderItemsViewAdapterListener): ListAdapter<OrderItem, RecyclerView.ViewHolder>(
+class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener): ListAdapter<OrderItem, RecyclerView.ViewHolder>(
     OrderItemsViewDiffCallback()
 ) {
 

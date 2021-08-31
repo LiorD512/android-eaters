@@ -7,9 +7,9 @@ import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.databinding.DeliveryDateTabLayoutBinding
 import com.bupp.wood_spoon_eaters.model.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
 import com.google.android.material.tabs.TabLayout
-import com.trading212.stickyheader.dpToPx
 
 
 class DeliveryDateTabLayout @JvmOverloads
@@ -65,17 +65,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if (list.size > 1) {
                     val startTab = tabLayout.getTabAt(0)?.view
                     val paramsStart = startTab?.layoutParams as MarginLayoutParams
-                    paramsStart.setMargins(dpToPx(21F), 0, 0, 0)
+                    paramsStart.setMargins(Utils.toPx(21), 0, 0, 0)
                     startTab.requestLayout()
 
                     val endTab = tabLayout.getTabAt(list.size - 1)?.view
                     val paramsEnd = endTab?.layoutParams as MarginLayoutParams
-                    paramsEnd.setMargins(0, 0, dpToPx(21F), 0)
+                    paramsEnd.setMargins(0, 0, Utils.toPx(21), 0)
                     endTab.requestLayout()
                 } else {
                     val startTab = tabLayout.getTabAt(0)?.view
                     val paramsStart = startTab?.layoutParams as MarginLayoutParams
-                    paramsStart.setMargins(dpToPx(21F), 0, dpToPx(21F), 0)
+                    paramsStart.setMargins(Utils.toPx(21), 0, Utils.toPx(21), 0)
                     startTab.requestLayout()
                 }
             }

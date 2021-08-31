@@ -97,7 +97,7 @@
                         android:layout_marginTop="22.8dp"
                         android:background="@color/grey_white" />
 
-                <com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
+                <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
                         android:id="@+id/singleOrderDetailsOrderItemsView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

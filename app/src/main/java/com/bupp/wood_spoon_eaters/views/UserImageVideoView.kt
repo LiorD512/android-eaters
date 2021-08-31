@@ -18,7 +18,6 @@ import com.bupp.wood_spoon_eaters.databinding.UserImageVideoViewBinding
 import com.bupp.wood_spoon_eaters.model.Cook
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.trading212.stickyheader.dpToPx
 
 
 class UserImageVideoView @JvmOverloads
@@ -118,7 +117,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     }
                     if (isWithStroke) {
                         cookImageViewPlay.visibility = View.VISIBLE
-                        cookImageViewPlay.elevation = dpToPx(8F).toFloat()
+                        cookImageViewPlay.elevation = Utils.toPx(8).toFloat()
                     } else {
                         cookImageViewPlay.visibility = View.GONE
                     }
@@ -151,7 +150,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
 
             if (isWithShadow) {
-                cookImageViewLayoutCardView.elevation = dpToPx(8F).toFloat()
+                cookImageViewLayoutCardView.elevation = Utils.toPx(8).toFloat()
             } else {
                 cookImageViewLayoutCardView.elevation = 0F
             }

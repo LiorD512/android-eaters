@@ -96,7 +96,7 @@
                     android:layout_height="7.7dp"
                     android:background="@color/light_periwinkle_50" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.order_item_view2.OrderItemsView2
+            <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
                     android:id="@+id/checkoutFragOrderItemsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
