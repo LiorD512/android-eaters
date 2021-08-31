@@ -84,8 +84,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     /**
      * Changing selected cookingSlot by Id - only UI without triggering listener
+     * returns the selected CookingSlots if found
      */
-    fun selectTabByCookingSlotId(cookingSlotId: Long) {
+    fun selectTabByCookingSlotId(cookingSlotId: Long): SortedCookingSlots? {
         datesList?.forEachIndexed { index, date ->
             val date = date.cookingSlots.find { it.id == cookingSlotId }
             if (date != null) {
@@ -96,10 +97,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         tabLayout.getTabAt(index)?.select()
                         tabLayout.addOnTabSelectedListener(tabSelectedListener)
                     }
-                    return@forEachIndexed
+                    return datesList?.getOrNull(index)
                 }
             }
         }
+        return null
     }
 
     fun getCurrentSelection(): SortedCookingSlots? {

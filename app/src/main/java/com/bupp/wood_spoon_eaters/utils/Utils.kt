@@ -105,7 +105,7 @@ object Utils {
 
     fun List<WSError>.getErrorsMsg(): String {
         var errorList = ""
-        this?.forEach {
+        this.forEach {
             errorList += "${it.msg} \n"
         }
         return errorList

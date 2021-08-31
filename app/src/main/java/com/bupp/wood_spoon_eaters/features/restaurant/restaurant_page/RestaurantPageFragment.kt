@@ -29,13 +29,8 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
-import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
-import com.bupp.wood_spoon_eaters.model.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.Restaurant
-import com.bupp.wood_spoon_eaters.model.Review
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -88,7 +83,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                     viewModel.logEvent(Constants.EVENT_SHARE_RESTAURANT)
                 }
             }
-            ratingLayout.setOnClickListener{
+            ratingLayout.setOnClickListener {
                 viewModel.getRestaurantReview()
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
@@ -242,12 +237,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         uiChange?.let {
             with(binding.restaurantMainListLayout) {
                 //delivery dates tabLayout
-                if (uiChange.forceTabChange) {
+                var selectedDate: SortedCookingSlots? = null
+                selectedDate = if (uiChange.forceTabChange) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+                } else {
+                    //timer picker ui
+                    restaurantDeliveryDates.getCurrentSelection()
                 }
-
                 //timer picker ui
-                restaurantDeliveryDates.getCurrentSelection()?.let { date ->
+                selectedDate?.let { date ->
                     if (date.cookingSlots.size > 1) {
                         restaurantTimePickerViewIcon.visibility = View.VISIBLE
                     } else {
@@ -311,7 +309,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
 
     private fun handleReviewData(it: LiveEvent<Review?>?) {
-        it?.getContentIfNotHandled()?.let{ reviews->
+        it?.getContentIfNotHandled()?.let { reviews ->
             RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
@@ -326,9 +324,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFavoriteEvent(event: LiveEvent<Boolean>?) {
         event?.getContentIfNotHandled()?.let { isSuccess ->
-            if (isSuccess){
+            if (isSuccess) {
                 mainViewModel.forceFeedRefresh()
-            }else{
+            } else {
                 binding.restHeaderFavorite.onFail()
             }
         }

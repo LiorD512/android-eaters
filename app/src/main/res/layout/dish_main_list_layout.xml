@@ -279,7 +279,7 @@
                 android:id="@+id/dishFragAvailabilityViewMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="1.5dp"
+                android:paddingBottom="10dp"
                 style="@style/LatoBold13DarkGrey"
                 android:text="View More"/>
 

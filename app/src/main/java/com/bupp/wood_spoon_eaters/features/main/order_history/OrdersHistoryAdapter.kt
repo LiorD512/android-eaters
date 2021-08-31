@@ -122,7 +122,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             Log.d("wowSTtaicMap","url $url")
             Glide.with(context).load(url).into(mapContainer)
 
-            restaurantName.text = order.restaurant?.getFullName() ?: ""
+            restaurantName.text = order.restaurant?.restaurantName ?: ""
             val orderState = order.getOrderState()
             orderPb.setState(orderState)
 
