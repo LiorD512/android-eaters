@@ -33,13 +33,13 @@ android {
     targetProjectPath = ":app" // Note that your module name may be different
 
     // Enable the benchmark to run separately from the app process
-//    experimentalProperties["android.experimental.self-instrumenting"] = true
-//    buildTypes {
-//        // Declare a build type (release) to match the target app's build type
-//        release {
-//            debuggable = true
-//        }
-//    }
+    experimentalProperties["android.experimental.self-instrumenting"] = true
+    buildTypes {
+        // Declare a build type (release) to match the target app's build type
+        release {
+            debuggable = true
+        }
+    }
 }
 
 dependencies {
