@@ -84,6 +84,9 @@ class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.Input
 
             reportFragReportBtn.setBtnEnabled(false)
             reportFragReportBtn.setOnClickListener { sendReport() }
+            reportIssueCloseBtn.setOnClickListener{
+                dismiss()
+            }
         }
     }
 

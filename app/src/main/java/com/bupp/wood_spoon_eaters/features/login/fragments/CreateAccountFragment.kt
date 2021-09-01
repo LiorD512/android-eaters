@@ -30,19 +30,6 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
     private fun initUi() {
         with(binding){
-//            KeyboardVisibilityEvent.setEventListener(requireActivity(), viewLifecycleOwner,
-//                object : KeyboardVisibilityEventListener {
-//                    override fun onVisibilityChanged(isOpen: Boolean) {
-//                        // some code depending on keyboard visiblity status
-//                        if(isOpen){
-//                            Log.d("wowKeyboard", "has keyboard")
-//                            createAccountFragAnim.visibility = View.GONE
-//                        }else{
-//                            Log.d("wowKeyboard", "no keyboard")
-//                            createAccountFragAnim.visibility = View.VISIBLE
-//                        }
-//                    }
-//                })
             createAccountFragNext.setOnClickListener {updateEater()}
             createAccountFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
 
