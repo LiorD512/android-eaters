@@ -34,3 +34,4 @@ class SplashStartupBenchmark(private val startupMode: StartupMode) {
         }
     }
 }
+
