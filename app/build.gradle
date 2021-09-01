@@ -22,33 +22,36 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
 
-        applicationId "com.bupp.wood_spoon_eater"
+        applicationId "com.bupp.wood_spoon_eaters"
         versionCode 89
         versionName "2.3.0"
 //        signingConfig signingConfigs.debug
-
     }
 
 
     buildTypes {
-        debug {
+        getByName("debug") {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
+
+            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/v2/"'
+            buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
+
+            applicationIdSuffix = ".staging"
         }
-        release {
+        getByName("release") {
             debuggable false
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders["isTestMode"] = "false"
-//            signingConfig signingConfigs.signing_config
+
+            buildConfigField "String", "BASE_URL", '"https://woodspoon-production.herokuapp.com/api/v2/"'
+            buildConfigField "String", "DEFAULT_TOKEN", '"9fa2df5e19ca2c5452f1a8361d463ac2c4297ad35bc5cdfd"'
+            signingConfig signingConfigs.debug
         }
-        benchmark {
-            debuggable false
-            shrinkResources true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders["isTestMode"] = "false"
+        create("benchmark") {
+            initWith(getByName("release"))
             signingConfig signingConfigs.debug
         }
     }
@@ -63,18 +66,6 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    flavorDimensions "flavor"
-
-    productFlavors {
-        prodFlavor {
-            dimension "flavor"
-            applicationId "com.bupp.wood_spoon_eaters"
-        }
-        stagingFlavor {
-            dimension "flavor"
-            applicationId "com.bupp.wood_spoon_eaters.staging"
-        }
-    }
 
     buildFeatures {
         viewBinding true
@@ -92,7 +83,6 @@ android {
 
 }
 
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -107,7 +97,6 @@ dependencies {
 
     implementation 'androidx.fragment:fragment-ktx:1.3.6'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.30"
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.30"
 
     //Support libraries
     implementation 'com.android.support:support-v4:26.0.1'

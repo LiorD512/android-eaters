@@ -46,9 +46,6 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
                     MetaDataRepository.MetaDataRepoStatus.FAILED -> {
                         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
                     }
-                    else -> {
-                        stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
-                    }
 
                 }
             }else{
@@ -83,7 +80,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
     val payments = MutableLiveData<PaymentMethod?>()
     fun getPaymentsLiveData() = payments
 
-    private fun getStripeCustomerCards(context: Context, forceRefresh: Boolean = false){
+    private fun getStripeCustomerCards(context: Context){
         if (hasStripeInitialized) {
                 CustomerSession.getInstance().getPaymentMethods(
                     PaymentMethod.Type.Card,

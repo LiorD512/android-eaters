@@ -166,7 +166,7 @@ class RestaurantPageViewModel(
         selectedCookingSlot?.let {
             val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
             val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
-            var uiStr = ""
+            var uiStr: String
             if (isNow) {
                 uiStr = "Now ($datesStr)"
             } else {
@@ -385,7 +385,7 @@ class RestaurantPageViewModel(
     /**
      * Called on any change to cart - updating UI accordingly
      */
-    fun handleCartData(order: Order?) {
+    fun handleCartData() {
         Log.d(TAG, "handleCartData")
         updateDishCountUi(dishListData, false)
     }

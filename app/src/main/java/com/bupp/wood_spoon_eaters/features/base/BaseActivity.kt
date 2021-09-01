@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bupp.wood_spoon_eaters.FlavorConfig
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
@@ -57,7 +57,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
     }
 
     override fun onResume() {
-        if (FlavorConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.d(TAG, "registered super user listener")
             sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
                     Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
@@ -67,7 +67,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
     }
 
     override fun onPause() {
-        if (FlavorConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.d(TAG, "unregister super user listener")
             sensorManager!!.unregisterListener(sensorListener)
         }

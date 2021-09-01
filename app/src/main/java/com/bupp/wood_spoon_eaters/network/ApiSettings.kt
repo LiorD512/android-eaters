@@ -1,13 +1,13 @@
 package com.bupp.wood_spoon_eaters.network
 
 import android.content.SharedPreferences
-import com.bupp.wood_spoon_eaters.FlavorConfig
+import com.bupp.wood_spoon_eaters.BuildConfig
 
 class ApiSettings(private val sharedPreferences: SharedPreferences) {
 
     companion object{
         const val TOKEN_KEY = "token_key"
-        const val DEFAULT_TOKEN = FlavorConfig.DEFAULT_TOKEN
+        const val DEFAULT_TOKEN = BuildConfig.DEFAULT_TOKEN
     }
 
     var token: String?

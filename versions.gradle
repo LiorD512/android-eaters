@@ -16,7 +16,6 @@ ext {
     // Android Sdk and tools
     targetSdkVersion = 28
     compileSdkVersion = 30
-    androidGradlePlugin = "3.3.2"
     buildToolsVersion = '30.0.2'
     supportLibraryVersion = '28.0.0'
 

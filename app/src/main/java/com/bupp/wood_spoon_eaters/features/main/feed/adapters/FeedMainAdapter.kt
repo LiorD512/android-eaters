@@ -24,7 +24,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
 
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
-        fun onRestaurantClick(cook: RestaurantInitParams)
+        fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
         fun onChangeAddressClick()
         fun onDishSwiped()
     }

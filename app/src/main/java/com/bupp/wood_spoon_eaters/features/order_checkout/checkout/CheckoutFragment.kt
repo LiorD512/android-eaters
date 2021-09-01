@@ -224,8 +224,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     title = "Checkout", subtitle = it.restaurant?.restaurantName?:"", icon = Constants.HEADER_ICON_CLOSE)
 
                 if (!it.orderItems.isNullOrEmpty()) {
-                    var cook = it.restaurant
-
                     checkoutFragDeliveryAddress.updateDeliveryAddressFullDetails(it.deliveryAddress)
                     checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }

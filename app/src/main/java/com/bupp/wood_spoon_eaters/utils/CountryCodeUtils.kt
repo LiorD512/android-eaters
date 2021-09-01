@@ -98,7 +98,7 @@ object CountryCodeUtils {
 
     fun countryCodeToEmojiFlag(countryCode: String): String {
         return countryCode
-            .toUpperCase(Locale.US)
+            .uppercase(Locale.US)
             .map { char ->
                 Character.codePointAt("$char", 0) - 0x41 + 0x1F1E6
             }
@@ -117,8 +117,8 @@ object CountryCodeUtils {
     fun isPhoneValid(phone: String?): Boolean{
         phone?.let{
             val re = Regex("[^A-Za-z0-9 ]")
-            val phone = re.replace(phone, "").replace(" ", "")
-            if(phone.isNotEmpty() && phone.length >= 8)
+            val phone2 = re.replace(phone, "").replace(" ", "")
+            if(phone2.isNotEmpty() && phone2.length >= 8)
                 return true
         }
         return false

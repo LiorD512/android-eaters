@@ -161,7 +161,7 @@ class CartManager(
                 }
 
                 //todo - check analytics for updated order.....
-                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+//                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
 //                eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
                 //check for errors
@@ -188,7 +188,7 @@ class CartManager(
                 result.data?.let {
                     updateCartManagerParams(it.copy())
                 }
-                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+//                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
 //                eventsManager.logEvent(Constants.EVENT_UPDATE_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
 //                check for errors
@@ -233,7 +233,7 @@ class CartManager(
      */
     suspend fun removeOrderItems(dishId: Long, removeSingle: Boolean = false): OrderRepository.OrderRepoStatus {
         Log.d("orderFlow - cartManager", "removeOrderItems")
-        var orderRequest: OrderRequest? = null
+        var orderRequest: OrderRequest?
         if (removeSingle) {
             orderRequest = buildOrderRequest(getDestroyedOrderItemRequestByOrderIdItem(dishId))
         } else {

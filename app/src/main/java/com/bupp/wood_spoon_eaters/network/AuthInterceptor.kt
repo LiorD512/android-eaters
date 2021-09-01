@@ -51,13 +51,13 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     }
 
     private fun addTokenToRequest(request: Request, authToken: String?): Request {
-        var request = request
+        var finalRequest = request
         if (authToken != null) {
             Log.d(TAG, "addTokenToRequest: $authToken")
             val requestBuilder = request.newBuilder().addHeader("X-Auth-Token", authToken)
-            request = requestBuilder.build()
+            finalRequest = requestBuilder.build()
         }
-        return request
+        return finalRequest
     }
 
 //    private fun refreshSessionToken(): Boolean {

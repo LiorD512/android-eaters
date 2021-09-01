@@ -171,7 +171,7 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
     fun checkMinVersionFail(): Boolean {
         val minVersion = getMinAndroidVersion()
         Log.d("wowMetaDataRepo", "minimum version: $minVersion")
-        minVersion?.let{
+        minVersion.let{
             val versionName = BuildConfig.VERSION_NAME
 
             val myCurrVersion = getNumberFromStr(versionName)

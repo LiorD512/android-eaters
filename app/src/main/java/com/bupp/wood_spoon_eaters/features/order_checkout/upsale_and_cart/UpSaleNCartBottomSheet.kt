@@ -61,7 +61,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     private val addLocationResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         Log.d(TAG, "Activity For Result - addLocationResult")
         if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
+//            val data = result.data
             viewModel.updateAddressAndProceedToCheckout()
             //check if location changed and refresh ui
         }
@@ -87,7 +87,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     /**
      * this function calculates the height of the screen without the status bar height
      */
-    fun getScreenHeight(): Int{
+    private fun getScreenHeight(): Int{
         val display: Display = requireActivity().windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
@@ -96,8 +96,8 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         val realDisplay: Display = requireActivity().windowManager.defaultDisplay
         realDisplay.getRealSize(realSize)
 
-        var maxWidth = size.x
-        var maxHeight = size.y
+//        var maxWidth = size.x
+        var maxHeight: Int
 
 //        maxHeight = size.y - getStatusBarSize()
 //        Log.d(TAG, "realSize: ${realSize.y}")

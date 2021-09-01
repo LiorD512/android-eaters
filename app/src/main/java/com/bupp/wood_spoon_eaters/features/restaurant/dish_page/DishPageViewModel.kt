@@ -225,7 +225,7 @@ class DishPageViewModel(
         if (quantity > 0) {
             val dishId = dishFullData.value?.id
             dishId?.let {
-                var isValid = false
+                var isValid: Boolean
                 val restaurant = dishFullData.value?.restaurant!!
                 var cookingSlotId: Long? = 0L
                 if (!dishMatchCookingSlot) {

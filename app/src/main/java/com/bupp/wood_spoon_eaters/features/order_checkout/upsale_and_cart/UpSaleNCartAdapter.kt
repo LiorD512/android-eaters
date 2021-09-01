@@ -21,17 +21,17 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
 
 
     interface UpSaleNCartAdapterListener {
-        fun onDishSwipedAdd(item: CartBaseAdapterItem)
-        fun onDishSwipedRemove(item: CartBaseAdapterItem)
-        fun onCartItemClicked(dishItem: CustomCartItem)
+        fun onDishSwipedAdd(cartBaseAdapterItem: CartBaseAdapterItem)
+        fun onDishSwipedRemove(cartBaseAdapterItem: CartBaseAdapterItem)
+        fun onCartItemClicked(customCartItem: CustomCartItem)
     }
 
-    override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
-        listener.onDishSwipedAdd(item)
+    override fun onDishSwipedAdd(cartBaseAdapterItem: CartBaseAdapterItem) {
+        listener.onDishSwipedAdd(cartBaseAdapterItem)
     }
 
-    override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
-        listener.onDishSwipedRemove(item)
+    override fun onDishSwipedRemove(cartBaseAdapterItem: CartBaseAdapterItem) {
+        listener.onDishSwipedRemove(cartBaseAdapterItem)
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal

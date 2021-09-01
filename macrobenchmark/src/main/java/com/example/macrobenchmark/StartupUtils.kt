@@ -6,7 +6,7 @@ import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 
-const val TARGET_PACKAGE = "com.bupp.wood_spoon_eater"
+const val TARGET_PACKAGE = "com.bupp.wood_spoon_eaters"
 
 fun MacrobenchmarkRule.measureStartup(
     profileCompiled: Boolean,

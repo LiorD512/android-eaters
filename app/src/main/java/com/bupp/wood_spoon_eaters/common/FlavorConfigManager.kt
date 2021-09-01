@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.common
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.bupp.wood_spoon_eaters.FlavorConfig
+import com.bupp.wood_spoon_eaters.BuildConfig
 
 class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
 
@@ -46,7 +46,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
                  Log.d(TAG, "curEnvironment: $curEnvironment")
                 finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v2/"
             }else{
-                 finalUrl = FlavorConfig.BASE_URL
+                 finalUrl = BuildConfig.BASE_URL
             }
             Log.d(TAG, "getBaseUrl: $finalUrl")
         }
