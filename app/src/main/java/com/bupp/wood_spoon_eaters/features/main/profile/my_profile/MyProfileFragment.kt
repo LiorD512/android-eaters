@@ -73,6 +73,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 myProfileFragUserName.text = eater.getFullName()
 
                 if (eater.ordersCount > 0) {
+                    if (eater.ordersCount == 1) {
+                        myProfileFragOrderCount.text = "1 Order"
+                    }
                     myProfileFragOrderCount.text = "${eater.ordersCount} Orders"
                 }
 

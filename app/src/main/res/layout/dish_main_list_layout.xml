@@ -8,7 +8,7 @@
         android:orientation="vertical"
         android:id="@+id/dishFragMainLayout"
         android:paddingHorizontal="23dp"
-        android:paddingBottom="40dp">
+        android:paddingBottom="30dp">
 
     <com.bupp.wood_spoon_eaters.views.ExpandableTextView
             android:id="@+id/dishFragDescription"
@@ -254,12 +254,13 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
+            android:id="@+id/dishFragAvailabilityLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
         <TextView
-                android:id="@+id/dishFragAvailabilityLayout"
                 style="@style/LatoBlack19DarkGrey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
