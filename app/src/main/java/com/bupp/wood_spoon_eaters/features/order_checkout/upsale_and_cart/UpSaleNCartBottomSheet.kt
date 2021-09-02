@@ -37,12 +37,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : BottomSheetDialogFragment() {
 
     interface UpsaleNCartBSListener{
         fun refreshParentOnCartCleared(){}
-        fun onCartDishCLick(customCartItem: CustomCartItem)
+        fun onCartDishCLick(customOrderItem: CustomOrderItem)
         fun onGoToCheckoutClicked()
     }
 
@@ -250,7 +249,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         })
     }
 
-    private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomCartItem>?) {
+    private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomOrderItem>?) {
         cartDishData?.getContentIfNotHandled()?.let{
                 listener?.onCartDishCLick(it)
             }
@@ -278,12 +277,12 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
                 when(item){
                     is CartAdapterItem -> {
-                        val dishId = item.customCartItem.orderItem.dish.id
-                        val note = item.customCartItem.orderItem.notes
-                        val orderId = item.customCartItem.orderItem.id
-                        val currentQuantity = item.customCartItem.orderItem.quantity
+                        val dishId = item.customOrderItem.orderItem.dish.id
+                        val note = item.customOrderItem.orderItem.notes
+                        val orderId = item.customOrderItem.orderItem.id
+                        val currentQuantity = item.customOrderItem.orderItem.quantity
                         viewModel.updateDishInCart(currentQuantity+1, dishId, note, orderId)
-                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, item.customCartItem)
+                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, item.customOrderItem)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}
@@ -293,19 +292,19 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
                 when(item){
                     is CartAdapterItem -> {
-                        val orderItemId = item.customCartItem.orderItem.id
+                        val orderItemId = item.customOrderItem.orderItem.id
                         viewModel.removeSingleOrderItemId(orderItemId)
-                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customCartItem)
+                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customOrderItem)
                     }
                     is UpsaleAdapterItem -> {}
                     else -> {}
                 }
             }
 
-            override fun onCartItemClicked(customCartItem: CustomCartItem) {
-                Log.d(TAG, "onCartItemClicked: $customCartItem")
-                viewModel.onCartItemClicked(customCartItem)
-                viewModel.logSwipeDishInCart(Constants.EVENT_CLICK_DISH_IN_CART, customCartItem)
+            override fun onCartItemClicked(customOrderItem: CustomOrderItem) {
+                Log.d(TAG, "onCartItemClicked: $customOrderItem")
+                viewModel.onCartItemClicked(customOrderItem)
+                viewModel.logSwipeDishInCart(Constants.EVENT_CLICK_DISH_IN_CART, customOrderItem)
                 dismiss()
             }
         }

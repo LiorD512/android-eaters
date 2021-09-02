@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSections
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.Dish
@@ -34,7 +33,7 @@ data class UpsaleAdapterItem(
 ): CartBaseAdapterItem(CartAdapterViewType.UPSALE_DISH)
 
 data class CartAdapterItem(
-    val customCartItem: CustomCartItem,
+    val customOrderItem: CustomOrderItem,
     override var cartQuantity: Int = 0,
     override val menuItem: MenuItem? = null,
     override val isSwipeable: Boolean = true
@@ -48,7 +47,7 @@ data class CartAdapterSubTotalItem(
 ): CartBaseAdapterItem(CartAdapterViewType.SUB_TOTAL)
 
 @Parcelize
-data class CustomCartItem(
+data class CustomOrderItem(
     val orderItem: OrderItem,
     val cookingSlot: CookingSlot?
 ): Parcelable

@@ -7,14 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.DeliveryDates
-import com.bupp.wood_spoon_eaters.model.OrderRequest
-import com.bupp.wood_spoon_eaters.model.ShippingMethod
-import com.bupp.wood_spoon_eaters.model.WSError
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.launch
@@ -34,6 +33,7 @@ class CheckoutViewModel(
     val orderLiveData = cartManager.getCurrentOrderData()
     val deliveryDatesUi = cartManager.getDeliveryDatesUi()
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
+    val orderItemsData = MutableLiveData<List<CheckoutAdapterItem>>()
 
     val onCheckoutDone = LiveEventData<Boolean>()
 
@@ -56,6 +56,19 @@ class CheckoutViewModel(
 
     private fun refreshDeliveryTime() {
         cartManager.calcCurrentOrderDeliveryTime()
+    }
+
+    fun handleOrderItems(order: Order) {
+        val list = mutableListOf<CheckoutAdapterItem>()
+        val orderItems = order.orderItems
+        orderItems?.forEach {
+            val customCartItem = CustomOrderItem(
+                orderItem = it,
+                cookingSlot = order.cookingSlot
+            )
+            list.add(CheckoutAdapterItem(customOrderItem = customCartItem))
+        }
+        orderItemsData.postValue(list)
     }
 
     private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
@@ -142,7 +155,7 @@ class CheckoutViewModel(
     }
 
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
-    val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
+    val feeAndTaxDialogData = LiveEventData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         val curOrder = cartManager.getCurrentOrderData().value
         curOrder?.let {
@@ -152,7 +165,7 @@ class CheckoutViewModel(
                     minOrderFee = curOrder.minOrderFee.formatedValue
                 }
             }
-            feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue, minOrderFee))
+            feeAndTaxDialogData.postRawValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue, minOrderFee))
         }
     }
 
@@ -213,6 +226,17 @@ class CheckoutViewModel(
         }
     }
 
+    fun updateDishInCart(quantity: Int, dishId: Long, note: String? = null, orderItemId: Long) {
+        viewModelScope.launch {
+            cartManager.updateDishInExistingCart(quantity, note, dishId, orderItemId)
+        }
+    }
+
+    fun removeSingleOrderItemId(orderItemId: Long) {
+        viewModelScope.launch {
+            cartManager.removeOrderItems(orderItemId, true)
+        }
+    }
 
     companion object {
         const val TAG = "wowCheckoutVM"

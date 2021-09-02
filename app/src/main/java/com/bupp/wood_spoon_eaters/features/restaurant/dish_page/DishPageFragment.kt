@@ -32,7 +32,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     ClearCartCookingSlotBottomSheet.ClearCartListener,
     PlusMinusView.PlusMinusInterface,
     WSFloatingButton.WSFloatingButtonListener,
-    ClearCartRestaurantBottomSheet.ClearCartListener, ExpandableTextView.ExpandableTextViewListener {
+    ClearCartRestaurantBottomSheet.ClearCartListener,
+    ExpandableTextView.ExpandableTextViewListener {
 
     private var binding: FragmentDishPageBinding? = null
     private val viewModel by viewModel<DishPageViewModel>()
@@ -103,7 +104,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             handleUserRequestData(it)
         })
         viewModel.progressData.observe(viewLifecycleOwner,{
-            (activity as RestaurantActivity).handleProgressBar(it)
+           //todo : ask Mittle about loader
         })
         viewModel.skeletonProgressData.observe(viewLifecycleOwner, {
             handleSkeleton(it)

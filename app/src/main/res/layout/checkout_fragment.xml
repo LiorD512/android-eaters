@@ -7,12 +7,33 @@
         android:background="@color/white"
         tools:context=".features.order_checkout.checkout.CheckoutFragment">
 
+    <androidx.cardview.widget.CardView
+            android:id="@+id/checkoutFragHeaderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
+                android:id="@+id/checkoutFragHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="Checkout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.cardview.widget.CardView>
+
+
     <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/grey_white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/checkoutFragHeaderLayout">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -96,15 +117,12 @@
                     android:layout_height="7.7dp"
                     android:background="@color/light_periwinkle_50" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+            <com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
                     android:id="@+id/checkoutFragOrderItemsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:paddingLeft="15.4dp"
-                    android:paddingRight="15.4dp"
-                    android:paddingBottom="15.4dp"
-                    app:showAddBtn="true" />
+                    android:paddingBottom="15.4dp" />
 
             <View
                     android:layout_width="match_parent"
@@ -232,7 +250,8 @@
             <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
                     android:id="@+id/checkoutFragTipPercentView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/floating_cart_btn_height"/>
 
 
         </LinearLayout>
