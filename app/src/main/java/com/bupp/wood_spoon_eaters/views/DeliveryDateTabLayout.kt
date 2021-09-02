@@ -88,8 +88,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
      */
     fun selectTabByCookingSlotId(cookingSlotId: Long): SortedCookingSlots? {
         datesList?.forEachIndexed { index, date ->
-            val date = date.cookingSlots.find { it.id == cookingSlotId }
-            if (date != null) {
+            val curDate = date.cookingSlots.find { it.id == cookingSlotId }
+            if (curDate != null) {
                 //relevant cookingSlot is found in current date
                 with(binding) {
                     tabLayout.waitForLayout {

@@ -63,33 +63,7 @@ fun IntRange.convert(number: Int, target: IntRange): Int {
     return (ratio * (target.last - target.first)).toInt()
 }
 
-fun Activity.updateScreenUi() {
-    val decorView = window.decorView
-    decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-        if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
-}
 
-fun DialogFragment.updateScreenUi() {
-    val decorView = dialog?.window?.decorView
-    decorView?.setOnSystemUiVisibilityChangeListener { visibility ->
-        if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
-}
 
 fun NavController.navigateSafe(
     @IdRes resId: Int,

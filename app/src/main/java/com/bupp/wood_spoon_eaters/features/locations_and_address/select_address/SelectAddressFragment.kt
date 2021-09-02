@@ -111,6 +111,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                 LocationAndAddressViewModel.ActionEvent.FETCH_MY_ADDRESS -> {
                     viewModel.fetchAddress()
                 }
+                else -> {}
             }
         })
 
@@ -175,6 +176,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
                     selectAddressFragMyLocationPickup.text = "Tap here to enable it."
                     selectAddressFragMyLocationPickup.visibility = View.VISIBLE
                 }
+                else -> {}
             }
         }
     }

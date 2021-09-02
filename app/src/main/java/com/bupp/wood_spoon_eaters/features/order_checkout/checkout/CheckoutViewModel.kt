@@ -191,6 +191,7 @@ class CheckoutViewModel(
                     }
                     wsErrorEvent.postRawValue(error)
                 }
+                else -> {}
             }
             progressData.endProgress()
         }

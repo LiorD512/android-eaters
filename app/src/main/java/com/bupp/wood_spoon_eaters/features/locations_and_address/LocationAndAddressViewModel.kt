@@ -101,8 +101,8 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     private fun geoCodeAddress(context: Context, address: AddressRequest) {
-        address.lat?.let{ lat ->
-            address.lng?.let{ lng ->
+        address.lat?.let{
+            address.lng?.let{
                 GeoCoderUtil.execute(context, address, object :
                     LoadDataCallback<AddressRequest> {
                     override fun onDataLoaded(response: AddressRequest) {

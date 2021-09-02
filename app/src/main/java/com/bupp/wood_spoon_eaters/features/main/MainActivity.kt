@@ -81,7 +81,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+    private val updateLocationOnResult = registerForActivityResult(StartActivityForResult()) { //result: ActivityResult ->
         Log.d(TAG, "Activity For Result - location")
 //        if (result.resultCode == Activity.RESULT_OK) {
 //            val data = result.data
@@ -93,8 +93,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)!!
-            val forceFeedRefresh = data?.getBooleanExtra("refreshFeed", false)!!
-            if (isAfterPurchase) {
+            val forceFeedRefresh = data.getBooleanExtra("refreshFeed", false)
+            if(isAfterPurchase){
                 updateUiAfterOrderSuccess(result.data)
             } else if (forceFeedRefresh) {
                 viewModel.forceFeedRefresh()

@@ -24,7 +24,7 @@ class SwipeableRemoveDishItemDecorator(context: Context, private val removeShape
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         var left = parent.width
-        var right = 0
+        var right: Int
         val verticalPadding = Utils.toPx(3)
         removeShape?.let {
             parent.adapter?.let {

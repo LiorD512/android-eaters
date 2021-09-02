@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 data class SortedCookingSlots(val date: Date, val cookingSlots: MutableList<CookingSlot>)

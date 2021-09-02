@@ -62,7 +62,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val chosenDateView = snapHelper.findSnapView(binding.wsRangeTimePickerDateList.layoutManager)
         val chosenDatePos = chosenDateView?.let { binding.wsRangeTimePickerDateList.getChildLayoutPosition(it) }
         chosenDatePos?.let {
-            Log.d(TAG, "chosenDate: ${datesList[it].date}")
+            Log.d(TAG, "chosenDate: ${datesList[it]}")
             return datesList[it]
         }
         return null
@@ -155,11 +155,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             val currentCookingSlot = cookingSlots[index]
             cookingSlotList.add(currentCookingSlot)
             var cookingSlotName = dateAndName.second
-            var cookingSlotDate = ""
             if(DateUtils.isNowInRange(currentCookingSlot.startsAt, currentCookingSlot.endsAt)){
                 cookingSlotName = "Now"
             }
-            cookingSlotDate = "${DateUtils.parseDateToUsTime(currentCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(currentCookingSlot.endsAt)}"
+            val cookingSlotDate = "${DateUtils.parseDateToUsTime(currentCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(currentCookingSlot.endsAt)}"
             stringPair.add(Pair(cookingSlotName, cookingSlotDate))
         }
         wsTimePickerCustomAdapter?.submitList(stringPair)

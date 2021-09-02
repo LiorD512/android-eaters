@@ -264,7 +264,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
                     availableTimesAdapter?.submitList(list.subList(0,3))
                     dishFragAvailabilityViewMore.setOnClickListener {
                         dishFragAvailabilityList.scheduleLayoutAnimation()
-                        if((availableTimesAdapter?.itemCount ?: 0)!! > 3){
+                        if((availableTimesAdapter?.itemCount ?: 0) > 3){
                             dishFragAvailabilityViewMore.text = "View More"
                             availableTimesAdapter?.submitList(list.subList(0,3))
                         } else {

@@ -98,7 +98,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
 
 
             rateLastOrderUserImage.setImage(order.restaurant!!.thumbnail?.url)
-            rateLastOrderUserName.text = "Made by ${order.restaurant!!.getFullName()}"
+            rateLastOrderUserName.text = "Made by ${order.restaurant.getFullName()}"
 
         }
     }

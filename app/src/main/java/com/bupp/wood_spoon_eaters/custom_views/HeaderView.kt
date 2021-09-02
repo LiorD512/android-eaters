@@ -123,9 +123,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun getAutoCompleteTextWatcher(): AutoCompleteTextWatcher {
         return object : AutoCompleteTextWatcher(450) {
-            override fun handleInputString(inputStr: String) {
-                Log.d("wowHeaderView", "afterTextChanged: $inputStr")
-                listener?.onHeaderTextChange(inputStr)
+            override fun handleInputString(str: String) {
+                Log.d("wowHeaderView", "afterTextChanged: $str")
+                listener?.onHeaderTextChange(str)
             }
         }
     }

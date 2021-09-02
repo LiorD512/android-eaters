@@ -30,7 +30,7 @@ class SwipeableAddDishItemDecorator(
     @SuppressLint("LogNotTimber")
     override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = parent.paddingLeft
-        var right = 10
+        var right: Int
         val verticalPadding = Utils.toPx(3)
         defaultShape?.let {
             selectedShape?.let {

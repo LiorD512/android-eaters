@@ -77,14 +77,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         super.afterTextChanged(s)
                     }
                 })
-                wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+                wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
                     if (hasFocus) {
                         wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.greyish_brown))
                     } else {
                         wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.light_periwinkle))
                     }
                 }
-                wsEditTextInput.setOnEditorActionListener { v, actionId, _ ->
+                wsEditTextInput.setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         if(validateIsNotEmpty()){
                             listener?.onWSEditTextActionDone()

@@ -153,8 +153,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
                 FeedUiStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION -> {
                     handleBannerEvent(Constants.BANNER_NO_GPS)
                 }
-                else -> {
-                }
             }
         }
     }
