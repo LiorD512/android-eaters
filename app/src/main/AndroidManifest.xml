@@ -160,7 +160,7 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="com.bupp.wood_spoon_eaters.features.main.RECYCLER_VIEW_ACTIVITY" />
+                <action android:name="com.bupp.wood_spoon_eaters.ADDRESS_LAUNCHER_ACTION" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
