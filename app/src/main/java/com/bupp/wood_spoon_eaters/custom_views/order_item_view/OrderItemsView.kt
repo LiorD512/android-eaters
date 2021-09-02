@@ -18,7 +18,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var listener: OrderItemsListener? = null
     interface OrderItemsListener{
-        fun onEditOrderBtnClicked()
+        fun onAddBtnClicked()
         fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {}
     }
 
@@ -26,15 +26,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var adapter: OrderItemsViewAdapter? = null
 
     init{
-        if (attrs != null) {
-            val a = context.obtainStyledAttributes(attrs, R.styleable.OrderItemsView)
-
-            val showAddBtn = a.getBoolean(R.styleable.OrderItemsView_showAddBtn, true)
-            if (!showAddBtn) {
-                binding.orderItemsViewEditOrderBtn.visibility = GONE
-            }
-        }
-
         initUi()
     }
 
@@ -43,10 +34,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             orderItemsViewRecyclerView.layoutManager = LinearLayoutManager(context)
             val divider = DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
             orderItemsViewRecyclerView.addItemDecoration(divider)
-
-            orderItemsViewEditOrderBtn.setOnClickListener{
-                listener?.onEditOrderBtnClicked()
-            }
         }
     }
 

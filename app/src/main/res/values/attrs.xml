@@ -222,10 +222,6 @@
         <attr name="iconsSize" format="integer" />
     </declare-styleable>
 
-    <declare-styleable name="OrderItemsView">
-        <attr name="showAddBtn" format="boolean" />
-    </declare-styleable>
-
     <declare-styleable name="BlueBtnAttrs">
         <attr name="title" />
         <attr name="textColor" format="reference|color" />

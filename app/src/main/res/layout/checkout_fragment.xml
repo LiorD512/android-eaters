@@ -96,15 +96,37 @@
                     android:layout_height="7.7dp"
                     android:background="@color/light_periwinkle_50" />
 
-            <com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+            <LinearLayout
+                    android:gravity="center"
+                    android:paddingTop="23dp"
+                    android:paddingBottom="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        style="@style/LatoBlack17Dark"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Order items" />
+
+                <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
+                        android:id="@+id/orderItemsViewEditOrderBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:title="Edit order" />
+
+            </LinearLayout>
+
+            <com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
                     android:id="@+id/checkoutFragOrderItemsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:paddingLeft="15.4dp"
                     android:paddingRight="15.4dp"
-                    android:paddingBottom="15.4dp"
-                    app:showAddBtn="true" />
+                    android:paddingBottom="15.4dp" />
 
             <View
                     android:layout_width="match_parent"

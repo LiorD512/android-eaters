@@ -18,11 +18,15 @@ import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
-import com.bupp.wood_spoon_eaters.custom_views.order_item_view.OrderItemsView
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutAdapterItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsAdapter
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartAdapter
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
@@ -36,13 +40,14 @@ import kotlin.collections.ArrayList
 
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
-    NationwideShippingChooserDialog.NationwideShippingChooserListener, OrderItemsView.OrderItemsListener,
+    NationwideShippingChooserDialog.NationwideShippingChooserListener,
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
 
     private var hasPaymentMethod: Boolean = false
+    private val cartAdapter: UpSaleNCartAdapter? = null
 
 
     val viewModel by viewModel<CheckoutViewModel>()
@@ -69,7 +74,68 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
         initUi()
         initObservers()
+    }
 
+    private fun initUi() {
+        binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
+        binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragDeliveryFee.setWSTitleValueListener(this)
+        binding.checkoutFragPromoCode.setDeliveryDetailsViewListener(this)
+        binding.checkoutFragFees.setWSTitleValueListener(this)
+        with(binding) {
+            checkoutFragPromoCode.setOnClickListener {
+                mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
+            }
+            checkoutFragPlaceOrderBtn.setOnClickListener {
+                viewModel.onPlaceOrderClick()
+            }
+
+            checkoutFragCourierTip.setOnClickListener {
+                onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
+            }
+            initOrderItemsView()
+        }
+    }
+
+
+    private fun initOrderItemsView() {
+        with(binding) {
+            //view listener
+            val viewListener = object : CheckoutOrderItemsView.CheckoutOrderItemsViewListener {
+                override fun onEditOrderBtnClicked() {
+                    mainViewModel.logEvent(Constants.EVENT_CLICK_EDIT_ORDER)
+                    (activity as OrderCheckoutActivity).onEditOrderClick()
+                }
+
+            }
+            //        if (isCartEmpty) {
+//            viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
+//            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY)
+//        } else {
+//            viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
+//        }
+
+            //adapter listener
+            val adapterListener = object : CheckoutOrderItemsAdapter.CheckoutOrderItemsAdapterListener {
+                override fun onDishSwipedAdd(item: CheckoutAdapterItem) {
+                    //
+                }
+
+                override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
+                   //
+                }
+
+                override fun onDishClicked(dishItem: CustomOrderItem) {
+                    //
+                }
+
+            }
+            //init view
+            checkoutFragOrderItemsView.initView(adapterListener = adapterListener, viewListener = viewListener)
+        }
     }
 
     private fun initObservers() {
@@ -133,6 +199,15 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.deliveryDatesUi.observe(viewLifecycleOwner, {
             binding.checkoutFragDeliveryTime.updateDeliveryTimeUi(it)
         })
+        viewModel.orderItemsData.observe(viewLifecycleOwner,{
+            handleOrderItemsData(it)
+        })
+    }
+
+    private fun handleOrderItemsData(list: List<CheckoutAdapterItem>) {
+        with(binding){
+            checkoutFragOrderItemsView.submitList(list)
+        }
     }
 
     private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
@@ -141,41 +216,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-    override fun onDishCountChange(updatedOrderItem: OrderItem, isCartEmpty: Boolean) {
-        if (isCartEmpty) {
-            viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
-            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY)
-        } else {
-            viewModel.updateOrderParams(OrderRequest(orderItemRequests = listOf(updatedOrderItem.toOrderItemRequest())))
-        }
-    }
-
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
             WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
-        }
-    }
-
-    private fun initUi() {
-        binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
-        binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragDeliveryFee.setWSTitleValueListener(this)
-        binding.checkoutFragPromoCode.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragFees.setWSTitleValueListener(this)
-        with(binding) {
-            checkoutFragPromoCode.setOnClickListener {
-                mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
-            }
-            checkoutFragPlaceOrderBtn.setOnClickListener {
-                viewModel.onPlaceOrderClick()
-            }
-
-            checkoutFragCourierTip.setOnClickListener {
-                onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
-            }
         }
     }
 
@@ -219,15 +262,17 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun handleOrderDetails(order: Order?) {
         order?.let {
             with(binding) {
+                viewModel.handleOrderItems(order)
 
                 (activity as OrderCheckoutActivity).updateMainHeader(
-                    title = "Checkout", subtitle = it.restaurant?.restaurantName?:"", icon = Constants.HEADER_ICON_CLOSE)
+                    title = "Checkout", subtitle = it.restaurant?.restaurantName ?: "", icon = Constants.HEADER_ICON_CLOSE
+                )
 
                 if (!it.orderItems.isNullOrEmpty()) {
                     var cook = it.restaurant
 
                     checkoutFragDeliveryAddress.updateDeliveryAddressFullDetails(it.deliveryAddress)
-                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
+//                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }
 
                 it.cookingSlot?.isNationwide?.let {
@@ -336,12 +381,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
-
-    override fun onEditOrderBtnClicked() {
-        mainViewModel.logEvent(Constants.EVENT_CLICK_EDIT_ORDER)
-        (activity as OrderCheckoutActivity).onEditOrderClick()
-    }
-
     override fun onToolTipClick(type: Int) {
         var titleText = ""
         var bodyText = ""
@@ -373,6 +412,4 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onWSErrorDone() {
         viewModel.refreshCheckoutPage()
     }
-
-
 }

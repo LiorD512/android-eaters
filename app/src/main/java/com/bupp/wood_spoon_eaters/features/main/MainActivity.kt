@@ -21,7 +21,7 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
-import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
@@ -259,8 +259,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         UpSaleNCartBottomSheet(this).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
-    override fun onCartDishCLick(customCartItem: CustomCartItem) {
-        afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customCartItem))
+    override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
+        afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customOrderItem))
     }
 
     override fun onGoToCheckoutClicked() {

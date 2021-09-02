@@ -4,17 +4,16 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.DeliveryDates
-import com.bupp.wood_spoon_eaters.model.OrderRequest
-import com.bupp.wood_spoon_eaters.model.ShippingMethod
-import com.bupp.wood_spoon_eaters.model.WSError
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.launch
@@ -34,6 +33,7 @@ class CheckoutViewModel(
     val orderLiveData = cartManager.getCurrentOrderData()
     val deliveryDatesUi = cartManager.getDeliveryDatesUi()
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
+    val orderItemsData = MutableLiveData<List<CheckoutAdapterItem>>()
 
     val onCheckoutDone = LiveEventData<Boolean>()
 
@@ -56,6 +56,19 @@ class CheckoutViewModel(
 
     private fun refreshDeliveryTime() {
         cartManager.calcCurrentOrderDeliveryTime()
+    }
+
+    fun handleOrderItems(order: Order) {
+        val list = mutableListOf<CheckoutAdapterItem>()
+        val orderItems = order.orderItems
+        orderItems?.forEach {
+            val customCartItem = CustomOrderItem(
+                orderItem = it,
+                cookingSlot = order.cookingSlot
+            )
+            list.add(CheckoutAdapterItem(customOrderItem = customCartItem))
+        }
+        orderItemsData.postValue(list)
     }
 
     private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
