@@ -1,8 +1,10 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +13,8 @@ import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.CheckoutOrderItemsViewBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsAdapter.CheckoutOrderItemsAdapterListener
 import com.bupp.wood_spoon_eaters.databinding.OrderItemsViewBinding
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
+import com.bupp.wood_spoon_eaters.model.OrderItem
 
 
 class CheckoutOrderItemsView @JvmOverloads
@@ -33,8 +37,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun initUi() {
         with(binding) {
             orderItemsViewRecyclerView.layoutManager = LinearLayoutManager(context)
-            val divider = DividerItemDecorator(ContextCompat.getDrawable(context, R.drawable.divider))
-            orderItemsViewRecyclerView.addItemDecoration(divider)
+
+            val divider: Drawable? = ContextCompat.getDrawable(context, R.drawable.line_divider)
+            orderItemsViewRecyclerView.addItemDecoration(DividerItemDecorator(divider))
 
             orderItemsViewEditOrderBtn.setOnClickListener {
                 listener?.onEditOrderBtnClicked()

@@ -4,12 +4,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
     <LinearLayout
             android:gravity="center"
             android:paddingTop="23dp"
             android:paddingBottom="3dp"
+            android:paddingHorizontal="15.4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -33,6 +35,7 @@
             android:layout_marginTop="7.7dp"
             android:id="@+id/orderItemsViewRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/restaurant_layout_animation"/>
 
 </LinearLayout>

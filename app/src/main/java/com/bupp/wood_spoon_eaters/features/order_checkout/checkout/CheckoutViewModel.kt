@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
@@ -155,7 +155,7 @@ class CheckoutViewModel(
     }
 
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
-    val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
+    val feeAndTaxDialogData = LiveEventData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         val curOrder = cartManager.getCurrentOrderData().value
         curOrder?.let {
@@ -165,7 +165,7 @@ class CheckoutViewModel(
                     minOrderFee = curOrder.minOrderFee.formatedValue
                 }
             }
-            feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue, minOrderFee))
+            feeAndTaxDialogData.postRawValue(FeesAndTaxData(curOrder.serviceFee?.formatedValue, curOrder.tax?.formatedValue, minOrderFee))
         }
     }
 
@@ -226,6 +226,17 @@ class CheckoutViewModel(
         }
     }
 
+    fun updateDishInCart(quantity: Int, dishId: Long, note: String? = null, orderItemId: Long) {
+        viewModelScope.launch {
+            cartManager.updateDishInExistingCart(quantity, note, dishId, orderItemId)
+        }
+    }
+
+    fun removeSingleOrderItemId(orderItemId: Long) {
+        viewModelScope.launch {
+            cartManager.removeOrderItems(orderItemId, true)
+        }
+    }
 
     companion object {
         const val TAG = "wowCheckoutVM"

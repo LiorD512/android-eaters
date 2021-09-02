@@ -7,12 +7,34 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+    <androidx.cardview.widget.CardView
+            android:id="@+id/checkoutFragHeaderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
+                android:id="@+id/checkoutFragHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="Promo code"
+                app:subtitle=""
+                app:iconType="HEADER_ICON_BACK"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.cardview.widget.CardView>
+
     <LinearLayout
             android:id="@+id/promoCodeFragmentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkoutFragHeaderLayout"
             app:layout_constraintStart_toStartOf="parent">
 
         <TextView

@@ -8,26 +8,6 @@
         android:animateLayoutChanges="true"
         android:background="@color/white">
 
-    <androidx.cardview.widget.CardView
-            android:id="@+id/checkoutActHeaderLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-    <com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
-            android:id="@+id/checkoutActHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="Checkout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    </androidx.cardview.widget.CardView>
-
     <androidx.fragment.app.FragmentContainerView
             android:id="@+id/checkoutActContainer"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -35,7 +15,7 @@
             android:layout_height="0dp"
             app:defaultNavHost="true"
             app:navGraph="@navigation/order_checkout_nav"
-            app:layout_constraintTop_toBottomOf="@id/checkoutActHeaderLayout"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

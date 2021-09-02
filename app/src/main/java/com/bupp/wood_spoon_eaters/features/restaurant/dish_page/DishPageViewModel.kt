@@ -29,7 +29,6 @@ class DishPageViewModel(
 
     private var isEditMode = false
     lateinit var extras: DishInitParams
-    private var finishToFeed: Boolean = true
     private var dishMatchCookingSlot: Boolean = true
     //this param indicates if the current menuItem is matching the selected cooking slot in parent
 
@@ -93,7 +92,6 @@ class DishPageViewModel(
 
         }else if(extras.orderItem != null){
             currentFragmentState = DishFragmentState.UPDATE_DISH
-            finishToFeed = extras.finishToFeed
             isEditMode = true
             handleOrderItemData(extras.orderItem)
             extras.orderItem.menuItem?.id?.let { getFullDish(it) }
@@ -204,18 +202,8 @@ class DishPageViewModel(
                 val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it.id)
                 if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                     logUpdateDish()
-                    onFinishDishPage.postValue(getFinishPageType())
                 }
             }
-        }
-    }
-
-    private fun getFinishPageType(): FinishNavigation {
-        Log.d("orderFlow - dishPage","getFinishPageType")
-        return if(finishToFeed){
-            FinishNavigation.FINISH_ACTIVITY
-        }else{
-            FinishNavigation.FINISH_AND_BACK
         }
     }
 

@@ -37,7 +37,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : BottomSheetDialogFragment() {
 
     interface UpsaleNCartBSListener{

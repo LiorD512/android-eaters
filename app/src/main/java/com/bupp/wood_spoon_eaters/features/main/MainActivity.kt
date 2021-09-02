@@ -44,7 +44,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
-    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
+    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener,
+    CampaignBottomSheet.CampaignBottomSheetListener,
     WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener, MainActivityTabLayout.MainActivityTabLayoutListener {
 
     lateinit var binding: ActivityMainBinding
@@ -65,7 +66,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         initUiRelatedProcesses()
     }
 
-    fun initUi(){
+    fun initUi() {
         binding.mainActFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
     }
 
@@ -93,9 +94,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)!!
             val forceFeedRefresh = data?.getBooleanExtra("refreshFeed", false)!!
-            if(isAfterPurchase){
+            if (isAfterPurchase) {
                 updateUiAfterOrderSuccess(result.data)
-            }else if(forceFeedRefresh){
+            } else if (forceFeedRefresh) {
                 viewModel.forceFeedRefresh()
             }
         }
@@ -107,7 +108,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             updateUiAfterOrderSuccess(result.data)
             val data = result.data
             val editOrderClicked = data?.getBooleanExtra("editOrderClick", false)
-            if(editOrderClicked!!){
+            if (editOrderClicked!!) {
                 UpSaleNCartBottomSheet(this@MainActivity).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
             }
         }
@@ -115,7 +116,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun updateUiAfterOrderSuccess(data: Intent?) {
         val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)
-        if(isAfterPurchase!!){
+        if (isAfterPurchase!!) {
             showRateTheAppDialog()
             viewModel.checkForActiveOrder()
             viewModel.forceFeedRefresh()
@@ -256,7 +257,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun openCartNUpsaleDialog() {
-        UpSaleNCartBottomSheet(this).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        UpSaleNCartBottomSheet(this@MainActivity).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
@@ -339,18 +340,18 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-            when (requestCode) {
-                PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    MTLogger.c(TAG, "Stripe")
-                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+        when (requestCode) {
+            PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                MTLogger.c(TAG, "Stripe")
+                val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
 
-                    result?.let {
-                        MTLogger.c(TAG, "payment method success")
-                        viewModel.updatePaymentMethod(this, result.paymentMethod)
-                    }
+                result?.let {
+                    MTLogger.c(TAG, "payment method success")
+                    viewModel.updatePaymentMethod(this, result.paymentMethod)
                 }
-
             }
+
+        }
     }
 
     override fun onTipDone(tipAmount: Int) {

@@ -8,23 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.CheckoutItemOrderItemBinding
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.model.Dish
-import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
-import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 import java.text.DecimalFormat
-
-data class CheckoutAdapterItem(
-    val customOrderItem: CustomOrderItem,
-    override var cartQuantity: Int = 0,
-    override val menuItem: MenuItem? = null,
-    override val isSwipeable: Boolean = true
-): SwipeableAdapterItem()
 
 class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener) : SwipeableAdapter<CheckoutAdapterItem>(DiffCallback()) {
 
@@ -33,6 +27,7 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
         fun onDishSwipedRemove(item: CheckoutAdapterItem)
         fun onDishClicked(dishItem: CustomOrderItem)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = CheckoutItemOrderItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -46,7 +41,9 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
 
     }
 
-    class OrderItemViewHolder(val binding: CheckoutItemOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class OrderItemViewHolder(val binding: CheckoutItemOrderItemBinding) : SwipeableBaseItemViewHolder(binding.root) {
+
+        override val isSwipeable: Boolean = true
 
         @SuppressLint("SetTextI18n")
         fun bindItem(item: CheckoutAdapterItem, listener: CheckoutOrderItemsAdapterListener) {
@@ -54,26 +51,21 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
             with(binding) {
                 val dish: Dish = orderItem.dish
 
-                orderItemCounter.text = "${item.cartQuantity}"
+                orderItemCounter.text = "${orderItem.quantity}"
                 orderItemName.text = dish.name
 
-                var price = 0.0
-                orderItem.price.value?.let {
-                    price = it
-
-                }
+                val price = orderItem.price.value ?: 0.0
                 val priceStr = DecimalFormat("##.##").format(price)
                 orderItemPrice.text = "$$priceStr"
 
+                orderItemNote.isVisible = !orderItem.getNoteStr().isNullOrEmpty()
                 if (!orderItem.getNoteStr().isNullOrEmpty()) {
-                    orderItemNote.visibility = View.VISIBLE
                     val builder = SpannableStringBuilder(orderItem.getNoteStr())
                     builder.setSpan(
                         ForegroundColorSpan(ContextCompat.getColor(itemView.context, R.color.greyish_brown)),
                         0, 17,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-
                     orderItemNote.text = builder
                 }
                 root.setOnClickListener {
@@ -94,7 +86,7 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
 
     class DiffCallback : DiffUtil.ItemCallback<CheckoutAdapterItem>() {
         override fun areItemsTheSame(oldItem: CheckoutAdapterItem, newItem: CheckoutAdapterItem): Boolean {
-            return oldItem.customOrderItem.orderItem.id == newItem.customOrderItem.orderItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: CheckoutAdapterItem, newItem: CheckoutAdapterItem): Boolean {

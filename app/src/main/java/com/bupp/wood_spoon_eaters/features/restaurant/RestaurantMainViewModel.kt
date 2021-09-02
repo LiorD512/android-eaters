@@ -64,7 +64,7 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
 
     fun openDishPageWithOrderItem(customOrderItem: CustomOrderItem, finishToFeed: Boolean = false) {
         val extras =
-            DishInitParams(orderItem = customOrderItem.orderItem, cookingSlot = customOrderItem.cookingSlot, menuItem = null, finishToFeed = finishToFeed)
+            DishInitParams(orderItem = customOrderItem.orderItem, cookingSlot = customOrderItem.cookingSlot, menuItem = null)
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
         navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }

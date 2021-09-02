@@ -37,24 +37,18 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun updateHeaderUi(title: String?, subtitle: String?, iconType: Int){
-        setTitle(title)
-        setSubtitle(subtitle)
-        initUi(iconType)
-    }
-
     fun setOnIconClickListener(function: () -> Unit) {
         binding.checkoutHeaderBtn.setOnClickListener{
             function.invoke()
         }
     }
 
-    private fun setTitle(title: String?) {
+    fun setTitle(title: String?) {
         binding.checkoutHeaderTitle.text = title
         binding.checkoutHeaderTitle.isVisible = !title.isNullOrEmpty()
     }
 
-    private fun setSubtitle(subtitle: String?) {
+    fun setSubtitle(subtitle: String?) {
         binding.checkoutHeaderSubtitle.text = subtitle
         binding.checkoutHeaderSubtitle.isVisible = !subtitle.isNullOrEmpty()
     }

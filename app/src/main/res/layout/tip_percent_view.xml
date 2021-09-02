@@ -5,7 +5,6 @@
         android:background="@color/white"
         android:paddingStart="7.4dp"
         android:paddingEnd="7.4dp"
-        android:paddingBottom="15dp"
         android:paddingTop="15dp"
         android:gravity="center"
         android:weightSum="4"

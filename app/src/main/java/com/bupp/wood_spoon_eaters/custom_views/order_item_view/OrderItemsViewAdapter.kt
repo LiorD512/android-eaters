@@ -19,7 +19,7 @@ import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import java.text.DecimalFormat
 
-class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener): ListAdapter<OrderItem, RecyclerView.ViewHolder>(
+class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener) : ListAdapter<OrderItem, RecyclerView.ViewHolder>(
     OrderItemsViewDiffCallback()
 ) {
 
@@ -55,21 +55,19 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
         private val note: TextView = view.orderItemNote
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(orderItem: OrderItem){
+        fun bindItem(orderItem: OrderItem) {
             val dish: Dish = orderItem.dish
 
             counter.text = "${orderItem.quantity}"
             name.text = dish.name
 
-            var price = 0.0
-            orderItem.price.value?.let{
-                price = it
 
-            }
+            val price = orderItem.price.value ?: 0.0
+
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
 
-            if(!orderItem.getNoteStr().isNullOrEmpty()){
+            if (!orderItem.getNoteStr().isNullOrEmpty()) {
                 note.visibility = View.VISIBLE
 
                 val builder = SpannableStringBuilder(orderItem.getNoteStr())

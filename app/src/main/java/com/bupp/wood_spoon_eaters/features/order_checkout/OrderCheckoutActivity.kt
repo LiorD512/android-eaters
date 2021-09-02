@@ -10,9 +10,11 @@ import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityOrderCheckoutActivityBinding
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -49,27 +51,34 @@ class OrderCheckoutActivity : BaseActivity() {
         })
     }
 
-    private fun handleNavigation(mainNavigationEvent: OrderCheckoutViewModel.NavigationEvent) {
-        when (mainNavigationEvent) {
-            OrderCheckoutViewModel.NavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
-                startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java))
-            }
-            OrderCheckoutViewModel.NavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
-                PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
-            }
-            OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY -> {
-                finish()
-            }
-            OrderCheckoutViewModel.NavigationEvent.INITIALIZE_STRIPE -> {
-                viewModel.reInitStripe(this)
-            }
-            OrderCheckoutViewModel.NavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE -> {
-                intent.putExtra("isAfterPurchase", true)
-                setResult(RESULT_OK, intent)
-                finish()
-            }
-            OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT -> {
-                findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_promoCodeFragment)
+    private fun handleNavigation(mainNavigationEvent: LiveEvent<OrderCheckoutViewModel.NavigationEvent>) {
+        mainNavigationEvent.getContentIfNotHandled()?.let{ navigation ->
+            when (navigation.navigationType) {
+                OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
+                    startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+                }
+                OrderCheckoutViewModel.NavigationEventType.START_PAYMENT_METHOD_ACTIVITY -> {
+                    PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
+                }
+                OrderCheckoutViewModel.NavigationEventType.FINISH_CHECKOUT_ACTIVITY -> {
+                    finish()
+                }
+                OrderCheckoutViewModel.NavigationEventType.INITIALIZE_STRIPE -> {
+                    viewModel.reInitStripe(this)
+                }
+                OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE -> {
+                    intent.putExtra("isAfterPurchase", true)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+                OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT -> {
+                    findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_promoCodeFragment)
+                }
+                OrderCheckoutViewModel.NavigationEventType.OPEN_DISH_PAGE -> {
+                    navigation.navDirections?.let { it ->
+                        findNavController(R.id.checkoutActContainer).navigate(it)
+                    }
+                }
             }
         }
     }
@@ -89,18 +98,11 @@ class OrderCheckoutActivity : BaseActivity() {
             }
     }
 
-    fun updateMainHeader(title: String, subtitle: String, icon: Int){
-        binding.checkoutActHeader.updateHeaderUi(title, subtitle,icon)
-        binding.checkoutActHeader.setOnIconClickListener { onBackPressed() }
-    }
-
     fun onEditOrderClick() {
         intent.putExtra("editOrderClick", true)
         setResult(RESULT_OK, intent)
         finish()
     }
-
-
 
     companion object{
         const val TAG = "wowOrderCheckoutAct"
