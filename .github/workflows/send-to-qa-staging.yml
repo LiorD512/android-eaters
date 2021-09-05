@@ -38,7 +38,6 @@ jobs:
           arguments: build
           build-root-directory: ${{ github.workspace }}/Macrobenchmark
           gradle-executable: ${{ github.workspace }}/Macrobenchmark/gradlew
-          wrapper-directory: ${{ github.workspace }}/Macrobenchmark/gradle/wrapper
 
       - name: Publish To App Center
         uses: wzieba/AppCenter-Github-Action@v1.3.2
