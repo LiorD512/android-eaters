@@ -40,21 +40,21 @@ jobs:
           gradle-executable: ${{ github.workspace }}/gradlew
           wrapper-directory: ${{ github.workspace }}/gradle/wrapper
 
-      - name: Publish To App Center
-        uses: wzieba/AppCenter-Github-Action@v1.3.2
-        with:
-          appName: Monkeytech/WoodSpoon-Android
-          token: ${{ secrets.APP_CENTER_TOKEN }}
-          group: WoodSpoon Android Testers
-          file: app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
-          releaseNotes: "Staging version -\n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
-          notifyTesters: true
-          debug: true
-
-      - name: Slack Notify
-        uses: rtCamp/action-slack-notify@v2.2.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_USERNAME: androidRulez
-          SLACK_TITLE: New version is out! - STAGING
-          SLACK_MESSAGE: "Check out this new version \n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
+#      - name: Publish To App Center
+#        uses: wzieba/AppCenter-Github-Action@v1.3.2
+#        with:
+#          appName: Monkeytech/WoodSpoon-Android
+#          token: ${{ secrets.APP_CENTER_TOKEN }}
+#          group: WoodSpoon Android Testers
+#          file: app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
+#          releaseNotes: "Staging version -\n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
+#          notifyTesters: true
+#          debug: true
+#
+#      - name: Slack Notify
+#        uses: rtCamp/action-slack-notify@v2.2.0
+#        env:
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#          SLACK_USERNAME: androidRulez
+#          SLACK_TITLE: New version is out! - STAGING
+#          SLACK_MESSAGE: "Check out this new version \n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
