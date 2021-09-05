@@ -36,9 +36,9 @@ jobs:
           JAVA_HOME: ${{ steps.setup-java.outputs.path }}
         with:
           arguments: build
-          build-root-directory: ${{ github.workspace }}/WoodSpoonEaters_Android
-          gradle-executable: ${{ github.workspace }}/WoodSpoonEaters_Android/gradlew
-          wrapper-directory: ${{ github.workspace }}/WoodSpoonEaters_Android/gradle/wrapper
+          build-root-directory: ${{ github.workspace }}
+          gradle-executable: ${{ github.workspace }}/gradlew
+          wrapper-directory: ${{ github.workspace }}/gradle/wrapper
 
       - name: Publish To App Center
         uses: wzieba/AppCenter-Github-Action@v1.3.2
