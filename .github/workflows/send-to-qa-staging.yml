@@ -36,7 +36,7 @@ jobs:
           appName: Monkeytech/WoodSpoon-Android
           token: ${{ secrets.APP_CENTER_TOKEN }}
           group: WoodSpoon Android Testers
-          file: app/build/outputs/apk/stagingFlavor/debug/app-stagingFlavor-debug.apk
+          file: app/build/outputs/apk/debug/app-debug.apk
           releaseNotes: "Staging version -\n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
           notifyTesters: true
           debug: true
