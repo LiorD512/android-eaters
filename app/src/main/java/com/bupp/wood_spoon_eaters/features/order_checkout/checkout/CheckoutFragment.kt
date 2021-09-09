@@ -14,10 +14,8 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
-import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
@@ -38,7 +36,7 @@ import kotlin.collections.ArrayList
 
 
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
-    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
+    CustomDetailsView.CustomDetailsViewListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener,
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
@@ -74,7 +72,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun initUi() {
-        binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
         binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
@@ -87,11 +84,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
             }
             checkoutFragPlaceOrderBtn.setOnClickListener {
-                viewModel.onPlaceOrderClick()
-            }
-
-            checkoutFragCourierTip.setOnClickListener {
-                onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
+                if (viewModel.validateOrderData()) {
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT)
+                }
             }
             checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
             initOrderItemsView()
@@ -167,7 +162,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         })
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let { data->
+            it.getContentIfNotHandled()?.let { data ->
                 FeesAndTaxBottomSheet.newInstance(data.fee, data.tax, data.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
             }
         })
@@ -283,11 +278,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragNationwideSelect.visibility = View.GONE
                     }
                 }
-                order.tipPercentage?.let { tip ->
-                    if (tip != 0) {
-                        checkoutFragTipPercentView.selectDefaultTip(tip)
-                    }
-                }
             }
             updatePriceUi(order)
         } else {
@@ -341,26 +331,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
         viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
         binding.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
-    }
-
-    override fun onTipIconClick(tipSelection: Int?) {
-        if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-            TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
-        } else {
-            if (tipSelection == TIP_NOT_SELECTED) {
-                viewModel.updateOrderParams(
-                    OrderRequest(tipPercentage = 0f, tip = 0),
-                    Constants.EVENT_CLICK_TIP
-                ) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
-            } else {
-                viewModel.updateOrderParams(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_CLICK_TIP)
-            }
-        }
-    }
-
-    override fun onTipDone(tipAmount: Int) {
-        binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_CLICK_TIP)
     }
 
     override fun onCustomDetailsClick(type: Int) {

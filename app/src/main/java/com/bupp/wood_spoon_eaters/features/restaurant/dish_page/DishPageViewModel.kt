@@ -202,6 +202,7 @@ class DishPageViewModel(
                 val result = cartManager.updateDishInExistingCart(quantity, note, dishId, it.id)
                 if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                     logUpdateDish()
+                    onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
                 }
             }
         }
