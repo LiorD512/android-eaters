@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
 import android.content.Context
-import android.provider.SyncStateContract
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout

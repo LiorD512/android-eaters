@@ -19,7 +19,7 @@ class EditProfileViewModel(private val userRepository: UserRepository, val eater
     MediaUploadManager.UploadManagerListener {
 
     val progressData = ProgressData()
-    private val TAG: String? = "wowEditProfileVM"
+    private val TAG: String = "wowEditProfileVM"
     val refreshThumbnailEvent: SingleLiveEvent<NavigationEvent> = SingleLiveEvent()
 
     data class NavigationEvent(val isSuccess: Boolean = false)
@@ -51,9 +51,7 @@ class EditProfileViewModel(private val userRepository: UserRepository, val eater
     }
 
     private fun uploadMediaData() {
-        this.eater.let { it ->
-
-
+        this.eater.let {
             val mediaUploadRequests: MutableList<Uri> = mutableListOf()
             it.tempThumbnail?.let { media ->
                 mediaUploadRequests.add(media)

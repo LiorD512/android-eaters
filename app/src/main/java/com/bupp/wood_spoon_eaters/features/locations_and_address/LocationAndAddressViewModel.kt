@@ -24,17 +24,13 @@ import kotlinx.coroutines.launch
 
 class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager, private val flowEventsManager: FlowEventsManager) : ViewModel() {
 
-    var tempSelectAddress: Address? = null
 
     val progressData = ProgressData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
 
-    val locationPermissionActionEvent: MutableLiveData<Boolean> = MutableLiveData()
     val mainNavigationEvent = MutableLiveData<NavigationEventType>()
     enum class NavigationEventType {
-        OPEN_EDIT_ADDRESS_SCREEN,
         OPEN_ADDRESS_LIST_CHOOSER,
-        OPEN_ADD_NEW_ADDRESS_SCREEN,
         OPEN_ADDRESS_AUTO_COMPLETE,
         OPEN_LOCATION_PERMISSION_SCREEN,
         OPEN_MAP_VERIFICATION_SCREEN,
@@ -42,10 +38,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
         OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS,
         LOCATION_PERMISSION_GUARENTEED,
         LOCATION_AND_ADDRESS_DONE
-    }
-
-    fun askLocationPermission() {
-        locationPermissionActionEvent.postValue(true)
     }
 
     fun getLocationLiveData() = eaterDataManager.getLocationData()
@@ -59,17 +51,12 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
     }
 
-//    fun setTempSelectedAddress(selected: Address) {
-//        this.tempSelectAddress =  selected
-//    }
-
     private var unsavedNewAddress: AddressRequest? = null
     val actionEvent = MutableLiveData<ActionEvent>()
     enum class ActionEvent {
         SAVE_NEW_ADDRESS,
         FETCH_MY_ADDRESS,
         REFRESH_MY_LOCATION_STATE,
-        RESET_HEADER_TITLE
     }
 
     val addressFoundUiEvent = MutableLiveData<AddressRequest>()
@@ -81,18 +68,12 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
         actionEvent.postValue(ActionEvent.REFRESH_MY_LOCATION_STATE)
     }
 
-
     fun showLocationPermissionScreen() {
         mainNavigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_SCREEN)
     }
 
-
     fun onSearchAddressAutoCompleteClick() {
         mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE)
-    }
-
-    fun onSaveNewAddressClick() {
-        actionEvent.postValue(ActionEvent.SAVE_NEW_ADDRESS)
     }
 
     fun redirectFinalDetailsToMap() {
@@ -120,8 +101,8 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     private fun geoCodeAddress(context: Context, address: AddressRequest) {
-        address.lat?.let{ lat ->
-            address.lng?.let{ lng ->
+        address.lat?.let{
+            address.lng?.let{
                 GeoCoderUtil.execute(context, address, object :
                     LoadDataCallback<AddressRequest> {
                     override fun onDataLoaded(response: AddressRequest) {
@@ -152,18 +133,6 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
             addressFoundUiEvent.postValue(it)
         }
     }
-
-//    fun checkIntentParam(intent: Intent?) {
-////        intent?.let {
-////            if (it.hasExtra(Constants.START_WITH)) {
-////                when (it.getIntExtra(Constants.START_WITH, Constants.NOTHING)) {
-////                    Constants.START_WITH_ADDRESS_CHOOSER -> {
-////                        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER)
-////                    }
-////                }
-////            }
-////        }
-//    }
 
     fun onLocationPermissionDone() {
         mainNavigationEvent.postValue(NavigationEventType.LOCATION_PERMISSION_GUARENTEED)

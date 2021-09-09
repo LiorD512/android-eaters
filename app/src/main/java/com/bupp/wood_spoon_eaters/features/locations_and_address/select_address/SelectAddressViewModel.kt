@@ -8,13 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
-import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import kotlinx.coroutines.launch
 
-class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager, val deliveryTimeManager: DeliveryTimeManager) : ViewModel(){
+class SelectAddressViewModel(val settings: AppSettings, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager) : ViewModel(){
 
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
 

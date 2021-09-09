@@ -8,7 +8,7 @@ fun RecyclerView.attachSnapHelperWithListener(
     behavior: SnapOnScrollListener.Behavior = SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
     onSnapPositionChangeListener: SnapOnScrollListener.OnSnapPositionChangeListener?
 ) {
-    onFlingListener = null;
+    onFlingListener = null
     snapHelper.attachToRecyclerView(this)
     onSnapPositionChangeListener?.let{
         val snapOnScrollListener = SnapOnScrollListener(snapHelper, behavior, onSnapPositionChangeListener)

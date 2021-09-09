@@ -13,7 +13,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.SingleTimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.DeliveryDates
-import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -28,7 +27,6 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     val date: Date? = null
     )
     enum class DeliveryType{
-        NON_FILTERED,
         TODAY,
         FUTURE
     }
@@ -45,7 +43,6 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     private var cookingSlots: List<CookingSlot>? = null
     private var deliveryDates: List<DeliveryDates>? = null
 
-    private var selectedData: Date? = null
     private var selectedDeliveryDate: Date? = null
     private var selectedCookingSlot: CookingSlot? = null
 
@@ -145,7 +142,6 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
 
     fun setCookingSlots(selectedCookingSlot: CookingSlot, cookingSlots: MutableList<CookingSlot>) {
         //restaurant
-//        this.isTemporary = true
         this.cookingSlots = cookingSlots
         val curCookingSlot = cookingSlots.find { it.id == selectedCookingSlot.id }
         this.selectedCookingSlot = curCookingSlot

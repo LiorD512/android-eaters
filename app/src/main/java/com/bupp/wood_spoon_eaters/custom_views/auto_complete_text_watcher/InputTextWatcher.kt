@@ -37,8 +37,8 @@ abstract class InputTextWatcher : TextWatcher {
     }
 
     private fun handleInputStringThrottleIfNeeded(input: String) {
-        if(myRunnable != null){
-            myHandler.removeCallbacks(myRunnable)
+        myRunnable?.let{
+            myHandler.removeCallbacks(it)
             myRunnable = null
         }
         myRunnable = Runnable {
@@ -46,12 +46,12 @@ abstract class InputTextWatcher : TextWatcher {
             handleInputString(input)
         }
         if (throttlingTimeout > 0) {
-            myHandler.postDelayed(myRunnable, throttlingTimeout)
+            myHandler.postDelayed(myRunnable!!, throttlingTimeout)
         } else {
             handleInputString(input)
         }
     }
 
 
-    protected abstract fun handleInputString(string: String)
+    protected abstract fun handleInputString(str: String)
 }

@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AddressMenuBottomSheet() : BottomSheetDialogFragment() {
+class AddressMenuBottomSheet : BottomSheetDialogFragment() {
 
     private val binding: AddressMenuBottomSheetBinding by viewBinding()
     val viewModel by viewModel<AddressMenuViewModel>()

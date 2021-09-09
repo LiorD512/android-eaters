@@ -108,7 +108,7 @@ class MTLogger {
     }
 
     private fun getAppVersion(): String {
-        return BuildConfig.VERSION_NAME.toString()
+        return BuildConfig.VERSION_NAME
     }
 
 }

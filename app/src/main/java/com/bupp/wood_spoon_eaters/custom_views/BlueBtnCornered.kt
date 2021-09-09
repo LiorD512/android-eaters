@@ -49,8 +49,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setBtnEnabled(isEnabled: Boolean) {
         with(binding){
-            blueBtnBackground.isEnabled = isEnabled;
-            blueBtnText.isEnabled = isEnabled;
+            blueBtnBackground.isEnabled = isEnabled
+            blueBtnText.isEnabled = isEnabled
             if (isEnabled) {
                 blueBtnBackground.alpha = 1f
             } else {

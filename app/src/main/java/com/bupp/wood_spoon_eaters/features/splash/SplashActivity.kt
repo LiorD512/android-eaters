@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.ActivitySplashBinding
@@ -13,7 +12,6 @@ import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.utils.updateScreenUi
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.branch.referral.Branch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,7 +44,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun initObservers() {
-        viewModel.splashEvent.observe(this, Observer { splashEvent ->
+        viewModel.splashEvent.observe(this, { splashEvent ->
             val event = splashEvent.getContentIfNotHandled()
             event?.let{
                 when(it){
@@ -70,7 +68,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
             
         })
 
-        viewModel.errorEvent.observe(this, Observer{
+        viewModel.errorEvent.observe(this, {
             if(it){
                 WSErrorDialog("Server error, please try again later", this).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
             }
@@ -144,11 +142,6 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                 viewModel.setUserReferralToken(token)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        updateScreenUi()
     }
 
     companion object{

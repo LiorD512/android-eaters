@@ -12,6 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.VideoViewDialogBinding
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -19,15 +20,14 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 
-class VideoViewDialog(val cookFullName: String, val video: String) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
+class VideoViewDialog(val video: String) : DialogFragment(), HeaderView.HeaderViewListener, Player.EventListener {
 
 
     private var player: SimpleExoPlayer? = null
     val binding: VideoViewDialogBinding by viewBinding()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.video_view_dialog, null)
-        return view
+        return inflater.inflate(R.layout.video_view_dialog, null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +58,9 @@ class VideoViewDialog(val cookFullName: String, val video: String) : DialogFragm
                 videoView.player = player
                 val dataSourceFactory = DefaultDataSourceFactory(requireContext(), Util.getUserAgent(requireContext(), "WoodSpoonEaters"))
                 val uri = Uri.parse(it)
-                val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
-                player?.prepare(videoSource)
+                val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri))
+                player?.setMediaSource(videoSource)
+                player?.prepare()
             }
 
         }

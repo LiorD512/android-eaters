@@ -1,17 +1,14 @@
 package com.bupp.wood_spoon_eaters.dialogs.web_docs
 
 import android.annotation.SuppressLint
-import android.net.http.SslError
 import android.os.Bundle
 import android.view.View
-import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.WebDocsDialogBinding
@@ -80,7 +77,9 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
         binding.webDocsWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
 //                webDocsPb.hide()
-                view?.loadUrl(url)
+                url?.let{
+                    view?.loadUrl(it)
+                }
                 return true
             }
 

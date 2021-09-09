@@ -1,18 +1,15 @@
 package com.bupp.wood_spoon_eaters.views
 
 import android.content.Context
-import android.os.Handler
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.airbnb.lottie.LottieDrawable.REVERSE
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.LottieAnimationViewBinding
-import com.bupp.wood_spoon_eaters.databinding.MapHeaderViewLayoutBinding
 
 
 class LottieAnimationView @JvmOverloads
@@ -20,13 +17,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     FrameLayout(context, attrs, defStyleAttr) {
 
     private var binding: LottieAnimationViewBinding = LottieAnimationViewBinding.inflate(LayoutInflater.from(context), this, true)
-
-
-    private lateinit var listener: LottieAnimListener
-
-    interface LottieAnimListener{
-        fun onAnimationEnd()
-    }
 
    init{
         if (attrs != null) {
@@ -70,49 +60,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
         binding.lottieAnimationView.playAnimation()
     }
-
-    fun showDefaultAnimation(listener: LottieAnimListener) {
-        this.listener = listener
-        with(binding){
-            lottieAnimationView.setAnimation("splash_anim.json")
-            lottieAnimationView.playAnimation()
-
-            Handler().postDelayed({
-    //            Log.d("wowLottie","onAnimationEnd")
-                lottieAnimationView.pauseAnimation()
-                listener.onAnimationEnd()
-            }, 3200)
-        }
-
-    }
-
-    fun rollAnimation(){
-        with(binding){
-    //        Log.d("wowLottie","rollAnimation: isAnimationg: ${lottieAnimationView.isAnimating}")
-            if(!lottieAnimationView.isAnimating){
-                lottieAnimationView.playAnimation()
-
-                Handler().postDelayed({
-    //                Log.d("wowLottie","onAnimationEnd")
-                    lottieAnimationView.pauseAnimation()
-                    listener.onAnimationEnd()
-                }, 3200)
-            }
-        }
-    }
-
-    fun isAnimating(): Boolean{
-        return binding.lottieAnimationView.isAnimating
-    }
-
-//    fun setCustomAnimation(animation: String?) {
-//        if(animation != null){
-//            lottieAnimationView.setAnimationFromJson(animation, "${Date().time}")
-//            lottieAnimationView.playAnimation()
-//        }else{
-//            showDefaultAnimation()
-//        }
-//    }
 
 
 }

@@ -20,7 +20,6 @@ import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -144,7 +143,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
         this.photoUploaded = false
     }
 
-    fun saveEaterDetails() {
+    private fun saveEaterDetails() {
         with(binding) {
             if (validateFields()) {
                 val first = editMyProfileFragFirstName.getText()

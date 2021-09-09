@@ -1,9 +1,8 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models
 
-import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionsViewType.*
-import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapterItem
 
 sealed class DishSections(
     val viewType: DishSectionsViewType

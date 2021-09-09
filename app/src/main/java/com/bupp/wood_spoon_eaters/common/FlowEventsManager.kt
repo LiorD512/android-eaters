@@ -1,10 +1,8 @@
 package com.bupp.wood_spoon_eaters.common
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
-import com.squareup.moshi.Json
 
 class FlowEventsManager(private val campaignManager: CampaignManager, private val eventsManager: EventsManager) {
 

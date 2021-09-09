@@ -2,19 +2,16 @@ package com.bupp.wood_spoon_eaters.common
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.bupp.wood_spoon_eaters.FlavorConfig
+import com.bupp.wood_spoon_eaters.BuildConfig
 
 class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
 
 
     companion object{
-        const val DEFAULT_STAGING_ENVIROMENT = FlavorConfig.BASE_URL
         const val TAG = "wowFlavorConfigManager"
         const val SYSTEM_ENVIRONMENT = "system_environment"
         const val CUSTOM_BASE_URL = "custom_base_url"
     }
-
-    val CURRENT_USR_COUNTRY = "cur_usr_country"
 
     var curEnvironment: String?
         get() = sharedPreferences.getString(SYSTEM_ENVIRONMENT, null)
@@ -41,7 +38,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
 
     fun getBaseUrl(): String {
         Log.d(TAG, "getBaseUrl env: $curEnvironment")
-        var finalUrl = FlavorConfig.BASE_URL
+        var finalUrl: String
         if(curBaseUrl?.isNotEmpty() == true){
             finalUrl = curBaseUrl!!
         }else{
@@ -49,7 +46,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
                  Log.d(TAG, "curEnvironment: $curEnvironment")
                 finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v2/"
             }else{
-                 finalUrl = FlavorConfig.BASE_URL
+                 finalUrl = BuildConfig.BASE_URL
             }
             Log.d(TAG, "getBaseUrl: $finalUrl")
         }

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters;
+package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemCuisineBinding
 
-class RPAdapterCuisine() : ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
+class RPAdapterCuisine : ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(

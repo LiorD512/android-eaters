@@ -1,10 +1,11 @@
 package com.bupp.wood_spoon_eaters.network.base_repos
 
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.Restaurant
+import com.bupp.wood_spoon_eaters.model.Review
+import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
-import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantResult
 
 interface RestaurantRepositoryInterface{
     suspend fun getRestaurant(lat: Double?, lng: Double?, addressId: Long?, cookId: Long): ResultHandler<ServerResponse<Restaurant>>

@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import android.util.Log
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*

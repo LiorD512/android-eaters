@@ -37,21 +37,6 @@
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 
-<!--    <style name="NewCartDialog" parent="Theme.AppCompat.Dialog">-->
-<!--        <item name="android:windowNoTitle">true</item>-->
-<!--        <item name="android:windowFullscreen">false</item>-->
-<!--        <item name="android:windowIsFloating">true</item>-->
-<!--        <item name="android:windowMinWidthMajor">96%</item>-->
-<!--        <item name="android:windowMinWidthMinor">96%</item>-->
-<!--        <item name="android:layout_height">260dp</item>-->
-<!--        <item name="android:windowBackground">@color/transparent</item>-->
-<!--    </style>-->
-
-    <style name="NewCartDialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/new_cart_overshoot_anim</item>
-        <item name="android:windowExitAnimation">@anim/new_cart_slide_out_anim</item>
-    </style>
-
     <style name="ErrorText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/coral</item>
         <item name="android:textSize">11.5sp</item>
@@ -65,7 +50,7 @@
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
         <!-- reference our hint & error styles -->
         <item name="android:textSize">15.4sp</item>
-        <item name="fontFamily">@font/open_sans_semi_bold</item>
+        <item name="fontFamily">@font/lato_black</item>
         <item name="hintTextAppearance">@style/HintText</item>
         <item name="errorTextAppearance">@style/ErrorText</item>
         <item name="android:textColor">@color/black</item>
@@ -121,6 +106,11 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoBlack15Red">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
 
     <style name="LatoBold13White">
         <item name="android:fontFamily">@font/lato_bold</item>
@@ -175,6 +165,11 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoReg11Red">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11.5sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
     <style name="LatoReg11Black">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">11.5sp</item>
@@ -191,11 +186,57 @@
         <item name="android:textSize">23sp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
+    <style name="LatoBlack13Dark50">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/dark_50</item>
+    </style>
+    <style name="LatoBold11Dark">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg11Dark">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg11Coral">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/coral</item>
+    </style>
+
+    <style name="LatoReg13Coral">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/coral</item>
+    </style>
 
     <style name="LatoReg15Dark50">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">15.4sp</item>
         <item name="android:textColor">@color/dark_50</item>
+    </style>
+    <style name="LatoReg13PurpleyGreyTwo">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/purpley_grey_two</item>
+    </style>
+    <style name="LatoBold19Dark">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoBlack13Dark">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg13Teal">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
     </style>
 
     <style name="LatoReg15Dark">
@@ -237,6 +278,11 @@
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="LatoReg13Dark50">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_50</item>
     </style>
 
     <style name="LatoReg13NobelGrey">
@@ -387,6 +433,11 @@
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
+    <style name="LatoBold17White">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
     <style name="LatoBlack9White">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">9.6sp</item>
@@ -399,346 +450,9 @@
         <item name="android:textColor">@color/dark</item>
     </style>
 
-    <style name="Reg32Dark">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">32.6sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Bold23Dark">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">23sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="SemiBold21Dark">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">21.1sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="SemiBold23Dark">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">23sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="SemiBold19Blue">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">23sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="Bold19Black">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">19sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="Bold19Dark">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">19sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Bold19DarkGrey">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">19sp</item>
-        <item name="android:textColor">@color/dark_grey</item>
-    </style>
-
-    <style name="Bold23Blue">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">23sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="Bold17White">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">17.3sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Bold17Blue">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">17.3sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="Reg17White">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">17.3sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Bold15Dark">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Bold15Blue">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="Bold11TealBlue">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">11.5sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="Bold11Dark">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">11.5sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Bold15White">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="SemiBold15Red">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/red</item>
-    </style>
-
-    <style name="Reg15Dark">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Reg11Black">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="Reg11Red">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/red</item>
-    </style>
-
-    <style name="Reg11Coral">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/coral</item>
-    </style>
-
-    <style name="Reg15Dark_50">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/dark_50</item>
-    </style>
-
-    <style name="Reg15Red">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/red</item>
-    </style>
-
-    <style name="Reg15Blue">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="Reg15Black">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">15.4sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-
-    <style name="SemiBold15BlackThree">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">15.1sp</item>
-        <item name="android:textColor">@color/black_three</item>
-    </style>
-
-    <style name="SemiBold13Blue">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="SemiBold13White">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="SemiBold15Blue">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">15.1sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="SemiBold15Dark">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">15.1sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="ExtraBold23White">
-        <item name="android:fontFamily">@font/open_sans_extra_bold</item>
-        <item name="android:textSize">23sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="SemiBold15Dark_50">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">15.1sp</item>
-        <item name="android:textColor">@color/dark_50</item>
-    </style>
-
-    <style name="Bold13Dark">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Bold13Dark_40">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/dark_40</item>
-    </style>
-
-    <style name="Bold13White">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Bold13TealBlue">
-        <item name="android:fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/teal_blue</item>
-    </style>
-
-    <style name="SemiBold11Dark">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="SemiBold13Dark">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="SemiBold11PurpelyGrey">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">11.5sp</item>
-        <item name="android:textColor">@color/purpley_grey</item>
-    </style>
-
-    <style name="SemiBold13Dark50">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/dark_50</item>
-    </style>
-
-    <style name="Reg13Black">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="Reg13Dark">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Reg13Coral">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/coral</item>
-    </style>
-
-    <style name="Reg12White">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">12.5sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Reg13White">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Reg13Dark_50">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/dark_50</item>
-    </style>
-
-    <style name="Reg13PurpleyGreyTwo">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/purpley_grey_two</item>
-    </style>
-
-    <style name="Reg13PurpleyGrey">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">13.4sp</item>
-        <item name="android:textColor">@color/purpley_grey</item>
-    </style>
-
-    <style name="Reg11Dark">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">11.5sp</item>
-        <item name="android:textColor">@color/dark</item>
-    </style>
-
-    <style name="Reg11PurpleyGrey">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">11.5sp</item>
-        <item name="android:textColor">@color/purpley_grey</item>
-    </style>
-
-    <style name="SemiBold13Silver">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.2sp</item>
-        <item name="android:textColor">@color/silver</item>
-    </style>
-
-    <style name="SemiBold9Grey">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">9.6sp</item>
-        <item name="android:textColor">@color/purpley_grey</item>
-    </style>
-
-    <style name="SemiBold13Grey">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.2sp</item>
-        <item name="android:textColor">@color/purpley_grey</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="SemiBold17White">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">17.3sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="SemiBold17Dark">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">17.3sp</item>
-        <item name="android:textColor">@color/dark</item>
     </style>
 
     <style name="ToolTipAnimation">
@@ -747,98 +461,17 @@
     </style>
 
 
-    //Calendar view
-
-    <style name="CalenderViewCustom" parent="Theme.MaterialComponents">
-        <item name="colorAccent">@color/teal_blue</item>
-        <item name="android:textColor">@color/calender_text_color_selector</item>
-        <item name="android:focusedMonthDateColor">@color/teal_blue</item>
-        <item name="android:weekSeparatorLineColor">@color/teal_blue</item>
-        <item name="android:selectedWeekBackgroundColor">@color/black</item>
-    </style>
-
-    <style name="CalendarDateText" parent="Theme.MaterialComponents">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">15.1sp</item>
-        <item name="android:textColor">@color/dark</item>
-        <item name="android:selectedWeekBackgroundColor">@color/white</item>
-    </style>
-
-    <style name="CalendarViewHeader" parent="Theme.MaterialComponents">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.2sp</item>
-        <item name="android:textColor">@color/dark</item>
-        <item name="android:selectedWeekBackgroundColor">@color/white</item>
-    </style>
-
-    <style name="CalendarWeekDays">
-        <item name="android:fontFamily">@font/open_sans_semi_bold</item>
-        <item name="android:textSize">13.1sp</item>
-        <item name="android:textColor">@color/silver</item>
-        <item name="android:selectedWeekBackgroundColor">@color/white</item>
-    </style>
-
-    <style name="calendar_indicator_style">
-        <item name="android:background">@color/black</item>
-        <!--<item name="android:drawable">@drawable/icons_time</item>-->
-    </style>
-
-    <style name="MySeekBar" parent="Widget.AppCompat.SeekBar">
-        <item name="android:progressTint">@color/teal_blue</item>
-    </style>
-
-
-    <style name="CardWidgetStyle" parent="Theme.MaterialComponents">
-        <item name="editTextStyle">@style/EditTextOverride</item>
-        <item name="android:editTextStyle">@style/EditTextOverride</item>
-    </style>
-
     <style name="EditTextOverride" parent="@android:style/Widget.EditText">
         <item name="android:textColor">@color/dark</item>
         <item name="android:textColorHint">@color/dark_50</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!--<style name="CardWidgetStyle" parent="@android:style/Theme.DeviceDefault">-->
-    <!--<item name="android:background">@color/white</item>-->
-    <!--<item name="editTextStyle">@style/EditTextOverride</item>-->
-    <!--<item name="android:editTextStyle">@style/EditTextOverride</item>-->
-    <!--</style>-->
-
-    <!--<style name="EditTextOverride" parent="@android:style/Widget.EditText">-->
-    <!--<item name="android:textColor">@color/dark</item>-->
-    <!--<item name="android:textColorHint">@color/dark_50</item>-->
-    <!--<item name="android:textSize">12sp</item>-->
-    <!--</style>-->
-
-    <declare-styleable name="CircleView">
-        <attr name="circleRadius" format="dimension" />
-        <attr name="circleColor" format="color" />
-        <attr name="circleDrawOnlystroke" format="boolean" />
-        <attr name="circleStrokeWidth" format="dimension" />
-    </declare-styleable>
-    <declare-styleable name="CircularDotsLoader">
-        <attr name="loader_bigCircleRadius" format="dimension" />
-    </declare-styleable>
-    <declare-styleable name="DotsLoaderBaseView">
-        <attr name="loader_defaultColor" format="color" />
-        <attr name="loader_selectedColor" format="color" />
-        <attr name="loader_circleRadius" format="dimension" />
-        <attr name="loader_animDur" format="integer" />
-        <attr name="loader_showRunningShadow" format="boolean" />
-        <attr name="loader_firstShadowColor" format="color" />
-        <attr name="loader_secondShadowColor" format="color" />
-    </declare-styleable>
 
     <declare-styleable name="WoodSpoonProgressBar">
         <attr name="isBlueStyle" format="boolean" />
     </declare-styleable>
 
-    <style name="flashbar_msg_appearence">
-        <item name="android:fontFamily">@font/open_sans_reg</item>
-        <item name="android:textSize">15.1sp</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
 
     <style name="FloatingBottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">true</item>
@@ -886,22 +519,11 @@
         <item name="android:fontFamily">@font/lato_reg</item>
     </style>
 
-    <style name="MainActTabLayout" parent="Widget.Design.TabLayout">
-        <item name="android:tabStripEnabled">true</item>
-        <item name="tabBackground">?attr/selectableItemBackground</item>
-        <item name="tabTextAppearance">@style/MainActTabLayoutTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/dark</item>
-    </style>
 
     <style name="MainActTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">9.6sp</item>
         <item name="android:textColor">@color/purpley_grey_two_to_dark_selector</item>
         <item name="textAllCaps">false</item>
-    </style>
-
-    <style name="roundedCorners7ImageView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">7.7dp</item>
     </style>
 
     <style name="roundedTopCorners7ImageView" parent="">

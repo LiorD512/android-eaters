@@ -2,8 +2,6 @@ package com.bupp.wood_spoon_eaters.views.ws_range_time_picker
 
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.model.FeedModelsViewType
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*

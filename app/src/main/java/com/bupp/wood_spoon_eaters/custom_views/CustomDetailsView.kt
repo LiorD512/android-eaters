@@ -9,10 +9,9 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CustomDetailsViewBinding
-import com.bupp.wood_spoon_eaters.managers.location.LocationManager
+import com.bupp.wood_spoon_eaters.model.Address
 
 @SuppressLint("CustomViewStyleable")
 class CustomDetailsView @JvmOverloads
@@ -162,22 +161,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun updateDeliveryTimeUi(input: String) {
         binding.customDetailsViewTitle.text = "Delivery Time"
         binding.customDetailsViewSubtitle.text = input
-    }
-
-    fun handleAddressData(address: LocationManager.FinalAddressParam){
-        when(address.addressType){
-            LocationManager.AddressDataType.FULL_ADDRESS -> {
-                updateDeliveryAddressFullDetails(address.address)
-            }
-            LocationManager.AddressDataType.DEVICE_LOCATION -> {
-                updateSubTitle("Select an address")
-                setBtnText("Select")
-            }
-            LocationManager.AddressDataType.DEFAULT -> {
-                updateSubTitle("Add your addresses")
-                setBtnText("Add")
-            }
-        }
     }
 
     fun updateDeliveryAddressFullDetails(address: Address?) {

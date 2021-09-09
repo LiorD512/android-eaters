@@ -25,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
 
-class CountryChooserBottomSheet() : BottomSheetDialogFragment(), CountryIsoChooserAdapter.AddressChooserAdapterListener {
+class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooserAdapter.AddressChooserAdapterListener {
 
     var adapter: CountryIsoChooserAdapter? = null
     private val binding: CountryChooserBottomSheetBinding by viewBinding()

@@ -1,12 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen
 
-import com.bupp.wood_spoon_eaters.model.*
-import java.util.*
-import kotlin.collections.ArrayList
+import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.Order
 
 //Multi section view models
-
-data class OrderTrackMapData(val order: Order, val orderUserInfo: OrderUserInfo?)
 
 data class OrderTrackHeader(val orderNumber: String?)
 

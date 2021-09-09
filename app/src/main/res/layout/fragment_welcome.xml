@@ -40,7 +40,7 @@
                 android:orientation="vertical">
 
             <TextView
-                    style="@style/Reg15Black"
+                    style="@style/LatoReg15Black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"

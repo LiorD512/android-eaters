@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters;
+package com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.DishItemModificationBinding
 
-class ModificationsListAdapter(private val listener: ModificationsListAdapterListener) : ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
+class ModificationsListAdapter : ListAdapter<String, RecyclerView.ViewHolder>(DiffCallback()) {
 
     interface ModificationsListAdapterListener {
         fun onModificationClick()

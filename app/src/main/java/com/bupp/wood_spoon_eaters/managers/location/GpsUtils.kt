@@ -3,12 +3,9 @@ package com.bupp.wood_spoon_eaters.managers.location
 import android.app.Activity
 import android.content.Context
 import android.content.IntentSender
-import android.location.Location
 import android.location.LocationManager
 import android.util.Log
 import android.widget.Toast
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.model.Address
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices

@@ -23,7 +23,7 @@
 
     <fragment
             android:id="@+id/promoCodeFragment"
-            android:name="com.bupp.wood_spoon_eaters.bottom_sheets.promo_code.PromoCodeFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeFragment"
             android:label="fragment_promo_code"
             tools:layout="@layout/promo_code_fragment"/>
 

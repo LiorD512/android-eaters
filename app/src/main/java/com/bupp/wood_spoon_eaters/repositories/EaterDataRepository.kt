@@ -1,9 +1,9 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import android.util.Log
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.managers.FeedDataManager
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.Trigger
+import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.network.base_repos.EaterDataRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
@@ -13,26 +13,14 @@ class EaterDataRepository(private val apiService: EaterDataRepositoryImpl) {
 
     data class EaterDataRepoResult<T>(val type: EaterDataRepoStatus, val data: T? = null, val wsError: List<WSError>? = null)
     enum class EaterDataRepoStatus {
-        GET_FAVORITES_SUCCESS,
-        GET_FAVORITES_FAILED,
-
         GET_TRACEABLE_SUCCESS,
         GET_TRACEABLE_FAILED,
 
         GET_TRIGGERS_SUCCESS,
         GET_TRIGGERS_FAILED,
 
-//        VALIDATE_REFERRAL_TOKEN_SUCCESS,
-//        VALIDATE_REFERRAL_TOKEN_FAILED,
-//
-//        UPDATE_CAMPAIGN_STATUS_SUCCESS,
-//        UPDATE_CAMPAIGN_STATUS_FAILED,
-
         CANCEL_ORDER_SUCCESS,
         CANCEL_ORDER_FAILED,
-
-//        GET_CAMPAIGN_SUCCESS,
-//        GET_CAMPAIGN_FAILED,
 
         SERVER_ERROR,
         SOMETHING_WENT_WRONG,
@@ -63,40 +51,6 @@ class EaterDataRepository(private val apiService: EaterDataRepositoryImpl) {
             }
         }
     }
-
-    suspend fun getFavorites(feedRequest: FeedRequest): EaterDataRepoResult<List<Dish>> {
-        val result = withContext(Dispatchers.IO){
-            val feedRequest = feedRequest
-            apiService.getFavorites(feedRequest)
-        }
-        result.let{
-            return  when (result) {
-                is ResultHandler.NetworkError -> {
-                    MTLogger.c(TAG,"getFavorites - NetworkError")
-                    EaterDataRepoResult(EaterDataRepoStatus.SERVER_ERROR)
-                }
-                is ResultHandler.GenericError -> {
-                    MTLogger.c(TAG,"getFavorites - GenericError")
-                    EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_FAILED)
-                }
-                is ResultHandler.Success -> {
-                    MTLogger.c(TAG,"getFavorites - Success")
-                    val searchObj = result.value.data
-                    if(searchObj?.results != null){
-                        val favOrders = searchObj.results
-                        EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, favOrders as List<Dish>)
-                    }else{
-                        EaterDataRepoResult(EaterDataRepoStatus.GET_FAVORITES_SUCCESS, listOfNotNull())
-                    }
-                }
-                is ResultHandler.WSCustomError -> {
-                    MTLogger.c(OrderRepository.TAG,"getFavorites - wsError")
-                    EaterDataRepoResult(EaterDataRepoStatus.WS_ERROR, wsError = result.errors)
-                }
-            }
-        }
-    }
-
 
     suspend fun getTriggers(): EaterDataRepoResult<Trigger> {
         val result = withContext(Dispatchers.IO){
@@ -149,8 +103,6 @@ class EaterDataRepository(private val apiService: EaterDataRepositoryImpl) {
             }
         }
     }
-
-
 
     companion object{
         const val TAG = "wowEaterDataRepo"

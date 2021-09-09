@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.views
 
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
@@ -9,11 +8,7 @@ import android.view.LayoutInflater
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import com.airbnb.lottie.LottieDrawable
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.OrderProgressBarBinding
-import com.bupp.wood_spoon_eaters.databinding.WoodspoonProgressBarBinding
 import com.bupp.wood_spoon_eaters.model.OrderState
 
 

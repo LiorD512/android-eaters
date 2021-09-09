@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.delivery_date.DeliveryTimeManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -12,7 +11,6 @@ import java.util.*
 
 class CartManager(
     private val eaterDataManager: EaterDataManager,
-    private val deliveryTimeManager: DeliveryTimeManager,
     private val orderRepository: OrderRepository,
     private val eventsManager: EventsManager
 ) {
@@ -22,9 +20,8 @@ class CartManager(
     private var currentOrderDeliveryDates: List<DeliveryDates?>? = null
 
     var currentCookingSlotId: Long? = null
-    fun getDeliverAt() = deliveryTimeManager.getTempDeliveryTimeStamp()
-    fun getAddressId() = eaterDataManager.getCartAddressId()
-    fun getTipPercentage() = currentOrderResponse?.tipPercentage
+    private fun getAddressId() = eaterDataManager.getCartAddressId()
+    private fun getTipPercentage() = currentOrderResponse?.tipPercentage
 
     private var tempCookingSlotId = LiveEventData<Long>()
     fun getOnCookingSlotIdChange() = tempCookingSlotId
@@ -135,14 +132,14 @@ class CartManager(
     /**
      * this function simply crates new order and adds a new instance of a dish to the cart
      */
-    suspend fun addDishToNewCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
+    private suspend fun addDishToNewCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
         val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
         val result = orderRepository.addNewDish(orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
             result.data?.let {
                 updateCartManagerParams(it.copy())
             }
-            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+//            val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
 
         } else {
             //check for errors
@@ -164,7 +161,7 @@ class CartManager(
                 }
 
                 //todo - check analytics for updated order.....
-                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+//                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
 //                eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
                 //check for errors
@@ -191,7 +188,7 @@ class CartManager(
                 result.data?.let {
                     updateCartManagerParams(it.copy())
                 }
-                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
+//                val currentAddedDish = result.data!!.orderItems?.find { it.dish.id == dishId }
 //                eventsManager.logEvent(Constants.EVENT_UPDATE_DISH, getAddDishData(result.data.id, currentAddedDish))
             } else {
 //                check for errors
@@ -234,9 +231,9 @@ class CartManager(
      * it updates the order with a "destroyed" orderItems list.
      * @param dishId = could be dish id or orderItem id
      */
-    suspend fun removeOrderItems(dishId: Long, removeSingle: Boolean = false): OrderRepository.OrderRepoStatus? {
+    suspend fun removeOrderItems(dishId: Long, removeSingle: Boolean = false): OrderRepository.OrderRepoStatus {
         Log.d("orderFlow - cartManager", "removeOrderItems")
-        var orderRequest: OrderRequest? = null
+        var orderRequest: OrderRequest?
         if (removeSingle) {
             orderRequest = buildOrderRequest(getDestroyedOrderItemRequestByOrderIdItem(dishId))
         } else {
@@ -327,17 +324,6 @@ class CartManager(
 
     /** Checkout page related functions
      */
-    //todo - fix this
-    fun getAvailableMenuItems(): List<MenuItem>? {
-        currentOrderResponse?.let {
-            return it.cookingSlot?.sections?.get(0)?.menuItems
-        }
-        return null
-    }
-
-    fun getCurrentRestaurantId():Long {
-        return currentOrderResponse?.restaurant?.id ?: -1
-    }
 
     /**
      * this function returns current order other available cooking slots
@@ -473,13 +459,6 @@ class CartManager(
         floatingCartBtnEvent.postValue(FloatingCartEvent(order?.restaurant?.id ?: -1,order?.restaurant?.restaurantName ?: "", order?.getAllOrderItemsQuantity() ?: 0))
     }
 
-    fun refreshFloatingCartBtn() {
-        currentOrderResponse.let {
-            Log.d("orderFlow - cartManager", "refreshFloatingCartBtn quantity: ${it?.getAllOrderItemsQuantity() ?: 0}")
-            floatingCartBtnEvent.postValue(FloatingCartEvent(it?.restaurant?.id ?: -1,it?.restaurant?.restaurantName ?: "", it?.getAllOrderItemsQuantity() ?: 0))
-        }
-    }
-
     fun refreshOrderLiveData() {
         currentOrderResponse?.let {
             Log.d("orderFlow - cartManager", "refreshOrderLiveData")
@@ -533,13 +512,6 @@ class CartManager(
         wsErrorEvent.postRawValue(errorList)
     }
 
-    fun getOrderSubTotal(): String? {
-        currentOrderResponse?.let {
-            return it.subtotal?.formatedValue
-        }
-        return null
-    }
-
     /**
      * Ups Data Functions
      */
@@ -580,7 +552,7 @@ class CartManager(
 
     private fun getTipData(): Map<String, String> {
         val data = mutableMapOf<String, String>()
-        data["precentage"] = currentOrderResponse?.tipPercentage.toString() ?: "0"
+        data["precentage"] = currentOrderResponse?.tipPercentage.toString()
         data["value"] = currentOrderResponse?.tip?.formatedValue ?: "0"
         data["subtotal_price"] = currentOrderResponse?.subtotal?.formatedValue ?: "0"
         return data
@@ -676,39 +648,6 @@ class CartManager(
         return dishNames.toList()
     }
 
-//    fun getAddDishData(orderId: Long? = null, orderItem: OrderItem? = null): Map<String, String> {
-//        val currentDishName = getCurrentDishName(orderItem?.dish)
-//        val chefsName = getCurrentOrderChefName()
-//        val chefsId = getCurrentOrderChefId()
-//        val cuisine = getCurrentOrderChefCuisine()
-//        val dishId = getCurrentDishId(orderItem?.dish)
-//        val dishPrice = orderItem?.price?.value
-//        val data = mutableMapOf<String, String>("cook_name" to chefsName)
-//
-//        data["cook_id"] = chefsId
-//        data["dish_id"] = "$dishId"
-//        data["dish_price"] = dishPrice.toString()
-//        data["dish_name"] = currentDishName
-//        if (cuisine.isNotEmpty()) {
-//            data["cuisine"] = cuisine[0]
-//        }
-//        orderId?.let {
-//            data["order_id"] = orderId.toString()
-//        }
-//
-//        return data
-//    }
-
-    private fun getCurrentDishName(dish: Dish? = null): String {
-        dish?.name?.let {
-            return it
-        }
-        return ""
-    }
-
-    fun sendFBAdditionalDishEvent(orderItem: OrderItem?) {
-//        eventsManager.logEvent(Constants.EVENT_ADD_ADDITIONAL_DISH, getAddDishData(orderItem = orderItem))
-    }
 
     private fun getCurrentOrderChefId(): String {
         currentOrderResponse.let {
@@ -716,21 +655,7 @@ class CartManager(
         }
     }
 
-    private fun getCurrentDishPrice(dish: Dish? = null): Double? {
-        dish?.let {
-            return it.price?.value
-        }
-        return null
-    }
-
-    private fun getCurrentDishId(dish: Dish? = null): Long {
-        dish?.let {
-            return it.id
-        }
-        return 0
-    }
-
-    fun calcTotalDishesPrice(): Double {
+    private fun calcTotalDishesPrice(): Double {
         currentOrderResponse?.total?.value?.let {
             return it
         }

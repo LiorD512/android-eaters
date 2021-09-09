@@ -29,7 +29,7 @@
     <TextView
             android:id="@+id/selectableBtnName"
             tools:text="adjaslkdasj"
-            style="@style/SemiBold13Grey"
+            style="@style/LatoBlack13DarkGrey"
             android:textColor="@color/grey_to_blue_selector"
             android:layout_gravity="center"
             android:layout_width="wrap_content"

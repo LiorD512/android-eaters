@@ -225,7 +225,7 @@ class DishPageViewModel(
         if (quantity > 0) {
             val dishId = dishFullData.value?.id
             dishId?.let {
-                var isValid = false
+                var isValid: Boolean
                 val restaurant = dishFullData.value?.restaurant!!
                 var cookingSlotId: Long? = 0L
                 if (!dishMatchCookingSlot) {
@@ -317,14 +317,6 @@ class DishPageViewModel(
         val data = mutableMapOf<String, String>()
         data["dish_name"] = dishFullData.value?.name.toString()
         data["dish_id"] = dishFullData.value?.id.toString()
-        return data
-    }
-
-    private fun getDishNoteData(note: String): Map<String, String> {
-        val data = mutableMapOf<String, String>()
-        data["dish_name"] = dishFullData.value?.name.toString()
-        data["dish_id"] = dishFullData.value?.id.toString()
-        data["note"] = note
         return data
     }
 

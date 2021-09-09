@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.views
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
@@ -71,7 +70,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         animator?.let { animator ->
             animator.duration = 300
             animator.interpolator = AccelerateDecelerateInterpolator()
-            animator.addUpdateListener(AnimatorUpdateListener { valueAnimator -> updateHeight(valueAnimator.animatedValue as Int) })
+            animator.addUpdateListener{ valueAnimator -> updateHeight(valueAnimator.animatedValue as Int) }
             animator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
                     if (isCollapsed) {

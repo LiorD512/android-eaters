@@ -30,7 +30,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     init{
         with(binding){
             this@RatingStarsView.arrayOfStars =
-                arrayListOf<ImageView>(ratingStarNum1, ratingStarNum2, ratingStarNum3, ratingStarNum4, ratingStarNum5)
+                arrayListOf(ratingStarNum1, ratingStarNum2, ratingStarNum3, ratingStarNum4, ratingStarNum5)
 
             ratingStarNum1.setOnClickListener(this@RatingStarsView)
             ratingStarNum2.setOnClickListener(this@RatingStarsView)

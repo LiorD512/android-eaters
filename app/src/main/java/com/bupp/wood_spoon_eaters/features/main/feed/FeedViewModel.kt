@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class FeedViewModel(
     private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager,
-    private val campaignManager: CampaignManager, private val eventsManager: EventsManager
+    campaignManager: CampaignManager, private val eventsManager: EventsManager
 ): ViewModel() {
 
     val progressData = ProgressData()
@@ -33,21 +33,11 @@ class FeedViewModel(
         }
     }
 
-
     fun getLocationLiveData() = feedDataManager.getLocationLiveData()
     fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
-//    fun getDeliveryTimeLiveData() = feedDataManager.getDeliveryTimeLiveData()
 
     val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
     val campaignLiveData = campaignManager.getCampaignLiveData()
-
-//    val favoritesLiveData = feedDataManager.getFavoritesLiveData
-    fun refreshFavorites() {
-        viewModelScope.launch {
-            feedDataManager.refreshFavorites()
-        }
-    }
-
 
     fun refreshFeedByLocationIfNeeded() {
         feedDataManager.refreshFeedByLocationIfNeeded()
@@ -63,7 +53,6 @@ class FeedViewModel(
     fun onPullToRefresh() {
         val feedRequest = feedDataManager.getLastFeedRequest()
         getFeedWith(feedRequest)
-        refreshFavorites()
     }
 
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()

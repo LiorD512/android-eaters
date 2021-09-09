@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.CuisineChooserItemBinding
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
-import okhttp3.internal.notify
 
 class CuisineChooserAdapter(val context: Context) :
     ListAdapter<SelectableIcon, RecyclerView.ViewHolder>(DiffCallback()) {

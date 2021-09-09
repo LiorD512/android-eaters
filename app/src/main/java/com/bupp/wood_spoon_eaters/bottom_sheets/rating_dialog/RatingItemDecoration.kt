@@ -5,7 +5,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class RatingItemDecoration() : RecyclerView.ItemDecoration() {
+class RatingItemDecoration : RecyclerView.ItemDecoration() {
 
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

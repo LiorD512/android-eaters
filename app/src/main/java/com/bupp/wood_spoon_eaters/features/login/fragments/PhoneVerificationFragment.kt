@@ -2,23 +2,18 @@ package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser.CountryChooserBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
-import com.bupp.wood_spoon_eaters.databinding.CountryCodePickerItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentPhoneVerificationBinding
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
-import com.bupp.wood_spoon_eaters.utils.showKeyboard
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
@@ -39,7 +34,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
     }
 
     private fun initObservers() {
-        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, {
             when (it) {
                 ErrorEventType.PHONE_EMPTY -> {
                     binding.verificationFragmentInput.showError()
@@ -88,7 +83,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         val phoneStr = binding.verificationFragmentInput.getText()
         if(CountryCodeUtils.isPhoneValid(phoneStr)){
             phoneStr!!.let{
-                val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
+                val phone = CountryCodeUtils.simplifyNumber(it)
                 phone?.let{
                     viewModel.setUserPhone(it)
                     viewModel.sendPhoneNumber()

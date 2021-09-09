@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
@@ -18,7 +19,6 @@ class UserRepository(
     private val locationManager: LocationManager,
     private val paymentManager: PaymentManager,
     private val globalErrorManager: GlobalErrorManager,
-
 ) {
 
     private var currentUser: Eater? = null
@@ -30,7 +30,8 @@ class UserRepository(
         INVALID_PHONE,
         WRONG_PASSWORD,
         SOMETHING_WENT_WRONG,
-        SERVER_ERROR
+        SERVER_ERROR,
+        WS_ERROR
     }
 
     suspend fun initUserRepo() {
@@ -261,6 +262,13 @@ class UserRepository(
                     UserRepoResult(UserRepoStatus.SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
+                    result.errors?.let{
+                        if(it.isNotEmpty()){
+                            val error = it[0]
+                            globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, error)
+
+                        }
+                    }
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }

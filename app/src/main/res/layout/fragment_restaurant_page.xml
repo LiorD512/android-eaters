@@ -88,7 +88,7 @@
 
     <TextView
             android:id="@+id/topHeaderChefName"
-            style="@style/Reg13Black"
+            style="@style/LatoReg13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -155,7 +155,7 @@
 
             <TextView
                     android:id="@+id/rating"
-                    style="@style/Reg12White"
+                    style="@style/LatoReg13White"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="4dp"
@@ -164,7 +164,7 @@
 
             <TextView
                     android:id="@+id/ratingCount"
-                    style="@style/Reg12White"
+                    style="@style/LatoReg13White"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="4dp"
@@ -217,7 +217,7 @@
 
         </LinearLayout>
 
-        <com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
+        <com.bupp.wood_spoon_eaters.views.FavoriteBtn
                 android:id="@+id/restHeaderFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

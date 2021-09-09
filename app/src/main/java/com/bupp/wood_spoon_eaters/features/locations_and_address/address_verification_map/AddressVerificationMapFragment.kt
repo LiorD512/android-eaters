@@ -14,7 +14,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentAddressVerificationMapBinding
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressViewModel
-import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.Order
@@ -22,7 +21,6 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.MapHeaderView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
@@ -36,7 +34,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private val viewModel by viewModel<AddressMapVerificationViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
     private val checkoutViewModel by sharedViewModel<CheckoutViewModel>()
-    private val orderHistoryViewModel by sharedViewModel<OrdersHistoryViewModel>()
 
     private var googleMap: GoogleMap? = null
     private var currentBoundSize = 100
@@ -185,14 +182,14 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                 }
             }
         }
-        googleMap?.setOnCameraMoveListener(OnCameraMoveListener {
+        googleMap?.setOnCameraMoveListener{
             val centerLatLng: LatLng? = googleMap?.cameraPosition?.target
             Log.d(TAG, "onMove: $centerLatLng")
             centerLatLng?.let {
                 viewModel.checkCenterLatLngPosition(it)
                 mainViewModel.updateUnsavedAddressLatLng(it)
             }
-        })
+        }
         googleMap?.setOnCameraIdleListener {
             Log.d(TAG, "camera idle")
         }

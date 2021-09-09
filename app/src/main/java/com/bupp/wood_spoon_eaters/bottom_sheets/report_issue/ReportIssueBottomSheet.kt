@@ -21,7 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ReportIssueBottomSheet() : BottomSheetDialogFragment(), InputTitleView.InputTitleViewListener,
+class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.InputTitleViewListener,
     ReportIssueAdapter.ReportIssueAdapterListener, TitleBodyDialog.TitleBodyDialogListener {
 
     val binding: ReportIssueFragmentBinding by viewBinding()

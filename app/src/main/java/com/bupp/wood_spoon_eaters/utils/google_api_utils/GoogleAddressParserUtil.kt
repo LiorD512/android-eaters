@@ -23,7 +23,7 @@ object GoogleAddressParserUtil {
 
     fun parsePlaceToAddressRequest(place: Place): AddressRequest {
 
-        var addressRequest: AddressRequest = AddressRequest()
+        var addressRequest = AddressRequest()
         place.latLng?.let {
             addressRequest.lat = it.latitude
             addressRequest.lng = it.longitude
@@ -32,12 +32,12 @@ object GoogleAddressParserUtil {
         val addressComponents = place.addressComponents?.asList()
         addressComponents?.forEach {
             val data = it.types.intersect(allowed_types).toString().replace("[", "").replace("]", "")
-            var result = data.split(",").map { it.trim() }
-            result.forEach { data ->
-                Log.d(TAG, "parseLocationToAddress: $data")
-                if (data.isNotEmpty()) {
+            val result = data.split(",").map { it.trim() }
+            result.forEach { dataResult ->
+                Log.d(TAG, "parseLocationToAddress: $dataResult")
+                if (dataResult.isNotEmpty()) {
                     Log.d(TAG, "parseLocationToAddress: ${it.name}")
-                    when (data) {
+                    when (dataResult) {
                         "route" -> {
                             addressRequest.streetLine1 = it.name
                         }
@@ -159,20 +159,8 @@ object GoogleAddressParserUtil {
              */
             private val STATES_BY_ABBR: MutableMap<String, State> = HashMap()
 
-            /**
-             * Gets the enum constant with the specified abbreviation.
-             *
-             * @param abbr the state's abbreviation.
-             * @return the enum constant with the specified abbreviation.
-             * @throws SunlightException if the abbreviation is invalid.
-             */
-            fun valueOfIso(abbr: String): State {
-                val state = STATES_BY_ABBR[abbr]
-                return state ?: UNKNOWN
-            }
-
             fun valueOfState(name: String): State? {
-                val enumName = name.toUpperCase().replace(" ".toRegex(), "_")
+                val enumName = name.uppercase().replace(" ".toRegex(), "_")
                 return try {
                     valueOf(enumName)
                 } catch (e: IllegalArgumentException) {

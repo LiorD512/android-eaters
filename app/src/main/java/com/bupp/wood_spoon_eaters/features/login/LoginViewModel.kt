@@ -8,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.CountriesISO
+import com.bupp.wood_spoon_eaters.model.EaterRequest
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
 
 
@@ -30,7 +31,6 @@ class LoginViewModel(
     var phone: String? = null
     var phonePrefix: String? = null
     var code: String? = null
-//    var privacyPolicyCb: Boolean = false
 
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
     val countryCodeEvent: MutableLiveData<CountriesISO> = MutableLiveData()
@@ -39,10 +39,8 @@ class LoginViewModel(
     val progressData = ProgressData()
 
     val phoneFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
-    val phoneCbFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     enum class NavigationEventType {
-//        OPEN_MAIN_LOGIN_SCREEN,
         OPEN_PHONE_SCREEN,
         OPEN_CODE_SCREEN,
         OPEN_MAIN_ACT,
@@ -74,17 +72,12 @@ class LoginViewModel(
         return " "
     }
 
-
-//    fun directToMainFrag() {
-//        navigationEvent.postValue(NavigationEventType.OPEN_MAIN_LOGIN_SCREEN)
-//    }
     fun directToPhoneFrag() {
         eventsManager.logEvent(Constants.EVENT_CLICK_GET_STARTED)
         navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 
     private fun directToCodeFrag() {
-//        actionEvent.postValue(START_RESEND_TIMER)
         userData.postValue(getCensoredPhone())
         navigationEvent.postValue(NavigationEventType.OPEN_CODE_SCREEN)
     }
@@ -98,8 +91,6 @@ class LoginViewModel(
         }
         return isValid
     }
-
-
 
     fun sendPhoneNumber() {
         if (validatePhoneData()) {
@@ -265,7 +256,7 @@ class LoginViewModel(
     }
 
     private fun getCreateAccountEventData(isSuccess: Boolean, userId: Long? = null): Map<String, String> {
-        val data = mutableMapOf<String, String>("success" to if(isSuccess) "true" else "false")
+        val data = mutableMapOf("success" to if(isSuccess) "true" else "false")
         data["user_id"] = userId.toString()
         return data
     }

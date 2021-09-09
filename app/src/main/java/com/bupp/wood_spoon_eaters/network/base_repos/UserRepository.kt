@@ -4,6 +4,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
+import retrofit2.Response
 
 
 interface UserRepositoryInterface {
@@ -14,7 +15,7 @@ interface UserRepositoryInterface {
     suspend fun getMe(): ResultHandler<ServerResponse<Eater>>
     suspend fun postMe(eater: EaterRequest): ResultHandler<ServerResponse<Eater>>
     suspend fun updateNotificationGroup(notifications: List<Long>?): ResultHandler<ServerResponse<Eater>>
-    suspend fun deleteMe(): ResultHandler<ServerResponse<Any>>
+    suspend fun deleteMe(): ResultHandler<Response<Unit>>
 
     suspend fun postNewAddress(addressRequest: AddressRequest): ResultHandler<ServerResponse<Address>>
     suspend fun deleteAddress(addressId: Long): ResultHandler<ServerResponse<Any>>
@@ -43,7 +44,7 @@ class UserRepositoryImpl(private val service: ApiService) : UserRepositoryInterf
         return safeApiCall { service.postEaterNotificationGroup(SettingsRequest(notifications)) }
     }
 
-    override suspend fun deleteMe(): ResultHandler<ServerResponse<Any>> {
+    override suspend fun deleteMe(): ResultHandler<Response<Unit>> {
         return safeApiCall { service.deleteMe() }
     }
 

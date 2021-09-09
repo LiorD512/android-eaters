@@ -11,12 +11,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bupp.wood_spoon_eaters.BuildConfig
-import com.bupp.wood_spoon_eaters.FlavorConfig
-import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserDialog
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
-import java.io.*
-import java.util.*
 import kotlin.math.sqrt
 
 
@@ -60,7 +57,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
     }
 
     override fun onResume() {
-        if (FlavorConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.d(TAG, "registered super user listener")
             sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
                     Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
@@ -70,7 +67,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
     }
 
     override fun onPause() {
-        if (FlavorConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.d(TAG, "unregister super user listener")
             sensorManager!!.unregisterListener(sensorListener)
         }
@@ -89,9 +86,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
         val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        if (this is Activity) {
-            (this as Activity).finish()
-        }
+        (this as Activity).finish()
         Runtime.getRuntime().exit(0)
     }
 

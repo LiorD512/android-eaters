@@ -23,7 +23,6 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
@@ -59,7 +58,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         binding.locationActHeader.setHeaderViewListener(this)
 
         var navController : NavController = Navigation.findNavController(this, R.id.locationActContainer)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d(TAG, "onDestinationChanged: "+destination.label)
             when(destination.label){
                 Constants.LOCATION_DESTINATION_SELECT_ADDRESS -> {
@@ -129,6 +128,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 ErrorEventType.SOMETHING_WENT_WRONG -> {
                     WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
+                else -> {}
             }
         })
     }
@@ -194,7 +194,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
             AutocompleteActivity.RESULT_ERROR -> {
                 data?.let {
                     val status = Autocomplete.getStatusFromIntent(data)
-                    Log.i(TAG, status.statusMessage)
+                    Log.i(TAG, status.statusMessage ?: "")
                 }
             }
             Activity.RESULT_CANCELED -> {

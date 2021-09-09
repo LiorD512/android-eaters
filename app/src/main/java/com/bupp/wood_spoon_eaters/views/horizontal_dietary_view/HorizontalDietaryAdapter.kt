@@ -68,15 +68,7 @@ class HorizontalDietaryAdapter(val listener: HorizontalDietaryListener) :
     fun setSelected(diets: List<SelectableIcon>) {
         selectedDiets.clear()
         selectedDiets.addAll(diets)
-        notifyDataSetChanged()
-    }
-
-    fun getSelectedDiets(): List<SelectableIcon> {
-        return this.selectedDiets
-    }
-
-    fun setSelectable(isSelectable: Boolean) {
-        this.isSelectEnabled = isSelectable
+        notifyItemRangeChanged(0, diets.size)
     }
 
     class ViewHolder(view: HorizontalDietaryViewItemBinding) : RecyclerView.ViewHolder(view.root) {

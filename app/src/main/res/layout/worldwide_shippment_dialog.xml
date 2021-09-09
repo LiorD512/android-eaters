@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/worldwideDialogBkg"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:id="@+id/worldwideDialogBkg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/back"
@@ -40,7 +38,7 @@
 
             <TextView
                     android:id="@+id/worldwideDialogMsg"
-                    style="@style/SemiBold13Dark"
+                    style="@style/LatoBlack13Dark"
                     android:gravity="center"
                     android:layout_marginTop="15.4dp"
                     android:layout_marginRight="25.4dp"
@@ -59,7 +57,7 @@
             <TextView
                     android:layout_marginStart="18dp"
                     android:layout_marginEnd="18dp"
-                    style="@style/Reg13Dark_50"
+                    style="@style/LatoReg13Dark50"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"

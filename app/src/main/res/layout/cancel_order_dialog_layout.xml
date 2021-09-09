@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:background="@color/dark_43"
-             android:id="@+id/cancelOrderDialogLayout"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+        android:background="@color/dark_43"
+        android:id="@+id/cancelOrderDialogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
             android:background="@drawable/rounded_white_bkg"
@@ -37,7 +36,7 @@
             <TextView
                     android:id="@+id/cancelOrderDialogTitle"
                     android:layout_marginTop="7.2dp"
-                    style="@style/SemiBold15Dark"
+                    style="@style/LatoBlack15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -49,7 +48,7 @@
 
         <TextView
                 android:id="@+id/cancelOrderDialogBody"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_marginStart="15.8dp"
@@ -84,7 +83,7 @@
 
         <TextView
                 android:id="@+id/cancelOrderDialogCancelBtn"
-                style="@style/SemiBold15Red"
+                style="@style/LatoBlack15Red"
                 android:gravity="center"
                 android:paddingTop="15.5dp"
                 android:paddingBottom="15.5dp"
@@ -100,7 +99,7 @@
 
         <TextView
                 android:id="@+id/cancelOrderDialogKeepBtn"
-                style="@style/SemiBold15Blue"
+                style="@style/LatoBlack15Teal"
                 android:gravity="center"
                 android:paddingTop="15.5dp"
                 android:paddingBottom="15.5dp"

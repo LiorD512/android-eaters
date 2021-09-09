@@ -89,7 +89,7 @@
 
     <TextView
             android:id="@+id/wsEditTextErrorText"
-            style="@style/Reg11Coral"
+            style="@style/LatoReg11Coral"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"

@@ -1,29 +1,22 @@
 package com.bupp.wood_spoon_eaters
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
-import com.appsflyer.AppsFlyerConversionListener
-import com.appsflyer.AppsFlyerLib
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
-import com.facebook.appevents.AppEventsLogger
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
 import com.segment.analytics.Analytics
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
+import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration
 import com.uxcam.UXCam
 import io.branch.referral.Branch
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration;
-
-
 
 
 class WoodSpoonApplication : Application() {

@@ -1,7 +1,6 @@
-package com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters;
+package com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.DishItemAvailabilityBinding
 import com.bupp.wood_spoon_eaters.model.AvailabilityDate
 
-class DishAvailabilityAdapter() :
+class DishAvailabilityAdapter :
     ListAdapter<AvailabilityDate, RecyclerView.ViewHolder>(DiffCallback()) {
 
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/NotificationGroupMainLayout"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="@color/white"
-             android:orientation="vertical">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/NotificationGroupMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
 
     <LinearLayout
             android:orientation="horizontal"
@@ -22,7 +21,7 @@
 
             <TextView
                     android:id="@+id/NotificationGroupName"
-                    style="@style/SemiBold13Dark"
+                    style="@style/LatoBlack13Dark"
                     android:layout_marginBottom="4.1dp"
                     android:text="Order status"
                     android:layout_width="wrap_content"
@@ -30,7 +29,7 @@
 
             <TextView
                     android:id="@+id/NotificationGroupDescription"
-                    style="@style/Reg13Dark_50"
+                    style="@style/LatoReg13Dark50"
                     android:paddingEnd="22dp"
                     android:text="Receive order status alerts"
                     android:layout_width="wrap_content"

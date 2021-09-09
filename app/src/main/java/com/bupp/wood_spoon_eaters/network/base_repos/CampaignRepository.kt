@@ -23,7 +23,7 @@ class CampaignRepositoryImpl(private val service: ApiService) : CampaignReposito
     }
 
     override suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.updateCampaignStatus(userInteractionId, status.name.toLowerCase()) }
+        return safeApiCall { service.updateCampaignStatus(userInteractionId, status.name.lowercase()) }
     }
 
 

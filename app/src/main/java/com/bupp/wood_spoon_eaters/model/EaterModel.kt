@@ -3,11 +3,8 @@ package com.bupp.wood_spoon_eaters.model
 import android.net.Uri
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.android.parcel.Parcelize
-import retrofit2.http.Field
 import java.util.*
 
 @kotlinx.parcelize.Parcelize
@@ -32,9 +29,9 @@ data class Eater(
     fun getFullName(): String{
         var first = "Anonymous"
         var last = ""
-        if(firstName != null && firstName?.isNotEmpty())
+        if(firstName != null && firstName.isNotEmpty())
             first = firstName
-        if(lastName != null && lastName?.isNotEmpty())
+        if(lastName != null && lastName.isNotEmpty())
             last = lastName
        return "$first $last"
     }

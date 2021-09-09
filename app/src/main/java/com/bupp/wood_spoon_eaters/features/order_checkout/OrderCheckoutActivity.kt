@@ -8,7 +8,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityOrderCheckoutActivityBinding
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity

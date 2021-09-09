@@ -1,9 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/groupDialogBkg"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/groupDialogBkg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <FrameLayout
             android:layout_width="match_parent"
@@ -19,7 +18,7 @@
             <TextView
                     android:id="@+id/updateDialogTitle"
                     android:layout_marginTop="38dp"
-                    style="@style/Bold15Dark"
+                    style="@style/LatoBold15Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -29,7 +28,7 @@
             <TextView
                     android:id="@+id/updateDialogBody"
                     android:gravity="center"
-                    style="@style/SemiBold13Grey"
+                    style="@style/LatoBlack13DarkGrey"
                     android:layout_marginStart="30.5dp"
                     android:layout_marginEnd="30.5dp"
                     android:layout_width="wrap_content"
@@ -46,7 +45,7 @@ before continuing."/>
                     android:layout_width="match_parent" android:layout_height="1dp"/>
 
             <TextView
-                    style="@style/SemiBold15Blue"
+                    style="@style/LatoBlack15Teal"
                     android:gravity="center"
                     android:text="Go to GooglePlay"
                     android:id="@+id/updateDialogBtn"

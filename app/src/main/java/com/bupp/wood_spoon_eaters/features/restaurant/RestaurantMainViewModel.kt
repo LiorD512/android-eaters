@@ -6,7 +6,7 @@ import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
@@ -40,6 +40,7 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
             NavigationType.START_ORDER_CHECKOUT_ACTIVITY -> {
                 navigationEvent.postRawValue(NavigationEvent(navigationType, null))
             }
+            else -> {}
         }
     }
 

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page;
+package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
@@ -19,27 +19,22 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.bupp.wood_spoon_eaters.custom_views.fav_btn.FavoriteBtn
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.UpSaleNCartBottomSheet
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
-import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
-import com.bupp.wood_spoon_eaters.model.SortedCookingSlots
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.model.CookingSlot
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.Restaurant
-import com.bupp.wood_spoon_eaters.model.Review
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+import com.bupp.wood_spoon_eaters.views.FavoriteBtn
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,7 +83,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                     viewModel.logEvent(Constants.EVENT_SHARE_RESTAURANT)
                 }
             }
-            ratingLayout.setOnClickListener{
+            ratingLayout.setOnClickListener {
                 viewModel.getRestaurantReview()
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
@@ -156,7 +151,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             handleDishesList(it)
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, {
-            viewModel.handleCartData(it)
+            viewModel.handleCartData()
         })
         viewModel.clearCartEvent.observe(viewLifecycleOwner, {
             handleClearCartEvent(it)
@@ -211,7 +206,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
             restFragVideoBtn.setOnClickListener {
                 restaurant.video?.let { video ->
-                    VideoViewDialog(restaurant.getFullName(), video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
+                    VideoViewDialog(video).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
                     mainViewModel.logClickVideo(restaurant.getFullName(), restaurant.id)
                 }
             }
@@ -242,12 +237,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         uiChange?.let {
             with(binding.restaurantMainListLayout) {
                 //delivery dates tabLayout
-                if (uiChange.forceTabChange) {
+                var selectedDate: SortedCookingSlots?
+                selectedDate = if (uiChange.forceTabChange) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
+                } else {
+                    //timer picker ui
+                    restaurantDeliveryDates.getCurrentSelection()
                 }
-
                 //timer picker ui
-                restaurantDeliveryDates.getCurrentSelection()?.let { date ->
+                selectedDate?.let { date ->
                     if (date.cookingSlots.size > 1) {
                         restaurantTimePickerViewIcon.visibility = View.VISIBLE
                     } else {
@@ -311,7 +309,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
 
     private fun handleReviewData(it: LiveEvent<Review?>?) {
-        it?.getContentIfNotHandled()?.let{ reviews->
+        it?.getContentIfNotHandled()?.let { reviews ->
             RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
@@ -326,9 +324,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFavoriteEvent(event: LiveEvent<Boolean>?) {
         event?.getContentIfNotHandled()?.let { isSuccess ->
-            if (isSuccess){
+            if (isSuccess) {
                 mainViewModel.forceFeedRefresh()
-            }else{
+            } else {
                 binding.restHeaderFavorite.onFail()
             }
         }
@@ -417,7 +415,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
 
     companion object {
-        private const val MOTION_TRANSITION_COMPLETED = 1F
         private const val MOTION_TRANSITION_INITIAL = 0F
         private const val TAG = "RestaurantPageFragment"
     }

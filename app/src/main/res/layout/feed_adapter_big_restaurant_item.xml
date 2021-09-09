@@ -121,34 +121,6 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
 
-                <!--                                <com.bupp.wood_spoon_eaters.views.feature_pb.WSFeatureProgressBar-->
-                <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                        android:id="@+id/feedRestaurantItemIndicator"-->
-                <!--                        android:layout_width="0dp"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:layout_marginHorizontal="12.4dp"-->
-                <!--                        android:paddingTop="9dp"-->
-                <!--                        android:paddingBottom="12dp"-->
-                <!--                        app:stepsCount="0" />-->
-
-                <!--                <me.relex.circleindicator.CircleIndicator3-->
-                <!--                        tools:background="@color/dark"-->
-                <!--                        android:id="@+id/feedRestaurantItemIndicator"-->
-                <!--                        android:layout_width="wrap_content"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:layout_marginStart="12.4dp"-->
-                <!--                        android:paddingTop="9dp"-->
-                <!--                        android:paddingBottom="12dp"-->
-                <!--                        app:ci_animator="@anim/circle_indicator_anim"-->
-                <!--                        app:ci_drawable="@drawable/vp_white_indicator_selected"-->
-                <!--                        app:ci_drawable_unselected="@drawable/vp_white_indicator_unselected"-->
-                <!--                        app:ci_gravity="start"-->
-                <!--                        app:ci_height="6dp"-->
-                <!--                        app:ci_width="6dp"-->
-                <!--                        app:ci_margin="3dp" />-->
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

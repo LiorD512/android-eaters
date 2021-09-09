@@ -13,7 +13,6 @@ import com.bupp.wood_spoon_eaters.di.abs.*
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
 //import com.bupp.wood_spoon_eaters.di.abs.FeedRestaurantItemAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_FACTORY
-import com.bupp.wood_spoon_eaters.managers.PutActionManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
@@ -35,7 +34,6 @@ import java.util.*
 
 val networkModule = module {
 
-    single { PutActionManager(get()) }
     single { FlavorConfigManager(get()) }
     single { provideEncryptedSharedPreferences(get(), androidApplication()) }
     factory { ApiSettings(get()) }

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.restaurant;
+package com.bupp.wood_spoon_eaters.features.restaurant
 
 import android.app.Activity
 import android.content.Intent
@@ -15,8 +15,8 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
-import com.bupp.wood_spoon_eaters.features.new_order.sub_screen.upsale_cart_bottom_sheet.CustomCartItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import org.koin.androidx.viewmodel.ext.android.viewModel

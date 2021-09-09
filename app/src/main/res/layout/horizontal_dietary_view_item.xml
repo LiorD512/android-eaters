@@ -17,7 +17,7 @@
             android:scaleType="fitXY" />
 
 
-    <com.bupp.wood_spoon_eaters.custom_views.AutofitTextView
+    <me.grantland.widget.AutofitTextView
             android:id="@+id/horizontalDietaryName"
             style="@style/LatoBold9Grey"
             android:layout_width="match_parent"

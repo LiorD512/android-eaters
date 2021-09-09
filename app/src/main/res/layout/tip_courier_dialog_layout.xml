@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
-                style="@style/SemiBold15Dark"
+                style="@style/LatoBlack15Dark"
                 android:layout_marginTop="-30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
 
 
         <TextView
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_marginTop="15.7dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:layout_marginStart="50.9dp"
                 android:layout_marginEnd="50.9dp"
                 android:layout_marginTop="23.5dp"
-                style="@style/Reg15Dark"
+                style="@style/LatoReg15Dark"
                 android:hint="Tip amount"
                 android:textAlignment="center"
                 android:layout_centerHorizontal="true"
@@ -71,7 +71,7 @@
 
         <TextView
                 android:id="@+id/tipCourierDialogDoneBtn"
-                style="@style/SemiBold15Dark"
+                style="@style/LatoBlack15Dark"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="19.3dp"

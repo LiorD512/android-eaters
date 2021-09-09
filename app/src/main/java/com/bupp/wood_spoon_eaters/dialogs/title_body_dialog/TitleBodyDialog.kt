@@ -11,11 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
-import com.bupp.wood_spoon_eaters.databinding.LogoutDialogBinding
 import com.bupp.wood_spoon_eaters.databinding.TitleBodyDialogBinding
 
-class TitleBodyDialog() : DialogFragment(){
+class TitleBodyDialog : DialogFragment(){
 
     private lateinit var listener: TitleBodyDialogListener
     val binding: TitleBodyDialogBinding by viewBinding()
@@ -39,7 +37,7 @@ class TitleBodyDialog() : DialogFragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle)
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

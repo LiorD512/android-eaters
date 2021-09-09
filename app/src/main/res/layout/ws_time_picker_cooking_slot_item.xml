@@ -10,7 +10,7 @@
             android:paddingBottom="15.4dp"
             android:paddingStart="15.4dp"
             tools:text="Breakfest"
-            style="@style/Reg15Dark"
+            style="@style/LatoReg15Dark"
             android:id="@+id/wsTimePickerItemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -21,7 +21,7 @@
             android:paddingBottom="15.4dp"
             android:paddingHorizontal="15.4dp"
             tools:text="06:00 am - 11:59 am"
-            style="@style/Reg15Dark"
+            style="@style/LatoReg15Dark"
             android:layout_weight="1"
             android:id="@+id/wsTimePickerItemDates"
             android:layout_width="0dp"

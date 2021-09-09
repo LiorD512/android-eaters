@@ -1,18 +1,14 @@
 package com.bupp.wood_spoon_eaters.dialogs.rate_last_order
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.ReviewRequest
+import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RateLastOrderViewModel(private val orderRepository: OrderRepository) : ViewModel() {
 

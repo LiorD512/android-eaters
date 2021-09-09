@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment">
+        tools:context="com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet">
 
 
     <LinearLayout

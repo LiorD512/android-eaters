@@ -86,7 +86,7 @@
 
                     <TextView
                             android:id="@+id/codeFragInput1"
-                            style="@style/Reg15Dark"
+                            style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -109,7 +109,7 @@
 
                     <TextView
                             android:id="@+id/codeFragInput2"
-                            style="@style/Reg15Dark"
+                            style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -132,7 +132,7 @@
 
                     <TextView
                             android:id="@+id/codeFragInput3"
-                            style="@style/Reg15Dark"
+                            style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -154,7 +154,7 @@
 
                     <TextView
                             android:id="@+id/codeFragInput4"
-                            style="@style/Reg15Dark"
+                            style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -175,7 +175,7 @@
 
         <TextView
                 android:id="@+id/codeFragInputError"
-                style="@style/Reg11Red"
+                style="@style/LatoReg11Red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -198,7 +198,7 @@
                 android:orientation="horizontal">
 
             <TextView
-                    style="@style/Reg13Dark"
+                    style="@style/LatoReg13Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/code_fragment_help" />

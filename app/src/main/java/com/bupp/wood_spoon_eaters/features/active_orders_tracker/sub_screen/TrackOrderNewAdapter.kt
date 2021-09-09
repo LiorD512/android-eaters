@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderData
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.*
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.binders.TrackOrderItemDetailsAdapter
@@ -41,8 +42,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     interface TrackOrderNewAdapterListener {
-        fun onHeaderClick(isExpanded: Boolean) {} //HEADER SECTION
-
         fun onContactUsClick(order: Order) {} //PROGRESS SECTION
         fun onShareImageClick(order: Order) {} //PROGRESS SECTION
         fun onOrderCanceled(orderState: Int, orderId: Long) {} //PROGRESS SECTION
@@ -64,20 +63,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
 
-    private var isExpended = true
-//    inner class TrackOrderHeaderViewHolder(val binding: TrackOrderDetailsHeaderSectionBinding) : ItemViewHolder<OrderTrackHeader>(binding.root) {
-//        fun bindItems(item: OrderTrackHeader) {
-//
-//        }
-//    }
-
     inner class TrackOrderDetailsViewHolder(val binding: TrackOrderDetailsSectionBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        private var sectionHeight = 0
-
-        init {
-//            sectionHeight = binding.trackOrderDetailsHeaderLayout.
-        }
 
         fun bindItems(item: OrderTrackDetails) {
 
@@ -197,7 +183,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     private fun setFontTypeDefault(binding: TrackOrderProgressSectionBinding, context: Context) {
-        val regTypeface = Typeface.createFromAsset(context.assets, "font/open_sans_reg.ttf")
+        val regTypeface = Typeface.createFromAsset(context.assets, "font/lato_reg.ttf")
         binding.trackOrderProgressCb1.typeface = regTypeface
         binding.trackOrderProgressCb2.typeface = regTypeface
         binding.trackOrderProgressCb3.typeface = regTypeface

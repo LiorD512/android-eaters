@@ -20,10 +20,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         fun onSelectableBtnClicked(btn: SelectableBtn)
     }
 
-    fun setSelectableBtnListener(listener: SelectableBtnListener) {
-        this.listener = listener
-    }
-
     var listener: SelectableBtnListener? = null
 
     var isBtnSelected = false
@@ -53,13 +49,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         listener?.onSelectableBtnClicked(this)
     }
 
-    public fun setBtnEnabled(isEnabled: Boolean) {
+    fun setBtnEnabled(isEnabled: Boolean) {
         with(binding){
             if (isEnabled) {
                 selectableBtnItem.setColorFilter(
                     ContextCompat.getColor(context, R.color.teal_blue),
                     android.graphics.PorterDuff.Mode.MULTIPLY
-                );
+                )
                 selectableBtnName.isSelected = true
             } else {
                 selectableBtnItem.setColorFilter(0)
@@ -68,10 +64,4 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun initBtn(icon: String, title: String) {
-        with(binding){
-            Glide.with(context).load(icon).into(selectableBtnItem)
-            selectableBtnName.text = title
-        }
-    }
 }
