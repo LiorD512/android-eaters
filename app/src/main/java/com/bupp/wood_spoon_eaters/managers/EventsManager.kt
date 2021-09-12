@@ -165,10 +165,10 @@ class EventsManager(val context: Context){
             eventData.putValue(it.key, it.value)
         }
         when(eventName){
-            Constants.EVENT_ADD_ADDITIONAL_DISH -> {
-                Analytics.with(context).track(Constants.EVENT_ADD_ADDITIONAL_DISH, eventData)
-                logFBAddAdditionalToCart(params)
-            }
+//            Constants.EVENT_ADD_ADDITIONAL_DISH -> {
+//                Analytics.with(context).track(Constants.EVENT_ADD_ADDITIONAL_DISH, eventData)
+//                logFBAddAdditionalToCart(params)
+//            }
             Constants.EVENT_ADD_DISH -> {
                 Analytics.with(context).track(Constants.EVENT_ADD_DISH, eventData)
                 logFBAddToCart(params)

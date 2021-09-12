@@ -237,8 +237,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         uiChange?.let {
             with(binding.restaurantMainListLayout) {
                 //delivery dates tabLayout
-                var selectedDate: SortedCookingSlots?
-                selectedDate = if (uiChange.forceTabChange) {
+                val selectedDate: SortedCookingSlots? = if (uiChange.forceTabChange) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
                 } else {
                     //timer picker ui
