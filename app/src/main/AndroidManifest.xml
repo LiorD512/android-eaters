@@ -31,6 +31,7 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning"
+            android:exported="false"
             tools:replace="supportsRtl, fullBackupContent, allowBackup">
 
         <activity

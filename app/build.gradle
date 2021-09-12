@@ -20,7 +20,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         applicationId "com.bupp.wood_spoon_eaters"
         versionCode 90
