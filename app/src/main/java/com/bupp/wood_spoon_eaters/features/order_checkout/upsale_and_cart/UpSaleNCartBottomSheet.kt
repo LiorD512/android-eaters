@@ -20,6 +20,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
@@ -37,12 +38,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
 
-class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : BottomSheetDialogFragment() {
+    lateinit var listener: UpsaleNCartBSListener
 
-    interface UpsaleNCartBSListener{
-        fun refreshParentOnCartCleared(){}
-        fun onCartDishCLick(customCartItem: CustomCartItem)
+    interface UpsaleNCartBSListener {
+        fun refreshParentOnCartCleared() {}
+        fun onCartDishCLick(customOrderItem: CustomOrderItem)
         fun onGoToCheckoutClicked()
     }
 
@@ -87,7 +89,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     /**
      * this function calculates the height of the screen without the status bar height
      */
-    private fun getScreenHeight(): Int{
+    private fun getScreenHeight(): Int {
         val display: Display = requireActivity().windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
@@ -103,12 +105,12 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
 //        Log.d(TAG, "realSize: ${realSize.y}")
 //        Log.d(TAG, "size: ${size.y}")
 //        Log.d(TAG, "maxHeight: $maxHeight")
-        if (size.y + getBottomBarHeight() == realSize.y){// || realSize.y == size.y) {
+        if (size.y + getBottomBarHeight() == realSize.y) {// || realSize.y == size.y) {
             // if we reached here it means that screenSize includes status bar inside - there fore subtract status bar height
 //        if (realSize.y - getBottomBarHeight() == size.y || realSize.y == size.y) {
             Log.d(TAG, "getSize() includes the status bar size");
             maxHeight = size.y - getStatusBarSize()
-        }else{
+        } else {
             maxHeight = size.y
         }
         return maxHeight
@@ -123,7 +125,7 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         dialog.setOnShowListener {
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            sheet?.let{ sheet ->
+            sheet?.let { sheet ->
                 currentSheetView = sheet
             }
             behavior = BottomSheetBehavior.from(sheet!!)
@@ -163,29 +165,29 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         }
     }
 
-    fun getScreenSizeIncludingTopBottomBar(context: Context): IntArray {
-        val screenDimensions = IntArray(2) // width[0], height[1]
-        val x: Int
-        val y: Int
-        val orientation = context.resources.configuration.orientation
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = wm.defaultDisplay
-        val screenSize = Point()
-        display.getRealSize(screenSize)
-        x = screenSize.x
-        y = screenSize.y
-        screenDimensions[0] = if (orientation == Configuration.ORIENTATION_PORTRAIT) x else y // width
-        screenDimensions[1] = if (orientation == Configuration.ORIENTATION_PORTRAIT) y else x // height
-        return screenDimensions
-    }
+//    fun getScreenSizeIncludingTopBottomBar(context: Context): IntArray {
+//        val screenDimensions = IntArray(2) // width[0], height[1]
+//        val x: Int
+//        val y: Int
+//        val orientation = context.resources.configuration.orientation
+//        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//        val display = wm.defaultDisplay
+//        val screenSize = Point()
+//        display.getRealSize(screenSize)
+//        x = screenSize.x
+//        y = screenSize.y
+//        screenDimensions[0] = if (orientation == Configuration.ORIENTATION_PORTRAIT) x else y // width
+//        screenDimensions[1] = if (orientation == Configuration.ORIENTATION_PORTRAIT) y else x // height
+//        return screenDimensions
+//    }
 
-    fun getBottomBarHeight(): Int{
+    fun getBottomBarHeight(): Int {
         val resources: Resources = requireContext().resources
-            val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-            val navigationBarHeight = if (resourceId > 0) {
-                resources.getDimensionPixelSize(resourceId)
-            } else
-                0
+        val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        val navigationBarHeight = if (resourceId > 0) {
+            resources.getDimensionPixelSize(resourceId)
+        } else
+            0
         return navigationBarHeight
     }
 
@@ -250,24 +252,24 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         })
     }
 
-    private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomCartItem>?) {
-        cartDishData?.getContentIfNotHandled()?.let{
-                listener?.onCartDishCLick(it)
-            }
+    private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomOrderItem>?) {
+        cartDishData?.getContentIfNotHandled()?.let {
+            listener?.onCartDishCLick(it)
         }
+    }
 
     private fun handleCartData(data: UpSaleNCartViewModel.CartData?) {
         Log.d(TAG, "handleCartData data: $data")
-        if(data != null){
+        if (data != null) {
 
-            data.restaurantName?.let{
+            data.restaurantName?.let {
                 binding.upsaleCartTitle.text = it
             }
 
             cartAdapter = UpSaleNCartAdapter(getAdapterListener())
             binding.cartFragList.initSwipeableRecycler(cartAdapter)
             cartAdapter.submitList(data.items)
-        }else{
+        } else {
 //            listener?.refreshParentOnCartCleared()
             dismiss()
         }
@@ -276,36 +278,40 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
     private fun getAdapterListener(): UpSaleNCartAdapter.UpSaleNCartAdapterListener =
         object : UpSaleNCartAdapter.UpSaleNCartAdapterListener {
             override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
-                when(item){
+                when (item) {
                     is CartAdapterItem -> {
-                        val dishId = item.customCartItem.orderItem.dish.id
-                        val note = item.customCartItem.orderItem.notes
-                        val orderId = item.customCartItem.orderItem.id
-                        val currentQuantity = item.customCartItem.orderItem.quantity
-                        viewModel.updateDishInCart(currentQuantity+1, dishId, note, orderId)
-                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, item.customCartItem)
+                        val dishId = item.customOrderItem.orderItem.dish.id
+                        val note = item.customOrderItem.orderItem.notes
+                        val orderId = item.customOrderItem.orderItem.id
+                        val currentQuantity = item.customOrderItem.orderItem.quantity
+                        viewModel.updateDishInCart(currentQuantity + 1, dishId, note, orderId)
+                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, item.customOrderItem)
                     }
-                    is UpsaleAdapterItem -> {}
-                    else -> {}
+                    is UpsaleAdapterItem -> {
+                    }
+                    else -> {
+                    }
                 }
             }
 
             override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
-                when(item){
+                when (item) {
                     is CartAdapterItem -> {
-                        val orderItemId = item.customCartItem.orderItem.id
+                        val orderItemId = item.customOrderItem.orderItem.id
                         viewModel.removeSingleOrderItemId(orderItemId)
-                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customCartItem)
+                        viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customOrderItem)
                     }
-                    is UpsaleAdapterItem -> {}
-                    else -> {}
+                    is UpsaleAdapterItem -> {
+                    }
+                    else -> {
+                    }
                 }
             }
 
-            override fun onCartItemClicked(customCartItem: CustomCartItem) {
-                Log.d(TAG, "onCartItemClicked: $customCartItem")
-                viewModel.onCartItemClicked(customCartItem)
-                viewModel.logSwipeDishInCart(Constants.EVENT_CLICK_DISH_IN_CART, customCartItem)
+            override fun onCartItemClicked(customOrderItem: CustomOrderItem) {
+                Log.d(TAG, "onCartItemClicked: $customOrderItem")
+                viewModel.onCartItemClicked(customOrderItem)
+                viewModel.logSwipeDishInCart(Constants.EVENT_CLICK_DISH_IN_CART, customOrderItem)
                 dismiss()
             }
         }
@@ -332,11 +338,11 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             behavior!!, "peekHeight",
             currentHeight, 50
         ).apply {
-                duration = 500
-                interpolator = FastOutSlowInInterpolator()
-                addListener(listener)
-                start()
-            }
+            duration = 500
+            interpolator = FastOutSlowInInterpolator()
+            addListener(listener)
+            start()
+        }
     }
 
     private fun animateExpand() {
@@ -346,10 +352,10 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
             behavior!!, "peekHeight",
             50, targetHeight
         ).apply {
-                duration = 600
-                interpolator = FastOutSlowInInterpolator()
-                start()
-            }
+            duration = 600
+            interpolator = FastOutSlowInInterpolator()
+            start()
+        }
         refreshButtonPosition()
 
     }
@@ -395,6 +401,17 @@ class UpSaleNCartBottomSheet(val listener: UpsaleNCartBSListener? = null) : Bott
         currentSheetView = null
         behavior = null
         super.onDestroy()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is UpsaleNCartBSListener) {
+            listener = context
+        } else if (parentFragment is UpsaleNCartBSListener) {
+            this.listener = parentFragment as UpsaleNCartBSListener
+        } else {
+            throw ClassCastException("$context must implement UpsaleNCartBSListener")
+        }
     }
 
 }

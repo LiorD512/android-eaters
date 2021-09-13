@@ -148,7 +148,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onPageClick(itemLocalId: Long?, position: Int) {
-        Log.d("wowFeedAdapter", "position:")
+        Log.d("wowFeedAdapter", "position: $position")
         currentList.forEachIndexed { index, feedAdapterItem ->
             if(feedAdapterItem.id == itemLocalId){
                 val section = getItem(index)

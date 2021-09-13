@@ -5,12 +5,19 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.stripe.android.model.PaymentMethod
@@ -21,18 +28,31 @@ class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private
 private val eventsManager: EventsManager) : ViewModel() {
 
 
-    val navigationEvent = MutableLiveData<NavigationEvent>()
-    enum class NavigationEvent{
+    val navigationEvent = LiveEventData<NavigationEvent>()
+
+    data class NavigationEvent(
+        val navigationType: NavigationEventType,
+        val navDirections: NavDirections? = null
+    )
+
+    enum class NavigationEventType{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
         FINISH_ACTIVITY_AFTER_PURCHASE,
         START_PAYMENT_METHOD_ACTIVITY,
         FINISH_CHECKOUT_ACTIVITY,
         INITIALIZE_STRIPE,
-        OPEN_PROMO_CODE_FRAGMENT
+        OPEN_PROMO_CODE_FRAGMENT,
+        OPEN_DISH_PAGE
     }
 
-    fun handleMainNavigation(type: NavigationEvent) {
-        navigationEvent.postValue(type)
+    fun handleMainNavigation(type: NavigationEventType) {
+        navigationEvent.postRawValue(NavigationEvent(type))
+    }
+
+    fun openDishPageWithOrderItem(customOrderItem: CustomOrderItem) {
+        val extras = DishInitParams(orderItem = customOrderItem.orderItem, cookingSlot = customOrderItem.cookingSlot, menuItem = null)
+        val action = CheckoutFragmentDirections.actionCheckoutFragmentToDishPageFragment(extras)
+        navigationEvent.postRawValue(NavigationEvent(NavigationEventType.OPEN_DISH_PAGE, action))
     }
 
     //stripe
@@ -40,10 +60,10 @@ private val eventsManager: EventsManager) : ViewModel() {
         MTLogger.c(TAG, "startStripeOrReInit")
         if(paymentManager.hasStripeInitialized){
             Log.d(TAG, "start payment method")
-            navigationEvent.postValue(NavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+            navigationEvent.postRawValue(NavigationEvent(NavigationEventType.START_PAYMENT_METHOD_ACTIVITY))
         }else{
             MTLogger.c(TAG, "re init stripe")
-            navigationEvent.postValue(NavigationEvent.INITIALIZE_STRIPE)
+            navigationEvent.postRawValue(NavigationEvent(NavigationEventType.INITIALIZE_STRIPE))
         }
     }
 

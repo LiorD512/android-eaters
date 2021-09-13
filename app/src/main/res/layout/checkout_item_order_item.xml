@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cartItemMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingVertical="15.4dp"
+        android:paddingHorizontal="15.4dp">
+
+
+    <TextView
+            android:id="@+id/orderItemCounter"
+            style="@style/LatoBold11White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/teal_blue_circle"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="3dp"
+            app:layout_constraintEnd_toStartOf="@id/orderItemName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1" />
+
+    <TextView
+            android:id="@+id/orderItemName"
+            style="@style/LatoBlack13DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.01"
+            android:paddingStart="7dp"
+            app:layout_constraintBottom_toBottomOf="@+id/orderItemCounter"
+            app:layout_constraintStart_toEndOf="@+id/orderItemCounter"
+            app:layout_constraintTop_toTopOf="@+id/orderItemCounter"
+            tools:text="GF Schnitzel" />
+
+    <TextView
+            android:id="@+id/cartItemDescription"
+            style="@style/LatoReg11PurpleyGreyThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.01"
+            android:paddingStart="7dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="10dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/orderItemName"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemName"
+            tools:text="No olive oil • Pita on the side" />
+
+    <TextView
+            android:id="@+id/orderItemPrice"
+            style="@style/LatoReg13DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/orderItemName"
+            tools:text="$10" />
+
+    <TextView
+            android:id="@+id/orderItemNote"
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:maxLines="5"
+            android:paddingTop="3dp"
+            android:paddingEnd="7.7dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/orderItemPrice"
+            app:layout_constraintStart_toStartOf="@+id/orderItemName"
+            app:layout_constraintTop_toBottomOf="@+id/orderItemName"
+            tools:text="Special requests: Please add some extra parmesan on the side sfsdfsdfsdf" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

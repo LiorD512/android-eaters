@@ -6,7 +6,7 @@ import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
@@ -62,9 +62,9 @@ class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, 
         navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }
 
-    fun openDishPageWithOrderItem(customCartItem: CustomCartItem, finishToFeed: Boolean = false) {
+    fun openDishPageWithOrderItem(customOrderItem: CustomOrderItem, finishToFeed: Boolean = false) {
         val extras =
-            DishInitParams(orderItem = customCartItem.orderItem, cookingSlot = customCartItem.cookingSlot, menuItem = null, finishToFeed = finishToFeed)
+            DishInitParams(orderItem = customOrderItem.orderItem, cookingSlot = customOrderItem.cookingSlot, menuItem = null)
         val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
         navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
     }

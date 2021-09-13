@@ -33,12 +33,12 @@ private var parentItemId: Long? = null
 
     @JvmName("setChefId1")
     fun setParentItemPosition(position: Int) {
-        Log.d("feedItemPosition", "setParentItemPosition: $position")
+        Log.d("wowFeedItemPosition", "setParentItemPosition: $position")
         this.parentItemPosition = position
     }
 
     fun setItemLocalId(id: Long?) {
-        Log.d("feedItemPosition", "setItemLocalId: $id")
+        Log.d("wowFeedItemPosition", "setItemLocalId: $id")
         this.parentItemId = id
     }
 
@@ -81,7 +81,7 @@ private var parentItemId: Long? = null
         private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemId: Long?, position: Int) {
-            Log.d("feedItemPosition", "bindItem: $parentItemId")
+            Log.d("wowFeedItemPosition", "bindItem: $parentItemId")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
 //                    .blurPlaceHolder(it, thumbnail, blurHash)
@@ -96,7 +96,7 @@ private var parentItemId: Long? = null
             tagView.setTags(dish.tags)
 
             layout.setOnClickListener{
-                Log.d("feedItemPosition", "parentItemPosition: $parentItemId")
+                Log.d("wowFeedItemPosition", "parentItemPosition: $parentItemId")
                 listener.onPageClick(parentItemId, position)
             }
         }

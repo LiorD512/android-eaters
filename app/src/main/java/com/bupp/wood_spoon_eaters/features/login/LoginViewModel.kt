@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
@@ -32,7 +33,7 @@ class LoginViewModel(
     var phonePrefix: String? = null
     var code: String? = null
 
-    val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
+    val navigationEvent: LiveEventData<NavigationEventType> = LiveEventData()
     val countryCodeEvent: MutableLiveData<CountriesISO> = MutableLiveData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
     val userData: MutableLiveData<String?> = MutableLiveData()
@@ -74,12 +75,12 @@ class LoginViewModel(
 
     fun directToPhoneFrag() {
         eventsManager.logEvent(Constants.EVENT_CLICK_GET_STARTED)
-        navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
+        navigationEvent.postRawValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 
     private fun directToCodeFrag() {
         userData.postValue(getCensoredPhone())
-        navigationEvent.postValue(NavigationEventType.OPEN_CODE_SCREEN)
+        navigationEvent.postRawValue(NavigationEventType.OPEN_CODE_SCREEN)
     }
 
     //phone verification methods
@@ -147,7 +148,7 @@ class LoginViewModel(
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d("wowLoginVM", "Success")
-                        navigationEvent.postValue(NavigationEventType.CODE_RESENT)
+                        navigationEvent.postRawValue(NavigationEventType.CODE_RESENT)
                     }
                     else -> {
                         Log.d("wowLoginVM", "NetworkError")
@@ -183,10 +184,10 @@ class LoginViewModel(
                             metaDataRepository.initMetaData()
                             if (userRepository.isUserSignedUp()) {
                                 paymentManager.initPaymentManager(context)
-                                navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                                navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)
                                 eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
                             } else {
-                                navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
+                                navigationEvent.postRawValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
                             eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(true))
                         }
@@ -240,7 +241,7 @@ class LoginViewModel(
                     val eater = userRepoResult.eater
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
-                    navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                    navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)
                     eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
 //                    eventsManager.sendRegistrationCompletedEvent()
                     eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))

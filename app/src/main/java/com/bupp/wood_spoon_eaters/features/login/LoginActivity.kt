@@ -50,7 +50,8 @@ class LoginActivity : BaseActivity() {
 
     private fun initObservers() {
         viewModel.navigationEvent.observe(this, {
-            it?.let{
+            val event = it.getContentIfNotHandled()
+            event?.let{
                 when(it){
                     LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
                         redirectToPhoneVerification()

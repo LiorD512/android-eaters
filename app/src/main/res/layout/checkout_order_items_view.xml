@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:gravity="center"
+            android:paddingTop="23dp"
+            android:paddingBottom="3dp"
+            android:paddingHorizontal="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/LatoBlack17Dark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Order items" />
+
+        <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
+                android:id="@+id/orderItemsViewEditOrderBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:title="Edit order" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRecycler
+            android:layout_marginTop="7.7dp"
+            android:id="@+id/orderItemsViewRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/restaurant_layout_animation"/>
+
+</LinearLayout>

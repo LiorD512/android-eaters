@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.databinding.ActivityRestaurantBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
-import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -60,8 +60,8 @@ class RestaurantActivity : BaseActivity(){
     /** Determine the starting fragment on activity launch -
      * can be one of (SearchFragment, HubPageFragment, MembershipPageFragment and SubCategoriesFragment)
      */
-    private fun checkStartDestination(restaurantInitParams: RestaurantInitParams?, customCartItem: CustomCartItem?) {
-        val dishInitParams = DishInitParams(cookingSlot = customCartItem?.cookingSlot, orderItem = customCartItem?.orderItem)
+    private fun checkStartDestination(restaurantInitParams: RestaurantInitParams?, customOrderItem: CustomOrderItem?) {
+        val dishInitParams = DishInitParams(cookingSlot = customOrderItem?.cookingSlot, orderItem = customOrderItem?.orderItem)
         val bundle = Bundle()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.restaurantActContainer) as NavHostFragment

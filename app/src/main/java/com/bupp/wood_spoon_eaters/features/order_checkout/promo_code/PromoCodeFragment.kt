@@ -13,6 +13,7 @@ import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
@@ -26,10 +27,11 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
-    private val binding: PromoCodeFragmentBinding by viewBinding()
+    private var binding: PromoCodeFragmentBinding ?=  null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = PromoCodeFragmentBinding.bind(view)
 
         initUi()
         initObservers()
@@ -37,10 +39,8 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
 
     private fun initUi() {
-        with(binding) {
-            (activity as OrderCheckoutActivity).updateMainHeader(
-                title = "Promo code", "", icon = Constants.HEADER_ICON_BACK
-            )
+        with(binding!!) {
+            checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
             promoCodeFragCodeInput.setWSEditTextListener(this@PromoCodeFragment)
 
             openKeyboard(promoCodeFragCodeInput)
@@ -68,16 +68,16 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
-                binding.promoCodeFragPb.show()
+                binding!!.promoCodeFragPb.show()
             } else {
-                binding.promoCodeFragPb.hide()
+                binding!!.promoCodeFragPb.hide()
             }
         })
     }
 
     private fun showWrongPromoCodeNotification(msg: String?) {
         snackbar = TSnackbar.make(
-            binding.promoCodeFragmentLayout,
+            binding!!.promoCodeFragmentLayout,
             msg ?: "The promo code seems to be invalid. \nplease check again",
             TSnackbar.LENGTH_LONG
         ).apply {
@@ -100,9 +100,9 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
     }
 
     private fun submitPromoCode() {
-        with(binding) {
+        with(binding!!) {
             if (promoCodeFragCodeInput.validateIsNotEmpty()) {
-                viewModel.savePromoCode(binding.promoCodeFragCodeInput.getText() ?: "")
+                viewModel.savePromoCode(promoCodeFragCodeInput.getText() ?: "")
             }
         }
     }
@@ -114,6 +114,11 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
     override fun onHeaderBackClick() {
         closeKeyboard()
         activity?.onBackPressed()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

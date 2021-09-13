@@ -1,12 +1,10 @@
 package com.bupp.wood_spoon_eaters.managers.location
 
-
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-
 
 /**
  * Created by MonkeyFather on 15/05/2018.
@@ -14,9 +12,11 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 
 class LocationManager(val context: Context, private val metaDataRepository: MetaDataRepository) {
 
-    fun clearUserAddresses(){
+    fun clearUserAddresses() {
         finalAddressLiveDataParam.postValue(FinalAddressParam(null))
         setDefaultAddress()
+        lastChosenAddress = null
+        previousChosenAddress = null
     }
 
     fun setDefaultAddress() {
@@ -47,7 +47,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
         val addressType: AddressDataType? = null
     )
 
-    enum class AddressDataType{
+    enum class AddressDataType {
         FULL_ADDRESS,
         DEVICE_LOCATION,
         DEFAULT
@@ -58,7 +58,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
 
     fun setSelectedAddressAndUpdateParams(selectedAddress: Address?, addressType: AddressDataType? = null) {
         Log.d(TAG, "setSelectedAddressAndUpdateParams: $selectedAddress")
-        if(selectedAddress != null) {
+        if (selectedAddress != null) {
             previousChosenAddress = lastChosenAddress
             lastChosenAddress = selectedAddress.copy()
             finalAddressLiveDataParam.postValue(
@@ -72,7 +72,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
                     addressType
                 )
             )
-        }else{
+        } else {
             setDefaultAddress()
 //            finalAddressLiveDataParam.postValue(FinalAddressParam())
         }

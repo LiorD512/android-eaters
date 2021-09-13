@@ -21,7 +21,7 @@ class UpSaleNCartViewModel(
     var currentPageState = PageState.CART
     val currentOrderData = cartManager.getCurrentOrderData()
     val currentCookingSlot = cartManager.getCurrentCookingSlot()
-    val onDishCartClick = LiveEventData<CustomCartItem>()
+    val onDishCartClick = LiveEventData<CustomOrderItem>()
 
     enum class PageState {
         UPSALE,
@@ -78,11 +78,11 @@ class UpSaleNCartViewModel(
             return null
         }
         orderItems.forEach {
-            val customCartItem = CustomCartItem(
+            val customCartItem = CustomOrderItem(
                 orderItem = it,
                 cookingSlot = currentCookingSlot
             )
-            list.add(CartAdapterItem(customCartItem = customCartItem))
+            list.add(CartAdapterItem(customOrderItem = customCartItem))
         }
 
         val subTotal = currentOrderData.value?.subtotal?.formatedValue
@@ -123,8 +123,8 @@ class UpSaleNCartViewModel(
         }
     }
 
-    fun onCartItemClicked(customCartItem: CustomCartItem) {
-        onDishCartClick.postRawValue(customCartItem)
+    fun onCartItemClicked(customOrderItem: CustomOrderItem) {
+        onDishCartClick.postRawValue(customOrderItem)
     }
 
     fun updateAddressAndProceedToCheckout() {
@@ -140,7 +140,7 @@ class UpSaleNCartViewModel(
         flowEventsManager.logPageEvent(eventType)
     }
 
-    fun logSwipeDishInCart(eventName: String, item: CustomCartItem) {
+    fun logSwipeDishInCart(eventName: String, item: CustomOrderItem) {
         eventsManager.logEvent(eventName, getSwipeDishData(item))
     }
 
@@ -148,7 +148,7 @@ class UpSaleNCartViewModel(
         eventsManager.logEvent(eventName)
     }
 
-    private fun getSwipeDishData(item: CustomCartItem): Map<String, String> {
+    private fun getSwipeDishData(item: CustomOrderItem): Map<String, String> {
         val data = mutableMapOf<String, String>()
         data["dish_name"] = item.orderItem.dish.name
         data["dish_id"] = item.orderItem.dish.id.toString()

@@ -21,7 +21,7 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
-import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
@@ -44,7 +44,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener,
-    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener, CampaignBottomSheet.CampaignBottomSheetListener,
+    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener,
+    CampaignBottomSheet.CampaignBottomSheetListener,
     WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener, MainActivityTabLayout.MainActivityTabLayoutListener {
 
     lateinit var binding: ActivityMainBinding
@@ -65,7 +66,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         initUiRelatedProcesses()
     }
 
-    fun initUi(){
+    fun initUi() {
         binding.mainActFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
     }
 
@@ -95,7 +96,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val forceFeedRefresh = data.getBooleanExtra("refreshFeed", false)
             if(isAfterPurchase){
                 updateUiAfterOrderSuccess(result.data)
-            }else if(forceFeedRefresh){
+            } else if (forceFeedRefresh) {
                 viewModel.forceFeedRefresh()
             }
         }
@@ -107,15 +108,15 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             updateUiAfterOrderSuccess(result.data)
             val data = result.data
             val editOrderClicked = data?.getBooleanExtra("editOrderClick", false)
-            if(editOrderClicked!!){
-                UpSaleNCartBottomSheet(this@MainActivity).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+            if (editOrderClicked!!) {
+                UpSaleNCartBottomSheet().show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
             }
         }
     }
 
     private fun updateUiAfterOrderSuccess(data: Intent?) {
         val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)
-        if(isAfterPurchase!!){
+        if (isAfterPurchase!!) {
             showRateTheAppDialog()
             viewModel.checkForActiveOrder()
             viewModel.forceFeedRefresh()
@@ -256,11 +257,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun openCartNUpsaleDialog() {
-        UpSaleNCartBottomSheet(this).show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        UpSaleNCartBottomSheet().show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
-    override fun onCartDishCLick(customCartItem: CustomCartItem) {
-        afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customCartItem))
+    override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
+        afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customOrderItem))
     }
 
     override fun onGoToCheckoutClicked() {
@@ -339,18 +340,18 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-            when (requestCode) {
-                PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    MTLogger.c(TAG, "Stripe")
-                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+        when (requestCode) {
+            PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                MTLogger.c(TAG, "Stripe")
+                val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
 
-                    result?.let {
-                        MTLogger.c(TAG, "payment method success")
-                        viewModel.updatePaymentMethod(this, result.paymentMethod)
-                    }
+                result?.let {
+                    MTLogger.c(TAG, "payment method success")
+                    viewModel.updatePaymentMethod(this, result.paymentMethod)
                 }
-
             }
+
+        }
     }
 
     override fun onTipDone(tipAmount: Int) {

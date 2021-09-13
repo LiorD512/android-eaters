@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.OrderItemViewFeed2VerBinding
+import com.bupp.wood_spoon_eaters.databinding.OrderItemViewBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import java.text.DecimalFormat
 
-class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener): ListAdapter<OrderItem, RecyclerView.ViewHolder>(
+class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener) : ListAdapter<OrderItem, RecyclerView.ViewHolder>(
     OrderItemsViewDiffCallback()
 ) {
 
@@ -38,7 +38,7 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding = OrderItemViewFeed2VerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = OrderItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return OrderItemViewHolder(binding)
     }
 
@@ -48,28 +48,26 @@ class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAd
         holder.bindItem(orderItem)
     }
 
-    class OrderItemViewHolder(view: OrderItemViewFeed2VerBinding) : RecyclerView.ViewHolder(view.root) {
+    class OrderItemViewHolder(view: OrderItemViewBinding) : RecyclerView.ViewHolder(view.root) {
         private val priceView: TextView = view.orderItemPrice
         private val name: TextView = view.orderItemName
         private val counter: TextView = view.orderItemCounter
         private val note: TextView = view.orderItemNote
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(orderItem: OrderItem){
+        fun bindItem(orderItem: OrderItem) {
             val dish: Dish = orderItem.dish
 
             counter.text = "${orderItem.quantity}"
             name.text = dish.name
 
-            var price = 0.0
-            orderItem.price.value?.let{
-                price = it
 
-            }
+            val price = orderItem.price.value ?: 0.0
+
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
 
-            if(!orderItem.getNoteStr().isNullOrEmpty()){
+            if (!orderItem.getNoteStr().isNullOrEmpty()) {
                 note.visibility = View.VISIBLE
 
                 val builder = SpannableStringBuilder(orderItem.getNoteStr())

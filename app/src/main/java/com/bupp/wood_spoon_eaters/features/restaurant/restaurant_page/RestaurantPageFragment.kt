@@ -22,7 +22,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
-import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomCartItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
@@ -123,11 +123,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun openCartNUpsaleDialog() {
-        UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        binding.restaurantFragFloatingCartBtn.isEnabled = false
+        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        binding.restaurantFragFloatingCartBtn.isEnabled = true
     }
 
-    override fun onCartDishCLick(customCartItem: CustomCartItem) {
-        mainViewModel.openDishPageWithOrderItem(customCartItem)
+    override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
+        mainViewModel.openDishPageWithOrderItem(customOrderItem)
     }
 
     override fun onGoToCheckoutClicked() {
@@ -180,7 +182,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun reOpenCart() {
-        UpSaleNCartBottomSheet(this).show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
+        UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
     }
 
     /** Headers data **/

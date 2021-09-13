@@ -48,7 +48,6 @@ android {
 
             buildConfigField "String", "BASE_URL", '"https://woodspoon-production.herokuapp.com/api/v2/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"9fa2df5e19ca2c5452f1a8361d463ac2c4297ad35bc5cdfd"'
-            signingConfig signingConfigs.debug
         }
         create("benchmark") {
             initWith(getByName("release"))

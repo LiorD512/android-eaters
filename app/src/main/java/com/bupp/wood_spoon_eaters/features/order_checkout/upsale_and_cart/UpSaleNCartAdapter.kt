@@ -23,7 +23,7 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
     interface UpSaleNCartAdapterListener {
         fun onDishSwipedAdd(cartBaseAdapterItem: CartBaseAdapterItem)
         fun onDishSwipedRemove(cartBaseAdapterItem: CartBaseAdapterItem)
-        fun onCartItemClicked(customCartItem: CustomCartItem)
+        fun onCartItemClicked(customCartItem: CustomOrderItem)
     }
 
     override fun onDishSwipedAdd(cartBaseAdapterItem: CartBaseAdapterItem) {
@@ -84,7 +84,7 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
         @SuppressLint("SetTextI18n")
         fun bindItem(dishItem: CartAdapterItem, listener: UpSaleNCartAdapterListener) {
             Log.d(TAG, "bindItem - cart dish")
-            val customCartItem = dishItem.customCartItem.orderItem
+            val customCartItem = dishItem.customOrderItem.orderItem
             customCartItem.let {
                 name.text = it.dish.name
                 quantity.text = "${it.quantity}"
@@ -96,7 +96,7 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
             }
 
             mainLayout.setOnClickListener {
-                listener.onCartItemClicked(dishItem.customCartItem)
+                listener.onCartItemClicked(dishItem.customOrderItem)
             }
         }
 

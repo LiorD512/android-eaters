@@ -14,11 +14,12 @@ import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
+import com.bupp.wood_spoon_eaters.views.WSEditText
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification),
-    InputTitleView.InputTitleViewListener{
+    InputTitleView.InputTitleViewListener, WSEditText.WSEditTextListener {
 
     val binding: FragmentPhoneVerificationBinding by viewBinding()
     private val viewModel: LoginViewModel by sharedViewModel()
@@ -76,6 +77,8 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
                 WebDocsDialog(Constants.WEB_DOCS_TERMS).show(childFragmentManager, Constants.WEB_DOCS_DIALOG)
             }
             verificationFragmentInput.requestFocus()
+
+            verificationFragmentInput.setWSEditTextListener(this@PhoneVerificationFragment)
         }
     }
 
@@ -92,6 +95,10 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         }else{
             binding.verificationFragmentInput.showError()
         }
+    }
+
+    override fun onWSEditTextActionDone() {
+        binding.verificationFragmentNext.performClick()
     }
 
 

@@ -29,7 +29,6 @@ data class DishInitParams(
     val menuItem: MenuItem? = null,
     val orderItem: OrderItem? = null,
     val cookingSlot: CookingSlot? = null,
-    val finishToFeed: Boolean = false,
 
     /** ANALYTICS PARAMS **/
     val dishSectionTitle: String? = null,

@@ -19,9 +19,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
         this.adapter = adapter
 
-//        val addTouchHelper = SwipeableAddDishItemTouchHelper()
-//        val removeTouchHelper = SwipeableRemoveDishItemTouchHelper()
-
         ItemTouchHelper(addTouchHelper).attachToRecyclerView(this)
         ItemTouchHelper(removeTouchHelper).attachToRecyclerView(this)
 
