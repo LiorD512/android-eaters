@@ -30,8 +30,8 @@ class FeedAdapterRestaurantViewHolder(
     }
 
     fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
-        Log.d("wowFeedPager", "bindItems - ${restaurantSection.restaurantSection.restaurantName}")
         restaurantSection.restaurantSection.let { restaurant ->
+            Log.d("wowProcessFeedData", "bindItems - ${restaurantSection.restaurantSection.restaurantName} - pos ${restaurantSection.id}")
             with(binding) {
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName

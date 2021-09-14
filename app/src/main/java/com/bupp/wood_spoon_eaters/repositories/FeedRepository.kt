@@ -87,37 +87,37 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
 
 
     private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
-        Log.d("processFeedData", "start ----")
+        Log.d("wowProcessFeedData", "start ----")
         var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEachIndexed { feedSectionIndex, feedSection ->
             feedSection.title?.let {
                 localId++
                 feedData.add(FeedAdapterTitle(it, localId))
-                Log.d("processFeedData", "adding title - $localId")
+                Log.d("wowProcessFeedData", "adding title - $localId")
             }
             feedSection.href?.let {
                 localId++
                 feedData.add(FeedAdapterHref(it, localId))
-                Log.d("processFeedData", "adding href  - $localId")
+                Log.d("wowProcessFeedData", "adding href  - $localId")
             }
             feedSection.collections?.forEachIndexed { index, feedSectionCollectionItem ->
                 localId++
                 when (feedSectionCollectionItem) {
                     is FeedCampaignSection -> {
-                        Log.d("processFeedData", "adding camp  - $localId")
+                        Log.d("wowProcessFeedData", "adding camp  - $localId")
                         feedData.add(FeedAdapterCoupons(feedSectionCollectionItem, localId))
                     }
                     is FeedIsEmptySection -> {
-                        Log.d("processFeedData", "adding empty - $localId")
+                        Log.d("wowProcessFeedData", "adding empty - $localId")
                         feedData.add(FeedAdapterEmptyFeed(feedSectionCollectionItem, localId, isCartEmpty()))
                     }
                     is FeedSingleEmptySection -> {
-                        Log.d("processFeedData", "adding empty2 - $localId")
+                        Log.d("wowProcessFeedData", "adding empty2 - $localId")
                         feedData.add(FeedAdapterEmptySection(feedSectionCollectionItem, localId))
                     }
                     is FeedRestaurantSection -> {
-                        Log.d("processFeedData", "adding rest  - $localId")
+                        Log.d("wowProcessFeedData", "adding rest  - $localId")
                         if (isLargeItems) {
                             feedData.add(FeedAdapterLargeRestaurant(feedSectionCollectionItem, localId))
                         } else {
@@ -148,14 +148,14 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
             section.href?.let {
                 if (it == href) {
-                    Log.d("hrefSucks", "handeling href - $href")
+                    Log.d("wowProcessFeedData", "handeling href - $href")
                     data?.let { data ->
                         if (data.isNotEmpty() && data[0].items!!.isNotEmpty()) {
-                            Log.d("hrefSucks", "update href section")
+                            Log.d("wowProcessFeedData", "update href section")
                             section.href = null
                             lastFeedDataResult?.sections!![index].collections = data.toMutableList()
                         } else {
-                            Log.d("hrefSucks", "href empty")
+                            Log.d("wowProcessFeedData", "href empty")
                             return@forEachIndexed
                         }
 

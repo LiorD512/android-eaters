@@ -16,11 +16,20 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
-class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedAdapterItem, RecyclerView.ViewHolder>(DiffCallback()),
+class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     FeedCouponSectionPagerAdapter.FeedCouponSectionListener, FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
     FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
+    private val dataList: MutableList<FeedAdapterItem> = mutableListOf()
+    fun setDataList(dataList: List<FeedAdapterItem>){
+        this.dataList.clear()
+        this.dataList.addAll(dataList)
+        notifyDataSetChanged()
+    }
 
+    fun updateDataList(){
+
+    }
 
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
@@ -29,7 +38,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         fun onDishSwiped()
     }
 
-    override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
+    override fun getItemViewType(position: Int): Int = dataList[position].type!!.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -82,8 +91,8 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("wowFeedAdapter", "position: $position")
-        val section = getItem(position)
+        Log.d("wowProcessFeedData", "onBindViewHolder - position: $position")
+        val section = dataList[position]
         when (section) {
             is FeedAdapterTitle -> {
                 holder as FeedAdapterTitleViewHolder
@@ -117,21 +126,21 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<FeedAdapterItem>() {
-        override fun areItemsTheSame(
-            oldItem: FeedAdapterItem,
-            newItem: FeedAdapterItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: FeedAdapterItem,
-            newItem: FeedAdapterItem
-        ): Boolean {
-            return oldItem.type == oldItem.type
-        }
-    }
+//    private class DiffCallback : DiffUtil.ItemCallback<FeedAdapterItem>() {
+//        override fun areItemsTheSame(
+//            oldItem: FeedAdapterItem,
+//            newItem: FeedAdapterItem
+//        ): Boolean {
+//            return oldItem == newItem
+//        }
+//
+//        override fun areContentsTheSame(
+//            oldItem: FeedAdapterItem,
+//            newItem: FeedAdapterItem
+//        ): Boolean {
+//            return oldItem.type == oldItem.type
+//        }
+//    }
 
     override fun onShareBannerClick(campaign: Campaign?) {
         campaign?.let {
@@ -148,10 +157,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
     }
 
     override fun onPageClick(itemLocalId: Long?, position: Int) {
-        Log.d("wowFeedAdapter", "position: $position")
-        currentList.forEachIndexed { index, feedAdapterItem ->
+        Log.d("wowProcessFeedData", "onPageClick position: $position")
+        dataList.forEachIndexed { index, feedAdapterItem ->
             if(feedAdapterItem.id == itemLocalId){
-                val section = getItem(index)
+                val section = dataList[index]
                 when (section) {
                     is FeedAdapterRestaurant -> {
                         val sectionTitle = section.sectionTitle
@@ -160,6 +169,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                         val dishIndexInRestaurant = position +1
 //                        Log.d("wowFeedAdapter", "onPageClick sectionTitle: $sectionTitle, sectionOrder: $sectionOrder, restaurantOrderInSection: $restaurantOrderInSection, dishIndexInRestaurant: $dishIndexInRestaurant")
                         listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams(sectionTitle, sectionOrder, restaurantOrderInSection, dishIndexInRestaurant))
+                        return@forEachIndexed
                     }
                     is FeedAdapterLargeRestaurant  -> {
                         val sectionTitle = section.sectionTitle
@@ -170,16 +180,19 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : ListAdapter<FeedA
                             sectionTitle,
                             sectionOrder,
                             restaurantOrderInSection,
-                            dishIndexInRestaurant
-                        )
-                        )
+                            dishIndexInRestaurant))
+                        return@forEachIndexed
                     }
                     else -> {}
                 }
-                return@forEachIndexed
             }
         }
     }
+
+    override fun getItemCount(): Int {
+       return dataList.size
+    }
+
 
 }
 

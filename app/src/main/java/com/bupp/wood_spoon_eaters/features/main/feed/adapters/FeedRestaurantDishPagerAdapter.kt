@@ -1,8 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +24,10 @@ import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ResizableTagsView
 import jp.wasabeef.glide.transformations.BlurTransformation
+import android.widget.Toast
+
+
+
 
 
 class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapterListener) :
@@ -33,12 +41,12 @@ private var parentItemId: Long? = null
 
     @JvmName("setChefId1")
     fun setParentItemPosition(position: Int) {
-        Log.d("wowFeedItemPosition", "setParentItemPosition: $position")
+        Log.d("wowProcessFeedData", "setParentItemPosition: $position")
         this.parentItemPosition = position
     }
 
     fun setItemLocalId(id: Long?) {
-        Log.d("wowFeedItemPosition", "setItemLocalId: $id")
+        Log.d("wowProcessFeedData", "setItemLocalId: $id")
         this.parentItemId = id
     }
 
@@ -63,6 +71,16 @@ private var parentItemId: Long? = null
             is FeedRestaurantItemDish -> {
                 holder as FeedDishViewHolder
                 holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemId, position)
+
+                holder.layout.setOnClickListener{
+                    Log.d("wowProcessFeedData", "parentItemPosition: $parentItemId")
+                    listener.onPageClick(parentItemId, position)
+
+//                    val absPos = absoluteAdapterPosition
+//                    val bindPos = bindingAdapterPosition
+//                    val layPos = layoutPosition
+//                    Log.d("wowAdapterPos", "absPos: $absPos bindPos $bindPos, layPos = $layPos, position: $position")
+                }
             }
             is FeedRestaurantItemSeeMore -> {
                 holder as FeedDishSeeMoreViewHolder
@@ -74,14 +92,15 @@ private var parentItemId: Long? = null
 
 
     class FeedDishViewHolder(val binding: FeedAdapterRestaurantDishItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val layout: ConstraintLayout = binding.feedRestaurantDishItem
+        val layout: ConstraintLayout = binding.feedRestaurantDishItem
         private val thumbnail: ImageView = binding.feedRestaurantDishItemImg
         private val name: TextView = binding.feedRestaurantItemName
         private val price: TextView = binding.feedRestaurantItemPrice
         private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
+        @SuppressLint("ClickableViewAccessibility")
         fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemId: Long?, position: Int) {
-            Log.d("wowFeedItemPosition", "bindItem: $parentItemId")
+            Log.d("wowProcessFeedData", "dishItem - bindItem: $parentItemId")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
 //                    .blurPlaceHolder(it, thumbnail, blurHash)
@@ -95,10 +114,8 @@ private var parentItemId: Long? = null
 
             tagView.setTags(dish.tags)
 
-            layout.setOnClickListener{
-                Log.d("wowFeedItemPosition", "parentItemPosition: $parentItemId")
-                listener.onPageClick(parentItemId, position)
-            }
+
+
         }
 
 

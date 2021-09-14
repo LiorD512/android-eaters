@@ -168,7 +168,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         } else {
             binding.feedFragRefreshLayout.isRefreshing = false
             binding.feedFragEmptyLayout.visibility = View.GONE
-            feedAdapter.submitList(feedArr)
+            feedAdapter.setDataList(feedArr)
         }
     }
 
