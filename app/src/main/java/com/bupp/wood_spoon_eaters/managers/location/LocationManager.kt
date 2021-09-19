@@ -91,9 +91,7 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
     }
 
     companion object {
-
         private val TAG = "wowLocationManager"
-
     }
 
 

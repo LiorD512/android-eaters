@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.dialogs.super_user
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ class SuperUserDialog : DialogFragment() {
     var listener: SuperUserListener? = null
     interface SuperUserListener{
         fun onEnvironmentChanged(forceRestart: Boolean? = false)
+        fun onDismissSuperDialog()
     }
 
     private val binding: DialogSuperUserBinding by viewBinding()
@@ -84,6 +86,11 @@ class SuperUserDialog : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        listener?.onDismissSuperDialog()
+        super.onDismiss(dialog)
     }
 
     companion object {
