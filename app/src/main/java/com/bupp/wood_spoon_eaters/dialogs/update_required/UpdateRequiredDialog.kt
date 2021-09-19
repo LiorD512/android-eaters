@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.UpdateRequiredDialogBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,7 +16,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpdateRequiredDialog : DialogFragment() {
 
-    lateinit var binding: UpdateRequiredDialogBinding
+    val binding: UpdateRequiredDialogBinding by viewBinding()
+
     val viewModel by viewModel<UpdateRequiredViewModel>()
     interface UpdateRequiredDialogListener {
         fun onUpdateApp(url: String)
@@ -36,8 +37,6 @@ class UpdateRequiredDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = UpdateRequiredDialogBinding.bind(view)
 
         initObserver()
         viewModel.getDialogData()

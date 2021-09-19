@@ -5,18 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 
-class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, private val paymentManager: PaymentManager) : ViewModel() {
+class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: EaterDataManager, private val paymentManager: PaymentManager, private val metaDataRepository: MetaDataRepository, private val flowEventsManager: FlowEventsManager,
+private val eventsManager: EventsManager) : ViewModel() {
 
     var orderId: Long? = null
     val traceableOrdersLiveData = eaterDataManager.getTraceableOrders()
@@ -88,6 +92,18 @@ class ActiveOrderTrackerViewModel(val api: ApiService, val eaterDataManager: Eat
 
     fun sendOpenEvent() {
         eaterDataManager.logUxCamEvent(Constants.EVENT_TRACK_ORDER_CLICK)
+    }
+
+    fun getContactUsPhoneNumber(): String {
+        return metaDataRepository.getContactUsPhoneNumber()
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
+
+    fun logEvent(eventName: String){
+        eventsManager.logEvent(eventName)
     }
 
 

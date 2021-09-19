@@ -2,12 +2,10 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
-import kotlin.collections.ArrayList
 
 @JsonClass(generateAdapter = true)
 data class SearchRequest(
@@ -23,43 +21,14 @@ data class SearchRequest(
     @Json(name = "asap_only") var isAsap: Boolean? = null
 )
 
+
 sealed class Search(
-    @Json(name = "resource") var resource: String?,
+    @Json(name = "resource") var resource: String?
 ): Parcelable {
     abstract val id: Long?
     abstract val results: List<Parcelable>?
     abstract val pagination: Pagination
-    fun cooksCount(): Int {
-        results?.let{
-            when (resource) {
-                Constants.RESOURCE_TYPE_COOK -> {
-                    return results!!.size
-                }
-                else -> return 0
-            }
-        }
-        return 0
-    }
 
-    fun dishCount(): Int {
-        results?.let{
-            when (resource) {
-                Constants.RESOURCE_TYPE_DISH -> {
-                    return results!!.size
-                }
-                else -> return 0
-            }
-        }
-        return 0
-    }
-
-    fun hasCooks(): Boolean {
-        return cooksCount() > 0
-    }
-
-    fun hasDishes(): Boolean {
-        return dishCount() > 0
-    }
 }
 
 @Parcelize
@@ -97,7 +66,7 @@ data class Cook(
     @Json(name = "id") val id: Long,
     @Json(name = "first_name") val firstName: String,
     @Json(name = "last_name") val lastName: String,
-    @Json(name = "thumbnail") val thumbnail: String,
+    @Json(name = "thumbnail") val thumbnail: WSImage,
     @Json(name = "video") val video: String?,
     @Json(name = "profession") val profession: String?,
     @Json(name = "about") val about: String?,
@@ -125,7 +94,8 @@ data class Dish(
     @Json(name = "price") val price: Price?,
     @Json(name = "description") val description: String,
     @Json(name = "avg_rating") val rating: Double?,
-    @Json(name = "thumbnail") val thumbnail: String,
+    @Json(name = "thumbnail") val thumbnail: WSImage?,
+    @Json(name = "video") val video:String?,
     @Json(name = "is_favorite") val isFavorite: Boolean?,
     @Json(name = "nationwide_shipping") val worldwide: Boolean?,
     @Json(name = "is_recurring") val isRecurring: Boolean?,
@@ -142,8 +112,4 @@ data class Dish(
         }
     }
 
-    fun isSoldOut(): Boolean {
-        val quantityLeft = (menuItem?.quantity ?: 0) - (menuItem?.unitsSold ?: 0)
-        return quantityLeft <= 0
-    }
 }

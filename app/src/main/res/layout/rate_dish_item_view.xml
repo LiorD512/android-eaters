@@ -23,7 +23,7 @@
 
         <TextView
                 android:id="@+id/orderItemName"
-                style="@style/SemiBold15Dark"
+                style="@style/LatoBlack15Dark"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -35,14 +35,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-            <RadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/rateDishItemNegative"
                     android:button="@drawable/icon_dislike_selector"
                     android:layout_marginEnd="23dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-            <RadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/rateDishItemPositive"
                     android:button="@drawable/icon_like_selector"
                     android:layout_marginEnd="7.7dp"

@@ -7,7 +7,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
+import com.bupp.wood_spoon_eaters.managers.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -43,7 +43,7 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
 
             userRepository.initUserRepo()
             metaDataRepository.initMetaData()
-            campaignManager.fetchCampaigns()
+//            campaignManager.fetchCampaigns()
             paymentManager.initPaymentManager(context)
 
             isUserExist = userRepository.isUserValid()
@@ -71,16 +71,13 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
     }
 
     fun setUserReferralToken(token: String?) {
-       eaterDataManager.setUserReferralToken(token = token)
+        viewModelScope.launch {
+            campaignManager.setUserReferralToken(token = token)
+        }
     }
 
     fun initFCMAndRefreshToken() {
         deviceDetailsManager.refreshPushNotificationToken()
     }
 
-    fun fetchCampaigns(){
-        viewModelScope.launch {
-
-        }
-    }
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/errorDialogBkg"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/errorDialogBkg"
         android:background="@color/dark_43"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:background="@drawable/rounded_white_bkg"
@@ -17,20 +16,21 @@
             android:layout_height="wrap_content">
 
             <TextView
-                style="@style/SemiBold15Dark"
+                style="@style/LatoBlack15Dark"
                 android:layout_gravity="center"
                 android:layout_marginTop="23.5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Error"/>
+                android:text="Oops..."/>
+
 
             <TextView
                     android:id="@+id/errorDialogBody"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="15.4dp"
                 android:layout_marginLeft="15.4dp"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -48,7 +48,7 @@
 
             <TextView
                 android:id="@+id/errorDialogClose"
-                style="@style/SemiBold15Red"
+                style="@style/LatoBlack15Red"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"

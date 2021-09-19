@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
@@ -22,7 +23,6 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
@@ -45,7 +45,8 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         setContentView(binding.root)
 
 
-        Analytics.with(this).screen("Manage addresses")
+//        Analytics.with(this).screen("Manage addresses")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ADDRESSES)
 //        viewModel.checkIntentParam(intent)
 
         initUi()
@@ -57,7 +58,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         binding.locationActHeader.setHeaderViewListener(this)
 
         var navController : NavController = Navigation.findNavController(this, R.id.locationActContainer)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d(TAG, "onDestinationChanged: "+destination.label)
             when(destination.label){
                 Constants.LOCATION_DESTINATION_SELECT_ADDRESS -> {
@@ -127,6 +128,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 ErrorEventType.SOMETHING_WENT_WRONG -> {
                     WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
+                else -> {}
             }
         })
     }
@@ -186,13 +188,13 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 data?.let {
                     val place = Autocomplete.getPlaceFromIntent(data)
                     Log.i(TAG, "Place: ${place.name}, ${place.addressComponents}, ${place.latLng}")
-                    viewModel.updateAutoCompleteAddressFound(place)
+                    viewModel.updateAutoCompleteAddressFound(this, place)
                 }
             }
             AutocompleteActivity.RESULT_ERROR -> {
                 data?.let {
                     val status = Autocomplete.getStatusFromIntent(data)
-                    Log.i(TAG, status.statusMessage)
+                    Log.i(TAG, status.statusMessage ?: "")
                 }
             }
             Activity.RESULT_CANCELED -> {
@@ -213,25 +215,6 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
     companion object{
         const val TAG = "wowLocationAndAddresAct"
     }
-
-//    override fun onResume() {
-//        super.onResume()
-////        updateUI()
-//    }
-//
-//    private fun updateUI() {
-//        val decorView = window.decorView
-//        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-//            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-//                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-//                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//            }
-//        }
-//    }
 
 
 }

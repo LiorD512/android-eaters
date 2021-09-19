@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.databinding.SingleDishHeaderViewBinding
 import com.bupp.wood_spoon_eaters.databinding.TipPercentViewBinding
 import com.bupp.wood_spoon_eaters.utils.Utils
 
@@ -81,7 +80,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setCustomTipValue(tipValue: Int? = 0){
         val string = "Custom\n$$tipValue"
-        var spannableString = Utils.setCustomFontTypeSpan(context, string, 0, 6, R.font.open_sans_semi_bold)
+        var spannableString = Utils.setCustomFontTypeSpan(context, string, 0, 6, R.font.lato_black)
         binding.tipPercentCustom.text = spannableString
     }
 

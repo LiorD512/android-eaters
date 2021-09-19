@@ -12,16 +12,16 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.HeaderViewBinding
-import com.bupp.wood_spoon_eaters.views.UserImageView
+import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 
 
 class HeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr), UserImageView.UserImageViewListener, AddressAndTimeView.AddressAndTimeViewListener {
+    FrameLayout(context, attrs, defStyleAttr), UserImageVideoView.UserImageViewListener{
 
     private var binding: HeaderViewBinding = HeaderViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    protected var watcher: AutoCompleteTextWatcher? = getAutoCompleteTextWatcher()
+    var watcher: AutoCompleteTextWatcher? = getAutoCompleteTextWatcher()
 
     init{
         with(binding){
@@ -34,10 +34,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if (a.hasValue(R.styleable.HeaderViewAttrs_type)) {
                     var type = a.getInt(R.styleable.HeaderViewAttrs_type, Constants.HEADER_VIEW_TYPE_FEED)
                     initUi(type)
-                }
-                var isWithSep = a.getBoolean(R.styleable.HeaderViewAttrs_isWithSep, true)
-                if (!isWithSep) {
-    //                headerViewSep.visibility = View.GONE
                 }
                 a.recycle()
             }
@@ -54,13 +50,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             binding.headerViewProfileBtn.setUser(eater)
         }
         listener = listenerInstance
-        binding.headerViewAddressAndTime.setAddressAndTimeViewListener(this)
-    }
-
-    fun refreshUserUi(eater: Eater? = null){
-        if(eater != null){
-            binding.headerViewProfileBtn.setUser(eater)
-        }
     }
 
     interface HeaderViewListener {
@@ -76,7 +65,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         fun onHeaderTextChange(str: String) {}
         fun onHeaderAddressClick() {}
         fun onHeaderTimeClick() {}
-        fun onHeaderSettingsClick() {}
         fun handleHeaderSep(shouldShow: Boolean){}
     }
 
@@ -135,9 +123,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun getAutoCompleteTextWatcher(): AutoCompleteTextWatcher {
         return object : AutoCompleteTextWatcher(450) {
-            override fun handleInputString(input: String) {
-                Log.d("wowHeaderView", "afterTextChanged: $input")
-                listener?.onHeaderTextChange(input)
+            override fun handleInputString(str: String) {
+                Log.d("wowHeaderView", "afterTextChanged: $str")
+                listener?.onHeaderTextChange(str)
             }
         }
     }
@@ -165,7 +153,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     headerViewFeedLayout.visibility = View.VISIBLE
                 }
                 Constants.HEADER_VIEW_TYPE_SEARCH -> {
-//                headerViewSep.visibility = View.GONE
                     headerViewBackBtn.visibility = View.VISIBLE
                     headerViewSearchLayout.visibility = View.VISIBLE
                     headerViewFilterBtn.visibility = View.VISIBLE
@@ -173,7 +160,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 }
                 Constants.HEADER_VIEW_TYPE_SIGNUP -> {
                     headerViewTitle.visibility = View.VISIBLE
-//                headerViewSkipBtn.visibility = View.VISIBLE
                     headerViewBackBtn.visibility = View.VISIBLE
                 }
                 Constants.HEADER_VIEW_TYPE_BACK_TITLE -> {
@@ -189,7 +175,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     headerViewTitle.visibility = VISIBLE
                     headerViewBackBtn.visibility = View.VISIBLE
                     headerViewSaveBtn.visibility = View.VISIBLE
-//                headerViewSaveBtn.isEnabled = false
                 }
                 Constants.HEADER_VIEW_TYPE_CLOSE_TITLE -> {
                     headerViewTitle.visibility = VISIBLE
@@ -201,8 +186,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     headerViewCloseBtn.visibility = View.VISIBLE
                 }
                 Constants.HEADER_VIEW_TYPE_CLOSE_NO_TITLE -> {
-//                    headerViewTitle.visibility = VISIBLE
-//                headerViewSettingsBtn.visibility = View.VISIBLE
                     headerViewCloseBtn.visibility = View.VISIBLE
                     listener?.handleHeaderSep(false)
 
@@ -211,14 +194,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     headerViewTitle.visibility = VISIBLE
                     headerViewDoneBtn.visibility = View.VISIBLE
                     headerViewCloseBtn.visibility = View.VISIBLE
-                }
-                Constants.HEADER_VIEW_TYPE_EVENT -> {
-                    headerViewFeedLayout.visibility = View.VISIBLE
-                    headerViewSearchBtn.visibility = View.INVISIBLE
-                    headerViewProfileBtn.visibility = View.INVISIBLE
-                    headerViewCloseBtn.visibility = View.VISIBLE
-                    headerViewAddressAndTime.setEnabled(false)
-                    headerViewAddressAndTime.alpha = 0.5f
                 }
                 Constants.HEADER_VIEW_TYPE_CLOSE_TITLE_NEXT -> {
                     headerViewTitle.visibility = VISIBLE
@@ -232,75 +207,20 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun hideAll() {
         with(binding) {
-            headerViewAddressAndTime.alpha = 1.0f
             headerViewTitle.visibility = GONE
             headerViewCloseBtn.visibility = View.GONE
             headerViewBackBtn.visibility = View.GONE
             headerViewDoneBtn.visibility = View.GONE
             headerViewSaveBtn.visibility = View.GONE
             headerViewNextBtn.visibility = View.GONE
-//        headerViewSettingsBtn.visibility = View.GONE
             headerViewFeedLayout.visibility = View.GONE
             headerViewSearchLayout.visibility = View.GONE
             listener?.handleHeaderSep(true)
         }
     }
 
-    fun setLocationTitle(location: String? = null) {
-        binding.headerViewAddressAndTime.setLocation(location)
-    }
-    fun setDeliveryTime(time: String?) {
-        binding.headerViewAddressAndTime.setTime(time)
-    }
-
-    fun isSkipable(isSkipable: Boolean) {
-        with(binding){
-            if (isSkipable) {
-                headerViewSkipBtn.visibility = View.VISIBLE
-            } else {
-                headerViewSkipBtn.visibility = View.GONE
-            }
-        }
-    }
-
-    fun updateSearchTitle(str: String) {
-        with(binding){
-            headerViewSearchInput.removeTextChangedListener(watcher)
-            headerViewSearchInput.setText(str)
-            setTitleInputListener()
-        }
-    }
-
-    fun setSaveButtonClickable(isClickable: Boolean) {
-        with(binding){
-            headerViewSaveBtn.isEnabled = isClickable
-            headerViewSaveBtn.isSelected = isClickable
-        }
-    }
-
-    fun setDoneButtonClickable(isEnabled: Boolean) {
-        with(binding){
-            headerViewDoneBtn.isEnabled = isEnabled
-        }
-    }
-
-    fun updateFilterUi(isEnabled: Boolean) {
-        binding.headerViewFilterBtn.isSelected = isEnabled
-    }
-
     fun setTitle(title: String) {
         binding.headerViewTitle.text = title
     }
 
-    override fun onAddressClick() {
-        listener?.onHeaderAddressClick()
-    }
-
-    override fun onTimeClick() {
-        listener?.onHeaderTimeClick()
-    }
-
-    fun enableLocationClick(isEnable: Boolean) {
-        binding.headerViewAddressAndTime.enableLocationClick(isEnable)
-    }
 }

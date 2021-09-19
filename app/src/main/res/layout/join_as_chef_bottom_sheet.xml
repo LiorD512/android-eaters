@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/top_cornered_bkg"
@@ -14,7 +13,7 @@
             app:isWithSep="true"
             android:id="@+id/joinAsChefHeader"
             app:title="Join WoodSpoon as a Home Chef!"
-            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
     <View
             android:layout_width="match_parent"

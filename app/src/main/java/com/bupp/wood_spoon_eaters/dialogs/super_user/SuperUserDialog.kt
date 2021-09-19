@@ -1,12 +1,14 @@
 package com.bupp.wood_spoon_eaters.dialogs.super_user
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.DialogSuperUserBinding
@@ -18,9 +20,10 @@ class SuperUserDialog : DialogFragment() {
     var listener: SuperUserListener? = null
     interface SuperUserListener{
         fun onEnvironmentChanged(forceRestart: Boolean? = false)
+        fun onDismissSuperDialog()
     }
 
-    private lateinit var binding: DialogSuperUserBinding
+    private val binding: DialogSuperUserBinding by viewBinding()
     val viewModel: SuperUserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,13 +31,8 @@ class SuperUserDialog : DialogFragment() {
         setStyle(STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
-        binding = DialogSuperUserBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.dialog_super_user, null)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +45,9 @@ class SuperUserDialog : DialogFragment() {
             superUserDialogBtn.setOnClickListener {
                 val input = superUserDialogInput.getText()
                 input?.let { it1 -> updateEnv(it1) }
+
+                val baseUrlInput = superUserDialogInput.getText()
+                baseUrlInput?.let { it1 -> updateBaseUrl(it1) }
             }
             superUserDialogReset.setOnClickListener {
                 updateEnv("")
@@ -60,6 +61,12 @@ class SuperUserDialog : DialogFragment() {
     private fun updateEnv(env: String){
         Log.d(TAG, "updateEnv with $env")
         viewModel.setEnvironment(env)
+        listener?.onEnvironmentChanged(true)
+    }
+
+    private fun updateBaseUrl(baseUrl: String){
+        Log.d(TAG, "updateBaseUrl with $baseUrl")
+        viewModel.updateBaseUrl(baseUrl)
         listener?.onEnvironmentChanged(true)
     }
 
@@ -79,6 +86,11 @@ class SuperUserDialog : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        listener?.onDismissSuperDialog()
+        super.onDismiss(dialog)
     }
 
     companion object {

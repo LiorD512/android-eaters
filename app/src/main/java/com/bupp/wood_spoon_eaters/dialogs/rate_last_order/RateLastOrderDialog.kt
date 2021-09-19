@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.custom_views.InputTitleView
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
-import com.bupp.wood_spoon_eaters.custom_views.metrics_view.MetricsViewAdapter
 import com.bupp.wood_spoon_eaters.databinding.RateLastOrderDialogBinding
 import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
 import com.bupp.wood_spoon_eaters.model.Order
@@ -24,7 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? = null) : DialogFragment(),
     RateLastOrderAdapter.RateOrderAdapterListener,
-    MetricsViewAdapter.MetricsViewAdapterListener, CompoundButton.OnCheckedChangeListener, TitleBodyDialog.TitleBodyDialogListener {
+    CompoundButton.OnCheckedChangeListener, TitleBodyDialog.TitleBodyDialogListener {
 
 
     interface RateDialogListener {
@@ -34,10 +32,10 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     private var accuracyRating: Int? = null
     private var deliveryRating: Int? = null
 
-    private lateinit var adapter: RateLastOrderAdapter
+    private var adapter: RateLastOrderAdapter? = null
     val viewModel by viewModel<RateLastOrderViewModel>()
 
-    lateinit var binding: RateLastOrderDialogBinding
+    val binding: RateLastOrderDialogBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +51,6 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = RateLastOrderDialogBinding.bind(view)
         initUi()
         initObservers()
     }
@@ -100,13 +97,11 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
             rateLastOrderDishesRecyclerView.adapter = adapter
 
 
-            rateLastOrderUserImage.setImage(order.cook!!.thumbnail)
-            rateLastOrderUserName.text = "Made by ${order.cook!!.getFullName()}"
+            rateLastOrderUserImage.setImage(order.restaurant!!.thumbnail?.url)
+            rateLastOrderUserName.text = "Made by ${order.restaurant.getFullName()}"
 
         }
-
     }
-
 
     override fun onRate() {
         if (allFieldsRated()) {
@@ -115,7 +110,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     }
 
     private fun allFieldsRated(): Boolean {
-        return accuracyRating != null && deliveryRating != null && adapter.isAllRated()
+        return accuracyRating != null && deliveryRating != null && adapter?.isAllRated()?:false
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
@@ -135,7 +130,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     private fun onDoneClick() {
         binding.rateLastOrderPb.show()
         val reviewRequest = ReviewRequest()
-        var metricsArr = adapter.getRatedDishes()
+        var metricsArr = adapter?.getRatedDishes()
 
         reviewRequest.accuracyRating = accuracyRating
         reviewRequest.deliveryRating = deliveryRating
@@ -150,6 +145,11 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     override fun onTitleBodyDialogDismiss() {
         listener?.onRatingDone(true)
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 
 }

@@ -1,30 +1,32 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.features.new_order.service.EphemeralKeyProvider
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.managers.EphemeralKeyProvider
+import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.model.Eater
+import com.bupp.wood_spoon_eaters.model.EaterRequest
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
+import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
-import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 class MyProfileViewModel(
-    val api: ApiService,
     private val userRepository: UserRepository,
-    val eaterDataManager: EaterDataManager,
-    val metaDataRepository: MetaDataRepository,
-    private val paymentManager: PaymentManager
+    private val metaDataRepository: MetaDataRepository,
+    private val flowEventsManager: FlowEventsManager,
+    private val flavorConfigManager: FlavorConfigManager,
+    paymentManager: PaymentManager,
+    campaignManager: CampaignManager,
 ) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -32,48 +34,37 @@ class MyProfileViewModel(
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     val paymentLiveData = paymentManager.getPaymentsLiveData()
-    val favoritesLiveData = eaterDataManager.getFavoritesLiveData()
     val profileData: SingleLiveEvent<ProfileData> = SingleLiveEvent()
+    val versionLiveData = SingleLiveEvent<String>()
 
-    val myProfileActionEvent = MutableLiveData<MyProfileActionEvent>()
+    val campaignLiveData = campaignManager.getCampaignLiveData()
 
-    data class MyProfileActionEvent(val type: MyProfileActionType)
-    enum class MyProfileActionType {
-        LOGOUT
-    }
+
 
     init {
-        fetchProfileData()
-        refreshFavorites()
-    }
-
-    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>, val bannerUrl: String?)
-
-    private fun fetchProfileData() {
-        val eater = getUserDetails()
-        val dietaries = metaDataRepository.getDietaryList()
-        val bannerUrl = metaDataRepository.getProfileBannerUrl()
-        profileData.postValue(ProfileData(eater, dietaries, bannerUrl))
-    }
-
-    private fun refreshFavorites() {
+        setVersionData()
         viewModelScope.launch {
-            eaterDataManager.refreshMyFavorites()
+            flowEventsManager.fireEvent(FlowEventsManager.FlowEvents.VISIT_PROFILE)
         }
     }
 
-    //    val getUserDetails: SingleLiveEvent<Eater> = SingleLiveEvent()
-    fun getUserDetails(): Eater? {
-        if (userRepository.getUser() == null) {
-            viewModelScope.launch {
-                userRepository.initUserRepo()
-            }
+    private fun setVersionData() {
+        val versionData = "Version: ${BuildConfig.VERSION_NAME} ${flavorConfigManager.getEnvName()}"
+        versionLiveData.postValue(versionData)
+    }
+
+    data class ProfileData(val eater: Eater?, val dietary: List<SelectableIcon>)
+
+    fun fetchProfileData() {
+        viewModelScope.launch {
+            Log.d(TAG, "fetchProfileData")
+            val eater =  userRepository.fetchUser()
+            val dietaries = metaDataRepository.getDietaryList()
+            profileData.postValue(ProfileData(eater, dietaries))
         }
-        return userRepository.getUser()
     }
 
     fun updateClientAccount(cuisineIcons: List<SelectableIcon>? = null, dietaryIcons: List<SelectableIcon>? = null, forceUpdate: Boolean = false) {
-        progressData.startProgress()
         val eater = EaterRequest()
 
         var arrayOfCuisinesIds: MutableList<Int>? = null
@@ -120,48 +111,9 @@ class MyProfileViewModel(
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                 }
             }
-            progressData.endProgress()
         }
     }
 
-    fun logout() {
-        val logoutResult = userRepository.logout()
-        if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
-            myProfileActionEvent.postValue(MyProfileActionEvent(MyProfileActionType.LOGOUT))
-        }
-    }
-
-
-    fun initStripe(activity: Activity) {
-        //todo - fix this
-//        PaymentConfiguration.init(activity, metaDataManager.getStripePublishableKey())
-//        CustomerSession.initCustomerSession(activity, EphemeralKeyProvider(this), false)
-    }
-
-//    private val getStripeCustomerCards: SingleLiveEvent<StripeCustomerCardsEvent> = SingleLiveEvent()
-//    data class StripeCustomerCardsEvent(val isSuccess: Boolean, val paymentMethods: List<PaymentMethod>? = null)
-//    fun getStripeCustomerCards(context: Context){
-//        val paymentMethod = paymentManager.getStripeCustomerCards(context)
-//        getStripeCustomerCards.postValue(StripeCustomerCardsEvent(true, paymentMethod.value))
-//    }
-
-    fun updateUserCustomerCard(paymentMethod: PaymentMethod) {
-//        eaterDataManager.updateCustomerCard(paymentMethod)//todo - nyyyyy
-    }
-
-    fun getShareText(): String {
-//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
-        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-        return "$text \n"
-    }
-
-    fun getCuisineList(): List<SelectableIcon> {
-        return metaDataRepository.getCuisineListSelectableIcons()
-    }
-
-//    fun getDietaryList(): List<SelectableIcon> {
-//        return metaDataRepository.getDietaryList()
-//    }
 
     companion object {
         const val TAG = "wowMyProfileVM"

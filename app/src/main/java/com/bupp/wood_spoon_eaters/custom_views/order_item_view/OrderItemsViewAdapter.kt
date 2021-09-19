@@ -1,26 +1,31 @@
 package com.bupp.wood_spoon_eaters.custom_views.order_item_view
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
-import com.bupp.wood_spoon_eaters.custom_views.adapters.IngredientsCheckoutAdapter
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.OrderItemViewBinding
 import com.bupp.wood_spoon_eaters.model.Dish
 import com.bupp.wood_spoon_eaters.model.OrderItem
 import java.text.DecimalFormat
 
-class OrderItemsViewAdapter(val context: Context)://, val listener: OrderItemsViewAdapterListener)  :
-    ListAdapter<OrderItem, RecyclerView.ViewHolder>(OrderItemsViewDiffCallback()) {
+class OrderItemsViewAdapter(val context: Context, val listener: OrderItemsViewAdapterListener) : ListAdapter<OrderItem, RecyclerView.ViewHolder>(
+    OrderItemsViewDiffCallback()
+) {
 
+    interface OrderItemsViewAdapterListener {
+        fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {}
+    }
 
     class OrderItemsViewDiffCallback : DiffUtil.ItemCallback<OrderItem>() {
         override fun areItemsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
@@ -32,10 +37,6 @@ class OrderItemsViewAdapter(val context: Context)://, val listener: OrderItemsVi
         }
     }
 
-//    interface OrderItemsViewAdapterListener {
-//        fun onDishCountChange(curOrderItem: OrderItem, isOrderItemsEmpty: Boolean) {}
-//    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = OrderItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return OrderItemViewHolder(binding)
@@ -44,133 +45,43 @@ class OrderItemsViewAdapter(val context: Context)://, val listener: OrderItemsVi
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val orderItem = getItem(position).copy()
         holder as OrderItemViewHolder
-        holder.bindItem(context, orderItem)
+        holder.bindItem(orderItem)
     }
 
     class OrderItemViewHolder(view: OrderItemViewBinding) : RecyclerView.ViewHolder(view.root) {
-        private lateinit var adapter: IngredientsCheckoutAdapter
-//        private val layout: ConstraintLayout = view.orderItemLayout
         private val priceView: TextView = view.orderItemPrice
         private val name: TextView = view.orderItemName
         private val counter: TextView = view.orderItemCounter
-        private val ingredientsList = view.orderItemIngredientsRecyclerView!!
+        private val note: TextView = view.orderItemNote
 
-        fun bindItem(context: Context, orderItem: OrderItem){
+        @SuppressLint("SetTextI18n")
+        fun bindItem(orderItem: OrderItem) {
             val dish: Dish = orderItem.dish
 
-//            if(orderItem.quantity == 0){
-//                layout.alpha = 0.5f
-//            }else{
-//                layout.alpha = 1f
-//            }
+            counter.text = "${orderItem.quantity}"
+            name.text = dish.name
 
-            counter.text = "x${orderItem.quantity}"
-            name.text = "${dish.name} x${orderItem.quantity}"
 
-            var price = 0.0
-            orderItem.price.value?.let{
-                price = it*orderItem.quantity
+            val price = orderItem.price.value ?: 0.0
 
-            }
             val priceStr = DecimalFormat("##.##").format(price)
             priceView.text = "$$priceStr"
-////        counterText.text = "Count: ${orderItem.quantity}"
-//            plusMinusView.setPlusMinusListener(object: PlusMinusView.PlusMinusInterface{
-//                override fun onPlusMinusChange(counter: Int, position: Int) {
-//                    orderItem.quantity = counter
-//                    onDishCountChange(counter, orderItem,  itemCount, listener)
-//                }
-//            }, position, initialCounter = orderItem.quantity, quantityLeft = orderItem.menuItem?.quantity)
-//
-//            if(orderItem.notes.isNullOrEmpty()){
-//                note.visibility = View.GONE
-//            }else{
-//                note.visibility = View.VISIBLE
-//                note.text = orderItem.notes
-//            }
 
+            if (!orderItem.getNoteStr().isNullOrEmpty()) {
+                note.visibility = View.VISIBLE
 
-            ingredientsList.layoutManager = LinearLayoutManager(context)
-            adapter = IngredientsCheckoutAdapter(context, listOfNotNull(orderItem.getRemovedIngredients(), orderItem.getNoteStr()))
-            ingredientsList.adapter = adapter
+                val builder = SpannableStringBuilder(orderItem.getNoteStr())
+                builder.setSpan(
+                    ForegroundColorSpan(ContextCompat.getColor(itemView.context, R.color.greyish_brown)),
+                    0, 17,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                note.text = builder
+            }
         }
-
-//        fun onDishCountChange(counter: Int, orderItem: OrderItem, itemCount: Int,  listener: OrderItemsViewAdapterListener) {
-//            var isOrderItemsEmpty = false
-//            val updatedOrderItem = orderItem.copy()
-//            updatedOrderItem.quantity = counter
-//            if (counter == 0) {
-//                isOrderItemsEmpty = itemCount == 1
-//                updatedOrderItem._destroy = true
-//            }
-//            listener.onDishCountChange(updatedOrderItem, isOrderItemsEmpty)
-//        }
 
     }
 
 
-//    fun getAllDishPriceValue(): Double {
-//        var sum: Double = 0.0
-//        for(item in itemlis){
-//            sum += (item.price.value*item.quantity)
-//        }
-//        return sum
-//    }
-//
-//
-//    fun getOrderItemsQuantity(): Int {
-//        var sum: Int = 0
-//        for(item in orders){
-//            sum += item.quantity
-//        }
-//        return sum
-//    }
-
-
-
 }
-
-//
-//
-//    RecyclerView.Adapter<OrderItemsViewAdapter.DishViewHolder>(){
-//
-//
-//
-//    var adapter: IngredientsCheckoutAdapter? = null
-//
-//
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DishViewHolder {
-//        return DishViewHolder(
-//            LayoutInflater.from(context).inflate(R.layout.order_item_view, parent, false)
-//        )
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return orders?.size
-//    }
-//
-//    override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
-//
-//    }
-//
-//    private fun onDishCountChange(counter: Int, position: Int, orderItem: OrderItem) {
-//        var isOrderItemsEmpty = false
-//        val updatedOrderItem = orders[position].copy()
-//        updatedOrderItem.quantity = counter
-//        if(counter == 0){
-//            isOrderItemsEmpty = itemCount == 1
-//            updatedOrderItem._destroy = true
-//        }
-//        listener.onDishCountChange(updatedOrderItem, isOrderItemsEmpty)
-//    }
-//
-//    fun setOrderItems(orderItems: ArrayList<OrderItem>) {
-//        this.orders = orderItems
-//        notifyDataSetChanged()
-//    }
-//
-//
-
-//
-//}

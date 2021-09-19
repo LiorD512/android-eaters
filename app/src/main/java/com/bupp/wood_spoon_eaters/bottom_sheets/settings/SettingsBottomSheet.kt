@@ -7,20 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SettingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.settings.NotificationsGroupAdapter
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.segment.analytics.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener, HeaderView.HeaderViewListener {
 
-    private lateinit var binding: SettingsBottomSheetBinding
-    private lateinit var adapter: NotificationsGroupAdapter
-    private val viewModel: SettingsViewModel by viewModel<SettingsViewModel>()
+    private val binding: SettingsBottomSheetBinding by viewBinding()
+    private var adapter: NotificationsGroupAdapter? = null
+    private val viewModel: SettingsViewModel by viewModel()
     var lastClickedSwitchId: Long = -1
 
 
@@ -37,16 +38,15 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = SettingsBottomSheetBinding.bind(view)
-
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
 
-        Analytics.with(requireContext()).screen("Communication settings")
+//        Analytics.with(requireContext()).screen("Communication settings")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_COMMUNICATION_SETTINGS)
 
         binding.settingsFragHeader.setHeaderViewListener(this)
 
-        binding.settingsFragLocationSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.settingsFragLocationSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setLocationSetting(isChecked)
         }
 
@@ -59,7 +59,7 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
 
     private fun onUpdateDone(successful: Boolean) {
         if(!successful){
-            adapter.reverseSwitchThis(lastClickedSwitchId)
+            adapter?.reverseSwitchThis(lastClickedSwitchId)
         }
     }
 
@@ -75,18 +75,24 @@ class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapte
         }
     }
 
-    override fun onNotificationChange(notificationGroupId: Long) {
-        this.lastClickedSwitchId = notificationGroupId
-        viewModel.updateEaterNotificationGroup(notificationGroupId)
+    override fun onNotificationChange(notificationGroupIds: List<Long>) {
+//        this.lastClickedSwitchId = notificationGroupId
+        viewModel.updateEaterNotificationGroup(notificationGroupIds)
     }
 
 
     private fun loadSettings(settings: SettingsViewModel.SettingsDetails) {
         binding.settingsFragLocationSwitch.isChecked = settings.enableUserLocation
+        binding.settingsFragLocationSwitch.jumpDrawablesToCurrentState()
     }
 
-    override fun onHeaderBackClick() {
+    override fun onHeaderCloseClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 
 

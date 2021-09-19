@@ -15,7 +15,7 @@
 
         <TextView
                 android:id="@+id/inputTitleViewSuffix"
-                style="@style/SemiBold13Blue"
+                style="@style/LatoReg13Teal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -25,7 +25,7 @@
 
         <TextView
                 android:id="@+id/inputTitleViewTitle"
-                style="@style/SemiBold13Dark"
+                style="@style/LatoBlack13Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -39,7 +39,7 @@
 
         <TextView
                 android:id="@+id/inputTitleViewCounter"
-                style="@style/SemiBold13Dark50"
+                style="@style/LatoBlack13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -57,7 +57,8 @@
             android:inputType="textMultiLine"
             android:lineSpacingExtra="0.2dp"
             android:paddingHorizontal="15.4dp"
-            android:paddingVertical="13dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="50dp"
             android:textColor="@color/dark"
             android:textColorHint="@color/dark_50"
             android:textCursorDrawable="@drawable/edit_text_cursor"
@@ -66,7 +67,7 @@
 
     <TextView
             android:id="@+id/inputTitleViewInputError"
-            style="@style/Reg11Red"
+            style="@style/LatoReg11Red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="5.4dp"

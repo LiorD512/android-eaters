@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.bupp.wood_spoon_eaters.features.main.report_issue.ReportIssueFragment">
+        android:orientation="vertical"
+        tools:context="com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet">
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:background="@drawable/top_cornered_30_bkg">
+
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17.5dp"
+                android:layout_marginBottom="17.3dp">
+
+            <ImageButton
+                    android:id="@+id/reportIssueCloseBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:layout_marginStart="15.4dp"
+                    android:background="@null"
+                    android:src="@drawable/icons_close" />
+
+            <TextView
+                    style="@style/LatoBlack15Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:letterSpacing="0.03"
+                    android:text="Report issue" />
+
+
+        </FrameLayout>
+
+
+    </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15.4dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="15.4dp"
                 android:layout_marginBottom="23.1dp"
                 app:title="Report" />
@@ -38,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-</FrameLayout>
+</LinearLayout>
 
 
 

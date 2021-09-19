@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CancelOrderDialogLayoutBinding
@@ -20,9 +21,9 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
         fun onOrderCanceled()
     }
 
-    lateinit var binding: CancelOrderDialogLayoutBinding
+    val binding: CancelOrderDialogLayoutBinding by viewBinding()
     var listener: CancelOrderDialogListener? = null
-    val viewModel: CancelOrderViewModel by viewModel<CancelOrderViewModel>()
+    val viewModel: CancelOrderViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +39,11 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = CancelOrderDialogLayoutBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding) {
             cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
             cancelOrderDialogKeepBtn.setOnClickListener { dismiss() }
             cancelOrderDialogCancelBtn.setOnClickListener { cancelOrder() }
@@ -52,17 +52,17 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
                 Constants.CANCEL_ORDER_STAGE_1 -> {
                     cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_1_title)
                     cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_1_body)
-    //                cancelOrderDialogReason.visibility = View.VISIBLE
+                    //                cancelOrderDialogReason.visibility = View.VISIBLE
                 }
                 Constants.CANCEL_ORDER_STAGE_2 -> {
                     cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_2_title)
                     cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_2_body)
-    //                cancelOrderDialogReason.visibility = View.GONE
+                    //                cancelOrderDialogReason.visibility = View.GONE
                 }
                 Constants.CANCEL_ORDER_STAGE_3 -> {
                     cancelOrderDialogTitle.text = resources.getString(R.string.cancel_dialog_stage_3_title)
                     cancelOrderDialogBody.text = resources.getString(R.string.cancel_dialog_stage_3_body)
-    //                cancelOrderDialogReason.visibility = View.GONE
+                    //                cancelOrderDialogReason.visibility = View.GONE
                 }
             }
 
@@ -76,13 +76,11 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
                 }
             })
         }
-
     }
 
     private fun cancelOrder() {
         binding.cancelOrderPb.show()
-        val note = ""//cancelOrderDialogReason.getText()
-        viewModel.cancelOrder(orderId, note)
+        viewModel.cancelOrder(orderId)
     }
 
     override fun onAttach(context: Context) {

@@ -14,7 +14,7 @@
             android:layout_marginTop="7.7dp"
             app:isWithSep="true"
             app:title="Support center"
-            app:type="HEADER_VIEW_TYPE_BACK_TITLE" />
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
     <View
             android:layout_width="match_parent"
@@ -68,6 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
                         android:layout_marginTop="30dp"
+                        android:visibility="gone"
                         app:title="Order again" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
@@ -101,8 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:paddingHorizontal="15.4dp"
-                        app:showAddBtn="false" />
+                        android:paddingHorizontal="15.4dp" />
 
                 <View
                         android:layout_width="match_parent"
@@ -123,58 +123,59 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
-                        android:paddingBottom="23dp"
                         android:background="@color/white"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingBottom="23dp">
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Subtotal"
                             android:id="@+id/singleOrderDetailsSubtotal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            app:title="Subtotal" />
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Delivery fee"
-                            app:tip_type="CHECKOUT_DELIVERY_FEE"
                             android:id="@+id/singleOrderDetailsDeliveryFee"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            app:tip_type="CHECKOUT_DELIVERY_FEE"
+                            app:title="Delivery fee" />
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Fees &amp; Estimated tax"
-                            app:tip_type="CHECKOUT_MINIMUM_FEE"
                             android:id="@+id/singleOrderDetailsFees"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            app:tip_type="FEES_AND_ESTIMATED_TAX"
+                            app:title="Fees &amp; Estimated tax" />
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Promo code"
-                            android:visibility="gone"
                             android:id="@+id/singleOrderDetailsPromoCode"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:title="Promo code" />
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Total before tip"
-                            android:id="@+id/singleOrderDetailsTotalBeforeTip"
+                            android:id="@+id/singleOrderDetailsTip"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            app:title="Tip for your courier" />
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                            app:title="Total"
                             android:id="@+id/singleOrderDetailsTotal2"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            app:isBold="true"
+                            app:title="Total" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <com.bupp.wood_spoon_eaters.views.WSProgressBar
-                    tools:visibility="gone"
                     android:id="@+id/singleOrderDetailsPb"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    tools:visibility="gone" />
 
         </FrameLayout>
 

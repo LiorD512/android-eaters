@@ -30,6 +30,12 @@ data class WSError(
 )
 
 @JsonClass(generateAdapter = true)
+@Parcelize
+data class WSImage(
+    @Json(name = "url") val url: String?,
+):Parcelable
+
+@JsonClass(generateAdapter = true)
 data class CountriesISO(
     val name: String?,
     val value: String,
@@ -99,7 +105,8 @@ data class AppSetting(
 )
 
 enum class CloudinaryTransformationsType{
-    SMALL, MEDIUM, LARGE
+    @Json(name = "small") SMALL,
+    MEDIUM, LARGE
 }
 
 @JsonClass(generateAdapter = true)
@@ -107,7 +114,8 @@ data class CloudinaryTransformations(
     var keyValueMap: Map<CloudinaryTransformationsType, String>?
 ){
     fun getByType(type: CloudinaryTransformationsType): String?{
-        return keyValueMap?.get(type.name.toLowerCase())
+        //todo - Amitt! check this !
+        return keyValueMap?.get(type)
     }
 }
 
@@ -132,6 +140,7 @@ data class DietaryIcon(
     @Json(name = "name") override val name: String,
     @Json(name = "icon") override val icon: String,
     @Json(name = "icon_selected") override val iconSelected: String? = null,
+    @Json(name = "icon_dish") val iconDish: String? = null,
     @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 
@@ -145,10 +154,6 @@ data class CuisineLabel(
     @Json(name = "id") override val id: Long
 ) : SelectableIcon, Parcelable
 
-interface SelectableString {
-    val id: Long
-    val name: String
-}
 
 @JsonClass(generateAdapter = true)
 data class PreSignedUrl(

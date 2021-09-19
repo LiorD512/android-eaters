@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/header_view_height"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15.4dp"
+                android:paddingVertical="15dp">
+
+            <ImageButton
+                    android:id="@+id/checkoutHeaderBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_close_grey" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/checkoutHeaderTitle"
+                        style="@style/LatoBlack15DarkGrey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="3dp"
+                        tools:text="Checkout" />
+
+                <TextView
+                        android:id="@+id/checkoutHeaderSubtitle"
+                        style="@style/LatoReg13VeryLightGrey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Israeli in the big apple" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+</FrameLayout>

@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
+import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
@@ -77,14 +77,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         super.afterTextChanged(s)
                     }
                 })
-                wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+                wsEditTextInput.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
                     if (hasFocus) {
                         wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.greyish_brown))
                     } else {
                         wsEditTextUnderline.setBackgroundColor(ContextCompat.getColor(context, R.color.light_periwinkle))
                     }
                 }
-                wsEditTextInput.setOnEditorActionListener { v, actionId, _ ->
+                wsEditTextInput.setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         if(validateIsNotEmpty()){
                             listener?.onWSEditTextActionDone()
@@ -306,10 +306,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setPrefix(prefix: String) {
         binding.wsEditTextPrefix.visibility = View.VISIBLE
         binding.wsEditTextPrefix.setText(prefix)
-    }
-
-    fun getPrefix(): String {
-        return binding.wsEditTextPrefix.text.toString()
     }
 
     fun setTextFromList(list: List<SelectableIcon>) {

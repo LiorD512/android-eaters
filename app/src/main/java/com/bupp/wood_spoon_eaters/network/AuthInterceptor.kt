@@ -11,14 +11,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
 
     private val TAG = "wowAuthInterceptor"
-    private var apiService: ApiService? = null
     private var storedAuthToken: String? = null
 
     private val lock = ReentrantReadWriteLock(true)
-
-    fun setApiService(apiService: ApiService) {
-        this.apiService = apiService
-    }
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -46,7 +41,7 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     }
 
     private fun updateToken(newToken: String) {
-        Log.d("wowAuth", "updateD Token: $newToken")
+//        Log.d("wowAuth", "updateD Token: $newToken")
         storedAuthToken = newToken
         settings.token = newToken
     }
@@ -56,13 +51,13 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     }
 
     private fun addTokenToRequest(request: Request, authToken: String?): Request {
-        var request = request
+        var finalRequest = request
         if (authToken != null) {
             Log.d(TAG, "addTokenToRequest: $authToken")
             val requestBuilder = request.newBuilder().addHeader("X-Auth-Token", authToken)
-            request = requestBuilder.build()
+            finalRequest = requestBuilder.build()
         }
-        return request
+        return finalRequest
     }
 
 //    private fun refreshSessionToken(): Boolean {

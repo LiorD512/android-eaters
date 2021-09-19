@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
-                style="@style/SemiBold15Dark"
+                style="@style/LatoBlack15Dark"
                 android:layout_marginTop="-30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
 
         <TextView
                 android:id="@+id/contactUsDialogCallBtn"
-                style="@style/Reg15Dark"
+                style="@style/LatoReg15Dark"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="15.4dp"
@@ -63,7 +63,7 @@
 
         <TextView
                 android:id="@+id/contactUsDialogSmsBtn"
-                style="@style/Reg15Dark"
+                style="@style/LatoReg15Dark"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="15.4dp"

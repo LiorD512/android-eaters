@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         xmlns:tools="http://schemas.android.com/tools"
         android:background="@color/white"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <TextView
+            android:padding="15.4dp"
+            style="@style/LatoBlack23Dark"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:text="Orders"/>
+
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+                android:layoutAnimation="@anim/restaurant_layout_animation"
                 android:id="@+id/ordersHistoryFragRecyclerView"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginEnd="15.4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -33,6 +40,10 @@
 
     </FrameLayout>
 
-
+    <View
+            android:visibility="gone"
+            android:id="@+id/orderHistoryFragHeightCorrection"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/floating_cart_btn_height"/>
 
 </LinearLayout>

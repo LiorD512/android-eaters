@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+    <ProgressBar
+            android:id="@+id/OrderPb"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/order_progressbar_states"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+            app:flexWrap="wrap"
+            app:flexDirection="column"
+            app:alignContent="space_between"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                    android:padding="5dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:id="@+id/orderPbReceived"
+                    android:src="@drawable/ic_order_pb_received_selector"
+                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+
+            <ImageView
+                    android:padding="5dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:id="@+id/orderPbPrepared"
+                    android:src="@drawable/ic_order_pb_prepared_selector"
+                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+
+            <ImageView
+                    android:padding="5dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:id="@+id/orderPbOnTheWay"
+                    android:src="@drawable/ic_order_pb_on_the_way_selector"
+                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+
+            <ImageView
+                    android:padding="5dp"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:id="@+id/orderPbDelivered"
+                    android:src="@drawable/ic_order_pb_delivered_selector"
+                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</FrameLayout>

@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.common
 
 import android.Manifest
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -58,8 +57,10 @@ class MediaUtils(activity: FragmentActivity? = null, listener: MediaUtilListener
         Log.d(TAG, "Activity For Result - cameraResult")
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             Log.d("wowFiles", "photoURI: $photoURI")
-            val file = File(currentPhotoPath)
-            listener.onMediaUtilResult(MediaUtilResult(MediaUtilsType.MEDIA_UTILS_PHOTO, photoURI, file, currentPhotoPath))
+            currentPhotoPath?.let{
+                val file = File(it)
+                listener.onMediaUtilResult(MediaUtilResult(MediaUtilsType.MEDIA_UTILS_PHOTO, photoURI, file, currentPhotoPath))
+            }
         }
     }
 
@@ -95,12 +96,6 @@ class MediaUtils(activity: FragmentActivity? = null, listener: MediaUtilListener
     fun startPhotoFetcher() {
         activity?.let{
             isPhotoMode = true
-            checkMediaPermission()
-        }
-    }
-    fun startVideoFetcher() {
-        activity?.let{
-            isPhotoMode = false
             checkMediaPermission()
         }
     }
@@ -167,14 +162,6 @@ class MediaUtils(activity: FragmentActivity? = null, listener: MediaUtilListener
     private fun openPhotoGallery() {
         val galleryIntent = Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryIntent.type = "image/*"
-//        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
-//        galleryIntent.type = "image/*"
-//        val listGallery = activity!!.packageManager.queryIntentActivities(galleryIntent, 0)
-//        val intent = Intent(galleryIntent)
-//        for (res in listGallery) {
-//            intent.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
-//            intent.setPackage(res.activityInfo.packageName)
-//        }
         mediaGalleryLauncher.launch(galleryIntent)
     }
 

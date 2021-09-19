@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/customBannerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="199dp"
+            android:visibility="gone"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="7.7dp"
+            tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <ImageView
+                    android:id="@+id/customBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+<!--            <ImageView-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:src="@drawable/banner_overlay" />-->
+
+            <TextView
+                    android:layout_marginHorizontal="15.4dp"
+                    android:layout_marginBottom="7.7dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/customBannerSubTitle"
+                    android:id="@+id/customBannerTitle"
+                    style="@style/LatoBold19White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="3.8sp"
+                    tools:text="Get 30% off your next order" />
+
+            <TextView
+                    android:paddingHorizontal="15.4dp"
+                    android:layout_marginBottom="14dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/customBannerSubTitle"
+                    style="@style/LatoBold13White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    tools:text="Invite your friends to try WoodSpoon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

@@ -4,11 +4,14 @@ import android.content.Context
 import android.location.LocationManager
 import android.util.Log
 import androidx.core.location.LocationManagerCompat
-import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.AppSettings
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.LocationUtils
+import com.bupp.wood_spoon_eaters.managers.location.LocationManager.AddressDataType
+import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.DateUtils
+import java.util.*
 
 
 class FeedDataManager(
@@ -17,15 +20,42 @@ class FeedDataManager(
 ) {
 
     private var isWaitingToLocationUpdate: Boolean = false
+    private var currentDeliveryParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam? = null
 
     fun getFinalAddressLiveDataParam() = eaterDataManager.getFinalAddressLiveDataParam()
     fun getLocationLiveData() = eaterDataManager.getLocationData()
-    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
+
+
+    private fun getFeedUnixTimestamp(): String?{
+        currentDeliveryParam?.let{
+            return when(it.deliveryTimeType){
+                SingleColumnTimePickerBottomSheet.DeliveryType.TODAY -> {
+                    DateUtils.parseUnixTimestamp(Date())
+                }
+                SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE -> {
+                    DateUtils.parseUnixTimestamp(it.date)
+                }
+                else -> { // DeliveryType.NON_FILTERED
+                    null
+                }
+            }
+        }
+        return null
+    }
+
+    fun getCurrentDeliveryDate(): Date?{
+        currentDeliveryParam.let{
+            return it?.date
+        }
+    }
+
+
+//    fun getDeliveryTimeLiveData() = eaterDataManager.getDeliveryTimeLiveData()
+
+
 
     fun getFeedUiStatus() = finalFeedUiStatus
     private val finalFeedUiStatus = SingleLiveEvent<FeedUiStatus>()
-
-    val getFavoritesLiveData = eaterDataManager.getFavoritesLiveData()
 
     private fun isGpsEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -56,8 +86,8 @@ class FeedDataManager(
                     Log.d(TAG, "don't have known address")
                     if (myLocation != null) {
                         finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.CURRENT_LOCATION))
-                        myLocation.toAddress()?.let {
-                            eaterDataManager.updateSelectedAddress(it)
+                        myLocation.toAddress().let {
+                            eaterDataManager.updateSelectedAddress(it, AddressDataType.DEVICE_LOCATION)
                         }
                     } else {
                         finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.HAS_GPS_ENABLED_BUT_NO_LOCATION))
@@ -73,13 +103,13 @@ class FeedDataManager(
                         if (closestAddress != null) {
                             Log.d(TAG, "using closest address: ${closestAddress.id}")
                             finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.KNOWN_ADDRESS))
-                            eaterDataManager.updateSelectedAddress(closestAddress)
+                            eaterDataManager.updateSelectedAddress(closestAddress, AddressDataType.FULL_ADDRESS)
                             isWaitingToLocationUpdate = false
                         } else {
                             Log.d(TAG, "using current location: $myLocation")
                             finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.CURRENT_LOCATION))
                             myLocation.toAddress()?.let {
-                                eaterDataManager.updateSelectedAddress(it)
+                                eaterDataManager.updateSelectedAddress(it, AddressDataType.DEVICE_LOCATION)
                             }
                             isWaitingToLocationUpdate = true
                         }
@@ -99,7 +129,7 @@ class FeedDataManager(
                     eaterDataManager.setDefaultFeedUi()
                 } else {
                     finalFeedUiStatus.postValue(FeedUiStatus(FeedUiStatusType.KNOWN_ADDRESS_WITH_BANNER))
-                    eaterDataManager.updateSelectedAddress(knownAddresses[0])
+                    eaterDataManager.updateSelectedAddress(knownAddresses[0], AddressDataType.FULL_ADDRESS)
                 }
             }
         } else {
@@ -130,7 +160,7 @@ class FeedDataManager(
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getDeliveryTimestamp()
+        feedRequest.timestamp = getFeedUnixTimestamp()
 
         return feedRequest
     }
@@ -150,17 +180,20 @@ class FeedDataManager(
         }
 
         //time
-        feedRequest.timestamp = eaterDataManager.getDeliveryTimestamp()
+        feedRequest.timestamp = getFeedUnixTimestamp()
 
         return feedRequest
     }
 
-    fun getUser(): Eater? {
-        return eaterDataManager.currentEater
+    fun getFeedDeliveryParams(): Date?{
+        currentDeliveryParam?.let{
+            return it.date
+        }
+        return null
     }
 
-    suspend fun refreshFavorites() {
-        eaterDataManager.refreshMyFavorites()
+    fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        this.currentDeliveryParam = deliveryTimeParam
     }
 
     companion object {

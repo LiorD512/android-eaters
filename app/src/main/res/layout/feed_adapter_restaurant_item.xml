@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/feedRestaurantItemMainLayout"
+        android:paddingBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/feedRestaurantItemCardLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="7.7dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:cardBackgroundColor="@color/dark">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/feedRestaurantItemTopLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="179dp">
+
+                <com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
+                        app:snapGravity="end"
+                        app:snapLastItem="true"
+                        app:snapEnabled="true"
+                        app:snapMaxFlingSizeFraction="1"
+                        app:snapToPadding="false"
+                        app:snapScrollMsPerInch="50"
+                        android:nestedScrollingEnabled="false"
+                        android:id="@+id/feedRestaurantItemList"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"/>
+
+                <ImageButton
+                        android:id="@+id/feedRestaurantItemBtnPrevious"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="15.4dp"
+                        android:alpha="0"
+                        android:background="@null"
+                        android:src="@drawable/ic_arrow_left"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                        android:id="@+id/feedRestaurantItemBtnNext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="15.4dp"
+                        android:alpha="0"
+                        android:background="@null"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                        android:id="@+id/feedRestaurantItemDishName"
+                        style="@style/LatoBlack15White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15.4dp"
+                        android:alpha="0"
+                        android:letterSpacing="-0.01"
+                        app:layout_constraintBottom_toTopOf="@+id/feedRestaurantItemIndicator"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="Vegan Health Salad" />
+
+                <TextView
+                        android:id="@+id/feedRestaurantItemDishPrice"
+                        style="@style/LatoBlack15White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginEnd="15dp"
+                        android:alpha="0"
+                        android:letterSpacing="-0.01"
+                        app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantItemDishName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemDishName"
+                        tools:text="$10" />
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        android:id="@+id/feedRestaurantItemDishSeeMore"
+                        android:layout_width="142dp"
+                        android:layout_height="wrap_content"
+                        android:alpha="0"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:title="See more" />
+
+                <com.bupp.wood_spoon_eaters.views.FeedItemsIndicatorView
+                        android:id="@+id/feedRestaurantItemIndicator"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15.4dp"
+                        android:paddingTop="9dp"
+                        android:paddingBottom="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp">
+
+                <ImageView
+                        android:id="@+id/feedRestaurantItemChefImage"
+                        android:layout_width="39dp"
+                        android:layout_height="39dp"
+                        android:layout_marginStart="15.4dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/feedRestaurantItemRating"
+                        app:layout_constraintStart_toEndOf="@+id/feedRestaurantItemChefImage"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                            android:id="@+id/feedRestaurantItemRestaurantName"
+                            style="@style/LatoBold15DarkGrey"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:letterSpacing="-0.01"
+                            tools:text="Israeli in The Big Apple" />
+
+                    <TextView
+                            android:id="@+id/feedRestaurantItemChefName"
+                            style="@style/LatoReg13NobelGrey"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:letterSpacing="-0.01"
+                            tools:text="by Assaf Beer" />
+
+                </LinearLayout>
+
+                <TextView
+                        style="@style/LatoReg13DarkGrey"
+                        android:id="@+id/feedRestaurantItemRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15.4dp"
+                        android:drawableStart="@drawable/ic_rating_star"
+                        android:gravity="center"
+                        android:letterSpacing="-0.01"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="4.4" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

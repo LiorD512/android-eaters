@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.di.abs
 
 import androidx.lifecycle.MutableLiveData
-import com.bupp.wood_spoon_eaters.model.Address
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
@@ -23,13 +22,17 @@ open class LiveEvent<out T>(private val content: T) {
         }
     }
 
+    fun forceUnHandled(){
+        hasBeenHandled = false
+    }
+
     /**
      * Returns the content, even if it's already been handled.
      */
     fun peekContent(): T = content
 }
 
-open class LiveEventData<T>() : MutableLiveData<LiveEvent<T>>() {
+open class LiveEventData<T> : MutableLiveData<LiveEvent<T>>() {
 
     fun postRawValue(value: T) = this.postValue(LiveEvent(value))
 }

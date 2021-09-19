@@ -44,8 +44,13 @@
 -keep class com.bupp.wood_spoon_eaters.model.* { *; }
 -keep public class com.bupp.wood_spoon_eaters.network.google.models.* {*;}
 
+
+
 -dontwarn module-info
 
 
 #-keep class com.uxcam.** { *; }
 -dontwarn com.uxcam.**
+
+#branch
+-keep class com.google.android.gms.** { *; }

@@ -3,11 +3,9 @@ package com.bupp.wood_spoon_eaters.custom_views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.View.OnClickListener
 import android.widget.EditText
 import android.widget.LinearLayout
-import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.NumpadViewBinding
 
 
@@ -22,11 +20,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun getInputText(): EditText {
         return inputEditText
     }
-
-    fun setInputText(inputEditText: EditText) {
-        this.inputEditText = inputEditText
-    }
-
 
     init{
         with(binding){
@@ -49,10 +42,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 inputEditText.setText(inputEditText.text.toString().substring(0, inputEditText.text.toString().length - 1))
             })
         }
-    }
-
-    fun clearInput() {
-        inputEditText.setText("")
     }
 
     override fun setEnabled(enabled: Boolean) {

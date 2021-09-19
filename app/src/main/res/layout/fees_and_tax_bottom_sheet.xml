@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="15.4dp"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <TextView
+            android:layout_marginTop="15.4dp"
+            style="@style/LatoBlack19DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:text="Fees &amp; estimated tax"/>
+
+    <TextView
+            android:id="@+id/feesTaxBSFeeTitle"
+            android:layout_marginTop="23dp"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            tools:text="Service fee: $13.35"/>
+
+    <TextView
+            android:id="@+id/feesTaxBSFeeSubTitle"
+            android:layout_marginTop="1dp"
+            style="@style/LatoReg13MediumGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="This 15% service fee helps us operate WoodSpoon."/>
+
+    <TextView
+            android:id="@+id/feesTaxBSTaxTitle"
+            android:layout_marginTop="23dp"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            tools:text="Estimated tax: $7.89"/>
+
+    <TextView
+            android:id="@+id/feesTaxBSTaxSubTitle"
+            android:layout_marginTop="1dp"
+            style="@style/LatoReg13MediumGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="Finalized tax will be shown on your order receipt."/>
+
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/feesTaxBSMinFeeTitle"
+            android:layout_marginTop="23dp"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="Minimum order fee:"/>
+
+    <TextView
+            android:visibility="gone"
+            android:id="@+id/feesTaxBSMinFeeSubTitle"
+            android:layout_marginTop="1dp"
+            style="@style/LatoReg13MediumGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="To reduce this fee your order value should be bigger than"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            app:title="OK"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/feesTaxBSTaxBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>
+
+
+
+

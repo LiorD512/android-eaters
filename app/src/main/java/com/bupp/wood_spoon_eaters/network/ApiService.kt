@@ -51,28 +51,18 @@ interface ApiService {
     suspend fun getFeed(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): ServerResponse<List<Feed>>
+    ): ServerResponse<FeedResult>
 
-    @FormUrlEncoded
-    @POST("eaters/me/presigned_urls")
-    fun postDishSuggestion(@Field("dish_name") dishName: String, @Field("dish_description") dishDescription: String): Call<ServerResponse<Any>>
+    @GET()
+    suspend fun getHrefCollection(
+        @Url url: String,
+    ): ServerResponse<List<FeedSectionCollectionItem>>
 
     @GET("eaters/me/triggers")
     suspend fun getTriggers(): ServerResponse<Trigger>
 
     @GET("eaters/me/stripe/ephemeral_key")
     fun getEphemeralKey(): Observable<ResponseBody>
-
-//    @GET("eaters/me/stripe/ephemeral_key")
-//    fun getEphemeralKey2(): Call<ServerResponse<Any>>
-
-    @FormUrlEncoded
-    @POST("eaters/me/referrals")
-    fun postCampaignReferrals(@Field("sid") sid: String, @Field("cid") cid: String? = null): Observable<ServerResponse<Any>>
-
-    @GET("eaters/me/campaigns/current")
-    fun getCurrentShareCampaign(): Call<ServerResponse<Campaign>>
-
 
     @GET("eaters/me/campaigns/active")
     suspend fun getUserCampaign(): ServerResponse<List<Campaign>>
@@ -81,19 +71,32 @@ interface ApiService {
     @POST("eaters/me/campaigns/interactions/referee")
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
 
+    /** Restaurant **/
+    @GET("cooks/{cook_id}")
+    suspend fun getRestaurant(
+        @Path(value = "cook_id", encoded = true) restaurantId: Long,
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null
+    ): ServerResponse<Restaurant>
 
+    //cook likes
+    @POST("eaters/me/likes/cooks/{id}")
+    suspend fun likeCook(@Path(value = "id", encoded = true) cookId: Long): ServerResponse<Any>
+
+    @DELETE("eaters/me/likes/cooks/{id}")
+    suspend fun unlikeCook(@Path(value = "id", encoded = true) cookId: Long): ServerResponse<Any>
+
+    @FormUrlEncoded
+    @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
+    suspend fun updateCampaignStatus(@Path(value = "user_interaction_id", encoded = true) userInteractionId: Long, @Field("user_interaction_status") status: String): ServerResponse<Any>
 
     //Utils
     @POST("eaters/me/presigned_urls")
     suspend fun postEaterPreSignedUrl(): ServerResponse<PreSignedUrl>
 
-
     //Eater
     @GET("eaters/me")
     suspend fun getMe(): ServerResponse<Eater>
-
-    @GET("eaters/me")
-    fun getMeCall(): Call<ServerResponse<Eater>>
 
     @POST("eaters/me")
     suspend fun postMe(@Body eater: EaterRequest): ServerResponse<Eater>
@@ -105,15 +108,15 @@ interface ApiService {
     @POST("eaters/me")
     suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Any>
 
-    @FormUrlEncoded
+
     @POST("eaters/me")
-    suspend fun postEaterNotificationGroup(@Field("notification_group_ids[]") notificationGroupIds: List<Long>): ServerResponse<Eater>
+    suspend fun postEaterNotificationGroup(@Body eater: SettingsRequest): ServerResponse<Eater>
+
+    @DELETE("eaters/me")
+    suspend fun deleteMe(): Response<Unit>
 
     @POST("eaters/me/searches")
     suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
-
-    @GET("eaters/me/searches/{id}")
-    fun getNextSearch(@Path(value = "id", encoded = true) searchId: Long, @Field("page") page: String): Call<ServerResponse<ArrayList<Search>>>
 
     @GET("cooks/{cook_id}")
     suspend fun getCook(
@@ -124,17 +127,6 @@ interface ApiService {
         @Query("timestamp") timestamp: String? = null,
         @Query("event_id") eventId: Long? = null
     ): ServerResponse<Cook>
-
-    //Single Dish
-//    @GET("menu_items/{menu_item_id}/dish")
-//    fun getSingleDish(
-//        @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
-//        @Query("lat") lat: Double? = null,
-//        @Query("lng") lng: Double? = null,
-//        @Query("address_id") addressId: Long? = null,
-//        @Query("timestamp") timestamp: String? = null
-//    ): Call<ServerResponse<FullDish>>
-
 
     //New Order calls
     @GET("menu_items/{menu_item_id}/dish")
@@ -155,15 +147,14 @@ interface ApiService {
     @POST("eaters/me/orders/{order_id}/checkout")
     suspend fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): ServerResponse<Any>
 
-//    @POST("eaters/me/orders/{order_id}/finalize")
-//    fun finalizeOrder(@Path(value = "order_id", encoded = true) orderId: Long): Call<ServerResponse<Void>>
-
     @DELETE("eaters/me/orders/{order_id}/")
     suspend fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): ServerResponse<Any>
 
     @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
     suspend fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<ShippingMethod>>
 
+    @GET("eaters/me/orders/{order_id}/delivery_times")
+    suspend fun getOrderDeliveryTimes(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<DeliveryDates>>
 
     //Eater Data
     @GET("eaters/me/orders/trackable")
@@ -175,46 +166,11 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
     ): ServerResponse<Search>
 
-//    @GET("eaters/me/orders/trackable")
-//    fun getTrackableOrdersObservable(): Observable<ServerResponse<ArrayList<Order>>>
-
     @GET("eaters/me/orders")
-    fun getOrders(): Call<ServerResponse<List<Order>>>
+    suspend fun getOrders(): ServerResponse<List<Order>>
 
     @GET("eaters/me/orders/{order_id}")
     suspend fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Order>
-
-
-    //Profile data
-    @GET("eaters/me/dishes/ordered")
-    fun getEaterOrdered(
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): Call<ServerResponse<Search>>
-
-//    @GET("eaters/me/favorites")
-//    fun getEaterFavorites(
-//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-//    ): Call<ServerResponse<Search>>
-
-
-//    //Feed
-//    @GET("eaters/me/feed")
-//    fun getFeed(
-//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-//    ): Call<ServerResponse<ArrayList<Feed>>>
-
-
-    //dish likes
-    @POST("dishes/{dish_id}/likes")
-    fun likeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Any>>
-
-    @DELETE("dishes/{dish_id}/likes")
-    fun unlikeDish(@Path(value = "dish_id", encoded = true) dishId: Long): Call<ServerResponse<Any>>
-
-    //Reports
 
     //Post Report
     @POST("eaters/me/orders/{order_id}/reports")
@@ -223,9 +179,6 @@ interface ApiService {
     //Post Review
     @POST("eaters/me/orders/{order_id}/reviews")
     suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
-
-    @GET("eaters/me/events/{event_id}")
-    fun getEventById(@Path(value = "event_id", encoded = true) eventId: String): Call<ServerResponse<Event>>
 
     @PUT
     suspend fun uploadAsset(@Url uploadUrl: String, @Body photo: RequestBody): ResponseBody

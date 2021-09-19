@@ -5,7 +5,6 @@ import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.base_repos.MetaDataRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
-import com.google.gson.internal.LinkedHashTreeMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -50,61 +49,40 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
 
     }
 
-    private fun getMetaDataObject(): MetaDataModel? {
+    private fun getMetaDataObject(): MetaDataModel {
         return this.metaDataObject
     }
 
-    fun getCuisineList(): List<CuisineLabel> {
-        if (getMetaDataObject()?.cuisines != null) {
-            return metaDataObject.cuisines as List<CuisineLabel>
-        }
-        return listOf()
-    }
-
     fun getCuisineListSelectableIcons(): List<SelectableIcon>{
-        if(getMetaDataObject()?.cuisines != null) {
+        if(getMetaDataObject().cuisines != null) {
             return metaDataObject.cuisines as List<SelectableIcon>
         }
         return listOf()
     }
 
     fun getDietaryList(): List<SelectableIcon> {
-        if (getMetaDataObject()?.diets != null) {
+        if (getMetaDataObject().diets != null) {
             return metaDataObject.diets as List<SelectableIcon>
         }
         return listOf()
     }
 
-    fun getMetricsList(): List<Metrics> {
-        if (getMetaDataObject()?.metrics != null) {
-            return metaDataObject.metrics as List<Metrics>
-        }
-        return listOf()
-    }
-
     fun getReportTopics(): List<ReportTopic> {
-        if (getMetaDataObject()?.reportTopic != null) {
+        if (getMetaDataObject().reportTopic != null) {
             return metaDataObject.reportTopic as List<ReportTopic>
         }
         return listOf()
     }
 
     fun getNotificationsGroup(): List<NotificationGroup> {
-        if (getMetaDataObject()?.notificationsGroup != null) {
+        if (getMetaDataObject().notificationsGroup != null) {
             return metaDataObject.notificationsGroup as List<NotificationGroup>
         }
         return listOf()
     }
 
-    fun getWelcomeScreens(): List<WelcomeScreen> {
-        if (getMetaDataObject()?.welcome_screens != null) {
-            return metaDataObject.welcome_screens as List<WelcomeScreen>
-        }
-        return listOf()
-    }
-
-    fun getSettings(): List<AppSetting> {
-        if (getMetaDataObject()?.settings != null) {
+    private fun getSettings(): List<AppSetting> {
+        if (getMetaDataObject().settings != null) {
             return metaDataObject.settings as List<AppSetting>
         }
         return listOf()
@@ -135,7 +113,7 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return null
     }
 
-    fun getReportsEmailAddress(): String? {
+    fun getReportsEmailAddress(): String {
         for (settings in getSettings()){
             if(settings.key == "reports_email")
                 return settings.value!! as String
@@ -182,7 +160,7 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return ""
     }
 
-    private fun getMinAndroidVersion():String?{
+    private fun getMinAndroidVersion():String{
         for (settings in getSettings()){
             if(settings.key == "eaters_min_android_version")
                 return (settings.value!!) as String
@@ -193,7 +171,7 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
     fun checkMinVersionFail(): Boolean {
         val minVersion = getMinAndroidVersion()
         Log.d("wowMetaDataRepo", "minimum version: $minVersion")
-        minVersion?.let{
+        minVersion.let{
             val versionName = BuildConfig.VERSION_NAME
 
             val myCurrVersion = getNumberFromStr(versionName)
@@ -201,13 +179,12 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
             Log.d("wowMetaDataRepo", "curVersion: $myCurrVersion, minimum version: $minimumVersion")
             return myCurrVersion < minimumVersion
         }
-        return true
     }
 
     private fun getNumberFromStr(str: String): Int {
         var versionNumber = 0
         val numParts = str.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        if (numParts.size > 0 && numParts.size <= 3) {
+        if (numParts.size in 1..3) {
             var multiplier = 1
             for (i in numParts.indices.reversed()) {
                 versionNumber += Integer.parseInt(numParts[i].replace("\"", "")) * multiplier
@@ -239,10 +216,6 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
                 return (settings.value!!) as String
         }
         return ""
-    }
-
-    fun getStates(): List<State>? {
-        return metaDataObject.states
     }
 
     fun getLocationDistanceThreshold(): Int {
@@ -285,21 +258,12 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return ""
     }
 
-    fun getProfileBannerUrl(): String? {
-        for (settings in getSettings()){
-            if(settings.key == "profile_banner_url")
-                return (settings.value) as String
-        }
-        return null
-    }
-
     fun getCloudinaryTransformations(): CloudinaryTransformations? {
         for (settings in getSettings()){
             if(settings.key == "cloudinary_transformations"){
                 val cloudinaryMap = settings.value as Map<*, *>?
-                cloudinaryMap?.let{
-                    val cloudinary = CloudinaryTransformations(cloudinaryMap as Map<CloudinaryTransformationsType, String>?)
-                    return cloudinary
+                cloudinaryMap?.let {
+                    return CloudinaryTransformations(cloudinaryMap as Map<CloudinaryTransformationsType, String>?)
                 }
             }
         }

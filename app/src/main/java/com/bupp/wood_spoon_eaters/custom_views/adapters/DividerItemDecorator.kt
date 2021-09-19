@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.custom_views.adapters
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import java.util.*

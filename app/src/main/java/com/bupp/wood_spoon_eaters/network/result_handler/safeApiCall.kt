@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.network.result_handler
 import android.util.Log
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.model.WSError
-import com.google.gson.Gson
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -12,7 +11,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import retrofit2.adapter.rxjava2.Result.response
 import java.io.IOException
 
 
@@ -22,7 +20,11 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
             ResultHandler.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
-                is IOException -> ResultHandler.NetworkError
+                is IOException -> {
+                    val errorMessage = throwable.message
+                    Log.d("safeApiCall","NetworkError: $errorMessage")
+                    ResultHandler.NetworkError
+                }
                 is HttpException -> {
                     val code = throwable.code()
                     when (code) {
@@ -34,7 +36,7 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, ap
                                 Types.newParameterizedType(ServerResponse::class.java, WSError::class.java)
                             )
                             val serverResponse = jsonAdapter.fromJson(source)
-                            Log.d("wow","wow errors: $serverResponse")
+                            Log.d("safeApiCall","wow errors: $serverResponse")
                             if (serverResponse?.errors != null) {
                                     ResultHandler.WSCustomError(serverResponse?.errors)
                             } else {

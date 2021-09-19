@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:id="@+id/dishFragMainLayout"
+        android:paddingHorizontal="23dp"
+        android:paddingBottom="30dp">
+
+    <com.bupp.wood_spoon_eaters.views.ExpandableTextView
+            android:id="@+id/dishFragDescription"
+            style="@style/LatoReg13BrownishGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:collapseMaxLines="3"
+            tools:text="Labaneh is soft cheese, similar in texture to cream cheese, made from strained yogurt and very popular in middle eastern cuisine eastern cuisine…" />
+
+    <TextView
+            android:id="@+id/dishFragPortionSize"
+            style="@style/LatoReg13NobelGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7.7dp"
+            android:maxLines="1"
+            tools:text="Portion size : 2 Servings " />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15.7dp"
+            android:layout_marginBottom="22dp"
+            android:background="@color/grey_white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dishFragDietaryList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/dishFragIngredientsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="1dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="7.7dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="20dp">
+
+            <TextView
+                    style="@style/LatoBold13BrownishGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="Ingredients" />
+
+            <com.bupp.wood_spoon_eaters.views.ExpandableTextView
+                    android:id="@+id/dishFragIngredients"
+                    style="@style/LatoReg13BrownishGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:collapseMaxLines="1"
+                    tools:text="Labaneh is soft cheese, similar in texture to cream cheese, made from strained yogurt and very popular in middle eastern cuisine eastern cuisine…" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/dishFragAccommodationsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="1dp"
+            android:layout_marginTop="15.7dp"
+            android:elevation="7dp"
+            app:cardCornerRadius="7.7dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="20dp">
+
+            <TextView
+                    style="@style/LatoBold13BrownishGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="Accomodations" />
+
+            <com.bupp.wood_spoon_eaters.views.ExpandableTextView
+                    android:id="@+id/dishFragAccommodations"
+                    style="@style/LatoReg13BrownishGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    app:collapseMaxLines="1"
+                    tools:text="Labaneh is soft cheese, similar in texture to cream cheese, made from strained yogurt and very popular in middle eastern cuisine eastern cuisine…" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <com.bupp.wood_spoon_eaters.custom_views.PlusMinusView
+            android:id="@+id/dishFragPlusMinus"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            app:iconsSize="39"/>
+
+    <TextView
+            android:id="@+id/dishFragRemoveBtn"
+            style="@style/LatoBold13Watermelon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:letterSpacing="-0.01"
+            android:padding="7.7dp"
+            android:text="Remove item"
+            android:visibility="gone" />
+
+
+    <TextView
+            android:id="@+id/dishFragModificationHeader"
+            style="@style/LatoBlack19DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Modifications"
+            android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dishFragModificationList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:orientation="horizontal">
+
+        <com.bupp.wood_spoon_eaters.views.UserImageView
+                android:id="@+id/dishFragChefThumbnail"
+                android:layout_width="46dp"
+                android:layout_height="wrap_content" />
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/dishFragChefLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="1dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="1dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="7.7dp">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="15dp">
+
+                <TextView
+                        android:id="@+id/dishFragChefName"
+                        style="@style/LatoBold13Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Assaf Beer" />
+
+                <TextView
+                        android:id="@+id/dishFragUserRequestLine"
+                        style="@style/LatoReg15BrownishGrey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Hey Lee, any apecial requests?" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSCounterEditText
+            android:id="@+id/dishFragUserRequestInput"
+            style="@style/LatoReg13BrownishGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="14dp"
+            app:hint="Type Your Request here…"
+            app:maxLines="5"
+            app:textSize="16"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="23dp"
+            android:background="@color/grey_white" />
+
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/dishFragAdditionalDetailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginHorizontal="1dp"
+            android:layout_marginBottom="23dp"
+            android:elevation="7dp"
+            app:cardCornerRadius="7.7dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="20dp">
+
+            <TextView
+                    style="@style/LatoBold15DarkGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
+                    android:text="Additional Details" />
+
+            <TextView
+                    android:id="@+id/dishFragAdditionalDetails"
+                    style="@style/LatoReg13BrownishGrey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
+                    tools:text="Arrive with 5 units of Pita" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+            android:id="@+id/dishFragAvailabilityLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
+
+        <TextView
+                style="@style/LatoBlack19DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dish Availability" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dishFragAvailabilityList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:layoutAnimation="@anim/restaurant_layout_animation"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <TextView
+                android:id="@+id/dishFragAvailabilityViewMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                style="@style/LatoBold13DarkGrey"
+                android:text="View More"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+

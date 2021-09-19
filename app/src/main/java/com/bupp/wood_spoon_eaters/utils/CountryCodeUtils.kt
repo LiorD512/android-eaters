@@ -29,19 +29,17 @@ object CountryCodeUtils {
 
         // try to get country code from TelephonyManager service
         val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        if (tm != null) {
             // query first getSimCountryIso()
-            countryCode = tm.simCountryIso
-            if (countryCode != null && countryCode.length == 2) return countryCode.toLowerCase()
-            countryCode = if (tm.phoneType == TelephonyManager.PHONE_TYPE_CDMA) {
-                // special case for CDMA Devices
-                getCDMACountryIso()
-            } else {
-                // for 3G devices (with SIM) query getNetworkCountryIso()
-                tm.networkCountryIso
-            }
-            if (countryCode != null && countryCode.length == 2) return countryCode.toLowerCase()
+        countryCode = tm.simCountryIso
+        if (countryCode != null && countryCode.length == 2) return countryCode.lowercase()
+        countryCode = if (tm.phoneType == TelephonyManager.PHONE_TYPE_CDMA) {
+            // special case for CDMA Devices
+            getCDMACountryIso()
+        } else {
+            // for 3G devices (with SIM) query getNetworkCountryIso()
+            tm.networkCountryIso
         }
+        if (countryCode != null && countryCode.length == 2) return countryCode.lowercase()
 
         // if network country not available (tablets maybe), get country code from Locale class
         countryCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -49,7 +47,7 @@ object CountryCodeUtils {
         } else {
             context.resources.configuration.locale.country
         }
-        return if (countryCode != null && countryCode.length == 2) countryCode.toLowerCase() else "us"
+        return if (countryCode != null && countryCode.length == 2) countryCode.lowercase() else "us"
 
         // general fallback to "us"
     }
@@ -68,26 +66,28 @@ object CountryCodeUtils {
             ) as String
 
             // first 3 chars (MCC) from homeOperator represents the country code
-            val mcc = homeOperator.substring(0, 3).toInt()
-            when (mcc) {
-                330 -> return "PR"
-                310 -> return "US"
-                311 -> return "US"
-                312 -> return "US"
-                316 -> return "US"
-                283 -> return "AM"
-                460 -> return "CN"
-                455 -> return "MO"
-                414 -> return "MM"
-                619 -> return "SL"
-                450 -> return "KR"
-                634 -> return "SD"
-                434 -> return "UZ"
-                232 -> return "AT"
-                204 -> return "NL"
-                262 -> return "DE"
-                247 -> return "LV"
-                255 -> return "UA"
+            if(homeOperator.isNotEmpty()){
+                val mcc = homeOperator.substring(0, 3).toInt()
+                when (mcc) {
+                    330 -> return "PR"
+                    310 -> return "US"
+                    311 -> return "US"
+                    312 -> return "US"
+                    316 -> return "US"
+                    283 -> return "AM"
+                    460 -> return "CN"
+                    455 -> return "MO"
+                    414 -> return "MM"
+                    619 -> return "SL"
+                    450 -> return "KR"
+                    634 -> return "SD"
+                    434 -> return "UZ"
+                    232 -> return "AT"
+                    204 -> return "NL"
+                    262 -> return "DE"
+                    247 -> return "LV"
+                    255 -> return "UA"
+                }
             }
         } catch (ignored: ClassNotFoundException) {
         } catch (ignored: NoSuchMethodException) {
@@ -100,7 +100,7 @@ object CountryCodeUtils {
 
     fun countryCodeToEmojiFlag(countryCode: String): String {
         return countryCode
-            .toUpperCase(Locale.US)
+            .uppercase(Locale.US)
             .map { char ->
                 Character.codePointAt("$char", 0) - 0x41 + 0x1F1E6
             }
@@ -112,17 +112,15 @@ object CountryCodeUtils {
             }
     }
 
-    fun simplifyNumber(context: Context, phoneStr: String): String {
-        val phoneNumberKit = PhoneNumberKit(context)
-//        return phoneNumberKit.formatPhoneNumber(phoneStr, "us")?.replace("+","")?.replace(" ","")
+    fun simplifyNumber(phoneStr: String): String {
         return phoneStr.replace("+","").replace(" ","").replace("(","").replace(")","").replace("-","")
     }
 
     fun isPhoneValid(phone: String?): Boolean{
         phone?.let{
             val re = Regex("[^A-Za-z0-9 ]")
-            val phone = re.replace(phone, "").replace(" ", "")
-            if(phone.isNotEmpty() && phone.length >= 8)
+            val phone2 = re.replace(phone, "").replace(" ", "")
+            if(phone2.isNotEmpty() && phone2.length >= 8)
                 return true
         }
         return false

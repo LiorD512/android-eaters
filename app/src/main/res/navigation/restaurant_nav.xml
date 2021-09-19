@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/restaurant_page_navigation">
+
+    <fragment
+            android:id="@+id/restaurantPageFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragment"
+            android:label="fragment_restaurant_page"
+            tools:layout="@layout/fragment_restaurant_page">
+        <action
+                android:id="@+id/action_restaurantPageFragment_to_dishPageFragment"
+                app:destination="@id/dishPageFragment"
+                app:enterAnim="@anim/slide_right_enter"
+                app:exitAnim="@anim/slide_right_exit"
+                app:popEnterAnim="@anim/slide_left_enter"
+                app:popExitAnim="@anim/slide_left_exit"
+                app:popUpTo="@+id/restaurantPageFragment">
+<!--            <argument-->
+<!--                    android:name="extras"-->
+<!--                    app:argType="com.bupp.wood_spoon_eaters.model.DishInitParams" />-->
+        </action>
+        <argument
+                android:name="extras"
+                app:argType="com.bupp.wood_spoon_eaters.model.RestaurantInitParams" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/dishPageFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageFragment"
+            android:label="fragment_dish_page"
+            tools:layout="@layout/fragment_dish_page">
+        <argument
+                android:name="extras"
+                app:argType="com.bupp.wood_spoon_eaters.model.DishInitParams" />
+    </fragment>
+
+
+</navigation>

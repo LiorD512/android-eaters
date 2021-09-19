@@ -1,58 +1,45 @@
 package com.bupp.wood_spoon_eaters.features.login.fragments
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccountBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.utils.Utils
-import com.segment.analytics.Analytics
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
+import com.bupp.wood_spoon_eaters.views.WSEditText
+//import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+//import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
+class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEditText.WSEditTextListener {
 
-    var binding: FragmentCreateAccountBinding? = null
+    val binding: FragmentCreateAccountBinding by viewBinding()
     val viewModel by sharedViewModel<LoginViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Analytics.with(requireContext()).screen("create_account")
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT)
 
-        binding = FragmentCreateAccountBinding.bind(view)
         initUi()
     }
 
     private fun initUi() {
-        with(binding!!){
-            KeyboardVisibilityEvent.setEventListener(requireActivity(), viewLifecycleOwner,
-                object : KeyboardVisibilityEventListener {
-                    override fun onVisibilityChanged(isOpen: Boolean) {
-                        // some code depending on keyboard visiblity status
-                        if(isOpen){
-                            Log.d("wowKeyboard", "has keyboard")
-                            createAccountFragAnim.visibility = View.GONE
-                        }else{
-                            Log.d("wowKeyboard", "no keyboard")
-                            createAccountFragAnim.visibility = View.VISIBLE
-                        }
-                    }
-                })
+        with(binding){
             createAccountFragNext.setOnClickListener {updateEater()}
             createAccountFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
-
+            createAccountFragEmail.setWSEditTextListener(this@CreateAccountFragment)
         }
     }
 
     private fun updateEater() {
         if(validateFields()){
-            with(binding!!){
+            with(binding){
                 val firstName = createAccountFragFirstName.getText()!!
                 val lastName = createAccountFragLastName.getText()!!
                 val email = createAccountFragEmail.getText()!!
@@ -64,7 +51,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
 
     private fun validateFields(): Boolean {
         var isValid = true
-        with(binding!!){
+        with(binding){
             if(createAccountFragFirstName.getText().isNullOrEmpty()){
                 createAccountFragFirstName.showError()
                 isValid = false
@@ -82,10 +69,8 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
         return isValid
     }
 
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
+    override fun onWSEditTextActionDone() {
+        binding.createAccountFragNext.performClick()
     }
 
 }

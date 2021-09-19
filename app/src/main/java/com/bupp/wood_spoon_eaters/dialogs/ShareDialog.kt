@@ -10,13 +10,15 @@ import android.view.ViewGroup
 import android.widget.TextView.BufferType
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.ShareDialogBinding
 
 
 class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
 
-    lateinit var binding: ShareDialogBinding
+    val binding: ShareDialogBinding by viewBinding()
+
     interface ShareDialogListener{
         fun onShareClick()
     }
@@ -27,7 +29,7 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.share_dialog, null)
+        val view = inflater.inflate(R.layout.share_dialog, null)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -35,7 +37,6 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = ShareDialogBinding.bind(view)
         initUi()
     }
 

@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +14,7 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface NotificationsGroupAdapterListener{
-        fun onNotificationChange(notificationGroupId: Long)
+        fun onNotificationChange(notificationGroupIds: List<Long>)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -31,18 +29,16 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
             holder.switch.isChecked = eaterPrefs.contains(notificationGroup.id)
         }
 
-        holder.switch.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-                Log.d("wowSettings","onCheckedChanged ${notificationGroup.id}")
-                if(eaterPrefs.contains(notificationGroup.id)){
-                    eaterPrefs.remove(notificationGroup.id)
-                }else{
-                    eaterPrefs.add(notificationGroup.id)
-                }
-                Log.d("wowSettings","list ${eaterPrefs}")
-                listener.onNotificationChange(notificationGroup.id)
+        holder.switch.setOnCheckedChangeListener { _, isChecked ->
+            Log.d("wowSettings", "onCheckedChanged ${notificationGroup.id}")
+            if (eaterPrefs.contains(notificationGroup.id)) {
+                eaterPrefs.remove(notificationGroup.id)
+            } else {
+                eaterPrefs.add(notificationGroup.id)
             }
-        })
+            Log.d("wowSettings", "list $eaterPrefs")
+            listener.onNotificationChange(eaterPrefs)
+        }
 
     }
 
@@ -64,13 +60,9 @@ class NotificationsGroupAdapter(val context: Context, private var notificationsG
         notifyDataSetChanged()
     }
 
-    fun getSelectedIds(): List<Long>{
-        return eaterPrefs
-    }
 }
 
 class ItemViewHolder(view: NotificationGroupItemBinding) : RecyclerView.ViewHolder(view.root) {
-    val mainLayout: LinearLayout = view.NotificationGroupMainLayout
     val name: TextView = view.NotificationGroupName
     val description: TextView = view.NotificationGroupDescription
     val switch: SwitchCompat = view.NotificationGroupSwitch

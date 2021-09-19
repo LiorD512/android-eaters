@@ -42,11 +42,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setBody(body: String){
-        binding.titleBodyBody.text = body
-    }
-
-
     companion object {
         const val TAG = "wowTitleBodyView"
     }

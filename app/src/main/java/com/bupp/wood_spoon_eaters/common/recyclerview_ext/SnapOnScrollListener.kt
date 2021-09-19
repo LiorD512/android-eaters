@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.common.recyclerview_ext
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 
@@ -41,6 +42,7 @@ class SnapOnScrollListener(
             val snapPosition = recyclerView.getChildAdapterPosition(snapView)
             val snapPositionChanged = this.snapPosition != snapPosition
             if (snapPositionChanged) {
+                Log.d("wowFeedPager", "recyclerView: $recyclerView")
                 onSnapPositionChangeListener?.onSnapPositionChange(snapPosition)
                 this.snapPosition = snapPosition
             }

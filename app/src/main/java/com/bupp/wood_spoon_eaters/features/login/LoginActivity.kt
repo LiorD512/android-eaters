@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private val viewModel: LoginViewModel by viewModel<LoginViewModel>()
+    private val viewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity() {
                     //do nothing this is default state
                 }
                 Constants.LOGIN_STATE_VERIFICATION -> {
-                    redirectToCodeVerification()
+                    redirectToPhoneVerification()
                 }
                 Constants.LOGIN_STATE_CREATE_ACCOUNT -> {
                     redirectToCreateAccountFromWelcome()
@@ -50,7 +50,8 @@ class LoginActivity : BaseActivity() {
 
     private fun initObservers() {
         viewModel.navigationEvent.observe(this, {
-            it?.let{
+            val event = it.getContentIfNotHandled()
+            event?.let{
                 when(it){
                     LoginViewModel.NavigationEventType.OPEN_PHONE_SCREEN -> {
                         redirectToPhoneVerification()
@@ -86,6 +87,7 @@ class LoginActivity : BaseActivity() {
                 ErrorEventType.SOMETHING_WENT_WRONG -> {
                     WSErrorDialog(getString(R.string.something_went_wrong_error), null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
                 }
+                else -> {}
             }
         })
 

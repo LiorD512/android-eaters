@@ -18,7 +18,7 @@
                 android:id="@+id/settingsFragHeader"
                 app:title="Communication settings"
                 app:isWithSep="true"
-                app:type="HEADER_VIEW_TYPE_BACK_TITLE"
+                app:type="HEADER_VIEW_TYPE_CLOSE_TITLE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

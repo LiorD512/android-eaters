@@ -1,9 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.util.ArrayList
 
 @JsonClass(generateAdapter = true)
 data class Review(

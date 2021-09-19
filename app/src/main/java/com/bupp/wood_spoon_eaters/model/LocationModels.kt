@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -15,7 +14,6 @@ enum class FeedUiStatusType{
     KNOWN_ADDRESS_WITH_BANNER,
     NO_GPS_ENABLED_AND_NO_LOCATION,
     HAS_GPS_ENABLED_BUT_NO_LOCATION,
-    NO_GPS_PERMISSION,
 
 }
 

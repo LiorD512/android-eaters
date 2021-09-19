@@ -1,9 +1,7 @@
 package com.bupp.wood_spoon_eaters.custom_views
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
 import android.util.AttributeSet
@@ -15,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
@@ -35,15 +32,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var listener: InputTitleViewListener? = null
     var maxChar = -1
     var throttlingTimeout: Long = 0
-    protected var watcher: AutoCompleteTextWatcher? = null
+    var watcher: AutoCompleteTextWatcher? = null
 
     interface InputTitleViewListener {
         fun onInputTitleChange(str: String?) {}
-        fun onMyLocationClick() {}
-    }
-
-    fun setInputTitleViewListener(listener: InputTitleViewListener) {
-        this.listener = listener
     }
 
     var isMandatory = false
@@ -174,24 +166,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return binding.inputTitleViewInput.setText(text)
     }
 
-    fun isValid(): Boolean {
-        with(binding) {
-            return if (isMandatory && inputType != Constants.INPUT_TYPE_MAIL) {
-                getText().isNotEmpty()
-            } else if (inputType == Constants.INPUT_TYPE_MAIL) {
-                if (Utils.isValidEmailAddress(getText())) {
-                    inputTitleViewInput.setTextColor(ContextCompat.getColor(context, R.color.dark))
-                    true
-                } else {
-                    inputTitleViewInput.setTextColor(ContextCompat.getColor(context, R.color.red))
-                    false
-                }
-            } else {
-                getText().isNotEmpty()
-            }
-        }
-    }
-
     fun showError() {
         binding.inputTitleViewInputError.visibility = View.VISIBLE
 
@@ -207,12 +181,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun getAutoCompleteTextWatcher(): AutoCompleteTextWatcher {
         return object : AutoCompleteTextWatcher(throttlingTimeout) {
-            override fun handleInputString(input: String) {
-                Log.d(TAG, "throttlingTimeout: $throttlingTimeout, afterTextChanged: $input")
+            override fun handleInputString(inputVal: String) {
+                Log.d(TAG, "throttlingTimeout: $throttlingTimeout, afterTextChanged: $inputVal")
                 if (maxChar != -1) {
-                    binding.inputTitleViewCounter.text = "${input.length} / $maxChar"
+                    binding.inputTitleViewCounter.text = "${inputVal.length} / $maxChar"
                 }
-                listener?.onInputTitleChange(input)
+                listener?.onInputTitleChange(inputVal)
                 hideError()
             }
         }

@@ -14,12 +14,7 @@ import com.bupp.wood_spoon_eaters.common.recyclerview_ext.MyLinearSnapHelper
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.SnapOnScrollListener
 import com.bupp.wood_spoon_eaters.common.recyclerview_ext.attachSnapHelperWithListener
 import com.bupp.wood_spoon_eaters.databinding.WsRangeTimePickerBinding
-import com.bupp.wood_spoon_eaters.features.main.search.WSRangeTimeViewItemDecorator
-import com.bupp.wood_spoon_eaters.model.MenuItem
-import com.bupp.wood_spoon_eaters.model.WSRangeTimePickerHours
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class WSRangeTimePicker @JvmOverloads
@@ -29,12 +24,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     val viewModel = WSRangeTimePickerViewModel()
     val interval = viewModel.getHoursInterval()
 
-    var wsRangeTimePickerDateAdapter: WSRangeTimePickerDateAdapter? = null
+    var wsTimePickerCustomAdapter: WSTimePickerCustomAdapter? = null
     var wsRangeTimePickerHoursAdapter: WSRangeTimePickerHoursAdapter? = null
     private var binding: WsRangeTimePickerBinding = WsRangeTimePickerBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private val datesAndHours: MutableList<WSRangeTimePickerHours> = mutableListOf()
-    private val hoursSnapHelper: SnapHelper = LinearSnapHelper()
+    private val datesAndHours: MutableList<WSRangeTimePickerModel> = mutableListOf()
 
     init {
         initView(attrs)
@@ -49,9 +43,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
 
         //dates
-        wsRangeTimePickerDateAdapter = WSRangeTimePickerDateAdapter()
+        wsTimePickerCustomAdapter = WSTimePickerCustomAdapter()
         binding.wsRangeTimePickerDateList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.wsRangeTimePickerDateList.adapter = wsRangeTimePickerDateAdapter
+        binding.wsRangeTimePickerDateList.adapter = wsTimePickerCustomAdapter
 
         val snapHelper: SnapHelper = LinearSnapHelper()
         binding.wsRangeTimePickerDateList.attachSnapHelperWithListener(
@@ -75,13 +69,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         val dates = getDaysFromNow(7)
         dates.let {
             it.forEach {
-                datesAndHours.add(WSRangeTimePickerHours(it, getHoursForDay(it)))
+                datesAndHours.add(WSRangeTimePickerModel(date = it, hours = getHoursForDay(it)))
             }
         }
     }
 
     private fun initDateAndHoursUi() {
-        wsRangeTimePickerDateAdapter?.submitList(datesAndHours)
+        wsTimePickerCustomAdapter?.submitList(datesAndHours as List<WSBaseTimePicker>?)
 
         wsRangeTimePickerHoursAdapter?.submitList(datesAndHours[0].hours)
         binding.wsRangeTimePickerHoursList.scrollToPosition(datesAndHours[0].hours.size/2)
@@ -133,73 +127,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         return hours
     }
 
-    fun setDatesByMenuItems(menuItems: List<MenuItem>) {
-        datesAndHours.clear()
-        val dates = getDaysForMenuItems(menuItems)
-        dates.let {
-            it.forEachIndexed { index, date ->
-                val currentMenuItem = menuItems[index]
-                currentMenuItem.cookingSlot?.let{
-                    datesAndHours.add(WSRangeTimePickerHours(dates[index], getHoursForMenuItem(it.orderFrom, it.endsAt)))
-                }
-            }
-        }
-        initDateAndHoursUi()
-    }
 
-    private fun getDaysForMenuItems(menuItems: List<MenuItem>): List<Date> {
-        val dates = mutableListOf<Date>()
-        menuItems.forEach { item ->
-            item.cookingSlot?.orderFrom?.let{
-                dates.add(it)
-            }
-        }
-        return dates
-    }
 
-    private fun getHoursForMenuItem(startingDate: Date, endingDate: Date): List<Date> {
-        val hours = mutableListOf<Date>()
-
-        val startDate = Calendar.getInstance()
-        startDate.time = startingDate
-
-        var startingTime: Long = startingDate.time
-        val endingTime: Long = endingDate.time - TimeUnit.MINUTES.toMillis(interval.toLong())
-
-        if (DateUtils.isToday(startingDate) && startingDate.before(Date())) {
-            //check if cooking slot is today and if now is after cooking slot started. if so,
-            // allow order 30 minutes from now..
-            startDate.time = DateUtils.truncateDate30MinUp(Date())
-            startingTime = startDate.timeInMillis
-        }
-
-        while (startingTime < endingTime) {
-            val unRoundedMinutes: Int = startDate.get(Calendar.MINUTE)
-            val mod = unRoundedMinutes % interval
-            startDate.add(Calendar.MINUTE, interval - mod)
-
-            val startingHours = startDate.time
-            hours.add(startingHours)
-
-            startingTime += TimeUnit.MINUTES.toMillis(interval.toLong())
-        }
-
-        return hours
-    }
-
-    fun getChosenDate(): Date? {
-        val chosenDateView = hoursSnapHelper.findSnapView(binding.wsRangeTimePickerDateList.layoutManager)
-        val chosenDatePos = chosenDateView?.let { binding.wsRangeTimePickerDateList.getChildLayoutPosition(it) }
-        val chosenView = hoursSnapHelper.findSnapView(binding.wsRangeTimePickerHoursList.layoutManager)
-        val chosenPos = chosenView?.let { binding.wsRangeTimePickerHoursList.getChildLayoutPosition(it) }
-        chosenDatePos?.let { datePos ->
-            chosenPos?.let { hourPos ->
-                Log.d(TAG, "chosenDate: ${datesAndHours[datePos].hours[hourPos]}")
-                return datesAndHours[datePos].hours[hourPos]
-            }
-        }
-        return null
-    }
 
     companion object {
         const val TAG = "wowWSRangeTimePicker"

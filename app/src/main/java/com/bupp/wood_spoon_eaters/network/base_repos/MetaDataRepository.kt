@@ -5,12 +5,12 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
 
-interface MetaDataRepository{
+interface MetaDataRepositoryInterface{
     suspend fun getMetaData(): ResultHandler<ServerResponse<MetaDataModel>>
 
 }
 
-class MetaDataRepositoryImpl(private val service: ApiService) : MetaDataRepository {
+class MetaDataRepositoryImpl(private val service: ApiService) : MetaDataRepositoryInterface {
 
     override suspend fun getMetaData(): ResultHandler<ServerResponse<MetaDataModel>> {
         return safeApiCall { service.getMetaData() }

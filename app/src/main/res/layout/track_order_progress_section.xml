@@ -22,7 +22,7 @@
                 android:clickable="false"
                 android:minHeight="0dp"
                 android:id="@+id/trackOrderProgressCb1"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/circle_checkbox_selector"
@@ -42,7 +42,7 @@
                 android:clickable="false"
                 android:minHeight="0dp"
                 android:id="@+id/trackOrderProgressCb2"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/circle_checkbox_selector"
@@ -62,7 +62,7 @@
                 android:clickable="false"
                 android:minHeight="0dp"
                 android:id="@+id/trackOrderProgressCb3"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/circle_checkbox_selector"
@@ -81,7 +81,7 @@
                 android:clickable="false"
                 android:minHeight="0dp"
                 android:id="@+id/trackOrderProgressCb4"
-                style="@style/Reg13Dark_50"
+                style="@style/LatoReg13Dark50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/circle_checkbox_selector"
@@ -99,7 +99,7 @@
 
             <TextView
                     android:id="@+id/trackOrderProgressArrivalTime"
-                    style="@style/SemiBold15Blue"
+                    style="@style/LatoBlack15Teal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -108,7 +108,7 @@
 
             <TextView
                     android:id="@+id/trackOrderProgressChangeTime"
-                    style="@style/SemiBold13Blue"
+                    style="@style/LatoReg13Teal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content">
 
         <TextView
-                style="@style/Reg15Dark"
+                style="@style/LatoReg15Dark"
                 android:layout_gravity="center"
                 android:layout_marginTop="22.6dp"
                 android:layout_marginBottom="22.2dp"
@@ -145,20 +145,26 @@
 
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/trackOrderBottomShareImageBtn"
-            android:src="@drawable/refferal_banner_pic"
-            android:scaleType="centerCrop"
+<!--    <ImageView-->
+<!--            android:id="@+id/trackOrderBottomShareImageBtn"-->
+<!--            android:src="@drawable/refferal_banner_pic"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="144dp"/>-->
+
+    <View
+            android:background="@color/light_periwinkle"
             android:layout_width="match_parent"
-            android:layout_height="144dp"/>
+            android:layout_height="1dp"/>
 
     <TextView
+            android:background="@drawable/rounded_white_bkg"
             android:id="@+id/trackOrderBottomCancelBtn"
-            style="@style/SemiBold15Dark"
+            style="@style/LatoBlack15Dark"
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingTop="22.6dp"
-            android:paddingBottom="23.2dp"
+            android:paddingBottom="22.2dp"
             android:textColor="@color/red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

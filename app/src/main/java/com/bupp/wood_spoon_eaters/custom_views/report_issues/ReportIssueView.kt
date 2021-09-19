@@ -40,9 +40,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             reportIssueTitle.text = reportTopic.name
             fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-            for(item in reportTopic.reportIssues){
+            for(item in reportTopic.reportIssues.sortedBy { it.id }){
                 val radioButton = RadioButton(context)
-                val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                val params = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 16.toPx(), 0, 16.toPx())
                 radioButton.layoutParams = params
                 radioButton.gravity = Gravity.CENTER or Gravity.LEFT

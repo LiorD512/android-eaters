@@ -21,7 +21,8 @@ class CancelOrderViewModel(val eaterDataManager: EaterDataManager) : ViewModel()
                 }
                 EaterDataRepository.EaterDataRepoStatus.CANCEL_ORDER_FAILED -> {
                     cancelOrder.postValue(false)
-
+                }
+                else -> {
                 }
             }
         }

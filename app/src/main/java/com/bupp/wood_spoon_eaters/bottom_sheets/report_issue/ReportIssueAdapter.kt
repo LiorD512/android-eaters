@@ -1,14 +1,11 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.report_issue
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.custom_views.report_issues.ReportIssueView
-import com.bupp.wood_spoon_eaters.databinding.GridStackableTextViewItemBinding
 import com.bupp.wood_spoon_eaters.databinding.ReportIssueItemBinding
 import com.bupp.wood_spoon_eaters.model.ReportRequest
 import com.bupp.wood_spoon_eaters.model.ReportTopic
@@ -66,46 +63,3 @@ class ReportIssueAdapter constructor(val listener: ReportIssueAdapterListener) :
         return ArrayList(reportsHash.values)
     }
 }
-
-//
-//
-//    RecyclerView.Adapter<RecyclerView.ViewHolder>(), ReportIssueView.ReportIssueViewListener {
-//
-//    var reportsHash: LinkedHashMap<Long, ReportRequest> = linkedMapOf()
-//
-//
-//    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        val reportTopic = reportTopics[position]
-//        (holder as ItemViewHolder).reportIssueView.initReportIssue(reportTopic, this)
-//
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        val binding = ReportIssueItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return ItemViewHolder(binding)
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return reportTopics.size
-//    }
-//
-//
-//
-//
-//
-
-//
-//}
-//
-//class ItemViewHolder(view: ReportIssueItemBinding) : RecyclerView.ViewHolder(view.root) {
-//    val reportIssueView: ReportIssueView = view.reportIssueView
-//
-//}
-//
-//    override fun onReportIssueChange(reportRequest: ReportRequest) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun onReportIssueTextChange(reportRequest: ReportRequest) {
-//        TODO("Not yet implemented")
-//    }

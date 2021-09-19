@@ -6,21 +6,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
-import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.CountriesISO
+import com.bupp.wood_spoon_eaters.model.EaterRequest
+import com.bupp.wood_spoon_eaters.model.ErrorEventType
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
 
 
 class LoginViewModel(
     private val eventsManager: EventsManager,
     private val userRepository: UserRepository,
-    private val eaterDataManager: EaterDataManager,
+    private val flowEventsManager: FlowEventsManager,
     private val metaDataRepository: MetaDataRepository,
     private val deviceDetailsManager: FcmManager,
     private val paymentManager: PaymentManager
@@ -29,19 +32,16 @@ class LoginViewModel(
     var phone: String? = null
     var phonePrefix: String? = null
     var code: String? = null
-//    var privacyPolicyCb: Boolean = false
 
-    val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
+    val navigationEvent: LiveEventData<NavigationEventType> = LiveEventData()
     val countryCodeEvent: MutableLiveData<CountriesISO> = MutableLiveData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
     val userData: MutableLiveData<String?> = MutableLiveData()
     val progressData = ProgressData()
 
     val phoneFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
-    val phoneCbFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     enum class NavigationEventType {
-//        OPEN_MAIN_LOGIN_SCREEN,
         OPEN_PHONE_SCREEN,
         OPEN_CODE_SCREEN,
         OPEN_MAIN_ACT,
@@ -73,18 +73,14 @@ class LoginViewModel(
         return " "
     }
 
-
-//    fun directToMainFrag() {
-//        navigationEvent.postValue(NavigationEventType.OPEN_MAIN_LOGIN_SCREEN)
-//    }
     fun directToPhoneFrag() {
-        navigationEvent.postValue(NavigationEventType.OPEN_PHONE_SCREEN)
+        eventsManager.logEvent(Constants.EVENT_CLICK_GET_STARTED)
+        navigationEvent.postRawValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 
     private fun directToCodeFrag() {
-//        actionEvent.postValue(START_RESEND_TIMER)
         userData.postValue(getCensoredPhone())
-        navigationEvent.postValue(NavigationEventType.OPEN_CODE_SCREEN)
+        navigationEvent.postRawValue(NavigationEventType.OPEN_CODE_SCREEN)
     }
 
     //phone verification methods
@@ -96,8 +92,6 @@ class LoginViewModel(
         }
         return isValid
     }
-
-
 
     fun sendPhoneNumber() {
         if (validatePhoneData()) {
@@ -154,7 +148,7 @@ class LoginViewModel(
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
                         Log.d("wowLoginVM", "Success")
-                        navigationEvent.postValue(NavigationEventType.CODE_RESENT)
+                        navigationEvent.postRawValue(NavigationEventType.CODE_RESENT)
                     }
                     else -> {
                         Log.d("wowLoginVM", "NetworkError")
@@ -168,7 +162,7 @@ class LoginViewModel(
 
     //code verification methods
 
-    fun sendPhoneAndCodeNumber() {
+    fun sendPhoneAndCodeNumber(context: Context) {
         if (!code.isNullOrEmpty()) {
             phone?.let { phone ->
                 progressData.startProgress()
@@ -189,9 +183,11 @@ class LoginViewModel(
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
                             if (userRepository.isUserSignedUp()) {
-                                navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                                paymentManager.initPaymentManager(context)
+                                navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)
+                                eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
                             } else {
-                                navigationEvent.postValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
+                                navigationEvent.postRawValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
                             eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(true))
                         }
@@ -245,7 +241,8 @@ class LoginViewModel(
                     val eater = userRepoResult.eater
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
-                    navigationEvent.postValue(NavigationEventType.OPEN_MAIN_ACT)
+                    navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)
+                    eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
 //                    eventsManager.sendRegistrationCompletedEvent()
                     eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))
                 }
@@ -260,9 +257,13 @@ class LoginViewModel(
     }
 
     private fun getCreateAccountEventData(isSuccess: Boolean, userId: Long? = null): Map<String, String> {
-        val data = mutableMapOf<String, String>("success" to if(isSuccess) "true" else "false")
+        val data = mutableMapOf("success" to if(isSuccess) "true" else "false")
         data["user_id"] = userId.toString()
         return data
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
     }
 
 

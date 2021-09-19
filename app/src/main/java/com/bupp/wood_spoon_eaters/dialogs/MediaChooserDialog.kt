@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.MediaChooserDialogBinding
 
 class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() {
 
-    lateinit var binding: MediaChooserDialogBinding
+    val binding: MediaChooserDialogBinding by viewBinding()
     interface MediaChooserListener {
         fun onMediaChoose(mediaType: Int)
     }
@@ -32,7 +33,6 @@ class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = MediaChooserDialogBinding.bind(view)
         initUi()
     }
 

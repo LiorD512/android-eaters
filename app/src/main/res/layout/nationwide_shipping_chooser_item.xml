@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="horizontal"
         android:gravity="center"
         android:alpha="0.5"
@@ -14,7 +13,7 @@
 
     <CheckBox
             android:id="@+id/nationwideShippingCb"
-            style="@style/Reg13Dark_50"
+            style="@style/LatoReg13Dark50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/circle_checkbox_selector"/>
@@ -28,7 +27,7 @@
 
         <TextView
                 android:id="@+id/nationwideShippingTitle"
-                style="@style/SemiBold13Dark"
+                style="@style/LatoBlack13Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="UPS Ground"/>
@@ -36,7 +35,7 @@
 
         <TextView
                 android:id="@+id/nationwideShippingEta"
-                style="@style/Reg11Dark"
+                style="@style/LatoReg11Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="5 business days"/>
@@ -45,7 +44,7 @@
 
     <TextView
             android:id="@+id/nationwideShippingPrice"
-            style="@style/SemiBold13Dark"
+            style="@style/LatoBlack13Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"

@@ -1,37 +1,33 @@
 package com.bupp.wood_spoon_eaters.views
 
-import android.animation.ObjectAnimator
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.telephony.PhoneNumberFormattingTextWatcher
-import android.text.Editable
-import android.text.InputType
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.BounceInterpolator
-import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.TextViewCompat
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.custom_views.SimpleTextWatcher
-import com.bupp.wood_spoon_eaters.databinding.WsEditTextBinding
-import com.bupp.wood_spoon_eaters.databinding.WsLongBtnBinding
 import com.bupp.wood_spoon_eaters.databinding.WsTitleValueViewBinding
-import com.bupp.wood_spoon_eaters.utils.Utils
 
 class WSTitleValueView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var binding: WsTitleValueViewBinding = WsTitleValueViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private var currentToolType: Int = 0
+
+    interface WSTitleValueListener{
+        fun onToolTipClick(type: Int)
+    }
 
     init {
          initUi(attrs)
+    }
+
+    private var listener: WSTitleValueListener? = null
+    fun setWSTitleValueListener(listener: WSTitleValueListener){
+        this.listener = listener
     }
 
     private fun initUi(attrs: AttributeSet?) {
@@ -46,14 +42,33 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val value = attr.getString(R.styleable.WSTitleValueView_subTitle)
                 setValue(value)
 
-                val toolTip = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
-                if(toolTip != 0){
-                    titleValueViewToolTip.customInit(context, attrs)
-                    titleValueViewToolTip.visibility = View.VISIBLE
+                val isBold = attr.getBoolean(R.styleable.WSTitleValueView_isBold, false)
+                setStyle(isBold)
+
+                val toolTipType = attr.getInt(R.styleable.WSTitleValueView_tip_type, 0)
+                if(toolTipType != 0){
+                    currentToolType = toolTipType
+//                    titleValueViewToolTip.customInit(context, attrs)
+                    titleValueViewToolTipBtn.visibility = View.VISIBLE
+
+//                    titleValueViewToolTip.disable()
+
                 }
 
                 attr.recycle()
+
+                titleValueViewToolTipBtn.setOnClickListener {
+                    Log.d("wowToolTip","currentToolType: $currentToolType $listener")
+                    listener?.onToolTipClick(currentToolType)
+                }
             }
+        }
+    }
+
+    private fun setStyle(isBold: Boolean) {
+        if(isBold){
+            TextViewCompat.setTextAppearance(binding.titleValueViewTitle, R.style.LatoBold13Black)
+            TextViewCompat.setTextAppearance(binding.titleValueViewValue, R.style.LatoBold13Black)
         }
     }
 

@@ -69,7 +69,7 @@
                     android:visibility="gone"
                     android:layout_marginTop="3dp"
                     android:id="@+id/selectAddressFragMyLocationPickup"
-                    style="@style/Reg13PurpleyGreyTwo"
+                    style="@style/LatoReg13PurpleyGreyTwo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"

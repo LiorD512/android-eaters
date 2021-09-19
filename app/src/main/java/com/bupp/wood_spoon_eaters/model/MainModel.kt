@@ -2,13 +2,10 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.net.Uri
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.utils.Utils
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
-
 
 
 @Parcelize
