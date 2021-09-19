@@ -48,8 +48,11 @@ class WoodSpoonApplication : Application() {
         Branch.getAutoInstance(this)
         Branch.enableTestMode()
 
-
-        UXCam.startWithKey(getString(R.string.ux_cam_app_key))
+        if(BuildConfig.DEBUG){
+            UXCam.optOutOverall()
+        }else{
+            UXCam.startWithKey(getString(R.string.ux_cam_app_key))
+        }
 
         val analytics =
             Analytics.Builder(applicationContext, getString(R.string.segment_jey)) // Enable this to record certain application events automatically!
