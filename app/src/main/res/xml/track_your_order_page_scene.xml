@@ -7,16 +7,16 @@
             motion:constraintSetEnd="@+id/end"
             motion:constraintSetStart="@id/start"
             motion:duration="10">
-<!--        <OnSwipe-->
-<!--                motion:maxAcceleration="5"-->
-<!--                motion:dragDirection="dragUp"-->
-<!--                motion:dragScale="1"-->
-<!--                motion:moveWhenScrollAtTop="true"-->
-<!--                motion:onTouchUp="autoComplete"-->
-<!--                motion:touchAnchorId="@id/mainList"-->
-<!--                motion:touchAnchorSide="top"/>-->
+        <OnSwipe
+                motion:maxAcceleration="5"
+                motion:dragDirection="dragUp"
+                motion:dragScale="1"
+                motion:moveWhenScrollAtTop="true"
+                motion:onTouchUp="autoComplete"
+                motion:touchAnchorId="@id/trackOrderActMainList"
+                motion:touchAnchorSide="top"/>
 
-<!--                <KeyFrameSet>-->
+                <KeyFrameSet>
 <!--                    <KeyAttribute-->
 <!--                            motion:keyPositionType="pathRelative"-->
 <!--                            android:alpha="0"-->
@@ -27,36 +27,26 @@
 <!--                            android:alpha="0"-->
 <!--                            motion:framePosition="50"-->
 <!--                            motion:motionTarget="@+id/coverPhotoLayout"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="0"-->
-<!--                            motion:framePosition="40"-->
-<!--                            motion:motionTarget="@+id/topHeader"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="1"-->
-<!--                            motion:framePosition="60"-->
-<!--                            motion:motionTarget="@+id/topHeader"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="0"-->
-<!--                            motion:framePosition="60"-->
-<!--                            motion:motionTarget="@+id/topHeaderRestaurantName"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="0"-->
-<!--                            motion:framePosition="60"-->
-<!--                            motion:motionTarget="@+id/topHeaderChefName"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="1"-->
-<!--                            motion:framePosition="90"-->
-<!--                            motion:motionTarget="@+id/topHeaderRestaurantName"/>-->
-<!--                    <KeyAttribute-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            android:alpha="1"-->
-<!--                            motion:framePosition="90"-->
-<!--                            motion:motionTarget="@+id/topHeaderChefName"/>-->
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="40"
+                            motion:motionTarget="@+id/trackOrderActTopHeader"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="1"
+                            motion:framePosition="60"
+                            motion:motionTarget="@+id/trackOrderActTopHeader"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="60"
+                            motion:motionTarget="@+id/trackOrderActTopHeaderRestaurantName"/>
+                    <KeyAttribute
+                            motion:keyPositionType="pathRelative"
+                            android:alpha="0"
+                            motion:framePosition="60"
+                            motion:motionTarget="@+id/trackOrderActTopHeaderChefName"/>
 <!--                    <KeyAttribute-->
 <!--                            motion:keyPositionType="pathRelative"-->
 <!--                            android:alpha="1"-->
@@ -67,38 +57,38 @@
 <!--                            android:alpha="0"-->
 <!--                            motion:framePosition="70"-->
 <!--                            motion:motionTarget="@+id/restaurantHeader"/>-->
-<!--                </KeyFrameSet>-->
+                </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-<!--        <Constraint-->
-<!--                android:id="@+id/topHeaderRestaurantName"-->
-<!--                motion:layout_constraintStart_toEndOf="@id/backButton"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                motion:layout_constraintTop_toTopOf="parent"-->
-<!--                android:layout_marginTop="15dp"-->
-<!--                android:alpha="1"/>-->
-<!--        <Constraint-->
-<!--                android:id="@+id/topHeaderChefName"-->
-<!--                motion:layout_constraintStart_toEndOf="@id/backButton"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                motion:layout_constraintTop_toBottomOf="@id/topHeaderRestaurantName"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="3dp"-->
-<!--                android:alpha="1"/>-->
-<!--        <Constraint-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                motion:layout_constraintTop_toTopOf="parent"-->
-<!--                motion:layout_constraintStart_toStartOf="parent"-->
-<!--                android:layout_marginTop="0dp"-->
-<!--                android:id="@+id/space" />-->
+        <Constraint
+                android:id="@+id/trackOrderActTopHeaderRestaurantName"
+                motion:layout_constraintStart_toEndOf="@id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="15dp"
+                android:alpha="1"/>
+        <Constraint
+                android:id="@+id/trackOrderActTopHeaderChefName"
+                motion:layout_constraintStart_toEndOf="@id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintTop_toBottomOf="@id/trackOrderActTopHeaderRestaurantName"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="3dp"
+                android:alpha="1"/>
+        <Constraint
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="0dp"
+                android:id="@+id/trackOrderActSpace" />
 <!--        <Constraint-->
 <!--                android:id="@+id/coverPhotoLayout"-->
 <!--                android:layout_width="match_parent"-->
@@ -115,18 +105,18 @@
 <!--                android:layout_marginStart="15dp"-->
 <!--                motion:layout_constraintStart_toStartOf="parent"-->
 <!--                android:alpha="0" />-->
-<!--        <Constraint-->
-<!--                android:id="@+id/topHeader"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="70dp"-->
-<!--                motion:layout_constraintTop_toTopOf="parent"-->
-<!--                motion:layout_constraintStart_toStartOf="parent"-->
-<!--                android:alpha="1"/>-->
+        <Constraint
+                android:id="@+id/trackOrderActTopHeader"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                android:alpha="1"/>
 <!--        <Constraint-->
 <!--                android:id="@+id/restaurantHeader"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
-<!--                motion:layout_constraintBottom_toTopOf="@id/mainList"-->
+<!--                motion:layout_constraintBottom_toTopOf="@id/trackOrderActList"-->
 <!--                motion:layout_constraintStart_toStartOf="parent"-->
 <!--                android:alpha="0" />-->
     </ConstraintSet>

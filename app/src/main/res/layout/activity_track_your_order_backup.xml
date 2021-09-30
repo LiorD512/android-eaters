@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -17,11 +17,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-    <FrameLayout
-            android:id="@+id/trackOrderMap"
-            android:layout_width="match_parent"
-            android:layout_height="360dp" />
 
 <!--    <ImageView-->
 <!--            android:id="@+id/trackOrderActMap"-->
@@ -109,13 +104,17 @@
             android:layout_height="wrap_content"
             android:overScrollMode="never"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trackOrderActSpace">
+            app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+            <FrameLayout
+                    android:id="@+id/trackOrderMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/trackOrderActList"
@@ -127,5 +126,5 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.motion.widget.MotionLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
