@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="7dp">
+
+        <ImageButton
+                android:id="@+id/reviewBottomSheetCloseIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:background="@null"
+                android:padding="15.4dp"
+                android:src="@drawable/icons_close_grey" />
+
+        <TextView
+                android:id="@+id/reviewsBottomSheetTextView"
+                style="@style/LatoBlack15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Israeli in The Big Apple" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ReviewsList"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom|right"
+            android:clipToPadding="false"
+            android:paddingBottom="5dp"
+            tools:listitem="@layout/reviews_item"/>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/reviewsBottomSheetBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            app:title="Show all 21 reviews" />
+
+
+</LinearLayout>
+
+
+

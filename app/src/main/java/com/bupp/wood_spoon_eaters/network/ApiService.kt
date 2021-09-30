@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.network
 
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.model.*
 import io.reactivex.Observable
 import okhttp3.RequestBody

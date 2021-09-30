@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:weightSum="5"
+        android:orientation="horizontal">
+
+    <ImageView
+            android:src="@drawable/add_review_star_selector"
+            android:id="@+id/ratingStarNum1"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:src="@drawable/add_review_star_selector"
+            android:id="@+id/ratingStarNum2"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:src="@drawable/add_review_star_selector"
+            android:id="@+id/ratingStarNum3"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    <ImageView
+            android:src="@drawable/add_review_star_selector"
+            android:id="@+id/ratingStarNum4"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:src="@drawable/add_review_star_selector"
+            android:id="@+id/ratingStarNum5"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>
