@@ -39,14 +39,15 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private var currentBoundSize = 100
     private var zoomLevel: Float = 18f
     private var mapFragment: SupportMapFragment? = null
+    private var curOrder: Order? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        zoomLevel = requireArguments().getString("zoomLevel", "18").toFloat()
+        zoomLevel = requireArguments().getFloat("zoomLevel", 18f)
         val shouldShowBtn = requireArguments().getBoolean("showBtns")
         val isCheckout = requireArguments().getBoolean("isCheckout", false)
-
+        curOrder = requireArguments().getParcelable<Order>("order")
 
         Log.d(TAG, "zoomLevel: $zoomLevel")
         initUi(shouldShowBtn)
@@ -58,7 +59,11 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
         binding.addressMapFragPb.show()
 
+        postponeEnterTransition()
+
+
     }
+
 
     private fun initUi(shouldShowDefaultUi: Boolean) {
         if(shouldShowDefaultUi){
@@ -107,6 +112,9 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             }
 
             initObservers()
+            curOrder?.let{
+                updateCheckoutMap(it)
+            }
         }
     }
 
@@ -248,6 +256,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                 }
             }
         }
+        startPostponedEnterTransition()
+
     }
 
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
@@ -274,5 +284,11 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     companion object {
         const val TAG = "wowAddressMapVerificton"
+
+        fun newInstance(bundle: Bundle): AddressVerificationMapFragment{
+            val fragment = AddressVerificationMapFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }

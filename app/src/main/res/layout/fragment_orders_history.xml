@@ -9,7 +9,6 @@
     <TextView
             android:padding="15.4dp"
             style="@style/LatoBlack23Dark"
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.03"
@@ -19,11 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:layoutAnimation="@anim/restaurant_layout_animation"
-                android:id="@+id/ordersHistoryFragRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/ordersHistoryFragRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layoutAnimation="@anim/restaurant_layout_animation"
+                    android:id="@+id/ordersHistoryFragRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
                 android:gravity="center"
