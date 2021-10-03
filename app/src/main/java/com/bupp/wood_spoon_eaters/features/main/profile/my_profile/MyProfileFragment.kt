@@ -32,7 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
     LogoutDialog.LogoutDialogListener, CuisinesChooserDialog.CuisinesChooserListener,
-    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageViewListener {
+    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageVideoViewListener {
 
     var binding: MyProfileFragmentBinding? = null
     private val viewModel by viewModel<MyProfileViewModel>()
@@ -81,7 +81,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 }
 
                 myProfileFragUserImageView.setImage(eater.thumbnail)
-                myProfileFragUserImageView.setUserImageViewListener(this@MyProfileFragment)
+                myProfileFragUserImageView.setUserImageVideoViewListener(this@MyProfileFragment)
 
 
                 //load selected cuisines and dietary

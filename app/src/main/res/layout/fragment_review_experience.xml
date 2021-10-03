@@ -1,91 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+<LinearLayout android:background="@color/white"
+        android:layout_gravity="center|bottom"
         android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <ImageButton
+            android:id="@+id/reviewDetailFragmentImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:background="@null"
+            android:padding="15.4dp"
+            android:src="@drawable/icons_close_grey" />
+
+    <ImageView
+            android:id="@+id/image"
+            android:layout_gravity="center"
+            android:layout_height="144dp"
+            android:layout_width="144dp"
+            android:scaleType="fitXY"
+            android:transitionName="logo_transition"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <TextView
+            android:id="@+id/title"
+            style="@style/LatoBlack19DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Israeli in The Big Apple"
+            android:transitionName="title_transition" />
+
+    <TextView
+            android:id="@+id/subtitle"
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="3.9dp"
+            android:text="by Assaf Beer"
+            android:transitionName="subtitle_transition" />
+
+    <TextView
+            style="@style/LatoBlack15Dark"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingTop="38.7dp"
+            android:text="How was your order experience?" />
+
+    <TextView
+            style="@style/LatoReg13Black"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Your feedback helps us improve" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
+            android:gravity="center"
+            android:id="@+id/pickFiltersFragRatingStarsView"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|bottom"
-            android:alpha="0.95"
-            android:background="@color/white"
-            android:orientation="vertical">
+            android:paddingTop="22.8dp" />
 
-        <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="15.6dp"
-                android:layout_height="wrap_content">
+    <View
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content" />
 
-
-
-        </FrameLayout>
-
-        <ImageView
-                android:id="@+id/image"
-                android:layout_width="144dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="36.4dp"
-                android:transitionName="logo_transition"
-                app:srcCompat="@mipmap/ic_launcher_round"
-                android:layout_height="144dp"/>
-
-        <TextView
-                android:transitionName="title_transition"
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="20dp"
-                style="@style/LatoBlack19DarkGrey"
-                android:text="Israeli in The Big Apple"/>
-        <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="3.9dp"
-                android:transitionName="subtitle_transition"
-                style="@style/LatoReg13PurpelyGrey"
-                android:text="by Assaf Beer"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="38.7dp"
-                style="@style/LatoBlack15Dark"
-                android:text="How was your order experience?"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="8dp"
-                style="@style/LatoReg13Black"
-                android:text="Your feedback helps us improve"/>
-
-        <com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
-                android:id="@+id/pickFiltersFragRatingStarsView"
-                android:layout_width="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:paddingTop="22.8dp"
-                android:layout_height="wrap_content"/>
-        <View
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                android:id="@+id/reviewExperienceFragmentNextBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="Next"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginEnd="15.4dp"
-                android:layout_marginBottom="14.8dp" />
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/reviewExperienceFragmentNextBtn"
+            android:layout_gravity="bottom"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14.8dp"
+            android:layout_marginEnd="15.4dp"
+            android:layout_marginStart="15.4dp"
+            android:layout_width="match_parent"
+            app:title="Next" />
 
 
-    </LinearLayout>
+</LinearLayout>
 
-</FrameLayout>

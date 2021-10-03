@@ -18,7 +18,6 @@ class ReviewActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
-        binding.reviewDetailFragmentImageView.setOnClickListener { finish() }
     }
 
 
