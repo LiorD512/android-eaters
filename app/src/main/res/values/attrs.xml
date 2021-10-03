@@ -263,6 +263,11 @@
 
     <declare-styleable name="UserImageView">
         <!--<attr name="isWithBkg" format="boolean" />-->
+        <attr name="srcImage" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="UserImageVideoView">
+        <!--<attr name="isWithBkg" format="boolean" />-->
         <attr name="placeHolder" format="integer" />
         <attr name="imageSize" format="enum">
             <enum name="HEADER" value="0" />

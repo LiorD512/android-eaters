@@ -34,23 +34,27 @@
             tools:replace="supportsRtl, fullBackupContent, allowBackup">
 
         <activity
-                android:exported="true"
                 android:name=".features.order_checkout.OrderCheckoutActivity"
+                android:exported="true"
                 android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity"/>
+                tools:ignore="LockedOrientationActivity" />
 
 
         <activity android:name=".features.reviews.review_activity.ReviewActivity">
-
+                        <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
         </activity>
-         <activity android:name=".delete_me.TestActivity"
-         android:screenOrientation="portrait"
-         android:windowSoftInputMode="adjustResize">
-         <intent-filter>
-         <action android:name="android.intent.action.MAIN" />
-         <category android:name="android.intent.category.LAUNCHER" />
-         </intent-filter>
-         </activity>
+<!--        <activity-->
+<!--                android:name=".delete_me.TestActivity"-->
+<!--                android:screenOrientation="portrait"-->
+<!--                android:windowSoftInputMode="adjustResize">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+<!--        </activity>-->
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
@@ -64,6 +68,7 @@
         <meta-data
                 android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
                 android:value="true" />
+
         <service
                 android:name=".fcm.MyFirebaseMessagingService"
                 android:exported="false">
@@ -86,23 +91,23 @@
                 android:name=".features.locations_and_address.LocationAndAddressActivity"
                 android:screenOrientation="portrait"
                 tools:ignore="LockedOrientationActivity" />
-<!--        <activity-->
-<!--                android:name=".features.new_order.NewOrderActivity"-->
-<!--                android:label="@string/title_activity_new_order"-->
-<!--                android:screenOrientation="portrait"-->
-<!--                android:theme="@style/AppTheme.NoActionBar"-->
-<!--                android:windowSoftInputMode="adjustResize" />-->
+        <!--        <activity-->
+        <!--                android:name=".features.new_order.NewOrderActivity"-->
+        <!--                android:label="@string/title_activity_new_order"-->
+        <!--                android:screenOrientation="portrait"-->
+        <!--                android:theme="@style/AppTheme.NoActionBar"-->
+        <!--                android:windowSoftInputMode="adjustResize" />-->
         <activity
-                android:exported="true"
                 android:name=".features.splash.SplashActivity"
+                android:exported="true"
                 android:launchMode="singleTask"
                 android:screenOrientation="portrait"
                 tools:ignore="LockedOrientationActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
             <intent-filter>
                 <action android:name="com.bupp.wood_spoon_eaters.features.splash.TRIVIAL_STARTUP_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -152,11 +157,11 @@
         <activity
                 android:name=".features.login.LoginActivity"
                 android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity"
-                android:windowSoftInputMode="adjustResize" />
+                android:windowSoftInputMode="adjustResize"
+                tools:ignore="LockedOrientationActivity" />
         <activity
-                android:exported="true"
                 android:name=".features.main.MainActivity"
+                android:exported="true"
                 android:screenOrientation="portrait"
                 tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -172,8 +177,8 @@
         </activity>
         <activity
                 android:name=".features.restaurant.RestaurantActivity"
-                android:windowSoftInputMode="adjustPan"
                 android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustPan"
                 tools:ignore="LockedOrientationActivity" />
 
         <provider
@@ -189,7 +194,8 @@
 
         <!-- Profileable to enable Macrobenchmark profiling -->
         <!--         Suppress AndroidElementNotAllowed -->
-        <profileable android:shell="true"
+        <profileable
+                android:shell="true"
                 tools:targetApi="q" />
     </application>
 

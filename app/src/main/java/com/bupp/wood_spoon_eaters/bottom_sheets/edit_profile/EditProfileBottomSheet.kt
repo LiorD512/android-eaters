@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageViewListener, HeaderView.HeaderViewListener{
+class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageVideoViewListener, HeaderView.HeaderViewListener{
 
 
     val binding: EditProfileBottomSheetBinding by viewBinding()
@@ -72,7 +72,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 
     private fun initUi() {
 //        mediaUtils = MediaUtils(requireActivity(), this)
-        binding.editMyProfileFragUserImageView.setUserImageViewListener(this)
+        binding.editMyProfileFragUserImageView.setUserImageVideoViewListener(this)
         binding.editMyProfileFragUserImageBtn.setOnClickListener{
             mainViewModel.onUserImageClick()
         }

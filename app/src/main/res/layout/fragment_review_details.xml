@@ -1,114 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_height="match_parent">
 
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|bottom"
-            android:alpha="0.95"
-            android:background="@color/white"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-        <FrameLayout
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="15.6dp"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/floating_cart_btn_height"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-
-
-
-        </FrameLayout>
+            <ImageButton
+                    android:id="@+id/reviewDetailFragmentImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:background="@null"
+                    android:padding="15.4dp"
+                    android:src="@drawable/icons_close_grey" />
 
             <ImageView
                     android:id="@+id/image"
-                    android:layout_width="72dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="36.4dp"
+                    android:layout_height="72dp"
+                    android:layout_width="72dp"
+                    android:scaleType="fitXY"
                     android:transitionName="logo_transition"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@mipmap/ic_launcher_round"
-                    android:layout_height="72dp"/>
+                    app:srcCompat="@mipmap/ic_launcher_round" />
+
 
             <TextView
                     android:id="@+id/title"
+                    style="@style/LatoBlack19DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:paddingTop="20dp"
-                    android:transitionName="title_transition"
-                    style="@style/LatoBlack19DarkGrey"
-                    android:text="Israeli in The Big Apple"/>
+                    android:layout_marginTop="20dp"
+                    android:text="Israeli in The Big Apple"
+                    android:transitionName="title_transition" />
 
-        <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="3.9dp"
-                android:transitionName="subtitle_transition"
-                style="@style/LatoReg13PurpelyGrey"
-                android:text="by Assaf Beer"/>
-
-
-        <TextView
-                android:id="@+id/textViewReview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:layout_marginTop="23.4dp"
-                style="@style/LatoReg13Black"
-                android:text="Tell others what you thought about your order"/>
-
-        <LinearLayout
-                android:id="@+id/editTextLayoutReview"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_height="wrap_content">
+            <TextView
+                    android:id="@+id/subtitle"
+                    style="@style/LatoReg13PurpelyGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="3.9dp"
+                    android:text="by Assaf Beer"
+                    android:transitionName="subtitle_transition" />
 
 
-        <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
-                android:id="@+id/editTextReviewDetails"
-                app:hint="Share your experience with our WoodSpoon community (optional)"
-                app:maxChar="50"
-                android:layout_marginTop="14.6dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="15.4dp"
-                app:maxLines = "6"
-                android:layout_marginEnd="15.4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/textViewReview"
+                    style="@style/LatoReg13Black"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="23.4dp"
+                    android:text="Tell others what you thought about your order" />
 
-        <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
-                android:id="@+id/editTextMessageReviewDetails"
-                app:hint="Type your message here… (optional)"
-                app:maxChar="50"
-                android:layout_marginTop="14.6dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="15.4dp"
-                app:maxLines = "6"
-                android:layout_marginEnd="15.4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:id="@+id/editTextLayoutReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+
+                <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
+                        android:id="@+id/editTextReviewDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginTop="14.6dp"
+                        android:layout_marginEnd="15.4dp"
+                        app:hint="Share your experience with our WoodSpoon community (optional)"
+                        app:maxChar="50"
+                        app:maxLines="6" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15.6dp"
+                        android:layout_marginTop="23dp"
+                        android:orientation="horizontal">
+
+                    <com.bupp.wood_spoon_eaters.views.UserImageView
+                            android:id="@+id/dishFragChefThumbnail"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            app:srcImage="@mipmap/ic_launcher_round" />
+
+                    <androidx.cardview.widget.CardView
+                            android:id="@+id/dishFragChefLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="1dp"
+                            android:elevation="4dp"
+                            app:cardCornerRadius="7.7dp">
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="15dp"
+                                android:paddingVertical="15dp">
+
+                            <TextView
+                                    android:id="@+id/dishFragChefName"
+                                    style="@style/LatoBold13Black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="The WoodSpoon team" />
+
+                            <TextView
+                                    android:id="@+id/dishFragUserRequestLine"
+                                    style="@style/LatoReg15BrownishGrey"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hey Lee, want to send us a private message?" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
+                        android:id="@+id/editTextMessageReviewDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginTop="14.6dp"
+                        android:layout_marginEnd="15.4dp"
+                        app:hint="Type your message here… (optional)"
+                        app:maxChar="50"
+                        app:maxLines="6" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
             android:id="@+id/reviewExperienceFragmentSubmitBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="Submit review"
             android:layout_gravity="bottom"
             android:layout_marginStart="15.4dp"
             android:layout_marginEnd="15.4dp"
-            android:layout_marginBottom="14.8dp" />
+            android:layout_marginBottom="14.8dp"
+            app:title="Submit review" />
 
 </FrameLayout>
