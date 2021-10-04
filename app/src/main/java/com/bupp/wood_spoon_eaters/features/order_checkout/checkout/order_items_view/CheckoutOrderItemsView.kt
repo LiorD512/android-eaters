@@ -47,7 +47,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun initView(viewListener: CheckoutOrderItemsViewListener, adapterListener: CheckoutOrderItemsAdapterListener) {
+    fun initView(viewListener: CheckoutOrderItemsViewListener?, adapterListener: CheckoutOrderItemsAdapterListener?) {
         this.listener = viewListener
         adapterCheckout = CheckoutOrderItemsAdapter(adapterListener)
         binding.orderItemsViewRecyclerView.initSwipeableRecycler(adapterCheckout!!)

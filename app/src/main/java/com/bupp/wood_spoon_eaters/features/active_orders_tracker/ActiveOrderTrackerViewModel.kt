@@ -106,5 +106,19 @@ private val eventsManager: EventsManager) : ViewModel() {
         eventsManager.logEvent(eventName)
     }
 
+    data class FeesAndTaxData(val fee: String?, val tax: String?, val minFee: String? = null)
+    val feeAndTaxDialogData = MutableLiveData<FeesAndTaxData>()
+    fun onFeesAndTaxInfoClick() {
+        getCurrentOrderDetails.value?.order.let{ order ->
+            var minOrderFee: String? = null
+            order?.minOrderFee?.value?.let {
+                if (it > 0) {
+                    minOrderFee = order.minOrderFee.formatedValue
+                }
+            }
+            feeAndTaxDialogData.postValue(FeesAndTaxData(order?.serviceFee?.formatedValue, order?.tax?.formatedValue, minOrderFee))
+        }
+    }
+
 
 }

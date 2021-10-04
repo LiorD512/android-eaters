@@ -59,7 +59,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
         binding.addressMapFragPb.show()
 
-        postponeEnterTransition()
+//        postponeEnterTransition()
 
 
     }
@@ -256,7 +256,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                 }
             }
         }
-        startPostponedEnterTransition()
+//        startPostponedEnterTransition()
 
     }
 

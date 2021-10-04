@@ -3,170 +3,46 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/top_cornered_30_bkg"
         android:orientation="vertical">
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="21dp"
-            android:background="@color/dark" />
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="23dp"
-            android:paddingEnd="23dp">
-
-        <CheckBox
-                android:clickable="false"
-                android:minHeight="0dp"
-                android:id="@+id/trackOrderProgressCb1"
-                style="@style/LatoReg13Dark50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/circle_checkbox_selector"
-                android:checked="true"
-                android:paddingStart="7.3dp"
-                android:text="We received your order" />
-
-        <View
-                android:layout_width="1.9dp"
-                android:layout_height="30.7dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="-1dp"
-                android:layout_marginBottom="-1dp"
-                android:background="@color/black" />
-
-        <CheckBox
-                android:clickable="false"
-                android:minHeight="0dp"
-                android:id="@+id/trackOrderProgressCb2"
-                style="@style/LatoReg13Dark50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/circle_checkbox_selector"
-                android:paddingStart="7.3dp"
-                android:text="Food is being prepared" />
-
-        <View
-                android:layout_width="1.9dp"
-                android:layout_height="30.7dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="-1dp"
-                android:layout_marginBottom="-1dp"
-                android:background="@color/black" />
-
-
-        <CheckBox
-                android:clickable="false"
-                android:minHeight="0dp"
-                android:id="@+id/trackOrderProgressCb3"
-                style="@style/LatoReg13Dark50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/circle_checkbox_selector"
-                android:paddingStart="7.3dp"
-                android:text="Your order is on its way" />
-
-        <View
-                android:layout_width="1.9dp"
-                android:layout_height="30.7dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="-1dp"
-                android:layout_marginBottom="-1dp"
-                android:background="@color/black" />
-
-        <CheckBox
-                android:clickable="false"
-                android:minHeight="0dp"
-                android:id="@+id/trackOrderProgressCb4"
-                style="@style/LatoReg13Dark50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/circle_checkbox_selector"
-                android:paddingStart="7.3dp"
-                android:paddingBottom="5dp"
-                android:text="Delivered" />
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15.4dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-            <TextView
-                    android:id="@+id/trackOrderProgressArrivalTime"
-                    style="@style/LatoBlack15Teal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.03"
-                    tools:text="Estimated arrival - 6:45 PM" />
-
-            <TextView
-                    android:id="@+id/trackOrderProgressChangeTime"
-                    style="@style/LatoReg13Teal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:letterSpacing="0.03"
-                    android:text="Change"
-                    android:visibility="gone" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <View
-            android:background="@color/light_periwinkle"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-
-    <LinearLayout
-            android:id="@+id/trackOrderBottomContactUsBtn"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-                style="@style/LatoReg15Dark"
-                android:layout_gravity="center"
-                android:layout_marginTop="22.6dp"
-                android:layout_marginBottom="22.2dp"
-                android:drawablePadding="7.7dp"
-                android:drawableStart="@drawable/ic_call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Contact us"/>
-
-    </LinearLayout>
-
-<!--    <ImageView-->
-<!--            android:id="@+id/trackOrderBottomShareImageBtn"-->
-<!--            android:src="@drawable/refferal_banner_pic"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="144dp"/>-->
-
-    <View
-            android:background="@color/light_periwinkle"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
 
     <TextView
-            android:background="@drawable/rounded_white_bkg"
-            android:id="@+id/trackOrderBottomCancelBtn"
-            style="@style/LatoBlack15Dark"
+            android:layout_marginTop="80dp"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingTop="22.6dp"
-            android:paddingBottom="22.2dp"
-            android:textColor="@color/red"
+            android:id="@+id/trackOrderProgressName"
+            style="@style/LatoReg11PurpleyGreyThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            tools:text="Israeli in the big apple" />
+
+    <TextView
+            android:layout_gravity="center"
+            android:id="@+id/activeOrderTitle"
+            style="@style/LatoBlack15DarkThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:letterSpacing="0.03"
+            android:text="Your order" />
+
+    <TextView
+            android:layout_gravity="center"
+            android:id="@+id/trackOrderProgressStatus"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="Waiting for home chef confirmation" />
+
+    <com.bupp.wood_spoon_eaters.views.OrderProgressBar
+            android:id="@+id/trackOrderProgressPb"
+            android:layout_marginHorizontal="23dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel order"/>
+            android:layout_marginTop="14.8dp" />
+
 </LinearLayout>

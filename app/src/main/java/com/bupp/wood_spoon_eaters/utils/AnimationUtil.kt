@@ -3,9 +3,10 @@ package com.bupp.wood_spoon_eaters.utils
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.OvershootInterpolator
+import android.animation.PropertyValuesHolder
+import android.view.animation.*
+import kotlinx.coroutines.delay
+
 
 class AnimationUtil {
 
@@ -154,6 +155,20 @@ class AnimationUtil {
             listener?.let{
                 addListener(listener)
             }
+            start()
+        }
+    }
+
+    fun scaleUp(view: View, customDuration: Long = 250, customStartDelay: Long = 100) {
+        ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            PropertyValuesHolder.ofFloat("scaleX", 0f, 1f),
+            PropertyValuesHolder.ofFloat("scaleY", 0f, 1f)
+        ).apply {
+            duration = customDuration
+            interpolator = OvershootInterpolator()
+            startDelay = 0
+            repeatCount = 0
             start()
         }
     }

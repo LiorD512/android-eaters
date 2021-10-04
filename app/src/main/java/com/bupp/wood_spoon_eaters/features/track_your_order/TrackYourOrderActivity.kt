@@ -4,12 +4,16 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import android.os.Bundle
-import android.transition.TransitionInflater
+import android.transition.*
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -18,7 +22,6 @@ import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrac
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetails
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackProgress
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.TrackOrderNewAdapter
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -27,6 +30,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.motion.widget.MotionScene.Transition.AUTO_ANIMATE_TO_END
+
 
 class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNewAdapterListener, OnMapReadyCallback {
 
@@ -47,8 +53,8 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         binding = ActivityTrackYourOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.sharedElementEnterTransition = TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition)
         binding.trackOrderMap.transitionName = "mapTransition"
+        window.sharedElementEnterTransition = TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition)
 
         curOrderId = intent.getLongExtra("order_id", -1)
         Log.d("wowTrackOrderFragment", "newInstance ARGS: $curOrderId")
@@ -67,6 +73,73 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         adapter = TrackOrderNewAdapter(this, this)
         binding.trackOrderActList.layoutManager = LinearLayoutManager(this)
         binding.trackOrderActList.adapter = adapter
+
+        binding.trackOrderActBackButton.setOnClickListener { onBackPressed() }
+
+        val motionContainer: MotionLayout = binding.motionLayout
+        val sharedElementEnterTransition: Transition = window.sharedElementEnterTransition
+        sharedElementEnterTransition.addListener(@RequiresApi(Build.VERSION_CODES.O)
+        object : TransitionListenerAdapter() {
+            override fun onTransitionEnd(transition: Transition?) {
+                super.onTransitionEnd(transition)
+                Log.d("wowTrackOrderFragment","onAnimationEnd 2")
+//                var fadeTransition: Transition =
+//                    TransitionInflater.from(this@TrackYourOrderActivity)
+//                        .inflateTransition(R.transition.shared_element_transition)
+
+                    motionContainer.setTransition(R.id.openStart, R.id.openEnd)
+//                    motionContainer.getTransition(R.id.mainTransition).autoTransition = AUTO_ANIMATE_TO_END
+                    motionContainer.transitionToEnd()
+                motionContainer.addTransitionListener(object: MotionLayout.TransitionListener{
+                    override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
+
+                    }
+
+                    override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
+
+                    }
+
+                    override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                        if(currentId == R.id.openEnd){
+                            motionContainer.setTransition(R.id.scrollTransition)
+                        }
+
+                    }
+
+                    override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
+
+                    }
+
+                })
+
+//                binding.motionLayout.enableTransition(R.id.scrollTransition, true)
+//                motionContainer.transitionToEnd()
+//                val sceneRoot: ViewGroup = findViewById(R.id.scene_root)
+//                val aScene: Scene = Scene.getSceneForLayout(sceneRoot, R.layout.track_order_scene_b, this@TrackYourOrderActivity)
+//                TransitionManager.go(aScene, fadeTransition)
+            }
+        })
+
+
+        binding.thumbnailBkg.setOnClickListener {
+            motionContainer.setTransition(R.id.openEnd, R.id.touchMapEnd)
+            motionContainer.transitionToEnd()
+            mMap?.uiSettings?.setAllGesturesEnabled(true)
+        }
+//        setEnterSharedElementCallback(object : SharedElementCallback() {
+//            override fun onMapSharedElements(names: List<String?>?, sharedElements: Map<String?, View?>) {
+//                super.onMapSharedElements(names, sharedElements)
+//                val keySharedElementView: View? = sharedElements["mapTransition"]
+//                if (keySharedElementView != null) {
+//                    ViewCompat.animate(keySharedElementView).setListener(object : ViewPropertyAnimatorListenerAdapter() {
+//                        override fun onAnimationEnd(view: View?) {
+//                            Log.d("wowTrackOrderFragment","onAnimationEnd")
+//                            super.onAnimationEnd(view)
+//                        }
+//                    })
+//                }
+//            }
+//        })
     }
 
     private fun initObservers() {
@@ -75,10 +148,13 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
                 Log.d("wowTrackOrderFragment","updating orders")
                 updateOrderUi(it, result.userInfo)
 
-//                (view.parent as? ViewGroup)?.doOnPreDraw {
-                    startPostponedEnterTransition()
+//                (binding.trackOrderMap.parent as? ViewGroup)?.doOnPreDraw {
+//                    startPostponedEnterTransition()
 //                }
             }
+        })
+        viewModel.feeAndTaxDialogData.observe(this, {
+            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minFee).show(supportFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
         })
     }
 
@@ -89,13 +165,18 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         val adapterProgress = OrderTrackProgress(order)
 
         val data = mutableListOf<TrackOrderData<Any>>(
+            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false),
             TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
-            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false)
         )
         adapter?.submitList(data)
         updateMap(order)
-//        val url = MapSyncUtil().getMapImage(order, 800, 1200)
+
+//        Glide.with(this).load(order.restaurant?.thumbnail?.url)
 //
+//            .circleCrop()
+//            .into(binding.trackOrderActThumbnail)
+//        AnimationUtil().scaleUp(binding.thumbnailBkg)
+//        val url = MapSyncUtil().getMapImage(order, 800, 1200)
 //        Log.d("wowSTtaicMap","url $url")
 //        Glide.with(this).load(url).into(binding.trackOrderActMap)
     }
@@ -136,6 +217,8 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
     private fun updateMap(
         curOrderData: Order
     ) {
+        startPostponedEnterTransition()
+
         mMap?.setOnMapLoadedCallback {
             val curCourierData  = curOrderData.courier
             val builder = LatLngBounds.Builder()
@@ -208,5 +291,45 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         }
     }
 
+    override fun onToolTipClick(type: Int) {
+        var titleText = ""
+        var bodyText = ""
+        if (type == Constants.FEES_AND_ESTIMATED_TAX) {
+            viewModel.onFeesAndTaxInfoClick()
+        } else {
+            when (type) {
+                Constants.TOOL_TIP_SERVICE_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                }
+                Constants.TOOL_TIP_CHECKOUT_SERVICE_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_service_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_service_fee_body)
+                }
+                Constants.TOOL_TIP_CHECKOUT_DELIVERY_FEE -> {
+                    titleText = resources.getString(R.string.tool_tip_delivery_fee_title)
+                    bodyText = resources.getString(R.string.tool_tip_delivery_fee_body)
+                }
+                Constants.TOOL_TIP_COURIER_TIP -> {
+                    titleText = resources.getString(R.string.tool_tip_courier_title)
+                    bodyText = resources.getString(R.string.tool_tip_courier_body)
+                }
+            }
+            ToolTipBottomSheet.newInstance(titleText, bodyText).show(supportFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
+        }
+    }
+
+    override fun onBackPressed() {
+        supportFinishAfterTransition()
+//        finishAfterTransition()
+//        binding.motionLayout.s
+        finish()
+        val motionContainer: MotionLayout = binding.motionLayout
+//        motionContainer.getTransition(R.id.mainTransition).isEnabled = false
+//        motionContainer.getTransition(R.id.scrollTransition).isEnabled = false
+//        motionContainer.setTransition(R.id.openEnd, R.id.openEnd)
+//        motionContainer.isInteractionEnabled = false
+//        super.onBackPressed()
+    }
 
 }

@@ -29,19 +29,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="152dp">
 
-<!--                <ImageView-->
-<!--                        android:id="@+id/activeOrderFragContainer"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"/>-->
+                <ImageView
+                        android:id="@+id/activeOrderFragContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
 
 <!--                <androidx.fragment.app.FragmentContainerView-->
 <!--                        android:id="@+id/activeOrderFragContainer"-->
 <!--                        android:layout_width="match_parent"-->
 <!--                        android:layout_height="match_parent"/>-->
-                <FrameLayout
-                        android:id="@+id/activeOrderFragContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+<!--                <FrameLayout-->
+<!--                        android:id="@+id/activeOrderFragContainer"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"/>-->
 
             </androidx.cardview.widget.CardView>
 

@@ -21,13 +21,16 @@ import com.bupp.wood_spoon_eaters.views.OrderProgressBar
 import android.app.Activity
 import android.os.Bundle
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
+import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
 
 
 class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdapterListener, private val fm: FragmentManager) :
@@ -79,35 +82,23 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
                 holder as ActiveOrderItemViewHolder
                 holder.bindItem(item, fm)
 
-                val containerId: Int = holder.mapContainer.id // Get container id
-
-                val oldFragment: Fragment? = fm.findFragmentById(containerId)
-                if (oldFragment != null) {
-                    fm.beginTransaction().remove(oldFragment).commit()
-                }
-
-                val newContainerId = View.generateViewId() // Generate unique container id
-                holder.mapContainer.id = newContainerId // Set container id
-
-
-// Add new fragment
-                val bundle = Bundle()
-                bundle.putFloat("zoom_level", 17f)
-                bundle.putBoolean("show_btns", false)
-                bundle.putBoolean("isCheckout", true)
-                bundle.putParcelable("order", item.order)
-                val fragment: AddressVerificationMapFragment = AddressVerificationMapFragment.newInstance(bundle)
-                fm.beginTransaction().replace(newContainerId, fragment).commit()
-
-//                val generatedId = View.generateViewId()
-//                Log.d("wowMap","id: $generatedId")
-//                holder.mapContainer.id = generatedId
+//                val containerId: Int = holder.mapContainer.id // Get container id
 //
+//                val oldFragment: Fragment? = fm.findFragmentById(containerId)
+//                if (oldFragment != null) {
+//                    fm.beginTransaction().remove(oldFragment).commit()
+//                }
 //
-//                fm.beginTransaction()
-//                    .add(holder.mapContainer.id, AddressVerificationMapFragment.newInstance(bundle), "MAP_$position")
-//                    .commit()
-
+//                val newContainerId = View.generateViewId() // Generate unique container id
+//                holder.mapContainer.id = newContainerId // Set container id
+//
+//                val bundle = Bundle()
+//                bundle.putFloat("zoom_level", 17f)
+//                bundle.putBoolean("show_btns", false)
+//                bundle.putBoolean("isCheckout", true)
+//                bundle.putParcelable("order", item.order)
+//                val fragment: AddressVerificationMapFragment = AddressVerificationMapFragment.newInstance(bundle)
+//                fm.beginTransaction().replace(newContainerId, fragment).commit()
             }
         }
     }
@@ -142,10 +133,11 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         private val title: TextView = binding.activeOrderTitle
         private val subtitle: TextView = binding.activeOrderSubtitle
         private val orderPb: OrderProgressBar = binding.activeOrderPb
-//        private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
-//        private val mapContainer: ImageView = binding.activeOrderFragContainer
+
+        //        private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
+        val mapContainer: ImageView = binding.activeOrderFragContainer
 //        private val mapContainer: FragmentContainerView = binding.activeOrderFragContainer
-val mapContainer: FrameLayout = binding.activeOrderFragContainer
+//        val mapContainer: FrameLayout = binding.activeOrderFragContainer
         private val sep: View = binding.activeOrderSep
 
 //        fun getForegroundFragment(): Fragment? {
@@ -155,17 +147,15 @@ val mapContainer: FrameLayout = binding.activeOrderFragContainer
 
         fun bindItem(data: OrderAdapterItemActiveOrder, fm: FragmentManager) {
             val order = data.order
-            Log.d("wowStatus","bindItem: ${order.id}")
+            Log.d("wowStatus", "bindItem: ${order.id}")
 
-//            val url = MapSyncUtil().getMapImage(order)
-//            Log.d("wowSTtaicMap","url $url")
-//            Glide.with(context).load(url).into(mapContainer)
+            val url = MapSyncUtil().getMapImage(order)
+            Log.d("wowSTtaicMap","url $url")
+            Glide.with(context).load(url).into(mapContainer)
 
 //            val amount = amountTv.text.toString().toInt()
 //            val action = CheckoutFragmentDirections.a(amount)
 //            mapContainer.findNavController().navigate(R.id.addressVerificationMapFragment)
-
-
 
 
             restaurantName.text = order.restaurant?.restaurantName ?: ""
@@ -205,28 +195,28 @@ val mapContainer: FrameLayout = binding.activeOrderFragContainer
 
         override fun areItemsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
             var isSame = oldItem == newItem
-            if(oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder){
+            if (oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder) {
                 isSame = oldItem.order.deliveryStatus == newItem.order.deliveryStatus &&
                         oldItem.order.preparationStatus == newItem.order.preparationStatus
-                Log.d("wowStatus","isSame: $isSame ${oldItem.order.id}")
+                Log.d("wowStatus", "isSame: $isSame ${oldItem.order.id}")
             }
-            Log.d("wowStatus","adapter - areItemsTheSame $isSame")
+            Log.d("wowStatus", "adapter - areItemsTheSame $isSame")
             return isSame
         }
 
         override fun areContentsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
             var isSame = oldItem == newItem
-            if(oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder){
+            if (oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder) {
                 isSame = oldItem.order.deliveryStatus == newItem.order.deliveryStatus &&
                         oldItem.order.preparationStatus == newItem.order.preparationStatus
-                Log.d("wowStatus","isSame: $isSame ${oldItem.order.id}")
+                Log.d("wowStatus", "isSame: $isSame ${oldItem.order.id}")
             }
 //            else{
 //                isSame = oldItem == newItem
 //            }
 //            Log.d("wowStatus","isSame: $isSame ${oldItem.type}")
 
-            Log.d("wowStatus","adapter - areContentsTheSame $isSame")
+            Log.d("wowStatus", "adapter - areContentsTheSame $isSame")
             return isSame
 
         }

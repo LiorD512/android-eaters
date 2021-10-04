@@ -105,6 +105,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     override fun onViewActiveOrderClicked(orderId: Long, transitionBundle: ActivityOptionsCompat) {
         val intent = Intent(requireContext(), TrackYourOrderActivity::class.java)
             .putExtra("order_id", orderId)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(intent, transitionBundle.toBundle())
 //        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }

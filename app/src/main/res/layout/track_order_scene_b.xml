@@ -6,15 +6,19 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_90"
         app:layoutDescription="@xml/track_your_order_page_scene">
 
+    <androidx.legacy.widget.Space
+            android:id="@+id/trackOrderActSpace"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="460dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-            android:clickable="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
-            android:layout_marginBottom="-25dp"
             android:id="@+id/trackOrderMap"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
@@ -84,9 +88,11 @@
     <androidx.core.widget.NestedScrollView
             android:background="@drawable/top_cornered_30_bkg"
             android:id="@+id/trackOrderActMainList"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trackOrderActSpace">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:fitsSystemWindows="true"
@@ -99,11 +105,15 @@
     <androidx.cardview.widget.CardView
             android:id="@+id/thumbnailBkg"
             android:background="@color/black_50"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/trackOrderActMainList"
+            app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
             app:cardElevation="4dp"
             app:cardCornerRadius="150dp"
             android:layout_gravity="center"
-            android:layout_width="14dp"
-            android:layout_height="14dp">
+            android:layout_width="114dp"
+            android:layout_height="114dp">
 
         <ImageView
                 tools:src="@drawable/tab_account_normal"
@@ -122,14 +132,6 @@
             android:background="@color/white"
             android:orientation="vertical"
             app:cardElevation="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.legacy.widget.Space
-            android:id="@+id/trackOrderActSpace"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="460dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
