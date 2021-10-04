@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.BottomSheetReviews
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -312,7 +313,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleReviewData(it: LiveEvent<Review?>?) {
         it?.getContentIfNotHandled()?.let { reviews ->
-            RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            val restaurant = viewModel.restaurantFullData.value
+            val header = "${restaurant?.rating?:""} (${restaurant?.reviewCount?:""} reviews)"
+            BottomSheetReviews.newInstance(reviews, restaurant?.restaurantName?:"", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 

@@ -15,7 +15,6 @@ import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
-import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
@@ -24,6 +23,7 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
+import com.bupp.wood_spoon_eaters.features.reviews.review_activity.ReviewActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
@@ -94,7 +94,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)!!
             val forceFeedRefresh = data.getBooleanExtra("refreshFeed", false)
-            if(isAfterPurchase){
+            if (isAfterPurchase) {
                 updateUiAfterOrderSuccess(result.data)
             } else if (forceFeedRefresh) {
                 viewModel.forceFeedRefresh()
@@ -202,9 +202,11 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         })
         viewModel.getTriggers.observe(this, { triggerEvent ->
             triggerEvent?.let {
-                it.shouldRateOrder?.id?.let {
-                    Log.d(TAG, "found should rate id !: ${triggerEvent.shouldRateOrder}")
-                    RateLastOrderDialog(it).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+                it.shouldRateOrder?.let { order->
+                    Log.d(TAG, "found should rate id !: $order")
+                    val intent = Intent(this, ReviewActivity::class.java)
+                    intent.putExtra(Constants.ARG_REVIEW, order)
+                    startActivity(intent)
                 }
             }
         })

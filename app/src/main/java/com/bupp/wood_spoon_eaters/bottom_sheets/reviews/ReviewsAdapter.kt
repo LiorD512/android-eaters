@@ -9,69 +9,40 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.ReviewsItemBinding
 import com.bupp.wood_spoon_eaters.databinding.ReviewsTitleItemBinding
 
-class ReviewsAdapter() : ListAdapter<ReviewsBaseAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
-
-
-    override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
+class ReviewsAdapter: ListAdapter<Comment, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            ReviewsBaseAdapterViewType.TITLE.ordinal -> {
-                val binding = ReviewsTitleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ReviewTitleItemViewHolder(binding)
-            }
-            else -> { //ReviewsBaseAdapterViewType.REVIEW
-                val binding = ReviewsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ReviewItemViewHolder(binding)
-            }
-        }
+        val binding = ReviewsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ReviewItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        Log.d("wowReviewsAdapter","position: $position")
         val review = getItem(position)
-        when (review) {
-            is ReviewAdapterTitleItem -> {
-                holder as ReviewTitleItemViewHolder
-                holder.bindItem(review)
-            }
-            is ReviewAdapterItem -> {
-                holder as ReviewItemViewHolder
-                holder.bindItem(review)
-            }
-        }
+        holder as ReviewItemViewHolder
+        holder.bindItem(review)
     }
 
     inner class ReviewItemViewHolder(val binding: ReviewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(data: ReviewAdapterItem) {
-                binding.reviewsItemName.text =  data.comment.eater.firstName
-                binding.reviewsItemComment.text = data.comment.body
+        fun bindItem(data: Comment) {
+            binding.reviewsItemName.text = data.eater.firstName
+            binding.reviewsItemComment.text = data.body
         }
-
         val icon: ImageView = binding.reviewsItemIcon
-
     }
 
-    inner class ReviewTitleItemViewHolder(val binding: ReviewsTitleItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(data: ReviewAdapterTitleItem) {
-            val reviewStr = "${data.rating} (${data.reviewCount} reviwes)"
-            binding.reviewTitle.text = reviewStr
-        }
-    }
-
-    private class DiffCallback : DiffUtil.ItemCallback<ReviewsBaseAdapterItem>() {
+    private class DiffCallback : DiffUtil.ItemCallback<Comment>() {
         override fun areItemsTheSame(
-            oldItem: ReviewsBaseAdapterItem,
-            newItem: ReviewsBaseAdapterItem
+            oldItem: Comment,
+            newItem: Comment
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: ReviewsBaseAdapterItem,
-            newItem: ReviewsBaseAdapterItem
+            oldItem: Comment,
+            newItem: Comment
         ): Boolean {
-            return oldItem.type == oldItem.type
+            return oldItem.id == oldItem.id
         }
     }
 }
