@@ -10,19 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentBottomsheetReviewsBinding
-import com.bupp.wood_spoon_eaters.model.Eater
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetReviews : BottomSheetDialogFragment() {
 
-//    val viewModel by viewModel<ReviewsViewmodel>()
     private val binding: FragmentBottomsheetReviewsBinding by viewBinding()
 
-//    val words = arrayListOf("One", "Two", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three",
-//        "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three", "Three" )
-
+    private var restaurantName: String = ""
+    private var ratingHeader: String = ""
+    private var review: Review? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_bottomsheet_reviews, container, false)
@@ -30,25 +28,24 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.BottomSheetStyleFullScreen)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
 
-//        val offsetFromTop = 700
-//        (dialog as? BottomSheetDialog)?.behavior?.apply {
-//            isFitToContents = false
-//            expandedOffset = offsetFromTop
-//            state = BottomSheetBehavior.STATE_EXPANDED
-//        }
+        arguments?.let {
+            review = it.getParcelable<Review>(REVIEW)
+            restaurantName = it.getString(RESTAURANT_NAME,"")
+            ratingHeader = it.getString(RATING_HEADER,"")
+        }
 
         initUI()
     }
+
 
     private lateinit var behavior: BottomSheetBehavior<View>
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -57,17 +54,13 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
             behavior = BottomSheetBehavior.from(sheet!!)
-//            behavior.isFitToContents = true
-//            behavior.isDraggable = false
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            behavior.expandedOffset = Utils.toPx(230)
+
         }
         return dialog
     }
 
 
     private fun initUI() {
-
         with(binding) {
             val adapter = ReviewsAdapter()
             ReviewsList.adapter = adapter
@@ -75,32 +68,31 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             reviewBottomSheetCloseIcon.setOnClickListener {
                 dismiss()
             }
-
-            val list = mutableListOf<ReviewsBaseAdapterItem>()
-            list.add(ReviewAdapterTitleItem("bla", 1))
-            list.add(ReviewAdapterItem(Comment(313,"Hi there im just checking if its work...:) ", Eater(12,"0502497343",
-            "Karin","Karin","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(315,"Hi there im just checking if its work...:) ", Eater(12,"312243",
-                "Noam","Noam","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(317,"Hi there im just checking if its work...:) ", Eater(12,"050249257573",
-                "Lior","Lior","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(312,"Hi there im just checking if its work...:) ", Eater(12,"2345688",
-                "Gili","Gili","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(314,"Hi there im just checking if its work...:) ", Eater(12,"0502497343",
-                "Alon","Mittel","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(3172,"Hi there im just checking if its work...:) ", Eater(12,"0502497343",
-                "Nicole","Niki","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(318,"Hi there im just checking if its work...:) ", Eater(12,"0502497343",
-                "Dor","Dor","hi",null,null,null,null,0,null,null,null,null,null))))
-            list.add(ReviewAdapterItem(Comment(3139,"Hi there im just checking if its work...:) ", Eater(12,"0502497343",
-                "Matan","Matan","hi",null,null,null,null,0,null,null,null,null,null))))
-
-//            adapter.submitList(list)
-            adapter.submitList(list.subList(0, 5))
-            reviewsBottomSheetBtn.setOnClickListener {
-              adapter.submitList(list)
+            reviewBottomSheetTitle.text = ratingHeader
+            review?.let { review ->
+                reviewsBottomSheetTextView.text = restaurantName
+                val list = mutableListOf<Comment>()
+                list.addAll(review.comments)
+                list.addAll(review.comments)
+                list.addAll(review.comments)
+                list.addAll(review.comments)
+                adapter.submitList(list)
             }
+        }
+    }
 
+    companion object {
+        private const val REVIEW = "review"
+        private const val RESTAURANT_NAME = "restaurantName"
+        private const val RATING_HEADER = "ratingHeader"
+        fun newInstance(review: Review, restaurantName: String, ratingHeader: String): BottomSheetReviews {
+            return BottomSheetReviews().apply {
+                arguments = Bundle().apply {
+                    putParcelable(REVIEW, review)
+                    putString(RESTAURANT_NAME, restaurantName)
+                    putString(RATING_HEADER, ratingHeader)
+                }
+            }
         }
     }
 

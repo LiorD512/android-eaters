@@ -7,22 +7,6 @@ import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 
-sealed class ReviewsBaseAdapterItem(
-    var type: ReviewsBaseAdapterViewType?
-) : Parcelable
-
-enum class ReviewsBaseAdapterViewType {
-    TITLE,
-    REVIEW,
-}
-
-@Parcelize
-data class ReviewAdapterTitleItem(
-        val rating: String,
-        val reviewCount: Int
-): Parcelable, ReviewsBaseAdapterItem(ReviewsBaseAdapterViewType.TITLE)
-
-
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Review(
@@ -30,14 +14,7 @@ data class Review(
     @Json(name = "avg_delivery_rating")  val deliveryRating: Double,
     @Json(name = "avg_dish_rating")  val dishRating: Double,
     @Json(name = "reviews") val comments: List<Comment>
-): Parcelable, ReviewsBaseAdapterItem(ReviewsBaseAdapterViewType.REVIEW)
-
-
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class ReviewAdapterItem(
-    val comment: Comment
-): Parcelable, ReviewsBaseAdapterItem(ReviewsBaseAdapterViewType.REVIEW)
+): Parcelable
 
 
 @JsonClass(generateAdapter = true)

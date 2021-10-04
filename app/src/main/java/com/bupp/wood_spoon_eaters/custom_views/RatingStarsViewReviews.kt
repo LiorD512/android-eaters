@@ -59,33 +59,33 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun setSmallUi(){
         with(binding) {
-            val topBottomPadding = Utils.toPx(15)
+            val topBottomPadding = Utils.toPx(0)
             val leftRightPadding = Utils.toPx(2)
 
             ratingStarNum1.setPadding(leftRightPadding,
                 topBottomPadding,
                 leftRightPadding,
-                Utils.toPx(0))
+                topBottomPadding)
 
             ratingStarNum2.setPadding(leftRightPadding,
                 topBottomPadding,
                 leftRightPadding,
-                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+                topBottomPadding)
 
             ratingStarNum3.setPadding(leftRightPadding,
                 topBottomPadding,
                 leftRightPadding,
-                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+                topBottomPadding)
 
             ratingStarNum4.setPadding(leftRightPadding,
                 topBottomPadding,
                 leftRightPadding,
-                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+                topBottomPadding)
 
             ratingStarNum5.setPadding(leftRightPadding,
                 topBottomPadding,
                 leftRightPadding,
-                com.bupp.wood_spoon_eaters.utils.Utils.toPx(0))
+                topBottomPadding)
         }
     }
 

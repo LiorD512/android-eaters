@@ -5,9 +5,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -17,7 +14,7 @@
                 android:orientation="vertical">
 
             <ImageButton
-                    android:id="@+id/reviewDetailFragmentImageView"
+                    android:id="@+id/reviewFragExitBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|left"
@@ -26,7 +23,7 @@
                     android:src="@drawable/icons_close_grey" />
 
             <ImageView
-                    android:id="@+id/image"
+                    android:id="@+id/reviewFragImage"
                     android:layout_gravity="center"
                     android:layout_height="72dp"
                     android:layout_width="72dp"
@@ -36,7 +33,7 @@
 
 
             <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/reviewFragRestName"
                     style="@style/LatoBlack19DarkGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -46,7 +43,7 @@
                     android:transitionName="title_transition" />
 
             <TextView
-                    android:id="@+id/subtitle"
+                    android:id="@+id/reviewFragCookName"
                     style="@style/LatoReg13PurpelyGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +54,7 @@
 
 
             <TextView
-                    android:id="@+id/textViewReview"
+                    android:id="@+id/reviewFragTitle"
                     style="@style/LatoReg13Black"
                     android:visibility="gone"
                     android:layout_width="wrap_content"
@@ -67,7 +64,7 @@
                     android:text="Tell others what you thought about your order" />
 
             <LinearLayout
-                    android:id="@+id/editTextLayoutReview"
+                    android:id="@+id/reviewFragLayoutReview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -76,7 +73,7 @@
 
 
                 <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
-                        android:id="@+id/editTextReviewDetails"
+                        android:id="@+id/reviewFragUserReviewInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -95,13 +92,11 @@
                         android:orientation="horizontal">
 
                     <com.bupp.wood_spoon_eaters.views.UserImageView
-                            android:id="@+id/dishFragChefThumbnail"
                             android:layout_width="46dp"
                             android:layout_height="wrap_content"
                             app:srcImage="@mipmap/ic_launcher_round" />
 
                     <androidx.cardview.widget.CardView
-                            android:id="@+id/dishFragChefLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="1dp"
@@ -118,14 +113,13 @@
                                 android:paddingVertical="15dp">
 
                             <TextView
-                                    android:id="@+id/dishFragChefName"
                                     style="@style/LatoBold13Black"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="The WoodSpoon team" />
 
                             <TextView
-                                    android:id="@+id/dishFragUserRequestLine"
+                                    android:id="@+id/reviewFragUserInputText"
                                     style="@style/LatoReg15BrownishGrey"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -138,7 +132,7 @@
                 </LinearLayout>
 
                 <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
-                        android:id="@+id/editTextMessageReviewDetails"
+                        android:id="@+id/reviewFragUserTeamInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -152,10 +146,8 @@
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
-
     <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-            android:id="@+id/reviewExperienceFragmentSubmitBtn"
+            android:id="@+id/reviewFragSubmitBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

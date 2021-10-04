@@ -103,6 +103,7 @@ class Constants {
 
         const val ARG_RESTAURANT = "args_restaurant"
         const val ARG_DISH = "args_dish"
+        const val ARG_REVIEW = "args_review"
 
 
         const val TIP_COURIER_DIALOG_TAG = "tip_courier_dialog"

@@ -7,14 +7,13 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.databinding.ActivityReviewBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
+import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience) {
-
 
 
     val binding: FragmentReviewExperienceBinding by viewBinding()
@@ -29,31 +28,44 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
     }
 
     fun initUi() {
-        binding.reviewExperienceFragmentNextBtn.setOnClickListener {
-            viewModel.onNextClick()
+        with(binding) {
+            binding.reviewFragNextBtn.setOnClickListener {
+                viewModel.onNextClick()
+            }
+            reviewFragExitBtn.setOnClickListener {
+                activity?.finish()
+            }
+            viewModel.order?.let { order ->
+                GlideApp.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
+                reviewFragRestName.text = order.restaurant?.restaurantName
+                reviewFragCookName.text = order.restaurant?.firstName
+//                reviewFragRating
+            }
         }
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(viewLifecycleOwner,  { navigationEvent ->
+        viewModel.navigationEvent.observe(viewLifecycleOwner, { navigationEvent ->
             handleNavigationEvent(navigationEvent)
         })
     }
 
     private fun handleNavigationEvent(navigationEvent: LiveEvent<ReviewsViewModel.NavigationEvent>?) {
         navigationEvent?.getContentIfNotHandled()?.let {
-            val extras = FragmentNavigatorExtras(binding.image to "logo_transition", binding.title to "title_transition", binding.subtitle to "subtitle_transition" )
+            val extras = FragmentNavigatorExtras(
+                binding.reviewFragImage to "logo_transition",
+                binding.reviewFragRestName to "title_transition",
+                binding.reviewFragCookName to "subtitle_transition"
+            )
 
             when (it) {
                 ReviewsViewModel.NavigationEvent.EXPERIENCE_TO_DETAILS -> {
                     val action = ReviewExperienceFragmentDirections.actionReviewExperienceFragmentToReviewDetailsFragment()
-                    findNavController().navigate(action,extras)
+                    findNavController().navigate(action, extras)
                 }
             }
         }
     }
-
-
 
 
 }

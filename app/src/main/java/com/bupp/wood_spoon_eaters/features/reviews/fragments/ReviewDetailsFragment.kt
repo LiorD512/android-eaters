@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewDetailsBinding
+import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,6 +25,7 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
         val animation = TransitionInflater.from(requireContext()).inflateTransition(
             android.R.transition.move
         )
+        initUi()
         sharedElementEnterTransition = animation
         sharedElementReturnTransition = animation
 
@@ -46,13 +48,31 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
 
         })
 
+    }
 
+    fun initUi() {
+        with(binding) {
+            binding.reviewFragSubmitBtn.setOnClickListener {
+                viewModel.onSubmitClick()
+            }
+            reviewFragExitBtn.setOnClickListener {
+                activity?.finish()
+            }
+            viewModel.order?.let { order ->
+                GlideApp.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
+                reviewFragRestName.text = order.restaurant?.restaurantName
+                reviewFragCookName.text = order.restaurant?.firstName
+//                reviewFragUserReviewInput
+//                reviewFragUserInputText
+//                reviewFragUserTeamInput
+            }
+        }
     }
 
 
     private fun  fadeIn() {
-        binding.editTextLayoutReview?.let {
-            binding.editTextLayoutReview.apply {
+        binding.reviewFragTitle.let {
+            binding.reviewFragTitle.apply {
                 // Set the content view to 0% opacity but visible, so that it is visible
                 // (but fully transparent) during the animation.
                 alpha = 0f
@@ -67,8 +87,8 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
             }
         }
 
-        binding.textViewReview?.let {
-            binding.textViewReview.apply {
+        binding.reviewFragLayoutReview?.let {
+            binding.reviewFragLayoutReview.apply {
                 // Set the content view to 0% opacity but visible, so that it is visible
                 // (but fully transparent) during the animation.
                 alpha = 0f
