@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.track_your_order.TrackYourOrderActivity
+import com.bupp.wood_spoon_eaters.model.Order
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -102,9 +103,19 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         SingleOrderDetailsBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.SINGLE_ORDER_DETAILS_BOTTOM_SHEET)
     }
 
-    override fun onViewActiveOrderClicked(orderId: Long, transitionBundle: ActivityOptionsCompat) {
+    override fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreviewUrl: String) {
+        val orderState = order.getOrderState()
+        val statusTitle = order.getOrderStateTitle(orderState)
+        val statusSubTitle = order.getOrderStateSubTitle(orderState)
+
         val intent = Intent(requireContext(), TrackYourOrderActivity::class.java)
-            .putExtra("order_id", orderId)
+            .putExtra("order_id", order.id)
+            .putExtra("thumbnail", order.restaurant?.thumbnail?.url)
+            .putExtra("restaurant_name", order.restaurant?.restaurantName)
+            .putExtra("status_title", statusTitle)
+            .putExtra("status_subtitle", statusSubTitle)
+            .putExtra("pb_state", orderState.name)
+            .putExtra("map_preview_url", mapPreviewUrl)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(intent, transitionBundle.toBundle())
 //        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)

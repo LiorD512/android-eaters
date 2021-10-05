@@ -217,21 +217,17 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             chefLat?.let{
                 chefLng?.let{
                     val chefLocation = LatLng(chefLat, chefLng)
-                    googleMap?.addMarker(MarkerOptions().position(chefLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_cook_marker)))
+                    googleMap?.addMarker(MarkerOptions().position(chefLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_chef_marker)))
                     builder.include(chefLocation)
                     Log.d("wowMapBinder","chefLocation $chefLocation")
                 }
             }
             val myLat = curOrderData.deliveryAddress?.lat ?: 0.0
             val myLng = curOrderData.deliveryAddress?.lng ?: 0.0
-            myLat?.let{
-                myLng?.let{
-                    val myLocation = LatLng(myLat, myLng)
-                    googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_my_marker)))
-                    builder.include(myLocation)
-                    Log.d("wowMapBinder","myLocation $myLocation")
-                }
-            }
+            val myLocation = LatLng(myLat, myLng)
+            googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_my_marker)))
+            builder.include(myLocation)
+            Log.d("wowMapBinder","myLocation $myLocation")
             val bounds = builder.build()
 
             //change mechnic to monig map by scroll and target bound on the courer or chef location

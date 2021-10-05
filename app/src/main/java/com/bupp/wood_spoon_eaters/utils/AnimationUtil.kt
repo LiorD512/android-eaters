@@ -159,11 +159,12 @@ class AnimationUtil {
         }
     }
 
-    fun scaleUp(view: View, customDuration: Long = 250, customStartDelay: Long = 100) {
+    fun scaleUpWithAlpha(view: View, customDuration: Long = 350, customStartDelay: Long = 100) {
         ObjectAnimator.ofPropertyValuesHolder(
             view,
             PropertyValuesHolder.ofFloat("scaleX", 0f, 1f),
-            PropertyValuesHolder.ofFloat("scaleY", 0f, 1f)
+            PropertyValuesHolder.ofFloat("scaleY", 0f, 1f),
+            PropertyValuesHolder.ofFloat("alpha", 0f, 1f),
         ).apply {
             duration = customDuration
             interpolator = OvershootInterpolator()

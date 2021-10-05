@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
 
 
@@ -38,7 +39,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
     interface OrdersHistoryAdapterListener {
         fun onOrderClick(orderId: Long)
-        fun onViewActiveOrderClicked(orderId: Long, transitionBundle: ActivityOptionsCompat)
+        fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreview: String)
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type.ordinal
@@ -136,7 +137,8 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
         //        private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
         val mapContainer: ImageView = binding.activeOrderFragContainer
-//        private val mapContainer: FragmentContainerView = binding.activeOrderFragContainer
+
+        //        private val mapContainer: FragmentContainerView = binding.activeOrderFragContainer
 //        val mapContainer: FrameLayout = binding.activeOrderFragContainer
         private val sep: View = binding.activeOrderSep
 
@@ -150,7 +152,9 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             Log.d("wowStatus", "bindItem: ${order.id}")
 
             val url = MapSyncUtil().getMapImage(order)
-            Log.d("wowSTtaicMap","url $url")
+            val bigUrl = MapSyncUtil().getMapImage(order, 600, 1800)
+            Log.d("wowSTtaicMap", "url $url")
+            Log.d("wowSTtaicMap", "bigUrl $bigUrl")
             Glide.with(context).load(url).into(mapContainer)
 
 //            val amount = amountTv.text.toString().toInt()
@@ -167,16 +171,17 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
 
             mainLayout.setOnClickListener {
-                order.id?.let { it1 ->
+                order.let { order ->
                     mapContainer.transitionName = "mapTransition"
                     val pairMap: Pair<View, String> = Pair.create(mapContainer as View, mapContainer.transitionName)
+                    val pairName: Pair<View, String> = Pair.create(restaurantName as View, restaurantName.transitionName)
+                    val pairStatusTitle: Pair<View, String> = Pair.create(title as View, title.transitionName)
+                    val pairStatusSubTitle: Pair<View, String> = Pair.create(subtitle as View, subtitle.transitionName)
+                    val pairPb: Pair<View, String> = Pair.create(orderPb as View, orderPb.transitionName)
 
-//
-                    val transitionBundle: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, pairMap)
-                    listener.onViewActiveOrderClicked(it1, transitionBundle)
-//
-//                    val intent = Intent(context, TrackYourOrderActivity::class.java)
-//                    context.startActivity(intent, optionsCompat.toBundle())
+                    val transitionBundle: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        context as Activity, pairMap, pairName, pairStatusTitle, pairStatusSubTitle, pairPb)
+                    listener.onViewActiveOrderClicked(order, transitionBundle, bigUrl)
                 }
             }
 
