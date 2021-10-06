@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.network.base_repos
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
-import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 
 interface CampaignRepositoryInterface{
     suspend fun getActiveCampaigns(): ResultHandler<ServerResponse<List<Campaign>>>
@@ -12,18 +12,18 @@ interface CampaignRepositoryInterface{
 
 }
 
-class CampaignRepositoryImpl(private val service: ApiService) : CampaignRepositoryInterface {
+class CampaignRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : CampaignRepositoryInterface {
 
     override suspend fun getActiveCampaigns(): ResultHandler<ServerResponse<List<Campaign>>> {
-        return safeApiCall { service.getUserCampaign() }
+        return resultManager.safeApiCall { service.getUserCampaign() }
     }
 
     override suspend fun validateReferralToken(token: String): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.validateReferralToken(token) }
+        return resultManager.safeApiCall { service.validateReferralToken(token) }
     }
 
     override suspend fun updateCampaignStatus(userInteractionId: Long, status: UserInteractionStatus): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.updateCampaignStatus(userInteractionId, status.name.lowercase()) }
+        return resultManager.safeApiCall { service.updateCampaignStatus(userInteractionId, status.name.lowercase()) }
     }
 
 
