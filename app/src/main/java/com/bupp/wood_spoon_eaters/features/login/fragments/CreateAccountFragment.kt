@@ -18,11 +18,12 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEditText.WSEditTextListener {
 
-    val binding: FragmentCreateAccountBinding by viewBinding()
+    var binding: FragmentCreateAccountBinding? = null
     val viewModel by sharedViewModel<LoginViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCreateAccountBinding.bind(view)
 
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT)
 
@@ -30,7 +31,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEdit
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             createAccountFragNext.setOnClickListener {updateEater()}
             createAccountFragCloseBtn.setOnClickListener { activity?.onBackPressed() }
             createAccountFragEmail.setWSEditTextListener(this@CreateAccountFragment)
@@ -39,7 +40,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEdit
 
     private fun updateEater() {
         if(validateFields()){
-            with(binding){
+            with(binding!!){
                 val firstName = createAccountFragFirstName.getText()!!
                 val lastName = createAccountFragLastName.getText()!!
                 val email = createAccountFragEmail.getText()!!
@@ -51,7 +52,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEdit
 
     private fun validateFields(): Boolean {
         var isValid = true
-        with(binding){
+        with(binding!!){
             if(createAccountFragFirstName.getText().isNullOrEmpty()){
                 createAccountFragFirstName.showError()
                 isValid = false
@@ -70,7 +71,12 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEdit
     }
 
     override fun onWSEditTextActionDone() {
-        binding.createAccountFragNext.performClick()
+        binding!!.createAccountFragNext.performClick()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

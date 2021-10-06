@@ -25,7 +25,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     OrdersHistoryAdapter.OrdersHistoryAdapterListener {
 
     private var listItemDecorator: OrderHistoryItemDecorator? = null
-    val binding: FragmentOrdersHistoryBinding by viewBinding()
+    var binding: FragmentOrdersHistoryBinding? = null
     val viewModel by viewModel<OrdersHistoryViewModel>()
     val mainViewModel by sharedViewModel<MainViewModel>()
     lateinit var adapter: OrdersHistoryAdapter
@@ -45,6 +45,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentOrdersHistoryBinding.bind(view)
 //        Analytics.with(requireContext()).screen("Order history")
 
 
@@ -55,7 +56,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     private fun initObservers() {
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.orderHistoryFragHeightCorrection.isVisible = it
+            binding!!.orderHistoryFragHeightCorrection.isVisible = it
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { event ->
             initList(event)
@@ -64,7 +65,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     private fun initUi() {
         Log.d("wowStatus","initUi")
-        with(binding){
+        with(binding!!){
             ordersHistoryFragRecyclerView.layoutManager = layoutManager
 
             adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
@@ -75,7 +76,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     }
 
     private fun initList(orderHistory: List<OrderHistoryBaseItem>) {
-        with(binding){
+        with(binding!!){
             if(orderHistory.isNotEmpty()){
                 listItemDecorator?.let{
                     ordersHistoryFragRecyclerView.removeItemDecoration(it)
@@ -105,6 +106,11 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     override fun onPause() {
         viewModel.endUpdates()
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

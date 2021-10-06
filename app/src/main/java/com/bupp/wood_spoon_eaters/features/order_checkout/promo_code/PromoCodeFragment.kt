@@ -27,7 +27,7 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
-    private var binding: PromoCodeFragmentBinding ?=  null
+    private var binding: PromoCodeFragmentBinding? =  null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

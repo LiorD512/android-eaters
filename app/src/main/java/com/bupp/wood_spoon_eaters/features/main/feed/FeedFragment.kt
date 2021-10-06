@@ -35,7 +35,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private var tooltip: Tooltip? = null
-    val binding: FragmentFeedBinding by viewBinding()
+    var binding: FragmentFeedBinding? = null
     private val viewModel: FeedViewModel by viewModel()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -43,6 +43,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentFeedBinding.bind(view)
 
         initUi()
         initObservers()
@@ -52,7 +53,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
             feedAdapter = FeedMainAdapter(this@FeedFragment)
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
@@ -65,7 +66,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     private fun initObservers() {
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.feedFragHeader.setAddress(it?.shortTitle)
+            binding!!.feedFragHeader.setAddress(it?.shortTitle)
         })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
             it.feedData?.let { skeletons ->
@@ -91,20 +92,20 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             handleShareCampaign(campaigns)
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
+            binding!!.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
         })
         mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner, {
             viewModel.onPullToRefresh()
         })
         mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner, {
-            binding.feedFragList.smoothScrollToPosition(0)
+            binding!!.feedFragList.smoothScrollToPosition(0)
         })
     }
 
     private fun handleFeedUi(isLargeItems: Boolean) {
         Log.d(TAG, "handleFeedUi: $isLargeItems")
         if(!isLargeItems){
-            binding.feedFragList.enableSnapping(isLargeItems)
+            binding!!.feedFragList.enableSnapping(isLargeItems)
         }
     }
 
@@ -120,7 +121,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
         viewModel.onTimePickerChanged(deliveryTimeParam)
-        binding.feedFragHeader.setDate(deliveryTimeParam)
+        binding!!.feedFragHeader.setDate(deliveryTimeParam)
     }
 
     private fun handleShareCampaign(campaigns: List<Campaign>?) {
@@ -166,8 +167,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             showEmptyLayout()
             handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
-            binding.feedFragRefreshLayout.isRefreshing = false
-            binding.feedFragEmptyLayout.visibility = View.GONE
+            binding!!.feedFragRefreshLayout.isRefreshing = false
+            binding!!.feedFragEmptyLayout.visibility = View.GONE
             feedAdapter.setDataList(feedArr)
         }
     }
@@ -179,7 +180,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     @SuppressLint("SetTextI18n")
     private fun showEmptyLayout() {
-        with(binding) {
+        with(binding!!) {
             feedFragList.visibility = View.GONE
             feedFragEmptyLayout.visibility = View.VISIBLE
             feedFragEmptyLayout.setOnClickListener {
@@ -214,8 +215,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private fun showBanner(text: String) {
-        with(binding) {
-            //todo : ask Mittel what he thinks
+        with(binding!!) {
             //.post call make sure the tool bar doesn't get called before the UI is ready to prevent crash
             feedFragHeader.post{
                 tooltip = Tooltip.Builder(requireContext())
@@ -256,6 +256,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     override fun onResume() {
         super.onResume()
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_FEED)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

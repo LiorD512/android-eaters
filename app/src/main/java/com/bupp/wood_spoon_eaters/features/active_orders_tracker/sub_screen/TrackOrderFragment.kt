@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.FragmentCodeBinding
 import com.bupp.wood_spoon_eaters.databinding.TrackOrderFragmentBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -30,7 +31,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     CancelOrderDialog.CancelOrderDialogListener, OnMapReadyCallback,
     TrackOrderNewAdapter.TrackOrderNewAdapterListener {
 
-    val binding: TrackOrderFragmentBinding by viewBinding()
+    var binding: TrackOrderFragmentBinding? = null
 
     private var mMap: GoogleMap? = null
     var curOrderId: Long? = null
@@ -68,7 +69,6 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         curOrderId = requireArguments().getLong(CUR_ORDER_ID_PARAM)
         Log.d("wowTrackOrderFragment", "newInstance ARGS: $curOrderId")
     }
@@ -76,6 +76,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = TrackOrderFragmentBinding.bind(view)
 
         initUi()
         initMap()
@@ -236,7 +237,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
         )
         adapter?.submitList(data)
 //        mainAdapter.updateUi(order, userInfo)
-        binding.trackOrderDialogList.scrollToPosition(0)
+        binding!!.trackOrderDialogList.scrollToPosition(0)
     }
 
     override fun onOrderCanceled() {
@@ -244,7 +245,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             Log.d("wowTrackOrderFragment","initUing now")
 //            mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this@TrackOrderFragment)
             adapter = TrackOrderNewAdapter(requireContext(), this@TrackOrderFragment)
@@ -288,6 +289,7 @@ class TrackOrderFragment : Fragment(R.layout.track_order_fragment),
         mMap?.clear()
         mMap = null
         adapter = null
+        binding = null
 //        binding = null
         super.onDestroy()
     }

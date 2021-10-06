@@ -6,8 +6,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.CheckResult
 import androidx.fragment.app.Fragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
@@ -43,7 +43,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
 
-    private val binding: CheckoutFragmentBinding by viewBinding()
+    private var binding: CheckoutFragmentBinding? = null
 
     private var hasPaymentMethod: Boolean = false
 
@@ -65,6 +65,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = CheckoutFragmentBinding.bind(view)
 
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CHECKOUT)
 
@@ -74,33 +75,35 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun initUi() {
-        binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
-        binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragDeliveryFee.setWSTitleValueListener(this)
-        binding.checkoutFragPromoCode.setDeliveryDetailsViewListener(this)
-        binding.checkoutFragFees.setWSTitleValueListener(this)
-        with(binding) {
-            checkoutFragPromoCode.setOnClickListener {
-                mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
-            }
-            checkoutFragPlaceOrderBtn.setOnClickListener {
-                viewModel.onPlaceOrderClick()
-            }
+        with(binding!!) {
+            checkoutFragTipPercentView.setTipPercentViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragChangePayment.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryFee.setWSTitleValueListener(this@CheckoutFragment)
+            checkoutFragPromoCode.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragFees.setWSTitleValueListener(this@CheckoutFragment)
+            with(binding!!) {
+                checkoutFragPromoCode.setOnClickListener {
+                    mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
+                }
+                checkoutFragPlaceOrderBtn.setOnClickListener {
+                    viewModel.onPlaceOrderClick()
+                }
 
-            checkoutFragCourierTip.setOnClickListener {
-                onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
+                checkoutFragCourierTip.setOnClickListener {
+                    onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
+                }
+                checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
+                initOrderItemsView()
             }
-            checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
-            initOrderItemsView()
         }
     }
 
 
     private fun initOrderItemsView() {
-        with(binding) {
+        with(binding!!) {
             //view listener
             val viewListener = object : CheckoutOrderItemsView.CheckoutOrderItemsViewListener {
                 override fun onEditOrderBtnClicked() {
@@ -139,9 +142,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
-                binding.checkoutFragmentPb.show()
+                binding!!.checkoutFragmentPb.show()
             } else {
-                binding.checkoutFragmentPb.hide()
+                binding!!.checkoutFragmentPb.hide()
             }
         })
         viewModel.onCheckoutDone.observe(viewLifecycleOwner, {
@@ -167,7 +170,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         })
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let { data->
+            it.getContentIfNotHandled()?.let { data ->
                 FeesAndTaxBottomSheet.newInstance(data.fee, data.tax, data.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
             }
         })
@@ -197,7 +200,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             handleWSError(it.getContentIfNotHandled())
         })
         viewModel.deliveryDatesUi.observe(viewLifecycleOwner, {
-            binding.checkoutFragDeliveryTime.updateDeliveryTimeUi(it)
+            binding!!.checkoutFragDeliveryTime.updateDeliveryTimeUi(it)
         })
         viewModel.orderItemsData.observe(viewLifecycleOwner, {
             handleOrderItemsData(it)
@@ -205,14 +208,14 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun handleOrderItemsData(list: List<CheckoutAdapterItem>) {
-        with(binding) {
+        with(binding!!) {
             checkoutFragOrderItemsView.submitList(list)
         }
     }
 
     private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
         if (deliveryDates.isEmpty()) {
-            binding.checkoutFragDeliveryTime.setChangeable(false)
+            binding!!.checkoutFragDeliveryTime.setChangeable(false)
         }
     }
 
@@ -234,7 +237,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun setEmptyPaymentMethod() {
-        with(binding) {
+        with(binding!!) {
             hasPaymentMethod = false
             checkoutFragChangePayment.updateSubTitle("Insert payment method")
         }
@@ -249,7 +252,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
-        with(binding) {
+        with(binding!!) {
             val card = paymentMethod.card
             card?.let {
                 hasPaymentMethod = true
@@ -261,7 +264,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     private fun handleOrderDetails(order: Order?) {
         if (order != null) {
-            with(binding) {
+            with(binding!!) {
                 viewModel.handleOrderItems(order)
 
                 checkoutFragHeader.setSubtitle(order.restaurant?.restaurantName ?: "")
@@ -297,7 +300,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     @SuppressLint("SetTextI18n")
     private fun updatePriceUi(curOrder: Order) {
-        with(binding) {
+        with(binding!!) {
 
             val deliveryFee = curOrder.deliveryFee?.value
 
@@ -340,7 +343,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
         viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
-        binding.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
+        binding!!.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
     }
 
     override fun onTipIconClick(tipSelection: Int?) {
@@ -359,7 +362,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onTipDone(tipAmount: Int) {
-        binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
+        binding!!.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
         viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_CLICK_TIP)
     }
 
@@ -415,5 +418,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onWSErrorDone() {
         viewModel.refreshCheckoutPage()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

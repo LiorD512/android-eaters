@@ -28,7 +28,7 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
         askLocationPermission()
     }
 
-    private val binding: FragmentLocationPermissionBinding by viewBinding()
+    private var binding: FragmentLocationPermissionBinding? = null
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,20 +61,20 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding = FragmentLocationPermissionBinding.bind(view)
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_LOCATION_PERMISSION)
 
         initUi()
     }
 
     private fun initUi() {
-        binding.locationPermissionFragAllow.setOnClickListener {
+        binding!!.locationPermissionFragAllow.setOnClickListener {
             mainViewModel.locationPermissionEvent(true)
 //            mainViewModel.onLocationPermissionDone()
             askLocationPermission()
         }
 
-        binding.locationPermissionFragReject.setOnClickListener {
+        binding!!.locationPermissionFragReject.setOnClickListener {
             mainViewModel.locationPermissionEvent(false)
 //            mainViewModel.onLocationPermissionDone()
             dismiss()
@@ -109,6 +109,11 @@ class LocationPermissionFragment : BottomSheetDialogFragment() {
             requireActivity(),
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 
 
     companion object{
