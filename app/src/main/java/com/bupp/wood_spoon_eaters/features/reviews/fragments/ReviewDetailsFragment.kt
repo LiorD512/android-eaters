@@ -25,7 +25,7 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
         val animation = TransitionInflater.from(requireContext()).inflateTransition(
             android.R.transition.move
         )
-        initUi()
+//        initUi()
         sharedElementEnterTransition = animation
         sharedElementReturnTransition = animation
 
@@ -45,18 +45,16 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
 
             override fun onTransitionResume(transition: Transition?) {
             }
-
         })
-
     }
 
     fun initUi() {
         with(binding) {
             binding.reviewFragSubmitBtn.setOnClickListener {
-                viewModel.onSubmitClick()
+//                viewModel.onSubmitClick()
             }
             reviewFragExitBtn.setOnClickListener {
-                activity?.finish()
+//                activity?.finish()
             }
             viewModel.order?.let { order ->
                 GlideApp.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
@@ -104,8 +102,5 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details){
 
             }
         }
-
     }
-
-
 }
