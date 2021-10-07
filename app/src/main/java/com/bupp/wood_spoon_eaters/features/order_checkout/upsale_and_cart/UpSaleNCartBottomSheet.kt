@@ -70,7 +70,9 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
+        binding = UpSaleNCartBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

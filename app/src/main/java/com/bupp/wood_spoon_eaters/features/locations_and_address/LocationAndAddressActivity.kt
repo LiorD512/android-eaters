@@ -27,7 +27,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewListener {
 
-    
     private lateinit var binding: ActivityLocationAndAddressBinding
 
     @SuppressLint("LongLogTag")
