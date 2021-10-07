@@ -21,7 +21,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
         fun onOrderCanceled()
     }
 
-    val binding: CancelOrderDialogLayoutBinding by viewBinding()
+    var binding: CancelOrderDialogLayoutBinding? = null
     var listener: CancelOrderDialogListener? = null
     val viewModel: CancelOrderViewModel by viewModel()
 
@@ -32,6 +32,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cancel_order_dialog_layout, null)
+        binding = CancelOrderDialogLayoutBinding.bind(view)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -43,7 +44,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             cancelOrderDialogCloseBtn.setOnClickListener { dismiss() }
             cancelOrderDialogKeepBtn.setOnClickListener { dismiss() }
             cancelOrderDialogCancelBtn.setOnClickListener { cancelOrder() }
@@ -79,7 +80,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
     }
 
     private fun cancelOrder() {
-        binding.cancelOrderPb.show()
+        binding!!.cancelOrderPb.show()
         viewModel.cancelOrder(orderId)
     }
 
@@ -97,5 +98,10 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.databinding.WorldwideShippmentDialogBinding
 
 class NationwideShippmentInfoDialog: DialogFragment(){
 
-    val binding: WorldwideShippmentDialogBinding by viewBinding()
+    var binding: WorldwideShippmentDialogBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +22,7 @@ class NationwideShippmentInfoDialog: DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.worldwide_shippment_dialog, null)
+        binding = WorldwideShippmentDialogBinding.bind(view)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
 
         return view
@@ -34,12 +35,17 @@ class NationwideShippmentInfoDialog: DialogFragment(){
 }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             worldwideDialogCloseBtn.setOnClickListener{
                 dismiss()}
             worldwideDialogBkg.setOnClickListener{
                 dismiss()}
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

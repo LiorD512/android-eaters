@@ -21,7 +21,7 @@ class SuperUserDialog : DialogFragment() {
         fun onEnvironmentChanged(forceRestart: Boolean? = false)
     }
 
-    private val binding: DialogSuperUserBinding by viewBinding()
+    private var binding: DialogSuperUserBinding? = null
     val viewModel: SuperUserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,9 @@ class SuperUserDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_super_user, null)
+        val view = inflater.inflate(R.layout.dialog_super_user, null)
+        binding = DialogSuperUserBinding.bind(view)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +41,7 @@ class SuperUserDialog : DialogFragment() {
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             superUserDialogBtn.setOnClickListener {
                 val input = superUserDialogInput.getText()
                 input?.let { it1 -> updateEnv(it1) }
@@ -84,6 +86,11 @@ class SuperUserDialog : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     companion object {

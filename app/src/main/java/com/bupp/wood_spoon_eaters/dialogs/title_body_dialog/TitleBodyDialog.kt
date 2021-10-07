@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.databinding.TitleBodyDialogBinding
 class TitleBodyDialog : DialogFragment(){
 
     private lateinit var listener: TitleBodyDialogListener
-    val binding: TitleBodyDialogBinding by viewBinding()
+    var binding: TitleBodyDialogBinding? = null
 
     interface TitleBodyDialogListener{
         fun onTitleBodyDialogDismiss()
@@ -42,6 +42,7 @@ class TitleBodyDialog : DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.title_body_dialog, null)
+        binding = TitleBodyDialogBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -52,11 +53,11 @@ class TitleBodyDialog : DialogFragment(){
         arguments?.let {
             val title = it.getString(TITLE_BODY_DIALOG_TITLE)
             val body = it.getString(TITLE_BODY_DIALOG_BODY)
-            binding.titleBodyDialogTitle.text = title
-            binding.titleBodyDialogBody.text = body
+            binding!!.titleBodyDialogTitle.text = title
+            binding!!.titleBodyDialogBody.text = body
         }
 
-        binding.titleBodyDialogClose.setOnClickListener {
+        binding!!.titleBodyDialogClose.setOnClickListener {
             dismiss()
         }
     }
@@ -77,6 +78,11 @@ class TitleBodyDialog : DialogFragment(){
         else {
             throw RuntimeException("$context must implement TitleBodyDialogListener")
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

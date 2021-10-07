@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.databinding.WsErrorDialogBinding
 
 class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogFragment() {
 
-    val binding: WsErrorDialogBinding by viewBinding()
+    var binding: WsErrorDialogBinding? = null
 
     interface WSErrorListener {
         fun onWSErrorDone()
@@ -26,6 +26,7 @@ class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogF
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.ws_error_dialog, null)
+        binding = WsErrorDialogBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -37,7 +38,7 @@ class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogF
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             body?.let {
                 errorDialogBody.text = it
             }
@@ -46,6 +47,11 @@ class WSErrorDialog(val body: String?, val listener: WSErrorListener?) : DialogF
                 listener?.onWSErrorDone()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

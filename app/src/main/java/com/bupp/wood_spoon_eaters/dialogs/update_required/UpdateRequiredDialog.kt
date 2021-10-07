@@ -16,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpdateRequiredDialog : DialogFragment() {
 
-    val binding: UpdateRequiredDialogBinding by viewBinding()
+    var binding: UpdateRequiredDialogBinding? = null
 
     val viewModel by viewModel<UpdateRequiredViewModel>()
     interface UpdateRequiredDialogListener {
@@ -27,7 +27,9 @@ class UpdateRequiredDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
-        return inflater.inflate(R.layout.update_required_dialog, container, false)
+        val view = inflater.inflate(R.layout.update_required_dialog, container, false)
+        binding = UpdateRequiredDialogBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +45,7 @@ class UpdateRequiredDialog : DialogFragment() {
     }
 
     private fun initObserver() {
-        with(binding){
+        with(binding!!){
             viewModel.updateRequiredEvent.observe(this@UpdateRequiredDialog, {event ->
                 updateDialogTitle.text = event.title
                 updateDialogBody.text = event.body
@@ -71,6 +73,11 @@ class UpdateRequiredDialog : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), HeaderView.HeaderViewListener {
 
-    val binding: WebDocsDialogBinding by viewBinding()
+    var binding: WebDocsDialogBinding? = null
     val viewModel by viewModel<WebDocsViewModel>()
 
     override fun getTheme(): Int {
@@ -27,13 +27,14 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = WebDocsDialogBinding.bind(view)
 
         initUi()
 
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             webDocsPrivacy.setOnClickListener {
                 webDocsTerms.isSelected = false
                 webDocsPrivacy.isSelected = true
@@ -72,9 +73,9 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
     fun openUrl(type: Int){
         val link = viewModel.getUrl(type)
 
-        binding.webDocsWebView.settings.javaScriptEnabled = true
+        binding!!.webDocsWebView.settings.javaScriptEnabled = true
 
-        binding.webDocsWebView.webViewClient = object : WebViewClient() {
+        binding!!.webDocsWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
 //                webDocsPb.hide()
                 url?.let{
@@ -92,11 +93,16 @@ class WebDocsDialog(val type: Int) : DialogFragment(R.layout.web_docs_dialog), H
                 }
             }
         }
-        binding.webDocsWebView.loadUrl(link)
+        binding!!.webDocsWebView.loadUrl(link)
     }
 
     override fun onHeaderBackClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     companion object{

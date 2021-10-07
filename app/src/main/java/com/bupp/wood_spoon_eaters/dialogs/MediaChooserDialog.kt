@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_eaters.databinding.MediaChooserDialogBinding
 
 class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() {
 
-    val binding: MediaChooserDialogBinding by viewBinding()
+    var binding: MediaChooserDialogBinding? = null
     interface MediaChooserListener {
         fun onMediaChoose(mediaType: Int)
     }
@@ -26,6 +26,7 @@ class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.media_chooser_dialog, null)
+        binding = MediaChooserDialogBinding.bind(view)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -37,7 +38,7 @@ class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() 
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             mediaChooserDialogBkg.setOnClickListener {
                 dismiss()
             }
@@ -53,6 +54,11 @@ class MediaChooserDialog(val listener: MediaChooserListener) : DialogFragment() 
                 dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

@@ -37,13 +37,14 @@ class ActiveOrderTrackerDialog : DialogFragment(),
         setStyle(STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
     }
 
-    val binding: FragmentActiveOrderTrackerBinding by viewBinding()
+    var binding: FragmentActiveOrderTrackerBinding? = null
     private lateinit var adapter: OrdersPagerAdapter
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_active_order_tracker, null)
+        binding = FragmentActiveOrderTrackerBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -62,7 +63,7 @@ class ActiveOrderTrackerDialog : DialogFragment(),
     }
 
     private fun handleOrders(orders: List<Order>?) {
-        with(binding){
+        with(binding!!){
             orders?.let {
                 if(!this@ActiveOrderTrackerDialog::adapter.isInitialized){
                     //check if isInitialized to do this only once. when dialog opens for the first time.
@@ -138,6 +139,11 @@ class ActiveOrderTrackerDialog : DialogFragment(),
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     companion object{

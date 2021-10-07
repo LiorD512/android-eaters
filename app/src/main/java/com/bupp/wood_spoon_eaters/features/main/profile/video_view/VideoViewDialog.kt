@@ -24,7 +24,7 @@ class VideoViewDialog(val video: String) : DialogFragment(), HeaderView.HeaderVi
 
 
     private var player: SimpleExoPlayer? = null
-    val binding: VideoViewDialogBinding by viewBinding()
+    var binding: VideoViewDialogBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.video_view_dialog, null)
@@ -43,10 +43,11 @@ class VideoViewDialog(val video: String) : DialogFragment(), HeaderView.HeaderVi
     override fun onDestroyView() {
         super.onDestroyView()
         player = null
+        binding = null
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             videoViewExitBtn.setOnClickListener {
                 dismiss()
             }
@@ -75,4 +76,5 @@ class VideoViewDialog(val video: String) : DialogFragment(), HeaderView.HeaderVi
         player?.clearVideoSurface()
         super.onDismiss(dialog)
     }
+
 }

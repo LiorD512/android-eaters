@@ -13,7 +13,7 @@ import com.bupp.wood_spoon_eaters.databinding.TipCourierDialogLayoutBinding
 
 class TipCourierDialog(val listener: TipCourierDialogListener) : DialogFragment() {
 
-    val binding: TipCourierDialogLayoutBinding by viewBinding()
+    var binding: TipCourierDialogLayoutBinding? = null
 
     interface TipCourierDialogListener {
         fun onTipDone(tipAmount: Int)
@@ -26,6 +26,7 @@ class TipCourierDialog(val listener: TipCourierDialogListener) : DialogFragment(
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.tip_courier_dialog_layout, null)
+        binding = TipCourierDialogLayoutBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -37,7 +38,7 @@ class TipCourierDialog(val listener: TipCourierDialogListener) : DialogFragment(
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             tipCourierDialogCloseBtn.setOnClickListener { dismiss() }
             tipCourierDialogDoneBtn.setOnClickListener {
                 val enteredAmountStr = tipCourierDialogTipAmount.text.toString()
@@ -50,5 +51,10 @@ class TipCourierDialog(val listener: TipCourierDialogListener) : DialogFragment(
                 dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }
