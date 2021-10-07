@@ -8,6 +8,7 @@
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/ic_my_marker.xml" value="0.2703125" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/ic_pin.xml" value="0.2703125" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/ic_search_grey.xml" value="0.2942708333333333" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/icons_my_location.xml" value="0.13072916666666667" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/rectangle_dark_grey_60_cornered.xml" value="0.2942708333333333" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/rectangle_dark_grey_cornered.xml" value="0.2942708333333333" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/activity_main.xml" value="0.28351449275362317" />
@@ -21,6 +22,7 @@
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_feed.xml" value="0.27853260869565216" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_orders_history.xml" value="0.27853260869565216" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_restaurant_page.xml" value="0.13880445795339413" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_select_address.xml" value="0.203125" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/orders_history_active_order_item.xml" value="0.28541666666666665" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/orders_history_order_item.xml" value="0.22239583333333332" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/track_order_bottom_sheet.xml" value="0.28541666666666665" />
@@ -99,5 +101,12 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
   <component name="SuppressionsComponent">
     <option name="suppComments" value="[]" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.22" />
+      </ProjectState>
+    </option>
   </component>
 </project>

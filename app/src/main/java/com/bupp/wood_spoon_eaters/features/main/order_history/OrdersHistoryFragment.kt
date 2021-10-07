@@ -68,7 +68,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         with(binding){
             ordersHistoryFragRecyclerView.layoutManager = layoutManager
 
-            adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment, childFragmentManager)
+            adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
             adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             ordersHistoryFragRecyclerView.adapter = adapter
 

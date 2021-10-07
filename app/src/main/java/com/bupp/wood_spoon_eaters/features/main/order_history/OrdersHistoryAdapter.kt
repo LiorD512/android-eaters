@@ -32,9 +32,10 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
+import com.bupp.wood_spoon_eaters.utils.Utils
 
 
-class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdapterListener, private val fm: FragmentManager) :
+class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdapterListener) :
     ListAdapter<OrderHistoryBaseItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
     interface OrdersHistoryAdapterListener {
@@ -81,7 +82,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
             }
             is OrderAdapterItemActiveOrder -> {
                 holder as ActiveOrderItemViewHolder
-                holder.bindItem(item, fm)
+                holder.bindItem(item)
 
 //                val containerId: Int = holder.mapContainer.id // Get container id
 //
@@ -134,58 +135,47 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         private val title: TextView = binding.activeOrderTitle
         private val subtitle: TextView = binding.activeOrderSubtitle
         private val orderPb: OrderProgressBar = binding.activeOrderPb
-
-        //        private val viewOrder: WSSimpleBtn = binding.activeOrderViewOrderBtn
-        val mapContainer: ImageView = binding.activeOrderFragContainer
-
-        //        private val mapContainer: FragmentContainerView = binding.activeOrderFragContainer
-//        val mapContainer: FrameLayout = binding.activeOrderFragContainer
+        private val mapContainer: ImageView = binding.activeOrderFragContainer
         private val sep: View = binding.activeOrderSep
 
-//        fun getForegroundFragment(): Fragment? {
-//            val navHostFragment: Fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)
-//            return if (navHostFragment == null) null else navHostFragment.childFragmentManager.fragments.get(0)
-//        }
 
-        fun bindItem(data: OrderAdapterItemActiveOrder, fm: FragmentManager) {
+        fun bindItem(data: OrderAdapterItemActiveOrder) {
             val order = data.order
             Log.d("wowStatus", "bindItem: ${order.id}")
 
-            val url = MapSyncUtil().getMapImage(order)
-            val bigUrl = MapSyncUtil().getMapImage(order, 600, 1800)
-            Log.d("wowSTtaicMap", "url $url")
-            Log.d("wowSTtaicMap", "bigUrl $bigUrl")
-            Glide.with(context).load(url).into(mapContainer)
+            mapContainer.post {
+                val url = MapSyncUtil().getMapImage(order, mapContainer.measuredWidth, Utils.toPx(152))
+                val bigUrl = MapSyncUtil().getMapImage(order, 600, 1800)
+                Log.d("wowSTtaicMap", "url $url")
+                Log.d("wowSTtaicMap", "bigUrl $bigUrl")
+                Glide.with(context).load(url).into(mapContainer)
 
-//            val amount = amountTv.text.toString().toInt()
-//            val action = CheckoutFragmentDirections.a(amount)
-//            mapContainer.findNavController().navigate(R.id.addressVerificationMapFragment)
+                restaurantName.text = order.restaurant?.restaurantName ?: ""
+                val orderState = order.getOrderState()
+                orderPb.setState(orderState)
 
+                title.text = order.getOrderStateTitle(orderState)
+                subtitle.text = order.getOrderStateSubTitle(orderState)
 
-            restaurantName.text = order.restaurant?.restaurantName ?: ""
-            val orderState = order.getOrderState()
-            orderPb.setState(orderState)
+                mainLayout.setOnClickListener {
+                    order.let { order ->
+                        mapContainer.transitionName = "mapTransition"
+                        val pairMap: Pair<View, String> = Pair.create(mapContainer as View, mapContainer.transitionName)
+                        val pairName: Pair<View, String> = Pair.create(restaurantName as View, restaurantName.transitionName)
+                        val pairStatusTitle: Pair<View, String> = Pair.create(title as View, title.transitionName)
+                        val pairStatusSubTitle: Pair<View, String> = Pair.create(subtitle as View, subtitle.transitionName)
+                        val pairPb: Pair<View, String> = Pair.create(orderPb as View, orderPb.transitionName)
 
-            title.text = order.getOrderStateTitle(orderState)
-            subtitle.text = order.getOrderStateSubTitle(orderState)
-
-
-            mainLayout.setOnClickListener {
-                order.let { order ->
-                    mapContainer.transitionName = "mapTransition"
-                    val pairMap: Pair<View, String> = Pair.create(mapContainer as View, mapContainer.transitionName)
-                    val pairName: Pair<View, String> = Pair.create(restaurantName as View, restaurantName.transitionName)
-                    val pairStatusTitle: Pair<View, String> = Pair.create(title as View, title.transitionName)
-                    val pairStatusSubTitle: Pair<View, String> = Pair.create(subtitle as View, subtitle.transitionName)
-                    val pairPb: Pair<View, String> = Pair.create(orderPb as View, orderPb.transitionName)
-
-                    val transitionBundle: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        context as Activity, pairMap, pairName, pairStatusTitle, pairStatusSubTitle, pairPb)
-                    listener.onViewActiveOrderClicked(order, transitionBundle, bigUrl)
+                        val transitionBundle: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            context as Activity, pairMap, pairName, pairStatusTitle, pairStatusSubTitle, pairPb)
+                        listener.onViewActiveOrderClicked(order, transitionBundle, bigUrl)
+                    }
                 }
+
+                sep.isVisible = data.isLast
             }
 
-            sep.isVisible = data.isLast
+
         }
     }
 

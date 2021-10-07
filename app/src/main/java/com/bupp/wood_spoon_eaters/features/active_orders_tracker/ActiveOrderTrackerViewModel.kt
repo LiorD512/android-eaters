@@ -42,11 +42,11 @@ class ActiveOrderTrackerViewModel(
     private var refreshRepeatedJob: Job? = null
 
 
-    fun getShareText(): String {
-//        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
-        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-        return "$text \n "
-    }
+//    fun getShareText(): String {
+////        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
+//        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
+//        return "$text \n "
+//    }
 
     val getCurrentOrderDetails: MutableLiveData<GetActiveOrdersEvent> = MutableLiveData()
 
@@ -97,22 +97,22 @@ class ActiveOrderTrackerViewModel(
     }
 
 
-    fun startSilentUpdate() {
-        refreshRepeatedJob = repeatRequest()
-    }
-
-    fun endUpdates() {
-        Log.d("wowActiveOrderTrackerVM", "endUpdates for id: $orderId")
-        refreshRepeatedJob?.cancel()
-    }
-
-    fun sendOpenEvent() {
-        eaterDataManager.logUxCamEvent(Constants.EVENT_TRACK_ORDER_CLICK)
-    }
-
-    fun getContactUsPhoneNumber(): String {
-        return metaDataRepository.getContactUsPhoneNumber()
-    }
+//    fun startSilentUpdate() {
+//        refreshRepeatedJob = repeatRequest()
+//    }
+//
+//    fun endUpdates() {
+//        Log.d("wowActiveOrderTrackerVM", "endUpdates for id: $orderId")
+//        refreshRepeatedJob?.cancel()
+//    }
+//
+//    fun sendOpenEvent() {
+//        eaterDataManager.logUxCamEvent(Constants.EVENT_TRACK_ORDER_CLICK)
+//    }
+//
+//    fun getContactUsPhoneNumber(): String {
+//        return metaDataRepository.getContactUsPhoneNumber()
+//    }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
         flowEventsManager.logPageEvent(eventType)

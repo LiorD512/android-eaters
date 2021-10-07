@@ -2,13 +2,13 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:motion="http://schemas.android.com/apk/res-auto">
 
+
     <Transition
             android:id="@+id/scrollTransition"
             motion:autoTransition="none"
-            motion:constraintSetStart="@id/scrollStart"
             motion:constraintSetEnd="@+id/scrollEnd"
-            motion:duration="10"
-            motion:transitionFlags="disableIntraAutoTransition">
+            motion:constraintSetStart="@id/scrollStart"
+            motion:duration="10">
         <OnSwipe
                 motion:dragDirection="dragUp"
                 motion:dragScale="1"
@@ -18,10 +18,318 @@
                 motion:touchAnchorId="@id/trackOrderActMainList"
                 motion:touchAnchorSide="top" />
 
+        <KeyFrameSet>
+            <KeyAttribute
+                    android:alpha="0"
+                    motion:framePosition="60"
+                    motion:keyPositionType="pathRelative"
+                    motion:motionTarget="@+id/trackOrderActTopHeader" />
+            <KeyAttribute
+                    android:alpha="1"
+                    motion:framePosition="100"
+                    motion:keyPositionType="pathRelative"
+                    motion:motionTarget="@+id/trackOrderActTopHeader" />
+            <KeyAttribute
+                    android:alpha="0"
+                    motion:framePosition="60"
+                    motion:keyPositionType="pathRelative"
+                    motion:motionTarget="@+id/trackOrderActTopHeaderRestaurantName" />
+            <KeyAttribute
+                    android:alpha="1"
+                    motion:framePosition="100"
+                    motion:keyPositionType="pathRelative"
+                    motion:motionTarget="@+id/trackOrderActTopHeaderRestaurantName" />
+            <KeyAttribute
+                    android:alpha="0"
+                    motion:framePosition="60"
+                    motion:keyPositionType="pathRelative"
+                    motion:motionTarget="@+id/trackOrderActTopHeaderDeliveryTime" />
+            <KeyAttribute
+                    android:alpha="1"
+                    motion:framePosition="100"
+                    motion:keyPositionType="pathRelative"
+                    motion:motionTarget="@+id/trackOrderActTopHeaderDeliveryTime" />
+        </KeyFrameSet>
+
         <ConstraintSet android:id="@+id/scrollStart">
+            <Constraint
+                    android:id="@+id/trackOrderMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="-25dp"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintTop_toTopOf="parent" />
+            <Constraint
+                    android:id="@+id/trackOrderMapPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="mapTransition"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintEnd_toEndOf="parent"
+                    motion:layout_constraintTop_toTopOf="parent" />
+            <Constraint
+                    android:id="@+id/trackOrderActMainList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@drawable/top_cornered_30_bkg"
+                    motion:layout_constraintBottom_toBottomOf="parent"
+                    motion:layout_constraintTop_toBottomOf="@+id/trackOrderSpace" />
+            <Constraint
+                    android:id="@+id/trackOrderSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="320dp" />
         </ConstraintSet>
 
         <ConstraintSet android:id="@+id/scrollEnd">
+            <Constraint
+                    android:id="@+id/trackOrderMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="-25dp"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintTop_toTopOf="parent" />
+            <Constraint
+                    android:id="@+id/trackOrderMapPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="mapTransition"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintEnd_toEndOf="parent"
+                    motion:layout_constraintTop_toTopOf="parent" />
+            <Constraint
+                    android:id="@+id/trackOrderActMainList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@drawable/top_cornered_30_bkg"
+                    motion:layout_constraintBottom_toBottomOf="parent"
+                    motion:layout_constraintTop_toBottomOf="@+id/trackOrderSpace" />
+            <Constraint
+                    android:id="@+id/trackOrderSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="-25dp" />
+        </ConstraintSet>
+    </Transition>
+
+
+<!--    <Transition-->
+<!--            android:id="@+id/scrollDownTransition"-->
+<!--            motion:autoTransition="none"-->
+<!--            motion:constraintSetEnd="@+id/scrollDownEnd"-->
+<!--            motion:constraintSetStart="@id/scrollDownStart"-->
+<!--            motion:duration="10">-->
+<!--        <OnSwipe-->
+<!--                motion:dragDirection="dragDown"-->
+<!--                motion:dragScale="1"-->
+<!--                motion:maxAcceleration="5"-->
+<!--                motion:moveWhenScrollAtTop="false"-->
+<!--                motion:onTouchUp="autoComplete"-->
+<!--                motion:touchAnchorId="@id/trackOrderActMainList"-->
+<!--                motion:touchAnchorSide="top" />-->
+
+<!--        <KeyFrameSet>-->
+<!--            <KeyAttribute-->
+<!--                    android:alpha="0"-->
+<!--                    motion:framePosition="60"-->
+<!--                    motion:keyPositionType="pathRelative"-->
+<!--                    motion:motionTarget="@+id/trackOrderActTopHeader" />-->
+<!--            <KeyAttribute-->
+<!--                    android:alpha="1"-->
+<!--                    motion:framePosition="100"-->
+<!--                    motion:keyPositionType="pathRelative"-->
+<!--                    motion:motionTarget="@+id/trackOrderActTopHeader" />-->
+<!--            <KeyAttribute-->
+<!--                    android:alpha="0"-->
+<!--                    motion:framePosition="60"-->
+<!--                    motion:keyPositionType="pathRelative"-->
+<!--                    motion:motionTarget="@+id/trackOrderActTopHeaderRestaurantName" />-->
+<!--            <KeyAttribute-->
+<!--                    android:alpha="1"-->
+<!--                    motion:framePosition="100"-->
+<!--                    motion:keyPositionType="pathRelative"-->
+<!--                    motion:motionTarget="@+id/trackOrderActTopHeaderRestaurantName" />-->
+<!--            <KeyAttribute-->
+<!--                    android:alpha="0"-->
+<!--                    motion:framePosition="60"-->
+<!--                    motion:keyPositionType="pathRelative"-->
+<!--                    motion:motionTarget="@+id/trackOrderActTopHeaderDeliveryTime" />-->
+<!--            <KeyAttribute-->
+<!--                    android:alpha="1"-->
+<!--                    motion:framePosition="100"-->
+<!--                    motion:keyPositionType="pathRelative"-->
+<!--                    motion:motionTarget="@+id/trackOrderActTopHeaderDeliveryTime" />-->
+<!--        </KeyFrameSet>-->
+
+<!--        <ConstraintSet android:id="@+id/scrollDownStart">-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderMap"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_marginBottom="-25dp"-->
+<!--                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"-->
+<!--                    motion:layout_constraintTop_toTopOf="parent" />-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderMapPreview"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:transitionName="mapTransition"-->
+<!--                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"-->
+<!--                    motion:layout_constraintEnd_toEndOf="parent"-->
+<!--                    motion:layout_constraintTop_toTopOf="parent" />-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderActMainList"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:background="@drawable/top_cornered_30_bkg"-->
+<!--                    motion:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    motion:layout_constraintTop_toBottomOf="@+id/trackOrderSpace" />-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderSpace"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginBottom="320dp" />-->
+<!--        </ConstraintSet>-->
+
+<!--        <ConstraintSet android:id="@+id/scrollDownEnd">-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderMap"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_marginBottom="-25dp"-->
+<!--                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"-->
+<!--                    motion:layout_constraintTop_toTopOf="parent" />-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderMapPreview"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:transitionName="mapTransition"-->
+<!--                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"-->
+<!--                    motion:layout_constraintEnd_toEndOf="parent"-->
+<!--                    motion:layout_constraintTop_toTopOf="parent" />-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderActMainList"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:background="@drawable/top_cornered_30_bkg"-->
+<!--                    motion:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    motion:layout_constraintTop_toBottomOf="@+id/trackOrderSpace" />-->
+<!--            <Constraint-->
+<!--                    android:id="@+id/trackOrderSpace"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="-25dp" />-->
+<!--        </ConstraintSet>-->
+<!--    </Transition>-->
+
+    <Transition
+            android:id="@+id/expandTransition"
+            motion:constraintSetEnd="@+id/expandEnd"
+            motion:constraintSetStart="@id/expandStart"
+            motion:duration="250">
+        <ConstraintSet android:id="@+id/expandStart">
+            <Constraint
+                    android:alpha="0"
+                    android:id="@+id/trackOrderActMyLocation"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:elevation="0dp"
+                    motion:cardUseCompatPadding="true"
+                    motion:cardCornerRadius="150dp"
+                    motion:cardElevation="11dp"
+                    android:layout_marginBottom="15dp"
+                    motion:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+                    motion:layout_constraintRight_toRightOf="@+id/trackOrderActHelp"/>
+            <Constraint
+                    android:alpha="0"
+                    android:id="@+id/trackOrderActCollapse"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:elevation="4dp"
+                    motion:cardUseCompatPadding="true"
+                    motion:cardCornerRadius="150dp"
+                    motion:cardElevation="11dp"
+                    android:layout_marginBottom="15dp"
+                    motion:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+                    motion:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton"/>
+        </ConstraintSet>
+        <ConstraintSet android:id="@+id/expandEnd">
+            <Constraint
+                    android:id="@+id/trackOrderMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="-25dp"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintTop_toTopOf="parent" />
+            <Constraint
+                    android:id="@+id/trackOrderMapPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="mapTransition"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintEnd_toEndOf="parent"
+                    motion:layout_constraintTop_toTopOf="parent" />
+            <Constraint
+                    android:id="@+id/trackOrderActMainList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@drawable/top_cornered_30_bkg"
+                    motion:layout_constraintBottom_toBottomOf="parent"
+                    motion:layout_constraintTop_toBottomOf="@+id/trackOrderSpace" />
+            <Constraint
+                    android:id="@+id/trackOrderActThumbnailLayout"
+                    android:layout_width="77dp"
+                    android:layout_height="77dp"
+                    android:layout_gravity="center"
+                    android:alpha="0"
+                    android:background="@color/black_50"
+                    motion:cardCornerRadius="150dp"
+                    motion:cardElevation="4dp"
+                    motion:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+                    motion:layout_constraintEnd_toEndOf="parent"
+                    motion:layout_constraintStart_toStartOf="parent"
+                    motion:layout_constraintTop_toTopOf="@+id/trackOrderActMainList" />
+            <Constraint
+                    android:id="@+id/trackOrderSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="100dp" />
+            <Constraint
+                    android:alpha="1"
+                    android:id="@+id/trackOrderActMyLocation"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:elevation="4dp"
+                    motion:cardUseCompatPadding="true"
+                    motion:cardCornerRadius="150dp"
+                    motion:cardElevation="11dp"
+                    android:layout_marginBottom="15dp"
+                    motion:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+                    motion:layout_constraintRight_toRightOf="@+id/trackOrderActHelp"/>
+            <Constraint
+                    android:alpha="1"
+                    android:id="@+id/trackOrderActCollapse"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:elevation="4dp"
+                    motion:cardUseCompatPadding="true"
+                    motion:cardCornerRadius="150dp"
+                    motion:cardElevation="11dp"
+                    android:layout_marginBottom="15dp"
+                    motion:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+                    motion:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton"/>
+            <Constraint
+                    android:id="@+id/trackOrderProgressName"
+                    style="@style/LatoReg11PurpleyGreyThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:letterSpacing="0.03"
+                    android:transitionName="nameTransition" />
         </ConstraintSet>
     </Transition>
 

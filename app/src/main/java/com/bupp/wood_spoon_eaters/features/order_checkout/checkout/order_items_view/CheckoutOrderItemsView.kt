@@ -58,4 +58,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         adapterCheckout?.submitList(orderItems)
     }
 
+    fun setBtnText(btnText: String){
+        binding.orderItemsViewEditOrderBtn.setTitle(btnText)
+    }
+
 }

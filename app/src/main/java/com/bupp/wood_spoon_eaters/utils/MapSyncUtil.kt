@@ -11,6 +11,7 @@ class MapSyncUtil {
 
     fun getMapImage(order: Order, width: Int = 600, height: Int = 400): String {
         var centerLatLng: LatLng? = null
+        var distance: Double = 0.0
 
         val eaterLat = order.deliveryAddress?.lat ?: 0.0
         val eaterLng = order.deliveryAddress?.lng ?: 0.0
@@ -26,21 +27,23 @@ class MapSyncUtil {
             val courierLng = order.courier.lng ?: 0.0
             courierLatLng = LatLng(courierLat, courierLng)
             centerLatLng = midPoint(eaterLatLng, courierLatLng)
+            distance = distance(eaterLatLng, courierLatLng)
         }else{
             centerLatLng = midPoint(eaterLatLng, chefLatLng)
+            distance = distance(eaterLatLng, chefLatLng)
         }
 
-
-        var url = "http://maps.google.com/maps/api/staticmap?center=${centerLatLng.latitude},${centerLatLng.longitude}&zoom=13&" +
+        val zoomLevel = distance * ZOOM_MULTIPLIER
+        var url = "http://maps.google.com/maps/api/staticmap?center=${centerLatLng.latitude},${centerLatLng.longitude}&zoom=$zoomLevel&" +
                 "size=${width}x${height}&" +
                 "sensor=false&" +
                 "markers=scale:2|icon:https://res.cloudinary.com/woodspoon/image/upload/c_scale,h_64/uploads/app/assets/map_pin.png|$eaterLat,$eaterLng&" +
-                "markers=scale:2|icon:https://res.cloudinary.com/woodspoon/image/upload/uploads/app/assets/chef.png|$chefLat,$chefLng&"
+                "markers=scale:2|icon:https://res.cloudinary.com/woodspoon/image/upload/c_scale,h_64/uploads/app/assets/chef.png|$chefLat,$chefLng&"
 
         order.courier?.let {
             val courierLat = it.lat
             val courierLng = it.lng
-            url += "markers=scale:2|icon:https://res.cloudinary.com/woodspoon/image/upload/uploads/app/assets/courier.png|$courierLat,$courierLng&"
+            url += "markers=scale:2|icon:https://res.cloudinary.com/woodspoon/image/upload/c_scale,h_64/uploads/app/assets/courier.png|$courierLat,$courierLng&"
         }
 
         url += "key=AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"
@@ -49,7 +52,7 @@ class MapSyncUtil {
         return url
     }
 
-    fun midPoint(firstLatLng: LatLng, secondLatLng: LatLng): LatLng {
+    private fun midPoint(firstLatLng: LatLng, secondLatLng: LatLng): LatLng {
         var lat1 = firstLatLng.latitude
         var lon1 = firstLatLng.longitude
         var lat2 = secondLatLng.latitude
@@ -68,30 +71,28 @@ class MapSyncUtil {
         return LatLng(Math.toDegrees(lat3), Math.toDegrees(lon3))
     }
 
-    val GLOBE_WIDTH = 256 // a constant in Google's map projection
-    val ZOOM_MAX = 21
-
-    fun getBoundsZoomLevel(
-        northeast: LatLng, southwest: LatLng,
-        width: Int, height: Int
-    ): Int {
-        val latFraction = (latRad(northeast.latitude) - latRad(southwest.latitude)) / Math.PI
-        val lngDiff = northeast.longitude - southwest.longitude
-        val lngFraction = (if (lngDiff < 0) lngDiff + 360 else lngDiff) / 360
-        val latZoom = zoom(height.toDouble(), GLOBE_WIDTH.toDouble(), latFraction)
-        val lngZoom = zoom(width.toDouble(), GLOBE_WIDTH.toDouble(), lngFraction)
-        val zoom = latZoom.coerceAtMost(lngZoom).coerceAtMost(ZOOM_MAX.toDouble())
-        return zoom.toInt()
+    private fun distance(firstLatLng: LatLng, secondLatLng: LatLng): Double {
+        val theta = firstLatLng.longitude - secondLatLng.longitude
+        var dist = (Math.sin(deg2rad(firstLatLng.latitude))
+                * Math.sin(deg2rad(secondLatLng.latitude))
+                + (Math.cos(deg2rad(firstLatLng.latitude))
+                * Math.cos(deg2rad(secondLatLng.latitude))
+                * Math.cos(deg2rad(theta))))
+        dist = Math.acos(dist)
+        dist = rad2deg(dist)
+        dist *= 60 * 1.1515
+        return dist
     }
 
-    private fun latRad(lat: Double): Double {
-        val sin = sin(lat * Math.PI / 180)
-        val radX2 = ln((1 + sin) / (1 - sin)) / 2
-        return radX2.coerceAtMost(Math.PI).coerceAtLeast(-Math.PI) / 2
+    private fun deg2rad(deg: Double): Double {
+        return deg * Math.PI / 180.0
     }
 
-    private fun zoom(mapPx: Double, worldPx: Double, fraction: Double): Double {
-        val LN2 = .693147180559945309417
-        return ln(mapPx / worldPx / fraction) / LN2
+    private fun rad2deg(rad: Double): Double {
+        return rad * 180.0 / Math.PI
+    }
+
+    companion object{
+        const val ZOOM_MULTIPLIER = 2
     }
 }

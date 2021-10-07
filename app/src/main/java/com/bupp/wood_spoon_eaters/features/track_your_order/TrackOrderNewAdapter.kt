@@ -38,16 +38,8 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            VIEW_TYPE_DETAILS -> {
-                val binding = TrackOrderDetailsSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                TrackOrderDetailsViewHolder(binding)
-            }
-            else -> { // VIEW_TYPE_PROGRESS
-                val binding = TrackOrderProgressSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                TrackOrderProgressViewHolder(binding)
-            }
-        }
+        val binding = TrackOrderDetailsSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TrackOrderDetailsViewHolder(binding)
     }
 
     interface TrackOrderNewAdapterListener {
@@ -64,10 +56,10 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
                 val orderItem = item.data as OrderTrackDetails
                 (holder as TrackOrderDetailsViewHolder).bindItems(orderItem)
             }
-            VIEW_TYPE_PROGRESS -> {
-                val orderItem = item.data as OrderTrackProgress
-                (holder as TrackOrderProgressViewHolder).bindItems(orderItem)
-            }
+//            VIEW_TYPE_PROGRESS -> {
+//                val orderItem = item.data as OrderTrackProgress
+//                (holder as TrackOrderProgressViewHolder).bindItems(orderItem)
+//            }
         }
 
     }
@@ -121,28 +113,9 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsCourier.setValue(order.tip?.formatedValue ?: "")
 
             binding.trackOrderDetailsTotalBeforeTip.setValue(order.totalBeforeTip?.formatedValue ?: "")
-//
-//            order.minOrderFee?.value?.let {
-//                if (it > 0) {
-//                    binding.trackOrderDetailsSectionMinOrderFeeTitle.visibility = View.VISIBLE
-//                    binding.trackOrderDetailsSectionMinOrderFee.visibility = View.VISIBLE
-//                    binding.trackOrderDetailsSectionMinOrderFee.text = order.minOrderFee.formatedValue
-//                }
-//            }
-//
-//            order.promoCode?.let {
-//                binding.trackOrderDetailsSectionPromoCodeLayout.visibility = View.VISIBLE
-//                binding.trackOrderDetailsSectionPromoCodeName.text = "Promo code $it"
-//                binding.trackOrderDetailsSectionPromoCode.text = "${order.discount?.formatedValue}"
-//            }
-//
-//            order.tip?.let {
-//                binding.trackOrderDetailsSectionTipLayout.visibility = View.VISIBLE
-//                binding.trackOrderDetailsSectionTip.text = it.formatedValue
-//
-//            }
 
             binding.trackOrderDetailsItems.initView(null, null)
+            binding.trackOrderDetailsItems.setBtnText("Home chef's page")
             val orderItems = order.orderItems
             val list = mutableListOf<CheckoutAdapterItem>()
             orderItems?.forEach {
@@ -172,19 +145,19 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
     private var curOrderStage: Int = 1
 
-    inner class TrackOrderProgressViewHolder(val binding: TrackOrderProgressSectionBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(orderItem: OrderTrackProgress) {
-            val order = orderItem.order
-            order?.let {
-
-                val orderState = order.getOrderState()
-                binding.trackOrderProgressPb.setState(orderState)
-
-                binding.trackOrderProgressName.text = order.restaurant?.restaurantName
-
-            }
-        }
-    }
+//    inner class TrackOrderProgressViewHolder(val binding: TrackOrderProgressSectionBinding) : RecyclerView.ViewHolder(binding.root) {
+//        fun bindItems(orderItem: OrderTrackProgress) {
+//            val order = orderItem.order
+//            order?.let {
+//
+//                val orderState = order.getOrderState()
+//                binding.trackOrderProgressPb.setState(orderState)
+//
+//                binding.trackOrderProgressName.text = order.restaurant?.restaurantName
+//
+//            }
+//        }
+//    }
 
 //    private fun setFontTypeDefault(binding: TrackOrderProgressSectionBinding, context: Context) {
 //        val regTypeface = Typeface.createFromAsset(context.assets, "font/lato_reg.ttf")

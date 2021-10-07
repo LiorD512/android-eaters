@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.track_your_order
 
+import android.R.attr
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -46,9 +48,20 @@ import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import jp.wasabeef.glide.transformations.BlurTransformation
 import android.util.DisplayMetrics
+import com.bupp.wood_spoon_eaters.utils.DateUtils
+import android.view.MotionEvent
 
+import android.view.View.OnTouchListener
+import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleMotionTransitionListener
+import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTransitionListener
+import android.R.attr.animation
 
+import android.widget.RelativeLayout
+import android.animation.ValueAnimator
 
+import android.animation.ValueAnimator.AnimatorUpdateListener
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.bupp.wood_spoon_eaters.utils.Utils
 
 
 class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNewAdapterListener, OnMapReadyCallback {
@@ -71,6 +84,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         setContentView(binding.root)
 
         curOrderId = intent.getLongExtra("order_id", -1)
+//        binding.motionLayout.setProgress(0.35f)
 
         initTransitionData()
 
@@ -93,9 +107,9 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         val pbState = intent.getStringExtra("pb_state") ?: ""
         val thumbnail = intent.getStringExtra("thumbnail") ?: ""
 
-        with(binding){
+        with(binding) {
 //            Glide.with(this@TrackYourOrderActivity).load(mapPreviewUrl).into(trackOrderMapPreview)
-            val multiTransformation = MultiTransformation(BlurTransformation( 10, 2), CenterCrop())
+            val multiTransformation = MultiTransformation(BlurTransformation(10, 2), CenterCrop())
             Glide.with(this@TrackYourOrderActivity)
                 .load(mapPreviewUrl)
                 .apply(RequestOptions.bitmapTransform(multiTransformation))
@@ -120,8 +134,24 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         adapter = TrackOrderNewAdapter(this, this)
         binding.trackOrderActList.layoutManager = LinearLayoutManager(this)
         binding.trackOrderActList.adapter = adapter
-//
-//        binding.trackOrderActBackButton.setOnClickListener { onBackPressed() }
+
+        binding.trackOrderActBackButton.setOnClickListener { onBackPressed() }
+
+        binding.trackOrderSpace.setOnClickListener {
+            Log.d("wowTrackOrderFragment", "trackOrderSpace click")
+            expandMap()
+        }
+
+        binding.trackOrderActMyLocation.setOnClickListener {
+            Log.d("wowTrackOrderFragment", "trackOrderActMyLocation click")
+            viewModel.onMapReady(this)
+        }
+
+        binding.trackOrderActCollapse.setOnClickListener {
+            Log.d("wowTrackOrderFragment", "trackOrderActMyLocation click")
+            collapseMap()
+        }
+
 
         val motionContainer: MotionLayout = binding.motionLayout
         val sharedElementEnterTransition: Transition = window.sharedElementEnterTransition
@@ -129,7 +159,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         object : TransitionListenerAdapter() {
             override fun onTransitionEnd(transition: Transition?) {
                 super.onTransitionEnd(transition)
-                Log.d("wowTrackOrderFragment","onAnimationEnd 2")
+                Log.d("wowTrackOrderFragment", "onAnimationEnd 2")
 
                 AnimationUtil().scaleUpWithAlpha(binding.trackOrderActThumbnailLayout)
 //                val anim: Animation = ScaleAnimation(
@@ -152,7 +182,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 //                    motionContainer.setTransition(R.id.openStart, R.id.openEnd)
 ////                    motionContainer.getTransition(R.id.mainTransition).autoTransition = AUTO_ANIMATE_TO_END
 //                    motionContainer.transitionToEnd()
-//                motionContainer.addTransitionListener(object: MotionLayout.TransitionListener{
+//                motionContainer.addTransitionListener(object : MotionLayout.TransitionListener {
 //                    override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
 //
 //                    }
@@ -162,11 +192,36 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 //                    }
 //
 //                    override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-//                        if(currentId == R.id.openEnd){
-////                            motionContainer.setTransition(R.id.openEnd, R.id.scrollEnd)
-////                            motionContainer.setTransition(R.id.scrollTransition)
-////                            motionContainer.enableTransition(R.id.scrollTransition, true)
-//                        }
+////                        when(currentId){
+////                            R.id.scrollStart -> {
+////                                binding.motionLayout.setTransition(R.id.scrollStart, R.id.scrollEnd)
+////                                binding.motionLayout.progress = 0f
+////
+////                                //adjust restaurant title padding
+////                                val curPadding = binding.trackOrderActMainList.paddingTop
+////                                if(curPadding <= Utils.toPx(50)){
+////                                    val varl = ValueAnimator.ofInt(Utils.toPx(30))
+////                                    varl.duration = 250
+////                                    varl.addUpdateListener { animation ->
+////                                        val padding = Utils.toDp(curPadding + animation.animatedValue as Int)
+////                                        Log.d("wowTrackOrderFragment", "collapseMap padding $padding dp")
+////                                        binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
+////                                    }
+////                                    varl.start()
+////                                }
+////                            }
+////                            R.id.expandEnd -> {
+////                                //adjust restaurant title padding
+////                                val varl = ValueAnimator.ofInt(Utils.toPx(30))
+////                                varl.duration = 250
+////                                varl.addUpdateListener { animation ->
+////                                    val padding = Utils.toDp(Utils.toPx(80) - (animation.animatedValue as Int))
+////                                    Log.d("wowTrackOrderFragment", "expandMap padding $padding dp")
+////                                    binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
+////                                }
+////                                varl.start()
+////                            }
+////                        }
 //
 //                    }
 //
@@ -176,20 +231,74 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 //
 //                })
 
-//                binding.motionLayout.enableTransition(R.id.scrollTransition, true)
-//                motionContainer.transitionToEnd()
-//                val sceneRoot: ViewGroup = findViewById(R.id.scene_root)
-//                val aScene: Scene = Scene.getSceneForLayout(sceneRoot, R.layout.track_order_scene_b, this@TrackYourOrderActivity)
-//                TransitionManager.go(aScene, fadeTransition)
             }
         })
 
     }
 
+    private fun expandMap() {
+        binding.motionLayout.setTransition(binding.motionLayout.currentState, R.id.expandEnd)
+        binding.motionLayout.transitionToEnd()
+
+        mMap?.uiSettings?.setAllGesturesEnabled(true)
+//        binding.trackOrderSpace.setOnClickListener(null)
+//        binding.trackOrderSpace.visibility = GONE
+        binding.trackOrderSpace.elevation = 0f
+        binding.trackOrderSpace.setOnClickListener(null)
+
+//        binding.trackOrderActMainList.isNestedScrollingEnabled = false
+//        binding.trackOrderActList.isNestedScrollingEnabled = false
+
+        binding.trackOrderActMainList.setOnTouchListener { v, event -> true }
+
+        val varl = ValueAnimator.ofInt(Utils.toPx(30))
+        varl.duration = 250
+        varl.addUpdateListener { animation ->
+            val padding = Utils.toDp(Utils.toPx(80) - (animation.animatedValue as Int))
+            Log.d("wowTrackOrderFragment", "expandMap padding $padding dp")
+            binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
+        }
+        varl.start()
+
+    }
+
+    private fun collapseMap() {
+        binding.motionLayout.transitionToStart()
+        binding.motionLayout.addTransitionListener(object: SimpleMotionTransitionListener(){
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                binding.motionLayout.setTransition(binding.motionLayout.currentState, R.id.scrollEnd)
+                binding.motionLayout.progress = 0f
+                binding.motionLayout.removeTransitionListener(this)
+            }
+        })
+
+//        mMap?.uiSettings?.setAllGesturesEnabled(false)
+////        binding.trackOrderSpace.visibility = VISIBLE
+        binding.trackOrderSpace.elevation = 10f
+//
+        binding.trackOrderActMainList.setOnTouchListener { v, event -> false }
+        binding.trackOrderSpace.setOnClickListener{
+            expandMap()
+        }
+
+        val curPadding = binding.trackOrderActMainList.paddingTop
+        if(curPadding <= Utils.toPx(50)){
+            val varl = ValueAnimator.ofInt(Utils.toPx(30))
+            varl.duration = 250
+            varl.addUpdateListener { animation ->
+                val padding = Utils.toDp(curPadding + animation.animatedValue as Int)
+                Log.d("wowTrackOrderFragment", "collapseMap padding $padding dp")
+                binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
+            }
+            varl.start()
+        }
+
+    }
+
     private fun initObservers() {
         viewModel.getCurrentOrderDetails.observe(this, { result ->
-            result.order.let{
-                Log.d("wowTrackOrderFragment","updating orders")
+            result.order.let {
+                Log.d("wowTrackOrderFragment", "updating orders")
                 updateOrderUi(it, result.userInfo)
             }
         })
@@ -202,21 +311,20 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
     }
 
     private fun handleMapData(mapData: ActiveOrderTrackerViewModel.MapData?) {
-        mapData?.let{
+        mapData?.let {
             val builder = LatLngBounds.Builder()
             it.markers.forEach {
                 mMap?.addMarker(it)
-
                 builder.include(it.position)
             }
 
-            val width = Resources.getSystem().displayMetrics.widthPixels
-            val padding = ((width * 10) / 100)
+            val width = binding.trackOrderMap.measuredWidth
+            val height = binding.trackOrderMap.measuredHeight
+            val padding = ((width * 15) / 100)
 
-            mMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 600, 1800, padding))
-//            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(mapData.bounds.center, 13f))
+            mMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), width, height, padding))
             mMap?.setOnCameraIdleListener {
-                if(binding.trackOrderMapPreview.alpha > 0){
+                if (binding.trackOrderMapPreview.alpha > 0) {
                     AnimationUtil().alphaOut(binding.trackOrderMapPreview, customStartDelay = 500)
                 }
             }
@@ -225,25 +333,17 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
     private fun updateOrderUi(
         order: Order,
-        userInfo: OrderUserInfo?){
+        userInfo: OrderUserInfo?
+    ) {
         val adapterDetails = OrderTrackDetails(order, userInfo)
-        val adapterProgress = OrderTrackProgress(order)
+
+        binding.trackOrderActTopHeaderRestaurantName.text = order.restaurant?.restaurantName
+        binding.trackOrderActTopHeaderDeliveryTime.text = order.etaToDisplay
 
         val data = mutableListOf<TrackOrderData<Any>>(
-//            TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_PROGRESS, adapterProgress, false),
             TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
         )
         adapter?.submitList(data)
-//        updateMap(order)
-
-//        Glide.with(this).load(order.restaurant?.thumbnail?.url)
-//
-//            .circleCrop()
-//            .into(binding.trackOrderActThumbnail)
-//        AnimationUtil().scaleUp(binding.thumbnailBkg)
-//        val url = MapSyncUtil().getMapImage(order, 800, 1200)
-//        Log.d("wowSTtaicMap","url $url")
-//        Glide.with(this).load(url).into(binding.trackOrderActMap)
     }
 
     private fun initMap() {
@@ -255,23 +355,14 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         mapFragment.getMapAsync(this)
     }
 
-
     override fun onMapReady(googleMap: GoogleMap?) {
-        if(mMap == null){
+        if (mMap == null) {
             mMap = googleMap
+            mMap?.uiSettings?.setAllGesturesEnabled(false)
             viewModel.onMapReady(this)
         }
     }
 
-
-    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
-        return ContextCompat.getDrawable(context, vectorResId)?.run {
-            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-            draw(Canvas(bitmap))
-            BitmapDescriptorFactory.fromBitmap(bitmap)
-        }
-    }
 
     override fun onToolTipClick(type: Int) {
         var titleText = ""

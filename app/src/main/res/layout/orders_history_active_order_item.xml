@@ -30,6 +30,7 @@
                     android:layout_height="152dp">
 
                 <ImageView
+                        android:scaleType="centerCrop"
                         android:transitionName="mapTransition"
                         android:id="@+id/activeOrderFragContainer"
                         android:layout_width="match_parent"
