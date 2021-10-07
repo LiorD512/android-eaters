@@ -14,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ToolTipBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var binding: ToolTipBottomSheetBinding
+    private var binding: ToolTipBottomSheetBinding? = null
 
     companion object {
         private const val TOOL_TIP_TITLE = "tool_tip_title"
@@ -30,7 +30,9 @@ class ToolTipBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.tool_tip_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.tool_tip_bottom_sheet, container, false)
+        binding = ToolTipBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,8 +66,8 @@ class ToolTipBottomSheet : BottomSheetDialogFragment() {
         arguments?.let {
             val title = it.getString(TOOL_TIP_TITLE) ?: ""
             val body = it.getString(TOOL_TIP_BODY)
-            binding.toolTipTitle.text = title
-            binding.toolTipBody.text = body
+            binding!!.toolTipTitle.text = title
+            binding!!.toolTipBody.text = body
         }
 
         val parent = view.parent as View
@@ -75,12 +77,16 @@ class ToolTipBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initUI() {
-        with(binding) {
+        with(binding!!) {
             toolTipBtn.setOnClickListener {
                 dismiss()
             }
         }
     }
 
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 }
 

@@ -28,11 +28,13 @@ import java.util.*
 class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooserAdapter.AddressChooserAdapterListener {
 
     var adapter: CountryIsoChooserAdapter? = null
-    private val binding: CountryChooserBottomSheetBinding by viewBinding()
+    private var binding: CountryChooserBottomSheetBinding? = null
     val viewModel by sharedViewModel<LoginViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.country_chooser_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.country_chooser_bottom_sheet, container, false)
+        binding = CountryChooserBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +69,7 @@ class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooser
 
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             adapter = CountryIsoChooserAdapter(this@CountryChooserBottomSheet)
             countryCodeBottomSheetList.layoutManager = LinearLayoutManager(requireContext())
             countryCodeBottomSheetList.adapter = adapter
@@ -116,6 +118,7 @@ class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooser
 
     override fun onDestroyView() {
         adapter = null
+        binding = null
         super.onDestroyView()
     }
 

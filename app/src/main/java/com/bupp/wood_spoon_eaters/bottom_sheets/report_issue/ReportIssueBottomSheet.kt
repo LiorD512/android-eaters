@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.InputTitleViewListener,
     ReportIssueAdapter.ReportIssueAdapterListener, TitleBodyDialog.TitleBodyDialogListener {
 
-    val binding: ReportIssueFragmentBinding by viewBinding()
+    var binding: ReportIssueFragmentBinding? = null
     private var adapter: ReportIssueAdapter ? = null
     val viewModel by viewModel<ReportIssueViewModel>()
 
@@ -40,7 +40,9 @@ class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.Input
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.report_issue_fragment, container, false)
+        val view =  inflater.inflate(R.layout.report_issue_fragment, container, false)
+        binding = ReportIssueFragmentBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +79,7 @@ class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.Input
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             reportIssueList.layoutManager = LinearLayoutManager(context)
             adapter = ReportIssueAdapter(this@ReportIssueBottomSheet)
             reportIssueList.adapter = adapter
@@ -103,16 +105,16 @@ class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.Input
 
         viewModel.progressData.observe(viewLifecycleOwner, {
             if(it){
-                binding.reportIssuePb.show()
+                binding!!.reportIssuePb.show()
             }else{
-                binding.reportIssuePb.hide()
+                binding!!.reportIssuePb.hide()
             }
         })
     }
 
 
     override fun onReportChange(reportRequest: ReportRequest) {
-        with(binding) {
+        with(binding!!) {
             reportFragReportBtn.setBtnEnabled(true)
             reportFragReportBtn.alpha = 1f
         }
@@ -127,5 +129,10 @@ class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.Input
 
     override fun onTitleBodyDialogDismiss() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

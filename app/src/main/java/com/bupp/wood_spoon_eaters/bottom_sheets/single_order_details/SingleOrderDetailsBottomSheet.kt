@@ -27,7 +27,7 @@ import java.text.DecimalFormat
 class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, RateLastOrderDialog.RateDialogListener,
     WSTitleValueView.WSTitleValueListener {
 
-    private val binding: SingleOrderDetailsBottomSheetBinding by viewBinding()
+    private var binding: SingleOrderDetailsBottomSheetBinding? = null
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
     private var curOrderId: Long = -1
 
@@ -44,7 +44,9 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.single_order_details_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.single_order_details_bottom_sheet, container, false)
+        binding = SingleOrderDetailsBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +85,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     private fun initUI() {
-        with(binding) {
+        with(binding!!) {
             singleOrderDetailsOrderAgain.setOnClickListener {
                 Toast.makeText(requireContext(), "Coming soon..", Toast.LENGTH_SHORT).show()
             }
@@ -95,8 +97,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
             }
             singleOrderDetailsHeader.setHeaderViewListener(this@SingleOrderDetailsBottomSheet)
 
-            binding.singleOrderDetailsFees.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
-            binding.singleOrderDetailsDeliveryFee.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
+            binding!!.singleOrderDetailsFees.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
+            binding!!.singleOrderDetailsDeliveryFee.setWSTitleValueListener(this@SingleOrderDetailsBottomSheet)
         }
     }
 
@@ -113,7 +115,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     private fun handleOrder(order: Order) {
-        with(binding) {
+        with(binding!!) {
             order.apply {
                 restaurant?.apply {
                     singleOrderDetailsHeader.setTitle("Home chef $firstName")
@@ -172,7 +174,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     private fun handlePb(showPb: Boolean) {
-        with(binding){
+        with(binding!!){
             if(showPb){
                 singleOrderDetailsPb.show()
             }else{
@@ -238,6 +240,11 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
 //    override fun onRatingDone() {
 //        TitleBodyDialog.newInstance(getString(R.string.thank_you), getString(R.string.rate_order_done_body)).show(childFragmentManager, Constants.TITLE_BODY_DIALOG)
 //    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 
 
 }

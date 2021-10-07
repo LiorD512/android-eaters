@@ -20,11 +20,13 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DeleteAccountBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private val binding: DeleteAccountBottomSheetBinding by viewBinding()
+    private var binding: DeleteAccountBottomSheetBinding? = null
     private val viewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.delete_account_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.delete_account_bottom_sheet, container, false)
+        binding = DeleteAccountBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,7 @@ class DeleteAccountBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding!!){
             deleteAccountBtn.setOnClickListener {
                 viewModel.deleteAccount()
             }
@@ -71,6 +73,11 @@ class DeleteAccountBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
 
     override fun onHeaderCloseClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

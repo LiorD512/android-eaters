@@ -22,11 +22,13 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private val binding: JoinAsChefBottomSheetBinding by viewBinding()
+    private var binding: JoinAsChefBottomSheetBinding? = null
     val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.join_as_chef_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.join_as_chef_bottom_sheet, container, false)
+        binding = JoinAsChefBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +64,7 @@ class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding!!){
             joinAsChefNext.setOnClickListener {
                 openWoodSpoonGooglePlay()
             }
@@ -80,6 +82,11 @@ class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
 
     override fun onHeaderCloseClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

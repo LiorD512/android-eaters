@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FreeTextBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener {
 
-    private lateinit var binding: FreeTextBottomSheetBinding
+    private var binding: FreeTextBottomSheetBinding? = null
 
     companion object {
         private const val FREE_TEXT_TITLE = "free_text_title"
@@ -31,7 +31,9 @@ class FreeTextBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewLi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.free_text_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.free_text_bottom_sheet, container, false)
+        binding = FreeTextBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +65,8 @@ class FreeTextBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewLi
         arguments?.let {
             val title = it.getString(FREE_TEXT_TITLE) ?: "Terms of use"
             val body = it.getString(FREE_TEXT_BODY)
-            binding.freeTextBottomSheetHeader.setTitle(title)
-            binding.freeTextBottomSheet.text = body
+            binding!!.freeTextBottomSheetHeader.setTitle(title)
+            binding!!.freeTextBottomSheet.text = body
         }
 
         val parent = view.parent as View
@@ -74,13 +76,18 @@ class FreeTextBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewLi
     }
 
     private fun initUI() {
-        with(binding) {
+        with(binding!!) {
             freeTextBottomSheetHeader.setHeaderViewListener(this@FreeTextBottomSheet)
         }
     }
 
     override fun onHeaderCloseClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

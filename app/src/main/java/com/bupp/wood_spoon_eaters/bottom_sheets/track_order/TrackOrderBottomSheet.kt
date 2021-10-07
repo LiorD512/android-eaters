@@ -38,7 +38,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener,
     TrackOrderNewAdapter.TrackOrderNewAdapterListener, CancelOrderDialog.CancelOrderDialogListener, OnMapReadyCallback {
 
-    val binding: TrackOrderFragmentBinding by viewBinding()
+    var binding: TrackOrderFragmentBinding? = null
 
     private var mMap: GoogleMap? = null
     var curOrderId: Long? = null
@@ -75,7 +75,9 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.track_order_fragment, container, false)
+        val view = inflater.inflate(R.layout.track_order_fragment, container, false)
+        TrackOrderFragmentBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -273,12 +275,11 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
         )
         adapter?.submitList(data)
 //        mainAdapter.updateUi(order, userInfo)
-        binding.trackOrderDialogList.scrollToPosition(0)
+        binding!!.trackOrderDialogList.scrollToPosition(0)
     }
 
-
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             Log.d("wowTrackOrderFragment","initUing now")
 //            mainAdapter = TrackOrderMainAdapter(requireContext(), childFragmentManager, this@TrackOrderFragment)
             adapter = TrackOrderNewAdapter(requireContext(), this@TrackOrderBottomSheet)
@@ -288,8 +289,6 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
             trackOrderDialogCloseBtn.setOnClickListener { dismiss() }
         }
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -306,7 +305,7 @@ class TrackOrderBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCo
         mMap?.clear()
         mMap = null
         adapter = null
-//        binding = null
+        binding = null
         super.onDestroy()
     }
 }
