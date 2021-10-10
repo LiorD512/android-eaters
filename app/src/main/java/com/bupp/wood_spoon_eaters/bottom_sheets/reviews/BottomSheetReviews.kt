@@ -28,7 +28,7 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.BottomSheetStyleFullScreen)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.BottomSheetStyle)
     }
 
 
@@ -72,9 +72,6 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             review?.let { review ->
                 reviewsBottomSheetTextView.text = restaurantName
                 val list = mutableListOf<Comment>()
-                list.addAll(review.comments)
-                list.addAll(review.comments)
-                list.addAll(review.comments)
                 list.addAll(review.comments)
                 adapter.submitList(list)
             }

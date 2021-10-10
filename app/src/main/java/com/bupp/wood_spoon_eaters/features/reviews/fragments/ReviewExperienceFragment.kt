@@ -53,7 +53,8 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
     private fun handleNavigationEvent(navigationEvent: LiveEvent<ReviewsViewModel.NavigationEvent>?) {
         navigationEvent?.getContentIfNotHandled()?.let {
             val extras = FragmentNavigatorExtras(
-                binding.reviewFragImage to "logo_transition",
+                binding.reviewFragImageLayout to "logo_transition",
+                binding.reviewFragImage to "logo_transition2",
                 binding.reviewFragRestName to "title_transition",
                 binding.reviewFragCookName to "subtitle_transition"
             )
