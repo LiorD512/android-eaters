@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.TipLineViewBinding
+import android.view.inputmethod.EditorInfo
 
 
 class TipLineView @JvmOverloads
@@ -82,7 +83,25 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             tipPercentageIcon.setImageResource(R.drawable.ic_tip_custom);
             tipPercentageText.text = "Custom"
             tipPercentageValue.isVisible = false
-            tipPercentageEditValue.isVisible = true
+            tipPercentageEditLayout.isVisible = true
+        }
+    }
+
+    fun setCustomTipListener(onTipDone: (Int) -> Unit) {
+        with(binding) {
+            tipPercentageEditValue.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val enteredAmountStr = tipPercentageEditValue.text.toString()
+                    var enteredAmount = 0
+                    if (enteredAmountStr.isNotEmpty()) {
+                        enteredAmountStr.trim().toIntOrNull()?.let{
+                            enteredAmount = it
+                        }
+                    }
+                    onTipDone(enteredAmount)
+                }
+                false
+            }
         }
     }
 
@@ -102,10 +121,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setCustomTipValue(tipAmount: Int) {
+    fun setCustomTipValue(tipAmount: Double) {
         with(binding){
             val string = "$$tipAmount"
-            tipPercentageEditValue.setText(string)
+            tipPercentageEditValue.hint = string
         }
     }
 

@@ -212,7 +212,7 @@ class CartManager(
         Log.d(TAG, "updateOrderParams")
         currentOrderResponse?.let {
 
-            orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
+//            orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
 
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
             result.data?.let {

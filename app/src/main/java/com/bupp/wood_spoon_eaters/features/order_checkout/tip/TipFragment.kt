@@ -9,13 +9,12 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBot
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.TipLineView
 import com.bupp.wood_spoon_eaters.databinding.FragmentTipBinding
-import com.bupp.wood_spoon_eaters.dialogs.TipCourierDialog
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderRequest
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourierDialogListener {
+class TipFragment : Fragment(R.layout.fragment_tip) {
 
     val viewModel by sharedViewModel<CheckoutViewModel>()
     private var binding: FragmentTipBinding? = null
@@ -30,10 +29,10 @@ class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourier
 
     private fun initUi() {
         with(binding!!) {
-            viewModel.orderLiveData.value?.tipPercentage?.let{
+            viewModel.orderLiveData.value?.tipPercentage?.let {
                 selectDefaultTip(it)
             }
-            tipFragToolTip.setOnClickListener{
+            tipFragToolTip.setOnClickListener {
                 onToolTipClick()
             }
             tipFrag12Percent.setOnClickListener {
@@ -48,17 +47,17 @@ class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourier
             tipFrag20Percent.setOnClickListener {
                 onTipClick(tipFrag20Percent, Constants.TIP_20_PERCENT_SELECTED)
             }
-            tipFragCustomSelect.setOnClickListener {
-                onTipSelected(Constants.TIP_CUSTOM_SELECTED)
+            tipFragCustomSelect.setCustomTipListener { value ->
+                onCustomTipSelected(value)
             }
-            tipFragPlaceOrder.setOnClickListener{
+            tipFragPlaceOrder.setOnClickListener {
                 viewModel.onPlaceOrderClick()
             }
         }
     }
 
-    private fun selectDefaultTip(tipPercentage: Int){
-        with(binding!!){
+    private fun selectDefaultTip(tipPercentage: Int) {
+        with(binding!!) {
             when (tipPercentage) {
                 Constants.TIP_12_PERCENT_SELECTED -> {
                     tipFrag12Percent.select()
@@ -72,9 +71,6 @@ class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourier
                 Constants.TIP_20_PERCENT_SELECTED -> {
                     tipFrag20Percent.select()
                 }
-                else -> {
-                    tipFragCustomSelect.setCustomTipValue(tipPercentage)
-                }
             }
         }
     }
@@ -87,9 +83,15 @@ class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourier
 
     @SuppressLint("SetTextI18n")
     private fun handleOrderDetails(order: Order?) {
-        order?.tip?.let{
+        order?.tip?.let {
             binding!!.tipFragTotalTip.text = "Your tip:  ${it.formatedValue}"
         }
+    }
+
+    private fun onCustomTipSelected(tipAmount: Int) {
+        clearAll()
+        binding!!.tipFragCustomSelect.select()
+        onTipSelected(Constants.TIP_CUSTOM_SELECTED, tipAmount = tipAmount)
     }
 
     private fun onTipClick(tipView: TipLineView, tipSelection: Int?) {
@@ -109,12 +111,13 @@ class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourier
             tipFrag15Percent.unselect()
             tipFrag18Percent.unselect()
             tipFrag20Percent.unselect()
+            tipFragCustomSelect.unselect()
         }
     }
 
-    private fun onTipSelected(tipSelection: Int?) {
+    private fun onTipSelected(tipSelection: Int?, tipAmount: Int? = null) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-            TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
+            viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = (tipAmount ?: 0) * 100), Constants.EVENT_CLICK_TIP)
         } else {
             if (tipSelection == Constants.TIP_NOT_SELECTED) {
                 viewModel.updateOrderParams(
@@ -125,11 +128,6 @@ class TipFragment : Fragment(R.layout.fragment_tip), TipCourierDialog.TipCourier
                 viewModel.updateOrderParams(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_CLICK_TIP)
             }
         }
-    }
-
-    override fun onTipDone(tipAmount: Int) {
-        binding!!.tipFragCustomSelect.setCustomTipValue(tipAmount)
-        viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount), Constants.EVENT_CLICK_TIP)
     }
 
     fun onToolTipClick() {
