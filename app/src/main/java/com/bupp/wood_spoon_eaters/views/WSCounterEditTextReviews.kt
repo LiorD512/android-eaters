@@ -99,7 +99,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                             val face = ResourcesCompat.getFont(context, R.font.lato_italic)
                             counterEditTextInput.typeface = face
                         } else {
-                            val face = ResourcesCompat.getFont(context, R.font.lato_bold)
+                            val face = ResourcesCompat.getFont(context, R.font.lato_reg)
                             counterEditTextInput.typeface = face
                         }
                         listener?.onInputTitleChange(s.toString())

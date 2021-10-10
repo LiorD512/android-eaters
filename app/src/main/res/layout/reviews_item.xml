@@ -10,7 +10,7 @@
             android:layout_height="wrap_content"
             android:background="@color/black_two"
             app:cardCornerRadius="8dp"
-            app:cardElevation="7dp"
+            app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,15 +19,12 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="15.4dp">
 
-            <ImageView
+            <com.bupp.wood_spoon_eaters.views.UserImageView
                     android:id="@+id/reviewsItemIcon"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginBottom="9dp"
-                    android:background="@mipmap/ic_launcher_round"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="@+id/reviewsItemDate"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

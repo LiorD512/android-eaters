@@ -26,8 +26,8 @@ class ReviewsAdapter: ListAdapter<Comment, RecyclerView.ViewHolder>(DiffCallback
         fun bindItem(data: Comment) {
             binding.reviewsItemName.text = data.eater.firstName
             binding.reviewsItemComment.text = data.body
+            data.eater.thumbnail?.let { binding.reviewsItemIcon.setImage(it) }
         }
-        val icon: ImageView = binding.reviewsItemIcon
     }
 
     private class DiffCallback : DiffUtil.ItemCallback<Comment>() {
