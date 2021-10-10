@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="$ "
+                    android:text="$"
                     tools:ignore="HardcodedText" />
 
             <EditText
@@ -68,8 +68,8 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="center"
-                    android:hint=" 0  "
-                    android:inputType="phone"
+                    android:hint="0.00"
+                    android:inputType="numberDecimal"
                     tools:ignore="HardcodedText" />
 
         </LinearLayout>

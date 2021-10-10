@@ -92,13 +92,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             tipPercentageEditValue.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     val enteredAmountStr = tipPercentageEditValue.text.toString()
-                    var enteredAmount = 0
+                    var enteredAmount = 0.0
                     if (enteredAmountStr.isNotEmpty()) {
-                        enteredAmountStr.trim().toIntOrNull()?.let{
-                            enteredAmount = it
+                        enteredAmountStr.trim().toDoubleOrNull()?.let{
+                            enteredAmount = it * 100
                         }
                     }
-                    onTipDone(enteredAmount)
+                    onTipDone(enteredAmount.toInt())
                 }
                 false
             }
