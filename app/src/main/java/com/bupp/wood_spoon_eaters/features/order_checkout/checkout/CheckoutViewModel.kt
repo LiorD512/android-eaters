@@ -69,6 +69,8 @@ class CheckoutViewModel(
             list.add(CheckoutAdapterItem(customOrderItem = customCartItem))
         }
         orderItemsData.postValue(list)
+
+//        order.deliverAt
     }
 
     private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {

@@ -47,7 +47,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun initView(viewListener: CheckoutOrderItemsViewListener, adapterListener: CheckoutOrderItemsAdapterListener) {
+    fun initView(viewListener: CheckoutOrderItemsViewListener?, adapterListener: CheckoutOrderItemsAdapterListener?) {
         this.listener = viewListener
         adapterCheckout = CheckoutOrderItemsAdapter(adapterListener)
         binding.orderItemsViewRecyclerView.initSwipeableRecycler(adapterCheckout!!)
@@ -56,6 +56,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun submitList(orderItems: List<CheckoutAdapterItem>) {
         adapterCheckout?.submitList(orderItems)
+    }
+
+    fun setBtnText(btnText: String){
+        binding.orderItemsViewEditOrderBtn.setTitle(btnText)
     }
 
 }

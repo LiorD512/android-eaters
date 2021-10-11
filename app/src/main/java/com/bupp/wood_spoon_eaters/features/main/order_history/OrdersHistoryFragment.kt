@@ -1,9 +1,11 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.track_your_order.TrackYourOrderActivity
+import com.bupp.wood_spoon_eaters.model.Order
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -37,20 +40,19 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     }
 
     override fun onResume() {
+        viewModel.startSilentUpdate()
         super.onResume()
-        viewModel.fetchData()
-
-        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ORDERS)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        Analytics.with(requireContext()).screen("Order history")
 
-
-
         initUi()
         initObservers()
+
+        viewModel.fetchData()
+        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ORDERS)
     }
 
     private fun initObservers() {
@@ -71,11 +73,15 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             ordersHistoryFragRecyclerView.adapter = adapter
 
+            ordersHistoryFragRefreshLayout.setOnRefreshListener {
+                viewModel.fetchData()
+            }
         }
     }
 
     private fun initList(orderHistory: List<OrderHistoryBaseItem>) {
         with(binding){
+            ordersHistoryFragRefreshLayout.isRefreshing = false
             if(orderHistory.isNotEmpty()){
                 listItemDecorator?.let{
                     ordersHistoryFragRecyclerView.removeItemDecoration(it)
@@ -98,8 +104,23 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         SingleOrderDetailsBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.SINGLE_ORDER_DETAILS_BOTTOM_SHEET)
     }
 
-    override fun onViewActiveOrderClicked(orderId: Long) {
-        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+    override fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreview: String) {
+        val orderState = order.status
+        val statusTitle = order.extendedStatus?.title
+        val statusSubTitle = order.extendedStatus?.subtitle
+
+        val intent = Intent(requireContext(), TrackYourOrderActivity::class.java)
+            .putExtra("order_id", order.id)
+            .putExtra("thumbnail", order.restaurant?.thumbnail?.url)
+            .putExtra("restaurant_name", order.restaurant?.restaurantName)
+            .putExtra("status_title", statusTitle)
+            .putExtra("status_subtitle", statusSubTitle)
+            .putExtra("pb_state", orderState.name)
+            .putExtra("map_preview_url", mapPreview)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+//        activity?.window?.exitTransition = null
+        startActivity(intent, transitionBundle.toBundle())
+//        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
     override fun onPause() {

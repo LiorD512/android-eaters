@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
@@ -149,6 +150,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
+            initMap(orderData)
         })
         viewModel.deliveryDatesLiveData.observe(viewLifecycleOwner, {
             handleOrderDeliveryDates(it)
@@ -202,6 +204,17 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.orderItemsData.observe(viewLifecycleOwner, {
             handleOrderItemsData(it)
         })
+    }
+
+    private fun initMap(orderData: Order?) {
+        val bundle = Bundle()
+        bundle.putFloat("zoom_level", 17f)
+        bundle.putBoolean("show_btns", false)
+        bundle.putBoolean("isCheckout", true)
+        bundle.putParcelable("order", orderData)
+        childFragmentManager.beginTransaction()
+            .add(R.id.checkoutFragMap, AddressVerificationMapFragment::class.java, bundle)
+            .commit()
     }
 
     private fun handleOrderItemsData(list: List<CheckoutAdapterItem>) {
