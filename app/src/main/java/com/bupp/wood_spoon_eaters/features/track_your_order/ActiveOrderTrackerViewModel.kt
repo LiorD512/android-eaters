@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
+import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.google.android.gms.maps.model.*
@@ -242,6 +243,23 @@ class ActiveOrderTrackerViewModel(
             if(it.status == OrderState.DELIVERED){
                 hideCancelBtn.postValue(true)
             }
+        }
+    }
+
+    val chefPageClick = MutableLiveData<RestaurantInitParams>()
+    fun onChefClick() {
+        getCurrentOrderDetails.value?.order?.restaurant?.let {
+            val restaurantParam = RestaurantInitParams(
+                restaurantId = it.id,
+                chefThumbnail = it.thumbnail,
+                coverPhoto = it.cover,
+                rating = it.rating,
+                restaurantName = it.restaurantName,
+                chefName = it.firstName,
+                isFavorite = it.isFavorite ?: false,
+                sectionTitle = "Track order page"
+            )
+            chefPageClick.postValue(restaurantParam)
         }
     }
 

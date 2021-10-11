@@ -27,10 +27,12 @@ import com.bumptech.glide.load.engine.GlideException
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
 
 
 class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener) :
-    ListAdapter<TrackOrderData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()), WSTitleValueView.WSTitleValueListener {
+    ListAdapter<TrackOrderData<Any>, RecyclerView.ViewHolder>(AdditionalDishesDiffCallback()), WSTitleValueView.WSTitleValueListener,
+    CheckoutOrderItemsView.CheckoutOrderItemsViewListener {
 
 
     override fun getItemViewType(position: Int): Int {
@@ -44,6 +46,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
     interface TrackOrderNewAdapterListener {
         fun onToolTipClick(type: Int)
+        fun onChefPageClick()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -111,7 +114,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
             binding.trackOrderDetailsTotalBeforeTip.setValue(order.totalBeforeTip?.formatedValue ?: "")
 
-            binding.trackOrderDetailsItems.initView(null, null)
+            binding.trackOrderDetailsItems.initView(this@TrackOrderNewAdapter, null)
             binding.trackOrderDetailsItems.setBtnText("Home chef's page")
             val orderItems = order.orderItems
             val list = mutableListOf<CheckoutAdapterItem>()
@@ -140,30 +143,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
         }
     }
 
-    private var curOrderStage: Int = 1
-
-//    inner class TrackOrderProgressViewHolder(val binding: TrackOrderProgressSectionBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bindItems(orderItem: OrderTrackProgress) {
-//            val order = orderItem.order
-//            order?.let {
-//
-//                val orderState = order.getOrderState()
-//                binding.trackOrderProgressPb.setState(orderState)
-//
-//                binding.trackOrderProgressName.text = order.restaurant?.restaurantName
-//
-//            }
-//        }
-//    }
-
-//    private fun setFontTypeDefault(binding: TrackOrderProgressSectionBinding, context: Context) {
-//        val regTypeface = Typeface.createFromAsset(context.assets, "font/lato_reg.ttf")
-//        binding.trackOrderProgressCb1.typeface = regTypeface
-//        binding.trackOrderProgressCb2.typeface = regTypeface
-//        binding.trackOrderProgressCb3.typeface = regTypeface
-//        binding.trackOrderProgressCb4.typeface = regTypeface
-//    }
-
     class AdditionalDishesDiffCallback : DiffUtil.ItemCallback<TrackOrderData<Any>>() {
         override fun areItemsTheSame(oldItem: TrackOrderData<Any>, newItem: TrackOrderData<Any>): Boolean {
             return oldItem.areItemsTheSame
@@ -183,6 +162,10 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
     override fun onToolTipClick(type: Int) {
         listener.onToolTipClick(type)
+    }
+
+    override fun onEditOrderBtnClicked() {
+        listener.onChefPageClick()
     }
 
 

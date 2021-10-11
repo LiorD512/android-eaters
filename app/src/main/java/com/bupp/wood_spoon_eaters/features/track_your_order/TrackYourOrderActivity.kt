@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.track_your_order
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.transition.*
@@ -26,6 +27,7 @@ import com.bupp.wood_spoon_eaters.databinding.ActivityTrackYourOrderBinding
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetails
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.track_your_order.menu.TrackOrderMenuBottomSheet
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
@@ -77,7 +79,6 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_TRACK_ORDER)
         viewModel.logEvent(Constants.EVENT_CLICK_TRACK_YOUR_ORDER)
-
     }
 
 
@@ -101,14 +102,10 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
                 .apply(RequestOptions.bitmapTransform(multiTransformation))
                 .into(trackOrderMapPreview)
 
-
             Glide.with(this@TrackYourOrderActivity).load(thumbnail).circleCrop().into(trackOrderActThumbnail)
         }
 
-
-
         startPostponedEnterTransition()
-
     }
 
 
@@ -119,83 +116,66 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
         binding.trackOrderActBackButton.setOnClickListener { onBackPressed() }
 
-        binding.trackOrderSpace.setOnClickListener {
-            Log.d("wowTrackOrderFragment", "trackOrderSpace click")
-            expandMap()
-        }
-
         binding.trackOrderActMyLocation.setOnClickListener {
             Log.d("wowTrackOrderFragment", "trackOrderActMyLocation click")
             viewModel.onMapReady(this)
         }
-
+        binding.trackOrderSpace.setOnClickListener {
+            Log.d("wowTrackOrderFragment", "trackOrderSpace click")
+            expandMap()
+        }
         binding.trackOrderActCollapse.setOnClickListener {
             Log.d("wowTrackOrderFragment", "trackOrderActMyLocation click")
             collapseMap()
         }
-
         binding.trackOrderActHelp.setOnClickListener {
             TrackOrderMenuBottomSheet().show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
         }
 
-
-        val motionContainer: MotionLayout = binding.motionLayout
         val sharedElementEnterTransition: Transition = window.sharedElementEnterTransition
         sharedElementEnterTransition.addListener(@RequiresApi(Build.VERSION_CODES.O)
         object : TransitionListenerAdapter() {
             override fun onTransitionEnd(transition: Transition?) {
                 super.onTransitionEnd(transition)
-                Log.d("wowTrackOrderFragment", "onAnimationEnd 2")
-
+                Log.d("wowTrackOrderFragment", "onTransitionEnd")
                 AnimationUtil().scaleUpWithAlpha(binding.trackOrderActThumbnailLayout)
-                motionContainer.addTransitionListener(object : MotionLayout.TransitionListener {
-                    override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
+            }
+        })
 
-                    }
+        binding.motionLayout.addTransitionListener(object : SimpleMotionTransitionListener() {
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                when(currentId){
+                    R.id.scrollStart -> {
+                        Log.d("wowTrackOrderFragment", "onAnimationEnd scrollStart")
+                        binding.motionLayout.setTransition(R.id.scrollStart, R.id.scrollEnd)
+                        binding.motionLayout.progress = 0f
 
-                    override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
-
-                    }
-
-                    override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                        when(currentId){
-                            R.id.scrollStart -> {
-                                binding.motionLayout.setTransition(R.id.scrollStart, R.id.scrollEnd)
-                                binding.motionLayout.progress = 0f
-
-                                //adjust restaurant title padding
-                                val curPadding = binding.trackOrderActMainList.paddingTop
-                                if(curPadding <= Utils.toPx(50)){
-                                    val varl = ValueAnimator.ofInt(Utils.toPx(30))
-                                    varl.duration = 250
-                                    varl.addUpdateListener { animation ->
-                                        val padding = Utils.toDp(curPadding + animation.animatedValue as Int)
-                                        Log.d("wowTrackOrderFragment", "collapseMap padding $padding dp")
-                                        binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
-                                    }
-                                    varl.start()
-                                }
+                        //adjust restaurant title padding
+                        val curPadding = binding.trackOrderActMainList.paddingTop
+                        if(curPadding <= Utils.toPx(50)){
+                            val varl = ValueAnimator.ofInt(Utils.toPx(30))
+                            varl.duration = 250
+                            varl.addUpdateListener { animation ->
+                                val padding = Utils.toDp(curPadding + animation.animatedValue as Int)
+                                Log.d("wowTrackOrderFragment", "collapseMap padding $padding dp")
+                                binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
                             }
-                            R.id.expandEnd -> {
-                                //adjust restaurant title padding
-                                val varl = ValueAnimator.ofInt(Utils.toPx(30))
-                                varl.duration = 250
-                                varl.addUpdateListener { animation ->
-                                    val padding = Utils.toDp(Utils.toPx(80) - (animation.animatedValue as Int))
-                                    Log.d("wowTrackOrderFragment", "expandMap padding $padding dp")
-                                    binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
-                                }
-                                varl.start()
-                            }
+                            varl.start()
                         }
-
                     }
-
-                    override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
-
+                    R.id.expandEnd -> {
+                        Log.d("wowTrackOrderFragment", "onAnimationEnd expandEnd")
+                        //adjust restaurant title padding
+                        val varl = ValueAnimator.ofInt(Utils.toPx(30))
+                        varl.duration = 250
+                        varl.addUpdateListener { animation ->
+                            val padding = Utils.toDp(Utils.toPx(80) - (animation.animatedValue as Int))
+                            Log.d("wowTrackOrderFragment", "expandMap padding $padding dp")
+                            binding.trackOrderActMainList.setPadding(0, Utils.toPx(padding), 0, 0)
+                        }
+                        varl.start()
                     }
-
-                })
+                }
 
             }
         })
@@ -241,6 +221,9 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         })
         viewModel.feeAndTaxDialogData.observe(this, {
             FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minFee).show(supportFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+        })
+        viewModel.chefPageClick.observe(this, {
+            startActivity(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_RESTAURANT, it))
         })
     }
 
@@ -341,8 +324,15 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         }
     }
 
+    override fun onChefPageClick() {
+        viewModel.onChefClick()
+    }
+
     override fun onDestroy() {
         viewModel.endUpdates()
+        mMap = null
+        curOrderId = null
+        adapter = null
         super.onDestroy()
     }
 
