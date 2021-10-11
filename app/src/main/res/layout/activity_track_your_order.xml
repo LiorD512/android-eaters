@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_90"
+        android:background="@color/white"
         app:layoutDescription="@xml/track_your_order_page_scene">
 
     <View
             android:id="@+id/trackOrderSpace"
             android:layout_width="match_parent"
+            android:layout_marginBottom="320dp"
             android:layout_height="0dp"
             android:elevation="8dp"
             android:visibility="gone"
@@ -40,8 +42,8 @@
             android:id="@+id/trackOrderActMainList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingTop="80dp"
             android:background="@drawable/top_cornered_30_bkg"
+            android:paddingTop="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trackOrderSpace">
 
@@ -188,26 +190,12 @@
             app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
             app:layout_constraintTop_toBottomOf="@id/trackOrderActTopHeaderRestaurantName" />
 
-    <TextView
-            android:id="@+id/trackOrderActHelp"
-            style="@style/LatoBold15White"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15.4dp"
-            android:background="@drawable/rectangle_dark_grey_60_cornered"
-            android:elevation="5dp"
-            android:letterSpacing="-0.01"
-            android:padding="9dp"
-            android:text="Help"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
             android:id="@+id/trackOrderActBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15.4dp"
-            android:elevation="5dp"
+            android:elevation="8dp"
             android:src="@drawable/ic_back_grey"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -216,12 +204,12 @@
             android:id="@+id/trackOrderActMyLocation"
             android:layout_width="46dp"
             android:layout_height="46dp"
+            android:layout_marginBottom="15dp"
             android:alpha="0"
             android:background="@color/white_90"
             app:cardCornerRadius="150dp"
             app:cardElevation="4dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+            app:layout_constraintBottom_toTopOf="@+id/trackOrderActCollapseLayout"
             app:layout_constraintRight_toRightOf="@+id/trackOrderActHelp">
 
         <ImageView
@@ -232,24 +220,57 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-            android:id="@+id/trackOrderActCollapse"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--            android:id="@+id/trackOrderActCollapse"-->
+    <!--            android:layout_width="46dp"-->
+    <!--            android:layout_height="46dp"-->
+    <!--            android:alpha="0"-->
+    <!--            android:background="@color/white_90"-->
+    <!--            app:cardCornerRadius="150dp"-->
+    <!--            app:cardElevation="4dp"-->
+    <!--            android:layout_marginBottom="15dp"-->
+    <!--            app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"-->
+    <!--            app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton">-->
+
+    <!--        <ImageView-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:src="@mipmap/ic_launcher_round" />-->
+    <!---->
+    <!--    </androidx.cardview.widget.CardView>-->
+
+    <FrameLayout
             android:alpha="0"
-            android:background="@color/white_90"
-            app:cardCornerRadius="150dp"
-            app:cardElevation="4dp"
-            android:layout_marginBottom="15dp"
+            android:id="@+id/trackOrderActCollapseLayout"
             app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
-            app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton">
+            app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton"
+            android:background="@drawable/transparent_to_white_80_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="88dp">
 
-        <ImageView
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:id="@+id/trackOrderActCollapse"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher_round" />
+                android:layout_height="wrap_content"
+                android:layout_margin="15.4dp"
+                app:title="Back to order status" />
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+
+    <TextView
+            android:id="@+id/trackOrderActHelp"
+            style="@style/LatoBold15White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:background="@drawable/rectangle_dark_grey_60_cornered"
+            android:elevation="8dp"
+            android:letterSpacing="-0.01"
+            android:padding="9dp"
+            android:text="Help"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

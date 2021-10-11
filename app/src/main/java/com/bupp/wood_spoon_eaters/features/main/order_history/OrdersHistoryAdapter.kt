@@ -141,7 +141,6 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
         fun bindItem(data: OrderAdapterItemActiveOrder) {
             val order = data.order
-            Log.d("wowStatus", "bindItem: ${order.id}")
 
             mapContainer.post {
                 val url = MapSyncUtil().getMapImage(order, mapContainer.measuredWidth, Utils.toPx(152))
@@ -151,31 +150,29 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
                 Glide.with(context).load(url).into(mapContainer)
 
                 restaurantName.text = order.restaurant?.restaurantName ?: ""
-                val orderState = order.getOrderState()
+                val orderState = order.status
+            Log.d("wowStatus", "bindItem: ${order.id}. orderState: $orderState")
                 orderPb.setState(orderState)
 
-                title.text = order.getOrderStateTitle(orderState)
-                subtitle.text = order.getOrderStateSubTitle(orderState)
+                title.text = order.extendedStatus?.title
+                subtitle.text = order.extendedStatus?.subtitle
 
                 mainLayout.setOnClickListener {
                     order.let { order ->
-                        mapContainer.transitionName = "mapTransition"
                         val pairMap: Pair<View, String> = Pair.create(mapContainer as View, mapContainer.transitionName)
                         val pairName: Pair<View, String> = Pair.create(restaurantName as View, restaurantName.transitionName)
                         val pairStatusTitle: Pair<View, String> = Pair.create(title as View, title.transitionName)
                         val pairStatusSubTitle: Pair<View, String> = Pair.create(subtitle as View, subtitle.transitionName)
                         val pairPb: Pair<View, String> = Pair.create(orderPb as View, orderPb.transitionName)
 
+
                         val transitionBundle: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             context as Activity, pairMap, pairName, pairStatusTitle, pairStatusSubTitle, pairPb)
                         listener.onViewActiveOrderClicked(order, transitionBundle, bigUrl)
                     }
                 }
-
                 sep.isVisible = data.isLast
             }
-
-
         }
     }
 
@@ -191,8 +188,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         override fun areItemsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
             var isSame = oldItem == newItem
             if (oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder) {
-                isSame = oldItem.order.deliveryStatus == newItem.order.deliveryStatus &&
-                        oldItem.order.preparationStatus == newItem.order.preparationStatus
+                isSame = oldItem.order.extendedStatus?.subtitle == newItem.order.extendedStatus?.subtitle
                 Log.d("wowStatus", "isSame: $isSame ${oldItem.order.id}")
             }
             Log.d("wowStatus", "adapter - areItemsTheSame $isSame")
@@ -202,15 +198,9 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         override fun areContentsTheSame(oldItem: OrderHistoryBaseItem, newItem: OrderHistoryBaseItem): Boolean {
             var isSame = oldItem == newItem
             if (oldItem is OrderAdapterItemActiveOrder && newItem is OrderAdapterItemActiveOrder) {
-                isSame = oldItem.order.deliveryStatus == newItem.order.deliveryStatus &&
-                        oldItem.order.preparationStatus == newItem.order.preparationStatus
+                isSame = oldItem.order.extendedStatus?.subtitle == newItem.order.extendedStatus?.subtitle
                 Log.d("wowStatus", "isSame: $isSame ${oldItem.order.id}")
             }
-//            else{
-//                isSame = oldItem == newItem
-//            }
-//            Log.d("wowStatus","isSame: $isSame ${oldItem.type}")
-
             Log.d("wowStatus", "adapter - areContentsTheSame $isSame")
             return isSame
 

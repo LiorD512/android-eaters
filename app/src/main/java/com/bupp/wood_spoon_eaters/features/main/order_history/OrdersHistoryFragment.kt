@@ -40,6 +40,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     }
 
     override fun onResume() {
+        viewModel.startSilentUpdate()
         super.onResume()
     }
 
@@ -103,10 +104,10 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         SingleOrderDetailsBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.SINGLE_ORDER_DETAILS_BOTTOM_SHEET)
     }
 
-    override fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreviewUrl: String) {
-        val orderState = order.getOrderState()
-        val statusTitle = order.getOrderStateTitle(orderState)
-        val statusSubTitle = order.getOrderStateSubTitle(orderState)
+    override fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreview: String) {
+        val orderState = order.status
+        val statusTitle = order.extendedStatus?.title
+        val statusSubTitle = order.extendedStatus?.subtitle
 
         val intent = Intent(requireContext(), TrackYourOrderActivity::class.java)
             .putExtra("order_id", order.id)
@@ -115,8 +116,9 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             .putExtra("status_title", statusTitle)
             .putExtra("status_subtitle", statusSubTitle)
             .putExtra("pb_state", orderState.name)
-            .putExtra("map_preview_url", mapPreviewUrl)
+            .putExtra("map_preview_url", mapPreview)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+//        activity?.window?.exitTransition = null
         startActivity(intent, transitionBundle.toBundle())
 //        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }

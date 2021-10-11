@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.active_orders_tracker
+package com.bupp.wood_spoon_eaters.features.track_your_order
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,13 +9,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.google.android.gms.maps.model.*
@@ -24,8 +26,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng
-import kotlin.math.ln
-import kotlin.math.sin
 
 
 class ActiveOrderTrackerViewModel(
@@ -41,13 +41,6 @@ class ActiveOrderTrackerViewModel(
     val traceableOrdersLiveData = eaterDataManager.getTraceableOrders()
     private var refreshRepeatedJob: Job? = null
 
-
-//    fun getShareText(): String {
-////        val inviteUrl = eaterDataManager.currentEater?.shareCampaign?.inviteUrl
-//        val text = eaterDataManager.currentEater?.shareCampaign?.shareText
-//        return "$text \n "
-//    }
-
     val getCurrentOrderDetails: MutableLiveData<GetActiveOrdersEvent> = MutableLiveData()
 
     data class GetActiveOrdersEvent(val order: Order, val userInfo: OrderUserInfo? = null)
@@ -60,10 +53,23 @@ class ActiveOrderTrackerViewModel(
                 val currentOrder = it.find { it.id == orderId }
                 currentOrder?.let {
                     getCurrentOrderDetails.postValue(GetActiveOrdersEvent(it, getOrderUserInfo()))
+//                    repeatRequest()
                 }
             }
         }
     }
+
+    fun startSilentUpdate() {
+        if (refreshRepeatedJob == null) {
+            refreshRepeatedJob = repeatRequest()
+        }
+    }
+
+    fun endUpdates() {
+        refreshRepeatedJob?.cancel()
+        refreshRepeatedJob = null
+    }
+
 
     private fun repeatRequest(): Job {
         return viewModelScope.launch {
@@ -78,6 +84,10 @@ class ActiveOrderTrackerViewModel(
                 delay(10000)
             }
         }
+    }
+
+    fun getContactUsPhoneNumber(): String {
+        return metaDataRepository.getContactUsPhoneNumber()
     }
 
     private fun getOrderUserInfo(): OrderUserInfo {
@@ -200,6 +210,38 @@ class ActiveOrderTrackerViewModel(
             val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
             draw(Canvas(bitmap))
             BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
+    }
+
+    data class CancelOrderParam(val orderStage: Int, val orderId: Long?)
+    val cancelOrderEvent = LiveEventData<CancelOrderParam>()
+    fun onCancelClick(){
+        getCurrentOrderDetails.value?.order?.let{
+            var curOrderStage = 1
+            when (it.status) {
+                OrderState.RECEIVED -> {
+                    curOrderStage = 1
+                }
+                OrderState.PREPARED -> {
+                    curOrderStage = 1
+                }
+                OrderState.ON_THE_WAY -> {
+                    curOrderStage = 2
+                }
+                OrderState.DELIVERED -> {
+                    curOrderStage = 3
+                }
+            }
+            cancelOrderEvent.postRawValue(CancelOrderParam(curOrderStage, it.id))
+        }
+    }
+
+    val hideCancelBtn = MutableLiveData<Boolean>()
+    fun checkIfCanCancel() {
+        getCurrentOrderDetails.value?.order?.let{
+            if(it.status == OrderState.DELIVERED){
+                hideCancelBtn.postValue(true)
+            }
         }
     }
 

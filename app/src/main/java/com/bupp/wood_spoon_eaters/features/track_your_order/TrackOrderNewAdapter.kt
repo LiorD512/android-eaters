@@ -43,9 +43,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
     }
 
     interface TrackOrderNewAdapterListener {
-        fun onContactUsClick(order: Order) {} //PROGRESS SECTION
-        fun onShareImageClick(order: Order) {} //PROGRESS SECTION
-        fun onOrderCanceled(orderState: Int, orderId: Long) {} //PROGRESS SECTION
         fun onToolTipClick(type: Int)
     }
 
@@ -128,7 +125,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             binding.trackOrderDetailsItems.submitList(list)
 //
             binding.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
-            binding.trackOrderDetailsSectionPayment.text = userInfo?.paymentMethod
+            binding.trackOrderDetailsSectionPayment.text = order.paymentMethodStr
             binding.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
             binding.trackOrderDetailsSectionOrderNumber.text = order.orderNumber
             val address = userInfo?.userLocation

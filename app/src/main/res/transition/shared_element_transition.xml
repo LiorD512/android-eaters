@@ -9,7 +9,7 @@
     <fade android:fadingMode="fade_in" />
 <!--    <changeTransform/>-->
 <!--    <changeClipBounds/>-->
-<!--    <fade android:fadingMode="fade_out" />-->
+<!--    <fade />-->
 <!--    <explode/>-->
 <!--    <changeImageTransform />-->
 </transitionSet>
