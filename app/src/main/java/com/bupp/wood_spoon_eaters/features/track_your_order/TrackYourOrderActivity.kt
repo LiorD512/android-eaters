@@ -114,6 +114,8 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         binding.trackOrderActList.layoutManager = LinearLayoutManager(this)
         binding.trackOrderActList.adapter = adapter
 
+        binding.trackOrderProgressPb.reset()
+
         binding.trackOrderActBackButton.setOnClickListener { onBackPressed() }
 
         binding.trackOrderActMyLocation.setOnClickListener {
@@ -236,12 +238,12 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             }
 
             val width = binding.trackOrderMap.measuredWidth
-            val height = binding.trackOrderMap.measuredHeight
-            val padding = ((width * 15) / 100)
+            val height = Utils.toPx(460)//binding.trackOrderMap.measuredHeight
+            val padding = ((width * 25) / 100)
 
             val bound = builder.build()
             try{
-                mMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bound, width, height, padding))
+                mMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(it.bounds, width, height, padding))
                 mMap?.setOnCameraIdleListener {
                     if (binding.trackOrderMapPreview.alpha > 0) {
                         AnimationUtil().alphaOut(binding.trackOrderMapPreview, customStartDelay = 500)
@@ -337,16 +339,15 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
     }
 
     override fun onOrderCanceled() {
+        intent.putExtra("isAfterCancel", true)
+        setResult(RESULT_OK, intent)
         finish()
     }
 
     override fun onBackPressed() {
-//        finishAfterTransition()
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-//        supportFinishAfterTransition()
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        // we want to disable exit shared-view-transition because it looks bad so
+        // we override the onBackPress and do just Finish()
         finish()
-//        super.onBackPressed()
     }
 
     companion object {

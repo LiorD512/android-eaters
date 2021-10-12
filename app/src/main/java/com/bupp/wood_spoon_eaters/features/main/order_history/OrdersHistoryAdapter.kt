@@ -151,7 +151,8 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
                 restaurantName.text = order.restaurant?.restaurantName ?: ""
                 val orderState = order.status
-            Log.d("wowStatus", "bindItem: ${order.id}. orderState: $orderState")
+                Log.d("wowStatus", "bindItem: ${order.id}. orderState: $orderState")
+                orderPb.reset()
                 orderPb.setState(orderState)
 
                 title.text = order.extendedStatus?.title
@@ -167,7 +168,8 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
 
                         val transitionBundle: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            context as Activity, pairMap, pairName, pairStatusTitle, pairStatusSubTitle, pairPb)
+                            context as Activity, pairMap, pairName, pairStatusTitle, pairStatusSubTitle, pairPb
+                        )
                         listener.onViewActiveOrderClicked(order, transitionBundle, bigUrl)
                     }
                 }

@@ -10,13 +10,13 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 enum class OrderState{
-    @Json(name = "cart") NONE,
+    @Json(name = "finalized") FINALIZED,
     @Json(name = "accepted") RECEIVED,
     @Json(name = "preparation") PREPARED,
     @Json(name = "on_the_way") ON_THE_WAY,
     @Json(name = "delivered") DELIVERED,
-    @Json(name = "finalized") FINALIZED,
-    @Json(name = "cancelled") CANCELLED
+    @Json(name = "cancelled") CANCELLED,
+    @Json(name = "cart") NONE
 }
 
 @JsonClass(generateAdapter = true)

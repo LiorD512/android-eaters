@@ -1,10 +1,13 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -18,6 +21,8 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.track_your_order.TrackYourOrderActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -26,6 +31,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderView.HeaderViewListener,
     OrdersHistoryAdapter.OrdersHistoryAdapterListener {
+
+    private val trackOrderForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        Log.d(TAG, "Activity For Result - trackOrderForResult")
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            val isAfterCancel = data?.getBooleanExtra("isAfterCancel", false)
+            if(isAfterCancel!!){
+                viewModel.fetchData()
+            }
+
+        }
+    }
 
     private var listItemDecorator: OrderHistoryItemDecorator? = null
     val binding: FragmentOrdersHistoryBinding by viewBinding()
@@ -37,6 +54,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     companion object{
         fun newInstance() = OrdersHistoryFragment()
+        const val TAG = "wowOrderHistory"
     }
 
     override fun onResume() {
@@ -119,7 +137,8 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             .putExtra("map_preview_url", mapPreview)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 //        activity?.window?.exitTransition = null
-        startActivity(intent, transitionBundle.toBundle())
+//        startActivity(intent, transitionBundle.toBundle())
+        trackOrderForResult.launch(intent, transitionBundle)
 //        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 
@@ -127,6 +146,5 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         viewModel.endUpdates()
         super.onPause()
     }
-
 
 }

@@ -103,6 +103,7 @@ class TrackOrderMenuBottomSheet : BottomSheetDialogFragment(), CancelOrderDialog
     }
 
     override fun onOrderCanceled() {
+        listener?.onOrderCanceled()
         dismiss()
     }
 
