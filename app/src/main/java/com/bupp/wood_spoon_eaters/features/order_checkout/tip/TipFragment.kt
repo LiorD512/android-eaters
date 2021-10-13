@@ -5,18 +5,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.custom_tip.CustomTipBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.TipLineView
 import com.bupp.wood_spoon_eaters.databinding.FragmentTipBinding
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderRequest
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class TipFragment : Fragment(R.layout.fragment_tip) {
+class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.CustomTipListener {
 
     val viewModel by sharedViewModel<CheckoutViewModel>()
+    val mainViewModel by sharedViewModel<OrderCheckoutViewModel>()
     private var binding: FragmentTipBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,9 +50,12 @@ class TipFragment : Fragment(R.layout.fragment_tip) {
             tipFrag20Percent.setOnClickListener {
                 onTipClick(tipFrag20Percent, Constants.TIP_20_PERCENT_SELECTED)
             }
-            tipFragCustomSelect.setCustomTipListener { value ->
-                onCustomTipSelected(value)
+            tipFragCustomSelect.setOnClickListener {
+                CustomTipBottomSheet().show(childFragmentManager, Constants.CUSTOM_TIP_BOTTOM_SHEET)
             }
+//            tipFragCustomSelect.setCustomTipListener { value ->
+//                onCustomTipSelected(value)
+//            }
             tipFragPlaceOrder.setOnClickListener {
                 viewModel.onPlaceOrderClick()
             }
@@ -79,6 +85,20 @@ class TipFragment : Fragment(R.layout.fragment_tip) {
         viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
         })
+        viewModel.onCheckoutDone.observe(viewLifecycleOwner, {
+            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE)
+        })
+        viewModel.progressData.observe(viewLifecycleOwner, {
+            handlePb(it ?: false)
+        })
+    }
+
+    private fun handlePb(shouldShow: Boolean) {
+        if(shouldShow){
+            binding!!.tipFragPb.show()
+        }else{
+            binding!!.tipFragPb.hide()
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -90,8 +110,8 @@ class TipFragment : Fragment(R.layout.fragment_tip) {
 
     private fun onCustomTipSelected(tipAmount: Int) {
         clearAll()
-        binding!!.tipFragCustomSelect.select()
-        onTipSelected(Constants.TIP_CUSTOM_SELECTED, tipAmount = tipAmount)
+        binding!!.tipFragCustomSelect.setCustomValue(tipAmount)
+        onTipSelected(Constants.TIP_CUSTOM_SELECTED, tipAmount = tipAmount*100)
     }
 
     private fun onTipClick(tipView: TipLineView, tipSelection: Int?) {
@@ -130,10 +150,14 @@ class TipFragment : Fragment(R.layout.fragment_tip) {
         }
     }
 
-    fun onToolTipClick() {
+    private fun onToolTipClick() {
         val titleText = resources.getString(R.string.tool_tip_courier_title)
         val bodyText = resources.getString(R.string.tool_tip_courier_body)
         ToolTipBottomSheet.newInstance(titleText, bodyText).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
+    }
+
+    override fun onCustomTipDone(tip: Int) {
+        onCustomTipSelected(tip)
     }
 
 }

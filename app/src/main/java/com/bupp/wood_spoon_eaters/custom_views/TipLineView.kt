@@ -48,7 +48,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun init12PercentUi() {
         with(binding) {
-            tipPercentageIcon.setImageResource(R.drawable.ic_tip_12);
+            tipPercentageIcon.setImageResource(R.drawable.ic_tip_12)
             tipPercentageText.text = "I love you shawarma’ch"
             tipPercentageValue.text = "12%"
         }
@@ -56,7 +56,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun init15PercentUi() {
         with(binding) {
-            tipPercentageIcon.setImageResource(R.drawable.ic_tip_15);
+            tipPercentageIcon.setImageResource(R.drawable.ic_tip_15)
             tipPercentageText.text = "You’re the sauce to my pasta"
             tipPercentageValue.text = "15%"
         }
@@ -64,7 +64,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun init18PercentUi() {
         with(binding) {
-            tipPercentageIcon.setImageResource(R.drawable.ic_tip_18);
+            tipPercentageIcon.setImageResource(R.drawable.ic_tip_18)
             tipPercentageText.text = "I walnut let you go"
             tipPercentageValue.text = "18%"
         }
@@ -72,7 +72,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun init20PercentUi() {
         with(binding) {
-            tipPercentageIcon.setImageResource(R.drawable.ic_tip_20);
+            tipPercentageIcon.setImageResource(R.drawable.ic_tip_20)
             tipPercentageText.text = "You have a pizza my heart"
             tipPercentageValue.text = "20%"
         }
@@ -80,30 +80,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun initCustomUi() {
         with(binding) {
-            tipPercentageIcon.setImageResource(R.drawable.ic_tip_custom);
+            tipPercentageIcon.setImageResource(R.drawable.ic_tip_custom)
             tipPercentageText.text = "Custom"
-            tipPercentageValue.isVisible = false
-            tipPercentageEditLayout.isVisible = true
+            tipPercentageValue.text = "$0"
         }
     }
 
-    fun setCustomTipListener(onTipDone: (Int) -> Unit) {
-        with(binding) {
-            tipPercentageEditValue.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    val enteredAmountStr = tipPercentageEditValue.text.toString()
-                    var enteredAmount = 0.0
-                    if (enteredAmountStr.isNotEmpty()) {
-                        enteredAmountStr.trim().toDoubleOrNull()?.let{
-                            enteredAmount = it * 100
-                        }
-                    }
-                    onTipDone(enteredAmount.toInt())
-                }
-                false
-            }
-        }
+    fun setCustomValue(tipAmount: Int){
+        binding.tipPercentageValue.text = "$$tipAmount"
+        select()
     }
+
 
     fun select() {
         with(binding){
@@ -121,12 +108,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setCustomTipValue(tipAmount: Double) {
-        with(binding){
-            val string = "$$tipAmount"
-            tipPercentageEditValue.hint = string
-        }
-    }
 
     companion object {
         const val TIP_PERCENT_12 = 0

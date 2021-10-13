@@ -42,37 +42,37 @@
                 android:layout_marginVertical="12dp"
                 tools:text="12%" />
 
-        <LinearLayout
-                android:id="@+id/tipPercentageEditLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="12dp">
+<!--        <LinearLayout-->
+<!--                android:id="@+id/tipPercentageEditLayout"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone"-->
+<!--                android:paddingHorizontal="10dp"-->
+<!--                android:paddingVertical="12dp">-->
 
 
-            <TextView
-                    style="@style/LatoBold13Dark50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:text="$"
-                    tools:ignore="HardcodedText" />
+<!--            <TextView-->
+<!--                    style="@style/LatoBold13Dark50"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@null"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="$"-->
+<!--                    tools:ignore="HardcodedText" />-->
 
-            <EditText
-                    android:id="@+id/tipPercentageEditValue"
-                    style="@style/LatoBold13Dark50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:hint="0.00"
-                    android:inputType="numberDecimal"
-                    tools:ignore="HardcodedText" />
+<!--            <EditText-->
+<!--                    android:id="@+id/tipPercentageEditValue"-->
+<!--                    style="@style/LatoBold13Dark50"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@null"-->
+<!--                    android:gravity="center"-->
+<!--                    android:hint="0.00"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    tools:ignore="HardcodedText" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
     </androidx.cardview.widget.CardView>
 

@@ -140,9 +140,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 binding.checkoutFragmentPb.hide()
             }
         })
-        viewModel.onCheckoutDone.observe(viewLifecycleOwner, {
-            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE)
-        })
+
         viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
             initMap(orderData)

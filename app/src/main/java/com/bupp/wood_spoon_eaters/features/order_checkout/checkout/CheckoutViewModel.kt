@@ -95,9 +95,9 @@ class CheckoutViewModel(
 
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
-            progressData.startProgress()
+//            progressData.startProgress()
             val result = cartManager.updateOrderParams(orderRequest, eventType)
-            progressData.endProgress()
+//            progressData.endProgress()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
                     cartManager.calcCurrentOrderDeliveryTime()
