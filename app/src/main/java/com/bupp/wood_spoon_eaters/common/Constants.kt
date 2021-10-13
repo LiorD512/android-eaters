@@ -163,8 +163,9 @@ class Constants {
 
         //Tip courier Selection arg
         const val TIP_NOT_SELECTED = 0
-        const val TIP_10_PERCENT_SELECTED = 10
+        const val TIP_12_PERCENT_SELECTED = 12
         const val TIP_15_PERCENT_SELECTED = 15
+        const val TIP_18_PERCENT_SELECTED = 18
         const val TIP_20_PERCENT_SELECTED = 20
         const val TIP_CUSTOM_SELECTED = 666
 

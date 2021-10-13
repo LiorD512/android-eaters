@@ -80,6 +80,7 @@
                 android:value="@string/default_notification_channel_id" />
 
         <activity
+                android:exported="true"
                 android:name=".features.locations_and_address.LocationAndAddressActivity"
                 android:screenOrientation="portrait"
                 tools:ignore="LockedOrientationActivity" /> <!-- <activity -->
@@ -147,6 +148,7 @@
                 android:name="io.branch.sdk.TestMode"
                 android:value="${isTestMode}" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
         <activity
+                android:exported="true"
                 android:name=".features.login.LoginActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"
@@ -170,6 +172,7 @@
             </intent-filter>
         </activity>
         <activity
+                android:exported="true"
                 android:name=".features.restaurant.RestaurantActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustPan"
