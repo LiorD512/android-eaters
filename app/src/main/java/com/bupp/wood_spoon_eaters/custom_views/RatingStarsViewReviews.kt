@@ -19,7 +19,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var binding: RatingStarsViewReviewsBinding = RatingStarsViewReviewsBinding.inflate(LayoutInflater.from(context), this, true)
 
     interface RatingStarsViewListener {
-        fun onRatingClick()
+        fun onRatingClick(rating: Int)
     }
 
     fun setRatingStarsViewListener(listener: RatingStarsViewListener) {
@@ -109,15 +109,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     setRating(5)
                 }
             }
-            listener?.onRatingClick()
         }
     }
 
     fun setRating(rating: Int) {
         reset()
         selectStars(rating)
-
         numberOfStars = rating
+        listener?.onRatingClick(rating)
     }
 
     private fun selectStars(numOfStars: Int) {

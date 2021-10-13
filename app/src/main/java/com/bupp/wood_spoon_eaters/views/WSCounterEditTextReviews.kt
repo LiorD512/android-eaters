@@ -4,12 +4,8 @@ import android.content.Context
 import android.text.Editable
 import android.text.InputFilter
 import android.util.AttributeSet
-import android.util.DisplayMetrics
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.bupp.wood_spoon_eaters.R
