@@ -38,7 +38,6 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener?
         val item = getItem(position)
         holder as OrderItemViewHolder
         holder.bindItem(item, listener)
-
     }
 
     class OrderItemViewHolder(val binding: CheckoutItemOrderItemBinding) : SwipeableBaseItemViewHolder(binding.root) {

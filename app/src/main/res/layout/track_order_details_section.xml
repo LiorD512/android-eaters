@@ -73,7 +73,7 @@
                 app:title="Tip for your courier"/>
 
         <com.bupp.wood_spoon_eaters.views.WSTitleValueView
-                android:id="@+id/trackOrderDetailsTotalBeforeTip"
+                android:id="@+id/trackOrderDetailsTotal"
                 style="@style/LatoBold13Black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

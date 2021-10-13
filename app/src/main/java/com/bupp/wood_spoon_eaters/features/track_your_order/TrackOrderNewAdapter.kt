@@ -85,6 +85,8 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 //
             binding.trackOrderDetailsSubtotal.setValue(order.subtotal?.formatedValue ?: "")
             binding.trackOrderDetailsDeliveryFee.setValue(order.deliveryFee?.formatedValue ?: "")
+            binding.trackOrderDetailsCourier.setValue(order.tip?.formatedValue ?: "")
+            binding.trackOrderDetailsTotal.setValue(order.total?.formatedValue ?: "")
 
             var feeAndTax = 0.0
             order.serviceFee?.value?.let {
@@ -100,8 +102,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
             binding.trackOrderDetailsFees.setValue("$$feeAndTaxStr")
 
-            val deliveryFee = order.deliveryFee?.value
-
             val promo = order.promoCode
 
             if (!promo.isNullOrEmpty()) {
@@ -109,10 +109,6 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
                 binding.trackOrderDetailsPromoCode.setTitle("Promo code $promo")
                 binding.trackOrderDetailsPromoCode.setValue("${order.discount?.formatedValue}")
             }
-
-            binding.trackOrderDetailsCourier.setValue(order.tip?.formatedValue ?: "")
-
-            binding.trackOrderDetailsTotalBeforeTip.setValue(order.totalBeforeTip?.formatedValue ?: "")
 
             binding.trackOrderDetailsItems.initView(this@TrackOrderNewAdapter, null)
             binding.trackOrderDetailsItems.setBtnText("Home chef's page")
@@ -127,7 +123,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
             }
             binding.trackOrderDetailsItems.submitList(list)
 //
-            binding.trackOrderDetailsSectionDate.text = DateUtils.parseDateToFullDate(order.created_at)
+            binding.trackOrderDetailsSectionDate.text = DateUtils.parseDateToOrderAtStr(order.created_at)
             binding.trackOrderDetailsSectionPayment.text = order.paymentMethodStr
             binding.trackOrderDetailsSectionUserInfo.text = userInfo?.userInfo
             binding.trackOrderDetailsSectionOrderNumber.text = order.orderNumber

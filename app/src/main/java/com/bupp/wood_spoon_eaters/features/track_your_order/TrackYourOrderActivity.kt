@@ -275,6 +275,11 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             trackOrderProgressName.text = order.restaurant?.restaurantName
             trackOrderProgressStatusTitle.text = order.extendedStatus?.title
             trackOrderProgressStatusSubTitle.text = order.extendedStatus?.subtitle
+
+            if(order.status.ordinal >= OrderState.RECEIVED.ordinal){
+                trackOrderActEta.text = order.etaToDisplay
+                AnimationUtil().alphaIn(trackOrderActEta)
+            }
         }
 
         adapter?.submitList(data)

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.utils
 
 import com.bupp.wood_spoon_eaters.utils.DateUtils.parseDateToDate
+import com.google.android.gms.common.internal.Preconditions.checkArgument
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,6 +24,32 @@ object DateUtils {
         val date = dateFormat.format(orderDate)
         val time = timeFormat.format(orderDate)
         return "$date, $time"
+    }
+
+    fun parseDateToOrderAtStr(orderDate: Date?): String {
+        //Tue Jul 7th, 2020 at 9:54 PM
+        val dateFormat = SimpleDateFormat("EEE MMM", Locale.getDefault())
+        val dayFormat = SimpleDateFormat("d", Locale.getDefault())
+        val yearFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+        val date = dateFormat.format(orderDate)
+        val day = dayFormat.format(orderDate)
+        val daySuffix = getDayOfMonthSuffix(day.toInt())
+        val time = timeFormat.format(orderDate)
+        val year = yearFormat.format(orderDate)
+        return "$date $day$daySuffix, $year at $time"
+    }
+
+    private fun getDayOfMonthSuffix(n: Int): String {
+        checkArgument(n in 1..31, "illegal day of month: $n")
+        return if (n in 11..13) {
+            "th"
+        } else when (n % 10) {
+            1 -> "st"
+            2 -> "nd"
+            3 -> "rd"
+            else -> "th"
+        }
     }
 
     fun parseDateToStartAndEnd(startDate: Date, endDate: Date): String {

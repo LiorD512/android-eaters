@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
@@ -12,8 +11,8 @@
     <View
             android:id="@+id/trackOrderSpace"
             android:layout_width="match_parent"
-            android:layout_marginBottom="320dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="320dp"
             android:elevation="8dp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
@@ -146,6 +145,15 @@
                 android:layout_height="match_parent"
                 android:padding="5dp"
                 tools:src="@drawable/tab_account_normal" />
+        <TextView
+                android:alpha="0"
+                android:gravity="center"
+                android:id="@+id/trackOrderActEta"
+                style="@style/LatoBold19White"
+                android:lines="2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/teal_blue_55" />
 
     </androidx.cardview.widget.CardView>
 
@@ -240,13 +248,13 @@
     <!--    </androidx.cardview.widget.CardView>-->
 
     <FrameLayout
-            android:alpha="0"
             android:id="@+id/trackOrderActCollapseLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
-            app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton"
-            android:background="@drawable/transparent_to_white_80_gradient"
             android:layout_width="match_parent"
-            android:layout_height="88dp">
+            android:layout_height="88dp"
+            android:alpha="0"
+            android:background="@drawable/transparent_to_white_80_gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+            app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton">
 
         <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                 android:id="@+id/trackOrderActCollapse"
