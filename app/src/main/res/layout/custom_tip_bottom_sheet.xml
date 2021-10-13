@@ -7,11 +7,11 @@
         android:orientation="vertical">
 
     <com.bupp.wood_spoon_eaters.custom_views.HeaderView
-            android:layout_marginTop="7.7dp"
+            android:id="@+id/customTipHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7.7dp"
             app:isWithSep="true"
-            android:id="@+id/customTipHeader"
             app:title="Tip courier"
             app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
 
@@ -23,44 +23,62 @@
 
     <TextView
             style="@style/LatoReg13Dark50"
-            android:layout_marginTop="15.7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add any number (in Dollars) "/>
+            android:layout_marginTop="15.7dp"
+            android:text="Add any number (in Dollars) " />
 
-
-    <EditText
-            android:id="@+id/customTipTipAmount"
-            android:inputType="number"
-            android:layout_marginStart="50.9dp"
-            android:layout_marginEnd="50.9dp"
-            android:layout_marginTop="23.5dp"
-            style="@style/LatoReg15Dark"
-            android:layout_gravity="center"
-            android:hint="Tip amount"
-            android:textAlignment="center"
-            android:textColorHint="@color/dark_50"
-            android:gravity="center"
+    <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="48dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="23.5dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+        <EditText
+                style="@style/LatoReg15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="$"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:background="@null"
+                android:textColorHint="@color/dark_50" />
+
+        <EditText
+                android:id="@+id/customTipTipAmount"
+                style="@style/LatoReg15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="Tip amount"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColorHint="@color/dark_50" />
+
+    </LinearLayout>
 
     <View
-            android:layout_marginTop="22.6dp"
-            android:layout_marginStart="7.7dp"
-            android:layout_marginEnd="7.7dp"
-            android:background="@color/silver"
             android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            android:layout_height="1dp"
+            android:layout_marginStart="7.7dp"
+            android:layout_marginTop="35.6dp"
+            android:layout_marginEnd="7.7dp"
+            android:background="@color/silver" />
 
     <TextView
             android:id="@+id/customTipDoneBtn"
             style="@style/LatoBold15Teal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="19.3dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Done"/>
+            android:text="Done" />
 
 </LinearLayout>
