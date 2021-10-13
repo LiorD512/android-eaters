@@ -141,6 +141,7 @@ class Constants {
         const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val FEES_AND_tAX_BOTTOM_SHEET = "fees_and_tax_bottom_sheet"
         const val UPSALE_AND_CART_BOTTOM_SHEET = "upsale_and_cart_bottom_sheet"
+        const val TRACK_ORDER_MENU_BOTTOM_SHEET = "track_order_menu_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"

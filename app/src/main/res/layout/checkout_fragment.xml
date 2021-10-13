@@ -42,13 +42,10 @@
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/floating_cart_btn_height">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/checkoutFragMap"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="222dp"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/checkout_nav" />
+                    android:layout_height="222dp"/>
 
             <View
                     android:layout_width="match_parent"

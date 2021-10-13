@@ -18,20 +18,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     FrameLayout(context, attrs, defStyleAttr) {
 
     private var binding: OrderProgressBarBinding = OrderProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
-    var currentState = OrderState.NONE
+    var currentState = OrderState.FINALIZED
 
-    init {
-        initUi()
+
+    fun reset() {
+        Log.d(TAG, "reset pb")
+        binding.orderPb.progress = 100
     }
 
-    private fun initUi() {
-
-    }
-
-    fun setProgress(orderState: OrderState) {
+    private fun setProgress(orderState: OrderState) {
         Log.d(TAG, "orderState: $orderState")
         val currentProgress = binding.orderPb.progress
-        val progress = (100/3F) * (orderState.ordinal - 1)
+        var progress = (100/3F) * (orderState.ordinal - 1)
+        if(progress < 0){
+            progress = 0f
+        }
+        Log.d(TAG, "orderState: progress: $progress")
+        Log.d(TAG, "orderState: currentProgress: $currentProgress")
         ObjectAnimator.ofInt(
             binding.orderPb, "progress",
             currentProgress, progress.toInt()

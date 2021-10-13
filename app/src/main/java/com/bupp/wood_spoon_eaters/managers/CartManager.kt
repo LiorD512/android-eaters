@@ -47,7 +47,7 @@ class CartManager(
     private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
         return OrderRequest(
             cookingSlotId = currentCookingSlotId,
-            deliveryAddressId = getAddressId(),
+            deliveryAddressId = currentOrderResponse?.deliveryAddress?.id ?: getAddressId(),
             orderItemRequests = cart,
             tipPercentage = getTipPercentage()?.toFloat()
         )
