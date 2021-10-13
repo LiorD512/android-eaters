@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="15.4dp">
+
+    <ImageButton
+            android:id="@+id/tipFragExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_back_grey" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/LatoBlack23CharcoalGrey"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tip your courier" />
+
+        <ImageButton
+                android:id="@+id/tipFragToolTip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="@null"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icons_tooltip" />
+
+    </LinearLayout>
+
+    <TextView
+            style="@style/LatoReg13NobelGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="Select an amount and say thanks with a tip " />
+
+    <com.bupp.wood_spoon_eaters.custom_views.TipLineView
+            android:id="@+id/tipFrag12Percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tipPercent="Percent12" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.TipLineView
+            android:id="@+id/tipFrag15Percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tipPercent="Percent15" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.TipLineView
+            android:id="@+id/tipFrag18Percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tipPercent="Percent18" />
+
+
+    <com.bupp.wood_spoon_eaters.custom_views.TipLineView
+            android:id="@+id/tipFrag20Percent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tipPercent="Percent20" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.TipLineView
+            android:id="@+id/tipFragCustomSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tipPercent="Custom" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/silver" />
+
+    <TextView
+            android:id="@+id/tipFragTotalTip"
+            style="@style/LatoBold15DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="22dp"
+            tools:text="Your tip: $1.50" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/tipFragPlaceOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:title="Place order" />
+
+
+</LinearLayout>

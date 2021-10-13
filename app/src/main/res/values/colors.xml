@@ -48,6 +48,7 @@
     <color name="silver_50">#80dcdcdf</color>
     <color name="white">#ffffff</color>
     <color name="white_three">#e7e7e7</color>
+    <color name="white_four">#f1f1f1</color>
     <color name="white_five">#eeeeee</color>
     <color name="white_50">#80ffffff</color>
     <color name="white_60">#99ffffff</color>
@@ -72,6 +73,7 @@
     <color name="light_rose">#ffc0c3</color>
     <color name="darkish_pink">#e5455c</color>
     <color name="charcoal_grey_20">#332e2a2f</color>
+    <color name="charcoal_grey">#342e38</color>
     <color name="petrol">#00656d</color>
     <color name="charcoal_grey_29">#4a3c3c43</color>
     <color name="seafoam_blue">#7ccbd2</color>

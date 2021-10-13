@@ -20,10 +20,10 @@
                 android:id="@+id/checkoutFragHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="Checkout"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="Checkout" />
 
     </androidx.cardview.widget.CardView>
 
@@ -212,59 +212,17 @@
                         app:title="Total before tip" />
 
             </LinearLayout>
-
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="7.7dp"
-                    android:background="@color/light_periwinkle_50" />
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15.4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                <TextView
-                        style="@style/LatoBlack17Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15.4dp"
-                        android:letterSpacing="0.03"
-                        android:paddingVertical="15.4dp"
-                        android:text="Tip your courier" />
-
-                <ImageButton
-                        android:id="@+id/checkoutFragCourierTip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="@null"
-                        android:paddingStart="5dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/icons_tooltip" />
-
-            </LinearLayout>
-
-            <com.bupp.wood_spoon_eaters.custom_views.TipPercentView
-                    android:id="@+id/checkoutFragTipPercentView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/floating_cart_btn_height"/>
-
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
 
     <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
-            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/checkoutFragPlaceOrderBtn"
-            app:floating_button_type="PLACE_ORDER"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:floating_button_type="PLACE_ORDER"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
             android:id="@+id/checkoutFragmentPb"

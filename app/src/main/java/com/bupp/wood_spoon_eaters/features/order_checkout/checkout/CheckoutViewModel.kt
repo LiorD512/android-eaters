@@ -203,7 +203,7 @@ class CheckoutViewModel(
         }
     }
 
-    private fun validateOrderData(): Boolean {
+    fun validateOrderData(): Boolean {
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
         if (paymentMethod == null) {
             validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
