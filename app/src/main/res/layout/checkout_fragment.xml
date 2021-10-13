@@ -171,7 +171,7 @@
                     android:layout_marginHorizontal="15.4dp"
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:paddingBottom="23dp">
+                    android:paddingBottom="80dp">
 
                 <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                         android:id="@+id/checkoutFragSubtotal"
