@@ -28,17 +28,12 @@ interface ApiService {
 
     //New Order
 
-
     @GET("cooks/{cook_id}/reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
-
-
 
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
     suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
-
-
 
     //Feed
 //    @GET("eaters/me/feed")

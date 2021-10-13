@@ -35,10 +35,9 @@ data class Comment(
 
 @JsonClass(generateAdapter = true)
 data class ReviewRequest(
-    @Json(name = "accuracy_rating")  var accuracyRating: Int? = null,
-    @Json(name = "delivery_rating")  var deliveryRating: Int? = null,
-    @Json(name = "dish_ratings") var dishMetrics: List<DishMetricsRequest>? = null,
-    @Json(name = "body")  var body: String? = null
+    @Json(name = "rating")  var rating: Int? = null,
+    @Json(name = "review_text")  var reviewText: String? = null,
+    @Json(name = "support_message") var supportMessage: String? = null,
 )
 
 @JsonClass(generateAdapter = true)

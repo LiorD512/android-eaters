@@ -6,16 +6,17 @@ import android.transition.TransitionInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewDetailsBinding
-import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
     val binding: FragmentReviewDetailsBinding by viewBinding()
-    private val viewModel by viewModel<ReviewsViewModel>()
+    private val viewModel by sharedViewModel<ReviewsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,20 +49,16 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
     fun initUi() {
         with(binding) {
             binding.reviewFragSubmitBtn.setOnClickListener {
-                viewModel.onSubmitClick()
+                viewModel.onSubmitClick(reviewFragUserReviewInput.getText(),reviewFragUserTeamInput.getText())
             }
             reviewFragExitBtn.setOnClickListener {
                 activity?.onBackPressed()
             }
             viewModel.order?.let { order ->
-                GlideApp.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
+                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
                 reviewFragCookName.text = order.restaurant?.firstName
-//                reviewFragUserReviewInput
-//                reviewFragUserInputText
-
-
-//                reviewFragUserTeamInput
+                reviewFragUserInputText.text = "Nicole"
             }
         }
     }

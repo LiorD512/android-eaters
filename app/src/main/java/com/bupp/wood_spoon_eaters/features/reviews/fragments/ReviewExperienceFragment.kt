@@ -6,19 +6,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
-import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience) {
-
+class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience), RatingStarsViewReviews.RatingStarsViewListener {
 
     val binding: FragmentReviewExperienceBinding by viewBinding()
-    private val viewModel by viewModel<ReviewsViewModel>()
-
+    private val viewModel by sharedViewModel<ReviewsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,17 +28,17 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
 
     fun initUi() {
         with(binding) {
-            binding.reviewFragNextBtn.setOnClickListener {
+            reviewFragRating.setRatingStarsViewListener(this@ReviewExperienceFragment)
+            reviewFragNextBtn.setOnClickListener {
                 viewModel.onNextClick()
             }
             reviewFragExitBtn.setOnClickListener {
                 activity?.finish()
             }
             viewModel.order?.let { order ->
-                GlideApp.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
+                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
                 reviewFragCookName.text = order.restaurant?.firstName
-//                reviewFragRating
             }
         }
     }
@@ -68,5 +67,8 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
         }
     }
 
+    override fun onRatingClick(rating: Int) {
+        viewModel.setRating(rating)
+    }
 
 }

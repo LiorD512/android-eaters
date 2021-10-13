@@ -1,7 +1,5 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details
 
-import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +9,13 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
-import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 
-class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener, RateLastOrderDialog.RateDialogListener,
+class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener,
     WSTitleValueView.WSTitleValueListener {
 
     private val binding: SingleOrderDetailsBottomSheetBinding by viewBinding()
@@ -88,7 +88,9 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 Toast.makeText(requireContext(), "Coming soon..", Toast.LENGTH_SHORT).show()
             }
             singleOrderDetailsRate.setOnClickListener {
-                RateLastOrderDialog(curOrderId, this@SingleOrderDetailsBottomSheet).show(childFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+                viewModel.curOrder?.let {
+                    (activity as MainActivity).openReviewActivity(it)
+                }
             }
             singleOrderDetailsReport.setOnClickListener {
                 ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
@@ -118,12 +120,12 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 restaurant?.apply {
                     singleOrderDetailsHeader.setTitle("Home chef $firstName")
                 }
-                deliveryAddress?.apply{
+                deliveryAddress?.apply {
                     singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }
                 singleOrderDetailsStatus.updateSubTitle(status?.uppercase() ?: "N/A")
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
-                orderItems?.let{
+                orderItems?.let {
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
                 }
 
@@ -135,16 +137,16 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                     singleOrderDetailsPromoCode.setValue("${discount?.formatedValue}")
                 }
 
-                if(status == "cancelled"){
+                if (status == "cancelled") {
                     singleOrderDetailsRate.isEnabled = false
                     singleOrderDetailsRate.alpha = 0.5f
                 }
 
                 var feeAndTax = 0.0
-                serviceFee?.value?.let{
+                serviceFee?.value?.let {
                     feeAndTax += it
                 }
-                tax?.value?.let{
+                tax?.value?.let {
                     feeAndTax += it
                 }
                 val feeAndTaxStr = DecimalFormat("##.##").format(feeAndTax)
@@ -162,7 +164,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 singleOrderDetailsSubtotal.setValue("$$allDishSubTotalStr")
                 singleOrderDetailsTotal2.setValue(total?.formatedValue ?: "N/A")
 
-                if(wasRated == true){
+                if (wasRated == true) {
                     singleOrderDetailsRate.setBtnEnabled(false)
                     singleOrderDetailsRate.setOnClickListener(null)
 
@@ -172,10 +174,10 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     private fun handlePb(showPb: Boolean) {
-        with(binding){
-            if(showPb){
+        with(binding) {
+            if (showPb) {
                 singleOrderDetailsPb.show()
-            }else{
+            } else {
                 singleOrderDetailsPb.hide()
             }
         }
@@ -185,9 +187,10 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         dismiss()
     }
 
-    override fun onRatingDone(isSuccess: Boolean) {
-        viewModel.initSingleOrder(curOrderId)
-    }
+    //todo : fix this
+//    override fun onRatingDone(isSuccess: Boolean) {
+//        viewModel.initSingleOrder(curOrderId)
+//    }
 
     override fun onToolTipClick(type: Int) {
         var titleText = ""

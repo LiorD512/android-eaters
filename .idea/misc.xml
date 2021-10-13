@@ -53,6 +53,7 @@
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/up_sale_n_cart_bottom_sheet.xml" value="0.31068840579710144" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/user_image_view_backup.xml" value="0.27708333333333335" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/web_docs_dialog.xml" value="0.2911458333333333" />
+        <entry key="..\:/Users/Nicol/.gradle/caches/transforms-3/b08cbcb933abf4dcb65f60f600952407/transformed/material-1.4.0/res/layout/design_bottom_sheet_dialog.xml" value="0.321875" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3848958333333333" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable-xhdpi/teal_10_cornered_13rad_rect.xml" value="0.23958333333333334" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/grey_white_cornered_rag15_rect.xml" value="0.3848958333333333" />
@@ -67,6 +68,7 @@
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/icons_filter_selected.xml" value="0.3848958333333333" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/icons_tooltip.xml" value="0.2203125" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/illus_feed_empty.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/order_progressbar_states.xml" value="0.3848958333333333" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/rectangle_blue_btn_cornered.xml" value="0.23958333333333334" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/teal_10_cornered_rect.xml" value="0.23958333333333334" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/drawable/teal_blue_circle.xml" value="0.23958333333333334" />
@@ -86,12 +88,14 @@
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_create_account.xml" value="0.3175925925925926" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_dish_page.xml" value="0.29074074074074074" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_feed.xml" value="0.2828125" />
+        <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_restaurant_page.xml" value="0.1" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_review_details.xml" value="0.33" />
-        <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_review_experience.xml" value="0.5" />
+        <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_review_experience.xml" value="0.33" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_search.xml" value="0.3697916666666667" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_tip.xml" value="0.25" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/main_act_tab_layout.xml" value="0.3697916666666667" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/my_profile_fragment.xml" value="0.21510416666666668" />
+        <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/order_progress_bar.xml" value="0.36875" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/rating_stars_view_reviews.xml" value="0.36875" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/ratings_bottom_sheet.xml" value="0.1671875" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/restaurant_item_dish.xml" value="0.2861111111111111" />

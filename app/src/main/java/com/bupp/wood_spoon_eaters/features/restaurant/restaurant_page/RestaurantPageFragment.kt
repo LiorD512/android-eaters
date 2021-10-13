@@ -224,7 +224,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
         }
         with(binding.restaurantMainListLayout) {
-
             //Description
             restaurantDescription.text = restaurant.about
 
