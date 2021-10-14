@@ -40,7 +40,6 @@ import java.util.*
 
 
 class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
-    TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
     ShareDialog.ShareDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener,
     CampaignBottomSheet.CampaignBottomSheetListener,
@@ -352,9 +351,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    override fun onTipDone(tipAmount: Int) {
-        Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
-    }
 
     override fun onCallSupportClick() {
         onContactUsClick()

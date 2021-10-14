@@ -146,7 +146,7 @@
                     android:id="@+id/checkoutFragPromoCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:btnTitle="Add"
+                    app:btnTitle="Add code"
                     app:changeable="true"
                     app:detailsType="DELIVERY_DETAILS_PROMO_CODE"
                     app:showSep="false" />

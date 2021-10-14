@@ -9,11 +9,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.CustomTipBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.JoinAsChefBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.title_body_dialog.TitleBodyDialog
@@ -78,6 +80,10 @@ class CustomTipBottomSheet: BottomSheetDialogFragment(), HeaderView.HeaderViewLi
             }
 
             customTipHeader.setHeaderViewListener(this@CustomTipBottomSheet)
+
+            customTipTipAmount.addTextChangedListener(object: SimpleTextWatcher(){
+
+            })
         }
     }
 
