@@ -2,7 +2,6 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-
     <Transition
             android:id="@+id/scrollTransition"
             motion:autoTransition="none"
