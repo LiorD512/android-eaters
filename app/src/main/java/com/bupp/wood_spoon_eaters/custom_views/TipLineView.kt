@@ -82,11 +82,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         with(binding) {
             tipPercentageIcon.setImageResource(R.drawable.ic_tip_custom)
             tipPercentageText.text = "Custom"
-            tipPercentageValue.text = "$0"
+            tipPercentageValue.text = "$0.0"
         }
     }
 
-    fun setCustomValue(tipAmount: Int){
+    fun setCustomValue(tipAmount: Double){
         binding.tipPercentageValue.text = "$$tipAmount"
         select()
     }

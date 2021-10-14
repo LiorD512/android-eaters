@@ -9,6 +9,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCheckoutBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
@@ -40,7 +42,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     CustomDetailsView.CustomDetailsViewListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener,
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
-    SingleColumnTimePickerBottomSheet.TimePickerListener {
+    SingleColumnTimePickerBottomSheet.TimePickerListener,
+    ClearCartCheckoutBottomSheet.ClearCartListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
 
@@ -118,7 +121,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
                 override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
                     val orderItemId = item.customOrderItem.orderItem.id
-                    viewModel.removeSingleOrderItemId(orderItemId)
+                    val showDialog = viewModel.removeSingleOrderItemId(orderItemId)
+                    if(showDialog){
+                        ClearCartCheckoutBottomSheet.newInstance(this@CheckoutFragment)
+                            .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
+                    }
 //                    viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customOrderItem)
                 }
 
@@ -396,5 +403,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onWSErrorDone() {
         viewModel.refreshCheckoutPage()
+    }
+
+    override fun onPerformClearCart() {
+        viewModel.clearCart()
+    }
+
+    override fun onClearCartCanceled() {
+       //do nothing
     }
 }
