@@ -250,8 +250,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragAccommodationsLayout.isVisible = !dish.accommodations.isNullOrEmpty()
             dishFragAccommodations.text = dish.accommodations ?: ""
             //Additional Details
-            dishFragAdditionalDetailsLayout.isVisible = false
-//            dishAdditionalDetails.text = dish.  //todo : what goes here?
+            dishFragAdditionalDetailsLayout.isVisible = !dish.instruction.isNullOrEmpty()
+            dishFragAdditionalDetails.text = dish.instruction
         }
     }
 
