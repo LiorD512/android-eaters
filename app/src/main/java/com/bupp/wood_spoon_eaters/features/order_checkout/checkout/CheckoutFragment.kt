@@ -340,7 +340,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragSubtotal.setValue("$$allDishSubTotalStr")
             checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
 
-            curOrder.total?.formatedValue?.let {
+            curOrder.totalBeforeTip?.formatedValue?.let {
                 checkoutFragPlaceOrderBtn.updateFloatingBtnPrice(it)
             }
         }
