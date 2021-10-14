@@ -138,12 +138,14 @@
                 android:layout_height="match_parent"
                 android:padding="5dp"
                 tools:src="@drawable/tab_account_normal" />
-        <TextView
+        <me.grantland.widget.AutofitTextView
                 android:alpha="0"
                 android:gravity="center"
                 android:id="@+id/trackOrderActEta"
                 style="@style/LatoBold19White"
-                android:lines="2"
+                android:lines="3"
+                android:padding="3dp"
+                app:minTextSize="7sp"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
