@@ -37,14 +37,13 @@
             android:gravity="center"
             android:layout_gravity="center">
 
-        <EditText
+        <TextView
                 style="@style/LatoReg15Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="$"
-                android:inputType="number"
                 android:textAlignment="center"
                 android:background="@null"
                 android:textColorHint="@color/dark_50" />
@@ -79,5 +78,5 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="19.3dp"
-            android:text="Done" />
+            app:title="Done" />
 </LinearLayout>
