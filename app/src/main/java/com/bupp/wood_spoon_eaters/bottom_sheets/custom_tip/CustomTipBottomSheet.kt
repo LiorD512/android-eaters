@@ -32,7 +32,7 @@ class CustomTipBottomSheet: BottomSheetDialogFragment(), HeaderView.HeaderViewLi
     var listener: CustomTipListener? = null
 
     interface CustomTipListener{
-        fun onCustomTipDone(tip: Int)
+        fun onCustomTipDone(tip: Double)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,7 +86,7 @@ class CustomTipBottomSheet: BottomSheetDialogFragment(), HeaderView.HeaderViewLi
         if(input.isEmpty()){
             AnimationUtil().shakeView(binding.customTipTipAmount)
         }else{
-            listener?.onCustomTipDone(input.toInt()) //convert cents to dollars
+            listener?.onCustomTipDone(input.toDouble()) //convert cents to dollars
             dismiss()
         }
     }

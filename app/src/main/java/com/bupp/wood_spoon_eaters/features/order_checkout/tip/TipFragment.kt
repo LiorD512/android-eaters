@@ -35,6 +35,9 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
             viewModel.orderLiveData.value?.tipPercentage?.let {
                 selectDefaultTip(it)
             }
+            tipFragExit.setOnClickListener{
+                activity?.onBackPressed()
+            }
             tipFragToolTip.setOnClickListener {
                 onToolTipClick()
             }
@@ -53,9 +56,6 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
             tipFragCustomSelect.setOnClickListener {
                 CustomTipBottomSheet().show(childFragmentManager, Constants.CUSTOM_TIP_BOTTOM_SHEET)
             }
-//            tipFragCustomSelect.setCustomTipListener { value ->
-//                onCustomTipSelected(value)
-//            }
             tipFragPlaceOrder.setOnClickListener {
                 viewModel.onPlaceOrderClick()
             }
@@ -108,10 +108,10 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
         }
     }
 
-    private fun onCustomTipSelected(tipAmount: Int) {
+    private fun onCustomTipSelected(tipAmount: Double) {
         clearAll()
         binding!!.tipFragCustomSelect.setCustomValue(tipAmount)
-        onTipSelected(Constants.TIP_CUSTOM_SELECTED, tipAmount = tipAmount*100)
+        onTipSelected(Constants.TIP_CUSTOM_SELECTED, tipAmount = (tipAmount*100).toInt())
     }
 
     private fun onTipClick(tipView: TipLineView, tipSelection: Int?) {
@@ -131,6 +131,7 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
             tipFrag15Percent.unselect()
             tipFrag18Percent.unselect()
             tipFrag20Percent.unselect()
+            binding!!.tipFragCustomSelect.setCustomValue(0.0)
             tipFragCustomSelect.unselect()
         }
     }
@@ -156,7 +157,7 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
         ToolTipBottomSheet.newInstance(titleText, bodyText).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
     }
 
-    override fun onCustomTipDone(tip: Int) {
+    override fun onCustomTipDone(tip: Double) {
         onCustomTipSelected(tip)
     }
 
