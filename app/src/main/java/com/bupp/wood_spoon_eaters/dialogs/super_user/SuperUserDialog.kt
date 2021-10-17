@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.dialogs.super_user
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater

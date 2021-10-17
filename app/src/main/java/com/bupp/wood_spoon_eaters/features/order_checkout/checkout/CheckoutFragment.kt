@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
@@ -75,12 +76,12 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     private fun initUi() {
         with(binding!!) {
-            checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
-            checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
-            checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
-            checkoutFragDeliveryFee.setWSTitleValueListener(this)
-            checkoutFragPromoCode.setDeliveryDetailsViewListener(this)
-            checkoutFragFees.setWSTitleValueListener(this)
+            checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragChangePayment.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryFee.setWSTitleValueListener(this@CheckoutFragment)
+            checkoutFragPromoCode.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragFees.setWSTitleValueListener(this@CheckoutFragment)
 
             checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
