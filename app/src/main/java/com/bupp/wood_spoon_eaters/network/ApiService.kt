@@ -28,7 +28,7 @@ interface ApiService {
 
     //New Order
 
-    @GET("cooks/{cook_id}/reviews")
+    @GET("cooks/{cook_id}/order_reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
     //Address
