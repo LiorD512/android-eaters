@@ -55,7 +55,7 @@ data class DeliveryDates(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Order (
-    @Json(name = "id") val id: Long?,
+    @Json(name = "id") val id: Long,
     @Json(name = "order_number") val orderNumber: String?,
     @Json(name = "deliver_at") val deliverAt: Date?,
     @Json(name = "created_at") val created_at: Date?,

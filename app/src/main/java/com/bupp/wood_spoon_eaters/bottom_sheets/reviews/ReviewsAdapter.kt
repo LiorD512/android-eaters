@@ -24,9 +24,12 @@ class ReviewsAdapter: ListAdapter<Comment, RecyclerView.ViewHolder>(DiffCallback
 
     inner class ReviewItemViewHolder(val binding: ReviewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(data: Comment) {
-            binding.reviewsItemName.text = data.eater.firstName
-            binding.reviewsItemComment.text = data.body
-            data.eater.thumbnail?.let { binding.reviewsItemIcon.setImage(it) }
+            with(binding){
+                reviewsItemName.text = data.eater.firstName
+                reviewsItemComment.text = data.body
+                data.eater.thumbnail?.let { reviewsItemIcon.setImage(it) }
+//                reviewsItemRating.setRating(data.)
+            }
         }
     }
 
