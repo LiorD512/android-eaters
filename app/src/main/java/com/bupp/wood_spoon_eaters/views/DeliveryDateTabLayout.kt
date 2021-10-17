@@ -74,9 +74,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     endTab.requestLayout()
                 } else {
                     val startTab = tabLayout.getTabAt(0)?.view
-                    val paramsStart = startTab?.layoutParams as MarginLayoutParams
-                    paramsStart.setMargins(Utils.toPx(21), 0, Utils.toPx(21), 0)
-                    startTab.requestLayout()
+                    val paramsStart = startTab?.layoutParams as MarginLayoutParams?
+                    paramsStart?.let{
+                        paramsStart.setMargins(Utils.toPx(21), 0, Utils.toPx(21), 0)
+                        startTab?.requestLayout()
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
-import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
+import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
@@ -25,7 +25,7 @@ class CheckoutViewModel(
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
     private val eventsManager: EventsManager
-) :ViewModel() {
+) : ViewModel() {
 
 
     val progressData = ProgressData()
@@ -69,33 +69,35 @@ class CheckoutViewModel(
             list.add(CheckoutAdapterItem(customOrderItem = customCartItem))
         }
         orderItemsData.postValue(list)
+
+//        order.deliverAt
     }
 
     private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
         Log.d(TAG, "fetchOrderDeliveryTimes: $isPendingRequest")
-        orderLiveData.value?.let{
+        orderLiveData.value?.let {
             viewModelScope.launch {
                 val result = cartManager.fetchOrderDeliveryTimes(it.id)
-                result?.let{
+                result?.let {
                     deliveryDatesLiveData.postValue(it)
                     refreshDeliveryTime()
                 }
             }
-            if(isPendingRequest){
+            if (isPendingRequest) {
                 onTimeChangeClick()
             }
         }
     }
 
-    fun refreshCheckoutPage(){
+    fun refreshCheckoutPage() {
         cartManager.refreshOrderLiveData()
     }
 
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
-            progressData.startProgress()
+//            progressData.startProgress()
             val result = cartManager.updateOrderParams(orderRequest, eventType)
-            progressData.endProgress()
+//            progressData.endProgress()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
                     cartManager.calcCurrentOrderDeliveryTime()
@@ -105,7 +107,8 @@ class CheckoutViewModel(
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
                     handleWsError(result.wsError)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -119,9 +122,9 @@ class CheckoutViewModel(
     }
 
     fun onTimeChangeClick() {
-        if(deliveryDatesLiveData.value != null){
+        if (deliveryDatesLiveData.value != null) {
             timeChangeEvent.postRawValue(TimePickerData(deliveryDatesLiveData.value!!, cartManager.getCurrentDeliveryAt()))
-        }else{
+        } else {
             fetchOrderDeliveryTimes(true)
         }
     }
@@ -155,6 +158,7 @@ class CheckoutViewModel(
     }
 
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minOrderFee: String? = null)
+
     val feeAndTaxDialogData = LiveEventData<FeesAndTaxData>()
     fun onFeesAndTaxInfoClick() {
         val curOrder = cartManager.getCurrentOrderData().value
@@ -191,7 +195,8 @@ class CheckoutViewModel(
                     }
                     wsErrorEvent.postRawValue(error)
                 }
-                else -> {}
+                else -> {
+                }
             }
             progressData.endProgress()
         }
@@ -203,7 +208,7 @@ class CheckoutViewModel(
         }
     }
 
-    private fun validateOrderData(): Boolean {
+    fun validateOrderData(): Boolean {
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
         if (paymentMethod == null) {
             validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
@@ -233,9 +238,21 @@ class CheckoutViewModel(
         }
     }
 
-    fun removeSingleOrderItemId(orderItemId: Long) {
+    //Return true if last item in cart - for showing clear dialog popup
+    fun removeSingleOrderItemId(orderItemId: Long): Boolean {
+        if (cartManager.getMenuItemsCount() == 1) {
+            return true
+        }
         viewModelScope.launch {
             cartManager.removeOrderItems(orderItemId, true)
+        }
+        return false
+    }
+
+
+    fun clearCart() {
+        viewModelScope.launch {
+            cartManager.onCartCleared()
         }
     }
 

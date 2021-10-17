@@ -50,6 +50,7 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
                 superUserDialog = SuperUserDialog()
                 superUserDialog!!.show(supportFragmentManager, Constants.SUPER_USER_DIALOG)
                 Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
+
             }
         }
 
@@ -79,6 +80,10 @@ open class BaseActivity : AppCompatActivity(), SuperUserDialog.SuperUserListener
         if (forceRestart == true) {
             restartApp()
         }
+    }
+
+    override fun onDismissSuperDialog() {
+        superUserDialog = null
     }
 
     open fun restartApp() {

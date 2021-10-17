@@ -19,6 +19,7 @@ class SuperUserDialog : DialogFragment() {
     var listener: SuperUserListener? = null
     interface SuperUserListener{
         fun onEnvironmentChanged(forceRestart: Boolean? = false)
+        fun onDismissSuperDialog()
     }
 
     private var binding: DialogSuperUserBinding? = null
@@ -86,6 +87,11 @@ class SuperUserDialog : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        listener?.onDismissSuperDialog()
+        super.onDismiss(dialog)
     }
 
     override fun onDestroyView() {

@@ -1,495 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layoutDescription="@xml/track_order_section_change_animation"
-        app:showPaths="false">
+        android:background="@color/white">
 
-    <View
-            app:layout_constraintTop_toTopOf="@+id/trackOrderDetailsHeaderTitle"
-            app:layout_constraintBottom_toBottomOf="@+id/trackOrderDetailsHeaderTitle"
-            android:id="@+id/trackOrderDetailsHeaderSpace"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-
-        <TextView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/trackOrderDetailsHeaderTitle"
-                style="@style/LatoBlack15Dark"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:letterSpacing="0.03"
-                android:paddingVertical="15dp"
-                tools:text="Order #12345678" />
-
-        <ImageView
-                app:layout_constraintTop_toTopOf="@+id/trackOrderDetailsHeaderTitle"
-                app:layout_constraintBottom_toBottomOf="@+id/trackOrderDetailsHeaderTitle"
-                app:layout_constraintStart_toEndOf="@+id/trackOrderDetailsHeaderTitle"
-                android:id="@+id/trackOrderDetailsHeaderArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="7dp"
-                android:src="@drawable/icons_down" />
-
-
-    <LinearLayout
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trackOrderDetailsHeaderTitle"
-            android:id="@+id/trackOrderDetailsSectionMainLayout"
+    <com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
+            android:id="@+id/trackOrderDetailsItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/white"
+            android:paddingBottom="15.4dp"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/dashed_grey_line" />
+    <View
+            app:layout_constraintTop_toBottomOf="@+id/trackOrderDetailsItems"
+            android:id="@+id/sep1"
+            android:background="@color/grey_white"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/trackOrderDetailsSectionOrderItemList"
+    <LinearLayout
+            android:layout_marginTop="15.4dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:id="@+id/detailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sep1">
+
+        <TextView
+                android:id="@+id/trackOrderDetailsSummery"
+                style="@style/LatoBlack17Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:text="Summary" />
+
+        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                android:id="@+id/trackOrderDetailsSubtotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp" />
+                app:title="Subtotal" />
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/dashed_grey_line" />
-
-        <LinearLayout
+        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                android:id="@+id/trackOrderDetailsDeliveryFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                app:tip_type="CHECKOUT_DELIVERY_FEE"
+                app:title="Delivery fee"/>
 
-            <TextView
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.03"
-                    android:text="Subtotal" />
-
-            <TextView
-                    android:id="@+id/trackOrderDetailsSectionSubTotal"
-                    style="@style/LatoBlack13Dark50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:letterSpacing="0.03"
-                    tools:text="$7" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                android:id="@+id/trackOrderDetailsFees"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                app:tip_type="FEES_AND_ESTIMATED_TAX"
+                app:title="Fees &amp; Estimated tax"/>
 
-            <TextView
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.03"
-                    android:text="Service fee" />
-
-            <TextView
-                    android:id="@+id/trackOrderDetailsSectionServiceFee"
-                    style="@style/LatoBlack13Dark50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:letterSpacing="0.03"
-                    tools:text="$7" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                android:id="@+id/trackOrderDetailsPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/trackOrderDetailsSectionPromoCodeLayout"
+                app:title="Promo code"/>
+
+        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                android:id="@+id/trackOrderDetailsCourier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                app:title="Tip for your courier"/>
+
+        <com.bupp.wood_spoon_eaters.views.WSTitleValueView
+                android:id="@+id/trackOrderDetailsTotal"
+                style="@style/LatoBold13Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isBold="true"
+                app:title="Total"/>
+
+
+    </LinearLayout>
+
+    <View
+            app:layout_constraintTop_toBottomOf="@+id/detailsLayout"
+            android:id="@+id/sep2"
+            android:background="@color/grey_white"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"/>
+
+    <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:id="@+id/trackOrderDetailsSectionOrderDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/sep2">
+
+        <TextView
+                style="@style/LatoBlack13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:text="Additional information"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
 
             <TextView
-                    android:id="@+id/trackOrderDetailsSectionPromoCodeName"
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
+                    style="@style/LatoBold11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
                     android:letterSpacing="0.03"
-                    android:text="Promo code" />
+                    android:text="Order placed:" />
 
             <TextView
-                    android:id="@+id/trackOrderDetailsSectionPromoCode"
-                    style="@style/LatoBlack13Dark50"
+                    android:id="@+id/trackOrderDetailsSectionDate"
+                    style="@style/LatoReg11Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:letterSpacing="0.03"
-                    tools:text="$7" />
+                    tools:text="Tue Jul 7th, 2020 at 9:54 PM" />
 
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
 
             <TextView
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
+                    style="@style/LatoBold11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
                     android:letterSpacing="0.03"
-                    android:text="Delivery fee" />
+                    android:text="Payment method:" />
 
             <TextView
-                    android:id="@+id/trackOrderDetailsSectionDeliveryFee"
-                    style="@style/LatoBlack13Dark50"
+                    android:id="@+id/trackOrderDetailsSectionPayment"
+                    style="@style/LatoReg11Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:letterSpacing="0.03"
-                    tools:text="$7" />
+                    tools:text="Visa ending in 5153" />
 
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
 
             <TextView
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
+                    style="@style/LatoBold11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
                     android:letterSpacing="0.03"
-                    android:text="Tax" />
+                    android:text="Personal info:" />
 
             <TextView
-                    android:id="@+id/trackOrderDetailsSectionTax"
-                    style="@style/LatoBlack13Dark50"
+                    android:id="@+id/trackOrderDetailsSectionUserInfo"
+                    style="@style/LatoReg11Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:letterSpacing="0.03"
-                    tools:text="$7" />
-
-        </LinearLayout>
-
-
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
-
-            <TextView
-                    android:id="@+id/trackOrderDetailsSectionMinOrderFeeTitle"
-                    android:visibility="gone"
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.03"
-                    android:text="Minimum order fee" />
-
-            <TextView
-                    android:visibility="gone"
-                    android:id="@+id/trackOrderDetailsSectionMinOrderFee"
-                    style="@style/LatoBlack13Dark50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:letterSpacing="0.03"
-                    tools:text="$7" />
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/trackOrderDetailsSectionTipLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
-
-            <TextView
-                    style="@style/LatoReg13Dark"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.03"
-                    android:text="Tip" />
-
-            <TextView
-                    android:id="@+id/trackOrderDetailsSectionTip"
-                    style="@style/LatoBlack13Dark50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:letterSpacing="0.03"
-                    tools:text="$7" />
+                    tools:text="Oren Saar, 617-909-6185" />
 
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15.4dp"
-                android:orientation="horizontal"
-                android:paddingStart="23dp"
-                android:paddingEnd="23dp">
+                android:layout_marginTop="9dp"
+                android:gravity="start"
+                android:orientation="horizontal">
 
             <TextView
-                    style="@style/LatoBold15Teal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.03"
-                    android:text="Total" />
-
-            <TextView
-                    android:id="@+id/trackOrderDetailsSectionTotal"
-                    style="@style/LatoBold15Teal"
+                    style="@style/LatoBold11Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:layout_marginEnd="4dp"
                     android:letterSpacing="0.03"
-                    tools:text="$7" />
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/trackOrderDetailsSectionOrderDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
-                android:orientation="vertical">
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="22dp"
-                    android:background="@drawable/dashed_grey_line" />
+                    android:text="Location:" />
 
             <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="23dp"
-                    android:paddingEnd="23dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                 <TextView
-                        style="@style/LatoBold11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:letterSpacing="0.03"
-                        android:text="Order placed:" />
-
-                <TextView
-                        android:id="@+id/trackOrderDetailsSectionDate"
+                        android:id="@+id/trackOrderDetailsSectionLocation1"
                         style="@style/LatoReg11Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:gravity="start"
                         android:letterSpacing="0.03"
-                        tools:text="Tue Jul 7th, 2020 at 9:54 PM" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="23dp"
-                    android:paddingEnd="23dp">
+                        tools:text="5 West 91st, New York NY " />
 
                 <TextView
-                        style="@style/LatoBold11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:letterSpacing="0.03"
-                        android:text="Payment method:" />
-
-                <TextView
-                        android:id="@+id/trackOrderDetailsSectionPayment"
+                        android:id="@+id/trackOrderDetailsSectionLocation2"
                         style="@style/LatoReg11Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:gravity="start"
                         android:letterSpacing="0.03"
-                        tools:text="Visa ending in 5153" />
-
+                        tools:text="5 West 91st, New York NY " />
             </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="match_parent"
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+            <TextView
+                    style="@style/LatoBold11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="23dp"
-                    android:paddingEnd="23dp">
+                    android:layout_marginEnd="4dp"
+                    android:letterSpacing="0.03"
+                    android:text="Note:" />
 
-                <TextView
-                        style="@style/LatoBold11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:letterSpacing="0.03"
-                        android:text="Personal info:" />
-
-                <TextView
-                        android:id="@+id/trackOrderDetailsSectionUserInfo"
-                        style="@style/LatoReg11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:letterSpacing="0.03"
-                        tools:text="Oren Saar, 617-909-6185" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
+            <TextView
+                    android:id="@+id/trackOrderDetailsSectionNote"
+                    style="@style/LatoReg11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:gravity="start"
-                    android:orientation="horizontal"
-                    android:paddingStart="23dp"
-                    android:paddingEnd="23dp">
+                    android:gravity="end"
+                    android:letterSpacing="0.03"
+                    tools:text="note" />
 
-                <TextView
-                        style="@style/LatoBold11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:letterSpacing="0.03"
-                        android:text="Location:" />
+        </LinearLayout>
 
-                <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+        <LinearLayout
+                android:paddingBottom="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
 
-                    <TextView
-                            android:id="@+id/trackOrderDetailsSectionLocation1"
-                            style="@style/LatoReg11Dark"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:letterSpacing="0.03"
-                            tools:text="5 West 91st, New York NY " />
-
-                    <TextView
-                            android:id="@+id/trackOrderDetailsSectionLocation2"
-                            style="@style/LatoReg11Dark"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:letterSpacing="0.03"
-                            tools:text="5 West 91st, New York NY " />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
+            <TextView
+                    style="@style/LatoBold11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="23dp"
-                    android:paddingEnd="23dp"
-                    android:visibility="gone">
+                    android:layout_marginEnd="4dp"
+                    android:letterSpacing="0.03"
+                    android:text="Order number:" />
 
-                <TextView
-                        style="@style/LatoBold11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:letterSpacing="0.03"
-                        android:text="Note:" />
-
-                <TextView
-                        android:id="@+id/trackOrderDetailsSectionNote"
-                        style="@style/LatoReg11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:letterSpacing="0.03"
-                        tools:text="note" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
+            <TextView
+                    android:id="@+id/trackOrderDetailsSectionOrderNumber"
+                    style="@style/LatoReg11Dark"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="23dp"
-                    android:paddingEnd="23dp">
-
-                <TextView
-                        style="@style/LatoBold11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:letterSpacing="0.03"
-                        android:text="Order number:" />
-
-                <TextView
-                        android:id="@+id/trackOrderDetailsSectionOrderNumber"
-                        style="@style/LatoReg11Dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:letterSpacing="0.03"
-                        tools:text="12345678" />
-
-            </LinearLayout>
+                    android:gravity="end"
+                    android:letterSpacing="0.03"
+                    tools:text="12345678" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</androidx.constraintlayout.motion.widget.MotionLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

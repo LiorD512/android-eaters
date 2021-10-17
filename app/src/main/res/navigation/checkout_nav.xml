@@ -17,7 +17,7 @@
                 android:defaultValue="false" />
         <argument
                 android:name="zoomLevel"
-                app:argType="string"
+                app:argType="float"
                 android:defaultValue="16" />
         <argument
                 android:name="isCheckout"

@@ -239,6 +239,16 @@
         <attr name="tip_type" />
     </declare-styleable>
 
+    <declare-styleable name="TipLineView">
+        <attr name="tipPercent" format="enum">
+            <enum name="Percent12" value="0" />
+            <enum name="Percent15" value="1" />
+            <enum name="Percent18" value="2" />
+            <enum name="Percent20" value="3" />
+            <enum name="Custom" value="4" />
+        </attr>
+    </declare-styleable>
+
     <declare-styleable name="progress_state">
         <attr name="state_selected" format="boolean" />
         <attr name="state_not_selected" format="boolean" />

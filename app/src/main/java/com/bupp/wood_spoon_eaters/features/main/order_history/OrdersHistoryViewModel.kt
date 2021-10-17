@@ -32,7 +32,6 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         initList()
         getArchivedOrders()
         getActiveOrders()
-        startSilentUpdate()
     }
 
     private fun getSkeletonList(): MutableList<OrderAdapterItemSkeleton> {
@@ -79,7 +78,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     }
 
 
-    fun getActiveOrders() {
+    private fun getActiveOrders() {
         viewModelScope.launch {
             val data = eaterDataManager.checkForTraceableOrders()
             data?.let { it ->
@@ -135,7 +134,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         }
     }
 
-    private fun startSilentUpdate() {
+    fun startSilentUpdate() {
         if (refreshRepeatedJob == null) {
             refreshRepeatedJob = repeatRequest()
         }
