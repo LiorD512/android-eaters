@@ -58,7 +58,7 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
                 Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
                 reviewFragCookName.text = order.restaurant?.firstName
-                reviewFragUserInputText.text = "Nicole"
+                reviewFragUserInputText.text = "Hey ${viewModel.getEaterName()}!, want to send us a private message?"
             }
         }
     }

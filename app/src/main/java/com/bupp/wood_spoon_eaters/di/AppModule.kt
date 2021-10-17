@@ -140,7 +140,7 @@ val appModule = module {
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
 
 
-    viewModel { ReviewsViewModel()}
+    viewModel { ReviewsViewModel(get())}
 
 
 
