@@ -144,7 +144,7 @@ val appModule = module {
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
 
 
-    viewModel { ReviewsViewModel(get())}
+    viewModel { ReviewsViewModel(get(),get())}
 
 
 
