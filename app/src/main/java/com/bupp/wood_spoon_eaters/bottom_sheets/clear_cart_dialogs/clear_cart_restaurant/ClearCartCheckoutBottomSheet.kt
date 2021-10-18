@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ClearCartCheckoutBottomSheetBinding
@@ -30,11 +29,12 @@ class ClearCartCheckoutBottomSheet(val listener: ClearCartListener): BottomSheet
         fun onClearCartCanceled()
     }
 
-    private val binding: ClearCartCheckoutBottomSheetBinding by viewBinding()
+    private var binding: ClearCartCheckoutBottomSheetBinding ?= null
     var notifyType: Int = NOTIFY_CANCEL_CLEAR_CART
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.clear_cart_checkout_bottom_sheet, container, false)
+        binding = ClearCartCheckoutBottomSheetBinding.bind(view)
         return view
     }
 
@@ -69,7 +69,7 @@ class ClearCartCheckoutBottomSheet(val listener: ClearCartListener): BottomSheet
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding!!){
             clearCartRestClearBtn.setOnClickListener {
                 notifyType = NOTIFY_CLEAR_CART
                 dismiss()
@@ -107,6 +107,11 @@ class ClearCartCheckoutBottomSheet(val listener: ClearCartListener): BottomSheet
             }
         }
         super.onDismiss(dialog)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }
