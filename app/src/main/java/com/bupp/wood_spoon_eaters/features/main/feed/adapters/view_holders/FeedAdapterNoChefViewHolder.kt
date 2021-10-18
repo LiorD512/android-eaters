@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterEmptyFeedItemBinding
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterEmptySectionItemBinding
+import com.bupp.wood_spoon_eaters.databinding.FeedAdapterNoNetworkItemBinding
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.*
 
@@ -34,6 +35,16 @@ class FeedAdapterEmptySectionViewHolder(val binding: FeedAdapterEmptySectionItem
                 noChefSection.emptySection.let{
                     binding.feedNoChefTitle.text = it.title
                     binding.feedNoChefSubtitle.text = it.subtitle
+                }
+            }
+    }
+}
+
+class FeedAdapterNoNetworkSectionViewHolder(val binding: FeedAdapterNoNetworkItemBinding, val listener: FeedMainAdapter.FeedMainAdapterListener) : RecyclerView.ViewHolder(binding.root) {
+    fun bindItems() {
+            with(binding) {
+                noNetworkSectionBtn.setOnClickListener {
+                    listener.onRefreshFeedClick()
                 }
             }
     }

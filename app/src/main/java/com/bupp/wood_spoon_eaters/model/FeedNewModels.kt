@@ -167,6 +167,7 @@ enum class FeedAdapterViewType {
     RESTAURANT_LARGE,
     EMPTY_FEED,
     EMPTY_SECTION,
+    NO_NETWORK_SECTION,
     SKELETON,
     HREF
 }
@@ -211,6 +212,11 @@ data class FeedAdapterEmptyFeed(
 data class FeedAdapterEmptySection(
     val emptySection: FeedSingleEmptySection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SECTION)
+
+@Parcelize
+data class FeedAdapterNoNetworkSection(
+    override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.NO_NETWORK_SECTION)
 
 @Parcelize
 data class FeedAdapterLargeRestaurant(
