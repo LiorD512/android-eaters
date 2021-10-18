@@ -1,59 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+
         android:layout_width="match_parent"
         android:layout_height="35dp">
 
-    <ProgressBar
-            android:id="@+id/OrderPb"
-            android:layout_gravity="center"
+    <FrameLayout
+            android:id="@+id/orderPbLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/order_progressbar_states"/>
+            android:layout_height="match_parent"
+            android:paddingHorizontal="15dp">
+
+        <ProgressBar
+                android:id="@+id/orderPb"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:progressDrawable="@drawable/order_progressbar_states" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/orderPbLoader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:indeterminate="true"
+                app:indicatorColor="@color/teal_blue"
+                app:trackColor="@color/teal_blue_50"
+                app:trackCornerRadius="10dp"
+                app:trackThickness="3dp" />
+
+    </FrameLayout>
+
 
     <com.google.android.flexbox.FlexboxLayout
-            app:flexWrap="wrap"
-            app:flexDirection="column"
-            app:alignContent="space_between"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:alignContent="space_between"
+            app:flexDirection="column"
+            app:flexWrap="wrap">
 
-            <ImageView
-                    android:padding="5dp"
-                    android:layout_width="29dp"
-                    android:layout_height="29dp"
-                    android:id="@+id/orderPbReceived"
-                    android:src="@drawable/ic_order_pb_received_selector"
-                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+        <ImageView
+                android:id="@+id/orderPbReceived"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:background="@drawable/ic_order_pb_bkg_selector"
+                android:padding="5dp"
+                android:src="@drawable/ic_order_pb_received_selector" />
 
-            <ImageView
-                    android:padding="5dp"
-                    android:layout_width="29dp"
-                    android:layout_height="29dp"
-                    android:id="@+id/orderPbPrepared"
-                    android:src="@drawable/ic_order_pb_prepared_selector"
-                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+        <ImageView
+                android:id="@+id/orderPbPrepared"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:background="@drawable/ic_order_pb_bkg_selector"
+                android:padding="5dp"
+                android:src="@drawable/ic_order_pb_prepared_selector" />
 
-            <ImageView
-                    android:padding="5dp"
-                    android:layout_width="29dp"
-                    android:layout_height="29dp"
-                    android:id="@+id/orderPbOnTheWay"
-                    android:src="@drawable/ic_order_pb_on_the_way_selector"
-                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+        <ImageView
+                android:id="@+id/orderPbOnTheWay"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:background="@drawable/ic_order_pb_bkg_selector"
+                android:padding="5dp"
+                android:src="@drawable/ic_order_pb_on_the_way_selector" />
 
-            <ImageView
-                    android:padding="5dp"
-                    android:layout_width="29dp"
-                    android:layout_height="29dp"
-                    android:id="@+id/orderPbDelivered"
-                    android:src="@drawable/ic_order_pb_delivered_selector"
-                    android:background="@drawable/ic_order_pb_bkg_selector"/>
+        <ImageView
+                android:id="@+id/orderPbDelivered"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:background="@drawable/ic_order_pb_bkg_selector"
+                android:padding="5dp"
+                android:src="@drawable/ic_order_pb_delivered_selector" />
 
     </com.google.android.flexbox.FlexboxLayout>
 

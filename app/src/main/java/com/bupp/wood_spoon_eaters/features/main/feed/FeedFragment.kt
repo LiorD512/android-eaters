@@ -239,7 +239,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-
     //Feed main adapter interface
     override fun onShareBannerClick(campaign: Campaign) {
         mainViewModel.onShareCampaignClick(campaign)
@@ -251,6 +250,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onDishSwiped() {
         viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES)
+    }
+
+    override fun onRefreshFeedClick() {
+        refreshList()
     }
 
     override fun onResume() {

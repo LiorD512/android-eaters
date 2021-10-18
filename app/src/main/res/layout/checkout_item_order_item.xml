@@ -52,7 +52,7 @@
 
     <TextView
             android:id="@+id/orderItemPrice"
-            style="@style/LatoReg13DarkGrey"
+            style="@style/LatoBold13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="-0.01"

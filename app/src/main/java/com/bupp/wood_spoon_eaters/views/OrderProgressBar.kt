@@ -4,10 +4,11 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import android.widget.ImageView
+import androidx.core.animation.doOnEnd
 import com.bupp.wood_spoon_eaters.databinding.OrderProgressBarBinding
 import com.bupp.wood_spoon_eaters.model.OrderState
 
@@ -17,88 +18,59 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     FrameLayout(context, attrs, defStyleAttr) {
 
     private var binding: OrderProgressBarBinding = OrderProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
-    var currentState = OrderState.NONE
+    var currentState = OrderState.FINALIZED
 
-    init {
-        initUi()
+
+    fun reset() {
+        Log.d(TAG, "reset pb")
+        binding.orderPb.progress = 100
     }
 
-    private fun initUi() {
-
-    }
-
-    fun setProgress(progress: Int) {
-        Log.d(TAG, "orderPb: $progress")
-        disableAllView()
-        val currentProgress = binding.OrderPb.progress
+    private fun setProgress(orderState: OrderState) {
+        Log.d(TAG, "orderState: $orderState")
+        val currentProgress = binding.orderPb.progress
+        var progress = (100/3F) * (orderState.ordinal - 1)
+        if(progress < 0){
+            progress = 0f
+        }
+        Log.d(TAG, "orderState: progress: $progress")
+        Log.d(TAG, "orderState: currentProgress: $currentProgress")
         ObjectAnimator.ofInt(
-            binding.OrderPb, "progress",
-            currentProgress, progress
+            binding.orderPb, "progress",
+            currentProgress, progress.toInt()
         ).apply {
             duration = 250
             interpolator = AccelerateDecelerateInterpolator()
             start()
+        }.doOnEnd {
+            showLoader(orderState)
         }
-        when(progress){
-            in (1..17) -> {
-                enableIcon(binding.orderPbReceived)
-            }
-            in (18..50) -> {
-                enableIcon(binding.orderPbReceived)
-                enableIcon(binding.orderPbPrepared)
-            }
-            in (50..83) -> {
-                enableIcon(binding.orderPbReceived)
-                enableIcon(binding.orderPbPrepared)
-                enableIcon(binding.orderPbOnTheWay)
-            }
-            in (83..100) -> {
-                enableIcon(binding.orderPbReceived)
-                enableIcon(binding.orderPbPrepared)
-                enableIcon(binding.orderPbOnTheWay)
-                enableIcon(binding.orderPbDelivered)
-            }
-        }
+        enableIcon(orderState)
     }
 
-    private fun disableAllView() {
-        binding.orderPbReceived.isSelected = false
-        binding.orderPbPrepared.isSelected = false
-        binding.orderPbOnTheWay.isSelected = false
-        binding.orderPbDelivered.isSelected = false
-    }
-
-    private fun enableIcon(iconView: ImageView) {
-        iconView.isSelected = true
+    private fun enableIcon(orderState: OrderState) {
+        binding.orderPbReceived.isSelected = orderState.ordinal > 0
+        binding.orderPbPrepared.isSelected = orderState.ordinal > 1
+        binding.orderPbOnTheWay.isSelected = orderState.ordinal > 2
+        binding.orderPbDelivered.isSelected = orderState.ordinal > 3
     }
 
     fun setState(orderState: OrderState) {
         Log.d(TAG, "orderState: $orderState")
         currentState = orderState
-        when(currentState){
-            OrderState.NONE -> {
-                currentState = OrderState.NONE
-                setProgress(0) // <- 33/2 - center of the first third
-            }
-            OrderState.RECEIVED -> {
-                currentState = OrderState.RECEIVED
-                setProgress(17) // <- 33/2 - center of the first third
-            }
-            OrderState.PREPARED -> {
-                currentState = OrderState.PREPARED
-                setProgress(50)
-            }
-            OrderState.ON_THE_WAY -> {
-                currentState = OrderState.ON_THE_WAY
-                setProgress(83) // <- 100 - 17 - center of the last third
-            }
-            OrderState.DELIVERED -> {
-                currentState = OrderState.DELIVERED
-                setProgress(100)
-            }
-        }
+        setProgress(orderState)
     }
 
+    private fun showLoader(orderState: OrderState) {
+        with(binding) {
+            val width = orderPb.width / 6
+            val height = orderPbLoader.height
+            val layoutParams = LayoutParams(width, height)
+            layoutParams.gravity = Gravity.CENTER_VERTICAL or Gravity.START
+            orderPbLoader.x = orderPb.x + (width * ((orderState.ordinal - 1) * 2 ))
+            orderPbLoader.layoutParams = layoutParams
+        }
+    }
 
     companion object {
         const val TAG = "wowOrderPb"

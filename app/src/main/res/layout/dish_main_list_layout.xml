@@ -233,7 +233,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="20dp">
+                android:paddingVertical="22dp">
 
             <TextView
                     style="@style/LatoBold15DarkGrey"
@@ -258,6 +258,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
+            android:layout_marginTop="22dp"
             android:orientation="vertical">
 
         <TextView

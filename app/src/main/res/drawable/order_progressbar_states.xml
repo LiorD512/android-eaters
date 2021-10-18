@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/background">
-        <shape android:shape="line">
-            <stroke
-                    android:width="3dp"
-                    android:color="@color/grey_white"/>
-            <corners
-                android:radius="1.9dp"/>
+    <item android:id="@+id/background" android:height="3dp" android:gravity="center">
+        <shape>
+            <solid android:color="@color/grey_white"/>
+            <corners android:radius="50dp"/>
         </shape>
     </item>
 
-    <item android:id="@+id/progress">
-        <clip android:clipOrientation="horizontal" android:gravity="start">
-            <shape android:shape="line">
-                <stroke
-                        android:width="3dp"
-                        android:color="@color/teal_blue"/>
+    <item android:id="@+id/progress"
+            android:height="3dp"
+            android:gravity="center"
+            android:top="1dp"
+            android:bottom="1dp"
+            android:left="1dp"
+            android:right="1dp">
+        <scale android:scaleWidth="100%">
+            <shape>
+                <solid android:color="@color/teal_blue"/>
+                <corners android:radius="50dp"/>
             </shape>
-        </clip>
+        </scale>
     </item>
 </layer-list>

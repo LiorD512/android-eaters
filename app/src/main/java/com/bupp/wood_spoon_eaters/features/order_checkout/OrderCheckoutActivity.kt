@@ -79,6 +79,9 @@ class OrderCheckoutActivity : BaseActivity() {
                         findNavController(R.id.checkoutActContainer).navigate(it)
                     }
                 }
+                OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT -> {
+                    findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_tipFragment)
+                }
             }
         }
     }

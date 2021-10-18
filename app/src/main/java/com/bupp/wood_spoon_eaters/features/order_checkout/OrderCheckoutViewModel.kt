@@ -42,7 +42,8 @@ private val eventsManager: EventsManager) : ViewModel() {
         FINISH_CHECKOUT_ACTIVITY,
         INITIALIZE_STRIPE,
         OPEN_PROMO_CODE_FRAGMENT,
-        OPEN_DISH_PAGE
+        OPEN_DISH_PAGE,
+        OPEN_TIP_FRAGMENT
     }
 
     fun handleMainNavigation(type: NavigationEventType) {

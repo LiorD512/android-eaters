@@ -34,6 +34,7 @@
     <color name="dark_50">#80252126</color>
     <color name="dark_80">#cc252126</color>
     <color name="dark_grey">#2a2a2c</color>
+    <color name="dark_grey_60">#992a2a2c</color>
     <color name="light_grey">#585858</color>
     <color name="medium_grey">#929092</color>
     <color name="purpley_grey_three">#929092</color>
@@ -48,8 +49,10 @@
     <color name="silver_50">#80dcdcdf</color>
     <color name="white">#ffffff</color>
     <color name="white_three">#e7e7e7</color>
+    <color name="white_four">#f1f1f1</color>
     <color name="white_five">#eeeeee</color>
     <color name="white_50">#80ffffff</color>
+    <color name="white_55">#8cffffff</color>
     <color name="white_60">#99ffffff</color>
     <color name="white_80">#d9ffffff</color>
     <color name="white_95">#f2ffffff</color>
@@ -62,6 +65,7 @@
     <color name="off_white_90">#f2fffaf0</color>
     <color name="switch_green">#26b8a5</color>
     <color name="teal_blue_50">#800097a3</color>
+    <color name="teal_blue_55">#8c0097a3</color>
     <color name="teal_blue_20">#330097a3</color>
     <color name="offwhite_90">#e6fffaf0</color>
     <color name="offwhite">#fffaf0</color>
@@ -72,6 +76,7 @@
     <color name="light_rose">#ffc0c3</color>
     <color name="darkish_pink">#e5455c</color>
     <color name="charcoal_grey_20">#332e2a2f</color>
+    <color name="charcoal_grey">#342e38</color>
     <color name="petrol">#00656d</color>
     <color name="charcoal_grey_29">#4a3c3c43</color>
     <color name="seafoam_blue">#7ccbd2</color>

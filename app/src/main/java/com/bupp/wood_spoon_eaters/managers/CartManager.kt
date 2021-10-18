@@ -47,7 +47,7 @@ class CartManager(
     private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
         return OrderRequest(
             cookingSlotId = currentCookingSlotId,
-            deliveryAddressId = getAddressId(),
+            deliveryAddressId = currentOrderResponse?.deliveryAddress?.id ?: getAddressId(),
             orderItemRequests = cart,
             tipPercentage = getTipPercentage()?.toFloat()
         )
@@ -212,7 +212,7 @@ class CartManager(
         Log.d(TAG, "updateOrderParams")
         currentOrderResponse?.let {
 
-            orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
+//            orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
 
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
             result.data?.let {
@@ -242,7 +242,7 @@ class CartManager(
         val result = orderRepository.updateOrder(getCurOrderId(), orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
             result.data?.let {
-                if(it.orderItems.isNullOrEmpty()){
+                if (it.orderItems.isNullOrEmpty()) {
                     /**
                      * if cart returns empty (orderItem.size == 0) - clear cart and update floating btn
                      */
@@ -250,7 +250,7 @@ class CartManager(
 //                    updateCartManagerParams(it.copy())
 //                    updateCartManagerParams(it.copy())
 //                    updateFloatingCartBtn(it.copy())
-                }else{
+                } else {
                     updateCartManagerParams(it.copy())
                 }
             }
@@ -322,6 +322,10 @@ class CartManager(
         return sumQuantity
     }
 
+    fun getMenuItemsCount(): Int {
+        return currentOrderResponse?.orderItems?.size ?: 0
+    }
+
     /** Checkout page related functions
      */
 
@@ -347,36 +351,36 @@ class CartManager(
     fun getDeliveryDatesUi() = deliveryDateUi
     fun calcCurrentOrderDeliveryTime() {
         Log.d("orderFlowTime", "calcCurrentOrderDeliveryTime")
-        currentOrderDeliveryDates?.let{ deliveryDates ->
-            currentOrderResponse?.let{ order ->
+        currentOrderDeliveryDates?.let { deliveryDates ->
+            currentOrderResponse?.let { order ->
                 val firstDeliveryDate = deliveryDates[0]!!
-                if(order.deliverAt == null){
+                if (order.deliverAt == null) {
                     Log.d("orderFlowTime", "deliverAt == null")
                     /**
                      * when deliver_at is null - it means no change of delivery time made by user.
                      */
-                    if(DateUtils.isToday(firstDeliveryDate.from)){
+                    if (DateUtils.isToday(firstDeliveryDate.from)) {
                         Log.d("orderFlowTime", "is now")
                         deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from)})")
-                    }else{
+                    } else {
                         Log.d("orderFlowTime", "first delivery time")
                         deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
                     }
-                }else{
+                } else {
                     val matchedDate = deliveryDates.find {
                         DateUtils.isDateInRange(order.deliverAt, it?.from, it?.to)
                     }
-                    if(matchedDate == null){
+                    if (matchedDate == null) {
                         Log.d("orderFlowTime", "future order but not in a valid delivery time")
 
                         deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
-                    }else{
+                    } else {
                         Log.d("orderFlowTime", "future order ")
                         val isFirst = DateUtils.isSameTime(deliveryDates[0]?.from, matchedDate.from)
-                        if(DateUtils.isNowInRange(matchedDate.from, matchedDate.to) && isFirst){
+                        if (DateUtils.isNowInRange(matchedDate.from, matchedDate.to) && isFirst) {
                             Log.d("orderFlowTime", "is now")
                             deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(order.deliverAt)})")
-                        }else{
+                        } else {
                             Log.d("orderFlowTime", "first delivery time")
                             deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(order.deliverAt))
                         }
@@ -435,7 +439,7 @@ class CartManager(
         return null
     }
 
-    fun getCurrentDeliveryAt(): Date?{
+    fun getCurrentDeliveryAt(): Date? {
         return currentOrderResponse?.deliverAt
     }
 
@@ -456,7 +460,13 @@ class CartManager(
 
     private fun updateFloatingCartBtn(order: Order?) {
         Log.d("orderFlow - cartManager", "updateFloatingCartBtn: ${order?.getAllOrderItemsQuantity()}")
-        floatingCartBtnEvent.postValue(FloatingCartEvent(order?.restaurant?.id ?: -1,order?.restaurant?.restaurantName ?: "", order?.getAllOrderItemsQuantity() ?: 0))
+        floatingCartBtnEvent.postValue(
+            FloatingCartEvent(
+                order?.restaurant?.id ?: -1,
+                order?.restaurant?.restaurantName ?: "",
+                order?.getAllOrderItemsQuantity() ?: 0
+            )
+        )
     }
 
     fun refreshOrderLiveData() {

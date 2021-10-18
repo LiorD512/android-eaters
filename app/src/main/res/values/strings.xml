@@ -9,7 +9,7 @@
     <string name="facebook_app_id">795355207569753</string>
     <string name="fb_login_protocol_scheme">fb795355207569753</string>
 
-<!--    <string name="app_name">Staging-WoodSpoonEater</string>-->
+    <!--    <string name="app_name">Staging-WoodSpoonEater</string>-->
 
 
     <string name="tool_tip_service_fee_title">Service fee</string>
@@ -126,7 +126,7 @@
     <string name="triangle_string">▼</string>
     <string name="delivery_method_deliver_to_door">delivery_to_door</string>
     <string name="delivery_method_pickup_outside">pickup_outside</string>
-    <!--    <string name="google_api_key">AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU</string>-->
+<!--    <string name="google_api_key">AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU</string>-->
 
     <string name="banner_my_location">Enter your address to discover Home Chefs that deliver to you</string>
     <string name="banner_no_location">You are seeing home chefs based on your last saved address since we’re unable to get your current location.</string>

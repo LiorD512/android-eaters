@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom|center">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginVertical="7.7dp"
+            android:background="@drawable/white_rect_7_radius"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/trackOrderMenuContact"
+                android:paddingVertical="20dp"
+                style="@style/LatoReg15Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="7.7sp"
+                android:gravity="center_horizontal"
+                android:text="Contact us"/>
+
+        <View
+                android:id="@+id/trackOrderMenuSep"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/silver_two" />
+
+        <TextView
+                android:id="@+id/trackOrderMenuCancel"
+                android:paddingVertical="20dp"
+                style="@style/LatoReg15Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="7.7sp"
+                android:gravity="center_horizontal"
+                android:text="Cancel order"/>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/trackOrderMenuClose"
+            android:paddingVertical="20dp"
+            style="@style/LatoBlack15Red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:layout_marginVertical="7.6dp"
+            android:lineSpacingExtra="7.7sp"
+            android:gravity="center_horizontal"
+            android:background="@drawable/white_rect_7_radius"
+            android:text="Cancel"/>
+</LinearLayout>

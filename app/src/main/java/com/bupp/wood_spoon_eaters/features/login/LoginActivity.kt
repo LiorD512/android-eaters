@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity() {
                     //do nothing this is default state
                 }
                 Constants.LOGIN_STATE_VERIFICATION -> {
-                    redirectToCodeVerification()
+                    redirectToPhoneVerification()
                 }
                 Constants.LOGIN_STATE_CREATE_ACCOUNT -> {
                     redirectToCreateAccountFromWelcome()
