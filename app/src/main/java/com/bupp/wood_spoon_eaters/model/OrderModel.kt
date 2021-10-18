@@ -48,8 +48,6 @@ data class DeliveryDates(
     val to: Date
 )
 
-
-
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Order (

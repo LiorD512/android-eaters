@@ -12,7 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository: UserRepository) : ViewModel() {
+
     val navigationEvent = LiveEventData<NavigationEvent>()
+    val reviewSuccess = LiveEventData<Boolean>()
     var order: Order? = null
     val reviewRequest = ReviewRequest()
 
@@ -32,7 +34,11 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
                 viewModelScope.launch(Dispatchers.IO) {
                     Log.d("wowTest", "rating =$rating, reviewText= $reviewText, supportMessage= $supportMessage")
                     val request = ReviewRequest(rating = rating, reviewText = reviewText, supportMessage = supportMessage)
-                    orderRepository.postReview(order.id, request)
+                    val result = orderRepository.postReview(7798, request)
+
+                    if (result.type == OrderRepository.OrderRepoStatus.POST_REVIEW_SUCCESS) {
+                        reviewSuccess.postRawValue(true)
+                    }
                 }
             }
         }
@@ -46,7 +52,7 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
         this.rating = rating
     }
 
-    fun getEaterName(): String{
+    fun getEaterName(): String {
         return userRepository.getUser()?.firstName ?: ""
     }
 

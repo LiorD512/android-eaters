@@ -10,7 +10,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReviewActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityReviewBinding
+    private lateinit var binding: ActivityReviewBinding
     private val viewModel by viewModel<ReviewsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +21,19 @@ class ReviewActivity : AppCompatActivity() {
 
         val order = intent.getParcelableExtra<Order>(Constants.ARG_REVIEW)
         viewModel.initExtras(order)
+
+        initObservers()
     }
 
+    private fun initObservers() {
+        viewModel.reviewSuccess.observe(this, {
+            it.getContentIfNotHandled()?.let { isSuccess ->
+                if (isSuccess) {
+                    finish()
+                }
+            }
+        })
+    }
 
 
 }

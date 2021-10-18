@@ -36,7 +36,7 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
                 activity?.finish()
             }
             viewModel.order?.let { order ->
-                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
+                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).circleCrop().into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
                 reviewFragCookName.text = order.restaurant?.firstName
             }

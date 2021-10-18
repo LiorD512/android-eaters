@@ -5,14 +5,12 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Review(
-    @Json(name = "avg_accuracy_rating")  val accuracyRating: Double,
-    @Json(name = "avg_delivery_rating")  val deliveryRating: Double,
-    @Json(name = "avg_dish_rating")  val dishRating: Double,
     @Json(name = "reviews") val comments: List<Comment>
 ): Parcelable
 
@@ -28,9 +26,11 @@ data class Metrics(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Comment(
-    @Json(name = "id") val id: Long,
-    @Json(name = "body") val body: String,
-    @Json(name = "eater") val eater: Eater
+    @Json(name = "id") val id: Long?,
+    @Json(name = "rating") val rating: Int?,
+    @Json(name = "review_text") val reviewText: String?,
+    @Json(name = "review_date") val reviewDate: Date?,
+    @Json(name = "eater") val eater: Eater?
 ): Parcelable
 
 @JsonClass(generateAdapter = true)
