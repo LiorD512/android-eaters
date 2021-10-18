@@ -116,13 +116,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onHeaderDateClick() {
-        val intent = Intent(requireContext(), ReviewActivity::class.java)
-        startActivity(intent)
-
-        //todo : return this after test
-//        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
-//        timePickerBottomSheet.setDatesFromNow(7)
-//        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
+        timePickerBottomSheet.setDatesFromNow(7)
+        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {

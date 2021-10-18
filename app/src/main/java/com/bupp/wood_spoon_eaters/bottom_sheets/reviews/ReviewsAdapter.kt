@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.bottom_sheets.reviews
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,10 +26,12 @@ class ReviewsAdapter: ListAdapter<Comment, RecyclerView.ViewHolder>(DiffCallback
     inner class ReviewItemViewHolder(val binding: ReviewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(data: Comment) {
             with(binding){
-                reviewsItemName.text = data.eater.firstName
-                reviewsItemComment.text = data.body
-                data.eater.thumbnail?.let { reviewsItemIcon.setImage(it) }
-//                reviewsItemRating.setRating(data.)
+                reviewsItemName.text = data.eater?.firstName
+                reviewsItemComment.text = data.reviewText
+                data.eater?.thumbnail?.let { reviewsItemIcon.setImage(it) }
+                val rating = data.rating?:0
+                reviewsItemRating.isVisible = rating > 0
+                reviewsItemRating.setRating(rating)
             }
         }
     }

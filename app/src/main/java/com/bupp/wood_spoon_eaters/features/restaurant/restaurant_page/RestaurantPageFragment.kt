@@ -205,7 +205,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             rating.text = "${params.rating}"
-            ratingLayout.isVisible = params.rating ?: 0f > 0
+//            ratingLayout.isVisible = params.rating ?: 0f > 0
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
@@ -225,7 +225,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             //ratings
-            ratingCount.isVisible = restaurant.reviewCount > 0
+//            ratingCount.isVisible = restaurant.reviewCount > 0
             ratingCount.text = "(${restaurant.reviewCount} ratings)"
 
             //favorite

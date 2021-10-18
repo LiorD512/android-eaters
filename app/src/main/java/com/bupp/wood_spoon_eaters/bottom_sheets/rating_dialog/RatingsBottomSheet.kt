@@ -60,9 +60,9 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
         with(binding!!){
             ratingsDialogCloseBtn.setOnClickListener { dismiss() }
 
-            ratingsDialogAccuracyRating.text = "${ratings.accuracyRating}"
-            ratingsDialogDeliveryRating.text = "${ratings.deliveryRating}"
-            ratingsDialogTasteRating.text = "${ratings.dishRating}"
+//            ratingsDialogAccuracyRating.text = "${ratings.accuracyRating}"
+//            ratingsDialogDeliveryRating.text = "${ratings.deliveryRating}"
+//            ratingsDialogTasteRating.text = "${ratings.dishRating}"
 
             ratings.comments.let{
                 ratingsDialogDishesRecyclerView.layoutManager = LinearLayoutManager(context)
