@@ -16,7 +16,6 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
@@ -41,10 +40,8 @@ import java.util.*
 
 
 class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
-    TipCourierDialog.TipCourierDialogListener,
     ContactUsDialog.ContactUsDialogListener,
-    ShareDialog.ShareDialogListener,
-    ActiveOrderTrackerDialog.ActiveOrderTrackerDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener,
+    ShareDialog.ShareDialogListener, MediaUtils.MediaUtilListener, CampaignBanner.CampaignBannerListener,
     CampaignBottomSheet.CampaignBottomSheetListener,
     WSFloatingButton.WSFloatingButtonListener, UpSaleNCartBottomSheet.UpsaleNCartBSListener, MainActivityTabLayout.MainActivityTabLayoutListener {
 
@@ -306,7 +303,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     }
 
-    override fun onContactUsClick() {
+    fun onContactUsClick() {
         val phone = viewModel.getContactUsPhoneNumber()
         Utils.callPhone(this, phone)
     }
@@ -354,9 +351,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    override fun onTipDone(tipAmount: Int) {
-        Toast.makeText(this, "onTipDone $tipAmount", Toast.LENGTH_SHORT).show()
-    }
 
     override fun onCallSupportClick() {
         onContactUsClick()

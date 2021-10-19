@@ -9,17 +9,18 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCheckoutBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.Constants.Companion.TIP_NOT_SELECTED
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
-import com.bupp.wood_spoon_eaters.custom_views.TipPercentView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
@@ -38,10 +39,11 @@ import kotlin.collections.ArrayList
 
 
 class CheckoutFragment : Fragment(R.layout.checkout_fragment),
-    TipPercentView.TipPercentViewListener, TipCourierDialog.TipCourierDialogListener, CustomDetailsView.CustomDetailsViewListener,
+    CustomDetailsView.CustomDetailsViewListener,
     NationwideShippingChooserDialog.NationwideShippingChooserListener,
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
-    SingleColumnTimePickerBottomSheet.TimePickerListener {
+    SingleColumnTimePickerBottomSheet.TimePickerListener,
+    ClearCartCheckoutBottomSheet.ClearCartListener {
 
     private val binding: CheckoutFragmentBinding by viewBinding()
 
@@ -74,7 +76,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun initUi() {
-        binding.checkoutFragTipPercentView.setTipPercentViewListener(this)
         binding.checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this)
         binding.checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this)
         binding.checkoutFragChangePayment.setDeliveryDetailsViewListener(this)
@@ -87,11 +88,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
             }
             checkoutFragPlaceOrderBtn.setOnClickListener {
-                viewModel.onPlaceOrderClick()
-            }
-
-            checkoutFragCourierTip.setOnClickListener {
-                onToolTipClick(Constants.TOOL_TIP_COURIER_TIP)
+                if (viewModel.validateOrderData()) {
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT)
+                }
             }
             checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
             initOrderItemsView()
@@ -122,7 +121,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
                 override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
                     val orderItemId = item.customOrderItem.orderItem.id
-                    viewModel.removeSingleOrderItemId(orderItemId)
+                    val showDialog = viewModel.removeSingleOrderItemId(orderItemId)
+                    if(showDialog){
+                        ClearCartCheckoutBottomSheet.newInstance(this@CheckoutFragment)
+                            .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
+                    }
 //                    viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customOrderItem)
                 }
 
@@ -144,11 +147,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 binding.checkoutFragmentPb.hide()
             }
         })
-        viewModel.onCheckoutDone.observe(viewLifecycleOwner, {
-            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE)
-        })
+
         viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
             handleOrderDetails(orderData)
+            initMap(orderData)
         })
         viewModel.deliveryDatesLiveData.observe(viewLifecycleOwner, {
             handleOrderDeliveryDates(it)
@@ -167,7 +169,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
         })
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            it.getContentIfNotHandled()?.let { data->
+            it.getContentIfNotHandled()?.let { data ->
                 FeesAndTaxBottomSheet.newInstance(data.fee, data.tax, data.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
             }
         })
@@ -202,6 +204,17 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.orderItemsData.observe(viewLifecycleOwner, {
             handleOrderItemsData(it)
         })
+    }
+
+    private fun initMap(orderData: Order?) {
+        val bundle = Bundle()
+        bundle.putFloat("zoom_level", 17f)
+        bundle.putBoolean("show_btns", false)
+        bundle.putBoolean("isCheckout", true)
+        bundle.putParcelable("order", orderData)
+        childFragmentManager.beginTransaction()
+            .add(R.id.checkoutFragMap, AddressVerificationMapFragment::class.java, bundle)
+            .commit()
     }
 
     private fun handleOrderItemsData(list: List<CheckoutAdapterItem>) {
@@ -283,11 +296,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                         checkoutFragNationwideSelect.visibility = View.GONE
                     }
                 }
-                order.tipPercentage?.let { tip ->
-                    if (tip != 0) {
-                        checkoutFragTipPercentView.selectDefaultTip(tip)
-                    }
-                }
             }
             updatePriceUi(order)
         } else {
@@ -332,7 +340,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragSubtotal.setValue("$$allDishSubTotalStr")
             checkoutFragTotalBeforeTip.setValue(curOrder.totalBeforeTip?.formatedValue ?: "")
 
-            curOrder.total?.formatedValue?.let {
+            curOrder.totalBeforeTip?.formatedValue?.let {
                 checkoutFragPlaceOrderBtn.updateFloatingBtnPrice(it)
             }
         }
@@ -341,26 +349,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onShippingMethodChoose(chosenShippingMethod: ShippingMethod) {
         viewModel.updateOrderShippingMethod(shippingService = chosenShippingMethod.code)
         binding.checkoutFragNationwideSelect.updateSubTitle(chosenShippingMethod.name)
-    }
-
-    override fun onTipIconClick(tipSelection: Int?) {
-        if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-            TipCourierDialog(this).show(childFragmentManager, Constants.TIP_COURIER_DIALOG_TAG)
-        } else {
-            if (tipSelection == TIP_NOT_SELECTED) {
-                viewModel.updateOrderParams(
-                    OrderRequest(tipPercentage = 0f, tip = 0),
-                    Constants.EVENT_CLICK_TIP
-                ) //if server fix this issue (accept tip_percentage=null as no tip) you can delete this case
-            } else {
-                viewModel.updateOrderParams(OrderRequest(tipPercentage = tipSelection?.toFloat()), Constants.EVENT_CLICK_TIP)
-            }
-        }
-    }
-
-    override fun onTipDone(tipAmount: Int) {
-        binding.checkoutFragTipPercentView.setCustomTipValue(tipAmount)
-        viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount * 100), Constants.EVENT_CLICK_TIP)
     }
 
     override fun onCustomDetailsClick(type: Int) {
@@ -415,5 +403,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onWSErrorDone() {
         viewModel.refreshCheckoutPage()
+    }
+
+    override fun onPerformClearCart() {
+        viewModel.clearCart()
+    }
+
+    override fun onClearCartCanceled() {
+       //do nothing
     }
 }

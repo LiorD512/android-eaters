@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -121,7 +122,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 deliveryAddress?.apply{
                     singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }
-                singleOrderDetailsStatus.updateSubTitle(status?.uppercase() ?: "N/A")
+                singleOrderDetailsStatus.updateSubTitle(status.name.uppercase())
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
                 orderItems?.let{
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)
@@ -135,7 +136,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                     singleOrderDetailsPromoCode.setValue("${discount?.formatedValue}")
                 }
 
-                if(status == "cancelled"){
+                if(status == OrderState.CANCELLED){
                     singleOrderDetailsRate.isEnabled = false
                     singleOrderDetailsRate.alpha = 0.5f
                 }

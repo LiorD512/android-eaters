@@ -141,6 +141,7 @@ class Constants {
         const val EDIT_PROFILE_BOTTOM_SHEET = "edit_profile_bottom_sheet"
         const val FEES_AND_tAX_BOTTOM_SHEET = "fees_and_tax_bottom_sheet"
         const val UPSALE_AND_CART_BOTTOM_SHEET = "upsale_and_cart_bottom_sheet"
+        const val CUSTOM_TIP_BOTTOM_SHEET = "custom_tip_bottom_sheet"
 
         //Location navigation destination labels
         const val LOCATION_DESTINATION_SELECT_ADDRESS = "select_address"
@@ -162,8 +163,9 @@ class Constants {
 
         //Tip courier Selection arg
         const val TIP_NOT_SELECTED = 0
-        const val TIP_10_PERCENT_SELECTED = 10
+        const val TIP_12_PERCENT_SELECTED = 12
         const val TIP_15_PERCENT_SELECTED = 15
+        const val TIP_18_PERCENT_SELECTED = 18
         const val TIP_20_PERCENT_SELECTED = 20
         const val TIP_CUSTOM_SELECTED = 666
 

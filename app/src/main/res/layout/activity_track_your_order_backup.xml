@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layoutDescription="@xml/track_your_order_page_scene">
+
+    <androidx.legacy.widget.Space
+            android:id="@+id/trackOrderActSpace"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="360dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+<!--    <ImageView-->
+<!--            android:id="@+id/trackOrderActMap"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="360dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            tools:src="@drawable/event_logo_bkg" />-->
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/trackOrderActTopHeader"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:alpha="0"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:cardElevation="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/trackOrderActHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:alpha="0"
+            android:elevation="5dp"
+            android:src="@drawable/ic_search_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/trackOrderActTopHeaderRestaurantName"
+            style="@style/LatoBlack15DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15.4dp"
+            android:alpha="0"
+            android:elevation="15dp"
+            android:text="Israeli in The Big Apple"
+            app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/trackOrderActTopHeaderChefName"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:alpha="0"
+            android:elevation="15.4dp"
+            android:paddingTop="3dp"
+            android:text="by Assaf Beer"
+            android:textColor="@color/very_light_grey"
+            app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
+            app:layout_constraintTop_toBottomOf="@id/trackOrderActTopHeaderRestaurantName" />
+
+    <ImageView
+            android:id="@+id/trackOrderActBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:elevation="5dp"
+            android:src="@drawable/ic_back_grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/trackOrderActShareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:elevation="5dp"
+            android:src="@drawable/ic_share_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/trackOrderActMainList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <FrameLayout
+                    android:id="@+id/trackOrderMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/trackOrderActList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

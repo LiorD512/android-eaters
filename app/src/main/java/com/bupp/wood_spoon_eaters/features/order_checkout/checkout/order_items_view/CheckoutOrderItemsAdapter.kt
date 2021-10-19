@@ -20,7 +20,7 @@ import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemVie
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 import java.text.DecimalFormat
 
-class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener) : SwipeableAdapter<CheckoutAdapterItem>(DiffCallback()) {
+class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener?) : SwipeableAdapter<CheckoutAdapterItem>(DiffCallback()) {
 
     interface CheckoutOrderItemsAdapterListener {
         fun onDishSwipedAdd(item: CheckoutAdapterItem)
@@ -38,7 +38,6 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
         val item = getItem(position)
         holder as OrderItemViewHolder
         holder.bindItem(item, listener)
-
     }
 
     class OrderItemViewHolder(val binding: CheckoutItemOrderItemBinding) : SwipeableBaseItemViewHolder(binding.root) {
@@ -46,7 +45,7 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
         override val isSwipeable: Boolean = true
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(item: CheckoutAdapterItem, listener: CheckoutOrderItemsAdapterListener) {
+        fun bindItem(item: CheckoutAdapterItem, listener: CheckoutOrderItemsAdapterListener?) {
             val orderItem = item.customOrderItem.orderItem
             with(binding) {
                 val dish: Dish = orderItem.dish
@@ -69,18 +68,18 @@ class CheckoutOrderItemsAdapter(val listener: CheckoutOrderItemsAdapterListener)
                     orderItemNote.text = builder
                 }
                 root.setOnClickListener {
-                    listener.onDishClicked(item.customOrderItem)
+                    listener?.onDishClicked(item.customOrderItem)
                 }
             }
         }
     }
 
     override fun onDishSwipedAdd(item: CheckoutAdapterItem) {
-        listener.onDishSwipedAdd(item)
+        listener?.onDishSwipedAdd(item)
     }
 
     override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
-        listener.onDishSwipedRemove(item)
+        listener?.onDishSwipedRemove(item)
     }
 
 

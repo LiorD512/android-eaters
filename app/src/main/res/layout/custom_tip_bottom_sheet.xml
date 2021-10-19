@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical">
+
+    <com.bupp.wood_spoon_eaters.custom_views.HeaderView
+            android:id="@+id/customTipHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7.7dp"
+            app:isWithSep="true"
+            app:title="Tip courier"
+            app:type="HEADER_VIEW_TYPE_CLOSE_TITLE" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_periwinkle_50" />
+
+
+    <TextView
+            style="@style/LatoReg13Dark50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15.7dp"
+            android:text="Add any number (in Dollars) " />
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="23.5dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+        <TextView
+                style="@style/LatoReg15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="$"
+                android:textAlignment="center"
+                android:background="@null"
+                android:textColorHint="@color/dark_50" />
+
+        <EditText
+                android:id="@+id/customTipTipAmount"
+                style="@style/LatoReg15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="Tip amount"
+                android:inputType="numberDecimal"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColorHint="@color/dark_50" />
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="7.7dp"
+            android:layout_marginTop="35.6dp"
+            android:layout_marginEnd="7.7dp"
+            android:background="@color/silver" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/customTipDoneBtn"
+            style="@style/LatoBold15Teal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="19.3dp"
+            app:title="Done" />
+</LinearLayout>
