@@ -1,12 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.reviews.review_activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.ActivityReviewBinding
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.bupp.wood_spoon_eaters.R
+
 
 class ReviewActivity : AppCompatActivity() {
 
@@ -35,5 +39,11 @@ class ReviewActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        if(findNavController(R.id.reviewsContainerFragment).currentDestination?.label == "fragment_review_experience"){
+            viewModel.ignoreTrigger()
+        }
+        super.onBackPressed()
+    }
 
 }

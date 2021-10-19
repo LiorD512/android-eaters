@@ -44,7 +44,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         }else{
              if(curEnvironment?.isNotEmpty() == true){
                  Log.d(TAG, "curEnvironment: $curEnvironment")
-                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v2/"
+                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/"
             }else{
                  finalUrl = BuildConfig.BASE_URL
             }

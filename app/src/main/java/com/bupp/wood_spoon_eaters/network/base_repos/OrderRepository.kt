@@ -19,6 +19,7 @@ interface OrderRepositoryInterface{
     suspend fun getAllOrders(): ResultHandler<ServerResponse<List<Order>>>
     suspend fun postReport(orderId: Long, report: Reports): ResultHandler<ServerResponse<Any>>
     suspend fun postReview(orderId: Long, reviewRequest: ReviewRequest): ResultHandler<ServerResponse<Any>>
+    suspend fun ignoreReview(orderId: Long): ResultHandler<ServerResponse<Any>>
 }
 
 class OrderRepositoryImpl(private val service: ApiService) : OrderRepositoryInterface {
@@ -74,6 +75,10 @@ class OrderRepositoryImpl(private val service: ApiService) : OrderRepositoryInte
 
     override suspend fun postReview(orderId: Long, reviewRequest: ReviewRequest): ResultHandler<ServerResponse<Any>>{
         return safeApiCall { service.postReview(orderId, reviewRequest) }
+    }
+
+    override suspend fun ignoreReview(orderId: Long): ResultHandler<ServerResponse<Any>>{
+        return safeApiCall { service.ignoreReview(orderId) }
     }
 
 }

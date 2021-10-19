@@ -2,21 +2,30 @@ package com.bupp.wood_spoon_eaters.managers
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 class EaterDataManager(
     val context: Context, private val locationManager: LocationManager, private val eventsManager: EventsManager,
     private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository
-) {
+): LifecycleObserver {
 
     val currentEater: Eater?
     get() = userRepository.getUser()
+
+
+    init {
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+    }
 
     suspend fun refreshCurrentEater() {
         userRepository.initUserRepo()
@@ -140,7 +149,7 @@ class EaterDataManager(
     /////////////////////////////////////////
 
     fun getTriggers() = triggerEvent
-    private val triggerEvent = MutableLiveData<Trigger>()
+    private val triggerEvent = LiveEventData<Trigger>()
 
     suspend fun checkForTriggers() {
         val result = eaterDataRepository.getTriggers()
@@ -148,7 +157,7 @@ class EaterDataManager(
             EaterDataRepository.EaterDataRepoStatus.GET_TRIGGERS_SUCCESS -> {
                 result.data?.let {
                     Log.d(TAG, "checkForTraceableOrders - success")
-                    triggerEvent.postValue(it)
+                    triggerEvent.postRawValue(it)
                 }
             }
             EaterDataRepository.EaterDataRepoStatus.GET_TRIGGERS_FAILED -> {
@@ -181,6 +190,14 @@ class EaterDataManager(
 
     fun getCartAddressId(): Long? {
         return getLastChosenAddress()?.id
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onAppStart() {
+        Log.d(TAG,"onAppStart")
+        MainScope().launch {
+            checkForTriggers()
+        }
     }
 
 

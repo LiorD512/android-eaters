@@ -14,25 +14,25 @@ interface ApiService {
 
 
     //General
-    @GET("eaters/utils/meta")
+    @GET("v2/eaters/utils/meta")
     suspend fun getMetaData(): ServerResponse<MetaDataModel>
 
     //Login end-points
     @FormUrlEncoded
-    @POST("eaters/auth/get_code")
+    @POST("v2/eaters/auth/get_code")
     suspend fun getCode(@Field("phone_number") phone: String): ServerResponse<Any>
 
     @FormUrlEncoded
-    @POST("eaters/auth/validate_code")
+    @POST("v2/eaters/auth/validate_code")
     suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
     //New Order
 
-    @GET("cooks/{cook_id}/order_reviews")
+    @GET("v2/cooks/{cook_id}/order_reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
     //Address
-    @DELETE("eaters/me/addresses/{address_id}")
+    @DELETE("v2/eaters/me/addresses/{address_id}")
     suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
 
     //Feed
@@ -44,7 +44,7 @@ interface ApiService {
 //        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
 //    ): ServerResponse<List<FeedFlow>>
 
-    @GET("eaters/me/feed")
+    @GET("v2/eaters/me/feed")
     suspend fun getFeed(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
@@ -55,21 +55,21 @@ interface ApiService {
         @Url url: String,
     ): ServerResponse<List<FeedSectionCollectionItem>>
 
-    @GET("eaters/me/triggers")
+    @GET("v2/eaters/me/triggers")
     suspend fun getTriggers(): ServerResponse<Trigger>
 
-    @GET("eaters/me/stripe/ephemeral_key")
+    @GET("v2/eaters/me/stripe/ephemeral_key")
     fun getEphemeralKey(): Observable<ResponseBody>
 
-    @GET("eaters/me/campaigns/active")
+    @GET("v2/eaters/me/campaigns/active")
     suspend fun getUserCampaign(): ServerResponse<List<Campaign>>
 
     @FormUrlEncoded
-    @POST("eaters/me/campaigns/interactions/referee")
+    @POST("v2/eaters/me/campaigns/interactions/referee")
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
 
     /** Restaurant **/
-    @GET("cooks/{cook_id}")
+    @GET("v2/cooks/{cook_id}")
     suspend fun getRestaurant(
         @Path(value = "cook_id", encoded = true) restaurantId: Long,
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
@@ -77,45 +77,45 @@ interface ApiService {
     ): ServerResponse<Restaurant>
 
     //cook likes
-    @POST("eaters/me/likes/cooks/{id}")
+    @POST("v2/eaters/me/likes/cooks/{id}")
     suspend fun likeCook(@Path(value = "id", encoded = true) cookId: Long): ServerResponse<Any>
 
-    @DELETE("eaters/me/likes/cooks/{id}")
+    @DELETE("v2/eaters/me/likes/cooks/{id}")
     suspend fun unlikeCook(@Path(value = "id", encoded = true) cookId: Long): ServerResponse<Any>
 
     @FormUrlEncoded
-    @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
+    @PATCH("v2/eaters/me/campaigns/interactions/{user_interaction_id}")
     suspend fun updateCampaignStatus(@Path(value = "user_interaction_id", encoded = true) userInteractionId: Long, @Field("user_interaction_status") status: String): ServerResponse<Any>
 
     //Utils
-    @POST("eaters/me/presigned_urls")
+    @POST("v2/eaters/me/presigned_urls")
     suspend fun postEaterPreSignedUrl(): ServerResponse<PreSignedUrl>
 
     //Eater
-    @GET("eaters/me")
+    @GET("v2/eaters/me")
     suspend fun getMe(): ServerResponse<Eater>
 
-    @POST("eaters/me")
+    @POST("v2/eaters/me")
     suspend fun postMe(@Body eater: EaterRequest): ServerResponse<Eater>
 
-    @POST("eaters/me/addresses")
+    @POST("v2/eaters/me/addresses")
     suspend fun postNewAddress(@Body addressRequest: AddressRequest): ServerResponse<Address>
 
 
-    @POST("eaters/me")
+    @POST("v2/eaters/me")
     suspend fun postDeviceDetails(@Body device: DeviceDetails): ServerResponse<Any>
 
 
-    @POST("eaters/me")
+    @POST("v2/eaters/me")
     suspend fun postEaterNotificationGroup(@Body eater: SettingsRequest): ServerResponse<Eater>
 
-    @DELETE("eaters/me")
+    @DELETE("v2/eaters/me")
     suspend fun deleteMe(): Response<Unit>
 
-    @POST("eaters/me/searches")
+    @POST("v2/eaters/me/searches")
     suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
 
-    @GET("cooks/{cook_id}")
+    @GET("v2/cooks/{cook_id}")
     suspend fun getCook(
         @Path(value = "cook_id", encoded = true) cookId: Long,
         @Query("address_id") addressId: Long? = null,
@@ -126,7 +126,7 @@ interface ApiService {
     ): ServerResponse<Cook>
 
     //New Order calls
-    @GET("menu_items/{menu_item_id}/dish")
+    @GET("v2/menu_items/{menu_item_id}/dish")
     suspend fun getSingleDish(
         @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
         @Query("lat") lat: Double? = null,
@@ -135,47 +135,51 @@ interface ApiService {
         @Query("timestamp") timestamp: String? = null
     ): ServerResponse<FullDish>
 
-    @POST("eaters/me/orders")
+    @POST("v2/eaters/me/orders")
     suspend fun postOrder(@Body orderRequest: OrderRequest): ServerResponse<Order>
 
-    @POST("eaters/me/orders/{order_id}")
+    @POST("v2/eaters/me/orders/{order_id}")
     suspend fun updateOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Body orderRequest: OrderRequest): ServerResponse<Order>
 
-    @POST("eaters/me/orders/{order_id}/checkout")
+    @POST("v2/eaters/me/orders/{order_id}/checkout")
     suspend fun checkoutOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("source_id") cardId: String? = null): ServerResponse<Any>
 
-    @DELETE("eaters/me/orders/{order_id}/")
+    @DELETE("v2/eaters/me/orders/{order_id}/")
     suspend fun cancelOrder(@Path(value = "order_id", encoded = true) orderId: Long, @Query("notes") notes: String? = null): ServerResponse<Any>
 
-    @GET("eaters/me/orders/{order_id}/ups_shipping_rates")
+    @GET("v2/eaters/me/orders/{order_id}/ups_shipping_rates")
     suspend fun getUpsShippingRates(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<ShippingMethod>>
 
-    @GET("eaters/me/orders/{order_id}/delivery_times")
+    @GET("v2/eaters/me/orders/{order_id}/delivery_times")
     suspend fun getOrderDeliveryTimes(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<List<DeliveryDates>>
 
     //Eater Data
-    @GET("eaters/me/orders/trackable")
+    @GET("v2/eaters/me/orders/trackable")
     suspend fun getTraceableOrders(): ServerResponse<List<Order>>
 
-    @GET("eaters/me/favorites")
+    @GET("v2/eaters/me/favorites")
     suspend fun getEaterFavorites(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
     ): ServerResponse<Search>
 
-    @GET("eaters/me/orders")
+    @GET("v2/eaters/me/orders")
     suspend fun getOrders(): ServerResponse<List<Order>>
 
-    @GET("eaters/me/orders/{order_id}")
+    @GET("v2/eaters/me/orders/{order_id}")
     suspend fun getOrderById(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Order>
 
     //Post Report
-    @POST("eaters/me/orders/{order_id}/reports")
+    @POST("v2/eaters/me/orders/{order_id}/reports")
     suspend fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): ServerResponse<Any>
 
     //Post Review
-    @POST("eaters/me/orders/{order_id}/order_reviews")
+    @POST("v2/eaters/me/orders/{order_id}/order_reviews")
     suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
+
+    //Ignore Review
+    @POST("v2/eaters/me/orders/{order_id}/reviews/ignore")
+    suspend fun ignoreReview(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Any>
 
     @PUT
     suspend fun uploadAsset(@Url uploadUrl: String, @Body photo: RequestBody): ResponseBody
