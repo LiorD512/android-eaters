@@ -76,9 +76,13 @@ class FeedViewModel(
 //                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
-                        MTLogger.c(TAG, "getFeedWith - Success")
-                        handleHrefApiCalls(feedRepository.feed)
-                        feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
+                        val hrefCount = getHrefItemsCount(feedRepository.feed)
+                        MTLogger.c(TAG, "getFeedWith - Success - hrefCount: $hrefCount  ")
+                        if(hrefCount > 0){
+                            handleHrefApiCalls(feedRepository.feed, hrefCount)
+                        }else{
+                            feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
+                        }
 //                        progressData.endProgress()
                     }
                     else -> {
@@ -96,12 +100,27 @@ class FeedViewModel(
         }
     }
 
-    private fun handleHrefApiCalls(feed: List<FeedAdapterItem>?) {
+    private fun getHrefItemsCount(feed: List<FeedAdapterItem>?): Int {
+        var hrefCounter = 0
+        feed?.let {
+            it.forEach { feedAdapterItem ->
+                if (feedAdapterItem is FeedAdapterHref) {
+                    hrefCounter++
+                }
+            }
+        }
+        MTLogger.c(TAG, "getHrefItemsCount: $hrefCounter")
+        return hrefCounter
+    }
+
+    private fun handleHrefApiCalls(feed: List<FeedAdapterItem>?, hrefCount: Int) {
         viewModelScope.launch {
+            var counter = 0
             feed?.forEach { feedAdapterItem ->
                 if(feedAdapterItem is FeedAdapterHref){
                     feedAdapterItem.href?.let{
                         val feedRepository = feedRepository.getFeedHref(it)
+                        counter++
                         when (feedRepository.type) {
                             FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
@@ -110,8 +129,10 @@ class FeedViewModel(
                                 MTLogger.c(TAG, "handleHrefApiCalls - GenericError")
                             }
                             FeedRepository.FeedRepoStatus.HREF_SUCCESS -> {
-                                MTLogger.c(TAG, "handleHrefApiCalls - Success")
-                                feedResultData.postValue(FeedLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
+                                MTLogger.c(TAG, "handleHrefApiCalls - Success counter: $counter, hrefCounter: $hrefCount")
+                                if(counter == hrefCount){
+                                    feedResultData.postValue(FeedLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
+                                }
                             }
                             else -> {
                                 MTLogger.c(TAG, "handleHrefApiCalls - NetworkError")
@@ -119,7 +140,6 @@ class FeedViewModel(
                         }
                     }
                 }
-
             }
         }
     }
