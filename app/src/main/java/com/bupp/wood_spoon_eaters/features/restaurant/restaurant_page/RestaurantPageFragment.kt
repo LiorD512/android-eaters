@@ -303,9 +303,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
-        if (dishSections?.animateList == true)
-            binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
-        adapterDishes?.submitList(dishSections?.dishes)
+        if(dishSections?.dishes.isNullOrEmpty()){
+            binding.restaurantMainListLayout.restaurantNoNetwork.visibility= View.VISIBLE
+            binding.restaurantMainListLayout.restaurantMainLayout.visibility= View.GONE
+        }else{
+            if (dishSections?.animateList == true)
+                binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+            adapterDishes?.submitList(dishSections?.dishes)
+        }
     }
 
 

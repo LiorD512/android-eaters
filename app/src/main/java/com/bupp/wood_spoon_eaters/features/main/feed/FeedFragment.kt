@@ -163,8 +163,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
         if (feedArr.isEmpty()) {
-            showEmptyLayout()
-            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
+//            feedAdapter.setDataList(arrayListOf(FeedAdapterNoNetworkSection(0)))
+//            showEmptyLayout()
+//            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
         } else {
             binding.feedFragRefreshLayout.isRefreshing = false
             binding.feedFragEmptyLayout.visibility = View.GONE

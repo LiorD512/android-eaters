@@ -74,6 +74,8 @@ class RestaurantPageViewModel(
                         handleDeliveryTimingSection(restaurant)
                         chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
                     }
+                }else if(result.type == SERVER_ERROR){
+                    dishListLiveData.postValue(DishListData(emptyList()))
                 }
             }
         }
