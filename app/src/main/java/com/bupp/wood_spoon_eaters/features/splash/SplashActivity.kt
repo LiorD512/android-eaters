@@ -106,7 +106,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
         viewModel.initFCMAndRefreshToken()
         val intent = Intent(this, MainActivity::class.java)
         cookId?.let {
-            intent.putExtra("cook_id", it.toLong())
+            intent.putExtra("chef_id", it.toLong())
         }
         menuItemId?.let {
             intent.putExtra("menu_item_id", it.toLong())
@@ -130,8 +130,8 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     private val callback = Branch.BranchReferralInitListener { linkProperties, _ ->
         linkProperties?.let {
             Log.d(TAG, "Branch.io intent $linkProperties")
-            if (it.has("cook_id")) {
-                cookId = it.get("cook_id") as String
+            if (it.has("chef_id")) {
+                cookId = (it.get("chef_id") as Int).toString()
             }
             if (it.has("menu_item_id")) {
                 menuItemId = it.get("menu_item_id") as String

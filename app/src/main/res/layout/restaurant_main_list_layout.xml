@@ -5,8 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingBottom="20dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
 
     <FrameLayout
             android:id="@+id/someLayout"
@@ -82,9 +82,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="11.5dp"
                     android:layout_marginBottom="19dp"
-                    android:paddingHorizontal="15.4dp"
-                    android:drawablePadding="5dp"
                     android:drawableStart="@drawable/ic_delivery_man"
+                    android:drawablePadding="5dp"
+                    android:paddingHorizontal="15.4dp"
                     android:text="Choose an exact delivery time at checkout" />
 
 
@@ -95,16 +95,16 @@
 
             <LinearLayout
                     android:id="@+id/restaurantTimePickerViewLayout"
-                    android:animateLayoutChanges="true"
-                    android:background="@drawable/grey_white_cornered_rag15_rect"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15.4dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="23dp"
-                    android:layout_marginStart="15.4dp"
+                    android:animateLayoutChanges="true"
+                    android:background="@drawable/grey_white_cornered_rag15_rect"
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp">
 
                 <TextView
                         android:id="@+id/restaurantTimePickerView"
@@ -117,11 +117,11 @@
                         app:drawableStartCompat="@drawable/ic_time_rest" />
 
                 <ImageView
-                        android:visibility="gone"
                         android:id="@+id/restaurantTimePickerViewIcon"
-                        android:src="@drawable/ic_arrow"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow"
+                        android:visibility="gone" />
 
 
             </LinearLayout>
