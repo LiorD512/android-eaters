@@ -91,7 +91,7 @@
                     android:layout_marginTop="14.6dp"
                     android:layout_marginEnd="15.4dp"
                     app:hint="Share your experience with our WoodSpoon community (optional)"
-                    app:maxChar="50"
+                    app:maxChar="300"
                     app:maxLines="4" />
 
             <LinearLayout
@@ -150,7 +150,7 @@
                     android:layout_marginTop="14.6dp"
                     android:layout_marginEnd="15.4dp"
                     app:hint="Type your message here… (optional)"
-                    app:maxChar="50"
+                    app:maxChar="300"
                     app:maxLines="4" />
         </LinearLayout>
 

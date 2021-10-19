@@ -33,7 +33,7 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
                 viewModel.onNextClick()
             }
             reviewFragExitBtn.setOnClickListener {
-                activity?.finish()
+                activity?.onBackPressed()
             }
             viewModel.order?.let { order ->
                 Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).circleCrop().into(reviewFragImage)
@@ -70,5 +70,7 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
     override fun onRatingClick(rating: Int) {
         viewModel.setRating(rating)
     }
+
+
 
 }

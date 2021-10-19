@@ -2,9 +2,7 @@ package com.bupp.wood_spoon_eaters.features.main
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
@@ -99,11 +97,6 @@ class MainViewModel(
     }
 
     val getTriggers = eaterDataManager.getTriggers()
-    fun checkForTriggers() {
-        viewModelScope.launch {
-            eaterDataManager.checkForTriggers()
-        }
-    }
 
     fun getRestaurant(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -222,6 +215,5 @@ class MainViewModel(
     fun logDeepLinkEvent(restaurantId: Long) {
         eventsManager.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
     }
-
 
 }

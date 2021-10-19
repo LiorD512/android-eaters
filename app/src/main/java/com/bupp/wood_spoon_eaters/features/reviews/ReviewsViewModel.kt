@@ -34,12 +34,20 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
                 viewModelScope.launch(Dispatchers.IO) {
                     Log.d("wowTest", "rating =$rating, reviewText= $reviewText, supportMessage= $supportMessage")
                     val request = ReviewRequest(rating = rating, reviewText = reviewText, supportMessage = supportMessage)
-                    val result = orderRepository.postReview(7798, request)
+                    val result = orderRepository.postReview(order.id, request)
 
                     if (result.type == OrderRepository.OrderRepoStatus.POST_REVIEW_SUCCESS) {
                         reviewSuccess.postRawValue(true)
                     }
                 }
+            }
+        }
+    }
+
+    fun ignoreTrigger() {
+        order?.let { order ->
+            viewModelScope.launch(Dispatchers.IO) {
+                orderRepository.ignoreReview(order.id)
             }
         }
     }
