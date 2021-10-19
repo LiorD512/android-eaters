@@ -5,6 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
@@ -160,6 +161,7 @@
             android:layout_height="match_parent">
 
         <include
+                android:id="@+id/restaurantNoNetworkLayout"
                 layout="@layout/feed_adapter_no_network_item"/>
 
     </FrameLayout>

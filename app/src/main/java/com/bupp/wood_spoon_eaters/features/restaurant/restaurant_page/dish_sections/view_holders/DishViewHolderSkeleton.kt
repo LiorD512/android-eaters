@@ -10,7 +10,7 @@ class DishViewHolderSkeleton(val binding: ItemRestaurantDishSkeletonBinding) : D
 
     override val isSwipeable: Boolean = false
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
-        if(layoutPosition == 0){
+        if(absoluteAdapterPosition == 0){
             binding.dishHeader.isVisible = true
         }
     }

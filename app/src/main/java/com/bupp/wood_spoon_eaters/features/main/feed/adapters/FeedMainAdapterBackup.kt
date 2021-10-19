@@ -27,6 +27,7 @@
 //        fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
 //        fun onChangeAddressClick()
 //        fun onDishSwiped()
+//        fun onRefreshFeedClick()
 //    }
 //
 //    override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -74,6 +75,10 @@
 //                val binding = FeedAdapterEmptySectionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 //                FeedAdapterEmptySectionViewHolder(binding)
 //            }
+//            FeedAdapterViewType.NO_NETWORK_SECTION.ordinal -> {
+//                val binding = FeedAdapterNoNetworkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//                FeedAdapterNoNetworkSectionViewHolder(binding, listener)
+//            }
 //            else -> {
 //                val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 //                FeedAdapterSkeletonViewHolder(binding)
@@ -111,6 +116,10 @@
 //            }
 //            is FeedAdapterSkeleton -> {
 //                holder as FeedAdapterSkeletonViewHolder
+//                holder.bindItems()
+//            }
+//            is FeedAdapterNoNetworkSection -> {
+//                holder as FeedAdapterNoNetworkSectionViewHolder
 //                holder.bindItems()
 //            }
 //            else -> {}

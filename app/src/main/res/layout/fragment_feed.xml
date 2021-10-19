@@ -90,30 +90,30 @@ a home cooked meal very soon :)"
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout"
-                    android:id="@+id/feedFragRefreshLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:scrollbars="none">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/feedFragRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedFragHeaderLayout">
 
         <com.github.rubensousa.gravitysnaphelper.GravitySnapRecyclerView
-                app:snapGravity="top"
-                app:snapLastItem="true"
-                app:snapEnabled="true"
-                app:snapMaxFlingSizeFraction="1"
-                app:snapToPadding="false"
-                app:snapScrollMsPerInch="50"
-                android:nestedScrollingEnabled="true"
                 android:id="@+id/feedFragList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:layoutAnimation="@anim/restaurant_layout_animation" />
+                android:layoutAnimation="@anim/restaurant_layout_animation"
+                android:nestedScrollingEnabled="true"
+                app:snapEnabled="true"
+                app:snapGravity="top"
+                app:snapLastItem="true"
+                app:snapMaxFlingSizeFraction="1"
+                app:snapScrollMsPerInch="50"
+                app:snapToPadding="false" />
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

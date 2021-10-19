@@ -162,15 +162,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
-        if (feedArr.isEmpty()) {
-//            feedAdapter.setDataList(arrayListOf(FeedAdapterNoNetworkSection(0)))
-//            showEmptyLayout()
-//            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-        } else {
-            binding.feedFragRefreshLayout.isRefreshing = false
-            binding.feedFragEmptyLayout.visibility = View.GONE
-            feedAdapter.setDataList(feedArr)
-        }
+        binding.feedFragRefreshLayout.isRefreshing = false
+        feedAdapter.setDataList(feedArr)
+//        binding.feedFragEmptyLayout.visibility = View.GONE
     }
 
     override fun onChangeAddressClick() {
@@ -178,16 +172,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-    @SuppressLint("SetTextI18n")
-    private fun showEmptyLayout() {
-        with(binding) {
-            feedFragList.visibility = View.GONE
-            feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyLayout.setOnClickListener {
-                mainViewModel.startLocationAndAddressAct()
-            }
-        }
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun showEmptyLayout() {
+//        with(binding) {
+//            feedFragList.visibility = View.GONE
+//            feedFragEmptyLayout.visibility = View.VISIBLE
+//            feedFragEmptyLayout.setOnClickListener {
+//                mainViewModel.startLocationAndAddressAct()
+//            }
+//        }
+//    }
 
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let {

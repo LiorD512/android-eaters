@@ -304,11 +304,21 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
         if(dishSections?.dishes.isNullOrEmpty()){
-            binding.restaurantMainListLayout.restaurantNoNetwork.visibility= View.VISIBLE
-            binding.restaurantMainListLayout.restaurantMainLayout.visibility= View.GONE
+            if(!binding.restaurantMainListLayout.restaurantNoNetwork.isVisible){
+                binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
+                binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.GONE
+
+                binding.restaurantMainListLayout.restaurantNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
+                    viewModel.reloadPage()
+                }
+            }
         }else{
+            binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+            binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+
             if (dishSections?.animateList == true)
                 binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+
             adapterDishes?.submitList(dishSections?.dishes)
         }
     }

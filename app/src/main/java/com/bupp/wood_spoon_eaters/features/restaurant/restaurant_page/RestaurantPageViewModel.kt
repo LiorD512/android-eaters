@@ -59,6 +59,10 @@ class RestaurantPageViewModel(
         }
     }
 
+    fun reloadPage(){
+        initRestaurantFullData(currentRestaurantId)
+    }
+
     private fun initRestaurantFullData(restaurantId: Long?) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {

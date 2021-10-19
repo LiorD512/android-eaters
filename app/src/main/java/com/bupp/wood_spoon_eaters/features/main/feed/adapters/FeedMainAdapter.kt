@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
     FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
     private val dataList: MutableList<FeedAdapterItem> = mutableListOf()
+    @SuppressLint("NotifyDataSetChanged")
     fun setDataList(dataList: List<FeedAdapterItem>){
         this.dataList.clear()
         this.dataList.addAll(dataList)
