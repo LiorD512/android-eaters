@@ -29,10 +29,6 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
         notifyDataSetChanged()
     }
 
-    fun updateDataList(){
-
-    }
-
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
         fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)

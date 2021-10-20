@@ -10,6 +10,7 @@
         android:paddingBottom="20dp">
 
     <LinearLayout
+            android:animateLayoutChanges="true"
             android:id="@+id/restaurantMainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,8 +156,8 @@
     </LinearLayout>
 
     <FrameLayout
+            android:visibility="invisible"
             android:id="@+id/restaurantNoNetwork"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

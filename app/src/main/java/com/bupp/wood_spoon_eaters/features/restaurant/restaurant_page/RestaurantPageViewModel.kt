@@ -59,17 +59,19 @@ class RestaurantPageViewModel(
         }
     }
 
-    fun reloadPage(){
-        initRestaurantFullData(currentRestaurantId)
+    fun reloadPage(showSkeleton: Boolean = true){
+        initRestaurantFullData(currentRestaurantId, showSkeleton)
     }
 
-    private fun initRestaurantFullData(restaurantId: Long?) {
+    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "initRestaurantFullData")
-                dishListData = getDishSkeletonItems()
+                if(showSkeleton){
+                    dishListData = getDishSkeletonItems()
+                    dishListLiveData.postValue(DishListData(dishListData))
+                }
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
-                dishListLiveData.postValue(DishListData(dishListData))
                 val result = restaurantRepository.getRestaurant(restaurantId)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->

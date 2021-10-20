@@ -248,7 +248,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onRefreshFeedClick() {
-        refreshList()
+        viewModel.onPullToRefresh()
     }
 
     override fun onResume() {
