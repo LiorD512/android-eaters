@@ -1,81 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+<<<<<<< HEAD
+=======
+        android:animateLayoutChanges="true"
+>>>>>>> feature/error_manager
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
-    <FrameLayout
-            android:id="@+id/someLayout"
+    <LinearLayout
+            android:animateLayoutChanges="true"
+            android:id="@+id/restaurantMainLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/detailsSkeleton"
+        <FrameLayout
+                android:id="@+id/someLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:shimmer_auto_start="true"
-                app:shimmer_base_alpha="0.6"
-                app:shimmer_base_color="@color/whiteTwo"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="@color/grey_white_three">
+                android:layout_height="wrap_content">
 
-            <include
-                    android:id="@+id/detailsSkeletonLayout"
-                    layout="@layout/restaurant_main_list_layout_skeleton" />
-
-        </com.facebook.shimmer.ShimmerFrameLayout>
-
-        <LinearLayout
-                android:id="@+id/detailsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-            <com.bupp.wood_spoon_eaters.views.ExpandableTextView
-                    android:id="@+id/restaurantDescription"
-                    style="@style/LatoReg13DarkGrey"
+            <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/detailsSkeleton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:paddingHorizontal="15.4dp"
-                    android:paddingBottom="3.8dp"
-                    app:maxLines="1"
-                    tools:text="Welcome to my kitchen, todat and every day, fresh food, 100% organic, 100% love. follow me on inst…" />
+                    android:visibility="gone"
+                    app:shimmer_auto_start="true"
+                    app:shimmer_base_alpha="0.6"
+                    app:shimmer_base_color="@color/whiteTwo"
+                    app:shimmer_highlight_alpha="1"
+                    app:shimmer_highlight_color="@color/grey_white_three">
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/restaurantCuisinesList"
+                <include
+                        android:id="@+id/detailsSkeletonLayout"
+                        layout="@layout/restaurant_main_list_layout_skeleton" />
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <LinearLayout
+                    android:id="@+id/detailsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="15.4dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="17.8dp"
-                    android:layout_marginTop="23dp"
-                    android:background="@color/grey_white" />
+                <com.bupp.wood_spoon_eaters.views.ExpandableTextView
+                        android:id="@+id/restaurantDescription"
+                        style="@style/LatoReg13DarkGrey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:paddingHorizontal="15.4dp"
+                        android:paddingBottom="3.8dp"
+                        app:maxLines="1"
+                        tools:text="Welcome to my kitchen, todat and every day, fresh food, 100% organic, 100% love. follow me on inst…" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/restaurantCuisinesList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15.4dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <TextView
-                    style="@style/LatoBold15DarkGrey"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="23dp"
-                    android:paddingHorizontal="15.4dp"
-                    android:text="Delivery Day" />
-
-
+<<<<<<< HEAD
             <TextView
                     style="@style/LatoReg13LightGrey"
                     android:layout_width="wrap_content"
@@ -86,13 +81,25 @@
                     android:drawablePadding="5dp"
                     android:paddingHorizontal="15.4dp"
                     android:text="Choose an exact delivery time at checkout" />
+=======
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="17.8dp"
+                        android:layout_marginTop="23dp"
+                        android:background="@color/grey_white" />
+>>>>>>> feature/error_manager
 
 
-            <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-                    android:id="@+id/restaurantDeliveryDates"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <TextView
+                        style="@style/LatoBold15DarkGrey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="23dp"
+                        android:paddingHorizontal="15.4dp"
+                        android:text="Delivery Day" />
 
+<<<<<<< HEAD
             <LinearLayout
                     android:id="@+id/restaurantTimePickerViewLayout"
                     android:layout_width="wrap_content"
@@ -105,12 +112,14 @@
                     android:orientation="horizontal"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp">
+=======
+>>>>>>> feature/error_manager
 
                 <TextView
-                        android:id="@+id/restaurantTimePickerView"
-                        style="@style/LatoBold15DarkGrey"
+                        style="@style/LatoReg13LightGrey"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+<<<<<<< HEAD
                         android:drawablePadding="3dp"
                         android:gravity="center"
                         android:text="Now"
@@ -122,27 +131,86 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_arrow"
                         android:visibility="gone" />
+=======
+                        android:layout_marginTop="11.5dp"
+                        android:layout_marginBottom="19dp"
+                        android:drawableStart="@drawable/ic_delivery_man"
+                        android:drawablePadding="5dp"
+                        android:paddingHorizontal="15.4dp"
+                        android:text="Choose an exact delivery time at checkout" />
+
+
+                <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+                        android:id="@+id/restaurantDeliveryDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                <LinearLayout
+                        android:id="@+id/restaurantTimePickerViewLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="23dp"
+                        android:animateLayoutChanges="true"
+                        android:background="@drawable/grey_white_cornered_rag15_rect"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp">
+
+                    <TextView
+                            android:id="@+id/restaurantTimePickerView"
+                            style="@style/LatoBold15DarkGrey"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="3dp"
+                            android:gravity="center"
+                            android:text="Now"
+                            app:drawableStartCompat="@drawable/ic_time_rest" />
+
+                    <ImageView
+                            android:id="@+id/restaurantTimePickerViewIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow"
+                            android:visibility="gone" />
+
+
+                </LinearLayout>
+>>>>>>> feature/error_manager
 
 
             </LinearLayout>
 
+        </FrameLayout>
 
-        </LinearLayout>
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="17.8dp"
+                android:background="@color/grey_white" />
+
+        <com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRecycler
+                android:id="@+id/restaurantDishesList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutAnimation="@anim/restaurant_layout_animation"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:visibility="invisible"
+            android:id="@+id/restaurantNoNetwork"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <include
+                android:id="@+id/restaurantNoNetworkLayout"
+                layout="@layout/feed_adapter_no_network_item"/>
 
     </FrameLayout>
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginHorizontal="17.8dp"
-            android:background="@color/grey_white" />
 
-    <com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRecycler
-            android:id="@+id/restaurantDishesList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutAnimation="@anim/restaurant_layout_animation"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-</LinearLayout>
+</FrameLayout>

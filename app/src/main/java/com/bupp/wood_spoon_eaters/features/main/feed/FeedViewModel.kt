@@ -67,6 +67,7 @@ class FeedViewModel(
                 when (feedRepository.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         MTLogger.c(TAG, "getFeedWith - NetworkError")
+                        feedResultData.postValue(FeedLiveData(listOf(FeedAdapterNoNetworkSection(0)), feedRepository.isLargeItems))
 //                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
 //                        progressData.endProgress()
                     }

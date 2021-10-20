@@ -37,6 +37,8 @@ import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.base_repos.*
+import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 import com.bupp.wood_spoon_eaters.repositories.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -48,22 +50,24 @@ val appModule = module {
     single { FcmManager(get()) }
     single { AppSettings(get(), get()) }
     single { FlowEventsManager(get(),get()) }
+    single { ErrorManger()}
+    single { ResultManager(get()) }
 
     //repos
     single { MetaDataRepository(get()) }
-    single { MetaDataRepositoryImpl(get()) }
+    single { MetaDataRepositoryImpl(get(),get()) }
     single { FeedRepository(get(), get(), get()) }
-    single { FeedRepositoryImpl(get()) }
-    single { UserRepositoryImpl(get()) }
+    single { FeedRepositoryImpl(get(),get()) }
+    single { UserRepositoryImpl(get(),get()) }
     single { RestaurantRepository(get())}
-    single { RestaurantRepositoryImpl(get())}
+    single { RestaurantRepositoryImpl(get(),get())}
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
-    single { OrderRepositoryImpl(get()) }
+    single { OrderRepositoryImpl(get(),get()) }
     single { EaterDataRepository(get()) }
-    single { EaterDataRepositoryImpl(get()) }
+    single { EaterDataRepositoryImpl(get(),get()) }
     single { CampaignRepository(get(), get()) }
-    single { CampaignRepositoryImpl(get()) }
+    single { CampaignRepositoryImpl(get(),get()) }
 
     //managers
     single { GlobalErrorManager() }

@@ -162,14 +162,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
-        if (feedArr.isEmpty()) {
-            showEmptyLayout()
-            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-        } else {
-            binding.feedFragRefreshLayout.isRefreshing = false
-            binding.feedFragEmptyLayout.visibility = View.GONE
-            feedAdapter.setDataList(feedArr)
-        }
+        binding.feedFragRefreshLayout.isRefreshing = false
+        feedAdapter.setDataList(feedArr)
+//        binding.feedFragEmptyLayout.visibility = View.GONE
     }
 
     override fun onChangeAddressClick() {
@@ -177,16 +172,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-    @SuppressLint("SetTextI18n")
-    private fun showEmptyLayout() {
-        with(binding) {
-            feedFragList.visibility = View.GONE
-            feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyLayout.setOnClickListener {
-                mainViewModel.startLocationAndAddressAct()
-            }
-        }
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun showEmptyLayout() {
+//        with(binding) {
+//            feedFragList.visibility = View.GONE
+//            feedFragEmptyLayout.visibility = View.VISIBLE
+//            feedFragEmptyLayout.setOnClickListener {
+//                mainViewModel.startLocationAndAddressAct()
+//            }
+//        }
+//    }
 
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let {
@@ -239,7 +234,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-
     //Feed main adapter interface
     override fun onShareBannerClick(campaign: Campaign) {
         mainViewModel.onShareCampaignClick(campaign)
@@ -251,6 +245,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onDishSwiped() {
         viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES)
+    }
+
+    override fun onRefreshFeedClick() {
+        viewModel.onPullToRefresh()
     }
 
     override fun onResume() {

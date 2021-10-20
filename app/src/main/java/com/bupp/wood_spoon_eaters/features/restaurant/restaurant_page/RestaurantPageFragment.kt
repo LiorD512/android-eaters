@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
@@ -19,6 +21,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListener
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
@@ -31,6 +34,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -106,6 +110,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantDishesList.addItemDecoration(it)
             }
             restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
+
+            restaurantNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
+                detailsSkeleton.visibility = View.VISIBLE
+                restaurantNoNetwork.visibility = View.INVISIBLE
+                viewModel.reloadPage(false)
+        }
+
         }
     }
 
@@ -303,11 +314,27 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
-        if (dishSections?.animateList == true)
-            binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
-        adapterDishes?.submitList(dishSections?.dishes)
-    }
+        if(dishSections?.dishes.isNullOrEmpty()){
+            if(!binding.restaurantMainListLayout.restaurantNoNetwork.isVisible){
+                binding.restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
+                binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
 
+            }
+//            if(binding.restaurantMainListLayout.restaurantNoNetwork.alpha <= 0){
+//                AnimationUtil().alphaIn(binding.restaurantMainListLayout.restaurantNoNetwork, customStartDelay = 150)
+//                binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
+//                binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.GONE
+//            }
+        }else{
+            binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+            binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+
+            if (dishSections?.animateList == true)
+                binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+
+            adapterDishes?.submitList(dishSections?.dishes)
+        }
+    }
 
     private fun handleReviewData(it: LiveEvent<Review?>?) {
         it?.getContentIfNotHandled()?.let { reviews ->
