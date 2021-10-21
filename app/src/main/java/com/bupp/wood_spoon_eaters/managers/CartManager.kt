@@ -510,8 +510,22 @@ class CartManager(
     private fun updateCartManagerParams(order: Order?) {
         Log.d(TAG, "updateCartParams")
         this.currentOrderResponse = order
+        updateOrderAtParams(order?.deliverAt)
         orderLiveData.postValue(order)
         updateFloatingCartBtn(order)
+    }
+
+    private var currentDeliveryAt: Date? = null
+    private val deliveryAtChangeEvent = LiveEventData<String>()
+    fun getDeliveryAtChangeEvent() = deliveryAtChangeEvent
+    private fun updateOrderAtParams(deliverAt: Date?) {
+        deliverAt?.let{ newDeliveryAt ->
+            if(currentDeliveryAt == null || currentDeliveryAt != newDeliveryAt){
+                currentDeliveryAt = newDeliveryAt
+                //todo : need to update message format
+                deliveryAtChangeEvent.postRawValue("Delivery at change")
+            }
+        }
     }
 
     fun handleWsError(wsError: List<WSError>?) {

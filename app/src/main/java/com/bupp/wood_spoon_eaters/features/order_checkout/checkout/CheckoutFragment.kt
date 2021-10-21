@@ -203,6 +203,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.orderItemsData.observe(viewLifecycleOwner, {
             handleOrderItemsData(it)
         })
+        viewModel.deliveryAtChangeEvent.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let{ message->
+                WSErrorDialog(message, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+            }
+        })
     }
 
     private fun initMap(orderData: Order?) {
