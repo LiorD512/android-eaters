@@ -59,7 +59,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
     suspend fun getFeedHref(href: String): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
             val baseUrl = flavorConfigManager.getBaseUrl()
-            apiService.getHrefCollection(baseUrl + href)
+            apiService.getHrefCollection(baseUrl + "v2" + href)
         }
         result.let {
             return when (result) {
@@ -126,8 +126,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
                                     id = localId,
                                     restaurantSection = feedSectionCollectionItem,
                                     sectionTitle = feedSection.title,
-                                    sectionOrder = feedSectionIndex+1,
-                                    restaurantOrderInSection = index+1
+                                    sectionOrder = feedSectionIndex + 1,
+                                    restaurantOrderInSection = index + 1
                                 )
                             )
                         }
@@ -139,7 +139,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
         return feedData
     }
 
-    private fun isCartEmpty(): Boolean{
+    private fun isCartEmpty(): Boolean {
         return cartManager.isCartEmpty()
     }
 
