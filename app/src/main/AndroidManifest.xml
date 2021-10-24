@@ -140,7 +140,7 @@
         </activity> <!-- Branch init -->
         <meta-data
                 android:name="io.branch.sdk.BranchKey"
-                android:value="key_live_ejLPSCmaw2jZxm2hDlPK1hjluDl92rWc" />
+                android:value="key_live_jgQUKCloy5j6un5oqeJJ3bcavsdX7wYj" />
         <meta-data
                 android:name="io.branch.sdk.BranchKey.test"
                 android:value="key_test_caHOMCbetYp9Eh0jucUXgejbBsj45D9u" />

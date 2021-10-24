@@ -5,10 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-<<<<<<< HEAD
-=======
         android:animateLayoutChanges="true"
->>>>>>> feature/error_manager
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
@@ -70,25 +67,12 @@
                         android:paddingHorizontal="15.4dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-<<<<<<< HEAD
-            <TextView
-                    style="@style/LatoReg13LightGrey"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="11.5dp"
-                    android:layout_marginBottom="19dp"
-                    android:drawableStart="@drawable/ic_delivery_man"
-                    android:drawablePadding="5dp"
-                    android:paddingHorizontal="15.4dp"
-                    android:text="Choose an exact delivery time at checkout" />
-=======
                 <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginHorizontal="17.8dp"
                         android:layout_marginTop="23dp"
                         android:background="@color/grey_white" />
->>>>>>> feature/error_manager
 
 
                 <TextView
@@ -99,39 +83,11 @@
                         android:paddingHorizontal="15.4dp"
                         android:text="Delivery Day" />
 
-<<<<<<< HEAD
-            <LinearLayout
-                    android:id="@+id/restaurantTimePickerViewLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15.4dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="23dp"
-                    android:animateLayoutChanges="true"
-                    android:background="@drawable/grey_white_cornered_rag15_rect"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp">
-=======
->>>>>>> feature/error_manager
 
                 <TextView
                         style="@style/LatoReg13LightGrey"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-<<<<<<< HEAD
-                        android:drawablePadding="3dp"
-                        android:gravity="center"
-                        android:text="Now"
-                        app:drawableStartCompat="@drawable/ic_time_rest" />
-
-                <ImageView
-                        android:id="@+id/restaurantTimePickerViewIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_arrow"
-                        android:visibility="gone" />
-=======
                         android:layout_marginTop="11.5dp"
                         android:layout_marginBottom="19dp"
                         android:drawableStart="@drawable/ic_delivery_man"
@@ -177,7 +133,6 @@
 
 
                 </LinearLayout>
->>>>>>> feature/error_manager
 
 
             </LinearLayout>
