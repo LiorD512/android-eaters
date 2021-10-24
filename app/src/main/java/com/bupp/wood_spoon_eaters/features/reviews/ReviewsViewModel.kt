@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -15,6 +17,7 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
 
     val navigationEvent = LiveEventData<NavigationEvent>()
     val reviewSuccess = LiveEventData<Boolean>()
+    val errorEvent = LiveEventData<List<WSError>?>()
     var order: Order? = null
     val reviewRequest = ReviewRequest()
 
@@ -38,6 +41,8 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
 
                     if (result.type == OrderRepository.OrderRepoStatus.POST_REVIEW_SUCCESS) {
                         reviewSuccess.postRawValue(true)
+                    } else if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR){
+                        errorEvent.postRawValue(result.wsError)
                     }
                 }
             }

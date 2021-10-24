@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience), RatingStarsViewReviews.RatingStarsViewListener {

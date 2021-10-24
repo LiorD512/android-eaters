@@ -342,32 +342,6 @@ class RestaurantPageViewModel(
         }
     }
 
-    val reviewEvent = LiveEventData<Review?>()
-    fun getRestaurantReview() {
-        currentRestaurantId.let { id ->
-            viewModelScope.launch {
-                progressData.startProgress()
-                val result = restaurantRepository.getCookReview(id)
-                when (result.type) {
-                    EMPTY -> {
-                        Log.e(TAG, "Empty")
-                    }
-                    SUCCESS -> {
-                        Log.e(TAG, "Success")
-                        reviewEvent.postRawValue(result.review)
-                    }
-                    SERVER_ERROR -> {
-                        Log.e(TAG, "Server Error")
-                    }
-                    SOMETHING_WENT_WRONG -> {
-                        Log.e(TAG, "Something went wrong")
-                    }
-                }
-                progressData.endProgress()
-            }
-        }
-    }
-
     fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
         Log.d(TAG, "addDishToCart")
         currentCookingSlot?.let { currentCookingSlot ->
