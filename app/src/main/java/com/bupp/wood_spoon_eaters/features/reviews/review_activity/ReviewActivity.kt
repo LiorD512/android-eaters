@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.reviews.review_activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -10,6 +9,10 @@ import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.model.WSError
+import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 
 
 class ReviewActivity : AppCompatActivity() {
@@ -37,6 +40,17 @@ class ReviewActivity : AppCompatActivity() {
                 }
             }
         })
+        viewModel.errorEvent.observe(this,{
+            handleWSError(it)
+        })
+    }
+
+    private fun handleWSError(errorEvent : LiveEvent<List<WSError>?>) {
+        errorEvent.getContentIfNotHandled().let{ errorList->
+            val errorMsg = errorList?.getErrorsMsg() ?: "Ops! something went wrong"
+            showErrorToast(errorMsg, binding.root)
+            finish()
+        }
     }
 
     override fun onBackPressed() {
