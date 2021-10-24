@@ -11,6 +11,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         const val TAG = "wowFlavorConfigManager"
         const val SYSTEM_ENVIRONMENT = "system_environment"
         const val CUSTOM_BASE_URL = "custom_base_url"
+        const val VERSION_PLACE_HOLDER = "VERSION_PLACE_HOLDER"
     }
 
     var curEnvironment: String?
@@ -24,7 +25,6 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         set(curEnvironment) {
             sharedPreferences.edit().putString(CUSTOM_BASE_URL, curEnvironment).commit()
         }
-
 
     fun setEnvironment(env: String) {
         Log.d(TAG, "environment end point branch: $env")
@@ -44,7 +44,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         } else {
             if (curEnvironment?.isNotEmpty() == true) {
                 Log.d(TAG, "curEnvironment: $curEnvironment")
-                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/v2/"
+                finalUrl = "https://woodspoon-server-pr-$curEnvironment.herokuapp.com/api/$VERSION_PLACE_HOLDER/"
             } else {
                 finalUrl = BuildConfig.BASE_URL
             }

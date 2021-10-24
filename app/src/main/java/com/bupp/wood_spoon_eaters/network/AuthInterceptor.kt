@@ -32,7 +32,7 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
 
         if (!response.header("X-Auth-Token").isNullOrEmpty()) {
             val newToken = response.header("X-Auth-Token") as String
-            if (!newToken.isEmpty()) {
+            if (newToken.isNotEmpty()) {
                 updateToken(newToken)
             }
         }
