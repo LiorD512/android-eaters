@@ -67,7 +67,7 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
     val authInterceptor = AuthInterceptor(apiSettings)
     val versionInterceptor = ApiVersioningInterceptor()
 
-    val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor(authInterceptor).addInterceptor(versionInterceptor)
+    val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor(authInterceptor)
     return httpClient.build()
 }
 
