@@ -5,10 +5,10 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
+import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
@@ -17,18 +17,20 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience), RatingStarsViewReviews.RatingStarsViewListener {
 
-    val binding: FragmentReviewExperienceBinding by viewBinding()
+    var binding: FragmentReviewExperienceBinding? = null
     private val viewModel by sharedViewModel<ReviewsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentReviewExperienceBinding.bind(view)
 
         initObservers()
         initUi()
     }
 
     fun initUi() {
-        with(binding) {
+        with(binding!!) {
             reviewFragRating.setRatingStarsViewListener(this@ReviewExperienceFragment)
             reviewFragNextBtn.setOnClickListener {
                 viewModel.onNextClick()
@@ -53,10 +55,10 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
     private fun handleNavigationEvent(navigationEvent: LiveEvent<ReviewsViewModel.NavigationEvent>?) {
         navigationEvent?.getContentIfNotHandled()?.let {
             val extras = FragmentNavigatorExtras(
-                binding.reviewFragImageLayout to "logo_transition",
-                binding.reviewFragImage to "logo_transition2",
-                binding.reviewFragRestName to "title_transition",
-                binding.reviewFragCookName to "subtitle_transition"
+                binding!!.reviewFragImageLayout to "logo_transition",
+                binding!!.reviewFragImage to "logo_transition2",
+                binding!!.reviewFragRestName to "title_transition",
+                binding!!.reviewFragCookName to "subtitle_transition"
             )
 
             when (it) {

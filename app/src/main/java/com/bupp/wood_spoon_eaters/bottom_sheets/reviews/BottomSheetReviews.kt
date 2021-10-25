@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentBottomsheetReviewsBinding
+import com.bupp.wood_spoon_eaters.databinding.ReportIssueFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -19,17 +20,24 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class BottomSheetReviews : BottomSheetDialogFragment() {
 
     private val viewModel by viewModel<ReviewsBSViewModel>()
-    private val binding: FragmentBottomsheetReviewsBinding by viewBinding()
+    private var binding: FragmentBottomsheetReviewsBinding? = null
 
     val adapter = ReviewsAdapter()
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_bottomsheet_reviews, container, false)
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view =  inflater.inflate(R.layout.fragment_bottomsheet_reviews, container, false)
+        binding = FragmentBottomsheetReviewsBinding.bind(view)
+        return view
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.BottomSheetStyle)
     }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,7 +71,7 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
 
     private fun initUI() {
-        with(binding) {
+        with(binding!!) {
             reviewBottomSheetReviewList.adapter = adapter
             reviewBottomSheetReviewList.layoutManager = LinearLayoutManager(requireContext())
             reviewBottomSheetCloseIcon.setOnClickListener {
@@ -84,7 +92,7 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
     }
 
     private fun handleErrorEvent() {
-        with(binding){
+        with(binding!!){
             reviewBottomSheetReviewList.isVisible = false
             reviewBottomSheetEmptyLayout.isVisible = true
         }

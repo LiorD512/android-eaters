@@ -71,16 +71,17 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 
     private fun initUi() {
 //        mediaUtils = MediaUtils(requireActivity(), this)
-        binding.editMyProfileFragUserImageView.setUserImageVideoViewListener(this)
-        binding.editMyProfileFragUserImageBtn.setOnClickListener {
-            mainViewModel.onUserImageClick()
-        }
-        binding.editMyProfileFragSave.setOnClickListener {
-            saveEaterDetails()
-        }
+        with(binding!!){
+            editMyProfileFragUserImageView.setUserImageVideoViewListener(this@EditProfileBottomSheet)
+            editMyProfileFragUserImageBtn.setOnClickListener {
+                mainViewModel.onUserImageClick()
+            }
+            editMyProfileFragSave.setOnClickListener {
+                saveEaterDetails()
+            }
 
-        binding!!.editMyProfileFragHeader.setHeaderViewListener(this)
-//        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
+            editMyProfileFragHeader.setHeaderViewListener(this@EditProfileBottomSheet)
+        }
     }
 
     private fun initObservers() {

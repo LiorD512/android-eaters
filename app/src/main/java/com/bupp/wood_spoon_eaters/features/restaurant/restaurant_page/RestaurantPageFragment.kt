@@ -91,6 +91,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
+
         with(binding!!.restaurantMainListLayout) {
             restaurantCuisinesList.adapter = adapterCuisines
 
@@ -113,8 +114,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 detailsSkeleton.visibility = View.VISIBLE
                 restaurantNoNetwork.visibility = View.INVISIBLE
                 viewModel.reloadPage(false)
-        }
-
+            }
         }
     }
 
@@ -311,15 +311,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
         with(binding!!) {
             if (dishSections?.dishes.isNullOrEmpty()) {
-                if (!restaurantMainListLayout.restaurantNoNetwork.isVisible) {
+                if(!restaurantMainListLayout.restaurantNoNetwork.isVisible){
                     restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
                     restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
-//            if(binding.restaurantMainListLayout.restaurantNoNetwork.alpha <= 0){
-//                AnimationUtil().alphaIn(binding.restaurantMainListLayout.restaurantNoNetwork, customStartDelay = 150)
-//                binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
-//                binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.GONE
-//            }
-                } else {
+                }else{
+                    //Do nothing
+                }
+            }else {
                     restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
                     restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
 
@@ -328,16 +326,16 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
                     adapterDishes?.submitList(dishSections?.dishes)
                 }
-            }
         }
     }
 
 
     private fun openReviews() {
-            val restaurant = viewModel.restaurantFullData.value
-        restaurant?.let{ restaurant->
-            val header = "${restaurant?.rating?:""} (${restaurant?.reviewCount?:""} reviews)"
-            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName?:"", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+        val restaurant = viewModel.restaurantFullData.value
+        restaurant?.let { restaurant ->
+            val header = "${restaurant?.rating ?: ""} (${restaurant?.reviewCount ?: ""} reviews)"
+            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+        }
     }
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
@@ -425,7 +423,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         if (hasMotionScrolled) {
             binding!!.motionLayout.progress = 1F
         }
-
     }
 
     override fun onPause() {
