@@ -160,7 +160,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun initUiRelatedProcesses() {
         checkForBranchIntent()
-        viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
     }
 
