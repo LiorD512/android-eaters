@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -50,7 +49,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
 
     private var defaultPeekHeight = Utils.toPx(400)
 
-    private val binding: UpSaleNCartBottomSheetBinding by viewBinding()
+    private var binding: UpSaleNCartBottomSheetBinding? = null
     private val viewModel by viewModel<UpSaleNCartViewModel>()
     private var currentParentHeight: Int = defaultPeekHeight
     private var behavior: BottomSheetBehavior<View>? = null
@@ -70,7 +69,9 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.up_sale_n_cart_bottom_sheet, container, false)
+        binding = UpSaleNCartBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,7 +135,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
                 override fun onSlide(view: View, v: Float) {
                     val yPos = height - (buttonHeight).toFloat() - view.y //- 81
                     if (yPos > buttonHeight) {
-                        binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+                        binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
 //                        Log.d(TAG, "yPos: ${view.y}")
 //                        Log.d(TAG, "view.measuredHeight: ${view.measuredHeight}")
 //                        Log.d(TAG, "top: ${view.top}")
@@ -151,10 +152,10 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun refreshButtonPosition() {
-        binding.floatingCartBtnLayout.waitForLayout {
+        binding!!.floatingCartBtnLayout.waitForLayout {
             val height = getScreenHeight()
             val yPos = height - (buttonHeight).toFloat() - currentSheetView!!.y
-            binding.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+            binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
 //            Log.d(TAG, "initial height: $height")
 //            Log.d(TAG, "initial currentSheetView.y: ${currentSheetView?.y}")
 //            Log.d(TAG, "initial binding.floatingCartBtnLayout.measuredHeight: ${binding.floatingCartBtnLayout.measuredHeight}")
@@ -205,7 +206,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun initUI() {
-        with(binding) {
+        with(binding!!) {
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.line_divider)
             cartFragList.addItemDecoration(DividerItemDecorator(divider))
 
@@ -263,11 +264,11 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
         if (data != null) {
 
             data.restaurantName?.let {
-                binding.upsaleCartTitle.text = it
+                binding!!.upsaleCartTitle.text = it
             }
 
             cartAdapter = UpSaleNCartAdapter(getAdapterListener())
-            binding.cartFragList.initSwipeableRecycler(cartAdapter)
+            binding!!.cartFragList.initSwipeableRecycler(cartAdapter)
             cartAdapter.submitList(data.items)
         } else {
 //            listener?.refreshParentOnCartCleared()
@@ -364,30 +365,30 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
         Log.d(TAG, "setUpsaleUi")
         animateTitle("Any thing else?")
         animateBtn("No Thanks")
-        AnimationUtil().alphaIn(binding.upsaleCartCloseBtn)
+        AnimationUtil().alphaIn(binding!!.upsaleCartCloseBtn)
     }
 
     private fun setCartUi() {
         Log.d(TAG, "setCartUi")
         animateTitle("Restaurant name")
         animateBtn("Go to checkout")
-        AnimationUtil().alphaOut(binding.upsaleCartCloseBtn)
+        AnimationUtil().alphaOut(binding!!.upsaleCartCloseBtn)
     }
 
     private fun animateTitle(text: String) {
-        AnimationUtil().alphaOut(binding.upsaleCartTitle, listener = object : SimpleAnimatorListener() {
+        AnimationUtil().alphaOut(binding!!.upsaleCartTitle, listener = object : SimpleAnimatorListener() {
             override fun onAnimationEnd(p0: Animator?) {
-                binding.upsaleCartTitle.text = text
-                AnimationUtil().alphaIn(binding.upsaleCartTitle)
+                binding!!.upsaleCartTitle.text = text
+                AnimationUtil().alphaIn(binding!!.upsaleCartTitle)
             }
         })
     }
 
     private fun animateBtn(text: String) {
-        AnimationUtil().alphaOut(binding.floatingCartBtnLayout, listener = object : SimpleAnimatorListener() {
+        AnimationUtil().alphaOut(binding!!.floatingCartBtnLayout, listener = object : SimpleAnimatorListener() {
             override fun onAnimationEnd(p0: Animator?) {
-                binding.upSaleCartBtn.setBtnText(text)
-                AnimationUtil().alphaIn(binding.floatingCartBtnLayout)
+                binding!!.upSaleCartBtn.setBtnText(text)
+                AnimationUtil().alphaIn(binding!!.floatingCartBtnLayout)
             }
         })
     }
@@ -400,6 +401,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     override fun onDestroy() {
         currentSheetView = null
         behavior = null
+        binding = null
         super.onDestroy()
     }
 

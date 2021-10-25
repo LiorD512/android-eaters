@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.SingleTimePickerBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.CookingSlot
@@ -23,19 +22,21 @@ import java.util.*
 class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
 
     data class DeliveryTimeParam(
-    val deliveryTimeType: DeliveryType,
-    val date: Date? = null
+        val deliveryTimeType: DeliveryType,
+        val date: Date? = null
     )
-    enum class DeliveryType{
+
+    enum class DeliveryType {
         TODAY,
         FUTURE
     }
-    interface TimePickerListener{
-        fun onTimerPickerChange(deliveryTimeParam: DeliveryTimeParam?){}
-        fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot){}
+
+    interface TimePickerListener {
+        fun onTimerPickerChange(deliveryTimeParam: DeliveryTimeParam?) {}
+        fun onTimerPickerCookingSlotChange(cookingSlot: CookingSlot) {}
     }
 
-    private val binding: SingleTimePickerBottomSheetBinding by viewBinding()
+    private var binding: SingleTimePickerBottomSheetBinding? = null
     private val viewModel by viewModel<TimePickerViewModel>()
     private var isTemporary: Boolean = false
 
@@ -47,7 +48,9 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     private var selectedCookingSlot: CookingSlot? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.single_time_picker_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.single_time_picker_bottom_sheet, container, false)
+        binding = SingleTimePickerBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,9 +94,9 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!) {
 
-            cookingSlots?.let{
+            cookingSlots?.let {
                 timePickerTimePicker.setDatesByCookingSlots(it)
                 timePickerTimePicker.setSelectedCookingSlot(selectedCookingSlot)
                 timePickerAsapBtn.visibility = View.GONE
@@ -102,36 +105,36 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
 
                 timePickerScheduleBtn.setOnClickListener {
                     val selectedCookingSlot = timePickerTimePicker.getChosenCookingSlot()
-                    selectedCookingSlot?.let{
+                    selectedCookingSlot?.let {
                         listener?.onTimerPickerCookingSlotChange(it)
                     }
                     dismiss()
                 }
             }
 
-            deliveryDates?.let{
+            deliveryDates?.let {
                 timePickerTimePicker.setDatesByDeliveryDates(it, selectedDeliveryDate)
                 timePickerAsapBtn.visibility = View.GONE
                 timePickerSubtitle.visibility = View.VISIBLE
                 timePickerSubtitle.text = DateUtils.parseDateToFullDayDate(it[0].from)
 
-                binding.timePickerScheduleBtn.setOnClickListener {
+                timePickerScheduleBtn.setOnClickListener {
                     listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.FUTURE, timePickerTimePicker.getChosenDate()))
                     dismiss()
                 }
             }
 
-            daysFromNow?.let{
+            daysFromNow?.let {
                 val selectedDate = viewModel.getSelectedData()
 
-                binding.timePickerTimePicker.initSimpleDatesData(it, selectedDate)
+                timePickerTimePicker.initSimpleDatesData(it, selectedDate)
 
-                binding.timePickerAsapBtn.setOnClickListener {
+                timePickerAsapBtn.setOnClickListener {
                     listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.TODAY))
                     dismiss()
                 }
 
-                binding.timePickerScheduleBtn.setOnClickListener {
+                timePickerScheduleBtn.setOnClickListener {
                     listener?.onTimerPickerChange(DeliveryTimeParam(DeliveryType.FUTURE, timePickerTimePicker.getChosenDate()))
                     dismiss()
                 }
@@ -147,17 +150,22 @@ class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null
         this.selectedCookingSlot = curCookingSlot
     }
 
-    fun setDeliveryDates(selectedDeliveryDate: Date?, deliveryDates: List<DeliveryDates>){
+    fun setDeliveryDates(selectedDeliveryDate: Date?, deliveryDates: List<DeliveryDates>) {
         //checkout
         this.isTemporary = true
         this.deliveryDates = deliveryDates
         this.selectedDeliveryDate = selectedDeliveryDate
     }
 
-    fun setDatesFromNow(daysFromNow: Int = 7){
+    fun setDatesFromNow(daysFromNow: Int = 7) {
         //feed
         this.isTemporary = false
         this.daysFromNow = daysFromNow
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

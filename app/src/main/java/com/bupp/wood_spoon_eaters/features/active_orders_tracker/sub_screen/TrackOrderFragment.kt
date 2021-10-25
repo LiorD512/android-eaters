@@ -10,7 +10,6 @@
 //import androidx.core.content.ContextCompat
 //import androidx.fragment.app.Fragment
 //import androidx.recyclerview.widget.LinearLayoutManager
-//import by.kirich1409.viewbindingdelegate.viewBinding
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderData
 //import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog

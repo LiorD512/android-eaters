@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.ContactUsDialogBinding
 
 class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() {
 
-    val binding: ContactUsDialogBinding by viewBinding()
+    var binding: ContactUsDialogBinding? = null
 
     interface ContactUsDialogListener{
         fun onCallSupportClick()
@@ -27,6 +26,7 @@ class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.contact_us_dialog, null)
+        binding = ContactUsDialogBinding.bind(view)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -38,7 +38,7 @@ class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() 
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             contactUsDialogCloseBtn.setOnClickListener { dismiss() }
             contactUsDialogCallBtn.setOnClickListener {
                 listener.onCallSupportClick()
@@ -50,5 +50,10 @@ class ContactUsDialog(val listener: ContactUsDialogListener) : DialogFragment() 
             }
             contactUsDialogLayout.setOnClickListener { dismiss() }
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

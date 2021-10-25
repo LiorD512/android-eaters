@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.LogoutDialogBinding
 
-class LogoutDialog(val listener: LogoutDialogListener) : DialogFragment(){
+class LogoutDialog(val listener: LogoutDialogListener) : DialogFragment() {
 
-    val binding: LogoutDialogBinding by viewBinding()
-    interface LogoutDialogListener{
+    var binding: LogoutDialogBinding? = null
+
+    interface LogoutDialogListener {
         fun logout()
     }
 
@@ -25,6 +25,7 @@ class LogoutDialog(val listener: LogoutDialogListener) : DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.logout_dialog, null)
+        binding = LogoutDialogBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -36,15 +37,23 @@ class LogoutDialog(val listener: LogoutDialogListener) : DialogFragment(){
     }
 
     private fun initUi() {
-        with(binding){
-            logoutDialogBkg.setOnClickListener{
-                dismiss()}
-            logoutDialogLogout.setOnClickListener{
-                listener.logout()}
-            logoutDialogCancel.setOnClickListener{
-                dismiss()}
+        with(binding!!) {
+            logoutDialogBkg.setOnClickListener {
+                dismiss()
+            }
+            logoutDialogLogout.setOnClickListener {
+                listener.logout()
+            }
+            logoutDialogCancel.setOnClickListener {
+                dismiss()
+            }
         }
 
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

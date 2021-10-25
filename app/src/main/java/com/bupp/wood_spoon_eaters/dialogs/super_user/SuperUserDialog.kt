@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.DialogSuperUserBinding
@@ -23,7 +22,7 @@ class SuperUserDialog : DialogFragment() {
         fun onDismissSuperDialog()
     }
 
-    private val binding: DialogSuperUserBinding by viewBinding()
+    private var binding: DialogSuperUserBinding? = null
     val viewModel: SuperUserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +31,9 @@ class SuperUserDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_super_user, null)
+        val view = inflater.inflate(R.layout.dialog_super_user, null)
+        binding = DialogSuperUserBinding.bind(view)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +42,7 @@ class SuperUserDialog : DialogFragment() {
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             superUserDialogBtn.setOnClickListener {
                 val input = superUserDialogInput.getText()
                 input?.let { it1 -> updateEnv(it1) }
@@ -91,6 +92,11 @@ class SuperUserDialog : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         listener?.onDismissSuperDialog()
         super.onDismiss(dialog)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     companion object {

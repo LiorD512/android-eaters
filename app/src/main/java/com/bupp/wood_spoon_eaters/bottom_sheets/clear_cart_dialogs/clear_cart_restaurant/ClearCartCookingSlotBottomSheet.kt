@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ClearCartCookingSlotBottomSheetBinding
@@ -23,13 +22,14 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
         fun onClearCartCanceled()
     }
 
-    private val binding: ClearCartCookingSlotBottomSheetBinding by viewBinding()
+    private var binding: ClearCartCookingSlotBottomSheetBinding? = null
     var curCookingSlotName: String = ""
     var newCookingSlotName: String = ""
     var notifyType: Int = NOTIFY_CANCEL_CLEAR_CART
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.clear_cart_cooking_slot_bottom_sheet, container, false)
+        binding = ClearCartCookingSlotBottomSheetBinding.bind(view)
         curCookingSlotName = arguments?.getString(CUR_DATA_ARGS) ?: ""
         newCookingSlotName = arguments?.getString(NEW_DATA_ARGS) ?: ""
         return view
@@ -68,7 +68,7 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding!!){
             clearCartCookingSlotCurrent.text = curCookingSlotName
             clearCartCookingSlotFuture.text = newCookingSlotName
 
@@ -112,5 +112,9 @@ class ClearCartCookingSlotBottomSheet(val listener: ClearCartListener): BottomSh
         super.onDismiss(dialog)
     }
 
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 
 }

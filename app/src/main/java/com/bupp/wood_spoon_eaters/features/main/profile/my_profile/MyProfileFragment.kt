@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.delete_account.DeleteAccountBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileBottomSheet
@@ -35,7 +34,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     LogoutDialog.LogoutDialogListener, CuisinesChooserDialog.CuisinesChooserListener,
     HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageViewListener {
 
-    val binding: MyProfileFragmentBinding by viewBinding()
+    var binding: MyProfileFragmentBinding? = null
     private val viewModel by viewModel<MyProfileViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -43,6 +42,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = MyProfileFragmentBinding.bind(view)
 
 
         initClicks()
@@ -57,7 +57,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {
-        with(binding) {
+        with(binding!!) {
             profileData.dietary.let {
                 myProfileFragDietary.initHorizontalDietaryView(it, this@MyProfileFragment)
             }
@@ -75,7 +75,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 if (eater.ordersCount > 0) {
                     if (eater.ordersCount == 1) {
                         myProfileFragOrderCount.text = "1 Order"
-                    }else{
+                    } else {
                         myProfileFragOrderCount.text = "${eater.ordersCount} Orders"
                     }
                 }
@@ -118,36 +118,39 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 //        })
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
-                binding.myProfileFragPb.show()
+                binding!!.myProfileFragPb.show()
             } else {
-                binding.myProfileFragPb.hide()
+                binding!!.myProfileFragPb.hide()
             }
         })
         viewModel.campaignLiveData.observe(viewLifecycleOwner, {
             handleCampaign(it)
         })
         viewModel.versionLiveData.observe(viewLifecycleOwner, {
-            binding.myProfileFragVersion.text = it
+            binding!!.myProfileFragVersion.text = it
         })
         mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
             Log.d(TAG, "stripeInitializationEvent status: $it")
-            when (it) {
-                PaymentManager.StripeInitializationStatus.START -> {
-                    binding.myProfileFragPb.show()
-                }
-                PaymentManager.StripeInitializationStatus.SUCCESS -> {
-                    binding.myProfileFragPb.hide()
-                }
-                PaymentManager.StripeInitializationStatus.FAIL -> {
-                    binding.myProfileFragPb.hide()
+            with(binding!!) {
+                when (it) {
+                    PaymentManager.StripeInitializationStatus.START -> {
+                        myProfileFragPb.show()
+                    }
+                    PaymentManager.StripeInitializationStatus.SUCCESS -> {
+                        myProfileFragPb.hide()
+                    }
+                    PaymentManager.StripeInitializationStatus.FAIL -> {
+                        myProfileFragPb.hide()
+                    }
+                    else -> { }
                 }
             }
         })
         mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
+            binding!!.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.myProfileFragHeightCorrection.isVisible = it
+            binding!!.myProfileFragHeightCorrection.isVisible = it
         })
     }
 
@@ -156,7 +159,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             campaign.viewTypes?.forEach { viewType ->
                 when (viewType) {
                     CampaignViewType.PROFILE -> {
-                        binding.myProfileFragShareBanner.initCustomBannerByCampaign(campaign, this)
+                        binding!!.myProfileFragShareBanner.initCustomBannerByCampaign(campaign, this)
                     }
                 }
             }
@@ -165,7 +168,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
 
     private fun initClicks() {
-        with(binding) {
+        with(binding!!) {
 //            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }//todo - fix this feed 2.0
 
             myProfileFragAddress.setOnClickListener {
@@ -218,7 +221,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             Constants.DELIVERY_DETAILS_LOCATION -> {
                 mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
             }
-
             Constants.DELIVERY_DETAILS_PAYMENT -> {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_PAYMENT)
                 mainViewModel.startStripeOrReInit()
@@ -238,13 +240,15 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         val card = paymentMethod.card
         if (card != null) {
             Log.d("wowMyProfile", "updateCustomerPaymentMethod: ${paymentMethod.id}")
-            binding.myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
-            binding.myProfileFragPb.hide()
+            with(binding!!){
+                myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
+                myProfileFragPb.hide()
+            }
         }
     }
 
     private fun setEmptyPaymentMethod() {
-        binding.myProfileFragPayment.updateSubTitle("Insert payment method")
+        binding!!.myProfileFragPayment.updateSubTitle("Insert payment method")
     }
 
     override fun onShareBannerClick(campaign: Campaign?) {
@@ -254,6 +258,11 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onUserImageClick(cook: Cook?) {
         editProfileBS = EditProfileBottomSheet()
         editProfileBS.show(childFragmentManager, Constants.EDIT_PROFILE_BOTTOM_SHEET)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     companion object {

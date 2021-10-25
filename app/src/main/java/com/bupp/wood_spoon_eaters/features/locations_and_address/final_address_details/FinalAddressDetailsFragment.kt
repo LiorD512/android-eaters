@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.locations_and_address.final_address_
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentFinalAddressDetailsBinding
@@ -17,11 +16,12 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     WSEditText.WSEditTextListener {
 
     val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
-    val binding: FragmentFinalAddressDetailsBinding by viewBinding()
+    var binding: FragmentFinalAddressDetailsBinding? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentFinalAddressDetailsBinding.bind(view)
 
         initUi()
         initObserver()
@@ -30,7 +30,7 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
 
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             addressDetailsDeliverToDoor.setOnClickListener{
                 onDeliverToDoorClick()
             }
@@ -56,16 +56,18 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     }
 
     private fun validateFields(): Boolean {
-        var isValid = true
-        if(binding.addressDetailsApt.getText().isNullOrEmpty()){
-            isValid = false
-            binding.addressDetailsApt.showError()
+        with(binding!!){
+            var isValid = true
+            if(addressDetailsApt.getText().isNullOrEmpty()){
+                isValid = false
+                addressDetailsApt.showError()
+            }
+            if(addressDetailsZipcode.getText().isNullOrEmpty()){
+                isValid = false
+                addressDetailsZipcode.showError()
+            }
+            return isValid
         }
-        if(binding.addressDetailsZipcode.getText().isNullOrEmpty()){
-            isValid = false
-            binding.addressDetailsZipcode.showError()
-        }
-        return isValid
     }
 
     private fun initObserver() {
@@ -75,7 +77,7 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
     }
 
     private fun updateAddressUi(address: AddressRequest) {
-        with(binding){
+        with(binding!!){
             addressDetailsStreet.setText("${address.streetNumber} ${address.streetLine1}")
             address.cityName?.let{
                 addressDetailsCity.setIsEditable(false, this@FinalAddressDetailsFragment)
@@ -95,15 +97,19 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
 
 
     private fun onDeliverToDoorClick() {
-        mainViewModel.updateDeliveryMethod(getString(R.string.delivery_method_deliver_to_door))
-        binding.addressDetailsDeliverToDoor.setBtnSelected(true)
-        binding.addressDetailsPickOutside.setBtnSelected(false)
+        with(binding!!){
+            mainViewModel.updateDeliveryMethod(getString(R.string.delivery_method_deliver_to_door))
+            addressDetailsDeliverToDoor.setBtnSelected(true)
+            addressDetailsPickOutside.setBtnSelected(false)
+        }
     }
 
     private fun onPickupOutsideClick() {
-        mainViewModel.updateDeliveryMethod(getString(R.string.delivery_method_pickup_outside))
-        binding.addressDetailsPickOutside.setBtnSelected(true)
-        binding.addressDetailsDeliverToDoor.setBtnSelected(false)
+        with(binding!!){
+            mainViewModel.updateDeliveryMethod(getString(com.bupp.wood_spoon_eaters.R.string.delivery_method_pickup_outside))
+            addressDetailsPickOutside.setBtnSelected(true)
+            addressDetailsDeliverToDoor.setBtnSelected(false)
+        }
     }
 
     override fun onReEnterAddressClick() {
@@ -112,6 +118,11 @@ class FinalAddressDetailsFragment : Fragment(R.layout.fragment_final_address_det
 
     override fun onWSEditUnEditableClick() {
         WrongAddressDialog().setWrongAddressDialogListener(this).show(childFragmentManager, Constants.WRONG_ADDRESS_DIALOG)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog
 
 import android.app.Dialog
 import android.graphics.drawable.ColorDrawable
+import android.media.Rating
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.RatingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.model.Review
@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
 
-    private val binding: RatingsBottomSheetBinding by viewBinding()
+    private var binding: RatingsBottomSheetBinding? = null
     private var adapter: RatingsAdapter? = null
 
     private lateinit var behavior: BottomSheetBehavior<View>
@@ -45,6 +45,7 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.ratings_bottom_sheet, null)
+        binding = RatingsBottomSheetBinding.bind(view)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -56,7 +57,7 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             ratingsDialogCloseBtn.setOnClickListener { dismiss() }
 
             ratingsDialogAccuracyRating.text = "${ratings.accuracyRating}"
@@ -72,6 +73,9 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
         }
     }
 
-
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 
 }

@@ -53,7 +53,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     FavoriteBtn.FavoriteBtnListener,
     UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
-    private val binding: FragmentRestaurantPageBinding by viewBinding()
+    private var binding: FragmentRestaurantPageBinding? = null
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
@@ -67,6 +67,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navArgs: RestaurantPageFragmentArgs by navArgs()
+        binding = FragmentRestaurantPageBinding.bind(view)
         viewModel.handleInitialParamData(navArgs.extras)
         Log.d("orderFlow - rest", "onViewCreated")
 
@@ -77,7 +78,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             backButton.setOnClickListener {
                 activity?.onBackPressed()
             }
@@ -93,7 +94,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
-        with(binding.restaurantMainListLayout) {
+        with(binding!!.restaurantMainListLayout) {
             restaurantCuisinesList.adapter = adapterCuisines
 
             detailsSkeleton.visibility = View.VISIBLE
@@ -122,7 +123,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
 
     private fun handleTimerPickerUi() {
-        with(binding.restaurantMainListLayout) {
+        with(binding!!.restaurantMainListLayout) {
             restaurantTimePickerViewLayout.setOnClickListener {
                 restaurantDeliveryDates.getCurrentSelection()?.let { date ->
                     if (date.cookingSlots.size > 1) {
@@ -134,9 +135,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun openCartNUpsaleDialog() {
-        binding.restaurantFragFloatingCartBtn.isEnabled = false
+        binding!!.restaurantFragFloatingCartBtn.isEnabled = false
         UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
-        binding.restaurantFragFloatingCartBtn.isEnabled = true
+        binding!!.restaurantFragFloatingCartBtn.isEnabled = true
     }
 
     override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
@@ -199,7 +200,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     /** Headers data **/
     @SuppressLint("SetTextI18n")
     private fun handleInitialParamData(params: RestaurantInitParams) {
-        with(binding) {
+        with(binding!!) {
             Glide.with(requireContext()).load(params.coverPhoto?.url).into(coverPhoto)
             restHeaderRestName.text = params.restaurantName
             restHeaderChefName.text = "By ${params.chefName}"
@@ -213,7 +214,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleRestaurantFullData(restaurant: Restaurant) {
-        with(binding) {
+        with(binding!!) {
             //Cover photo + video
             Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
             restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
@@ -232,7 +233,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderFavorite.setIsFavorite(restaurant.isFavorite)
             restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
         }
-        with(binding.restaurantMainListLayout) {
+        with(binding!!.restaurantMainListLayout) {
 
             //Description
             restaurantDescription.text = restaurant.about
@@ -248,7 +249,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleCookingSlotUiChange(uiChange: RestaurantPageViewModel.CookingSlotUi?) {
         uiChange?.let {
-            with(binding.restaurantMainListLayout) {
+            with(binding!!.restaurantMainListLayout) {
                 //delivery dates tabLayout
                 val selectedDate: SortedCookingSlots? = if (uiChange.forceTabChange) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
@@ -271,12 +272,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
         event?.let {
-            binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            binding!!.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
         }
     }
 
     private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
-        binding.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
+        binding!!.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
             val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
             timePickerBottomSheet.setCookingSlots(selectedCookingSlot, deliveryDate.cookingSlots)
             timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
@@ -300,14 +301,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
-            showErrorToast(errorEvent, binding.root)
+            showErrorToast(errorEvent, binding!!.root)
             viewModel.refreshRestaurantUi()
         }
     }
 
     private fun handleTimePickerUi(timePickerStr: String?) {
         timePickerStr?.let {
-            with(binding.restaurantMainListLayout) {
+            with(binding!!.restaurantMainListLayout) {
                 restaurantTimePickerView.text = it
             }
         }
@@ -336,6 +337,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
+
     private fun handleReviewData(it: LiveEvent<Review?>?) {
         it?.getContentIfNotHandled()?.let { reviews ->
             RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
@@ -344,7 +346,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
         datesList?.let {
-            with(binding.restaurantMainListLayout) {
+            with(binding!!.restaurantMainListLayout) {
                 restaurantDeliveryDates.initDates(it)
             }
         }
@@ -355,7 +357,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             if (isSuccess) {
                 mainViewModel.forceFeedRefresh()
             } else {
-                binding.restHeaderFavorite.onFail()
+                binding!!.restHeaderFavorite.onFail()
             }
         }
     }
@@ -409,7 +411,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
-        binding.restaurantFragHeightCorrection.isVisible = isShowing
+        binding!!.restaurantFragHeightCorrection.isVisible = isShowing
     }
 
     override fun onAddToFavoriteClick() {
@@ -425,19 +427,20 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onResume() {
         super.onResume()
         if (hasMotionScrolled) {
-            binding.motionLayout.progress = 1F
+            binding!!.motionLayout.progress = 1F
         }
 
     }
 
     override fun onPause() {
         super.onPause()
-        hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
+        hasMotionScrolled = binding!!.motionLayout.progress > MOTION_TRANSITION_INITIAL
     }
 
     override fun onDestroyView() {
         adapterDishes = null
         adapterCuisines = null
+        binding = null
         super.onDestroyView()
     }
 

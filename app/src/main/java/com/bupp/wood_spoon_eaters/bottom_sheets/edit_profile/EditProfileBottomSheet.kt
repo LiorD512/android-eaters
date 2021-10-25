@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MediaUtils
@@ -27,13 +26,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageViewListener, HeaderView.HeaderViewListener{
 
 
-    val binding: EditProfileBottomSheetBinding by viewBinding()
+    var binding: EditProfileBottomSheetBinding? = null
     private var photoUploaded: Boolean = false
     val viewModel by viewModel<EditProfileViewModel>()
     val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.edit_profile_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.edit_profile_bottom_sheet, container, false)
+        binding = EditProfileBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,15 +73,15 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 
     private fun initUi() {
 //        mediaUtils = MediaUtils(requireActivity(), this)
-        binding.editMyProfileFragUserImageView.setUserImageViewListener(this)
-        binding.editMyProfileFragUserImageBtn.setOnClickListener{
+        binding!!.editMyProfileFragUserImageView.setUserImageViewListener(this)
+        binding!!.editMyProfileFragUserImageBtn.setOnClickListener{
             mainViewModel.onUserImageClick()
         }
-        binding.editMyProfileFragSave.setOnClickListener{
+        binding!!.editMyProfileFragSave.setOnClickListener{
             saveEaterDetails()
         }
 
-        binding.editMyProfileFragHeader.setHeaderViewListener(this)
+        binding!!.editMyProfileFragHeader.setHeaderViewListener(this)
 //        (activity as MainActivity).setHeaderViewSaveBtnClickable(true)
     }
 
@@ -93,9 +94,9 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
-                binding.editMyProfileFragPb.show()
+                binding!!.editMyProfileFragPb.show()
             } else {
-                binding.editMyProfileFragPb.hide()
+                binding!!.editMyProfileFragPb.hide()
             }
         })
 
@@ -113,7 +114,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     }
 
     private fun setEaterDetails(eater: Eater?) {
-        with(binding) {
+        with(binding!!) {
             if (eater != null) {
                 if(eater.thumbnail != null){
                     editMyProfileFragUserImageView.setImage(eater.thumbnail)
@@ -144,7 +145,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     }
 
     private fun saveEaterDetails() {
-        with(binding) {
+        with(binding!!) {
             if (validateFields()) {
                 val first = editMyProfileFragFirstName.getText()
                 val last = editMyProfileFragLastName.getText()
@@ -155,7 +156,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     }
 
     private fun validateFields(): Boolean {
-        with(binding) {
+        with(binding!!) {
             var isValid = true
             val first = editMyProfileFragFirstName.getText()
             val last = editMyProfileFragLastName.getText()
@@ -182,8 +183,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 
     fun onMediaUtilResult(result: MediaUtils.MediaUtilResult) {
         result.fileUri?.let {
-            binding.editMyProfileFragUserImageView.setImage(it)
-            binding.editMyProfileFragUserImageBtn.setTitle("Change photo")
+            binding!!.editMyProfileFragUserImageView.setImage(it)
+            binding!!.editMyProfileFragUserImageBtn.setTitle("Change photo")
             viewModel.updateTempThumbnail(it)
             this.photoUploaded = true
         }
@@ -193,4 +194,8 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
         dismiss()
     }
 
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 }

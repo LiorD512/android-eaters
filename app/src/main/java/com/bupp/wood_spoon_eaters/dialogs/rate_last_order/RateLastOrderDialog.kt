@@ -9,7 +9,6 @@ import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.adapters.RateLastOrderAdapter
@@ -35,7 +34,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     private var adapter: RateLastOrderAdapter? = null
     val viewModel by viewModel<RateLastOrderViewModel>()
 
-    val binding: RateLastOrderDialogBinding by viewBinding()
+    var binding: RateLastOrderDialogBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +43,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.rate_last_order_dialog, null)
+        binding = RateLastOrderDialogBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -56,7 +56,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             rateLastOrderCloseBtn.setOnClickListener { dismiss() }
             rateLastOrderDoneBtn.setBtnEnabled(false)
 
@@ -76,9 +76,9 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     private fun initObservers() {
         viewModel.progressData.observe(viewLifecycleOwner, {
             if (it) {
-                binding.rateLastOrderPb.show()
+                binding!!.rateLastOrderPb.show()
             } else {
-                binding.rateLastOrderPb.hide()
+                binding!!.rateLastOrderPb.hide()
             }
         })
         viewModel.getLastOrder.observe(viewLifecycleOwner, { order ->
@@ -91,7 +91,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     }
 
     private fun handleOrderDetails(order: Order) {
-        with(binding) {
+        with(binding!!) {
             rateLastOrderDishesRecyclerView.layoutManager = LinearLayoutManager(context)
             adapter = RateLastOrderAdapter(requireContext(), order.orderItems, this@RateLastOrderDialog)
             rateLastOrderDishesRecyclerView.adapter = adapter
@@ -105,7 +105,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
 
     override fun onRate() {
         if (allFieldsRated()) {
-            binding.rateLastOrderDoneBtn.setBtnEnabled(true)
+            binding!!.rateLastOrderDoneBtn.setBtnEnabled(true)
         }
     }
 
@@ -128,7 +128,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
     }
 
     private fun onDoneClick() {
-        binding.rateLastOrderPb.show()
+        binding!!.rateLastOrderPb.show()
         val reviewRequest = ReviewRequest()
         var metricsArr = adapter?.getRatedDishes()
 
@@ -136,7 +136,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
         reviewRequest.deliveryRating = deliveryRating
 
         reviewRequest.dishMetrics = metricsArr
-        reviewRequest.body = binding.rateLastOrderNotes.getText()
+        reviewRequest.body = binding!!.rateLastOrderNotes.getText()
 
         viewModel.postRating(orderId, reviewRequest)
 
@@ -149,6 +149,7 @@ class RateLastOrderDialog(val orderId: Long, val listener: RateDialogListener? =
 
     override fun onDestroyView() {
         adapter = null
+        binding = null
         super.onDestroyView()
     }
 

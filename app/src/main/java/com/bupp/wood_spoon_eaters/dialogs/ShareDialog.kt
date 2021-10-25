@@ -10,14 +10,13 @@ import android.view.ViewGroup
 import android.widget.TextView.BufferType
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.ShareDialogBinding
 
 
 class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
 
-    val binding: ShareDialogBinding by viewBinding()
+    var binding: ShareDialogBinding? = null
 
     interface ShareDialogListener{
         fun onShareClick()
@@ -30,6 +29,7 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.share_dialog, null)
+        binding = ShareDialogBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -41,7 +41,7 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             shareDialogCloseBtn.setOnClickListener { dismiss() }
             shareDialogShareBtn.setOnClickListener {
                 listener.onShareClick()
@@ -55,5 +55,10 @@ class ShareDialog(val listener: ShareDialogListener) : DialogFragment() {
             val end = "Share ".length
             s.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.teal_blue)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

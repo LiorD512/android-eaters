@@ -10,7 +10,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.airbnb.lottie.LottieDrawable
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -31,10 +30,11 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     private var gpsBroadcastReceiver: GPSBroadcastReceiver? = null
     private val viewModel by viewModel<SelectAddressViewModel>()
     private val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
-    private val binding: FragmentSelectAddressBinding by viewBinding()
+    private var binding: FragmentSelectAddressBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentSelectAddressBinding.bind(view)
 
         initUi()
         initObservers()
@@ -62,7 +62,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             selectAddressFragMyLocationLayout.setOnClickListener {
                 viewModel.onMyLocationClick()
             }
@@ -87,7 +87,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         mainViewModel.getLocationLiveData().observe(viewLifecycleOwner, { result ->
             result?.let {
                 Log.d(TAG, "getLocationLiveData observer called")
-                with(binding) {
+                with(binding!!) {
                     viewModel.onMyLocationReceived(it)
                     selectAddressFragMyLocationAddress.text = it.getUserLocationStr()
                     hideMyLocationPb()
@@ -140,16 +140,17 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
         viewModel.myLocationEvent.observe(viewLifecycleOwner, { myLocation -> handleMyLocationUiEvent(myLocation) })
 
         viewModel.myAddressesEvent.observe(viewLifecycleOwner, {
-            if (it.address.isNullOrEmpty()) {
-                binding.selectAddressFragEmptyList.visibility = View.VISIBLE
-                binding.selectAddressFragList.visibility = View.GONE
-                addressAdapter?.selectedAddress = null
-            } else {
-                binding.selectAddressFragList.visibility = View.VISIBLE
-                binding.selectAddressFragEmptyList.visibility = View.GONE
-                addressAdapter?.submitList(it.address)
-                addressAdapter?.selectedAddress = it?.currentAddress
-
+            with(binding!!){
+                if (it.address.isNullOrEmpty()) {
+                    selectAddressFragEmptyList.visibility = View.VISIBLE
+                    selectAddressFragList.visibility = View.GONE
+                    addressAdapter?.selectedAddress = null
+                } else {
+                    selectAddressFragList.visibility = View.VISIBLE
+                    selectAddressFragEmptyList.visibility = View.GONE
+                    addressAdapter?.submitList(it.address)
+                    addressAdapter?.selectedAddress = it?.currentAddress
+                }
             }
         })
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
@@ -158,7 +159,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun handleMyLocationUiEvent(myLocation: SelectAddressViewModel.MyLocationStatus) {
-        with(binding) {
+        with(binding!!) {
             when (myLocation) {
                 SelectAddressViewModel.MyLocationStatus.FETCHING -> {
                     showMyLocationPb()
@@ -182,15 +183,19 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     private fun showMyLocationPb() {
-        binding.selectAddressFragMyLocationPb.setAnimation("loader.json")
-        binding.selectAddressFragMyLocationPb.repeatCount = LottieDrawable.INFINITE
-        binding.selectAddressFragMyLocationPb.playAnimation()
-        binding.selectAddressFragMyLocationPb.visibility = View.VISIBLE
+        with(binding!!){
+            selectAddressFragMyLocationPb.setAnimation("loader.json")
+            selectAddressFragMyLocationPb.repeatCount = LottieDrawable.INFINITE
+            selectAddressFragMyLocationPb.playAnimation()
+            selectAddressFragMyLocationPb.visibility = View.VISIBLE
+        }
     }
 
     private fun hideMyLocationPb() {
-        binding.selectAddressFragMyLocationPb.cancelAnimation()
-        binding.selectAddressFragMyLocationPb.visibility = View.GONE
+        with(binding!!) {
+            selectAddressFragMyLocationPb.cancelAnimation()
+            selectAddressFragMyLocationPb.visibility = View.GONE
+        }
     }
 
     override fun onAddressClick(selected: Address) {
@@ -229,6 +234,7 @@ class SelectAddressFragment : Fragment(R.layout.fragment_select_address), GPSBro
     }
 
     override fun onDestroy() {
+        binding = null
         gpsBroadcastReceiver = null
         super.onDestroy()
     }
