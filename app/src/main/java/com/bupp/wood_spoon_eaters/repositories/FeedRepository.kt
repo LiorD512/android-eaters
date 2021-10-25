@@ -10,7 +10,8 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FeedRepository(private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
+class FeedRepository(
+    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
 
 
     private var lastFeedDataResult: FeedResult? = null
@@ -126,8 +127,8 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
                                     id = localId,
                                     restaurantSection = feedSectionCollectionItem,
                                     sectionTitle = feedSection.title,
-                                    sectionOrder = feedSectionIndex+1,
-                                    restaurantOrderInSection = index+1
+                                    sectionOrder = feedSectionIndex + 1,
+                                    restaurantOrderInSection = index + 1
                                 )
                             )
                         }
@@ -139,7 +140,7 @@ class FeedRepository(private val apiService: FeedRepositoryImpl, private val fla
         return feedData
     }
 
-    private fun isCartEmpty(): Boolean{
+    private fun isCartEmpty(): Boolean {
         return cartManager.isCartEmpty()
     }
 

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|bottom"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+    <ImageButton
+            android:id="@+id/reviewFragExitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:background="@null"
+            android:padding="15.4dp"
+            android:src="@drawable/icons_close_grey" />
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/reviewFragImageLayout"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            app:cardElevation="5dp"
+            android:layout_gravity="center"
+            android:transitionName="logo_transition"
+            app:cardCornerRadius="100dp">
+
+        <ImageView
+                android:id="@+id/reviewFragImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:transitionName="logo_transition2"
+                android:scaleType="fitXY"
+                app:srcCompat="@mipmap/ic_launcher_round" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+            android:id="@+id/reviewFragRestName"
+            style="@style/LatoBlack19DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Israeli in The Big Apple"
+            android:transitionName="title_transition" />
+
+    <TextView
+            android:id="@+id/reviewFragCookName"
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="3.9dp"
+            android:text="by Assaf Beer"
+            android:transitionName="subtitle_transition" />
+
+    <TextView
+            style="@style/LatoBlack15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="38.7dp"
+            android:text="How was your order experience?" />
+
+    <TextView
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="8dp"
+            android:text="Your feedback helps us improve" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
+            android:id="@+id/reviewFragRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="22.8dp" />
+
+    <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/reviewFragNextBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:layout_marginBottom="14.8dp"
+            app:title="Next" />
+
+
+</LinearLayout>
+

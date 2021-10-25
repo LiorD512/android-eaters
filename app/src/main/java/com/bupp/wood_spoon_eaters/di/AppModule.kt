@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileViewMode
 import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBSViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
@@ -33,6 +34,7 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSale
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
+import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
@@ -141,6 +143,11 @@ val appModule = module {
     viewModel { RestaurantPageViewModel(get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
+    viewModel { ReviewsBSViewModel(get())}
+
+    //Review Activity
+    viewModel { ReviewsViewModel(get(),get())}
+
 
 
 }

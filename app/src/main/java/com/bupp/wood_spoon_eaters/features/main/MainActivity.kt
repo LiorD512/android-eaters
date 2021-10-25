@@ -9,13 +9,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
-import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
@@ -23,6 +26,7 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
+import com.bupp.wood_spoon_eaters.features.reviews.review_activity.ReviewActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
@@ -36,6 +40,7 @@ import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import java.util.*
 
 
@@ -91,7 +96,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)!!
             val forceFeedRefresh = data.getBooleanExtra("refreshFeed", false)
-            if(isAfterPurchase){
+            if (isAfterPurchase) {
                 updateUiAfterOrderSuccess(result.data)
             } else if (forceFeedRefresh) {
                 viewModel.forceFeedRefresh()
@@ -160,7 +165,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun initUiRelatedProcesses() {
         checkForBranchIntent()
-        viewModel.checkForTriggers()
         viewModel.checkForActiveOrder()
     }
 
@@ -198,10 +202,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             handleTraceableOrderData(traceableOrders)
         })
         viewModel.getTriggers.observe(this, { triggerEvent ->
-            triggerEvent?.let {
-                it.shouldRateOrder?.id?.let {
-                    Log.d(TAG, "found should rate id !: ${triggerEvent.shouldRateOrder}")
-                    RateLastOrderDialog(it).show(supportFragmentManager, Constants.RATE_LAST_ORDER_DIALOG_TAG)
+            triggerEvent?.getContentIfNotHandled()?.let { trigger ->
+                trigger.shouldRateOrder?.let { order ->
+                    openReviewActivity(order)
                 }
             }
         })
@@ -213,6 +216,13 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.shareEvent.observe(this, {
             sendShareCampaign(it)
         })
+    }
+
+    fun openReviewActivity(order:Order){
+        Log.d(TAG, "found should rate id !: $order")
+        val intent = Intent(this, ReviewActivity::class.java)
+        intent.putExtra(Constants.ARG_REVIEW, order)
+        startActivity(intent)
     }
 
     private fun handleTraceableOrderData(traceableOrders: List<Order>?) {

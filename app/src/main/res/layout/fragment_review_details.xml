@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/floating_cart_btn_height">
+
+        <ImageButton
+                android:id="@+id/reviewFragExitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:background="@null"
+                android:padding="15.4dp"
+                android:src="@drawable/icons_close_grey" />
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/reviewFragImageLayout"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:transitionName="logo_transition"
+                app:cardCornerRadius="100dp"
+                app:cardElevation="5dp">
+
+            <ImageView
+                    android:id="@+id/reviewFragImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:transitionName="logo_transition"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@mipmap/ic_launcher_round" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+                android:id="@+id/reviewFragRestName"
+                style="@style/LatoBlack19DarkGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Israeli in The Big Apple"
+                android:transitionName="title_transition" />
+
+        <TextView
+                android:id="@+id/reviewFragCookName"
+                style="@style/LatoReg13PurpelyGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="3.9dp"
+                android:text="by Assaf Beer"
+                android:transitionName="subtitle_transition" />
+
+
+        <TextView
+                android:id="@+id/reviewFragTitle"
+                style="@style/LatoReg13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23.4dp"
+                android:layout_marginHorizontal="15.4dp"
+                android:text="Tell others what you thought about your order"
+                android:visibility="gone"/>
+
+        <LinearLayout
+                android:id="@+id/reviewFragLayoutReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
+                    android:id="@+id/reviewFragUserReviewInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginTop="14.6dp"
+                    android:layout_marginEnd="15.4dp"
+                    app:hint="Share your experience with our WoodSpoon community (optional)"
+                    app:maxChar="300"
+                    app:maxLines="4" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15.6dp"
+                    android:layout_marginTop="23dp"
+                    android:orientation="horizontal">
+
+                <com.bupp.wood_spoon_eaters.views.UserImageView
+                        android:layout_width="46dp"
+                        android:layout_height="wrap_content"
+                        app:srcImage="@mipmap/ic_launcher_round" />
+
+                <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="1dp"
+                        android:elevation="4dp"
+                        app:cardCornerRadius="7.7dp">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="15dp"
+                            android:paddingVertical="15dp">
+
+                        <TextView
+                                style="@style/LatoBold13Black"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="The WoodSpoon team" />
+
+                        <TextView
+                                android:id="@+id/reviewFragUserInputText"
+                                style="@style/LatoReg15BrownishGrey"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:text="Hey Lee, want to send us a private message?" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <com.bupp.wood_spoon_eaters.views.WSCounterEditTextReviews
+                    android:id="@+id/reviewFragUserTeamInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginTop="14.6dp"
+                    android:layout_marginEnd="15.4dp"
+                    app:hint="Type your message here… (optional)"
+                    app:maxChar="300"
+                    app:maxLines="4" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/reviewFragSubmitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="15.4dp"
+            android:layout_marginEnd="15.4dp"
+            android:layout_marginBottom="14.8dp"
+            app:title="Submit review" />
+
+</FrameLayout>

@@ -32,6 +32,8 @@ class CheckoutViewModel(
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
     val orderLiveData = cartManager.getCurrentOrderData()
     val deliveryDatesUi = cartManager.getDeliveryDatesUi()
+    val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
+
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
     val orderItemsData = MutableLiveData<List<CheckoutAdapterItem>>()
 

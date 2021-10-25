@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.repositories
 
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -301,6 +302,31 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
     suspend fun postReview(orderId: Long, reviewRequest: ReviewRequest): OrderRepoResult<Order> {
         val result = withContext(Dispatchers.IO){
             apiService.postReview(orderId, reviewRequest)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"postReview - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"postReview - GenericError")
+                    OrderRepoResult(OrderRepoStatus.POST_REVIEW_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"postReview - Success")
+                    OrderRepoResult(OrderRepoStatus.POST_REVIEW_SUCCESS)
+                }
+                is ResultHandler.WSCustomError -> {
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun ignoreReview(orderId: Long): OrderRepoResult<Order> {
+        val result = withContext(Dispatchers.IO){
+            apiService.ignoreReview(orderId)
         }
         result.let{
             return  when (result) {

@@ -11,8 +11,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
 import com.bupp.wood_spoon_eaters.databinding.RatingsBottomSheetBinding
-import com.bupp.wood_spoon_eaters.model.Review
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -59,9 +59,9 @@ class RatingsBottomSheet(val ratings: Review) : BottomSheetDialogFragment() {
         with(binding){
             ratingsDialogCloseBtn.setOnClickListener { dismiss() }
 
-            ratingsDialogAccuracyRating.text = "${ratings.accuracyRating}"
-            ratingsDialogDeliveryRating.text = "${ratings.deliveryRating}"
-            ratingsDialogTasteRating.text = "${ratings.dishRating}"
+//            ratingsDialogAccuracyRating.text = "${ratings.accuracyRating}"
+//            ratingsDialogDeliveryRating.text = "${ratings.deliveryRating}"
+//            ratingsDialogTasteRating.text = "${ratings.dishRating}"
 
             ratings.comments.let{
                 ratingsDialogDishesRecyclerView.layoutManager = LinearLayoutManager(context)

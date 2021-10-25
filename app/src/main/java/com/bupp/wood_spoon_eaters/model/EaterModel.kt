@@ -10,7 +10,7 @@ import java.util.*
 @kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 data class Eater(
-   @Json(name = "id") val id: Long,
+   @Json(name = "id") val id: Long?,
    @Json(name = "phone_number") val phoneNumber: String?,
    @Json(name = "account_status") val accountStatus: String?,
    @Json(name = "first_name") val firstName: String?,
@@ -24,7 +24,7 @@ data class Eater(
    @Json(name = "cuisines") var cuisines: List<CuisineLabel>? = null,
    @Json(name = "diets") var diets: List<DietaryIcon>? = null,
    @Json(name = "share_campaign") val shareCampaign: Campaign? = null,
-   @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>?
+   @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>? = null
 ): Parcelable{
     fun getFullName(): String{
         var first = "Anonymous"
