@@ -34,7 +34,7 @@ android {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
 
-            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/VERSION_PLACE_HOLDER/"'
+            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/v2/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
 
             applicationIdSuffix = ".staging"
@@ -46,7 +46,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders["isTestMode"] = "false"
 
-            buildConfigField "String", "BASE_URL", '"https://woodspoon-production.herokuapp.com/api/VERSION_PLACE_HOLDER/"'
+            buildConfigField "String", "BASE_URL", '"https://woodspoon-production.herokuapp.com/api/v2/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"9fa2df5e19ca2c5452f1a8361d463ac2c4297ad35bc5cdfd"'
         }
         create("benchmark") {

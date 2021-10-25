@@ -29,9 +29,9 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
             lock.readLock().unlock()
         }
 
-        request = buildVersionPath(request)
-        request = addTokenToRequest(request, authToken)
-        val response = chain.proceed(request)
+        val newRequest = buildVersionPath(request)
+        val finalRequest = addTokenToRequest(newRequest, authToken)
+        val response = chain.proceed(finalRequest)
 
         if (!response.header("X-Auth-Token").isNullOrEmpty()) {
             val newToken = response.header("X-Auth-Token") as String
@@ -64,26 +64,26 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     }
 
     private fun buildVersionPath(request: Request): Request {
+        Log.d(TAG, "buildVersionPath - VERSION_PLACE_HOLDER")
         val invocation = request.tag(Invocation::class.java)
         val version = invocation?.method()?.getAnnotation(V3::class.java)
 
-        val host = request.url.toUrl().host
-        var path = request.url.toUrl().path
+        var url = request.url.toUrl().toString()
 
         if (version != null) {
-            //Annotation is present, using new auth method
-            path = path.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, "v3")
-            Log.d(TAG, "version: $version - v3 - $path")
+            //Annotation is present
+            url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, "v3")
+            Log.d(TAG, "version: $version - v3 - $url")
         } else {
-            //No annotation, sticking with legacy auth
+            //No annotation
             Log.d(TAG, "version: $version - v2")
-            path = path.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, "v2")
+            url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, "v2")
         }
 
-        val finalUrl = "https://$host$path"
-        Log.d(TAG, "finalUrl: $finalUrl")
+//        val finalUrl = "https://$host$path"
+        Log.d(TAG, "finalUrl: $url")
 
-        val finalRequest = request.newBuilder().url(finalUrl).build()
+        val finalRequest = request.newBuilder().url(url).build()
         return finalRequest
     }
 
