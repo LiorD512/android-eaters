@@ -260,7 +260,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             //Portion size
             dishFragPortionSize.isVisible = !dish.portionSize.isNullOrEmpty()
             dishFragPortionSize.text = "Portion size : ${dish.portionSize} Servings "
-            //Ingredients
+            //IngredientsR
             dishFragIngredientsLayout.isVisible = !dish.ingredients.isNullOrEmpty()
             dishFragIngredients.text = dish.ingredients ?: ""
             //Accommodations

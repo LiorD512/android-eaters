@@ -11,8 +11,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
@@ -21,7 +19,6 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListener
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
@@ -315,25 +312,26 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
-        if(dishSections?.dishes.isNullOrEmpty()){
-            if(!binding.restaurantMainListLayout.restaurantNoNetwork.isVisible){
-                binding.restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
-                binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
-
-            }
+        with(binding!!) {
+            if (dishSections?.dishes.isNullOrEmpty()) {
+                if (!restaurantMainListLayout.restaurantNoNetwork.isVisible) {
+                    restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
+                    restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
 //            if(binding.restaurantMainListLayout.restaurantNoNetwork.alpha <= 0){
 //                AnimationUtil().alphaIn(binding.restaurantMainListLayout.restaurantNoNetwork, customStartDelay = 150)
 //                binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
 //                binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.GONE
 //            }
-        }else{
-            binding.restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
-            binding.restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+                } else {
+                    restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+                    restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
 
-            if (dishSections?.animateList == true)
-                binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+                    if (dishSections?.animateList == true)
+                        restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
 
-            adapterDishes?.submitList(dishSections?.dishes)
+                    adapterDishes?.submitList(dishSections?.dishes)
+                }
+            }
         }
     }
 
