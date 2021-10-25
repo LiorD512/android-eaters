@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
-import android.animation.Animator
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -31,7 +30,6 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -311,21 +309,21 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
         with(binding!!) {
             if (dishSections?.dishes.isNullOrEmpty()) {
-                if(!restaurantMainListLayout.restaurantNoNetwork.isVisible){
+                if (!restaurantMainListLayout.restaurantNoNetwork.isVisible) {
                     restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
                     restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
-                }else{
+                } else {
                     //Do nothing
                 }
-            }else {
-                    restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
-                    restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+            } else {
+                restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+                restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
 
-                    if (dishSections?.animateList == true)
-                        restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+                if (dishSections?.animateList == true)
+                    restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
 
-                    adapterDishes?.submitList(dishSections?.dishes)
-                }
+                adapterDishes?.submitList(dishSections?.dishes)
+            }
         }
     }
 
@@ -333,7 +331,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun openReviews() {
         val restaurant = viewModel.restaurantFullData.value
         restaurant?.let { restaurant ->
-            val header = "${restaurant?.rating ?: ""} (${restaurant?.reviewCount ?: ""} reviews)"
+            val header = "${restaurant.rating ?: ""} (${restaurant.reviewCount ?: ""} reviews)"
             BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
