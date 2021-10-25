@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,8 +13,10 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePick
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.features.reviews.review_activity.ReviewActivity
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -113,9 +116,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onHeaderDateClick() {
-        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
-        timePickerBottomSheet.setDatesFromNow(7)
-        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+        val intent = Intent(requireContext(), ReviewActivity::class.java)
+        startActivity(intent)
+
+        //todo : return this after test
+//        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
+//        timePickerBottomSheet.setDatesFromNow(7)
+//        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {

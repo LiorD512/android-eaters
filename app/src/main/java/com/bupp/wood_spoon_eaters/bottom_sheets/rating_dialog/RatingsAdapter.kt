@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Comment
 import com.bupp.wood_spoon_eaters.databinding.DishRatingItemViewBinding
-import com.bupp.wood_spoon_eaters.model.Comment
 
 class RatingsAdapter(val context: Context, private var comments: List<Comment>) :RecyclerView.Adapter<RatingsAdapter.DishViewHolder>() {
 

@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.network
 
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.model.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -27,6 +29,8 @@ interface ApiService {
     @V3
     @GET("cooks/{cook_id}/reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
+
+
 
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
