@@ -11,7 +11,7 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
         const val TAG = "wowFlavorConfigManager"
         const val SYSTEM_ENVIRONMENT = "system_environment"
         const val CUSTOM_BASE_URL = "custom_base_url"
-        const val VERSION_PLACE_HOLDER = "VERSION_PLACE_HOLDER"
+        const val VERSION_PLACE_HOLDER = "v2"
     }
 
     var curEnvironment: String?

@@ -15,8 +15,6 @@ import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
-import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderDialog
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.ActiveOrderTrackerDialog
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
