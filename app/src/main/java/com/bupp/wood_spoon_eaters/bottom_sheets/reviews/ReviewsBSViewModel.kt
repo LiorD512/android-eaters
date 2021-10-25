@@ -17,21 +17,22 @@ class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository)
     var ratingHeader = ""
 
     val commentListData = MutableLiveData<List<CommentAdapterItem>?>()
-    val errorEvent = LiveEventData<WSError>()
+    val errorEvent = LiveEventData<String>()
 
     fun initData(restaurantId: Long, restaurantName: String, ratingHeader: String) {
         getSkeletonData()
         this.restaurantId = restaurantId
         this.restaurantName = restaurantName
         this.ratingHeader = ratingHeader
+        getRestaurantReview()
     }
 
-    fun getSkeletonData() {
+    private fun getSkeletonData() {
         val list = listOf(CommentSkeleton(), CommentSkeleton(), CommentSkeleton(), CommentSkeleton())
         commentListData.postValue(list)
     }
 
-    fun getRestaurantReview() {
+    private fun getRestaurantReview() {
         restaurantId.let { id ->
             viewModelScope.launch {
                 val result = restaurantRepository.getCookReview(id)
@@ -45,9 +46,11 @@ class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository)
                     }
                     RestaurantRepository.RestaurantRepoStatus.SERVER_ERROR -> {
                         Log.e(RestaurantPageViewModel.TAG, "Server Error")
+                        errorEvent.postRawValue("error")
                     }
                     RestaurantRepository.RestaurantRepoStatus.SOMETHING_WENT_WRONG -> {
                         Log.e(RestaurantPageViewModel.TAG, "Something went wrong")
+                        errorEvent.postRawValue("error")
                     }
                 }
             }
