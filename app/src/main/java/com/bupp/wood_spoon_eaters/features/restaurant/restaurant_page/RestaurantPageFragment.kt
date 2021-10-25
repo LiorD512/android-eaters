@@ -173,9 +173,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.favoriteEvent.observe(viewLifecycleOwner, {
             handleFavoriteEvent(it)
         })
-        viewModel.reviewEvent.observe(viewLifecycleOwner, {
-//            openReviews(it)
-        })
         mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
             reOpenCart()
         })

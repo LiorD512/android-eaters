@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -13,6 +14,7 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentBottomsheetReviewsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.android.scope.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BottomSheetReviews : BottomSheetDialogFragment() {
@@ -44,6 +46,7 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
         }
 
         initUI()
+        initObservers()
     }
 
 
@@ -76,6 +79,16 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
         viewModel.commentListData.observe(viewLifecycleOwner,{
             handleReviewList(it)
         })
+        viewModel.errorEvent.observe(viewLifecycleOwner,{
+            handleErrorEvent()
+        })
+    }
+
+    private fun handleErrorEvent() {
+        with(binding){
+            reviewBottomSheetReviewList.isVisible = false
+            reviewBottomSheetEmptyLayout.isVisible = true
+        }
     }
 
     private fun handleReviewList(comments: List<CommentAdapterItem>?){
