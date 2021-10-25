@@ -34,7 +34,7 @@ android {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
 
-            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/"'
+            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/v2/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
 
             applicationIdSuffix = ".staging"

@@ -27,7 +27,7 @@ interface ApiService {
     suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
     //New Order
-
+    @V3
     @GET("cooks/{cook_id}/reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
@@ -174,10 +174,12 @@ interface ApiService {
     suspend fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): ServerResponse<Any>
 
     //Post Review
+    @V3
     @POST("eaters/me/orders/{order_id}/reviews")
     suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
 
     //Ignore Review
+    @V3
     @POST("eaters/me/orders/{order_id}/reviews/ignore")
     suspend fun ignoreReview(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Any>
 

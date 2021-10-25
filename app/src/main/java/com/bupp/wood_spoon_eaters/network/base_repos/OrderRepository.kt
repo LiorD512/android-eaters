@@ -78,7 +78,7 @@ class OrderRepositoryImpl(private val service: ApiService, private val resultMan
     }
 
     override suspend fun ignoreReview(orderId: Long): ResultHandler<ServerResponse<Any>>{
-        return safeApiCall { service.ignoreReview(orderId) }
+        return resultManager.safeApiCall { service.ignoreReview(orderId) }
     }
 
 }
