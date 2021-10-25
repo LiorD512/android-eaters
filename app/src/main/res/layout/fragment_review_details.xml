@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +91,7 @@
                     android:layout_marginTop="14.6dp"
                     android:layout_marginEnd="15.4dp"
                     app:hint="Share your experience with our WoodSpoon community (optional)"
-                    app:maxChar="50"
+                    app:maxChar="300"
                     app:maxLines="4" />
 
             <LinearLayout
@@ -132,7 +133,7 @@
                                 style="@style/LatoReg15BrownishGrey"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Hey Lee, want to send us a private message?" />
+                                tools:text="Hey Lee, want to send us a private message?" />
 
                     </LinearLayout>
 
@@ -149,7 +150,7 @@
                     android:layout_marginTop="14.6dp"
                     android:layout_marginEnd="15.4dp"
                     app:hint="Type your message here… (optional)"
-                    app:maxChar="50"
+                    app:maxChar="300"
                     app:maxLines="4" />
         </LinearLayout>
 

@@ -16,13 +16,13 @@ class FlavorConfigManager(private val sharedPreferences: SharedPreferences) {
 
     var curEnvironment: String?
         get() = sharedPreferences.getString(SYSTEM_ENVIRONMENT, null)
-        set(curEnvironment) {
+        set(curEnvironment){
             sharedPreferences.edit().putString(SYSTEM_ENVIRONMENT, curEnvironment).commit()
         }
 
     var curBaseUrl: String?
         get() = sharedPreferences.getString(CUSTOM_BASE_URL, "")
-        set(curEnvironment) {
+        set(curEnvironment){
             sharedPreferences.edit().putString(CUSTOM_BASE_URL, curEnvironment).commit()
         }
 

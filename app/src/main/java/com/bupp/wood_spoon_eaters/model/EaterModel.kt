@@ -10,7 +10,7 @@ import java.util.*
 @kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 data class Eater(
-   @Json(name = "id") val id: Long,
+   @Json(name = "id") val id: Long?,
    @Json(name = "phone_number") val phoneNumber: String?,
    @Json(name = "account_status") val accountStatus: String?,
    @Json(name = "first_name") val firstName: String?,

@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience), RatingStarsViewReviews.RatingStarsViewListener {
@@ -33,10 +34,10 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
                 viewModel.onNextClick()
             }
             reviewFragExitBtn.setOnClickListener {
-                activity?.finish()
+                activity?.onBackPressed()
             }
             viewModel.order?.let { order ->
-                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).into(reviewFragImage)
+                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).circleCrop().into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
                 reviewFragCookName.text = order.restaurant?.firstName
             }
@@ -70,5 +71,7 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
     override fun onRatingClick(rating: Int) {
         viewModel.setRating(rating)
     }
+
+
 
 }

@@ -12,6 +12,7 @@ import retrofit2.http.*
 
 interface ApiService {
 
+
     //General
     @GET("eaters/utils/meta")
     suspend fun getMetaData(): ServerResponse<MetaDataModel>
@@ -26,17 +27,13 @@ interface ApiService {
     suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
     //New Order
-    @V3
+
     @GET("cooks/{cook_id}/reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
-
-
 
     //Address
     @DELETE("eaters/me/addresses/{address_id}")
     suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
-
-
 
     //Feed
 //    @GET("eaters/me/feed")
@@ -177,9 +174,12 @@ interface ApiService {
     suspend fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): ServerResponse<Any>
 
     //Post Review
-    @V3
     @POST("eaters/me/orders/{order_id}/reviews")
     suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
+
+    //Ignore Review
+    @POST("eaters/me/orders/{order_id}/reviews/ignore")
+    suspend fun ignoreReview(@Path(value = "order_id", encoded = true) orderId: Long): ServerResponse<Any>
 
     @PUT
     suspend fun uploadAsset(@Url uploadUrl: String, @Body photo: RequestBody): ResponseBody

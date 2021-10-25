@@ -324,6 +324,31 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         }
     }
 
+    suspend fun ignoreReview(orderId: Long): OrderRepoResult<Order> {
+        val result = withContext(Dispatchers.IO){
+            apiService.ignoreReview(orderId)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"postReview - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"postReview - GenericError")
+                    OrderRepoResult(OrderRepoStatus.POST_REVIEW_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"postReview - Success")
+                    OrderRepoResult(OrderRepoStatus.POST_REVIEW_SUCCESS)
+                }
+                is ResultHandler.WSCustomError -> {
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
     companion object{
         const val TAG = "wowOrderRepo"
     }

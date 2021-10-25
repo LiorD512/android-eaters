@@ -17,9 +17,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.BottomSheetReviews
-import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -90,7 +88,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 }
             }
             ratingLayout.setOnClickListener {
-                viewModel.getRestaurantReview()
+                openReviews()
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
@@ -186,9 +184,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.favoriteEvent.observe(viewLifecycleOwner, {
             handleFavoriteEvent(it)
         })
-        viewModel.reviewEvent.observe(viewLifecycleOwner, {
-            handleReviewData(it)
-        })
         mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
             reOpenCart()
         })
@@ -207,7 +202,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             rating.text = "${params.rating}"
-            ratingLayout.isVisible = params.rating ?: 0f > 0
+//            ratingLayout.isVisible = params.rating ?: 0f > 0
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
@@ -227,7 +222,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             //ratings
-            ratingCount.isVisible = restaurant.reviewCount > 0
+//            ratingCount.isVisible = restaurant.reviewCount > 0
             ratingCount.text = "(${restaurant.reviewCount} ratings)"
 
             //favorite
@@ -337,11 +332,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleReviewData(it: LiveEvent<Review?>?) {
-        it?.getContentIfNotHandled()?.let { reviews ->
+    private fun openReviews() {
             val restaurant = viewModel.restaurantFullData.value
+        restaurant?.let{ restaurant->
             val header = "${restaurant?.rating?:""} (${restaurant?.reviewCount?:""} reviews)"
-            BottomSheetReviews.newInstance(reviews, restaurant?.restaurantName?:"", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName?:"", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 
