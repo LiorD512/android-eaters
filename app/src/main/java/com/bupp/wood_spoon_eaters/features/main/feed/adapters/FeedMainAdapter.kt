@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -21,14 +22,11 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
     FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener {
 
     private val dataList: MutableList<FeedAdapterItem> = mutableListOf()
+    @SuppressLint("NotifyDataSetChanged")
     fun setDataList(dataList: List<FeedAdapterItem>){
         this.dataList.clear()
         this.dataList.addAll(dataList)
         notifyDataSetChanged()
-    }
-
-    fun updateDataList(){
-
     }
 
     interface FeedMainAdapterListener {
@@ -36,6 +34,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
         fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
         fun onChangeAddressClick()
         fun onDishSwiped()
+        fun onRefreshFeedClick()
     }
 
     override fun getItemViewType(position: Int): Int = dataList[position].type!!.ordinal
@@ -83,6 +82,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
                 val binding = FeedAdapterEmptySectionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterEmptySectionViewHolder(binding)
             }
+            FeedAdapterViewType.NO_NETWORK_SECTION.ordinal -> {
+                val binding = FeedAdapterNoNetworkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterNoNetworkSectionViewHolder(binding, listener)
+            }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterSkeletonViewHolder(binding)
@@ -117,6 +120,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
             is FeedAdapterEmptySection -> {
                 holder as FeedAdapterEmptySectionViewHolder
                 holder.bindItems(section)
+            }
+            is FeedAdapterNoNetworkSection -> {
+                holder as FeedAdapterNoNetworkSectionViewHolder
+                holder.bindItems()
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder

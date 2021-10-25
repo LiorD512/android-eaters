@@ -5,7 +5,7 @@ import com.bupp.wood_spoon_eaters.model.Review
 import com.bupp.wood_spoon_eaters.model.ServerResponse
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
-import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 
 interface RestaurantRepositoryInterface{
     suspend fun getRestaurant(lat: Double?, lng: Double?, addressId: Long?, cookId: Long): ResultHandler<ServerResponse<Restaurant>>
@@ -14,22 +14,22 @@ interface RestaurantRepositoryInterface{
     suspend fun unlikeCook(cookId: Long): ResultHandler<ServerResponse<Any>>
 }
 
-class RestaurantRepositoryImpl(private val service: ApiService) : RestaurantRepositoryInterface {
+class RestaurantRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : RestaurantRepositoryInterface {
     override suspend fun getRestaurant(lat: Double?, lng: Double?, addressId: Long?, restaurantId: Long): ResultHandler<ServerResponse<Restaurant>> {
 //        val tempUrl = "https://woodspoon-server-pr-167.herokuapp.com/api/v2/cooks/1" // todo - remove this shit !
-        return safeApiCall { service.getRestaurant(restaurantId, lat, lng, addressId) }
+        return resultManager.safeApiCall { service.getRestaurant(restaurantId, lat, lng, addressId) }
     }
 
     override suspend fun getCookReview(cookId: Long): ResultHandler<ServerResponse<Review>> {
-        return safeApiCall { service.getCookReview(cookId = cookId) }
+        return resultManager.safeApiCall { service.getCookReview(cookId = cookId) }
     }
 
     override suspend fun likeCook(cookId: Long): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.likeCook(cookId) }
+        return resultManager.safeApiCall { service.likeCook(cookId) }
     }
 
     override suspend fun unlikeCook(cookId: Long): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.unlikeCook(cookId) }
+        return resultManager.safeApiCall { service.unlikeCook(cookId) }
     }
 
 }

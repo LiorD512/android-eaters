@@ -124,6 +124,20 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
+        viewModel.networkError.observe(viewLifecycleOwner, {
+            showNoNetworkLayout()
+        })
+    }
+
+    private fun showNoNetworkLayout() {
+        with(binding!!){
+            dishFragMainListLayout.dishFragNoNetwork.visibility = View.VISIBLE
+            dishFragAddToCartBtn.hide()
+
+            dishFragMainListLayout.dishFragNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
+                viewModel.reloadPage()
+            }
+        }
 
     }
 
@@ -226,6 +240,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private fun handleDishFullData(dish: FullDish) {
         with(binding!!){
+            dishFragMainListLayout.dishFragNoNetwork.visibility = View.GONE
+            dishFragAddToCartBtn.show()
+
             // video
             dishFragVideoBtn.isVisible = !dish.restaurant.video.isNullOrEmpty()
             dishFragVideoBtn.setOnClickListener {

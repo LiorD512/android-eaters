@@ -166,12 +166,12 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     private fun checkForBranchIntent() {
         intent?.let {
-            val cookId = intent.getLongExtra("cook_id", -1)
+            val chefId = intent.getLongExtra("chef_id", -1)
             val menuItemId = intent.getLongExtra("menu_item_id", -1)
-            Log.d("wowMain", "branch: cook $cookId, menuItem: $menuItemId")
-            if (cookId > 0) {
-                viewModel.getRestaurant(cookId)
-                viewModel.logDeepLinkEvent(cookId)
+            Log.d("wowMain", "branch: cook $chefId, menuItem: $menuItemId")
+            if (chefId > 0) {
+                viewModel.getRestaurant(chefId)
+                viewModel.logDeepLinkEvent(chefId)
             }
         }
     }

@@ -13,54 +13,56 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
+class ResultManager(private val errorManager: ErrorManger) {
 
-suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, apiCall: suspend () -> T): ResultHandler<T> {
-    return withContext(dispatcher) {
-        try {
-            ResultHandler.Success(apiCall.invoke())
-        } catch (throwable: Throwable) {
-            when (throwable) {
-                is IOException -> {
-                    val errorMessage = throwable.message
-                    Log.d("safeApiCall","NetworkError: $errorMessage")
-                    ResultHandler.NetworkError
-                }
-                is HttpException -> {
-                    val code = throwable.code()
-                    when (code) {
-                        400 -> {
-                            val source = throwable.response()?.errorBody()?.source()
-                            val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher = Dispatchers.IO, apiCall: suspend () -> T): ResultHandler<T> {
+        return withContext(dispatcher) {
+            try {
+                ResultHandler.Success(apiCall.invoke())
+            } catch (throwable: Throwable) {
+                errorManager.onError()
+                when (throwable) {
+                    is IOException -> {
+                        val errorMessage = throwable.message
+                        Log.d("safeApiCall", "NetworkError: $errorMessage")
+                        ResultHandler.NetworkError
+                    }
+                    is HttpException -> {
+                        val code = throwable.code()
+                        when (code) {
+                            400 -> {
+                                val source = throwable.response()?.errorBody()?.source()
+                                val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
-                            val jsonAdapter: JsonAdapter<ServerResponse<Any>> = moshi.adapter(
-                                Types.newParameterizedType(ServerResponse::class.java, WSError::class.java)
-                            )
-                            val serverResponse = jsonAdapter.fromJson(source)
-                            Log.d("safeApiCall","wow errors: $serverResponse")
-                            if (serverResponse?.errors != null) {
+                                val jsonAdapter: JsonAdapter<ServerResponse<Any>> = moshi.adapter(
+                                    Types.newParameterizedType(ServerResponse::class.java, WSError::class.java)
+                                )
+                                val serverResponse = jsonAdapter.fromJson(source)
+                                Log.d("safeApiCall", "wow errors: $serverResponse")
+                                if (serverResponse?.errors != null) {
                                     ResultHandler.WSCustomError(serverResponse?.errors)
-                            } else {
+                                } else {
+                                    val errorResponse = convertErrorBody(throwable)
+                                    ResultHandler.GenericError(code, errorResponse)
+                                }
+                            }
+                            else -> {
                                 val errorResponse = convertErrorBody(throwable)
                                 ResultHandler.GenericError(code, errorResponse)
                             }
                         }
-                        else -> {
-                            val errorResponse = convertErrorBody(throwable)
-                            ResultHandler.GenericError(code, errorResponse)
-                        }
                     }
-                }
-                else -> {
-                    Log.d("safeApiCall", "safeApiCall serverResponse: ${throwable.message}")
-                    ResultHandler.GenericError(null, null)
+                    else -> {
+                        Log.d("safeApiCall", "safeApiCall serverResponse: ${throwable.message}")
+                        ResultHandler.GenericError(null, null)
+                    }
                 }
             }
         }
     }
-}
 
-private fun convertErrorBody(throwable: HttpException): String {
-    return "errorrrrrrrrrrrrrrrrrrrrr"
+    private fun convertErrorBody(throwable: HttpException): String {
+        return "errorrrrrrrrrrrrrrrrrrrrr"
 //    return try {
 //        throwable.response()?.errorBody()?.source()?.let {
 //            val moshiAdapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
@@ -69,4 +71,5 @@ private fun convertErrorBody(throwable: HttpException): String {
 //    } catch (exception: Exception) {
 //        null
 //    }
+    }
 }

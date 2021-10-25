@@ -3,6 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/custom_tip_bottom_sheet.xml" value="0.17481884057971014" />
+<<<<<<< HEAD
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_empty_feed_item.xml" value="0.17481884057971014" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_network_issue_item.xml" value="0.25052083333333336" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_no_network_item.xml" value="0.16770833333333332" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_feed.xml" value="0.17481884057971014" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_restaurant_page.xml" value="0.1" />
+=======
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/dish_main_list_layout.xml" value="0.2807971014492754" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_empty_feed_item.xml" value="0.17481884057971014" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_network_issue_item.xml" value="0.25052083333333336" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/feed_adapter_no_network_item.xml" value="0.16770833333333332" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_dish_page.xml" value="0.11911231884057971" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_feed.xml" value="0.17481884057971014" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/fragment_restaurant_page.xml" value="0.1" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/item_restaurant_dish_skeleton.xml" value="0.10416666666666667" />
+>>>>>>> feature/error_manager
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/restaurant_main_list_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/restaurant_main_list_layout_skeleton.xml" value="0.18072916666666666" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/drawable/my_location_disabled.xml" value="0.3765625" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/activity_event.xml" value="0.2911458333333333" />
         <entry key="..\:/Monkeytech/woodspoonNew/WoodSpoonEaters_Android/app/src/main/res/layout/activity_new_order.xml" value="0.2911458333333333" />
@@ -129,7 +148,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
   <component name="SuppressionsComponent">
     <option name="suppComments" value="[]" />
   </component>

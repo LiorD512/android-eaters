@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.network.base_repos
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
-import com.bupp.wood_spoon_eaters.network.result_handler.safeApiCall
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 
 interface EaterDataRepositoryInterface{
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
@@ -12,19 +12,19 @@ interface EaterDataRepositoryInterface{
     suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Any>>
 }
 
-class EaterDataRepositoryImpl(private val service: ApiService) : EaterDataRepositoryInterface {
+class EaterDataRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : EaterDataRepositoryInterface {
     override suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>> {
-        return safeApiCall { service.getTraceableOrders() }
+        return resultManager.safeApiCall { service.getTraceableOrders() }
     }
     override suspend fun getFavorites(feedRequest: FeedRequest): ResultHandler<ServerResponse<Search>> {
-        return safeApiCall { service.getEaterFavorites(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp) }
+        return resultManager.safeApiCall { service.getEaterFavorites(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp) }
     }
     override suspend fun getTrigger(): ResultHandler<ServerResponse<Trigger>> {
-        return safeApiCall { service.getTriggers() }
+        return resultManager.safeApiCall { service.getTriggers() }
     }
 
     override suspend fun cancelOrder(orderId: Long, note: String?): ResultHandler<ServerResponse<Any>> {
-        return safeApiCall { service.cancelOrder(orderId, note) }
+        return resultManager.safeApiCall { service.cancelOrder(orderId, note) }
     }
 
 }
