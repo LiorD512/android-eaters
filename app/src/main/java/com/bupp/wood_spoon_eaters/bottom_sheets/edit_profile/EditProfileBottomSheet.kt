@@ -23,8 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageViewListener, HeaderView.HeaderViewListener{
-
+class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageVideoViewListener, HeaderView.HeaderViewListener {
 
     var binding: EditProfileBottomSheetBinding? = null
     private var photoUploaded: Boolean = false
@@ -57,7 +56,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,11 +71,11 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
 
     private fun initUi() {
 //        mediaUtils = MediaUtils(requireActivity(), this)
-        binding!!.editMyProfileFragUserImageView.setUserImageViewListener(this)
-        binding!!.editMyProfileFragUserImageBtn.setOnClickListener{
+        binding.editMyProfileFragUserImageView.setUserImageVideoViewListener(this)
+        binding.editMyProfileFragUserImageBtn.setOnClickListener {
             mainViewModel.onUserImageClick()
         }
-        binding!!.editMyProfileFragSave.setOnClickListener{
+        binding.editMyProfileFragSave.setOnClickListener {
             saveEaterDetails()
         }
 
@@ -88,7 +86,7 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     private fun initObservers() {
         viewModel.userDetails.observe(viewLifecycleOwner, { eater -> setEaterDetails(eater) })
 
-        viewModel.refreshThumbnailEvent.observe(viewLifecycleOwner,  { event -> handleSaveResponse(event) })
+        viewModel.refreshThumbnailEvent.observe(viewLifecycleOwner, { event -> handleSaveResponse(event) })
 
         viewModel.getEaterProfile()
 
@@ -116,10 +114,10 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
     private fun setEaterDetails(eater: Eater?) {
         with(binding!!) {
             if (eater != null) {
-                if(eater.thumbnail != null){
+                if (eater.thumbnail != null) {
                     editMyProfileFragUserImageView.setImage(eater.thumbnail)
                     editMyProfileFragUserImageBtn.setTitle("Change photo")
-                }else{
+                } else {
                     editMyProfileFragUserImageBtn.setTitle("Add photo")
                 }
 
@@ -138,7 +136,6 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
                     editMyProfileFragPhone.setText(it)
                     editMyProfileFragPhone.alpha = 0.5f
                 }
-
             }
         }
         this.photoUploaded = false

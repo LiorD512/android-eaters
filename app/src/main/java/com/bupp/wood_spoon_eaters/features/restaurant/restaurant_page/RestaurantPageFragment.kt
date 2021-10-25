@@ -338,7 +338,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         restaurant?.let{ restaurant->
             val header = "${restaurant?.rating?:""} (${restaurant?.reviewCount?:""} reviews)"
             BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName?:"", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
-        }
     }
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {

@@ -9,6 +9,7 @@
 //import androidx.core.content.ContextCompat
 //import androidx.fragment.app.DialogFragment
 //import androidx.recyclerview.widget.LinearLayoutManager
+//import by.kirich1409.viewbindingdelegate.viewBinding
 //import com.bupp.wood_spoon_eaters.R
 //import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 //import com.bupp.wood_spoon_eaters.common.Constants
@@ -34,7 +35,7 @@
 //    private var adapter: RateLastOrderAdapter? = null
 //    val viewModel by viewModel<RateLastOrderViewModel>()
 //
-//    var binding: RateLastOrderDialogBinding? = null
+//    val binding: RateLastOrderDialogBinding by viewBinding()
 //
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -43,7 +44,6 @@
 //
 //    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 //        val view = inflater.inflate(R.layout.rate_last_order_dialog, null)
-//        binding = RateLastOrderDialogBinding.bind(view)
 //        dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
 //        return view
 //    }
@@ -56,7 +56,7 @@
 //    }
 //
 //    private fun initUi() {
-//        with(binding!!) {
+//        with(binding) {
 //            rateLastOrderCloseBtn.setOnClickListener { dismiss() }
 //            rateLastOrderDoneBtn.setBtnEnabled(false)
 //
@@ -76,9 +76,9 @@
 //    private fun initObservers() {
 //        viewModel.progressData.observe(viewLifecycleOwner, {
 //            if (it) {
-//                binding!!.rateLastOrderPb.show()
+//                binding.rateLastOrderPb.show()
 //            } else {
-//                binding!!.rateLastOrderPb.hide()
+//                binding.rateLastOrderPb.hide()
 //            }
 //        })
 //        viewModel.getLastOrder.observe(viewLifecycleOwner, { order ->
@@ -91,7 +91,7 @@
 //    }
 //
 //    private fun handleOrderDetails(order: Order) {
-//        with(binding!!) {
+//        with(binding) {
 //            rateLastOrderDishesRecyclerView.layoutManager = LinearLayoutManager(context)
 //            adapter = RateLastOrderAdapter(requireContext(), order.orderItems, this@RateLastOrderDialog)
 //            rateLastOrderDishesRecyclerView.adapter = adapter
@@ -105,7 +105,7 @@
 //
 //    override fun onRate() {
 //        if (allFieldsRated()) {
-//            binding!!.rateLastOrderDoneBtn.setBtnEnabled(true)
+//            binding.rateLastOrderDoneBtn.setBtnEnabled(true)
 //        }
 //    }
 //
@@ -128,7 +128,7 @@
 //    }
 //
 //    private fun onDoneClick() {
-//        binding!!.rateLastOrderPb.show()
+//        binding.rateLastOrderPb.show()
 //        val reviewRequest = ReviewRequest()
 //        var metricsArr = adapter?.getRatedDishes()
 //
@@ -136,7 +136,7 @@
 //        reviewRequest.deliveryRating = deliveryRating
 //
 //        reviewRequest.dishMetrics = metricsArr
-//        reviewRequest.body = binding!!.rateLastOrderNotes.getText()
+//        reviewRequest.body = binding.rateLastOrderNotes.getText()
 //
 //        viewModel.postRating(orderId, reviewRequest)
 //
@@ -149,7 +149,6 @@
 //
 //    override fun onDestroyView() {
 //        adapter = null
-//        binding = null
 //        super.onDestroyView()
 //    }
 //
