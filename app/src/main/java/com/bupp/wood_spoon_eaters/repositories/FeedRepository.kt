@@ -60,7 +60,7 @@ class FeedRepository(
     suspend fun getFeedHref(href: String): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
             val baseUrl = flavorConfigManager.getBaseUrl()
-            apiService.getHrefCollection(baseUrl + "v2" + href)
+            apiService.getHrefCollection(baseUrl + href)
         }
         result.let {
             return when (result) {
