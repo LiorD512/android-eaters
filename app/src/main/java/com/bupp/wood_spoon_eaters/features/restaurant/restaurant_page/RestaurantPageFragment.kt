@@ -220,7 +220,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             //ratings
-//            ratingCount.isVisible = restaurant.reviewCount > 0
+            ratingCount.isVisible = restaurant.reviewCount > 0
             ratingCount.text = "(${restaurant.reviewCount} ratings)"
 
             //favorite
@@ -333,7 +333,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun openReviews() {
         val restaurant = viewModel.restaurantFullData.value
         restaurant?.let { restaurant ->
-            val header = "${restaurant?.rating ?: ""} (${restaurant?.reviewCount ?: ""} reviews)"
+            val header = "${restaurant.getAvgRating()} (${restaurant?.reviewCount ?: ""} reviews)"
             BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }

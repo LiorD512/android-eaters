@@ -77,6 +77,14 @@ data class FeedRestaurantSection(
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
+
+    fun getAvgRating(): String{
+        avgRating?.let{
+            return String.format("%.1f", avgRating)
+        }
+        return ""
+    }
+
     fun toRestaurantInitParams(sectionTitle: String? = null,
                                sectionOrder: Int? = null,
                                restaurantOrderInSection: Int? = null,
@@ -85,7 +93,7 @@ data class FeedRestaurantSection(
             chefId,
             chefThumbnail,
             chefCover,
-            avgRating,
+            getAvgRating(),
             restaurantName,
             chefName,
             false,

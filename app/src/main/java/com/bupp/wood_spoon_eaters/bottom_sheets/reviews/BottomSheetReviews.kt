@@ -24,21 +24,16 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
     val adapter = ReviewsAdapter()
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_bottomsheet_reviews, container, false)
         binding = FragmentBottomsheetReviewsBinding.bind(view)
         return view
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.BottomSheetStyle)
     }
-
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,7 +59,6 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             val d = it as BottomSheetDialog
             val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
             behavior = BottomSheetBehavior.from(sheet!!)
-
         }
         return dialog
     }
@@ -79,6 +73,11 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             }
             reviewBottomSheetTitle.text = viewModel.ratingHeader
             reviewsBottomSheetTextView.text = viewModel.restaurantName
+            reviewBottomSheetNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
+                reviewBottomSheetReviewList.isVisible = true
+                reviewBottomSheetNoNetwork.isVisible = false
+                viewModel.reloadData()
+            }
         }
     }
 
@@ -94,7 +93,7 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
     private fun handleErrorEvent() {
         with(binding!!){
             reviewBottomSheetReviewList.isVisible = false
-            reviewBottomSheetEmptyLayout.isVisible = true
+            reviewBottomSheetNoNetwork.isVisible = true
         }
     }
 

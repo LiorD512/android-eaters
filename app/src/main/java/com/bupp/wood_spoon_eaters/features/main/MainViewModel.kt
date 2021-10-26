@@ -107,7 +107,7 @@ class MainViewModel(
                         restaurantId = restaurant.id,
                         chefThumbnail = restaurant.thumbnail,
                         coverPhoto = restaurant.cover,
-                        rating = restaurant.rating,
+                        rating = restaurant.getAvgRating(),
                         restaurantName = restaurant.restaurantName,
                         chefName = restaurant.getFullName(),
                         isFavorite = restaurant.isFavorite ?: false
