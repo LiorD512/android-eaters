@@ -49,12 +49,12 @@ jobs:
           SLACK_TITLE: New version is out! - STAGING
           SLACK_MESSAGE: "Check out this new version \n ${{ steps.vars.outputs.tag }} -  ${{ steps.vars2.outputs.commit }}"
 
-      - name: Build Macrobenchmark Sample
-        uses: eskatos/gradle-command-action@v1
-        env:
-          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
-        with:
-          arguments: build
-          build-root-directory: ${{ github.workspace }}
-          gradle-executable: ${{ github.workspace }}/gradlew
-          wrapper-directory: ${{ github.workspace }}/gradle/wrapper
+#      - name: Build Macrobenchmark Sample
+#        uses: eskatos/gradle-command-action@v1
+#        env:
+#          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
+#        with:
+#          arguments: build
+#          build-root-directory: ${{ github.workspace }}
+#          gradle-executable: ${{ github.workspace }}/gradlew
+#          wrapper-directory: ${{ github.workspace }}/gradle/wrapper
