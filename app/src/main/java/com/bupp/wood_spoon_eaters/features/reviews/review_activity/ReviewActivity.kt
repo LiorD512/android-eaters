@@ -43,13 +43,23 @@ class ReviewActivity : AppCompatActivity() {
         viewModel.errorEvent.observe(this,{
             handleWSError(it)
         })
+        viewModel.progressData.observe(this,{
+            handleProgressBar(it)
+        })
     }
 
     private fun handleWSError(errorEvent : LiveEvent<List<WSError>?>) {
         errorEvent.getContentIfNotHandled().let{ errorList->
             val errorMsg = errorList?.getErrorsMsg() ?: "Ops! something went wrong"
             showErrorToast(errorMsg, binding.root)
-            finish()
+        }
+    }
+
+    private fun handleProgressBar(isLoading: Boolean) {
+        if (isLoading) {
+            binding.reviewsActProgressBar.show()
+        } else {
+            binding.reviewsActProgressBar.hide()
         }
     }
 

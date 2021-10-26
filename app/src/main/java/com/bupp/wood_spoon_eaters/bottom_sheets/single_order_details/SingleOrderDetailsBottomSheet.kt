@@ -54,7 +54,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
         arguments?.let {
             curOrderId = it.getLong(SINGLE_ORDER_ARGS)
-            viewModel.initSingleOrder(curOrderId)
         }
     }
 
@@ -169,7 +168,6 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 if (wasRated == true) {
                     singleOrderDetailsRate.setBtnEnabled(false)
                     singleOrderDetailsRate.setOnClickListener(null)
-
                 }
             }
         }
@@ -189,10 +187,10 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         dismiss()
     }
 
-    //todo : fix this
-//    override fun onRatingDone(isSuccess: Boolean) {
-//        viewModel.initSingleOrder(curOrderId)
-//    }
+    override fun onResume() {
+        super.onResume()
+        viewModel.initSingleOrder(curOrderId)
+    }
 
     override fun onToolTipClick(type: Int) {
         var titleText = ""

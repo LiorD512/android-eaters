@@ -41,7 +41,7 @@ class ReviewsAdapter : ListAdapter<CommentAdapterItem, RecyclerView.ViewHolder>(
         fun bindItem(data: Comment) {
             with(binding) {
                 reviewsItemName.text = data.eater?.firstName
-                reviewsItemComment.text = data.reviewText
+                reviewsItemComment.text = data.reviewText ?: ""
                 data.eater?.thumbnail?.let { reviewsItemIcon.setImage(it) }
                 val rating = data.rating ?: 0
                 reviewsItemRating.isVisible = rating > 0

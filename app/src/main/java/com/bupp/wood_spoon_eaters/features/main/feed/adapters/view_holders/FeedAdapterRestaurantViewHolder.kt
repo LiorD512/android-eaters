@@ -36,7 +36,7 @@ class FeedAdapterRestaurantViewHolder(
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
-                feedRestaurantItemRating.text = restaurant.avgRating.toString()
+                feedRestaurantItemRating.text = restaurant.getAvgRating()
                 feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0f > 0
 
 //                adapter.setParentItemPosition(restaurantSection.id)

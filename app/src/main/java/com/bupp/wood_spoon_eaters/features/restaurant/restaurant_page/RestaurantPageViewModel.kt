@@ -114,7 +114,6 @@ class RestaurantPageViewModel(
         Log.d(TAG, "chooseStartingCookingSlot")
         if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
             /**  case1 : has open cart - get the cooking slot of the current order **/
-            //todo - nicole - this will work? - cooking slot sections is not returned with order
             val orderCookingSlot = cartManager.getCurrentCookingSlot()
             orderCookingSlot?.let {
                 val currentCookingSlot = getCookingSlotById(orderCookingSlot.id)

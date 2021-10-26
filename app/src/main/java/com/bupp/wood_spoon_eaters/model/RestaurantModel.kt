@@ -34,4 +34,11 @@ data class Restaurant(
     fun getShareTextStr(): String{
         return "$shareText \n $shareUrl"
     }
+
+    fun getAvgRating(): String{
+        rating?.let{
+            return String.format("%.1f", rating)
+        }
+        return ""
+    }
 }

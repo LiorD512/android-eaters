@@ -70,15 +70,23 @@
                     android:paddingBottom="5dp"
                     tools:listitem="@layout/reviews_item" />
 
-            <View
-                    android:id="@+id/reviewBottomSheetEmptyLayout"
+            <FrameLayout
+
+                    android:id="@+id/reviewBottomSheetNoNetwork"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:visibility="gone"
-                    android:background="@drawable/grey_white_cornered_rag15_rect"/>
+                    android:layout_height="match_parent"
+                    android:paddingBottom="100dp"
+                    android:visibility="gone">
+
+                <include
+                        android:id="@+id/reviewBottomSheetNoNetworkLayout"
+                        layout="@layout/feed_adapter_no_network_item"/>
+
+            </FrameLayout>
 
 
         </LinearLayout>
+
 
     </androidx.core.widget.NestedScrollView>
 
