@@ -91,9 +91,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 if (viewModel.validateOrderData()) {
                     mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT)
                 }
-                checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
-                initOrderItemsView()
             }
+            checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
+            initOrderItemsView()
         }
     }
 
