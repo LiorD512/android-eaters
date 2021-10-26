@@ -29,7 +29,7 @@ sealed class CommentAdapterItem()
 @JsonClass(generateAdapter = true)
 data class Comment(
     @Json(name = "id") val id: Long?,
-    @Json(name = "rating") val rating: Int?,
+    @Json(name = "rating") val rating: Double?,
     @Json(name = "review_text") val reviewText: String?,
     @Json(name = "review_date") val reviewDate: Date?,
     @Json(name = "eater") val eater: Eater?
