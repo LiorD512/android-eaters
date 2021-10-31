@@ -18,7 +18,7 @@ import com.bupp.wood_spoon_eaters.model.MenuItem
 class RestaurantMainViewModel(
     private val flowEventsManager: FlowEventsManager,
     private val eventsManager: EventsManager,
-    private val cartManager: CartManager
+    cartManager: CartManager
     ) : ViewModel() {
 
     private var shouldForceRefresh = false

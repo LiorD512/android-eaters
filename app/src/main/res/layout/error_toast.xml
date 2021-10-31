@@ -9,6 +9,7 @@
             android:background="@drawable/rectangle_dark_grey_cornered"
             android:layout_margin="7.7dp"
             android:paddingVertical="18dp"
+            android:paddingHorizontal="5dp"
             style="@style/LatoReg15WhiteFive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

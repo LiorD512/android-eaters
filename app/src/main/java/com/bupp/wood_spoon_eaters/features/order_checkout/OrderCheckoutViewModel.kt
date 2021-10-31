@@ -24,11 +24,15 @@ import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
 import java.util.*
 
-class OrderCheckoutViewModel(private val paymentManager: PaymentManager, private val cartManager: CartManager, private val flowEventsManager: FlowEventsManager,
+class OrderCheckoutViewModel(
+    private val paymentManager: PaymentManager,
+    private val cartManager: CartManager,
+    private val flowEventsManager: FlowEventsManager,
 private val eventsManager: EventsManager) : ViewModel() {
 
 
     val navigationEvent = LiveEventData<NavigationEvent>()
+    val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
 
     data class NavigationEvent(
         val navigationType: NavigationEventType,

@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,6 +49,11 @@ class OrderCheckoutActivity : BaseActivity() {
     private fun initObservers() {
         viewModel.navigationEvent.observe(this, {
             handleNavigation(it)
+        })
+        viewModel.deliveryAtChangeEvent.observe(this, {
+            it.getContentIfNotHandled()?.let { message ->
+                showErrorToast(message, binding.root)
+            }
         })
     }
 
