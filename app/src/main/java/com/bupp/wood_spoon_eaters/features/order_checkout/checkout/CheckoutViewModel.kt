@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,7 +33,6 @@ class CheckoutViewModel(
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
     val orderLiveData = cartManager.getCurrentOrderData()
     val deliveryDatesUi = cartManager.getDeliveryDatesUi()
-    val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
 
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
     val orderItemsData = MutableLiveData<List<CheckoutAdapterItem>>()
@@ -75,7 +75,7 @@ class CheckoutViewModel(
 //        order.deliverAt
     }
 
-    private fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
+    fun fetchOrderDeliveryTimes(isPendingRequest: Boolean = false) {
         Log.d(TAG, "fetchOrderDeliveryTimes: $isPendingRequest")
         orderLiveData.value?.let {
             viewModelScope.launch {
@@ -93,6 +93,11 @@ class CheckoutViewModel(
 
     fun refreshCheckoutPage() {
         cartManager.refreshOrderLiveData()
+    }
+
+    fun updateDeliveryAt(deliveryAt:Date?){
+        cartManager.updateCurrentDeliveryAt(deliveryAt)
+      updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryAt)))
     }
 
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
@@ -250,7 +255,6 @@ class CheckoutViewModel(
         }
         return false
     }
-
 
     fun clearCart() {
         viewModelScope.launch {
