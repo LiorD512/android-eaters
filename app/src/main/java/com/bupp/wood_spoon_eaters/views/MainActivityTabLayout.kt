@@ -31,9 +31,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         TabLayoutMediator(binding.mainActTabLayout, viewPager, true, false) { tab, position ->
             when(position){
                 0 -> tab.setCustomView(R.layout.feed_tab_home)
-//                1 -> tab.setCustomView(R.layout.feed_tab_search)
-                1 -> tab.setCustomView(R.layout.feed_tab_orders)
-                2 -> tab.setCustomView(R.layout.feed_tab_account)
+                1 -> tab.setCustomView(R.layout.feed_tab_search)
+                2 -> tab.setCustomView(R.layout.feed_tab_orders)
+                3 -> tab.setCustomView(R.layout.feed_tab_account)
             }
         }.attach()
 

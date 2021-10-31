@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
@@ -110,8 +111,11 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun redirectToCodeVerification() {
-        hideKeyboard()
-        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+        Log.d("wowo","destinatonL: ${findNavController(R.id.loginActContainer).currentDestination}")
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.phoneVerificationFragment){
+            hideKeyboard()
+            findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+        }
     }
 
     private fun handlePb(shouldShow: Boolean) {
