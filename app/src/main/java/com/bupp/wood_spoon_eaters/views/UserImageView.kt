@@ -33,8 +33,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setImage(imageUri: String) {
-        Glide.with(context).load(imageUri).transform(CircleCrop()).into(binding.userThumbnail)
+    fun setImage(imageUri: String?) {
+        imageUri?.let{
+            Glide.with(context).load(imageUri).transform(CircleCrop()).into(binding.userThumbnail)
+        }
     }
 
     private fun setSrc(drawableID: Int) {

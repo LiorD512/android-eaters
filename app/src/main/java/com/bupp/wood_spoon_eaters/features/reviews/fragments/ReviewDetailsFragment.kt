@@ -19,6 +19,7 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentReviewDetailsBinding.bind(view)
+        initUi()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +36,6 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
 
             override fun onTransitionEnd(transition: Transition?) {
                 fadeIn()
-                initUi()
             }
 
             override fun onTransitionCancel(transition: Transition?) {
@@ -60,7 +60,7 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
             viewModel.order?.let { order ->
                 Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).circleCrop().into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
-                reviewFragCookName.text = " by ${order.restaurant?.firstName}"
+                reviewFragCookName.text = " by ${order.restaurant?.getFullName()}"
                 reviewFragUserInputText.text = "Hey ${viewModel.getEaterName()}, want to send us a private message?"
             }
         }

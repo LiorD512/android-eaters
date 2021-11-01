@@ -71,10 +71,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:paddingTop="8dp"
+                    android:layout_marginEnd="15dp"
                     android:text="Amazing as always! Love the new summer options like watermelon mint feta and ice cream! The Love the new summer options like watermelon mint feta!"
                     app:collapseMaxLines="2"
                     app:layout_constraintStart_toStartOf="@+id/reviewsItemIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/reviewsItemIcon" />
+                    app:layout_constraintTop_toBottomOf="@+id/reviewsItemIcon"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
