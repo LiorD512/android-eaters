@@ -211,7 +211,6 @@ class CartManager(
         Log.d("orderFlow - cartManager", "updateOrderParams")
         Log.d(TAG, "updateOrderParams")
         currentOrderResponse?.let {
-
 //            orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
 
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
@@ -481,6 +480,7 @@ class CartManager(
      */
     fun onCartCleared() {
         Log.d("orderFlow - cartManager", "onCartCleared")
+        currentDeliveryAt = null
         currentOrderResponse = null
         currentOrderDeliveryDates = null
         orderLiveData.postValue(null)
@@ -516,14 +516,21 @@ class CartManager(
     }
 
     private var currentDeliveryAt: Date? = null
+    fun updateCurrentDeliveryAt(deliverAt: Date?){
+        currentDeliveryAt = deliverAt
+    }
+    
     private val deliveryAtChangeEvent = LiveEventData<String>()
     fun getDeliveryAtChangeEvent() = deliveryAtChangeEvent
     private fun updateOrderAtParams(deliverAt: Date?) {
         deliverAt?.let{ newDeliveryAt ->
-            if(currentDeliveryAt == null || currentDeliveryAt != newDeliveryAt){
-                currentDeliveryAt = newDeliveryAt
-                //todo : need to update message format
-                deliveryAtChangeEvent.postRawValue("Delivery at change")
+            currentDeliveryAt?.let{ currentDeliveryAt->
+                if(currentDeliveryAt != newDeliveryAt){
+                    val currentTime = DateUtils.parseDateToUsTime(currentDeliveryAt)
+                    val newTime = DateUtils.parseDateToUsTime(newDeliveryAt)
+                    deliveryAtChangeEvent.postRawValue("Your delivery time was set to $currentTime, and was changed to $newTime due to a change in the preparation time")
+                    this.currentDeliveryAt = newDeliveryAt
+                }
             }
         }
     }

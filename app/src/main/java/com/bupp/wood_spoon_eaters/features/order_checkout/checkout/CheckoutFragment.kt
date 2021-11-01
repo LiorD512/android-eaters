@@ -203,11 +203,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.orderItemsData.observe(viewLifecycleOwner, {
             handleOrderItemsData(it)
         })
-        viewModel.deliveryAtChangeEvent.observe(viewLifecycleOwner,{
-            it.getContentIfNotHandled()?.let{ message->
-                WSErrorDialog(message, this).show(childFragmentManager, Constants.ERROR_DIALOG)
-            }
-        })
     }
 
     private fun initMap(orderData: Order?) {
@@ -246,7 +241,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
-        viewModel.updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryTimeParam?.date)))
+        viewModel.updateDeliveryAt(deliveryTimeParam?.date)
         mainViewModel.logChangeTime(deliveryTimeParam?.date)
     }
 
@@ -279,6 +274,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun handleOrderDetails(order: Order?) {
         if (order != null) {
             with(binding!!) {
+                viewModel.fetchOrderDeliveryTimes()
                 viewModel.handleOrderItems(order)
 
                 checkoutFragHeader.setSubtitle(order.restaurant?.restaurantName ?: "")

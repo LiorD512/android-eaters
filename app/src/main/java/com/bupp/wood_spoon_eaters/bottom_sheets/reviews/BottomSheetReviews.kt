@@ -86,7 +86,9 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
             handleReviewList(it)
         })
         viewModel.errorEvent.observe(viewLifecycleOwner,{
-            handleErrorEvent()
+            it.getContentIfNotHandled()?.let{
+                handleErrorEvent()
+            }
         })
     }
 

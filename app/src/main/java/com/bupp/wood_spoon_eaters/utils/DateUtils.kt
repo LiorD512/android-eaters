@@ -72,6 +72,15 @@ object DateUtils {
         return ""
     }
 
+    fun parseDateToMonthAndYear(date: Date?): String {
+        //August 2019
+        date?.let{
+            val sdf = SimpleDateFormat("MMMM yyyy")
+            return sdf.format(date.time)
+        }
+        return ""
+    }
+
     fun parseDateToFullDayDate(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EEEE, MMM dd")

@@ -220,7 +220,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             //ratings
-            ratingCount.isVisible = restaurant.reviewCount > 0
+            ratingLayout.isVisible = restaurant.reviewCount > 0
             ratingCount.text = "(${restaurant.reviewCount} ratings)"
 
             //favorite

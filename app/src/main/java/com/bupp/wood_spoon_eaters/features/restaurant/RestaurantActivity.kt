@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.NavController
@@ -19,9 +20,10 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class RestaurantActivity : BaseActivity(){
+class RestaurantActivity : BaseActivity() {
 
     lateinit var binding: ActivityRestaurantBinding
     private val viewModel by viewModel<RestaurantMainViewModel>()
@@ -34,13 +36,13 @@ class RestaurantActivity : BaseActivity(){
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)
-            if(isAfterPurchase!!){
+            if (isAfterPurchase!!) {
                 intent.putExtra("isAfterPurchase", isAfterPurchase)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
             val editOrderClicked = data.getBooleanExtra("editOrderClick", false)
-            if(editOrderClicked){
+            if (editOrderClicked) {
                 viewModel.reOpenCart()
             }
         }
@@ -67,7 +69,7 @@ class RestaurantActivity : BaseActivity(){
             supportFragmentManager.findFragmentById(R.id.restaurantActContainer) as NavHostFragment
         val inflater = navHostFragment.navController.navInflater
         val graph = inflater.inflate(R.navigation.restaurant_nav)
-        if(restaurantInitParams != null ){
+        if (restaurantInitParams != null) {
             graph.startDestination = R.id.restaurantPageFragment
             bundle.putParcelable("extras", restaurantInitParams)
         } else {
@@ -87,13 +89,18 @@ class RestaurantActivity : BaseActivity(){
         viewModel.navigationEvent.observe(this, { navigationEvent ->
             handleNavigationEvent(navigationEvent)
         })
+        viewModel.deliveryAtChangeEvent.observe(this, {
+            it.getContentIfNotHandled()?.let { message ->
+                showErrorToast(message, binding.root, Toast.LENGTH_LONG)
+            }
+        })
     }
 
     private fun handleNavigationEvent(navigationEvent: LiveEvent<RestaurantMainViewModel.NavigationEvent>) {
         MTLogger.c(body = "handleFragmentNavigationEvent called")
         val event = navigationEvent.getContentIfNotHandled()
         event?.let {
-            when(it.navigationType){
+            when (it.navigationType) {
                 RestaurantMainViewModel.NavigationType.OPEN_DISH_PAGE -> {
                     it.navDirections?.let { it1 ->
                         findNavController(R.id.restaurantActContainer).navigate(it1)
@@ -105,7 +112,8 @@ class RestaurantActivity : BaseActivity(){
                 RestaurantMainViewModel.NavigationType.FINISH_RESTAURANT_ACTIVITY -> {
 
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
