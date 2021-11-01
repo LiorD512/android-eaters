@@ -529,6 +529,7 @@ class CartManager(
                     val currentTime = DateUtils.parseDateToUsTime(currentDeliveryAt)
                     val newTime = DateUtils.parseDateToUsTime(newDeliveryAt)
                     deliveryAtChangeEvent.postRawValue("Your delivery time was set to $currentTime, and was changed to $newTime due to a change in the preparation time")
+                    this.currentDeliveryAt = newDeliveryAt
                 }
             }
         }

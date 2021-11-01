@@ -40,7 +40,7 @@
                     android:gravity="start"
                     android:lineSpacingExtra="11.5dp"
                     android:maxLines="1"
-                    android:text="Steven"
+                    tools:text="Steven"
                     app:layout_constraintStart_toEndOf="@+id/reviewsItemIcon"
                     app:layout_constraintTop_toTopOf="@+id/reviewsItemIcon" />
 
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="9dp"
-                    android:text="June 2021"
+                    tools:text="June 2021"
                     app:layout_constraintBottom_toBottomOf="@+id/reviewsItemIcon"
                     app:layout_constraintStart_toEndOf="@+id/reviewsItemIcon"
                     app:layout_constraintTop_toBottomOf="@+id/reviewsItemName" />
@@ -72,7 +72,7 @@
                     android:layout_marginLeft="15dp"
                     android:paddingTop="8dp"
                     android:layout_marginEnd="15dp"
-                    android:text="Amazing as always! Love the new summer options like watermelon mint feta and ice cream! The Love the new summer options like watermelon mint feta!"
+                    tools:text="Amazing as always! Love the new summer options like watermelon mint feta and ice cream! The Love the new summer options like watermelon mint feta!"
                     app:collapseMaxLines="2"
                     app:layout_constraintStart_toStartOf="@+id/reviewsItemIcon"
                     app:layout_constraintTop_toBottomOf="@+id/reviewsItemIcon"

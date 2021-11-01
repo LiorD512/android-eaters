@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.ReviewsItemBinding
 import com.bupp.wood_spoon_eaters.databinding.ReviewsItemSkeletonBinding
+import com.bupp.wood_spoon_eaters.utils.DateUtils
 
 class ReviewsAdapter : ListAdapter<CommentAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
@@ -46,6 +47,7 @@ class ReviewsAdapter : ListAdapter<CommentAdapterItem, RecyclerView.ViewHolder>(
                 val rating = data.rating ?: 0.0
                 reviewsItemRating.isVisible = rating > 0.0
                 reviewsItemRating.setRating(rating.toInt())
+                reviewsItemDate.text = DateUtils.parseDateToMonthAndYear(data.reviewDate)
             }
         }
     }
