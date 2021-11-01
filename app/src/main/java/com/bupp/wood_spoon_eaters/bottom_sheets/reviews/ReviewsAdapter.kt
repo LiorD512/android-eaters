@@ -6,6 +6,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.databinding.ReviewsItemBinding
 import com.bupp.wood_spoon_eaters.databinding.ReviewsItemSkeletonBinding
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -43,7 +45,9 @@ class ReviewsAdapter : ListAdapter<CommentAdapterItem, RecyclerView.ViewHolder>(
             with(binding) {
                 reviewsItemName.text = data.eater?.firstName
                 reviewsItemComment.text = data.reviewText ?: ""
-                data.eater?.thumbnail?.let { reviewsItemIcon.setImage(it.url) }
+                data.eater?.thumbnail?.url.let {
+                    Glide.with(root).load(it).transform(CircleCrop()).into(binding.reviewsItemIcon)
+                }
                 val rating = data.rating ?: 0.0
                 reviewsItemRating.isVisible = rating > 0.0
                 reviewsItemRating.setRating(rating.toInt())
