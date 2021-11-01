@@ -12,7 +12,13 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    //General
+    //AppConfig
+    @V3
+    @GET("eaters/utils/config")
+    suspend fun getAppSettings(): ServerResponse<List<AppSetting>>
+
+    //MetaData
+    @V3
     @GET("eaters/utils/meta")
     suspend fun getMetaData(): ServerResponse<MetaDataModel>
 
@@ -42,6 +48,14 @@ interface ApiService {
 //        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
 //        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
 //    ): ServerResponse<List<FeedFlow>>
+
+    @V3
+    @FormUrlEncoded
+    @POST("/v3/eaters/me/searches")
+    suspend fun search(
+        @Query("q") query: String, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<FeedResult>
 
     @GET("eaters/me/feed")
     suspend fun getFeed(
@@ -84,7 +98,10 @@ interface ApiService {
 
     @FormUrlEncoded
     @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
-    suspend fun updateCampaignStatus(@Path(value = "user_interaction_id", encoded = true) userInteractionId: Long, @Field("user_interaction_status") status: String): ServerResponse<Any>
+    suspend fun updateCampaignStatus(
+        @Path(value = "user_interaction_id", encoded = true) userInteractionId: Long,
+        @Field("user_interaction_status") status: String
+    ): ServerResponse<Any>
 
     //Utils
     @POST("eaters/me/presigned_urls")

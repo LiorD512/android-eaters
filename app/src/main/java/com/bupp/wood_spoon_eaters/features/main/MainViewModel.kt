@@ -7,6 +7,7 @@ import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val metaDataRepository: MetaDataRepository,
+    private val appSettingsRepository: AppSettingsRepository,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
     private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository,
@@ -119,11 +120,11 @@ class MainViewModel(
     }
 
     fun getContactUsPhoneNumber(): String {
-        return metaDataRepository.getContactUsPhoneNumber()
+        return appSettingsRepository.getContactUsPhoneNumber()
     }
 
     fun getContactUsTextNumber(): String {
-        return metaDataRepository.getContactUsTextNumber()
+        return appSettingsRepository.getContactUsTextNumber()
     }
 
 

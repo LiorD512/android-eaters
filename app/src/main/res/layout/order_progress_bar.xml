@@ -33,7 +33,7 @@
     </FrameLayout>
 
 
-    <com.google.android.flexbox.FlexboxLayout
+    <com.google.android.seaflexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -74,6 +74,6 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_order_pb_delivered_selector" />
 
-    </com.google.android.flexbox.FlexboxLayout>
+    </com.google.android.seaflexbox.FlexboxLayout>
 
 </FrameLayout>

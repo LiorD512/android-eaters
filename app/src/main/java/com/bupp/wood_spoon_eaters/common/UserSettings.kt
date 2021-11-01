@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 
-class AppSettings(private val context: Context, private val sharedPreferences: SharedPreferences) {
+class UserSettings(private val context: Context, private val sharedPreferences: SharedPreferences) {
 
     val hasGPSPermission: Boolean
     get() = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED

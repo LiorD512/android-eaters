@@ -18,6 +18,7 @@ enum class SearchViewType{
     RESTAURANT_SKELETON,
     SEARCH_TAGS,
     SEARCH_TAGS_SKELETON,
+    RECENT_ORDER,
 }
 
 data class SearchAdapterTitle(
@@ -42,5 +43,9 @@ data class SearchAdapterRestaurant(
 ): SearchBaseItem(SearchViewType.RESTAURANT)
 
 data class SearchAdapterTag(
-    val tag: String? = null
+    val tags: List<String>? = null
 ): SearchBaseItem(SearchViewType.SEARCH_TAGS)
+
+data class SearchAdapterRecentOrder(
+    val order: Order? = null
+): SearchBaseItem(SearchViewType.RECENT_ORDER)

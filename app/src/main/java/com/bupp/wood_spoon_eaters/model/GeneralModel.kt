@@ -50,9 +50,10 @@ data class MetaDataModel(
     @Json(name = "diets") val diets: List<DietaryIcon>? = listOf(),
     @Json(name = "metrics") val metrics: List<Metrics>? = listOf(),
     @Json(name = "report_topics") val reportTopic: List<ReportTopic>? = listOf(),
-    @Json(name = "settings") val settings: List<AppSetting>? = listOf(),
+//    @Json(name = "settings") val settings: List<AppSetting>? = listOf(),
     @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
     @Json(name = "states") val states: List<State>? = listOf(),
+    @Json(name = "search_tags") val searchTags: List<String>? = listOf(),
     @Json(name = "welcome_screens") val welcome_screens: List<WelcomeScreen>? = listOf(),
 )
 

@@ -59,6 +59,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     private fun updateArchivedOrders(newData: List<Order>) {
         val currentList = orderListData[SECTION_ARCHIVE]
         if (currentList?.isEmpty() == true && newData.isNotEmpty()) {
+            //add title on first init
             currentList.add(OrderAdapterItemTitle("Past orders"))
         }
         newData.forEach { order ->

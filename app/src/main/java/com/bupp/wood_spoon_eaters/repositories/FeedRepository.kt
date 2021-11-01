@@ -168,6 +168,34 @@ class FeedRepository(
         return processFeedData(FeedResult(tempFeedResult))
     }
 
+    suspend fun getFeedBySearch(input: String, feedRequest: FeedRequest) {
+        val result = withContext(Dispatchers.IO) {
+            apiService.getFeed(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
+//            apiService.getFeed(40.845381, -73.866364, null, feedRequest.timestamp)
+        }
+//        result.let {
+//            return when (result) {
+//                is ResultHandler.NetworkError -> {
+//                    Log.d(TAG, "getFeed - NetworkError")
+//                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
+//                }
+//                is ResultHandler.GenericError -> {
+//                    Log.d(TAG, "getFeed - GenericError")
+//                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+//                }
+//                is ResultHandler.Success -> {
+//                    Log.d(TAG, "getFeed - Success")
+//                    val feedData = processFeedData(result.value.data)
+//                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
+//                }
+//                else -> {
+//                    Log.d(TAG, "getFeed - wsError")
+//                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+//                }
+//            }
+//        }
+    }
+
     companion object {
         const val TAG = "wowFeedRepo"
     }

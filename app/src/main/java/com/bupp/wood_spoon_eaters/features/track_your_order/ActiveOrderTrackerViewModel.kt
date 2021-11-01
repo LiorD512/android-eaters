@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.Job
@@ -33,7 +34,7 @@ class ActiveOrderTrackerViewModel(
     val api: ApiService,
     val eaterDataManager: EaterDataManager,
     private val paymentManager: PaymentManager,
-    private val metaDataRepository: MetaDataRepository,
+    private val appSettingsRepository: AppSettingsRepository,
     private val flowEventsManager: FlowEventsManager,
     private val eventsManager: EventsManager
 ) : ViewModel() {
@@ -88,7 +89,7 @@ class ActiveOrderTrackerViewModel(
     }
 
     fun getContactUsPhoneNumber(): String {
-        return metaDataRepository.getContactUsPhoneNumber()
+        return appSettingsRepository.getContactUsPhoneNumber()
     }
 
     private fun getOrderUserInfo(): OrderUserInfo {
