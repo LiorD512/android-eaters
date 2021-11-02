@@ -1,11 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.search
 
-import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.model.FeedAdapterItem
-import com.bupp.wood_spoon_eaters.model.FeedAdapterViewType
 import com.bupp.wood_spoon_eaters.model.FeedRestaurantSection
 import com.bupp.wood_spoon_eaters.model.Order
-import kotlinx.parcelize.Parcelize
 
 sealed class SearchBaseItem(
     val type: SearchViewType
@@ -33,18 +29,6 @@ data class SearchAdapterRestaurantSkeleton(
     val id: Long? = null
 ): SearchBaseItem(SearchViewType.RESTAURANT_SKELETON)
 
-data class SearchAdapterEmpty(
-    val id: Long? = null
-): SearchBaseItem(SearchViewType.EMPTY)
-
-data class SearchAdapterRestaurant(
-    val restaurantSection: FeedRestaurantSection,
-    val id: Long?,
-): SearchBaseItem(SearchViewType.RESTAURANT)
-
-data class SearchAdapterTag(
-    val tags: List<String>? = null
-): SearchBaseItem(SearchViewType.SEARCH_TAGS)
 
 data class SearchAdapterRecentOrder(
     val order: Order? = null

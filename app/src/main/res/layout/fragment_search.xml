@@ -31,11 +31,20 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_search" />
 
+<!--            <com.bupp.wood_spoon_eaters.views.WSEditText-->
+<!--                    android:paddingStart="3.8dp"-->
+<!--                    android:background="@null"-->
+<!--                    android:id="@+id/searchFragInput"-->
+<!--                    app:isWithBkg="false"-->
+<!--                    android:hint="By dishes, restaurants, chefs or dietary"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"/>-->
             <EditText
                     android:paddingStart="3.8dp"
                     android:background="@null"
                     android:id="@+id/searchFragInput"
-                    style="@style/LatoReg13VeryLightGrey"
+                    style="@style/LatoBold13Black"
+                    android:textColorHint="@color/very_light_grey"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="By dishes, restaurants, chefs or dietary"

@@ -253,6 +253,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         viewModel.onPullToRefresh()
     }
 
+
+
     override fun onResume() {
         super.onResume()
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_FEED)

@@ -49,12 +49,20 @@ interface ApiService {
 //        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
 //    ): ServerResponse<List<FeedFlow>>
 
+//    @V3
+//    @FormUrlEncoded
+//    @POST("/v3/eaters/me/searches")
+//    suspend fun search(
+//        @Query("q") query: String, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): ServerResponse<FeedResult>
+
     @V3
-    @FormUrlEncoded
-    @POST("/v3/eaters/me/searches")
+    @GET("eaters/me/search")
     suspend fun search(
-        @Query("q") query: String, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
+        @Query("q") q: String? = null
     ): ServerResponse<FeedResult>
 
     @GET("eaters/me/feed")
@@ -128,8 +136,6 @@ interface ApiService {
     @DELETE("eaters/me")
     suspend fun deleteMe(): Response<Unit>
 
-    @POST("eaters/me/searches")
-    suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
 
     @GET("cooks/{cook_id}")
     suspend fun getCook(

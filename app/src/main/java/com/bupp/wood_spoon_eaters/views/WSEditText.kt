@@ -60,6 +60,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val isEditable = attr.getBoolean(R.styleable.WSEditText_isEditable, true)
                 setIsEditable(isEditable, null)
 
+                val isWithBkg = attr.getBoolean(R.styleable.WSEditText_isWithBkg, true)
+                if(!isWithBkg){
+                    binding.wsEditTextLayout.setBackgroundResource(0)
+                }
+
                 attr.recycle()
 
                 wsEditTextInput.addTextChangedListener(object : SimpleTextWatcher() {

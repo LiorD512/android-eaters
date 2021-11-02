@@ -11,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FeedRepository(
-    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
+    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager
+) {
 
 
     private var lastFeedDataResult: FeedResult? = null
@@ -168,32 +169,35 @@ class FeedRepository(
         return processFeedData(FeedResult(tempFeedResult))
     }
 
-    suspend fun getFeedBySearch(input: String, feedRequest: FeedRequest) {
+    suspend fun getFeedBySearch(input: String, feedRequest: FeedRequest): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
-            apiService.getFeed(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
-//            apiService.getFeed(40.845381, -73.866364, null, feedRequest.timestamp)
+            val lat = feedRequest.lat
+            val lng = feedRequest.lng
+            val addressId = feedRequest.addressId
+            val timestamp = feedRequest.timestamp
+            apiService.search(input, lat, lng, addressId, timestamp)
         }
-//        result.let {
-//            return when (result) {
-//                is ResultHandler.NetworkError -> {
-//                    Log.d(TAG, "getFeed - NetworkError")
-//                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
-//                }
-//                is ResultHandler.GenericError -> {
-//                    Log.d(TAG, "getFeed - GenericError")
-//                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-//                }
-//                is ResultHandler.Success -> {
-//                    Log.d(TAG, "getFeed - Success")
-//                    val feedData = processFeedData(result.value.data)
-//                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
-//                }
-//                else -> {
-//                    Log.d(TAG, "getFeed - wsError")
-//                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
-//                }
-//            }
-//        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getFeedBySearch - NetworkError")
+                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getFeedBySearch - GenericError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getFeedBySearch - Success")
+                    val feedData = processFeedData(result.value.data)
+                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
+                }
+                else -> {
+                    Log.d(TAG, "getFeedBySearch - wsError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
     }
 
     companion object {

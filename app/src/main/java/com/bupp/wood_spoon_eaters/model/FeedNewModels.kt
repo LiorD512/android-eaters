@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.features.main.search.SearchBaseItem
+import com.bupp.wood_spoon_eaters.features.main.search.SearchViewType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -167,6 +169,8 @@ enum class FeedAdapterViewType {
     RESTAURANT_LARGE,
     EMPTY_FEED,
     EMPTY_SECTION,
+    EMPTY_SEARCH,
+    SEARCH_TAGS,
     NO_NETWORK_SECTION,
     SKELETON,
     HREF
@@ -227,3 +231,14 @@ data class FeedAdapterLargeRestaurant(
     val sectionOrder: Int? = null,
     val restaurantOrderInSection: Int? = null,
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
+
+@Parcelize
+data class FeedAdapterEmptySearch(
+    override val id: Long? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SEARCH)
+
+@Parcelize
+data class FeedAdapterSearchTag(
+    override val id: Long? = null,
+    val tags: List<String>? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.SEARCH_TAGS)
