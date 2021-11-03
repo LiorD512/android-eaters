@@ -73,7 +73,8 @@ class RestaurantPageViewModel(
                     dishListLiveData.postValue(DishListData(dishListData))
                 }
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
-                val result = restaurantRepository.getRestaurant(restaurantId)
+                val lastFeedRequest = feedDataManager.getLastFeedRequest()
+                val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
                         restaurantFullData.postValue(restaurant)
