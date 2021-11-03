@@ -42,13 +42,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
 
-    private var listener: UserImageViewListener? = null
+    private var listener: UserImageVideoViewListener? = null
 
-    interface UserImageViewListener {
+    interface UserImageVideoViewListener {
         fun onUserImageClick(cook: Cook?)
     }
 
-    fun setUserImageViewListener(listener: UserImageViewListener) {
+    fun setUserImageVideoViewListener(listener: UserImageVideoViewListener) {
         this.listener = listener
     }
 
@@ -56,12 +56,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         with(binding) {
             attrs?.let {
 
-                val a = context.obtainStyledAttributes(attrs, R.styleable.UserImageView)
+                val a = context.obtainStyledAttributes(attrs, R.styleable.UserImageVideoView)
 
-                imageSize = a.getInteger(R.styleable.UserImageView_imageSize, Constants.SMALL_IMAGE_SIZE)
-                placeHolder = a.getDrawable(R.styleable.UserImageView_placeHolder)
-                isWithStroke = a.getBoolean(R.styleable.UserImageView_isWithStroke, false)
-                isWithShadow = a.getBoolean(R.styleable.UserImageView_isWithShadow, false)
+                imageSize = a.getInteger(R.styleable.UserImageVideoView_imageSize, Constants.SMALL_IMAGE_SIZE)
+                placeHolder = a.getDrawable(R.styleable.UserImageVideoView_placeHolder)
+                isWithStroke = a.getBoolean(R.styleable.UserImageVideoView_isWithStroke, false)
+                isWithShadow = a.getBoolean(R.styleable.UserImageVideoView_isWithShadow, false)
                 a.recycle()
             }
 
@@ -178,7 +178,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
 
     private fun loadSmallImage(imageUrl: String) {
-        Log.d("wowUserImageView", "loadSmallImage")
+        Log.d("wowUserImageVideoView", "loadSmallImage")
         val smallThumbnail = imageUrl.replace("t_medium", "t_small")
         Glide.with(context).load(smallThumbnail).transform(CircleCrop()).into(binding.cookImageView)
     }

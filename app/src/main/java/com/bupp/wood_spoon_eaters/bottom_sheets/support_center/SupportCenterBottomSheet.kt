@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -24,12 +23,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
-    private val binding: SupportCenterBottomSheetBinding by viewBinding()
+    private var binding: SupportCenterBottomSheetBinding? = null
     private val viewModel: SupportViewModel by viewModel()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.support_center_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.support_center_bottom_sheet, container, false)
+        binding = SupportCenterBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +67,7 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding!!){
             supportDialogHeader.setHeaderViewListener(this@SupportCenterBottomSheet)
             supportDialogNext.setBtnEnabled(false)
             supportDialogCommentInput.setWSCounterListener(this@SupportCenterBottomSheet)
@@ -87,7 +88,7 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
     }
 
     private fun sendMail() {
-        val text = binding.supportDialogCommentInput.getText()
+        val text = binding!!.supportDialogCommentInput.getText()
         val address = viewModel.getAdminMailAddress()
 
         val selectorIntent = Intent(Intent.ACTION_SENDTO)
@@ -104,7 +105,7 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
 
 
     override fun onInputTitleChange(str: String?) {
-        with(binding){
+        with(binding!!){
             if (str.isNullOrEmpty()) {
                 supportDialogNext.setBtnEnabled(false)
             } else {
@@ -115,5 +116,10 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
 
     override fun onHeaderCloseClick() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }

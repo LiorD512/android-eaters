@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
@@ -59,13 +60,19 @@ class RestaurantPageViewModel(
         }
     }
 
-    private fun initRestaurantFullData(restaurantId: Long?) {
+    fun reloadPage(showSkeleton: Boolean = true){
+        initRestaurantFullData(currentRestaurantId, showSkeleton)
+    }
+
+    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "initRestaurantFullData")
-                dishListData = getDishSkeletonItems()
+                if(showSkeleton){
+                    dishListData = getDishSkeletonItems()
+                    dishListLiveData.postValue(DishListData(dishListData))
+                }
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
-                dishListLiveData.postValue(DishListData(dishListData))
                 val result = restaurantRepository.getRestaurant(restaurantId)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
@@ -74,6 +81,8 @@ class RestaurantPageViewModel(
                         handleDeliveryTimingSection(restaurant)
                         chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
                     }
+                }else if(result.type == SERVER_ERROR){
+                    dishListLiveData.postValue(DishListData(emptyList()))
                 }
             }
         }
@@ -105,7 +114,6 @@ class RestaurantPageViewModel(
         Log.d(TAG, "chooseStartingCookingSlot")
         if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
             /**  case1 : has open cart - get the cooking slot of the current order **/
-            //todo - nicole - this will work? - cooking slot sections is not returned with order
             val orderCookingSlot = cartManager.getCurrentCookingSlot()
             orderCookingSlot?.let {
                 val currentCookingSlot = getCookingSlotById(orderCookingSlot.id)
@@ -330,32 +338,6 @@ class RestaurantPageViewModel(
         date?.cookingSlots?.getOrNull(0)?.let { cookingSlot ->
             onCookingSlotSelected(cookingSlot, false)
             logEvent(Constants.EVENT_CHANGE_COOKING_SLOT_DATE)
-        }
-    }
-
-    val reviewEvent = LiveEventData<Review?>()
-    fun getRestaurantReview() {
-        currentRestaurantId.let { id ->
-            viewModelScope.launch {
-                progressData.startProgress()
-                val result = restaurantRepository.getCookReview(id)
-                when (result.type) {
-                    EMPTY -> {
-                        Log.e(TAG, "Empty")
-                    }
-                    SUCCESS -> {
-                        Log.e(TAG, "Success")
-                        reviewEvent.postRawValue(result.review)
-                    }
-                    SERVER_ERROR -> {
-                        Log.e(TAG, "Server Error")
-                    }
-                    SOMETHING_WENT_WRONG -> {
-                        Log.e(TAG, "Something went wrong")
-                    }
-                }
-                progressData.endProgress()
-            }
         }
     }
 

@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.repositories
 
 import android.util.Log
-import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
@@ -72,7 +71,8 @@ class UserRepository(
 
     suspend fun sendPhoneVerification(phone: String): UserRepoResult {
         val result = withContext(Dispatchers.IO){
-            apiService.getCode(phone)
+//            baseApiService.makeParamCall<String>(BaseApiService.EndPoint.GET_CODE, [Pair("phone", phone)])
+                apiService.getCode(phone)
         }
         result.let{
             return when (result) {

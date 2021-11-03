@@ -1,19 +1,21 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
+import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.features.reviews.review_activity.ReviewActivity
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -35,7 +37,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private var tooltip: Tooltip? = null
-    val binding: FragmentFeedBinding by viewBinding()
+    var binding: FragmentFeedBinding? = null
     private val viewModel: FeedViewModel by viewModel()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
@@ -43,6 +45,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentFeedBinding.bind(view)
 
         initUi()
         initObservers()
@@ -52,7 +55,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
             feedAdapter = FeedMainAdapter(this@FeedFragment)
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
@@ -65,7 +68,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     private fun initObservers() {
         viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-            binding.feedFragHeader.setAddress(it?.shortTitle)
+            binding!!.feedFragHeader.setAddress(it?.shortTitle)
         })
         viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
             it.feedData?.let { skeletons ->
@@ -91,20 +94,20 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             handleShareCampaign(campaigns)
         })
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
+            binding!!.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
         })
         mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner, {
             viewModel.onPullToRefresh()
         })
         mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner, {
-            binding.feedFragList.smoothScrollToPosition(0)
+            binding!!.feedFragList.smoothScrollToPosition(0)
         })
     }
 
     private fun handleFeedUi(isLargeItems: Boolean) {
         Log.d(TAG, "handleFeedUi: $isLargeItems")
         if(!isLargeItems){
-            binding.feedFragList.enableSnapping(isLargeItems)
+            binding!!.feedFragList.enableSnapping(isLargeItems)
         }
     }
 
@@ -120,7 +123,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
         viewModel.onTimePickerChanged(deliveryTimeParam)
-        binding.feedFragHeader.setDate(deliveryTimeParam)
+        binding!!.feedFragHeader.setDate(deliveryTimeParam)
     }
 
     private fun handleShareCampaign(campaigns: List<Campaign>?) {
@@ -162,14 +165,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
-        if (feedArr.isEmpty()) {
-            showEmptyLayout()
-            handleBannerEvent(Constants.BANNER_NO_AVAILABLE_DISHES)
-        } else {
-            binding.feedFragRefreshLayout.isRefreshing = false
-            binding.feedFragEmptyLayout.visibility = View.GONE
-            feedAdapter.setDataList(feedArr)
-        }
+        binding!!.feedFragRefreshLayout.isRefreshing = false
+        feedAdapter.setDataList(feedArr)
+//        binding.feedFragEmptyLayout.visibility = View.GONE
     }
 
     override fun onChangeAddressClick() {
@@ -177,16 +175,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-    @SuppressLint("SetTextI18n")
-    private fun showEmptyLayout() {
-        with(binding) {
-            feedFragList.visibility = View.GONE
-            feedFragEmptyLayout.visibility = View.VISIBLE
-            feedFragEmptyLayout.setOnClickListener {
-                mainViewModel.startLocationAndAddressAct()
-            }
-        }
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun showEmptyLayout() {
+//        with(binding) {
+//            feedFragList.visibility = View.GONE
+//            feedFragEmptyLayout.visibility = View.VISIBLE
+//            feedFragEmptyLayout.setOnClickListener {
+//                mainViewModel.startLocationAndAddressAct()
+//            }
+//        }
+//    }
 
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let {
@@ -214,8 +212,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private fun showBanner(text: String) {
-        with(binding) {
-            //todo : ask Mittel what he thinks
+        with(binding!!) {
             //.post call make sure the tool bar doesn't get called before the UI is ready to prevent crash
             feedFragHeader.post{
                 tooltip = Tooltip.Builder(requireContext())
@@ -239,7 +236,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
 
-
     //Feed main adapter interface
     override fun onShareBannerClick(campaign: Campaign) {
         mainViewModel.onShareCampaignClick(campaign)
@@ -253,10 +249,18 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         viewModel.logEvent(Constants.EVENT_SWIPE_BETWEEN_DISHES)
     }
 
+    override fun onRefreshFeedClick() {
+        viewModel.onPullToRefresh()
+    }
+
     override fun onResume() {
         super.onResume()
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_FEED)
     }
 
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
 
 }

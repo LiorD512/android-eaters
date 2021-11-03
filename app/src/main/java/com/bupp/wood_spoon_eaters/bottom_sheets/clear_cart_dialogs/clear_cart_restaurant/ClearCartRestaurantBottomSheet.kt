@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ClearCartRestaurantBottomSheetBinding
@@ -29,13 +28,14 @@ class ClearCartRestaurantBottomSheet(val listener: ClearCartListener): BottomShe
         fun onClearCartCanceled()
     }
 
-    private val binding: ClearCartRestaurantBottomSheetBinding by viewBinding()
+    private var binding: ClearCartRestaurantBottomSheetBinding? = null
     var curRestaurantName: String = ""
     var newRestaurantName: String = ""
     var notifyType: Int = NOTIFY_CANCEL_CLEAR_CART
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.clear_cart_restaurant_bottom_sheet, container, false)
+        binding = ClearCartRestaurantBottomSheetBinding.bind(view)
         curRestaurantName = arguments?.getString(CUR_DATA_ARGS) ?: ""
         newRestaurantName = arguments?.getString(NEW_DATA_ARGS) ?: ""
         return view
@@ -74,7 +74,7 @@ class ClearCartRestaurantBottomSheet(val listener: ClearCartListener): BottomShe
     }
 
     private fun initUI() {
-        with(binding){
+        with(binding!!){
             clearCartRestCurRest.text = curRestaurantName
 
             val subTitle = "Would you like to clear the cart and add this dish from $newRestaurantName instead?"
@@ -128,6 +128,11 @@ class ClearCartRestaurantBottomSheet(val listener: ClearCartListener): BottomShe
             }
         }
         super.onDismiss(dialog)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

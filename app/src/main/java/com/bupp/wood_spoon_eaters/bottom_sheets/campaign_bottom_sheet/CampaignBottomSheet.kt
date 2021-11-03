@@ -9,19 +9,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.free_text_bottom_sheet.FreeTextBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CampaignBottomSheetBinding
-import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.model.Campaign
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CampaignBottomSheet : BottomSheetDialogFragment() {
 
-    private val binding: CampaignBottomSheetBinding by viewBinding()
+    private var binding: CampaignBottomSheetBinding? = null
     private lateinit var campaign: Campaign
 
     var listener: CampaignBottomSheetListener? = null
@@ -51,7 +50,9 @@ class CampaignBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.campaign_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.campaign_bottom_sheet, container, false)
+        binding = CampaignBottomSheetBinding.bind(view)
+        return view
     }
 
     private lateinit var behavior: BottomSheetBehavior<View>
@@ -65,7 +66,8 @@ class CampaignBottomSheet : BottomSheetDialogFragment() {
         }
         return dialog
     }
-//
+
+    //
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,7 +75,7 @@ class CampaignBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             campaignBSBtn.setOnClickListener {
                 listener?.handleCampaignAction(campaign)
                 dismiss()
@@ -86,10 +88,12 @@ class CampaignBottomSheet : BottomSheetDialogFragment() {
                 it.termsAndConditions?.let { campaignConditions ->
                     campaignBSDetails.visibility = View.VISIBLE
                     campaignBSDetails.setOnClickListener {
-                        FreeTextBottomSheet.newInstance(getString(R.string.campaign_full_details_title), campaignConditions).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
+                        FreeTextBottomSheet.newInstance(getString(R.string.campaign_full_details_title), campaignConditions)
+                            .show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
                     }
                 }
-                Glide.with(requireContext()).load(campaign.photoSmall).placeholder(R.mipmap.ic_launcher_round).apply(RequestOptions.circleCropTransform()).into(campaignBSImage)
+                Glide.with(requireContext()).load(campaign.photoSmall).placeholder(R.mipmap.ic_launcher_round).apply(RequestOptions.circleCropTransform())
+                    .into(campaignBSImage)
             }
 
         }
@@ -109,6 +113,11 @@ class CampaignBottomSheet : BottomSheetDialogFragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

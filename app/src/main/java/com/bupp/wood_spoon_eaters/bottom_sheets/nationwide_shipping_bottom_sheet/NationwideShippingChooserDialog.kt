@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
 import com.bupp.wood_spoon_eaters.databinding.NationwideShippingChooserDialogBinding
@@ -17,9 +16,9 @@ import com.bupp.wood_spoon_eaters.model.ShippingMethod
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {
+class NationwideShippingChooserDialog : BottomSheetDialogFragment(), NationwideShippingChooserAdapter.NationwideShippingAdapterListener {
 
-    private val binding: NationwideShippingChooserDialogBinding by viewBinding()
+    private var binding: NationwideShippingChooserDialogBinding? = null
     private var adapter: NationwideShippingChooserAdapter? = null
     private var listener: NationwideShippingChooserListener? = null
 
@@ -39,6 +38,7 @@ class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), Nationwide
 
     companion object {
         const val DIALOG_ARGS = "shippingData"
+
         @JvmStatic
         fun newInstance(shippingMethods: ArrayList<ShippingMethod>) =
             NationwideShippingChooserDialog().apply {
@@ -51,6 +51,7 @@ class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), Nationwide
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.nationwide_shipping_chooser_dialog, null)
+        binding = NationwideShippingChooserDialogBinding.bind(view)
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -62,7 +63,7 @@ class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), Nationwide
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!) {
             nationwideShippingChooserDialogBkg.setOnClickListener {
                 dismiss()
             }
@@ -76,7 +77,7 @@ class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), Nationwide
             nationwideShippingChooserDialogRecycler.addItemDecoration(dividerItemDecoration)
             nationwideShippingChooserDialogRecycler.adapter = adapter
 
-            shippingMethods?.let{
+            shippingMethods?.let {
                 adapter?.submitList(it.toList())
             }
         }
@@ -87,11 +88,9 @@ class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), Nationwide
         super.onAttach(context)
         if (context is NationwideShippingChooserListener) {
             listener = context
-        }
-        else if (parentFragment is NationwideShippingChooserListener){
+        } else if (parentFragment is NationwideShippingChooserListener) {
             this.listener = parentFragment as NationwideShippingChooserListener
-        }
-        else {
+        } else {
             throw RuntimeException("$context must implement NationwideShippingAdapterListener")
         }
     }
@@ -107,8 +106,9 @@ class NationwideShippingChooserDialog :  BottomSheetDialogFragment(), Nationwide
     }
 
     override fun onDestroyView() {
-    adapter = null
-    super.onDestroyView()
+        adapter = null
+        binding = null
+        super.onDestroyView()
     }
 
 }

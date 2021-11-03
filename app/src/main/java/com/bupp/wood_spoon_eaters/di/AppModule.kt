@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.edit_profile.EditProfileViewMode
 import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxViewModel
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueViewModel
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBSViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
@@ -33,10 +34,13 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSale
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
+import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.base_repos.*
+import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 import com.bupp.wood_spoon_eaters.repositories.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -48,22 +52,24 @@ val appModule = module {
     single { FcmManager(get()) }
     single { AppSettings(get(), get()) }
     single { FlowEventsManager(get(),get()) }
+    single { ErrorManger()}
+    single { ResultManager(get()) }
 
     //repos
     single { MetaDataRepository(get()) }
-    single { MetaDataRepositoryImpl(get()) }
+    single { MetaDataRepositoryImpl(get(),get()) }
     single { FeedRepository(get(), get(), get()) }
-    single { FeedRepositoryImpl(get()) }
-    single { UserRepositoryImpl(get()) }
+    single { FeedRepositoryImpl(get(),get()) }
+    single { UserRepositoryImpl(get(),get()) }
     single { RestaurantRepository(get())}
-    single { RestaurantRepositoryImpl(get())}
+    single { RestaurantRepositoryImpl(get(),get())}
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
-    single { OrderRepositoryImpl(get()) }
+    single { OrderRepositoryImpl(get(),get()) }
     single { EaterDataRepository(get()) }
-    single { EaterDataRepositoryImpl(get()) }
+    single { EaterDataRepositoryImpl(get(),get()) }
     single { CampaignRepository(get(), get()) }
-    single { CampaignRepositoryImpl(get()) }
+    single { CampaignRepositoryImpl(get(),get()) }
 
     //managers
     single { GlobalErrorManager() }
@@ -133,10 +139,15 @@ val appModule = module {
     viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
 
     //RestaurantPage
-    viewModel { RestaurantMainViewModel(get(), get()) }
+    viewModel { RestaurantMainViewModel(get(), get(),get()) }
     viewModel { RestaurantPageViewModel(get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
+    viewModel { ReviewsBSViewModel(get())}
+
+    //Review Activity
+    viewModel { ReviewsViewModel(get(),get())}
+
 
 
 }

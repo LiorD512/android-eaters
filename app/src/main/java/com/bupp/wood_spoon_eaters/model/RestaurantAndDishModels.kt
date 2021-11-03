@@ -11,7 +11,7 @@ data class RestaurantInitParams(
     var restaurantId: Long?,
     var chefThumbnail: WSImage?,
     var coverPhoto: WSImage?,
-    var rating: Float?,
+    var rating: String?,
     var restaurantName: String?,
     var chefName: String?,
     var isFavorite: Boolean,

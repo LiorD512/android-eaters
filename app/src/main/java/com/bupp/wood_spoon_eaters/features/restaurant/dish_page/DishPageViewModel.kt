@@ -33,6 +33,7 @@ class DishPageViewModel(
     //this param indicates if the current menuItem is matching the selected cooking slot in parent
 
     val progressData = ProgressData()
+    val networkError = MutableLiveData<Boolean>()
     val skeletonProgressData = ProgressData()
     val wsErrorEvent = cartManager.getWsErrorEvent()
 
@@ -134,9 +135,11 @@ class DishPageViewModel(
             viewModelScope.launch {
                 val fullDishResult = cartManager.getFullDish(it)
                 val fullDish = fullDishResult?.data
-                fullDish?.let {
-                    dishFullData.postValue(it)
-                    getUserRequestData(it.restaurant)
+                if(fullDish == null){
+                    networkError.postValue(true)
+                }else{
+                    dishFullData.postValue(fullDish!!)
+                    getUserRequestData(fullDish.restaurant)
                 }
                 skeletonProgressData.endProgress()
             }
@@ -307,6 +310,10 @@ class DishPageViewModel(
         data["dish_name"] = dishFullData.value?.name.toString()
         data["dish_id"] = dishFullData.value?.id.toString()
         return data
+    }
+
+    fun reloadPage() {
+        initData(extras)
     }
 
     companion object{

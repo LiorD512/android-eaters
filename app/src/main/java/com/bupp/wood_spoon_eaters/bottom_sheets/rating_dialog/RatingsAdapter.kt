@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Comment
 import com.bupp.wood_spoon_eaters.databinding.DishRatingItemViewBinding
-import com.bupp.wood_spoon_eaters.model.Comment
 
 class RatingsAdapter(val context: Context, private var comments: List<Comment>) :RecyclerView.Adapter<RatingsAdapter.DishViewHolder>() {
 
@@ -32,11 +32,11 @@ class RatingsAdapter(val context: Context, private var comments: List<Comment>) 
     override fun onBindViewHolder(holder: DishViewHolder, position: Int) {
         val review: Comment = comments[position]
 
-        review.eater.thumbnail?.let {
+        review.eater?.thumbnail?.let {
             Glide.with(context).load(review.eater.thumbnail).placeholder(R.drawable.profile_pic_placeholder).apply(RequestOptions.circleCropTransform()).into(holder.image)
         }
 
-        holder.name.text = review.eater.getFullName()
-        holder.review.text = review.body
+        holder.name.text = review.eater?.getFullName()
+        holder.review.text = review.reviewText
     }
 }

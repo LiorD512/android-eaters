@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.AddressMenuBottomSheetBinding
@@ -21,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddressMenuBottomSheet : BottomSheetDialogFragment() {
 
-    private val binding: AddressMenuBottomSheetBinding by viewBinding()
+    private var binding: AddressMenuBottomSheetBinding? = null
     val viewModel by viewModel<AddressMenuViewModel>()
     val mainViewModel by sharedViewModel<LocationAndAddressViewModel>()
 
@@ -36,7 +35,7 @@ class AddressMenuBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding = AddressMenuBottomSheetBinding.bind(view)
         val resources = resources
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -63,8 +62,8 @@ class AddressMenuBottomSheet : BottomSheetDialogFragment() {
 
     private fun initObservers() {
         viewModel.currentAddress.observe(viewLifecycleOwner, {
-            binding.addressMenuTitle.text = "${it.streetLine1}, #${it.streetLine2}"
-            binding.addressMenuSubtitle.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
+            binding!!.addressMenuTitle.text = "${it.streetLine1}, #${it.streetLine2}"
+            binding!!.addressMenuSubtitle.text = "${it.city?.name ?: ""}, ${it.state?.name ?: ""} ${it.zipCode}"
         })
 
         viewModel.navigationEvent.observe(viewLifecycleOwner, { it ->
@@ -98,14 +97,19 @@ class AddressMenuBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initUi() {
-        binding.addressMenuClose.setOnClickListener {
+        binding!!.addressMenuClose.setOnClickListener {
 //            viewModel.setDeliveryTime(null)
             dismiss()
         }
-        binding.addressMenuDelete.setOnClickListener {
+        binding!!.addressMenuDelete.setOnClickListener {
             viewModel.deleteCurrentAddress()
         }
 
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

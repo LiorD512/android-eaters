@@ -253,7 +253,7 @@ class ActiveOrderTrackerViewModel(
                 restaurantId = it.id,
                 chefThumbnail = it.thumbnail,
                 coverPhoto = it.cover,
-                rating = it.rating,
+                rating = it.getAvgRating(),
                 restaurantName = it.restaurantName,
                 chefName = it.firstName,
                 isFavorite = it.isFavorite ?: false,

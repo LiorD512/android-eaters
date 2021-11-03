@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
             android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -48,6 +47,21 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
+
+
+        <activity android:name=".features.reviews.review_activity.ReviewActivity">
+
+        </activity>
+<!--        <activity-->
+<!--                android:name=".delete_me.TestActivity"-->
+<!--                android:screenOrientation="portrait"-->
+<!--                android:windowSoftInputMode="adjustResize">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+<!--        </activity>-->
+
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU" />
@@ -140,7 +154,7 @@
         </activity> <!-- Branch init -->
         <meta-data
                 android:name="io.branch.sdk.BranchKey"
-                android:value="key_live_ejLPSCmaw2jZxm2hDlPK1hjluDl92rWc" />
+                android:value="key_live_jgQUKCloy5j6un5oqeJJ3bcavsdX7wYj" />
         <meta-data
                 android:name="io.branch.sdk.BranchKey.test"
                 android:value="key_test_caHOMCbetYp9Eh0jucUXgejbBsj45D9u" />

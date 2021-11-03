@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
@@ -45,7 +44,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     }
 
     private var listItemDecorator: OrderHistoryItemDecorator? = null
-    val binding: FragmentOrdersHistoryBinding by viewBinding()
+    var binding: FragmentOrdersHistoryBinding? = null
     val viewModel by viewModel<OrdersHistoryViewModel>()
     val mainViewModel by sharedViewModel<MainViewModel>()
     lateinit var adapter: OrdersHistoryAdapter
@@ -64,6 +63,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentOrdersHistoryBinding.bind(view)
 //        Analytics.with(requireContext()).screen("Order history")
 
         initUi()
@@ -75,7 +75,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     private fun initObservers() {
         mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
-            binding.orderHistoryFragHeightCorrection.isVisible = it
+            binding!!.orderHistoryFragHeightCorrection.isVisible = it
         })
         viewModel.orderLiveData.observe(viewLifecycleOwner, { event ->
             initList(event)
@@ -84,7 +84,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     private fun initUi() {
         Log.d("wowStatus","initUi")
-        with(binding){
+        with(binding!!){
             ordersHistoryFragRecyclerView.layoutManager = layoutManager
 
             adapter = OrdersHistoryAdapter(requireContext(), this@OrdersHistoryFragment)
@@ -98,7 +98,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     }
 
     private fun initList(orderHistory: List<OrderHistoryBaseItem>) {
-        with(binding){
+        with(binding!!){
             ordersHistoryFragRefreshLayout.isRefreshing = false
             if(orderHistory.isNotEmpty()){
                 listItemDecorator?.let{
@@ -146,5 +146,11 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         viewModel.endUpdates()
         super.onPause()
     }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
+
 
 }

@@ -7,19 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.WrongAddressDialogBinding
 
-class WrongAddressDialog: DialogFragment(){
+class WrongAddressDialog : DialogFragment() {
 
-    val binding: WrongAddressDialogBinding by viewBinding()
+    var binding: WrongAddressDialogBinding? = null
 
     var listener: WrongAddressDialogListener? = null
-    interface WrongAddressDialogListener{
+
+    interface WrongAddressDialogListener {
         fun onReEnterAddressClick()
     }
-    fun setWrongAddressDialogListener(listener: WrongAddressDialogListener): WrongAddressDialog{
+
+    fun setWrongAddressDialogListener(listener: WrongAddressDialogListener): WrongAddressDialog {
         this.listener = listener
         return this
     }
@@ -31,6 +32,7 @@ class WrongAddressDialog: DialogFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.wrong_address_dialog, null)
+        binding = WrongAddressDialogBinding.bind(view)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.dark_43)))
         return view
     }
@@ -39,16 +41,23 @@ class WrongAddressDialog: DialogFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         initUi()
-}
+    }
 
     private fun initUi() {
-        with(binding){
-            wrongAddressDialogBtn.setOnClickListener{
+        with(binding!!) {
+            wrongAddressDialogBtn.setOnClickListener {
                 listener?.onReEnterAddressClick()
-                dismiss()}
-            wrongAddressDialogCloseBtn.setOnClickListener{
-                dismiss()}
+                dismiss()
+            }
+            wrongAddressDialogCloseBtn.setOnClickListener {
+                dismiss()
+            }
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 }

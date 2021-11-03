@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
 
-    private lateinit var binding: FeesAndTaxBottomSheetBinding
+    private var binding: FeesAndTaxBottomSheetBinding? = null
     val viewModel by viewModel<FeesAndTaxViewModel>()
 
     companion object {
@@ -34,7 +34,9 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fees_and_tax_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.fees_and_tax_bottom_sheet, container, false)
+        binding = FeesAndTaxBottomSheetBinding.bind(view)
+        return  view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,18 +70,18 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
         arguments?.let {
             val fee = it.getString(VALUE_ARGS_FEE)
             val tax = it.getString(VALUE_ARGS_TAX)
-            binding.feesTaxBSFeeTitle.text = "Service fee: $fee"
-            binding.feesTaxBSTaxTitle.text = "Estimated tax: $tax"
+            binding!!.feesTaxBSFeeTitle.text = "Service fee: $fee"
+            binding!!.feesTaxBSTaxTitle.text = "Estimated tax: $tax"
             val minOrderFee = it.getString(VALUE_ARGS_MIN_FEE)
             minOrderFee?.let{
-                binding.feesTaxBSMinFeeSubTitle.visibility = View.VISIBLE
-                binding.feesTaxBSMinFeeTitle.visibility = View.VISIBLE
-                binding.feesTaxBSMinFeeTitle.text = "Minimum order fee: $minOrderFee"
+                binding!!.feesTaxBSMinFeeSubTitle.visibility = View.VISIBLE
+                binding!!.feesTaxBSMinFeeTitle.visibility = View.VISIBLE
+                binding!!.feesTaxBSMinFeeTitle.text = "Minimum order fee: $minOrderFee"
             }
         }
 
         val globalMinimumOrderFee = viewModel.getGlobalMinimumOrderFee()
-        binding.feesTaxBSMinFeeSubTitle.text = "To reduce this fee your order value should be bigger than $globalMinimumOrderFee"
+        binding!!.feesTaxBSMinFeeSubTitle.text = "To reduce this fee your order value should be bigger than $globalMinimumOrderFee"
 
         val parent = view.parent as View
         parent.setBackgroundResource(R.drawable.top_cornered_bkg)
@@ -88,11 +90,16 @@ class FeesAndTaxBottomSheet : BottomSheetDialogFragment(){
     }
 
     private fun initUI() {
-        with(binding) {
+        with(binding!!) {
             feesTaxBSTaxBtn.setOnClickListener {
                 dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
 

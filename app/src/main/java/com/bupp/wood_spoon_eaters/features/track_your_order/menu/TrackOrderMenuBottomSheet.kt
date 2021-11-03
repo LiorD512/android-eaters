@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CancelOrderDialogLayoutBinding
+import com.bupp.wood_spoon_eaters.databinding.FeesAndTaxBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.TrackOrderMenuBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.track_your_order.ActiveOrderTrackerViewModel
@@ -29,11 +29,13 @@ class TrackOrderMenuBottomSheet : BottomSheetDialogFragment(), CancelOrderDialog
     }
 
     var listener: TrackOrderMenuListener? = null
-    private val binding: TrackOrderMenuBottomSheetBinding by viewBinding()
+    private var binding: TrackOrderMenuBottomSheetBinding ?= null
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.track_order_menu_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.track_order_menu_bottom_sheet, container, false)
+        binding = TrackOrderMenuBottomSheetBinding.bind(view)
+        return  view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,14 +66,14 @@ class TrackOrderMenuBottomSheet : BottomSheetDialogFragment(), CancelOrderDialog
         })
         viewModel.hideCancelBtn.observe(viewLifecycleOwner, {
             if(it){
-                binding.trackOrderMenuCancel.visibility = View.GONE
-                binding.trackOrderMenuSep.visibility = View.GONE
+                binding!!.trackOrderMenuCancel.visibility = View.GONE
+                binding!!.trackOrderMenuSep.visibility = View.GONE
             }
         })
     }
 
     private fun initUi() {
-        with(binding){
+        with(binding!!){
             trackOrderMenuCancel.setOnClickListener {
                 viewModel.onCancelClick()
             }
@@ -122,6 +124,7 @@ class TrackOrderMenuBottomSheet : BottomSheetDialogFragment(), CancelOrderDialog
     override fun onDetach() {
         super.onDetach()
         listener = null
+        binding = null
     }
 
 }

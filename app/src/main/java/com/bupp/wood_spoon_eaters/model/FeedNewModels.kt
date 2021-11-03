@@ -77,6 +77,14 @@ data class FeedRestaurantSection(
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
+
+    fun getAvgRating(): String{
+        avgRating?.let{
+            return String.format("%.1f", avgRating)
+        }
+        return ""
+    }
+
     fun toRestaurantInitParams(sectionTitle: String? = null,
                                sectionOrder: Int? = null,
                                restaurantOrderInSection: Int? = null,
@@ -85,7 +93,7 @@ data class FeedRestaurantSection(
             chefId,
             chefThumbnail,
             chefCover,
-            avgRating,
+            getAvgRating(),
             restaurantName,
             chefName,
             false,
@@ -167,6 +175,7 @@ enum class FeedAdapterViewType {
     RESTAURANT_LARGE,
     EMPTY_FEED,
     EMPTY_SECTION,
+    NO_NETWORK_SECTION,
     SKELETON,
     HREF
 }
@@ -211,6 +220,11 @@ data class FeedAdapterEmptyFeed(
 data class FeedAdapterEmptySection(
     val emptySection: FeedSingleEmptySection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SECTION)
+
+@Parcelize
+data class FeedAdapterNoNetworkSection(
+    override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.NO_NETWORK_SECTION)
 
 @Parcelize
 data class FeedAdapterLargeRestaurant(

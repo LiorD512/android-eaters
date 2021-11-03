@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/top_cornered_bkg"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+        <ImageButton
+                android:id="@+id/reviewBottomSheetCloseIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:background="@null"
+                android:padding="15.4dp"
+                android:src="@drawable/icons_close_grey" />
+
+        <TextView
+                android:id="@+id/reviewsBottomSheetTextView"
+                style="@style/LatoBlack15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Israeli in The Big Apple" />
+    </FrameLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/charcoal_grey_36" />
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+            <TextView
+                    android:id="@+id/reviewBottomSheetTitle"
+                    style="@style/LatoBlack23Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:paddingHorizontal="15.4dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:text="4.8 ( 21 reviews )"
+                    app:drawableStartCompat="@drawable/ic_rating_star_big" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/reviewBottomSheetReviewList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_weight="1"
+                    android:clipToPadding="false"
+                    android:paddingBottom="5dp"
+                    tools:listitem="@layout/reviews_item" />
+
+            <FrameLayout
+
+                    android:id="@+id/reviewBottomSheetNoNetwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="100dp"
+                    android:visibility="gone">
+
+                <include
+                        android:id="@+id/reviewBottomSheetNoNetworkLayout"
+                        layout="@layout/feed_adapter_no_network_item"/>
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/reviewsBottomSheetBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:visibility="gone"
+            app:title="Show all 21 reviews" />
+
+</LinearLayout>
+
+
+

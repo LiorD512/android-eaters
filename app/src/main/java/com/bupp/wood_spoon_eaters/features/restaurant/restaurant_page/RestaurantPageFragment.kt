@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -10,12 +11,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.rating_dialog.RatingsBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.BottomSheetReviews
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -31,6 +31,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -49,7 +50,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     FavoriteBtn.FavoriteBtnListener,
     UpSaleNCartBottomSheet.UpsaleNCartBSListener {
 
-    private val binding: FragmentRestaurantPageBinding by viewBinding()
+    private var binding: FragmentRestaurantPageBinding? = null
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by viewModel<RestaurantPageViewModel>()
@@ -63,6 +64,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navArgs: RestaurantPageFragmentArgs by navArgs()
+        binding = FragmentRestaurantPageBinding.bind(view)
         viewModel.handleInitialParamData(navArgs.extras)
         Log.d("orderFlow - rest", "onViewCreated")
 
@@ -73,7 +75,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun initUi() {
-        with(binding) {
+        with(binding!!) {
             backButton.setOnClickListener {
                 activity?.onBackPressed()
             }
@@ -84,12 +86,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 }
             }
             ratingLayout.setOnClickListener {
-                viewModel.getRestaurantReview()
+                openReviews()
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
         }
-        with(binding.restaurantMainListLayout) {
+
+        with(binding!!.restaurantMainListLayout) {
             restaurantCuisinesList.adapter = adapterCuisines
 
             detailsSkeleton.visibility = View.VISIBLE
@@ -106,12 +109,18 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantDishesList.addItemDecoration(it)
             }
             restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
+
+            restaurantNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
+                detailsSkeleton.visibility = View.VISIBLE
+                restaurantNoNetwork.visibility = View.INVISIBLE
+                viewModel.reloadPage(false)
+            }
         }
     }
 
 
     private fun handleTimerPickerUi() {
-        with(binding.restaurantMainListLayout) {
+        with(binding!!.restaurantMainListLayout) {
             restaurantTimePickerViewLayout.setOnClickListener {
                 restaurantDeliveryDates.getCurrentSelection()?.let { date ->
                     if (date.cookingSlots.size > 1) {
@@ -123,9 +132,9 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun openCartNUpsaleDialog() {
-        binding.restaurantFragFloatingCartBtn.isEnabled = false
+        binding!!.restaurantFragFloatingCartBtn.isEnabled = false
         UpSaleNCartBottomSheet().show(childFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
-        binding.restaurantFragFloatingCartBtn.isEnabled = true
+        binding!!.restaurantFragFloatingCartBtn.isEnabled = true
     }
 
     override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
@@ -173,9 +182,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.favoriteEvent.observe(viewLifecycleOwner, {
             handleFavoriteEvent(it)
         })
-        viewModel.reviewEvent.observe(viewLifecycleOwner, {
-            handleReviewData(it)
-        })
         mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
             reOpenCart()
         })
@@ -188,13 +194,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     /** Headers data **/
     @SuppressLint("SetTextI18n")
     private fun handleInitialParamData(params: RestaurantInitParams) {
-        with(binding) {
+        with(binding!!) {
             Glide.with(requireContext()).load(params.coverPhoto?.url).into(coverPhoto)
             restHeaderRestName.text = params.restaurantName
             restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             rating.text = "${params.rating}"
-            ratingLayout.isVisible = params.rating ?: 0f > 0
+//            ratingLayout.isVisible = params.rating ?: 0f > 0
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
@@ -202,7 +208,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun handleRestaurantFullData(restaurant: Restaurant) {
-        with(binding) {
+        with(binding!!) {
             //Cover photo + video
             Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
             restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
@@ -214,14 +220,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
 
             //ratings
-            ratingCount.isVisible = restaurant.reviewCount > 0
+            ratingLayout.isVisible = restaurant.reviewCount > 0
             ratingCount.text = "(${restaurant.reviewCount} ratings)"
 
             //favorite
             restHeaderFavorite.setIsFavorite(restaurant.isFavorite)
             restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
         }
-        with(binding.restaurantMainListLayout) {
+        with(binding!!.restaurantMainListLayout) {
 
             //Description
             restaurantDescription.text = restaurant.about
@@ -237,7 +243,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleCookingSlotUiChange(uiChange: RestaurantPageViewModel.CookingSlotUi?) {
         uiChange?.let {
-            with(binding.restaurantMainListLayout) {
+            with(binding!!.restaurantMainListLayout) {
                 //delivery dates tabLayout
                 val selectedDate: SortedCookingSlots? = if (uiChange.forceTabChange) {
                     restaurantDeliveryDates.selectTabByCookingSlotId(uiChange.cookingSlotId)
@@ -260,12 +266,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
         event?.let {
-            binding.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            binding!!.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
         }
     }
 
     private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
-        binding.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
+        binding!!.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
             val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
             timePickerBottomSheet.setCookingSlots(selectedCookingSlot, deliveryDate.cookingSlots)
             timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
@@ -289,35 +295,52 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleWSError(errorEvent: String?) {
         errorEvent?.let {
-            showErrorToast(errorEvent, binding.root)
+            showErrorToast(errorEvent, binding!!.root)
             viewModel.refreshRestaurantUi()
         }
     }
 
     private fun handleTimePickerUi(timePickerStr: String?) {
         timePickerStr?.let {
-            with(binding.restaurantMainListLayout) {
+            with(binding!!.restaurantMainListLayout) {
                 restaurantTimePickerView.text = it
             }
         }
     }
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
-        if (dishSections?.animateList == true)
-            binding.restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
-        adapterDishes?.submitList(dishSections?.dishes)
+        with(binding!!) {
+            if (dishSections?.dishes.isNullOrEmpty()) {
+                if(!restaurantMainListLayout.restaurantNoNetwork.isVisible){
+                    restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
+                    restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
+                }else{
+                    //Do nothing
+                }
+            }else {
+                    restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+                    restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+
+                    if (dishSections?.animateList == true)
+                        restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+
+                    adapterDishes?.submitList(dishSections?.dishes)
+                }
+        }
     }
 
 
-    private fun handleReviewData(it: LiveEvent<Review?>?) {
-        it?.getContentIfNotHandled()?.let { reviews ->
-            RatingsBottomSheet(reviews).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+    private fun openReviews() {
+        val restaurant = viewModel.restaurantFullData.value
+        restaurant?.let { restaurant ->
+            val header = "${restaurant.getAvgRating()} (${restaurant?.reviewCount ?: ""} reviews)"
+            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 
     private fun initDeliveryDatesTabLayout(datesList: List<SortedCookingSlots>?) {
         datesList?.let {
-            with(binding.restaurantMainListLayout) {
+            with(binding!!.restaurantMainListLayout) {
                 restaurantDeliveryDates.initDates(it)
             }
         }
@@ -328,7 +351,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             if (isSuccess) {
                 mainViewModel.forceFeedRefresh()
             } else {
-                binding.restHeaderFavorite.onFail()
+                binding!!.restHeaderFavorite.onFail()
             }
         }
     }
@@ -382,7 +405,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     override fun onFloatingCartStateChanged(isShowing: Boolean) {
-        binding.restaurantFragHeightCorrection.isVisible = isShowing
+        binding!!.restaurantFragHeightCorrection.isVisible = isShowing
     }
 
     override fun onAddToFavoriteClick() {
@@ -398,19 +421,19 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     override fun onResume() {
         super.onResume()
         if (hasMotionScrolled) {
-            binding.motionLayout.progress = 1F
+            binding!!.motionLayout.progress = 1F
         }
-
     }
 
     override fun onPause() {
         super.onPause()
-        hasMotionScrolled = binding.motionLayout.progress > MOTION_TRANSITION_INITIAL
+        hasMotionScrolled = binding!!.motionLayout.progress > MOTION_TRANSITION_INITIAL
     }
 
     override fun onDestroyView() {
         adapterDishes = null
         adapterCuisines = null
+        binding = null
         super.onDestroyView()
     }
 

@@ -2,10 +2,10 @@ package com.bupp.wood_spoon_eaters.dialogs.rate_last_order
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.model.Order
-import com.bupp.wood_spoon_eaters.model.ReviewRequest
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch

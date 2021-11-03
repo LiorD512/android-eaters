@@ -94,7 +94,10 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             trackOrderProgressName.text = restaurantName
             trackOrderProgressStatusTitle.text = statusTitle
             trackOrderProgressStatusSubTitle.text = statusSubTitle
-            trackOrderProgressPb.setState(OrderState.valueOf(pbState))
+
+            if(OrderState.values().find { it.name == pbState } != null){
+                trackOrderProgressPb.setState(OrderState.valueOf(pbState))
+            }
 
             val multiTransformation = MultiTransformation(BlurTransformation(10, 2), CenterCrop())
             Glide.with(this@TrackYourOrderActivity)
@@ -279,6 +282,10 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             if(order.status.ordinal >= OrderState.RECEIVED.ordinal){
                 trackOrderActEta.text = order.etaToDisplay
                 AnimationUtil().alphaIn(trackOrderActEta)
+            }
+
+            if(order.status.ordinal == OrderState.DELIVERED.ordinal){
+                viewModel.endUpdates()
             }
         }
 

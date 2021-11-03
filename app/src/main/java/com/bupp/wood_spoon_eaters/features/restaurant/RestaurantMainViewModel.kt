@@ -10,13 +10,19 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.Custom
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
+import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 
-class RestaurantMainViewModel(private val flowEventsManager: FlowEventsManager, private val eventsManager: EventsManager) : ViewModel() {
+class RestaurantMainViewModel(
+    private val flowEventsManager: FlowEventsManager,
+    private val eventsManager: EventsManager,
+    cartManager: CartManager
+    ) : ViewModel() {
 
     private var shouldForceRefresh = false
+    val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
 
     enum class NavigationType {
         OPEN_DISH_PAGE,

@@ -17,7 +17,7 @@ import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 
 class HeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr), UserImageVideoView.UserImageViewListener{
+    FrameLayout(context, attrs, defStyleAttr), UserImageVideoView.UserImageVideoViewListener{
 
     private var binding: HeaderViewBinding = HeaderViewBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -107,7 +107,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             headerViewNextBtn.setOnClickListener {
                 listener?.onHeaderNextClick()
             }
-            headerViewProfileBtn.setUserImageViewListener(this@HeaderView)
+            headerViewProfileBtn.setUserImageVideoViewListener(this@HeaderView)
 
             headerViewSearchClean.setOnClickListener {
                 headerViewSearchInput.text.clear()

@@ -1,35 +1,19 @@
 package com.bupp.wood_spoon_eaters.delete_me
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import com.bupp.wood_spoon_eaters.databinding.ActivityTestBinding
+import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.BottomSheetReviews
 
-class TestActivity : ComponentActivity() {
-
-    lateinit var binding: ActivityTestBinding
+class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_test)
 
-//        setContent{
-//            Text("hello world")
-//        }
-        binding = ActivityTestBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-//
-//        UpSaleNCartBottomSheet().show(supportFragmentManager, "upsale")
-//
-//
-//        binding.btn.setOnClickListener {
-//            UpSaleNCartBottomSheet().show(supportFragmentManager, "upsale")
-//            CartBottomSheet().show(supportFragmentManager, "upsale2")
-//        }
+//        UpSaleBottomSheet().show(supportFragmentManager, "upsale")
 
-        binding.btn.setOnClickListener {
-//            binding.orderPb.next()
-        }
-        binding.clearBtn.setOnClickListener {
-//            binding.orderPb.setProgress(0)
-        }
+        BottomSheetReviews().show(supportFragmentManager, "bottomsheet")
+
+
     }
-
 }
