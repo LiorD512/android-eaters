@@ -21,7 +21,7 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
     }
 
     suspend fun getRestaurant(restaurantId: Long, feedRequest: FeedRequest): RestaurantResult {
-        val result = withContext(Dispatchers.IO) {//todo remove hard coded text !
+        val result = withContext(Dispatchers.IO) {
             apiService.getRestaurant(feedRequest.lat, feedRequest.lng, feedRequest.addressId, restaurantId = restaurantId)
         }
         result.let {
