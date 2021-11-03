@@ -118,6 +118,10 @@ class FeedRepository(
                         Log.d("wowProcessFeedData", "adding empty2 - $localId")
                         feedData.add(FeedAdapterEmptySection(feedSectionCollectionItem, localId))
                     }
+                    is FeedSearchEmptySection -> {
+                        Log.d("wowProcessFeedData", "adding search empty - $localId")
+                        feedData.add(FeedAdapterEmptySearch(feedSectionCollectionItem, localId))
+                    }
                     is FeedRestaurantSection -> {
                         Log.d("wowProcessFeedData", "adding rest  - $localId")
                         if (isLargeItems) {

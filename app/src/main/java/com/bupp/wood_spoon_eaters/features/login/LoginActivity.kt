@@ -99,15 +99,21 @@ class LoginActivity : BaseActivity() {
 
 
     private fun redirectToCreateAccountFromWelcome() {
-        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.welcomeFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+        }
     }
 
     private fun redirectToCreateAccountFromVerification() {
-        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.codeFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+        }
     }
 
     private fun redirectToPhoneVerification() {
-        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.welcomeFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+        }
     }
 
     private fun redirectToCodeVerification() {

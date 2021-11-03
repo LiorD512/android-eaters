@@ -5,6 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginHorizontal="15.4dp"
             app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
             android:id="@+id/searchTagsItemList"
             android:layout_width="match_parent"

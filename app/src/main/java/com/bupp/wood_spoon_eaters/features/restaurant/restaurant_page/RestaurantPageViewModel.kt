@@ -56,7 +56,7 @@ class RestaurantPageViewModel(
         if (initialParamData.value == null) {
             currentRestaurantId = params.restaurantId ?: -1
             initialParamData.postValue(params)
-            initRestaurantFullData(params.restaurantId)
+            initRestaurantFullData(params.restaurantId, query = params.query)
         }
     }
 
@@ -64,7 +64,7 @@ class RestaurantPageViewModel(
         initRestaurantFullData(currentRestaurantId, showSkeleton)
     }
 
-    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true) {
+    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true, query: String? = null) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "initRestaurantFullData")

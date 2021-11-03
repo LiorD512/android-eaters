@@ -7,6 +7,7 @@
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/shimmer_cornered_rad7.xml" value="0.19895833333333332" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/teal_blue_cornered_rect.xml" value="0.19895833333333332" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/drawable/teal_blue_cornered_rect_16.xml" value="0.19895833333333332" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/activity_login.xml" value="0.1078125" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/activity_main.xml" value="0.13269927536231885" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/checkout_fragment.xml" value="0.16666666666666666" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/checkout_header_view.xml" value="0.190625" />
@@ -17,6 +18,7 @@
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/orders_history_active_order_item.xml" value="0.13019250253292808" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/orders_history_title_item.xml" value="0.1828125" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/report_issue_fragment.xml" value="0.190625" />
+        <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/restaurant_item_dishes_header.xml" value="0.23143115942028986" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/restaurant_main_list_layout_skeleton.xml" value="0.13269927536231885" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/reviews_item_skeleton.xml" value="0.1828125" />
         <entry key="..\:/Monkeytech/InDev/WoodSpoonEaters_Android/app/src/main/res/layout/search_item_empty.xml" value="0.2368659420289855" />

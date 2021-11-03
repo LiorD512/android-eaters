@@ -15,6 +15,7 @@ data class RestaurantInitParams(
     var restaurantName: String?,
     var chefName: String?,
     var isFavorite: Boolean,
+    var query: String? = null,
 
     /** ANALYTICS PARAMS **/
     val sectionTitle: String? = null,

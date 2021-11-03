@@ -16,7 +16,6 @@ interface RestaurantRepositoryInterface{
 
 class RestaurantRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : RestaurantRepositoryInterface {
     override suspend fun getRestaurant(lat: Double?, lng: Double?, addressId: Long?, restaurantId: Long): ResultHandler<ServerResponse<Restaurant>> {
-//        val tempUrl = "https://woodspoon-server-pr-167.herokuapp.com/api/v2/cooks/1" // todo - remove this shit !
         return resultManager.safeApiCall { service.getRestaurant(restaurantId, lat, lng, addressId) }
     }
 

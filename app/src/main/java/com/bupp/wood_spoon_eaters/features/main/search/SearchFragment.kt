@@ -11,13 +11,16 @@ import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCo
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.InputTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
+import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedMainAdapterListener {
 
+    private val mainViewModel by sharedViewModel<MainViewModel>()
     val viewModel by viewModel<SearchViewModel>()
     var binding: FragmentSearchBinding? = null
     var searchAdapter: FeedMainAdapter? = null
@@ -73,26 +76,33 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
         binding = null
     }
 
-    override fun onShareBannerClick(campaign: Campaign) {
-
-    }
-
     override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
-    }
-
-    override fun onChangeAddressClick() {
-    }
-
-    override fun onDishSwiped() {
-    }
-
-    override fun onRefreshFeedClick() {
+        val query = binding!!.searchFragInput.text.toString()
+        restaurantInitParams.query = query
+        mainViewModel.startRestaurantActivity(restaurantInitParams)
     }
 
     override fun onTagClick(tag: String) {
         binding!!.searchFragInput.setText(tag)
         binding!!.searchFragInput.setSelection(tag.length)
     }
+
+    override fun onShareBannerClick(campaign: Campaign) {
+        //do nothing
+    }
+
+    override fun onChangeAddressClick() {
+        //do nothing
+    }
+
+    override fun onDishSwiped() {
+        //do nothing
+    }
+
+    override fun onRefreshFeedClick() {
+        //do nothing
+    }
+
 
 
 }
