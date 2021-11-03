@@ -73,7 +73,9 @@ class RestaurantPageViewModel(
                     dishListLiveData.postValue(DishListData(dishListData))
                 }
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
-                val result = restaurantRepository.getRestaurant(restaurantId)
+                val lastFeedRequest = feedDataManager.getLastFeedRequest()
+                lastFeedRequest.q = query
+                val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
                         restaurantFullData.postValue(restaurant)
@@ -265,7 +267,7 @@ class RestaurantPageViewModel(
         val dishSectionsList = mutableListOf<DishSections>()
         cookingSlot.sections.forEach { section ->
             if (section.menuItems.isNotEmpty()) {
-                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: ""))
+                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: "", section.subtitle ?: ""))
                 section.menuItems.forEach { menuItem ->
                     dishSectionsList.add(DishSectionSingleDish(menuItem))
                 }

@@ -116,7 +116,7 @@ val appModule = module {
     viewModel { UpSaleNCartViewModel(get(), get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get()) }

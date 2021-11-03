@@ -349,6 +349,11 @@
         <item name="android:textSize">13.4sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="LatoReg13BrownishGreyTwo">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/brownish_grey_two</item>
+    </style>
 
     <style name="LatoReg13TealBlue">
         <item name="android:fontFamily">@font/lato_reg</item>

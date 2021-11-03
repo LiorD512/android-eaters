@@ -101,6 +101,7 @@ data class FeedRestaurantSection(
             restaurantName,
             chefName,
             false,
+            null,
             sectionTitle,
             sectionOrder,
             restaurantOrderInSection,

@@ -94,7 +94,7 @@ interface ApiService {
     suspend fun getRestaurant(
         @Path(value = "cook_id", encoded = true) restaurantId: Long,
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null
+        @Query("address_id") addressId: Long? = null, @Query("q") query: String? = null
     ): ServerResponse<Restaurant>
 
     //cook likes

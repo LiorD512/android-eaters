@@ -27,6 +27,7 @@ data class CookingSlot(
 @JsonClass(generateAdapter = true)
 data class CookingSlotSection(
     @Json(name = "title") val title: String?,
+    @Json(name = "subtitle") val subtitle: String?,
     @Json(name = "menu_items") val menuItems: List<MenuItem> = listOf(),
 ) : Parcelable
 

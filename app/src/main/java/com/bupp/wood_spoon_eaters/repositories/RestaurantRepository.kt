@@ -20,9 +20,10 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         SOMETHING_WENT_WRONG,
     }
 
-    suspend fun getRestaurant(restaurantId: Long): RestaurantResult {
-        val result = withContext(Dispatchers.IO) {//todo remove hard coded text !
-            apiService.getRestaurant(null, null, 1996, restaurantId = restaurantId)
+    suspend fun getRestaurant(restaurantId: Long, lastFeedRequest: FeedRequest): RestaurantResult {
+        val result = withContext(Dispatchers.IO) {
+            apiService.getRestaurant(lastFeedRequest.lat, lastFeedRequest.lng, lastFeedRequest.addressId,
+                cookId = restaurantId, lastFeedRequest.q)
         }
         result.let {
             return when (result) {
