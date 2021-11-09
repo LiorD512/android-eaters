@@ -72,6 +72,15 @@ object DateUtils {
         return ""
     }
 
+    fun parseDateToMonthTime(date: Date?): String {
+        //Aug 2, 10:40 pm
+        date?.let{
+            val sdf = SimpleDateFormat("MMM dd")
+            return "${sdf.format(date.time)}, ${parseDateToUsTime(it)}"
+        }
+        return ""
+    }
+
     fun parseDateToFullDayDate(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EEEE, MMM dd")
@@ -216,6 +225,22 @@ object DateUtils {
             return from.time == from1.time
         }
         return false
+    }
+
+    fun isTomorrow(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = calendar.time
+
+        return isSameDay(date, tomorrow)
+    }
+
+    fun isAfterTomorrow(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 2)
+        val tomorrow = calendar.time
+
+        return isSameDay(date, tomorrow)
     }
 }
 

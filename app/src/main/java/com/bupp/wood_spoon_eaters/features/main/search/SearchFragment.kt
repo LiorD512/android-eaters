@@ -15,6 +15,8 @@ import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,27 +44,35 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
                 adapter = searchAdapter
             }
 
-            binding!!.searchFragInput.addTextChangedListener(object: SimpleTextWatcher(){
+            searchFragInput.addTextChangedListener(object: SimpleTextWatcher(){
                 override fun afterTextChanged(s: Editable) {
                     if (s.isEmpty()) {
                         val face = ResourcesCompat.getFont(requireContext(), R.font.lato_reg)
                         binding!!.searchFragInput.typeface = face
+                        AnimationUtil().alphaOut(binding!!.searchFragClearInput)
                     } else {
                         val face = ResourcesCompat.getFont(requireContext(), R.font.lato_bold)
                         binding!!.searchFragInput.typeface = face
+                        AnimationUtil().alphaIn(binding!!.searchFragClearInput)
                     }
                     super.afterTextChanged(s)
                 }
             })
 
-            binding!!.searchFragInput.addTextChangedListener(object: AutoCompleteTextWatcher(){
+            searchFragInput.addTextChangedListener(object: AutoCompleteTextWatcher(){
                 override fun handleInputString(str: String) {
-                    viewModel.searchInput(str)
+                    if(str.isNotEmpty()){
+                        viewModel.searchInput(str)
+                    }else{
+                        viewModel.showDefaultSearchData()
+                    }
                 }
             })
+
+            searchFragClearInput.setOnClickListener {
+                searchFragInput.clear()
+            }
         }
-
-
     }
 
     private fun initObservers() {

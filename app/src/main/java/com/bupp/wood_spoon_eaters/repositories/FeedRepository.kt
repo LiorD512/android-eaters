@@ -11,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FeedRepository(
-    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager
+    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager,
+    private val metaDataManager: MetaDataRepository
 ) {
 
 
@@ -124,6 +125,7 @@ class FeedRepository(
                     }
                     is FeedRestaurantSection -> {
                         Log.d("wowProcessFeedData", "adding rest  - $localId")
+                        feedSectionCollectionItem.countryIso = metaDataManager.getCountryIsoById(feedSectionCollectionItem.countryId)
                         if (isLargeItems) {
                             feedData.add(FeedAdapterLargeRestaurant(feedSectionCollectionItem, localId))
                         } else {
@@ -133,7 +135,8 @@ class FeedRepository(
                                     restaurantSection = feedSectionCollectionItem,
                                     sectionTitle = feedSection.title,
                                     sectionOrder = feedSectionIndex + 1,
-                                    restaurantOrderInSection = index + 1
+                                    restaurantOrderInSection = index + 1,
+
                                 )
                             )
                         }

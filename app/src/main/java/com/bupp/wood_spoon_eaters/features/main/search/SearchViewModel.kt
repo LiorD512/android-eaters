@@ -22,10 +22,7 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
         showDefaultSearchData()
     }
 
-
-
-
-    private fun showDefaultSearchData() {
+    fun showDefaultSearchData() {
         val defaultData = mutableListOf<FeedAdapterItem>()
         defaultData.add(getSearchTagsAdapterItems())
         defaultData.addAll(getRecentOrderAdapterItems())

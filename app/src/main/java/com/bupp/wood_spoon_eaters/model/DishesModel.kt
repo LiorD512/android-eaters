@@ -25,6 +25,13 @@ data class CookingSlot(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+data class FeedDishCookingSlot(
+    @Json(name = "id") val id: Long,
+    @Json(name = "starts_at") val startsAt: Date,
+) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
 data class CookingSlotSection(
     @Json(name = "title") val title: String?,
     @Json(name = "subtitle") val subtitle: String?,

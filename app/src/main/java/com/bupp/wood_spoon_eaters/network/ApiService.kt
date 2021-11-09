@@ -15,7 +15,7 @@ interface ApiService {
     //AppConfig
     @V3
     @GET("eaters/utils/config")
-    suspend fun getAppSettings(): ServerResponse<List<AppSetting>>
+    suspend fun getAppSettings(): ServerResponse<AppSettings>
 
     //MetaData
     @V3

@@ -37,7 +37,7 @@ class AppSettingsRepository(private val apiService: AppSettingsRepositoryImpl) {
                     Log.d(TAG,"initAppSetting - Success")
                     val appSettings = result.value.data
                     appSettings?.let{
-                        this.appSettingsArr = it
+                        this.appSettingsArr = it.settings
                     }
                     return AppSettingsRepoResult(AppSettingsRepoStatus.SUCCESS)
                 }
@@ -46,14 +46,11 @@ class AppSettingsRepository(private val apiService: AppSettingsRepositoryImpl) {
                 }
             }
         }
-
     }
-
 
     private fun getSettings(): List<AppSetting> {
         return appSettingsArr
     }
-
 
     fun getTermsOfServiceUrl(): String {
         for (settings in getSettings()){

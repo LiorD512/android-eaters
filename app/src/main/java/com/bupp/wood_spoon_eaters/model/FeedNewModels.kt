@@ -85,9 +85,12 @@ data class FeedRestaurantSection(
     @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "title") val title: String?,
     @Json(name = "chef_id") val chefId: Long?,
+    @Json(name = "country_id") val countryId: Long?,
     @Json(name = "chef_thumbnail") val chefThumbnail: WSImage?,
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
+    @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
+    var countryIso: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
     fun toRestaurantInitParams(sectionTitle: String? = null,
                                sectionOrder: Int? = null,
@@ -160,7 +163,7 @@ enum class FeedModelsViewType {
     EMPTY_FEED,
     @Json(name = "section_empty_no_chefs")
     EMPTY_SECTION,
-    @Json(name = "section_empty_search")
+    @Json(name = "section_empty_no_matches")
     EMPTY_SEARCH,
 }
 

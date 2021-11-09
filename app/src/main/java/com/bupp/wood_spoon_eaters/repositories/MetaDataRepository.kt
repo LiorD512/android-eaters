@@ -89,6 +89,13 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return listOf()
     }
 
+    fun getCountryIsoById(countryId: Long?): String? {
+        if (getMetaDataObject().countries != null) {
+            return metaDataObject.countries?.find { it.id == countryId }?.iso
+        }
+        return ""
+    }
+
 
     companion object{
         const val TAG = "wowMetaDataRepo"
