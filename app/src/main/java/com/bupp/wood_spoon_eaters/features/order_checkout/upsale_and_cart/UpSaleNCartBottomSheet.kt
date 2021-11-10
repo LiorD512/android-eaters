@@ -270,8 +270,8 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
             cartAdapter = UpSaleNCartAdapter(getAdapterListener())
             binding!!.cartFragList.initSwipeableRecycler(cartAdapter)
             cartAdapter.submitList(data.items)
+            refreshButtonPosition()
         } else {
-//            listener?.refreshParentOnCartCleared()
             dismiss()
         }
     }

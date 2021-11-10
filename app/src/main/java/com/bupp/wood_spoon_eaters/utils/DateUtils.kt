@@ -189,7 +189,7 @@ object DateUtils {
         return false
     }
 
-    fun isNowInRange(startDate: Date, endDate: Date): Boolean {
+    fun isNowInRange(startDate: Date?, endDate: Date?): Boolean {
         return isDateInRange(Date(), startDate, endDate)
     }
 
