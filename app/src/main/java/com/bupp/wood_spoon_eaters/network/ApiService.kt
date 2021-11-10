@@ -18,7 +18,7 @@ interface ApiService {
     suspend fun getAppSettings(): ServerResponse<AppSettings>
 
     //MetaData
-//    @V3
+    @V3
     @GET("eaters/utils/meta")
     suspend fun getMetaData(): ServerResponse<MetaDataModel>
 
@@ -56,6 +56,12 @@ interface ApiService {
 //        @Query("q") query: String, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
 //        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
 //    ): ServerResponse<FeedResult>
+
+    @GET("eaters/me/feed/order_again")
+    suspend fun getRecentOrders(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
+    ): ServerResponse<FeedResult>
 
     @V3
     @GET("eaters/me/search")

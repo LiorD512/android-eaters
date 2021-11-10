@@ -207,6 +207,37 @@ class FeedRepository(
         }
     }
 
+    suspend fun getRecentOrders(feedRequest: FeedRequest): FeedRepoResult {
+        val result = withContext(Dispatchers.IO) {
+            val lat = feedRequest.lat
+            val lng = feedRequest.lng
+            val addressId = feedRequest.addressId
+            val timestamp = feedRequest.timestamp
+            apiService.getRecentOrders(lat, lng, addressId, timestamp)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getRecentOrders - NetworkError")
+                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getRecentOrders - GenericError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getRecentOrders - Success")
+                    val feedData = processFeedData(result.value.data)
+                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
+                }
+                else -> {
+                    Log.d(TAG, "getRecentOrders - wsError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
     companion object {
         const val TAG = "wowFeedRepo"
     }

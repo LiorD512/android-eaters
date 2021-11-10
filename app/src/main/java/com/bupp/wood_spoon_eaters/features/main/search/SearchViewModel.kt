@@ -36,6 +36,25 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
     }
 
     private fun getRecentOrders(): List<Order> {
+        viewModelScope.launch {
+            val feedRequest = feedDataManager.getLastFeedRequest()
+            val recentOrderResult = feedRepository.getRecentOrders(feedRequest)
+            when(recentOrderResult.type){
+                FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
+                    MTLogger.c(TAG, "getRecentOrders - NetworkError")
+//                    searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
+                }
+                FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
+                    MTLogger.c(TAG, "getRecentOrders - GenericError")
+                }
+                FeedRepository.FeedRepoStatus.SUCCESS -> {
+                    MTLogger.c(TAG, "getRecentOrders - SUCCESS")
+                }
+                else -> {
+                    MTLogger.c(TAG, "getRecentOrders - NetworkError")
+                }
+            }
+        }
         return emptyList()
     }
 
