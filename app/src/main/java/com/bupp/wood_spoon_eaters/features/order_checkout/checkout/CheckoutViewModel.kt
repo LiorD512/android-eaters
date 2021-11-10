@@ -97,14 +97,12 @@ class CheckoutViewModel(
 
     fun updateDeliveryAt(deliveryAt:Date?){
         cartManager.updateCurrentDeliveryAt(deliveryAt)
-      updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryAt)))
+        updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryAt)))
     }
 
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
-//            progressData.startProgress()
             val result = cartManager.updateOrderParams(orderRequest, eventType)
-//            progressData.endProgress()
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
                     cartManager.calcCurrentOrderDeliveryTime()
