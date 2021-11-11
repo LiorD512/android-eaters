@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
 
-class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository) : ViewModel() {
+class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, private val eventsManager: EventsManager) : ViewModel() {
 
     val progressData = ProgressData()
     val errorEvent: SingleLiveEvent<List<WSError>> = SingleLiveEvent()
@@ -54,5 +55,9 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository) 
             }
             feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder?.serviceFee?.formatedValue, curOrder?.tax?.formatedValue, minOrderFee))
         }
+    }
+
+    fun logEvent(eventName: String, params: Map<String, String>? = null) {
+        eventsManager.logEvent(eventName, params)
     }
 }

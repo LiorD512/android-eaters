@@ -7,6 +7,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
@@ -36,6 +37,7 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
                 viewModel.onNextClick()
             }
             reviewFragExitBtn.setOnClickListener {
+                viewModel.logEvent(Constants.EVENT_REVIEW_EXIT_1_PAGE)
                 activity?.onBackPressed()
             }
             viewModel.order?.let { order ->

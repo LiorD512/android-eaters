@@ -5,8 +5,11 @@ import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.InputTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
@@ -16,6 +19,7 @@ import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,6 +38,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
 
         initUi()
         initObservers()
+
     }
 
     private fun initUi() {
@@ -72,6 +77,12 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
             searchFragClearInput.setOnClickListener {
                 searchFragInput.clear()
             }
+
+            searchFragInput.setOnFocusChangeListener { view, b ->
+                if(b){
+                    viewModel.logEvent(Constants.EVENT_SEARCH_QUERY_CLICK)
+                }
+            }
         }
     }
 
@@ -90,11 +101,13 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
         val query = binding!!.searchFragInput.text.toString()
         restaurantInitParams.query = query
         mainViewModel.startRestaurantActivity(restaurantInitParams)
+        viewModel.logRestaurantClick(restaurantInitParams)
     }
 
     override fun onTagClick(tag: String) {
         binding!!.searchFragInput.setText(tag)
         binding!!.searchFragInput.setSelection(tag.length)
+        viewModel.logTagEvent(Constants.EVENT_SEARCH_TAG_CLICK, tag)
     }
 
     override fun onShareBannerClick(campaign: Campaign) {
@@ -111,6 +124,12 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
 
     override fun onRefreshFeedClick() {
         //do nothing
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        viewModel.showDefaultSearchData()
+
     }
 
 

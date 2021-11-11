@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import android.util.Log
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -28,7 +29,28 @@ data class CookingSlot(
 data class FeedDishCookingSlot(
     @Json(name = "id") val id: Long,
     @Json(name = "starts_at") val startsAt: Date,
-) : Parcelable
+) : Parcelable {
+    fun getAvailabilityString(): String {
+        //this method is used for analytics
+        if (Date().after(startsAt)) {
+            // if now is after starts_at - availably now
+            return "ASAP"
+        } else if (Date().before(startsAt) && DateUtils.isToday(startsAt)) {
+            // if now is before starts_at and in the same day
+            return "Today"
+        } else if (DateUtils.isTomorrow(startsAt)) {
+            // if cooking slot is tomorrow -
+            return "Tomorrow"
+        } else if (DateUtils.isSameWeek(startsAt)) {
+            // if the same week - after tomorrow and before week end
+            return "Same week"
+        } else {
+            // if after a week from now -
+            return "Next week and beyond"
+        }
+    }
+}
+
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -68,10 +90,10 @@ data class MenuItem(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class AvailabilityDate(
-    @Json(name = "starts_at")  val startsAt: Date,
-    @Json(name = "ends_at")  val endsAt: Date
+    @Json(name = "starts_at") val startsAt: Date,
+    @Json(name = "ends_at") val endsAt: Date
 ) : Parcelable {
-    fun getStartEndAtTag():String {
+    fun getStartEndAtTag(): String {
         return DateUtils.parseDateToStartAndEnd(startsAt, endsAt)
     }
 }

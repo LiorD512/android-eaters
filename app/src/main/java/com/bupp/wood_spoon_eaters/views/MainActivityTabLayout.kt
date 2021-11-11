@@ -23,6 +23,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     var listener: MainActivityTabLayoutListener? = null
     interface MainActivityTabLayoutListener{
         fun onHomeTabReClicked()
+        fun onSearchTabClicked()
+        fun onOrdersTabClicked()
+        fun onProfileTabClicked()
     }
 
     fun setViewPager(viewPager: ViewPager2, listener: MainActivityTabLayoutListener){
@@ -39,7 +42,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
         binding.mainActTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-
+                when(tab?.position){
+                    1 -> this@MainActivityTabLayout.listener?.onSearchTabClicked()
+                    2 -> this@MainActivityTabLayout.listener?.onOrdersTabClicked()
+                    3 -> this@MainActivityTabLayout.listener?.onProfileTabClicked()
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -50,6 +57,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if(tab?.position == 0){
                     this@MainActivityTabLayout.listener?.onHomeTabReClicked()
                 }
+
             }
 
         })

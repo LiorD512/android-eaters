@@ -40,22 +40,6 @@ interface ApiService {
     @DELETE("eaters/me/addresses/{address_id}")
     suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
 
-    //Feed
-//    @GET("eaters/me/feed")
-//    suspend fun getFeedFlow(
-//        @Query("page") page: Int = 1,
-//        @Query("limit") limit: Int = 20,
-//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-//    ): ServerResponse<List<FeedFlow>>
-
-//    @V3
-//    @FormUrlEncoded
-//    @POST("/v3/eaters/me/searches")
-//    suspend fun search(
-//        @Query("q") query: String, @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-//    ): ServerResponse<FeedResult>
 
     @GET("eaters/me/feed/order_again")
     suspend fun getRecentOrders(

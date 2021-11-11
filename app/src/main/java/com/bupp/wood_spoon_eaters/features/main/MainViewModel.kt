@@ -186,11 +186,10 @@ class MainViewModel(
      * we start it from here, beacuse we need to update stuff when order is successfully done.
      */
     fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
-        eventsManager.logEvent(Constants.EVENT_CLICK_RESTAURANT, getRestaurantClicked(restaurantInitParams))
         startRestaurantActivity.postValue(restaurantInitParams)
     }
 
-    private fun getRestaurantClicked(restaurantInitParams: RestaurantInitParams): Map<String, String> {
+    fun logRestaurantClick(restaurantInitParams: RestaurantInitParams){
         val data = mutableMapOf<String, String>()
         data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
         data["home_chef_name"] = restaurantInitParams.chefName.toString()
@@ -199,7 +198,7 @@ class MainViewModel(
         data["section_index"] = restaurantInitParams.sectionOrder.toString()
         data["home_chef_index"] = restaurantInitParams.restaurantOrderInSection.toString()
         data["dish_tapped_index"] = restaurantInitParams.dishIndexInRestaurant.toString()
-        return data
+        eventsManager.logEvent(Constants.EVENT_CLICK_RESTAURANT, data)
     }
 
     fun forceFeedRefresh() {

@@ -36,6 +36,7 @@ class FeedRepositoryImpl(private val service: ApiService, private val resultMana
     override suspend fun search(input: String, lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<FeedResult>> {
         return resultManager.safeApiCall { service.search(lat, lng, addressId, timestamp, input) }
     }
+
     override suspend fun getRecentOrders(lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<FeedResult>> {
         return resultManager.safeApiCall { service.getRecentOrders(lat, lng, addressId, timestamp) }
     }

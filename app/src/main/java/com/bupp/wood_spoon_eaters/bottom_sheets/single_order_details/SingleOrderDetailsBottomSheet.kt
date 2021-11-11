@@ -96,6 +96,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
             }
             singleOrderDetailsReport.setOnClickListener {
                 ReportIssueBottomSheet.newInstance(curOrderId).show(childFragmentManager, Constants.REPORT_ISSUE_BOTTOM_SHEET)
+                viewModel.logEvent(Constants.EVENT_ORDERS_ORDER_HISTORY_CLICK)
             }
             singleOrderDetailsHeader.setHeaderViewListener(this@SingleOrderDetailsBottomSheet)
 

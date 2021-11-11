@@ -118,7 +118,7 @@ val appModule = module {
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
 
@@ -130,8 +130,8 @@ val appModule = module {
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
-    viewModel { SingleOrderDetailsViewModel(get()) }
-    viewModel { OrdersHistoryViewModel(get(), get()) }
+    viewModel { SingleOrderDetailsViewModel(get(), get()) }
+    viewModel { OrdersHistoryViewModel(get(), get(), get()) }
     viewModel { CuisineChooserViewModel(get(), get()) }
 
     //support

@@ -18,6 +18,7 @@ data class RestaurantInitParams(
     var query: String? = null,
 
     /** ANALYTICS PARAMS **/
+    val cookingSlot: FeedDishCookingSlot? = null,
     val sectionTitle: String? = null,
     val sectionOrder: Int? = null,
     val restaurantOrderInSection: Int? = null,

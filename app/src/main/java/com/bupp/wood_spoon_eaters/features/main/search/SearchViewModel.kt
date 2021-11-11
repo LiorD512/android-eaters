@@ -3,16 +3,19 @@ package com.bupp.wood_spoon_eaters.features.main.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.features.main.feed.FeedViewModel
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
 
-class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataManager: FeedDataManager,
-    val feedRepository: FeedRepository) : ViewModel() {
+class SearchViewModel(private val metaDataRepository: MetaDataRepository, private val feedDataManager: FeedDataManager,
+                      private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager,
+                      private val eventsManager: EventsManager) : ViewModel() {
 
 //    val searchLiveData = MutableLiveData<List<SearchBaseItem>>()
     val searchResultData: MutableLiveData<SearchLiveData> = MutableLiveData()
@@ -35,7 +38,7 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
 //        return SearchAdapterTag(arrayListOf("sababa", "asasas", "sds", "asdasd", "Sdads"))
     }
 
-    private fun getRecentOrders(): List<Order> {
+    fun getRecentOrders(): List<Order> {
         viewModelScope.launch {
             val feedRequest = feedDataManager.getLastFeedRequest()
             val recentOrderResult = feedRepository.getRecentOrders(feedRequest)
@@ -63,13 +66,14 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
         val recentOrders = getRecentOrders()
         recentOrders.forEach {
             //todo - fix this when server is ready
-//            recentOrderItems.add(FeedAdapterItem(it))
+//            recentOrderItems.add(FeedAdapterRestaurant(restaurantSection = it))
         }
         return recentOrderItems
     }
 
     fun searchInput(input: String) {
         viewModelScope.launch {
+            searchResultData.postValue(getSkeletonItems())
             val feedRequest = feedDataManager.getLastFeedRequest()
             val result = feedRepository.getFeedBySearch(input, feedRequest)
             when(result.type){
@@ -84,9 +88,10 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
                     val hrefCount = getHrefItemsCount(result.feed)
                     MTLogger.c(TAG, "getFeedWith - Success - hrefCount: $hrefCount")
                     if(hrefCount > 0){
-                        handleHrefApiCalls(result.feed, hrefCount)
+                        handleHrefApiCalls(result.feed, hrefCount, input)
                     }else{
                         searchResultData.postValue(SearchLiveData(result.feed, result.isLargeItems))
+                        logQueryResult(input, result.feed?.size ?: 0)
                     }
                 }
                 else -> {
@@ -109,7 +114,7 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
         return hrefCounter
     }
 
-    private fun handleHrefApiCalls(feed: List<FeedAdapterItem>?, hrefCount: Int) {
+    private fun handleHrefApiCalls(feed: List<FeedAdapterItem>?, hrefCount: Int, input: String) {
         viewModelScope.launch {
             var counter = 0
             feed?.forEach { feedAdapterItem ->
@@ -128,6 +133,7 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
                                 MTLogger.c(TAG, "handleHrefApiCalls - Success counter: $counter, hrefCounter: $hrefCount")
                                 if(counter == hrefCount){
                                     searchResultData.postValue(SearchLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
+                                    logQueryResult(input, feedRepository.feed?.size ?: 0)
                                 }
                             }
                             else -> {
@@ -139,6 +145,47 @@ class SearchViewModel(val metaDataRepository: MetaDataRepository, val feedDataMa
             }
         }
     }
+
+    private fun getSkeletonItems(): SearchLiveData {
+        val skeletons = mutableListOf<FeedAdapterSearchSkeleton>()
+        for(i in 0 until 2){
+            skeletons.add(FeedAdapterSearchSkeleton())
+        }
+        return SearchLiveData(skeletons)
+    }
+
+    fun logTagEvent(eventName: String, tag: String) {
+        logEvent(eventName, mapOf(Pair("cuisine_name", tag)))
+    }
+
+    private fun logQueryResult(query: String, count: Int) {
+        val data = mutableMapOf<String, String>()
+        data["search_text"] = query
+        data["results_count"] = count.toString()
+        logEvent(Constants.EVENT_SEARCH_QUERY, data)
+    }
+
+    fun logRestaurantClick(restaurantInitParams: RestaurantInitParams) {
+        val data = mutableMapOf<String, String>()
+        data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
+        data["home_chef_name"] = restaurantInitParams.chefName.toString()
+        data["kitchen_name"] = restaurantInitParams.restaurantName.toString()
+        data["home_chef_rating"] = restaurantInitParams.rating.toString()
+        data["home_chef_availability"] = restaurantInitParams.cookingSlot?.getAvailabilityString().toString()
+        logEvent(Constants.EVENT_SEARCH_RESTAURANT_CLICK, data)
+    }
+
+    fun logEvent(eventName: String, params: Map<String, String>? = null) {
+        eventsManager.logEvent(eventName, params)
+    }
+
+
+//    private fun getSendOtpData(isSuccess: Boolean): Map<String, String> {
+//        val data = mutableMapOf<String, String>()
+//        data["number"] = this.phonePrefix+this.phone
+//        data["success"] = isSuccess.toString()
+//        return data
+//    }
 
 
     companion object {

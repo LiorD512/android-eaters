@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemSkeletonBinding
 import com.bupp.wood_spoon_eaters.databinding.FeedAdapterTitleItemBinding
+import com.bupp.wood_spoon_eaters.databinding.SearchItemSkeletonBinding
 import com.bupp.wood_spoon_eaters.model.FeedAdapterTitle
 
 class FeedAdapterTitleViewHolder(val binding: FeedAdapterTitleItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -12,6 +13,11 @@ class FeedAdapterTitleViewHolder(val binding: FeedAdapterTitleItemBinding) : Rec
 }
 
 class FeedAdapterSkeletonViewHolder(val binding: FeedAdapterRestaurantItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bindItems() {
+    }
+}
+
+class FeedAdapterSkeletonSearchViewHolder(val binding: SearchItemSkeletonBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bindItems() {
     }
 }

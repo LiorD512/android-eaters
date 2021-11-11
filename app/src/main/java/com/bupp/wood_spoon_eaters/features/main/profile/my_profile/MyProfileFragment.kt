@@ -53,7 +53,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onResume() {
         super.onResume()
         viewModel.fetchProfileData()
-        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ACCOUNT)
     }
 
     private fun initProfileData(profileData: MyProfileViewModel.ProfileData) {

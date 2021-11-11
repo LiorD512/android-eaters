@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewDetailsBinding
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -55,6 +56,7 @@ class ReviewDetailsFragment : Fragment(R.layout.fragment_review_details) {
                 viewModel.onSubmitClick(reviewFragUserReviewInput.getText(),reviewFragUserTeamInput.getText())
             }
             reviewFragExitBtn.setOnClickListener {
+                viewModel.logEvent(Constants.EVENT_REVIEW_EXIT_2_PAGE)
                 activity?.onBackPressed()
             }
             viewModel.order?.let { order ->

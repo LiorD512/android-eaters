@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.BottomSheetReviews
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -332,7 +332,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         val restaurant = viewModel.restaurantFullData.value
         restaurant?.let { restaurant ->
             val header = "${restaurant.rating ?: ""} (${restaurant.reviewCount ?: ""} reviews)"
-            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            ReviewsBottomSheet.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 

@@ -125,7 +125,7 @@ class FeedRepository(
                     }
                     is FeedRestaurantSection -> {
                         Log.d("wowProcessFeedData", "adding rest  - $localId")
-                        feedSectionCollectionItem.countryIso = metaDataManager.getCountryIsoById(feedSectionCollectionItem.countryId)
+                        feedSectionCollectionItem.flagUrl = metaDataManager.getCountryFlagById(feedSectionCollectionItem.countryId)
                         if (isLargeItems) {
                             feedData.add(FeedAdapterLargeRestaurant(feedSectionCollectionItem, localId))
                         } else {

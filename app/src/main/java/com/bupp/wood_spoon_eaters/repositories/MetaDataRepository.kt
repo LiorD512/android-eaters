@@ -96,6 +96,13 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return ""
     }
 
+    fun getCountryFlagById(countryId: Long?): String? {
+        if (getMetaDataObject().countries != null) {
+            return metaDataObject.countries?.find { it.id == countryId }?.flagUrl
+        }
+        return ""
+    }
+
 
     companion object{
         const val TAG = "wowMetaDataRepo"

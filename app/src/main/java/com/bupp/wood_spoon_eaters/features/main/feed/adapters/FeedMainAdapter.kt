@@ -97,6 +97,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
                 val binding = SearchItemTagsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterSearchTagViewHolder(parent.context, binding)
             }
+            FeedAdapterViewType.SKELETON_SEARCH.ordinal -> {
+                val binding = SearchItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterSkeletonSearchViewHolder(binding)
+            }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterSkeletonViewHolder(binding)
@@ -138,6 +142,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
             }
             is FeedAdapterSkeleton -> {
                 holder as FeedAdapterSkeletonViewHolder
+                holder.bindItems()
+            }
+            is FeedAdapterSearchSkeleton -> {
+                holder as FeedAdapterSkeletonSearchViewHolder
                 holder.bindItems()
             }
             is FeedAdapterSearchTag -> {

@@ -242,6 +242,16 @@ object DateUtils {
 
         return isSameDay(date, tomorrow)
     }
+
+    fun isSameWeek(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 2) //tomorrow
+        val tomorrow = calendar.time
+        calendar.add(Calendar.DAY_OF_YEAR, 4) //a week from now - add 4 more days to tomorrow
+        val inAWeek = calendar.time
+
+        return isDateInRange(date, tomorrow, inAWeek)
+    }
 }
 
 /** Compering between 2 dates */

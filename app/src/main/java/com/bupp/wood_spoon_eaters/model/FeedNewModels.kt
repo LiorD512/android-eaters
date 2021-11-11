@@ -90,7 +90,7 @@ data class FeedRestaurantSection(
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
     @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
-    var countryIso: String?,
+    var flagUrl: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
     fun toRestaurantInitParams(sectionTitle: String? = null,
                                sectionOrder: Int? = null,
@@ -105,6 +105,7 @@ data class FeedRestaurantSection(
             chefName,
             false,
             null,
+            cookingSlot,
             sectionTitle,
             sectionOrder,
             restaurantOrderInSection,
@@ -189,6 +190,7 @@ enum class FeedAdapterViewType {
     SEARCH_TAGS,
     NO_NETWORK_SECTION,
     SKELETON,
+    SKELETON_SEARCH,
     HREF
 }
 
@@ -196,6 +198,11 @@ enum class FeedAdapterViewType {
 data class FeedAdapterSkeleton(
     override var id: Long? = null
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON)
+
+@Parcelize
+data class FeedAdapterSearchSkeleton(
+    override var id: Long? = null
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON_SEARCH)
 
 @Parcelize
 data class FeedAdapterHref(
