@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
@@ -89,6 +90,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
     private fun initObservers() {
         viewModel.searchResultData.observe(viewLifecycleOwner, {
             it.feedData?.let { it1 -> searchAdapter?.setDataList(it1) }
+        })
+        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+            viewModel.getRecentOrders()
         })
     }
 

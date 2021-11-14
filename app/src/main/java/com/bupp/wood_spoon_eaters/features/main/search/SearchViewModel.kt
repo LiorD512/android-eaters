@@ -25,6 +25,8 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
         showDefaultSearchData()
     }
 
+    fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
+
     fun showDefaultSearchData() {
         val defaultData = mutableListOf<FeedAdapterItem>()
         defaultData.add(getSearchTagsAdapterItems())
@@ -41,20 +43,22 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
     fun getRecentOrders(): List<Order> {
         viewModelScope.launch {
             val feedRequest = feedDataManager.getLastFeedRequest()
-            val recentOrderResult = feedRepository.getRecentOrders(feedRequest)
-            when(recentOrderResult.type){
-                FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
-                    MTLogger.c(TAG, "getRecentOrders - NetworkError")
-//                    searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
-                }
-                FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
-                    MTLogger.c(TAG, "getRecentOrders - GenericError")
-                }
-                FeedRepository.FeedRepoStatus.SUCCESS -> {
-                    MTLogger.c(TAG, "getRecentOrders - SUCCESS")
-                }
-                else -> {
-                    MTLogger.c(TAG, "getRecentOrders - NetworkError")
+            if((feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null){
+                val recentOrderResult = feedRepository.getRecentOrders(feedRequest)
+                when(recentOrderResult.type){
+                    FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
+                        MTLogger.c(TAG, "getRecentOrders - NetworkError")
+    //                    searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
+                    }
+                    FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
+                        MTLogger.c(TAG, "getRecentOrders - GenericError")
+                    }
+                    FeedRepository.FeedRepoStatus.SUCCESS -> {
+                        MTLogger.c(TAG, "getRecentOrders - SUCCESS")
+                    }
+                    else -> {
+                        MTLogger.c(TAG, "getRecentOrders - NetworkError")
+                    }
                 }
             }
         }
@@ -70,6 +74,8 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
         }
         return recentOrderItems
     }
+
+
 
     fun searchInput(input: String) {
         viewModelScope.launch {
@@ -178,6 +184,8 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
     fun logEvent(eventName: String, params: Map<String, String>? = null) {
         eventsManager.logEvent(eventName, params)
     }
+
+
 
 
 //    private fun getSendOtpData(isSuccess: Boolean): Map<String, String> {

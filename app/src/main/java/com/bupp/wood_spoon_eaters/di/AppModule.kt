@@ -119,7 +119,7 @@ val appModule = module {
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
-    viewModel { ReportIssueViewModel(get(), get()) }
+    viewModel { ReportIssueViewModel(get(), get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
@@ -147,10 +147,10 @@ val appModule = module {
     viewModel { RestaurantPageViewModel(get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
-    viewModel { ReviewsBSViewModel(get())}
+    viewModel { ReviewsBSViewModel(get(), get())}
 
     //Review Activity
-    viewModel { ReviewsViewModel(get(),get())}
+    viewModel { ReviewsViewModel(get(),get(), get())}
 
 
 

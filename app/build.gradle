@@ -24,7 +24,7 @@ android {
 
         applicationId "com.bupp.wood_spoon_eaters"
         versionCode 95
-        versionName "2.3.4"
+        versionName "2.3.7"
 //        signingConfig signingConfigs.debug
     }
 
