@@ -46,7 +46,7 @@ class MediaUploadManager(private val context: Context, private val apiService: A
     private suspend fun putFileOnAws(dispatcher: CoroutineDispatcher = Dispatchers.IO, uri: Uri?, preSignedUrl: String) {
         uri?.let {
             withContext(dispatcher) {
-                val bitmap = decodeUri(context, uri, 200)
+                val bitmap = decodeUri(context, uri, 2000)
                 val stream = ByteArrayOutputStream()
                 bitmap?.compress(Bitmap.CompressFormat.PNG, 90, stream)
                 val image = stream.toByteArray()
