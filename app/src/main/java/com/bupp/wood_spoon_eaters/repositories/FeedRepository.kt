@@ -227,7 +227,8 @@ class FeedRepository(
                 }
                 is ResultHandler.Success -> {
                     Log.d(TAG, "getRecentOrders - Success")
-                    val feedData = processFeedData(result.value.data)
+                    val data = result.value.data
+                    val feedData = processFeedData(FeedResult(listOf(FeedSection(collections = data as MutableList<FeedSectionCollectionItem>))))
                     FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
                 }
                 else -> {

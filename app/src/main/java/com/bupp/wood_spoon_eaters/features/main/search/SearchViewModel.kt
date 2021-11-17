@@ -21,26 +21,28 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
     val searchResultData: MutableLiveData<SearchLiveData> = MutableLiveData()
     data class SearchLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
 
-    init {
-        showDefaultSearchData()
-    }
+//    init {
+//        getRecentOrders()
+//    }
 
+    private var curOrderAgainData: List<FeedAdapterItem>? = null
     fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
 
     fun showDefaultSearchData() {
         val defaultData = mutableListOf<FeedAdapterItem>()
         defaultData.add(getSearchTagsAdapterItems())
-        defaultData.addAll(getRecentOrderAdapterItems())
+        curOrderAgainData?.let {
+        defaultData.add(FeedAdapterTitle(title = "My recent orders", -1))
+            defaultData.addAll(it) }
         searchResultData.postValue(SearchLiveData(defaultData))
     }
 
     private fun getSearchTagsAdapterItems(): FeedAdapterSearchTag {
         val searchTags = metaDataRepository.getSearchTags()
         return FeedAdapterSearchTag(tags = searchTags)
-//        return SearchAdapterTag(arrayListOf("sababa", "asasas", "sds", "asdasd", "Sdads"))
     }
 
-    fun getRecentOrders(): List<Order> {
+    fun getRecentOrders() {
         viewModelScope.launch {
             val feedRequest = feedDataManager.getLastFeedRequest()
             if((feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null){
@@ -55,6 +57,8 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getRecentOrders - SUCCESS")
+                        curOrderAgainData = recentOrderResult.feed
+                        showDefaultSearchData()
                     }
                     else -> {
                         MTLogger.c(TAG, "getRecentOrders - NetworkError")
@@ -62,18 +66,17 @@ class SearchViewModel(private val metaDataRepository: MetaDataRepository, privat
                 }
             }
         }
-        return emptyList()
     }
 
-    private fun getRecentOrderAdapterItems(): List<FeedAdapterItem>{
-        val recentOrderItems = mutableListOf<FeedAdapterItem>()
-        val recentOrders = getRecentOrders()
-        recentOrders.forEach {
-            //todo - fix this when server is ready
-//            recentOrderItems.add(FeedAdapterRestaurant(restaurantSection = it))
-        }
-        return recentOrderItems
-    }
+//    private fun getRecentOrderAdapterItems(): List<FeedAdapterItem>{
+//        val recentOrderItems = mutableListOf<FeedAdapterItem>()
+//        val recentOrders = getRecentOrders()
+//        recentOrders.forEach {
+//            //todo - fix this when server is ready
+////            recentOrderItems.add(FeedAdapterRestaurant(restaurantSection = it))
+//        }
+//        return recentOrderItems
+//    }
 
 
 

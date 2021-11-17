@@ -151,11 +151,16 @@ private val eventsManager: EventsManager) : ViewModel() {
 
     fun logTrackOrderClick(orderId: Long) {
         var orderItemPosition = 0
+
         orderListData[SECTION_ACTIVE]?.let {
-            it.forEachIndexed { index, orderHistoryBaseItem ->
-                if(orderHistoryBaseItem is OrderAdapterItemActiveOrder){
-                    if(orderHistoryBaseItem.order.id == orderId){
-                        orderItemPosition = index
+            if(it.size == 1){
+                orderItemPosition = 0
+            }else{
+                it.forEachIndexed { index, orderHistoryBaseItem ->
+                    if(orderHistoryBaseItem is OrderAdapterItemActiveOrder){
+                        if(orderHistoryBaseItem.order.id == orderId){
+                            orderItemPosition = index + 1
+                        }
                     }
                 }
             }

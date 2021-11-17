@@ -45,7 +45,7 @@ interface ApiService {
     suspend fun getRecentOrders(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
-    ): ServerResponse<FeedResult>
+    ): ServerResponse<List<FeedRestaurantSection>>
 
     @V3
     @GET("eaters/me/search")

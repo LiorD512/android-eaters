@@ -192,6 +192,8 @@ class MainViewModel(
     fun logRestaurantClick(restaurantInitParams: RestaurantInitParams){
         val data = mutableMapOf<String, String>()
         data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
+        data["kitchen_name"] = restaurantInitParams.restaurantName.toString()
+        data["home_chef_availability"] = restaurantInitParams.cookingSlot?.getAvailabilityString().toString()
         data["home_chef_name"] = restaurantInitParams.chefName.toString()
         data["home_chef_rating"] = restaurantInitParams.rating.toString()
         data["section_title"] = restaurantInitParams.sectionTitle.toString()

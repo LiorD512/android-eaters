@@ -40,6 +40,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
         initUi()
         initObservers()
 
+
     }
 
     private fun initUi() {
