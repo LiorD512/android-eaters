@@ -23,8 +23,8 @@ android {
         targetSdkVersion 30
 
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode 96
-        versionName "2.3.4"
+        versionCode 97
+        versionName "2.3.5"
 //        signingConfig signingConfigs.debug
     }
 
