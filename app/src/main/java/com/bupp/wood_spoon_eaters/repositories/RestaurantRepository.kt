@@ -20,9 +20,10 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         SOMETHING_WENT_WRONG,
     }
 
-    suspend fun getRestaurant(restaurantId: Long, feedRequest: FeedRequest): RestaurantResult {
+    suspend fun getRestaurant(restaurantId: Long, lastFeedRequest: FeedRequest): RestaurantResult {
         val result = withContext(Dispatchers.IO) {
-            apiService.getRestaurant(feedRequest.lat, feedRequest.lng, feedRequest.addressId, restaurantId = restaurantId)
+            apiService.getRestaurant(lastFeedRequest.lat, lastFeedRequest.lng, lastFeedRequest.addressId,
+                cookId = restaurantId, lastFeedRequest.q)
         }
         result.let {
             return when (result) {

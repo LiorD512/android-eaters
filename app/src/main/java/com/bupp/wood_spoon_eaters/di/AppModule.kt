@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_eaters.di
 
 import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserViewModel
-import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.UserSettings
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredViewModel
@@ -27,6 +27,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBSViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
+import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
@@ -50,26 +51,28 @@ val appModule = module {
 
     //global
     single { FcmManager(get()) }
-    single { AppSettings(get(), get()) }
-    single { FlowEventsManager(get(),get()) }
+    single { UserSettings(get(), get()) }
+    single { FlowEventsManager(get(), get()) }
     single { ErrorManger()}
     single { ResultManager(get()) }
 
     //repos
     single { MetaDataRepository(get()) }
-    single { MetaDataRepositoryImpl(get(),get()) }
-    single { FeedRepository(get(), get(), get()) }
-    single { FeedRepositoryImpl(get(),get()) }
-    single { UserRepositoryImpl(get(),get()) }
+    single { MetaDataRepositoryImpl(get(), get()) }
+    single { AppSettingsRepository(get()) }
+    single { AppSettingsRepositoryImpl(get(), get()) }
+    single { FeedRepository(get(), get(), get(), get()) }
+    single { FeedRepositoryImpl(get(), get()) }
+    single { UserRepositoryImpl(get(), get()) }
     single { RestaurantRepository(get())}
-    single { RestaurantRepositoryImpl(get(),get())}
+    single { RestaurantRepositoryImpl(get(), get())}
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
-    single { OrderRepositoryImpl(get(),get()) }
+    single { OrderRepositoryImpl(get(), get()) }
     single { EaterDataRepository(get()) }
-    single { EaterDataRepositoryImpl(get(),get()) }
+    single { EaterDataRepositoryImpl(get(), get()) }
     single { CampaignRepository(get(), get()) }
-    single { CampaignRepositoryImpl(get(),get()) }
+    single { CampaignRepositoryImpl(get(), get()) }
 
     //managers
     single { GlobalErrorManager() }
@@ -90,7 +93,7 @@ val appModule = module {
     viewModel { AddressMenuViewModel(get(), get(), get()) }
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SuperUserViewModel(get(), get()) }
 
     //login
@@ -100,7 +103,7 @@ val appModule = module {
     //location
     viewModel { LocationAndAddressViewModel(get(), get(), get(), get()) }
     viewModel { SelectAddressViewModel(get(), get(), get()) }
-    viewModel { AddressMapVerificationViewModel(get(), get()) }
+    viewModel { AddressMapVerificationViewModel(get(), get(), get()) }
 
     //time
     viewModel { TimePickerViewModel(get()) }
@@ -115,7 +118,8 @@ val appModule = module {
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
-    viewModel { ReportIssueViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
+    viewModel { ReportIssueViewModel(get(), get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
@@ -126,8 +130,8 @@ val appModule = module {
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
-    viewModel { SingleOrderDetailsViewModel(get()) }
-    viewModel { OrdersHistoryViewModel(get(), get()) }
+    viewModel { SingleOrderDetailsViewModel(get(), get()) }
+    viewModel { OrdersHistoryViewModel(get(), get(), get()) }
     viewModel { CuisineChooserViewModel(get(), get()) }
 
     //support
@@ -143,10 +147,10 @@ val appModule = module {
     viewModel { RestaurantPageViewModel(get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
-    viewModel { ReviewsBSViewModel(get())}
+    viewModel { ReviewsBSViewModel(get(), get())}
 
     //Review Activity
-    viewModel { ReviewsViewModel(get(),get())}
+    viewModel { ReviewsViewModel(get(),get(), get())}
 
 
 

@@ -135,6 +135,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         }
         binding.trackOrderActHelp.setOnClickListener {
             TrackOrderMenuBottomSheet().show(supportFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+            viewModel.logOnHelpClick()
         }
 
         val sharedElementEnterTransition: Transition = window.sharedElementEnterTransition
@@ -350,7 +351,8 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         super.onDestroy()
     }
 
-    override fun onOrderCanceled() {
+    override fun onOrderCanceled(type: Int) {
+        viewModel.logCancelClick(type)
         intent.putExtra("isAfterCancel", true)
         setResult(RESULT_OK, intent)
         finish()

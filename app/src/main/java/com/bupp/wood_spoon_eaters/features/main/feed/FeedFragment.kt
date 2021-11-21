@@ -243,6 +243,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
         mainViewModel.startRestaurantActivity(restaurantInitParams)
+        mainViewModel.logRestaurantClick(restaurantInitParams)
     }
 
     override fun onDishSwiped() {
@@ -252,6 +253,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     override fun onRefreshFeedClick() {
         viewModel.onPullToRefresh()
     }
+
+
 
     override fun onResume() {
         super.onResume()

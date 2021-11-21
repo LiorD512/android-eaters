@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.WSError
@@ -14,7 +16,7 @@ import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository: UserRepository) : ViewModel() {
+class ReviewsViewModel(private val orderRepository: OrderRepository, private val userRepository: UserRepository, private val eventsManager: EventsManager) : ViewModel() {
 
     val progressData = ProgressData()
     val navigationEvent = LiveEventData<NavigationEvent>()
@@ -44,6 +46,7 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
 
                     if (result.type == OrderRepository.OrderRepoStatus.POST_REVIEW_SUCCESS) {
                         reviewSuccess.postRawValue(true)
+                        logReviewSentEvent(rating ?: 0, reviewText ?: "", supportMessage ?: "")
                     } else if (result.type == OrderRepository.OrderRepoStatus.WS_ERROR){
                         errorEvent.postRawValue(result.wsError)
                     }
@@ -72,4 +75,18 @@ class ReviewsViewModel(val orderRepository: OrderRepository, val userRepository:
     fun getEaterName(): String {
         return userRepository.getUser()?.firstName ?: ""
     }
+
+    fun logEvent(eventName: String) {
+        eventsManager.logEvent(eventName)
+    }
+
+    fun logReviewSentEvent(ratingStars: Int, review: String, comment: String){
+        val data = mutableMapOf<String, String>()
+        data["rating_stars"] = ratingStars.toString()
+        data["review_comment"] = review
+        data["note_for_woodspoon"] = comment
+        eventsManager.logEvent(Constants.EVENT_REVIEW_SUBMIT, data)
+    }
+
+
 }

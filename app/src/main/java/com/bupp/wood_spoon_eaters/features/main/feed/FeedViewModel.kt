@@ -62,19 +62,14 @@ class FeedViewModel(
         if(validFeedRequest(feedRequest)){
             feedSkeletonEvent.postValue(getSkeletonItems())
             viewModelScope.launch {
-//                progressData.startProgress()
                 val feedRepository = feedRepository.getFeed(feedRequest)
                 when (feedRepository.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         MTLogger.c(TAG, "getFeedWith - NetworkError")
                         feedResultData.postValue(FeedLiveData(listOf(FeedAdapterNoNetworkSection(0)), feedRepository.isLargeItems))
-//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-//                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                         MTLogger.c(TAG, "getFeedWith - GenericError")
-//                        errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-//                        progressData.endProgress()
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         val hrefCount = getHrefItemsCount(feedRepository.feed)
@@ -84,15 +79,11 @@ class FeedViewModel(
                         }else{
                             feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
                         }
-//                        progressData.endProgress()
                     }
                     else -> {
                         MTLogger.c(TAG, "getFeedWith - NetworkError")
-//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-//                        progressData.endProgress()
                     }
                 }
-//                progressData.endProgress()
             }
         }else{
             MTLogger.c("wowFeedVM","getFeed setLocationListener")

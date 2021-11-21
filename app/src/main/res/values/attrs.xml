@@ -52,6 +52,7 @@
         <attr name="isEditable" />
         <attr name="hint" />
         <attr name="error" />
+        <attr name="isWithBkg" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="WSLongBtn">

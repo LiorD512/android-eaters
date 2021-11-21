@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders
 
+import android.view.View
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemDishesHeaderBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionAvailableHeader
@@ -13,6 +14,12 @@ class DishViewHolderAvailableHeader(val binding: RestaurantItemDishesHeaderBindi
         section as DishSectionAvailableHeader
         with(binding) {
             dishHeader.text = section.header
+            if(section.subtitle.isNullOrEmpty()){
+                dishSubtitle.visibility = View.GONE
+            }else{
+                dishSubtitle.text = section.subtitle
+                dishSubtitle.visibility = View.VISIBLE
+            }
         }
     }
 

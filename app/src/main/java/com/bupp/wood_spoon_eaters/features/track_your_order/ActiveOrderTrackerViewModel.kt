@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
@@ -20,6 +21,7 @@ import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.Job
@@ -33,7 +35,7 @@ class ActiveOrderTrackerViewModel(
     val api: ApiService,
     val eaterDataManager: EaterDataManager,
     private val paymentManager: PaymentManager,
-    private val metaDataRepository: MetaDataRepository,
+    private val appSettingsRepository: AppSettingsRepository,
     private val flowEventsManager: FlowEventsManager,
     private val eventsManager: EventsManager
 ) : ViewModel() {
@@ -88,7 +90,7 @@ class ActiveOrderTrackerViewModel(
     }
 
     fun getContactUsPhoneNumber(): String {
-        return metaDataRepository.getContactUsPhoneNumber()
+        return appSettingsRepository.getContactUsPhoneNumber()
     }
 
     private fun getOrderUserInfo(): OrderUserInfo {
@@ -125,13 +127,6 @@ class ActiveOrderTrackerViewModel(
 //        return metaDataRepository.getContactUsPhoneNumber()
 //    }
 
-    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
-    }
-
-    fun logEvent(eventName: String) {
-        eventsManager.logEvent(eventName)
-    }
 
     data class FeesAndTaxData(val fee: String?, val tax: String?, val minFee: String? = null)
 
@@ -261,6 +256,32 @@ class ActiveOrderTrackerViewModel(
             )
             chefPageClick.postValue(restaurantParam)
         }
+    }
+
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.logPageEvent(eventType)
+    }
+
+    fun logEvent(eventName: String) {
+        eventsManager.logEvent(eventName)
+    }
+
+    fun logOnHelpClick() {
+        eventsManager.logEvent(Constants.EVENT_TRACK_ORDER_HELP_CLICK)
+    }
+
+    fun logCancelClick(type: Int) {
+        var cancelFee = 0
+        when(type){
+            Constants.CANCEL_ORDER_STAGE_2 -> {
+                cancelFee = 50
+            }
+            Constants.CANCEL_ORDER_STAGE_3 -> {
+                cancelFee = 100
+            }
+        }
+        eventsManager.logEvent(Constants.EVENT_ORDERS_CANCEL, mapOf(Pair("cancalation_fee",cancelFee)))
     }
 
 }

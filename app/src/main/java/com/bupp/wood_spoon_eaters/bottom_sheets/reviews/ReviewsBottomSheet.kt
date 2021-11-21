@@ -10,14 +10,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FragmentBottomsheetReviewsBinding
-import com.bupp.wood_spoon_eaters.databinding.ReportIssueFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.koin.android.scope.getOrCreateScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class BottomSheetReviews : BottomSheetDialogFragment() {
+class ReviewsBottomSheet : BottomSheetDialogFragment() {
 
     private val viewModel by viewModel<ReviewsBSViewModel>()
     private var binding: FragmentBottomsheetReviewsBinding? = null
@@ -49,6 +47,8 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
 
         initUI()
         initObservers()
+
+        viewModel.logOpenScreenEvent()
     }
 
 
@@ -109,8 +109,8 @@ class BottomSheetReviews : BottomSheetDialogFragment() {
         private const val RESTAURANT_ID = "restaurantId"
         private const val RESTAURANT_NAME = "restaurantName"
         private const val RATING_HEADER = "ratingHeader"
-        fun newInstance(restaurantId: Long, restaurantName: String, ratingHeader: String): BottomSheetReviews {
-            return BottomSheetReviews().apply {
+        fun newInstance(restaurantId: Long, restaurantName: String, ratingHeader: String): ReviewsBottomSheet {
+            return ReviewsBottomSheet().apply {
                 arguments = Bundle().apply {
                     putLong(RESTAURANT_ID, restaurantId)
                     putString(RESTAURANT_NAME, restaurantName)

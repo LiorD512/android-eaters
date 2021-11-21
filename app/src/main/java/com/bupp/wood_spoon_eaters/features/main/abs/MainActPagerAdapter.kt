@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bupp.wood_spoon_eaters.features.main.feed.FeedFragment
 import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryFragment
 import com.bupp.wood_spoon_eaters.features.main.profile.my_profile.MyProfileFragment
+import com.bupp.wood_spoon_eaters.features.main.search.SearchFragment
 
 class MainActPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun getItemCount(): Int = NUM_PAGES
@@ -17,13 +18,13 @@ class MainActPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
             0 -> {
                 FeedFragment()
             }
-//            1 -> {
-//                SearchFragment()
-//            }
             1 -> {
-                OrdersHistoryFragment()
+                SearchFragment()
             }
             2 -> {
+                OrdersHistoryFragment()
+            }
+            3 -> {
                 MyProfileFragment()
             }
             else -> {
@@ -33,7 +34,7 @@ class MainActPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     }
 
     companion object {
-        const val NUM_PAGES = 3
+        const val NUM_PAGES = 4
         const val TAG = "wowMainActPagerAdapter"
     }
 }

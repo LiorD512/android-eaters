@@ -23,8 +23,8 @@ android {
         targetSdkVersion 30
 
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode 97
-        versionName "2.3.5"
+        versionCode 95
+        versionName "2.3.7"
 //        signingConfig signingConfigs.debug
     }
 
@@ -110,6 +110,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'com.github.gayanvoice:android-animations-kotlin:1.0.1'
     implementation 'it.sephiroth.android.library.targettooltip:target-tooltip-library:2.0.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //image proccessing
 

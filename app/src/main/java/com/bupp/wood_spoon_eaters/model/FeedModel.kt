@@ -18,6 +18,7 @@ data class FeedRequest(
     @Json(name = "lat") var lat: Double? = null,
     @Json(name = "lng") var lng: Double? = null,
     @Json(name = "addressId") var addressId: Long? = null,
-    @Json(name = "timestamp") var timestamp: String? = null
+    @Json(name = "timestamp") var timestamp: String? = null,
+    @Json(name = "q") var q: String? = null
 )
 

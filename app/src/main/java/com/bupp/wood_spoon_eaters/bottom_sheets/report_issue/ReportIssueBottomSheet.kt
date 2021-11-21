@@ -50,6 +50,7 @@ class ReportIssueBottomSheet : BottomSheetDialogFragment(), InputTitleView.Input
         arguments?.let {
             viewModel.setOrderId(it.getLong(SINGLE_ORDER_ARGS))
         }
+        viewModel.logOpenScreenEvent()
     }
 
     private lateinit var behavior: BottomSheetBehavior<View>

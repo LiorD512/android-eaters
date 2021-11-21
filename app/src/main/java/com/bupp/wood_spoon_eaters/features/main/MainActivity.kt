@@ -421,6 +421,18 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.scrollFeedToTop()
     }
 
+    override fun onSearchTabClicked() {
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_SEARCH)
+    }
+
+    override fun onOrdersTabClicked() {
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ORDERS)
+    }
+
+    override fun onProfileTabClicked() {
+        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ACCOUNT)
+    }
+
     companion object {
         const val TAG = "wowMainAct"
     }

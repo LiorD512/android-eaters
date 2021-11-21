@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.settings
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.UserSettings
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
@@ -12,8 +12,8 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
 
-class SettingsViewModel(private val appSettings: AppSettings, val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, val eaterDataManager: EaterDataManager,
-private val flowEventsManager: FlowEventsManager) : ViewModel() {
+class SettingsViewModel(private val userSettings: UserSettings, val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, val eaterDataManager: EaterDataManager,
+                        private val flowEventsManager: FlowEventsManager) : ViewModel() {
 
     data class SettingsDetails(
         val enableUserLocation: Boolean = false,
@@ -22,11 +22,11 @@ private val flowEventsManager: FlowEventsManager) : ViewModel() {
     val settingsDetails: SingleLiveEvent<SettingsDetails> = SingleLiveEvent()
 
     fun setLocationSetting(isEnabled: Boolean) {
-        appSettings.shouldEnabledUserLocation = isEnabled
+        userSettings.shouldEnabledUserLocation = isEnabled
     }
 
     fun loadSettings() {
-        val useLocation = appSettings.shouldEnabledUserLocation
+        val useLocation = userSettings.shouldEnabledUserLocation
         settingsDetails.postValue(SettingsDetails(useLocation))
     }
 

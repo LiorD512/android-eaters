@@ -15,8 +15,10 @@ data class RestaurantInitParams(
     var restaurantName: String?,
     var chefName: String?,
     var isFavorite: Boolean,
+    var query: String? = null,
 
     /** ANALYTICS PARAMS **/
+    val cookingSlot: FeedDishCookingSlot? = null,
     val sectionTitle: String? = null,
     val sectionOrder: Int? = null,
     val restaurantOrderInSection: Int? = null,

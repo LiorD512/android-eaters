@@ -23,6 +23,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     var listener: MainActivityTabLayoutListener? = null
     interface MainActivityTabLayoutListener{
         fun onHomeTabReClicked()
+        fun onSearchTabClicked()
+        fun onOrdersTabClicked()
+        fun onProfileTabClicked()
     }
 
     fun setViewPager(viewPager: ViewPager2, listener: MainActivityTabLayoutListener){
@@ -31,15 +34,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         TabLayoutMediator(binding.mainActTabLayout, viewPager, true, false) { tab, position ->
             when(position){
                 0 -> tab.setCustomView(R.layout.feed_tab_home)
-//                1 -> tab.setCustomView(R.layout.feed_tab_search)
-                1 -> tab.setCustomView(R.layout.feed_tab_orders)
-                2 -> tab.setCustomView(R.layout.feed_tab_account)
+                1 -> tab.setCustomView(R.layout.feed_tab_search)
+                2 -> tab.setCustomView(R.layout.feed_tab_orders)
+                3 -> tab.setCustomView(R.layout.feed_tab_account)
             }
         }.attach()
 
         binding.mainActTabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-
+                when(tab?.position){
+                    1 -> this@MainActivityTabLayout.listener?.onSearchTabClicked()
+                    2 -> this@MainActivityTabLayout.listener?.onOrdersTabClicked()
+                    3 -> this@MainActivityTabLayout.listener?.onProfileTabClicked()
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -50,6 +57,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if(tab?.position == 0){
                     this@MainActivityTabLayout.listener?.onHomeTabReClicked()
                 }
+
             }
 
         })
@@ -64,7 +72,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun forceOrdersClick() {
-        binding.mainActTabLayout.selectTab(binding.mainActTabLayout.getTabAt(1))
+        binding.mainActTabLayout.selectTab(binding.mainActTabLayout.getTabAt(2))
     }
 
 

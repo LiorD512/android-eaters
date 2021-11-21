@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import com.bupp.wood_spoon_eaters.features.main.search.SearchBaseItem
+import com.bupp.wood_spoon_eaters.features.main.search.SearchViewType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -53,6 +55,16 @@ data class FeedSingleEmptySection(
     @Json(name = "action") val action: String?
 ): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_SECTION)
 
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedSearchEmptySection(
+    override val href: String? = null,
+    override val items: List<Campaign>? = null,
+    @Json(name = "title") val title: String?,
+    @Json(name = "subtitle") val subtitle: String?,
+    @Json(name = "action") val action: String?
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_SEARCH)
+
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -73,9 +85,12 @@ data class FeedRestaurantSection(
     @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "title") val title: String?,
     @Json(name = "chef_id") val chefId: Long?,
+    @Json(name = "country_id") val countryId: Long?,
     @Json(name = "chef_thumbnail") val chefThumbnail: WSImage?,
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
+    @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
+    var flagUrl: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
 
     fun getAvgRating(): String{
@@ -97,6 +112,8 @@ data class FeedRestaurantSection(
             restaurantName,
             chefName,
             false,
+            null,
+            cookingSlot,
             sectionTitle,
             sectionOrder,
             restaurantOrderInSection,
@@ -155,6 +172,8 @@ enum class FeedModelsViewType {
     EMPTY_FEED,
     @Json(name = "section_empty_no_chefs")
     EMPTY_SECTION,
+    @Json(name = "section_empty_no_matches")
+    EMPTY_SEARCH,
 }
 
 enum class FeedRestaurantSectionItemViewType{
@@ -170,13 +189,17 @@ sealed class FeedAdapterItem(
 
 enum class FeedAdapterViewType {
     TITLE,
+    SEARCH_TITLE,
     COUPONS,
     RESTAURANT,
     RESTAURANT_LARGE,
     EMPTY_FEED,
     EMPTY_SECTION,
+    EMPTY_SEARCH,
+    SEARCH_TAGS,
     NO_NETWORK_SECTION,
     SKELETON,
+    SKELETON_SEARCH,
     HREF
 }
 
@@ -184,6 +207,11 @@ enum class FeedAdapterViewType {
 data class FeedAdapterSkeleton(
     override var id: Long? = null
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON)
+
+@Parcelize
+data class FeedAdapterSearchSkeleton(
+    override var id: Long? = null
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SKELETON_SEARCH)
 
 @Parcelize
 data class FeedAdapterHref(
@@ -194,6 +222,11 @@ data class FeedAdapterHref(
 data class FeedAdapterTitle(
     val title: String, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.TITLE)
+
+@Parcelize
+data class FeedAdapterSearchTitle(
+    val title: String, override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SEARCH_TITLE)
 
 @Parcelize
 data class FeedAdapterCoupons(
@@ -235,3 +268,14 @@ data class FeedAdapterLargeRestaurant(
     val sectionOrder: Int? = null,
     val restaurantOrderInSection: Int? = null,
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.RESTAURANT_LARGE)
+
+@Parcelize
+data class FeedAdapterEmptySearch(
+    val emptySection: FeedSearchEmptySection, override val id: Long? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SEARCH)
+
+@Parcelize
+data class FeedAdapterSearchTag(
+    override val id: Long? = null,
+    val tags: List<String>? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.SEARCH_TAGS)

@@ -17,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
 
     interface CancelOrderDialogListener{
-        fun onOrderCanceled()
+        fun onOrderCanceled(type: Int)
     }
 
     var binding: CancelOrderDialogLayoutBinding? = null
@@ -69,7 +69,7 @@ class CancelOrderDialog(val type: Int, val orderId: Long?) : DialogFragment() {
             viewModel.cancelOrder.observe(viewLifecycleOwner, {cancelOrderEvent ->
                 cancelOrderPb.hide()
                 if(cancelOrderEvent){
-                    listener?.onOrderCanceled()
+                    listener?.onOrderCanceled(type)
                     dismiss()
                 }else{
                     Toast.makeText(context, "Problem canceling order", Toast.LENGTH_SHORT).show()

@@ -56,7 +56,7 @@ class RestaurantPageViewModel(
         if (initialParamData.value == null) {
             currentRestaurantId = params.restaurantId ?: -1
             initialParamData.postValue(params)
-            initRestaurantFullData(params.restaurantId)
+            initRestaurantFullData(params.restaurantId, query = params.query)
         }
     }
 
@@ -64,7 +64,7 @@ class RestaurantPageViewModel(
         initRestaurantFullData(currentRestaurantId, showSkeleton)
     }
 
-    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true) {
+    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true, query: String? = null) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "initRestaurantFullData")
@@ -74,6 +74,7 @@ class RestaurantPageViewModel(
                 }
 //                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
                 val lastFeedRequest = feedDataManager.getLastFeedRequest()
+                lastFeedRequest.q = query
                 val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
@@ -265,7 +266,7 @@ class RestaurantPageViewModel(
         val dishSectionsList = mutableListOf<DishSections>()
         cookingSlot.sections.forEach { section ->
             if (section.menuItems.isNotEmpty()) {
-                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: ""))
+                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: "", section.subtitle ?: ""))
                 section.menuItems.forEach { menuItem ->
                     dishSectionsList.add(DishSectionSingleDish(menuItem))
                 }

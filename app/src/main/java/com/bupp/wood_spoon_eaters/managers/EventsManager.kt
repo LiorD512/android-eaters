@@ -192,6 +192,7 @@ class EventsManager(val context: Context){
     }
 
     fun onFlowEventFired(curEvent: FlowEventsManager.FlowEvents) {
+        Log.d(TAG, "onFlowEventFired: ${curEvent.name}")
         when(curEvent){
             FlowEventsManager.FlowEvents.PAGE_VISIT_ON_BOARDING -> {
                 Analytics.with(context).screen("onboarding")
@@ -249,6 +250,9 @@ class EventsManager(val context: Context){
             }
             FlowEventsManager.FlowEvents.PAGE_VISIT_CART -> {
                 Analytics.with(context).screen("cart")
+            }
+            FlowEventsManager.FlowEvents.PAGE_VISIT_SEARCH -> {
+                Analytics.with(context).screen("view_search_page")
             }
         }
     }
