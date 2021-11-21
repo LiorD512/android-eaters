@@ -332,7 +332,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         val restaurant = viewModel.restaurantFullData.value
         restaurant?.let { restaurant ->
             val header = "${restaurant.getAvgRating()} (${restaurant?.reviewCount ?: ""} reviews)"
-            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            ReviewsBottomSheet.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 
