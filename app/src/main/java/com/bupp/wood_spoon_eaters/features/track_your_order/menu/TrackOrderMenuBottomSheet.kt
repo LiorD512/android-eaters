@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.databinding.SupportCenterBottomSheetBinding
 import com.bupp.wood_spoon_eaters.databinding.TrackOrderMenuBottomSheetBinding
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
 import com.bupp.wood_spoon_eaters.features.track_your_order.ActiveOrderTrackerViewModel
@@ -23,11 +24,13 @@ class TrackOrderMenuBottomSheet : BottomSheetDialogFragment(), CancelOrderDialog
     }
 
     var listener: TrackOrderMenuListener? = null
-    private val binding: TrackOrderMenuBottomSheetBinding ?= null
+    private var binding: TrackOrderMenuBottomSheetBinding? = null
     val viewModel by sharedViewModel<ActiveOrderTrackerViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.track_order_menu_bottom_sheet, container, false)
+        val view = inflater.inflate(R.layout.track_order_menu_bottom_sheet, container, false)
+        binding = TrackOrderMenuBottomSheetBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

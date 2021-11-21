@@ -72,7 +72,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun forceOrdersClick() {
-        binding.mainActTabLayout.selectTab(binding.mainActTabLayout.getTabAt(1))
+        binding.mainActTabLayout.selectTab(binding.mainActTabLayout.getTabAt(2))
     }
 
 
