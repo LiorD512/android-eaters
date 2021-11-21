@@ -17,6 +17,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var binding: CheckoutHeaderViewBinding = CheckoutHeaderViewBinding.inflate(LayoutInflater.from(context), this, true)
 
+    var listener: CheckoutHeaderListener? = null
+    interface CheckoutHeaderListener{
+        fun onCloseBtnClick(){}
+        fun onBackBtnClick(){}
+    }
+
     init{
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.CheckoutHeaderView)
@@ -35,12 +41,13 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             }
             a.recycle()
         }
+
     }
 
-    fun setOnIconClickListener(function: () -> Unit) {
-        binding.checkoutHeaderBtn.setOnClickListener{
-            function.invoke()
-        }
+
+
+    fun setCheckoutHeaderListener(listener: CheckoutHeaderListener) {
+        this.listener = listener
     }
 
     fun setTitle(title: String?) {
@@ -57,11 +64,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         when(iconType){
             Constants.HEADER_ICON_BACK -> {
                 binding.checkoutHeaderBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_back_grey))
+                binding.checkoutHeaderBtn.setOnClickListener {
+                    listener?.onBackBtnClick()
+                }
             }
             Constants.HEADER_ICON_CLOSE -> {
                 binding.checkoutHeaderBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_close_grey))
+                binding.checkoutHeaderBtn.setOnClickListener {
+                    listener?.onCloseBtnClick()
+                }
             }
         }
+
+
     }
 
 }

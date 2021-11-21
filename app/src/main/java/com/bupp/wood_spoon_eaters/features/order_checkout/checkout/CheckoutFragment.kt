@@ -15,6 +15,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePick
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
@@ -41,7 +42,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     NationwideShippingChooserDialog.NationwideShippingChooserListener,
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener,
-    ClearCartCheckoutBottomSheet.ClearCartListener {
+    ClearCartCheckoutBottomSheet.ClearCartListener, CheckoutHeaderView.CheckoutHeaderListener {
 
     private var binding: CheckoutFragmentBinding? = null
 
@@ -92,7 +93,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT)
                 }
             }
-            checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
+            checkoutFragHeader.setCheckoutHeaderListener(this@CheckoutFragment)
             initOrderItemsView()
         }
     }
@@ -416,5 +417,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    override fun onCloseBtnClick() {
+        activity?.finish()
     }
 }

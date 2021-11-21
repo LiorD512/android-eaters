@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
@@ -22,7 +23,7 @@ import java.util.*
 
 
 class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
-    HeaderView.HeaderViewListener, WSEditText.WSEditTextListener {
+    HeaderView.HeaderViewListener, WSEditText.WSEditTextListener, CheckoutHeaderView.CheckoutHeaderListener {
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
@@ -39,7 +40,7 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
     private fun initUi() {
         with(binding!!) {
-            checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
+            checkoutFragHeader.setCheckoutHeaderListener(this@PromoCodeFragment)
             promoCodeFragCodeInput.setWSEditTextListener(this@PromoCodeFragment)
 
             openKeyboard(promoCodeFragCodeInput)
@@ -118,6 +119,10 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    override fun onBackBtnClick() {
+        activity?.onBackPressed()
     }
 
 }
