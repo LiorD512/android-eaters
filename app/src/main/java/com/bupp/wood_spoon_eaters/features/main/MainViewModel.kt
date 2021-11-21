@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val metaDataRepository: MetaDataRepository,
+    private val metaDataRepository: MetaDataRepository, private val feedDataManager: FeedDataManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
     private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository,
@@ -100,7 +100,8 @@ class MainViewModel(
 
     fun getRestaurant(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = restaurantRepository.getRestaurant(id)
+            val lastFeedRequest = feedDataManager.getLastFeedRequest()
+            val result = restaurantRepository.getRestaurant(id, lastFeedRequest)
             if (result.type == RestaurantRepository.RestaurantRepoStatus.SUCCESS) {
                 result.restaurant?.let { restaurant ->
                     val param = RestaurantInitParams(
