@@ -89,11 +89,15 @@ class FeedRepository(
     }
 
 
-    private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
+    private fun processFeedData(feedResult: FeedResult?, input: String? = null): List<FeedAdapterItem> {
         Log.d("wowProcessFeedData", "start ----")
         var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEachIndexed { feedSectionIndex, feedSection ->
+            if(input != null && feedData.size == 0){
+                val searchTitle = "${feedSection.collections?.size} Results for “$input”"
+                feedData.add(FeedAdapterSearchTitle(searchTitle, -1))
+            }
             feedSection.title?.let {
                 localId++
                 feedData.add(FeedAdapterTitle(it, localId))
@@ -196,7 +200,7 @@ class FeedRepository(
                 }
                 is ResultHandler.Success -> {
                     Log.d(TAG, "getFeedBySearch - Success")
-                    val feedData = processFeedData(result.value.data)
+                    val feedData = processFeedData(result.value.data, input)
                     FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
                 }
                 else -> {

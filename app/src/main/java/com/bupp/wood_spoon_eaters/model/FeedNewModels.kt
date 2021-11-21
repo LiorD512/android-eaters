@@ -181,6 +181,7 @@ sealed class FeedAdapterItem(
 
 enum class FeedAdapterViewType {
     TITLE,
+    SEARCH_TITLE,
     COUPONS,
     RESTAURANT,
     RESTAURANT_LARGE,
@@ -213,6 +214,11 @@ data class FeedAdapterHref(
 data class FeedAdapterTitle(
     val title: String, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.TITLE)
+
+@Parcelize
+data class FeedAdapterSearchTitle(
+    val title: String, override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.SEARCH_TITLE)
 
 @Parcelize
 data class FeedAdapterCoupons(

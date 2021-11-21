@@ -44,6 +44,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
+            FeedAdapterViewType.SEARCH_TITLE.ordinal -> {
+                val binding = FeedAdapterSearchTitleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterSearchTitleViewHolder(binding)
+            }
             FeedAdapterViewType.TITLE.ordinal -> {
                 val binding = FeedAdapterTitleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterTitleViewHolder(binding)
@@ -114,6 +118,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
         when (section) {
             is FeedAdapterTitle -> {
                 holder as FeedAdapterTitleViewHolder
+                holder.bindItems(section)
+            }
+            is FeedAdapterSearchTitle -> {
+                holder as FeedAdapterSearchTitleViewHolder
                 holder.bindItems(section)
             }
             is FeedAdapterCoupons -> {
