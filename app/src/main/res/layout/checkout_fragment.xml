@@ -219,7 +219,7 @@
             android:id="@+id/checkoutFragPlaceOrderBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:floating_button_type="PLACE_ORDER"
+            app:floating_button_type="CONTINUE"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar

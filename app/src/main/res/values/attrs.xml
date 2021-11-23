@@ -41,6 +41,7 @@
         <enum name="VIEW_CART" value="0" />
         <enum name="ADD_TO_CART" value="1" />
         <enum name="PLACE_ORDER" value="2" />
+        <enum name="CONTINUE" value="3" />
     </attr>
 
     <declare-styleable name="WSFloatingButton">

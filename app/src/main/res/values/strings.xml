@@ -158,5 +158,6 @@
     <string name="report_issue_done_body">Your report has been submitted to our customer service team.  WoodSpoon is working hard to resolve this issue!</string>
     <string name="rate_order_done_body">Your rating has been submitted!</string>
     <string name="campaign_full_details_title">Terms of use</string>
+    <string name="by_dishes_restaurants_chefs_or_dietary">By dishes, restaurants, chefs or dietary</string>
 
 </resources>

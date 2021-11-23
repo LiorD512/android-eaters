@@ -302,7 +302,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         mapFragment.getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         if (mMap == null) {
             mMap = googleMap
             mMap?.uiSettings?.setAllGesturesEnabled(false)

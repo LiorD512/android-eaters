@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import com.bupp.wood_spoon_eaters.utils.closeKeyboard
 import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -82,6 +85,19 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
             searchFragInput.setOnFocusChangeListener { view, b ->
                 if(b){
                     viewModel.logEvent(Constants.EVENT_SEARCH_QUERY_CLICK)
+                }
+            }
+
+            searchFragInput.imeOptions = IME_ACTION_DONE
+            searchFragInput.setOnEditorActionListener { _, actionId, _ ->
+                when(actionId){
+                    IME_ACTION_DONE -> {
+                        closeKeyboard()
+                        return@setOnEditorActionListener true
+                    }
+                    else -> {
+                        return@setOnEditorActionListener false
+                    }
                 }
             }
         }

@@ -92,7 +92,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     }
 
     @SuppressLint("MissingPermission")
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         googleMap?.let {
             this.googleMap = it
 
@@ -288,4 +288,5 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             return fragment
         }
     }
+
 }

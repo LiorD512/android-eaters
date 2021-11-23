@@ -136,15 +136,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                        android:layout_marginEnd="-3dp"
+                <TextView
                         android:id="@+id/feedRestaurantItemChefFlag"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
+                        android:layout_marginEnd="-3dp"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantItemChefImage"
                         app:layout_constraintEnd_toEndOf="@+id/feedRestaurantItemChefImage" />
-
 
 
                 <LinearLayout
@@ -158,35 +157,38 @@
                         app:layout_constraintStart_toEndOf="@+id/feedRestaurantItemChefImage"
                         app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
+                    <me.grantland.widget.AutofitTextView
                             android:id="@+id/feedRestaurantItemRestaurantName"
                             style="@style/LatoBold15DarkGrey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:letterSpacing="-0.01"
+                            android:lines="1"
+                            app:minTextSize="7sp"
                             tools:text="Israeli in The Big Apple" />
 
-                    <TextView
+                    <me.grantland.widget.AutofitTextView
                             android:id="@+id/feedRestaurantItemChefName"
                             style="@style/LatoReg13NobelGrey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:letterSpacing="-0.01"
+                            app:minTextSize="7sp"
                             tools:text="by Assaf Beer" />
 
                 </LinearLayout>
 
 
                 <LinearLayout
-                        android:layout_marginEnd="15.4dp"
                         android:id="@+id/ratingLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="7dp"
-                        android:orientation="vertical"
+                        android:layout_marginEnd="15.4dp"
                         android:gravity="end"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="@+id/nameLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/nameLayout"
                         app:layout_constraintTop_toTopOf="@id/nameLayout">
 
@@ -199,18 +201,19 @@
                             android:letterSpacing="-0.01"
                             tools:text="4.4" />
 
-                    <TextView
+                    <me.grantland.widget.AutofitTextView
                             android:id="@+id/feedRestaurantItemAvailability"
                             style="@style/LatoReg13DarkGrey"
-                            android:drawablePadding="3dp"
-                            android:drawableStart="@drawable/ic_delivery_man"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_delivery_man"
+                            android:drawablePadding="3dp"
                             android:letterSpacing="-0.01"
                             android:lineSpacingExtra="1.9sp"
                             android:text="Available now"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemChefName" />
+                            app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemChefName"
+                            app:minTextSize="7sp" />
 
                 </LinearLayout>
 

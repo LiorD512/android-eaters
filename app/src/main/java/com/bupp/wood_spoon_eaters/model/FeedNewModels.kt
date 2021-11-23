@@ -91,6 +91,7 @@ data class FeedRestaurantSection(
     @Json(name = "avg_rating") val avgRating: Float?,
     @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
     var flagUrl: String?,
+    var countryIso: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
 
     fun getAvgRating(): String{

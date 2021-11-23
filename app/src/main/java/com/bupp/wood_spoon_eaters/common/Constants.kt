@@ -100,6 +100,7 @@ class Constants {
         const val VIEW_CART = 0
         const val ADD_TO_CART = 1
         const val PLACE_ORDER = 2
+        const val CONTINUE = 3
 
 
         const val ARG_RESTAURANT = "args_restaurant"
