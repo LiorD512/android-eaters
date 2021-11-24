@@ -40,8 +40,8 @@ class FeedAdapterRestaurantViewHolder(
             Log.d("wowProcessFeedData", "bindItems - ${restaurantSection.restaurantSection.restaurantName} - pos ${restaurantSection.id}")
             with(binding) {
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
-                restaurant.countryIso?.let {
-                    Glide.with(context).load(restaurant.flagUrl).circleCrop().into(feedRestaurantItemChefFlag)
+                restaurant.flagUrl?.let {
+                    Glide.with(context).load(it).circleCrop().into(feedRestaurantItemChefFlag)
 //                    feedRestaurantItemChefFlag.text = CountryCodeUtils.countryCodeToEmojiFlag(it.uppercase(Locale.ROOT))
 
                 }

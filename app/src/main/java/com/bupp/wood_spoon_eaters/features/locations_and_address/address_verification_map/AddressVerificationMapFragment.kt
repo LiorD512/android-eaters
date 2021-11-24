@@ -230,7 +230,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                     val myLat = curOrderData.deliveryAddress?.lat ?: 0.0
                     val myLng = curOrderData.deliveryAddress?.lng ?: 0.0
                     val myLocation = LatLng(myLat, myLng)
-                    googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_my_marker)))
+                    googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_pin)))
                     builder.include(myLocation)
                     Log.d("wowMapBinder", "myLocation $myLocation")
 

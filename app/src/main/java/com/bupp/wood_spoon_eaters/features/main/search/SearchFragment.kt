@@ -88,7 +88,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
                 }
             }
 
-            searchFragInput.imeOptions = IME_ACTION_DONE
             searchFragInput.setOnEditorActionListener { _, actionId, _ ->
                 when(actionId){
                     IME_ACTION_DONE -> {
