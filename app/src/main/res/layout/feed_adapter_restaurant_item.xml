@@ -136,7 +136,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <ImageView
                         android:id="@+id/feedRestaurantItemChefFlag"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
@@ -149,48 +149,25 @@
                 <LinearLayout
                         android:id="@+id/nameLayout"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="18dp"
                         android:layout_marginStart="7dp"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/ratingLayout"
+                        android:layout_marginEnd="15.8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/feedRestaurantItemChefImage"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemChefImage">
 
                     <me.grantland.widget.AutofitTextView
+                            android:layout_marginEnd="7dp"
                             android:id="@+id/feedRestaurantItemRestaurantName"
                             style="@style/LatoBold15DarkGrey"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:letterSpacing="-0.01"
                             android:lines="1"
                             app:minTextSize="7sp"
                             tools:text="Israeli in The Big Apple" />
-
-                    <me.grantland.widget.AutofitTextView
-                            android:id="@+id/feedRestaurantItemChefName"
-                            style="@style/LatoReg13NobelGrey"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:letterSpacing="-0.01"
-                            app:minTextSize="7sp"
-                            tools:text="by Assaf Beer" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                        android:id="@+id/ratingLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginEnd="15.4dp"
-                        android:gravity="end"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="@+id/nameLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/nameLayout"
-                        app:layout_constraintTop_toTopOf="@id/nameLayout">
 
                     <TextView
                             android:id="@+id/feedRestaurantItemRating"
@@ -200,6 +177,32 @@
                             android:drawableStart="@drawable/ic_rating_star"
                             android:letterSpacing="-0.01"
                             tools:text="4.4" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                        android:id="@+id/ratingLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginEnd="15.4dp"
+                        android:gravity="end"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@+id/feedRestaurantItemChefImage"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/feedRestaurantItemChefImage">
+
+                    <me.grantland.widget.AutofitTextView
+                            android:layout_weight="1"
+                            android:layout_marginEnd="7dp"
+                            android:id="@+id/feedRestaurantItemChefName"
+                            style="@style/LatoReg13NobelGrey"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:letterSpacing="-0.01"
+                            app:minTextSize="7sp"
+                            tools:text="by Assaf Beer" />
 
                     <me.grantland.widget.AutofitTextView
                             android:id="@+id/feedRestaurantItemAvailability"
@@ -215,9 +218,11 @@
                             app:layout_constraintTop_toTopOf="@+id/feedRestaurantItemChefName"
                             app:minTextSize="7sp" />
 
+
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </LinearLayout>
 

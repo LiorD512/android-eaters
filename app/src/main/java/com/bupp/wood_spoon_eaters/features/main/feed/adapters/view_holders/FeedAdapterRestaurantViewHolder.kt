@@ -41,8 +41,8 @@ class FeedAdapterRestaurantViewHolder(
             with(binding) {
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
                 restaurant.countryIso?.let {
-//                    Glide.with(context).load(restaurant.flagUrl).circleCrop().into(feedRestaurantItemChefFlag)`
-                    feedRestaurantItemChefFlag.text = CountryCodeUtils.countryCodeToEmojiFlag(it.uppercase(Locale.ROOT))
+                    Glide.with(context).load(restaurant.flagUrl).circleCrop().into(feedRestaurantItemChefFlag)
+//                    feedRestaurantItemChefFlag.text = CountryCodeUtils.countryCodeToEmojiFlag(it.uppercase(Locale.ROOT))
 
                 }
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
