@@ -87,20 +87,20 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     private fun setIcon(icon: Drawable?) {
-        icon?.let{
+        icon?.let {
             binding.customDetailsViewIcon.setImageDrawable(icon)
             binding.customDetailsViewIcon.visibility = View.VISIBLE
         }
     }
 
     private fun handleSep(showSep: Boolean) {
-        if(!showSep){
+        if (!showSep) {
             binding.customDetailsViewSep.visibility = View.GONE
         }
     }
 
     fun setChangeable(changeable: Boolean) {
-        with(binding){
+        with(binding) {
             if (changeable) {
                 customDetailsViewChangeBtn.visibility = View.VISIBLE
                 customDetailsViewChangeBtn.isClickable = true
@@ -164,18 +164,20 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun updateDeliveryAddressFullDetails(address: Address?) {
-        with(binding){
-            address?.let {
-                val street1 = it.streetLine1?.let{"${it},"} ?: ""
-                val street2 = it.streetLine2?.let{"#${it},"} ?: ""
+        with(binding) {
+            if (address != null) {
+                val street1 = address.streetLine1?.let { "${it}," } ?: ""
+                val street2 = address.streetLine2?.let { "#${it}," } ?: ""
                 customDetailsViewTitle.text = "$street1 $street2"
-                val city = it.city?.name?.let{"${it},"} ?: ""
-                val state = it.state?.name?.let{"${it},"} ?: ""
-                customDetailsViewSubtitle.text = "$city $state ${it.zipCode ?: ""}"
+                val city = address.city?.name?.let { "${it}," } ?: ""
+                val state = address.state?.name?.let { "${it}," } ?: ""
+                customDetailsViewSubtitle.text = "$city $state ${address.zipCode ?: ""}"
                 address.notes?.let {
                     customDetailsViewExtraText.text = address.notes
                     customDetailsViewExtraText.visibility = View.VISIBLE
                 }
+            }else{
+                customDetailsViewSubtitle.text = "Please select your address"
             }
         }
     }
