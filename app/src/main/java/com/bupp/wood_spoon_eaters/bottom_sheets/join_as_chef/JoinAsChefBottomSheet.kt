@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.abs.FullScreenBottomSheetBase
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.JoinAsChefBottomSheetBinding
@@ -19,7 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class JoinAsChefBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
+class JoinAsChefBottomSheet: FullScreenBottomSheetBase(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
     private var binding: JoinAsChefBottomSheetBinding? = null
     val mainViewModel by sharedViewModel<MainViewModel>()

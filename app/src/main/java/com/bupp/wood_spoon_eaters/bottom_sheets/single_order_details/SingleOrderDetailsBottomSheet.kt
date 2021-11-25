@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
+import java.util.*
 
 class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.HeaderViewListener,
     WSTitleValueView.WSTitleValueListener {
@@ -125,7 +126,8 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 deliveryAddress?.apply {
                     singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }
-                singleOrderDetailsStatus.updateSubTitle(status.name.uppercase())
+                val parsedStatus = status.name.lowercase()
+                singleOrderDetailsStatus.updateSubTitle(parsedStatus.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() })
                 singleOrderDetailsTotal.updateSubTitle(total?.formatedValue ?: "N/A")
                 orderItems?.let {
                     singleOrderDetailsOrderItemsView.setOrderItems(requireContext(), it)

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.settings
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,10 +14,24 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SettingsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.features.main.settings.NotificationsGroupAdapter
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.app.Activity
 
-class SettingsBottomSheet: BottomSheetDialogFragment(), NotificationsGroupAdapter.NotificationsGroupAdapterListener, HeaderView.HeaderViewListener {
+import android.util.DisplayMetrics
+
+
+import android.widget.FrameLayout
+
+import android.content.DialogInterface
+import android.content.DialogInterface.OnShowListener
+import androidx.annotation.NonNull
+import com.bupp.wood_spoon_eaters.bottom_sheets.abs.FullScreenBottomSheetBase
+
+
+class SettingsBottomSheet: FullScreenBottomSheetBase(), NotificationsGroupAdapter.NotificationsGroupAdapterListener, HeaderView.HeaderViewListener {
 
     private var binding: SettingsBottomSheetBinding? = null
     private var adapter: NotificationsGroupAdapter? = null

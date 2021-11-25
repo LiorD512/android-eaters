@@ -20,15 +20,14 @@
             tools:text="title" />
 
     <EditText
-            android:inputType="textImeMultiLine"
             android:id="@+id/counterEditTextInput"
             style="@style/LatoReg13Dark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/white_two_rect_7_radius"
             android:gravity="top|start"
+            android:inputType="textMultiLine"
             android:padding="15.4dp"
-            android:imeOptions="actionDone"
             android:lineSpacingExtra="6.5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/counterEditTextTitle"

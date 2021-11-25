@@ -46,7 +46,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 params.setMargins(0, 16.toPx(), 0, 16.toPx())
                 radioButton.layoutParams = params
                 radioButton.gravity = Gravity.CENTER or Gravity.LEFT
-                radioButton.setButtonDrawable(R.drawable.circle_checkbox_selector)
+                radioButton.setButtonDrawable(R.drawable.rb_selector)
                 radioButton.setPadding(8.toPx(),0,0,0)
                 radioButton.setText(item.name)
                 radioButton.id = item.id.toInt()

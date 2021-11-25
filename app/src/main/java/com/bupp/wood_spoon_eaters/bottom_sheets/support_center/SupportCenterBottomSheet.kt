@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.abs.FullScreenBottomSheetBase
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -21,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
+class SupportCenterBottomSheet: FullScreenBottomSheetBase(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
     private var binding: SupportCenterBottomSheetBinding? = null
     private val viewModel: SupportViewModel by viewModel()
@@ -38,21 +39,6 @@ class SupportCenterBottomSheet: BottomSheetDialogFragment(), WSCounterEditText.W
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
-    private lateinit var behavior: BottomSheetBehavior<View>
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            val d = it as BottomSheetDialog
-            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isFitToContents = true
-            behavior.isDraggable = true
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            behavior.expandedOffset = Utils.toPx(230)
-        }
-
-        return dialog
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

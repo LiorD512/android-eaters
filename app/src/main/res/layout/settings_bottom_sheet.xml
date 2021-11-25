@@ -12,7 +12,7 @@
             android:orientation="vertical"
             android:paddingTop="7.6dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
         <com.bupp.wood_spoon_eaters.custom_views.HeaderView
                 android:id="@+id/settingsFragHeader"

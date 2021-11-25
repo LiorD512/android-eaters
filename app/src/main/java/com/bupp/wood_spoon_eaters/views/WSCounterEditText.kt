@@ -107,20 +107,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         super.afterTextChanged(s)
                     }
                 })
-
-                counterEditTextInput.setOnEditorActionListener { view, actionId, _ ->
-                    when(actionId){
-                        EditorInfo.IME_ACTION_DONE -> {
-                            context.hideKeyboard(counterEditTextInput)
-                            view.clearFocus()
-                            return@setOnEditorActionListener true
-                        }
-                        else -> {
-                            return@setOnEditorActionListener false
-                        }
-                    }
-                }
-
             }
         }
     }

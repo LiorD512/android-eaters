@@ -148,7 +148,7 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
 
     private fun onTipSelected(tipSelection: Int?, tipAmount: Int? = null) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-            viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount), Constants.EVENT_CLICK_TIP)
+            viewModel.updateOrderParams(OrderRequest(tipPercentage = -1f, tip = tipAmount), Constants.EVENT_CLICK_TIP)
         } else {
             if (tipSelection == Constants.TIP_NOT_SELECTED) {
                 viewModel.updateOrderParams(
