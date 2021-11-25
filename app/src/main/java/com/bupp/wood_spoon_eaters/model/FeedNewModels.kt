@@ -65,6 +65,12 @@ data class FeedSearchEmptySection(
     @Json(name = "action") val action: String?
 ): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.EMPTY_SEARCH)
 
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedSearchTagsEmptySection(
+    val id: Long = -1
+): Parcelable
+
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -197,6 +203,7 @@ enum class FeedAdapterViewType {
     EMPTY_FEED,
     EMPTY_SECTION,
     EMPTY_SEARCH,
+    EMPTY_SEARCH_TAGS,
     SEARCH_TAGS,
     NO_NETWORK_SECTION,
     SKELETON,
@@ -274,6 +281,11 @@ data class FeedAdapterLargeRestaurant(
 data class FeedAdapterEmptySearch(
     val emptySection: FeedSearchEmptySection, override val id: Long? = null
 ): Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SEARCH)
+
+@Parcelize
+data class FeedAdapterEmptySearchTags(
+    override val id: Long? = null
+): Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SEARCH_TAGS)
 
 @Parcelize
 data class FeedAdapterSearchTag(

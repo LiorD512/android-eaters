@@ -3,10 +3,12 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.SearchItemEmptyBinding
+import com.bupp.wood_spoon_eaters.databinding.SearchItemEmptyTagsBinding
 import com.bupp.wood_spoon_eaters.databinding.SearchItemTagsBinding
 import com.bupp.wood_spoon_eaters.features.main.search.SearchAdapterTitle
 import com.bupp.wood_spoon_eaters.features.main.search.SearchTagsAdapter
 import com.bupp.wood_spoon_eaters.model.FeedAdapterSearchTag
+import com.bupp.wood_spoon_eaters.model.FeedSearchTagsEmptySection
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -26,6 +28,11 @@ class FeedAdapterSearchTagViewHolder(val context: Context, val binding: SearchIt
     }
 
 class FeedAdapterEmptySearchViewHolder(val binding: SearchItemEmptyBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bindItem() {
+    }
+}
+
+class FeedAdapterEmptySearchTagsViewHolder(val binding: SearchItemEmptyTagsBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bindItem() {
     }
 }

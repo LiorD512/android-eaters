@@ -73,7 +73,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
                     if(str.isNotEmpty()){
                         viewModel.searchInput(str)
                     }else{
-                        viewModel.showDefaultSearchData()
+                        viewModel.postDefaultData()
                     }
                 }
             })
@@ -106,9 +106,14 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
         viewModel.searchResultData.observe(viewLifecycleOwner, {
             it.feedData?.let { it1 -> searchAdapter?.setDataList(it1) }
         })
-        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+        mainViewModel.refreshSearchData.observe(viewLifecycleOwner, {
+            viewModel.getSearchTags()
             viewModel.getRecentOrders()
         })
+//        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+//            viewModel.getSearchTags()
+//            viewModel.getRecentOrders()
+//        })
     }
 
     override fun onDestroy() {

@@ -55,7 +55,6 @@ data class MetaDataModel(
     @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
     @Json(name = "states") val states: List<State>? = listOf(),
     @Json(name = "countries") val countries: List<Country>? = listOf(),
-    @Json(name = "search_tags") val searchTags: List<String>? = listOf(),
     @Json(name = "welcome_screens") val welcome_screens: List<WelcomeScreen>? = listOf(),
 )
 

@@ -13,7 +13,7 @@ interface FeedRepositoryInterface{
     suspend fun getCookReview(cookId: Long): ResultHandler<ServerResponse<Review>>
     suspend fun search(input: String, lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<FeedResult>>
     suspend fun getRecentOrders(lat: Double?, lng: Double?, addressId: Long?, timestamp: String? = null): ResultHandler<ServerResponse<List<FeedRestaurantSection>>>
-
+    suspend fun getSearchTags(lat: Double?, lng: Double?, addressId: Long?): ResultHandler<ServerResponse<List<String>>>
 }
 
 class FeedRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : FeedRepositoryInterface {
@@ -39,6 +39,10 @@ class FeedRepositoryImpl(private val service: ApiService, private val resultMana
 
     override suspend fun getRecentOrders(lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<List<FeedRestaurantSection>>> {
         return resultManager.safeApiCall { service.getRecentOrders(lat, lng, addressId, timestamp) }
+    }
+
+    override suspend fun getSearchTags(lat: Double?, lng: Double?, addressId: Long?): ResultHandler<ServerResponse<List<String>>> {
+        return resultManager.safeApiCall { service.getSearchTags(lat, lng, addressId) }
     }
 
 }

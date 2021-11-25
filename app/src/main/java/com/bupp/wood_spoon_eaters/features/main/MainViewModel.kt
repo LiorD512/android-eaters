@@ -219,4 +219,9 @@ class MainViewModel(
         eventsManager.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
     }
 
+    val refreshSearchData = MutableLiveData<Boolean>()
+    fun refreshSearchData() {
+        refreshSearchData.postValue(true)
+    }
+
 }

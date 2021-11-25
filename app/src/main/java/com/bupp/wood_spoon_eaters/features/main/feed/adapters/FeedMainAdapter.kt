@@ -93,6 +93,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
                 val binding = SearchItemEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterEmptySearchViewHolder(binding)
             }
+            FeedAdapterViewType.EMPTY_SEARCH_TAGS.ordinal -> {
+                val binding = SearchItemEmptyTagsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterEmptySearchTagsViewHolder(binding)
+            }
             FeedAdapterViewType.NO_NETWORK_SECTION.ordinal -> {
                 val binding = FeedAdapterNoNetworkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterNoNetworkSectionViewHolder(binding, listener)
@@ -163,6 +167,9 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
             }
             is FeedAdapterEmptySearch -> {
                 holder as FeedAdapterEmptySearchViewHolder
+            }
+            is FeedAdapterEmptySearchTags -> {
+                holder as FeedAdapterEmptySearchTagsViewHolder
             }
             else -> {}
         }

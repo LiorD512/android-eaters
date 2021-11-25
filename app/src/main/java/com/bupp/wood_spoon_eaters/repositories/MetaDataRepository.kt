@@ -82,12 +82,12 @@ class MetaDataRepository(private val apiService: MetaDataRepositoryImpl) {
         return listOf()
     }
 
-    fun getSearchTags(): List<String> {
-        if (getMetaDataObject().searchTags != null) {
-            return metaDataObject.searchTags as List<String>
-        }
-        return listOf()
-    }
+//    fun getSearchTags(): List<String> {
+//        if (getMetaDataObject().searchTags != null) {
+//            return metaDataObject.searchTags as List<String>
+//        }
+//        return listOf()
+//    }
 
     fun getCountryIsoById(countryId: Long?): String? {
         if (getMetaDataObject().countries != null) {

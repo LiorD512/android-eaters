@@ -244,6 +244,38 @@ class FeedRepository(
         }
     }
 
+    data class SearchTagsResult(val type: FeedRepoStatus, val tags: List<String>? = null)
+    suspend fun getSearchTags(feedRequest: FeedRequest): SearchTagsResult {
+        val result = withContext(Dispatchers.IO) {
+            val lat = feedRequest.lat
+            val lng = feedRequest.lng
+            val addressId = feedRequest.addressId
+//            val timestamp = feedRequest.timestamp
+            apiService.getSearchTags(lat, lng, addressId)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getSearchTags - NetworkError")
+                    SearchTagsResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getSearchTagss - GenericError")
+                    SearchTagsResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getSearchTags - Success")
+                    val data = result.value.data
+                    SearchTagsResult(FeedRepoStatus.SUCCESS, data)
+                }
+                else -> {
+                    Log.d(TAG, "getSearchTags - wsError")
+                    SearchTagsResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
     companion object {
         const val TAG = "wowFeedRepo"
     }

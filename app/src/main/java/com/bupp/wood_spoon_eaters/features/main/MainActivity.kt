@@ -423,6 +423,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     override fun onSearchTabClicked() {
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_SEARCH)
+        viewModel.refreshSearchData()
     }
 
     override fun onOrdersTabClicked() {

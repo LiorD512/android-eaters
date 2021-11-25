@@ -48,6 +48,12 @@ interface ApiService {
     ): ServerResponse<List<FeedRestaurantSection>>
 
     @V3
+    @GET("eaters/me/search/tags")
+    suspend fun getSearchTags(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null): ServerResponse<List<String>>
+
+    @V3
     @GET("eaters/me/search")
     suspend fun search(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
