@@ -119,6 +119,17 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
+                <TextView
+                        android:id="@+id/feedRestaurantItemUnavailable"
+                        android:visibility="invisible"
+                        android:background="@color/black_50"
+                        android:gravity="center"
+                        style="@style/LatoBlack15White"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:letterSpacing="-0.01"
+                        tools:text="Unavailable"/>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

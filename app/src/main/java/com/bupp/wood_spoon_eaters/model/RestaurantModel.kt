@@ -17,6 +17,7 @@ data class Restaurant(
     @Json(name = "video") val video: String?,
     @Json(name = "flag_url") val flagUrl: String?,
     @Json(name = "availability") val availability: RestaurantAvailability?,
+    @Json(name = "place_of_birth") val country: Country?,
     @Json(name = "avg_rating") val rating: Float?,
     @Json(name = "reviews_count") var reviewCount: Int = 0,
     @Json(name = "about") val about: String?,

@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil.DiffResult.NO_POSITION
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedRestaurantDishPagerAdapter
 import com.bupp.wood_spoon_eaters.model.FeedAdapterRestaurant
 import com.bupp.wood_spoon_eaters.model.FeedRestaurantSection
+import com.bupp.wood_spoon_eaters.model.RestaurantAvailability
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -112,7 +114,11 @@ class FeedAdapterRestaurantViewHolder(
                     }
                 }
 
-//                restaurant.a
+                if(restaurant.availability != RestaurantAvailability.AVAILABLE) {
+                    binding.feedRestaurantItemAvailability.visibility = View.VISIBLE
+                }else{
+                    binding.feedRestaurantItemAvailability.visibility = View.INVISIBLE
+                }
             }
         }
     }
