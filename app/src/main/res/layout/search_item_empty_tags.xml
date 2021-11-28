@@ -22,6 +22,6 @@
             android:letterSpacing="0.03"
             android:lineSpacingExtra="6.7sp"
             android:gravity="center_horizontal"
-            android:text="Search for dishes…"/>
+            android:text="Search for chefs…"/>
 
 </LinearLayout>

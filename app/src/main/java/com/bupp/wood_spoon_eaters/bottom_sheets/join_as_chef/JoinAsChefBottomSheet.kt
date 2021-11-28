@@ -36,21 +36,21 @@ class JoinAsChefBottomSheet: FullScreenBottomSheetBase(), WSCounterEditText.WSCo
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
-    private lateinit var behavior: BottomSheetBehavior<View>
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            val d = it as BottomSheetDialog
-            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isFitToContents = true
-            behavior.isDraggable = true
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            behavior.expandedOffset = Utils.toPx(230)
-        }
-
-        return dialog
-    }
+//    private lateinit var behavior: BottomSheetBehavior<View>
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+//        dialog.setOnShowListener {
+//            val d = it as BottomSheetDialog
+//            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
+//            behavior = BottomSheetBehavior.from(sheet!!)
+//            behavior.isFitToContents = true
+//            behavior.isDraggable = true
+//            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+////            behavior.expandedOffset = Utils.toPx(230)
+//        }
+//
+//        return dialog
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

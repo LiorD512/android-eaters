@@ -94,7 +94,7 @@ class FeedRepository(
         var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEachIndexed { feedSectionIndex, feedSection ->
-            if(input != null && feedData.size == 0 && feedResult.sections.isNotEmpty()){
+            if(input != null && feedData.size == 0 && (feedResult.sections.isNotEmpty() && feedResult.sections[0].collections?.get(0) ?: null is FeedRestaurantSection)){
                 val searchTitle = "Results for “$input”"
                 feedData.add(FeedAdapterSearchTitle(searchTitle, -1))
             }

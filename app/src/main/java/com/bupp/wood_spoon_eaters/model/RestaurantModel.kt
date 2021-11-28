@@ -16,8 +16,7 @@ data class Restaurant(
     @Json(name = "thumbnail") val thumbnail: WSImage?,
     @Json(name = "video") val video: String?,
     @Json(name = "flag_url") val flagUrl: String?,
-    @Json(name = "available") val available: Boolean?,
-    @Json(name = "deliverable") val deliverable: Boolean?,
+    @Json(name = "availability") val availability: RestaurantAvailability?,
     @Json(name = "avg_rating") val rating: Float?,
     @Json(name = "reviews_count") var reviewCount: Int = 0,
     @Json(name = "about") val about: String?,
@@ -44,4 +43,13 @@ data class Restaurant(
         }
         return ""
     }
+}
+
+enum class RestaurantAvailability{
+    @Json(name = "available")
+    AVAILABLE,
+    @Json(name = "no_cooking_slots")
+    NO_COOKING_SLOT,
+    @Json(name = "other_location")
+    OTHER_LOCATION,
 }

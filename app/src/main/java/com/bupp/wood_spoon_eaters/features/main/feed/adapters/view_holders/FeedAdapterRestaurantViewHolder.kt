@@ -111,6 +111,8 @@ class FeedAdapterRestaurantViewHolder(
                         binding.feedRestaurantItemAvailability.text = DateUtils.parseDateToMonthTime(it.startsAt)
                     }
                 }
+
+//                restaurant.a
             }
         }
     }

@@ -96,6 +96,7 @@ data class FeedRestaurantSection(
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
     @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
+    @Json(name = "availability") val availability: RestaurantAvailability?,
     var flagUrl: String?,
     var countryIso: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {

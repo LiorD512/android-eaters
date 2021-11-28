@@ -22,7 +22,10 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Campaign
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
+import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
+import com.monkeytech.brenda.common.item_decorators.SpacesItemDecoration
 import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -50,6 +53,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
             searchAdapter = FeedMainAdapter(this@SearchFragment)
             searchFragList.apply {
                 layoutManager = LinearLayoutManager(requireContext())
+                addItemDecoration(SpacesItemDecoration(Utils.toPx(14)))
                 adapter = searchAdapter
             }
 

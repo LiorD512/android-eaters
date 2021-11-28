@@ -57,6 +57,7 @@ class SearchViewModel(
         val data = mutableListOf<FeedAdapterItem>()
         searchDefaultData[SECTION_TAGS]?.let {
             if (it.isNotEmpty()) {
+                data.add(FeedAdapterTitle(title = "Popular cuisines", -1))
                 data.addAll(it)
             }
         }
@@ -219,9 +220,9 @@ class SearchViewModel(
     }
 
     private fun getSkeletonItems(): SearchLiveData {
-        val skeletons = mutableListOf<FeedAdapterSearchSkeleton>()
+        val skeletons = mutableListOf<FeedAdapterSkeleton>()
         for (i in 0 until 2) {
-            skeletons.add(FeedAdapterSearchSkeleton())
+            skeletons.add(FeedAdapterSkeleton())
         }
         return SearchLiveData(skeletons)
     }
