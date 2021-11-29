@@ -41,7 +41,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentSearchBinding.bind(view.rootView)
+        binding = FragmentSearchBinding.bind(view)
 
         initUi()
         initObservers()
@@ -75,7 +75,11 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
             searchFragInput.addTextChangedListener(object: AutoCompleteTextWatcher(){
                 override fun handleInputString(str: String) {
                     if(str.isNotEmpty()){
-                        viewModel.searchInput(str)
+                        if(str.startsWith(" ")){
+                            handleInputString(str.substring(1))
+                        }else{
+                            viewModel.searchInput(str)
+                        }
                     }else{
                         viewModel.postDefaultData()
                     }

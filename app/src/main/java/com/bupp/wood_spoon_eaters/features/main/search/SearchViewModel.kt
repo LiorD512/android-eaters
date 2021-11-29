@@ -25,7 +25,7 @@ class SearchViewModel(
 
     data class SearchLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
 
-    private var searchTagData: List<FeedAdapterItem> = emptyList()
+    private var searchTagData: MutableList<FeedAdapterItem> = mutableListOf()
     private var orderAgainData: List<FeedAdapterItem> = emptyList()
     private val searchDefaultData: HashMap<Int, List<FeedAdapterItem>> = hashMapOf()
 
@@ -34,7 +34,7 @@ class SearchViewModel(
     }
 
     private fun initList() {
-        searchDefaultData[SECTION_TAGS] = listOf()
+        searchDefaultData[SECTION_TAGS] = mutableListOf()
         searchDefaultData[SECTION_RECENT_ORDERS] = listOf()
     }
 
@@ -80,6 +80,7 @@ class SearchViewModel(
 //    }
 
     fun getSearchTags() {
+        searchTagData.clear()
         viewModelScope.launch {
             val feedRequest = feedDataManager.getLastFeedRequest()
             if ((feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null) {
@@ -95,7 +96,7 @@ class SearchViewModel(
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getSearchTags - SUCCESS")
                         if(searchTagsResult.tags?.isNullOrEmpty() == false){
-                            searchTagData = listOf(FeedAdapterSearchTag(tags = searchTagsResult.tags))
+                            searchTagData = mutableListOf(FeedAdapterSearchTag(tags = searchTagsResult.tags))
                         }
                         postDefaultData()
                     }
