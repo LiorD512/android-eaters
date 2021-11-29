@@ -198,6 +198,5 @@ class FeedDataManager(
 
     companion object {
         private const val TAG = "wowFeedDataManager"
-
     }
 }

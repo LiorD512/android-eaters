@@ -15,6 +15,9 @@ import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
@@ -55,41 +58,53 @@ class FeedViewModel(
         getFeedWith(feedRequest)
     }
 
+
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
-    data class FeedLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
-    private fun getFeedWith(feedRequest: FeedRequest) {
-        if(validFeedRequest(feedRequest)){
+
+    var feedJobs: MutableList<Job> = mutableListOf()
+
+    private suspend fun runFeedJob(feedRequest: FeedRequest) {
+        if(validFeedRequest(feedRequest)) {
             feedSkeletonEvent.postValue(getSkeletonItems())
-            viewModelScope.launch {
-                val feedRepository = feedRepository.getFeed(feedRequest)
-                when (feedRepository.type) {
-                    FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
-                        MTLogger.c(TAG, "getFeedWith - NetworkError")
-                        feedResultData.postValue(FeedLiveData(listOf(FeedAdapterNoNetworkSection(0)), feedRepository.isLargeItems))
+            val feedRepository = feedRepository.getFeed(feedRequest)
+            when (feedRepository.type) {
+                FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
+                    MTLogger.c(TAG, "getFeedWith - NetworkError")
+                    feedResultData.postValue(FeedLiveData(listOf(FeedAdapterNoNetworkSection(0)), feedRepository.isLargeItems))
+                }
+                FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
+                    MTLogger.c(TAG, "getFeedWith - GenericError")
+                }
+                FeedRepository.FeedRepoStatus.SUCCESS -> {
+                    val hrefCount = getHrefItemsCount(feedRepository.feed)
+                    MTLogger.c(TAG, "getFeedWith - Success - hrefCount: $hrefCount  ")
+                    if (hrefCount > 0) {
+                        handleHrefApiCalls(feedRepository.feed, hrefCount)
+                    } else {
+                        feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
                     }
-                    FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
-                        MTLogger.c(TAG, "getFeedWith - GenericError")
-                    }
-                    FeedRepository.FeedRepoStatus.SUCCESS -> {
-                        val hrefCount = getHrefItemsCount(feedRepository.feed)
-                        MTLogger.c(TAG, "getFeedWith - Success - hrefCount: $hrefCount  ")
-                        if(hrefCount > 0){
-                            handleHrefApiCalls(feedRepository.feed, hrefCount)
-                        }else{
-                            feedResultData.postValue(FeedLiveData(feedRepository.feed, feedRepository.isLargeItems))
-                        }
-                    }
-                    else -> {
-                        MTLogger.c(TAG, "getFeedWith - NetworkError")
-                    }
+                }
+                else -> {
+                    MTLogger.c(TAG, "getFeedWith - NetworkError")
                 }
             }
         }else{
-            MTLogger.c("wowFeedVM","getFeed setLocationListener")
+            MTLogger.c(TAG,"getFeed setLocationListener")
             feedResultData.postValue(FeedLiveData(null))
             progressData.endProgress()
         }
+    }
+
+    data class FeedLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
+    private fun getFeedWith(feedRequest: FeedRequest) {
+        MTLogger.c(TAG, "getFeedWith - ${feedRequest.lat} - ${feedRequest.lng}")
+        if(feedJobs.size > 0){
+            feedJobs[0].cancel()
+            feedJobs.clear()
+        }
+        val feedJob = viewModelScope.launch { runFeedJob(feedRequest) }
+        feedJobs.add(feedJob)
     }
 
     private fun getHrefItemsCount(feed: List<FeedAdapterItem>?): Int {

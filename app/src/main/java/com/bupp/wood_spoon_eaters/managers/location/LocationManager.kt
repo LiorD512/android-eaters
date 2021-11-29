@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 class LocationManager(val context: Context, private val appSettingsRepository: AppSettingsRepository) {
 
     fun clearUserAddresses() {
+        Log.d(TAG, "clearUserAddresses")
         finalAddressLiveDataParam.postValue(FinalAddressParam(null))
         setDefaultAddress()
         lastChosenAddress = null
@@ -21,12 +22,12 @@ class LocationManager(val context: Context, private val appSettingsRepository: A
     }
 
     fun setDefaultAddress() {
+        Log.d(TAG, "setDefaultAddress")
         val lat = appSettingsRepository.getDefaultLat()
         val lng = appSettingsRepository.getDefaultLng()
         val name = appSettingsRepository.getDefaultFeedLocationName()
         setSelectedAddressAndUpdateParams(Address(lat = lat, lng = lng, streetLine1 = name), AddressDataType.DEFAULT)
     }
-
 
     /////////////////////////////////////////
     /////////////    LOCATION    ////////////

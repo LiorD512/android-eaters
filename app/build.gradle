@@ -137,9 +137,9 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 
     //exo player
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.16.0'
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.16.0'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.16.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.16.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.16.1'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.16.1'
 
     //camera util
     implementation 'com.github.dhaval2404:imagepicker:1.8'
