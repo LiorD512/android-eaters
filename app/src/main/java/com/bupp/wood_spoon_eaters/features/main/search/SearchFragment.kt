@@ -155,7 +155,12 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
     }
 
     override fun onRefreshFeedClick() {
-        //do nothing
+        val input = binding!!.searchFragInput.text.toString()
+        if(input.isNullOrBlank()){
+            viewModel.postDefaultData()
+        }else{
+            viewModel.searchInput(input)
+        }
     }
 
     override fun onResume() {
