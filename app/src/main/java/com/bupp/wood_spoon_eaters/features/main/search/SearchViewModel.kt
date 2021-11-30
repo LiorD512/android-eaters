@@ -153,7 +153,7 @@ class SearchViewModel(
             when (result.type) {
                 FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                     MTLogger.c(TAG, "getFeedWith - NetworkError")
-//                    searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
+                    searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
                 }
                 FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                     MTLogger.c(TAG, "getFeedWith - GenericError")
