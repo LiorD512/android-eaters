@@ -210,7 +210,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding!!) {
             //Cover photo + video
             Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
-            restaurant.country?.flagUrl?.let { restHeaderChefThumbnail.setFlag(it) }
+            restaurant.flagUrl?.let { restHeaderChefThumbnail.setFlag(it) }
 
             restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
             restFragVideoBtn.setOnClickListener {

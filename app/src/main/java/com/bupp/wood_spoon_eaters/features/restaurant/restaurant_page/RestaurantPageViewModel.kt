@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRepoStatus.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -24,7 +25,8 @@ class RestaurantPageViewModel(
     private val restaurantRepository: RestaurantRepository,
     private val cartManager: CartManager,
     private val feedDataManager: FeedDataManager,
-    private val eventsManager: EventsManager
+    private val eventsManager: EventsManager,
+    private val metaDataManager: MetaDataRepository,
 
 ) : ViewModel() {
     var currentRestaurantId: Long = -1
@@ -74,18 +76,18 @@ class RestaurantPageViewModel(
                     dishListData = getDishSkeletonItems()
                     dishListLiveData.postValue(DishListData(dishListData))
                 }
-//                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
                 val lastFeedRequest = feedDataManager.getLastFeedRequest()
                 lastFeedRequest.q = query
                 val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
+                        restaurant.flagUrl = metaDataManager.getCountryFlagById(restaurant.countryId)
                         restaurantFullData.postValue(restaurant)
                         dishes = restaurant.dishes.associateBy({ it.id }, { it })
                         handleDeliveryTimingSection(restaurant)
                         chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
                     }
-                } else if (result.type == SERVER_ERROR) {
+                }else if (result.type == SERVER_ERROR) {
                     dishListLiveData.postValue(DishListData(emptyList()))
                 }
             }
