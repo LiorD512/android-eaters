@@ -30,6 +30,8 @@ class ReviewActivity : AppCompatActivity() {
         viewModel.initExtras(order)
 
         initObservers()
+
+        viewModel.logEvent(Constants.EVENT_REVIEW_TRIGGERED)
     }
 
     private fun initObservers() {

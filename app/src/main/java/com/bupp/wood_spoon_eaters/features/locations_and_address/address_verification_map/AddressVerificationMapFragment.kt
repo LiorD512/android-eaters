@@ -53,7 +53,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
         initUi(shouldShowBtn)
         initObservers()
 
-        if(!isCheckout){
+        if (!isCheckout) {
             mainViewModel.initMapLocation()
         }
 
@@ -66,8 +66,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
 
     private fun initUi(shouldShowDefaultUi: Boolean) {
-        if(shouldShowDefaultUi){
-            with(binding!!){
+        if (shouldShowDefaultUi) {
+            with(binding!!) {
                 addressMapDoneBtn.visibility = View.VISIBLE
                 addressMapFragHeader.visibility = View.VISIBLE
                 addressMapMyLocationBtn.visibility = View.VISIBLE
@@ -83,7 +83,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
                 googleMap?.isBuildingsEnabled = true
             }
-        }else{
+        } else {
             googleMap?.isBuildingsEnabled = false
         }
 
@@ -92,7 +92,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     }
 
     @SuppressLint("MissingPermission")
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         googleMap?.let {
             this.googleMap = it
 
@@ -112,7 +112,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             }
 
             initObservers()
-            curOrder?.let{
+            curOrder?.let {
                 updateCheckoutMap(it)
             }
         }
@@ -177,8 +177,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             googleMap?.clear()
             val locationLat = addressRequest.lat
             val locationLng = addressRequest.lng
-            locationLat?.let{
-                locationLng?.let{
+            locationLat?.let {
+                locationLng?.let {
                     val myLocation = LatLng(locationLat, locationLng)
                     val location = CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel)
                     googleMap?.moveCamera(location)
@@ -190,7 +190,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                 }
             }
         }
-        googleMap?.setOnCameraMoveListener{
+        googleMap?.setOnCameraMoveListener {
             val centerLatLng: LatLng? = googleMap?.cameraPosition?.target
             Log.d(TAG, "onMove: $centerLatLng")
             centerLatLng?.let {
@@ -206,48 +206,56 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
     private fun updateCheckoutMap(curOrderData: Order) {
         googleMap?.setOnMapLoadedCallback {
-            val curCourierData  = curOrderData.courier
+            val curCourierData = curOrderData.courier
             val builder = LatLngBounds.Builder()
 
             googleMap?.clear()
             googleMap?.uiSettings?.setAllGesturesEnabled(false)
 
-            val chefLat = curOrderData.restaurant?.pickupAddress?.lat
-            val chefLng = curOrderData.restaurant?.pickupAddress?.lng
-            chefLat?.let{
-                chefLng?.let{
-                    val chefLocation = LatLng(chefLat, chefLng)
-                    googleMap?.addMarker(MarkerOptions().position(chefLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_chef_marker)))
-                    builder.include(chefLocation)
-                    Log.d("wowMapBinder","chefLocation $chefLocation")
+            curOrderData.deliveryAddress?.lat?.let {
+                curOrderData.deliveryAddress?.lng?.let {
+
+                    val chefLat = curOrderData.restaurant?.pickupAddress?.lat
+                    val chefLng = curOrderData.restaurant?.pickupAddress?.lng
+                    chefLat?.let {
+                        chefLng?.let {
+                            val chefLocation = LatLng(chefLat, chefLng)
+                            googleMap?.addMarker(
+                                MarkerOptions().position(chefLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_chef_marker))
+                            )
+                            builder.include(chefLocation)
+                            Log.d("wowMapBinder", "chefLocation $chefLocation")
+                        }
+                    }
+                    val myLat = curOrderData.deliveryAddress?.lat ?: 0.0
+                    val myLng = curOrderData.deliveryAddress?.lng ?: 0.0
+                    val myLocation = LatLng(myLat, myLng)
+                    googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_pin)))
+                    builder.include(myLocation)
+                    Log.d("wowMapBinder", "myLocation $myLocation")
+
+                    val bounds = builder.build()
+
+                    //change mechnic to monig map by scroll and target bound on the courer or chef location
+                    animateCamera(bounds)
                 }
             }
-            val myLat = curOrderData.deliveryAddress?.lat ?: 0.0
-            val myLng = curOrderData.deliveryAddress?.lng ?: 0.0
-            val myLocation = LatLng(myLat, myLng)
-            googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_my_marker)))
-            builder.include(myLocation)
-            Log.d("wowMapBinder","myLocation $myLocation")
-            val bounds = builder.build()
-
-            //change mechnic to monig map by scroll and target bound on the courer or chef location
-            animateCamera(bounds)
             binding!!.addressMapFragPb.hide()
         }
     }
 
     private fun animateCamera(bounds: LatLngBounds?) {
-        bounds?.let{
-            try{
+        bounds?.let {
+            try {
                 googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, currentBoundSize), 150, null)
-                Log.d("wowTrackOrder","bound size: $currentBoundSize")
-            }catch (ex: Exception){
-                if(currentBoundSize > 100){
+                Log.d("wowTrackOrder", "bound size: $currentBoundSize")
+            } catch (ex: Exception) {
+                if (currentBoundSize > 100) {
                     currentBoundSize -= 50
-                    Log.d("wowTrackOrder","changing bound size: $currentBoundSize")
+                    Log.d("wowTrackOrder", "changing bound size: $currentBoundSize")
                     animateCamera(bounds)
-                }else{
-                    Log.d("wowTrackOrder","map ex: $ex")
+                } else {
+                    Log.d("wowTrackOrder", "map ex: $ex")
 
                 }
             }
@@ -282,10 +290,11 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     companion object {
         const val TAG = "wowAddressMapVerificton"
 
-        fun newInstance(bundle: Bundle): AddressVerificationMapFragment{
+        fun newInstance(bundle: Bundle): AddressVerificationMapFragment {
             val fragment = AddressVerificationMapFragment()
             fragment.arguments = bundle
             return fragment
         }
     }
+
 }

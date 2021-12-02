@@ -7,8 +7,10 @@
         tools:background="@color/white">
 
     <FrameLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/userFlag"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintDimensionRatio="1:1"
@@ -22,4 +24,14 @@
                 android:layout_gravity="center"
                 android:src="@drawable/profile_pic_placeholder_big" />
     </FrameLayout>
+
+    <ImageView
+            android:id="@+id/userFlag"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="-3dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@+id/layout"
+            app:layout_constraintEnd_toEndOf="@+id/layout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

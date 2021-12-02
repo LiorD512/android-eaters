@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.Job
@@ -12,7 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager) : ViewModel() {
+class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager,
+private val eventsManager: EventsManager) : ViewModel() {
 
     private var refreshRepeatedJob: Job? = null
     val TAG = "wowOrderHistoryVM"
@@ -59,6 +62,7 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
     private fun updateArchivedOrders(newData: List<Order>) {
         val currentList = orderListData[SECTION_ARCHIVE]
         if (currentList?.isEmpty() == true && newData.isNotEmpty()) {
+            //add title on first init
             currentList.add(OrderAdapterItemTitle("Past orders"))
         }
         newData.forEach { order ->
@@ -145,6 +149,29 @@ class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterData
         refreshRepeatedJob = null
     }
 
+    fun logTrackOrderClick(orderId: Long) {
+        var orderItemPosition = 0
+
+        orderListData[SECTION_ACTIVE]?.let {
+            if(it.size == 1){
+                orderItemPosition = 0
+            }else{
+                it.forEachIndexed { index, orderHistoryBaseItem ->
+                    if(orderHistoryBaseItem is OrderAdapterItemActiveOrder){
+                        if(orderHistoryBaseItem.order.id == orderId){
+                            orderItemPosition = index + 1
+                        }
+                    }
+                }
+            }
+        }
+        logEvent(Constants.EVENT_ORDERS_TRACK_ORDER_CLICK, mapOf(Pair("order_position", orderItemPosition.toString())))
+    }
+
+
+    fun logEvent(eventName: String, params: Map<String, String>? = null) {
+        eventsManager.logEvent(eventName, params)
+    }
 
 
     companion object {

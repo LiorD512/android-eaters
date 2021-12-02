@@ -2,9 +2,11 @@ package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Metrics
+import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
+import java.util.ArrayList
 
 @JsonClass(generateAdapter = true)
 data class ServerResponse<T> (
@@ -50,9 +52,9 @@ data class MetaDataModel(
     @Json(name = "diets") val diets: List<DietaryIcon>? = listOf(),
     @Json(name = "metrics") val metrics: List<Metrics>? = listOf(),
     @Json(name = "report_topics") val reportTopic: List<ReportTopic>? = listOf(),
-    @Json(name = "settings") val settings: List<AppSetting>? = listOf(),
     @Json(name = "notification_groups") val notificationsGroup: List<NotificationGroup>? = listOf(),
     @Json(name = "states") val states: List<State>? = listOf(),
+    @Json(name = "countries") val countries: List<Country>? = listOf(),
     @Json(name = "welcome_screens") val welcome_screens: List<WelcomeScreen>? = listOf(),
 )
 
@@ -95,6 +97,11 @@ data class PrepTimeRange(
     @Json(name = "icon") val icon: String,
     @Json(name = "min_time") val minTime: Int,
     @Json(name = "max_time") val maxTime: Int
+)
+
+@JsonClass(generateAdapter = true)
+data class AppSettings(
+    @Json(name = "settings") val settings: List<AppSetting>
 )
 
 @JsonClass(generateAdapter = true)

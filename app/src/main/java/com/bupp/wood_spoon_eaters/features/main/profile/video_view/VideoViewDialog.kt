@@ -1,15 +1,18 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.video_view
 
 import android.content.DialogInterface
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
+import com.bupp.wood_spoon_eaters.databinding.LogoutDialogBinding
 import com.bupp.wood_spoon_eaters.databinding.VideoViewDialogBinding
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
@@ -26,7 +29,9 @@ class VideoViewDialog(val video: String) : DialogFragment(), HeaderView.HeaderVi
     var binding: VideoViewDialogBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.video_view_dialog, null)
+        val view = inflater.inflate(R.layout.video_view_dialog, null)
+        binding = VideoViewDialogBinding.bind(view)
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

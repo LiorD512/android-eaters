@@ -183,6 +183,7 @@
                     motion:layout_constraintRight_toRightOf="@+id/trackOrderActHelp"/>
             <Constraint
                     android:alpha="1"
+                    android:layout_marginBottom="25dp"
                     android:id="@+id/trackOrderActCollapseLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

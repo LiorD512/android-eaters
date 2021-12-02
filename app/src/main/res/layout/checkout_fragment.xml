@@ -23,6 +23,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:iconType="HEADER_ICON_CLOSE"
                 app:title="Checkout" />
 
     </androidx.cardview.widget.CardView>
@@ -218,7 +219,7 @@
             android:id="@+id/checkoutFragPlaceOrderBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:floating_button_type="PLACE_ORDER"
+            app:floating_button_type="CONTINUE"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar

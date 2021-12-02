@@ -12,7 +12,13 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    //General
+    //AppConfig
+    @V3
+    @GET("eaters/utils/config")
+    suspend fun getAppSettings(): ServerResponse<AppSettings>
+
+    //MetaData
+    @V3
     @GET("eaters/utils/meta")
     suspend fun getMetaData(): ServerResponse<MetaDataModel>
 
@@ -34,14 +40,26 @@ interface ApiService {
     @DELETE("eaters/me/addresses/{address_id}")
     suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
 
-    //Feed
-//    @GET("eaters/me/feed")
-//    suspend fun getFeedFlow(
-//        @Query("page") page: Int = 1,
-//        @Query("limit") limit: Int = 20,
-//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-//    ): ServerResponse<List<FeedFlow>>
+
+    @GET("eaters/me/feed/order_again")
+    suspend fun getRecentOrders(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
+    ): ServerResponse<List<FeedRestaurantSection>>
+
+    @V3
+    @GET("eaters/me/search/tags")
+    suspend fun getSearchTags(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null): ServerResponse<List<String>>
+
+    @V3
+    @GET("eaters/me/search")
+    suspend fun search(
+        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
+        @Query("q") q: String? = null
+    ): ServerResponse<FeedResult>
 
     @GET("eaters/me/feed")
     suspend fun getFeed(
@@ -72,7 +90,7 @@ interface ApiService {
     suspend fun getRestaurant(
         @Path(value = "cook_id", encoded = true) restaurantId: Long,
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null
+        @Query("address_id") addressId: Long? = null, @Query("q") query: String? = null
     ): ServerResponse<Restaurant>
 
     //cook likes
@@ -84,7 +102,10 @@ interface ApiService {
 
     @FormUrlEncoded
     @PATCH("eaters/me/campaigns/interactions/{user_interaction_id}")
-    suspend fun updateCampaignStatus(@Path(value = "user_interaction_id", encoded = true) userInteractionId: Long, @Field("user_interaction_status") status: String): ServerResponse<Any>
+    suspend fun updateCampaignStatus(
+        @Path(value = "user_interaction_id", encoded = true) userInteractionId: Long,
+        @Field("user_interaction_status") status: String
+    ): ServerResponse<Any>
 
     //Utils
     @POST("eaters/me/presigned_urls")
@@ -111,8 +132,6 @@ interface ApiService {
     @DELETE("eaters/me")
     suspend fun deleteMe(): Response<Unit>
 
-    @POST("eaters/me/searches")
-    suspend fun search(@Body searchRequest: SearchRequest): ServerResponse<List<Search>>
 
     @GET("cooks/{cook_id}")
     suspend fun getCook(

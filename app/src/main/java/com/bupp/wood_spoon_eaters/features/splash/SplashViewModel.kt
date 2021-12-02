@@ -12,11 +12,13 @@ import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import kotlinx.coroutines.launch
 
 
 class SplashViewModel(
-    val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository, private val paymentManager: PaymentManager,
+    val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository,
+    private val appSettingsRepository: AppSettingsRepository, private val paymentManager: PaymentManager,
 private val deviceDetailsManager: FcmManager, private val campaignManager: CampaignManager
 )
     : ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
@@ -43,13 +45,13 @@ private val deviceDetailsManager: FcmManager, private val campaignManager: Campa
 
             userRepository.initUserRepo()
             metaDataRepository.initMetaData()
-//            campaignManager.fetchCampaigns()
+            appSettingsRepository.initAppSettings()
             paymentManager.initPaymentManager(context)
 
             isUserExist = userRepository.isUserValid()
             isUserSigned = userRepository.isUserSignedUp()
             isUserRegistered = userRepository.isUserRegistered()
-            shouldUpdateVersion = metaDataRepository.checkMinVersionFail()
+            shouldUpdateVersion = appSettingsRepository.checkMinVersionFail()
 
             if(shouldUpdateVersion){
                 //go to update

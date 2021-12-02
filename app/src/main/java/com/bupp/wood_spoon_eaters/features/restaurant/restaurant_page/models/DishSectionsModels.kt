@@ -10,6 +10,7 @@ sealed class DishSections(
 
 data class DishSectionAvailableHeader(
     val header: String,
+    val subtitle: String,
     override val menuItem: MenuItem? = null,
     override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false

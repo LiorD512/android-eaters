@@ -211,8 +211,12 @@ class CartManager(
         Log.d("orderFlow - cartManager", "updateOrderParams")
         Log.d(TAG, "updateOrderParams")
         currentOrderResponse?.let {
-//            orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
-
+            if(orderRequest.tipPercentage == -1f){
+                orderRequest.tipPercentage = null
+            }else{
+                orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
+            }
+//            orderRequest.tipPercentage = it.tipPercentage?.toFloat()
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
             result.data?.let {
                 updateCartManagerParams(it.copy())
@@ -358,7 +362,7 @@ class CartManager(
                     /**
                      * when deliver_at is null - it means no change of delivery time made by user.
                      */
-                    if (DateUtils.isToday(firstDeliveryDate.from)) {
+                    if (DateUtils.isNowInRange(order.cookingSlot?.startsAt, order.cookingSlot?.endsAt) && DateUtils.isToday(firstDeliveryDate.from)) {
                         Log.d("orderFlowTime", "is now")
                         deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from)})")
                     } else {

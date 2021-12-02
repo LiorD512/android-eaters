@@ -1,7 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters.view_holders
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil.DiffResult.NO_POSITION
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +14,13 @@ import com.bupp.wood_spoon_eaters.databinding.FeedAdapterRestaurantItemBinding
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedRestaurantDishPagerAdapter
 import com.bupp.wood_spoon_eaters.model.FeedAdapterRestaurant
 import com.bupp.wood_spoon_eaters.model.FeedRestaurantSection
+import com.bupp.wood_spoon_eaters.model.RestaurantAvailability
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
+import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.bupp.wood_spoon_eaters.utils.Utils
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
+import java.util.*
 
 
 class FeedAdapterRestaurantViewHolder(
@@ -29,11 +36,17 @@ class FeedAdapterRestaurantViewHolder(
         fun onDishSwiped()
     }
 
+    @SuppressLint("SetTextI18n")
     fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
         restaurantSection.restaurantSection.let { restaurant ->
             Log.d("wowProcessFeedData", "bindItems - ${restaurantSection.restaurantSection.restaurantName} - pos ${restaurantSection.id}")
             with(binding) {
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
+                restaurant.flagUrl?.let {
+                    Glide.with(context).load(it).circleCrop().into(feedRestaurantItemChefFlag)
+//                    feedRestaurantItemChefFlag.text = CountryCodeUtils.countryCodeToEmojiFlag(it.uppercase(Locale.ROOT))
+
+                }
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"
                 feedRestaurantItemRating.text = restaurant.getAvgRating()
@@ -74,6 +87,37 @@ class FeedAdapterRestaurantViewHolder(
 
                 root.setOnClickListener {
                     listener.onRestaurantClick(restaurant)
+                }
+
+                val curCookingSlot = restaurant.cookingSlot
+                curCookingSlot?.let{
+                    if(Date().after(it.startsAt)){
+                        Log.d("wowFeedPager", "now is after starts_at")
+                        // if now is after starts_at - availably now
+                        binding.feedRestaurantItemAvailability.text = "Available now"
+                    }else if(Date().before(it.startsAt) && DateUtils.isToday(it.startsAt)){
+                        Log.d("wowFeedPager", "now is before starts_at")
+                        // if now is before starts_at and in the same day - today MM:HH PM
+                        binding.feedRestaurantItemAvailability.text = "Today, ${DateUtils.parseDateToUsTime(it.startsAt)}"
+                    }else if(DateUtils.isTomorrow(it.startsAt)){
+                        Log.d("wowFeedPager", "cooking slot is tomotrrow")
+                        // if cooking slot is tomotrrow - tomorrow MM:HH PM
+                        binding.feedRestaurantItemAvailability.text = "Tomorrow, ${DateUtils.parseDateToUsTime(it.startsAt)}"
+                    }else if(DateUtils.isAfterTomorrow(it.startsAt)) {
+                        Log.d("wowFeedPager", "after tomorrow")
+                        // if after tomorrow - Tue, mm:hh PM
+                        binding.feedRestaurantItemAvailability.text = DateUtils.parseDateToDayAndUsTime(it.startsAt)
+                    }else{
+                        // if after a week from now - Nov 10, 6:40 pm
+                        Log.d("wowFeedPager", "after a week from now")
+                        binding.feedRestaurantItemAvailability.text = DateUtils.parseDateToMonthTime(it.startsAt)
+                    }
+                }
+
+                if(restaurant.availability != RestaurantAvailability.AVAILABLE) {
+                    binding.feedRestaurantItemAvailability.visibility = View.VISIBLE
+                }else{
+                    binding.feedRestaurantItemAvailability.visibility = View.INVISIBLE
                 }
             }
         }

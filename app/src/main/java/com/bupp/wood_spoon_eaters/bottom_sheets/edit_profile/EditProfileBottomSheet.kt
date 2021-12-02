@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.bottom_sheets.abs.FullScreenBottomSheetBase
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MediaUtils
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -23,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.UserImageVideoViewListener, HeaderView.HeaderViewListener {
+class EditProfileBottomSheet: FullScreenBottomSheetBase(), UserImageVideoView.UserImageVideoViewListener, HeaderView.HeaderViewListener {
 
     var binding: EditProfileBottomSheetBinding? = null
     private var photoUploaded: Boolean = false
@@ -41,19 +42,19 @@ class EditProfileBottomSheet : BottomSheetDialogFragment(), UserImageVideoView.U
         setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
     }
 
-    private lateinit var behavior: BottomSheetBehavior<View>
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener {
-            val d = it as BottomSheetDialog
-            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
-            behavior = BottomSheetBehavior.from(sheet!!)
-            behavior.isFitToContents = true
-            behavior.isDraggable = true
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-        return dialog
-    }
+//    private lateinit var behavior: BottomSheetBehavior<View>
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+//        dialog.setOnShowListener {
+//            val d = it as BottomSheetDialog
+//            val sheet = d.findViewById<View>(R.id.design_bottom_sheet)
+//            behavior = BottomSheetBehavior.from(sheet!!)
+//            behavior.isFitToContents = true
+//            behavior.isDraggable = true
+//            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        }
+//        return dialog
+//    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

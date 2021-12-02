@@ -11,11 +11,13 @@ class FlowEventsManager(private val campaignManager: CampaignManager, private va
         VISIT_FEED,
         VISIT_PROFILE,
 
+
         PAGE_VISIT_ON_BOARDING,
         PAGE_VISIT_GET_OTF_CODE,
         PAGE_VISIT_VERIFY_OTF_CODE,
         PAGE_VISIT_CREATE_ACCOUNT,
         PAGE_VISIT_FEED,
+        PAGE_VISIT_SEARCH,
         PAGE_VISIT_ACCOUNT,
         PAGE_VISIT_ORDERS,
         PAGE_VISIT_PRIVACY_POLICY,

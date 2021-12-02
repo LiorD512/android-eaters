@@ -10,13 +10,14 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBot
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.TipLineView
 import com.bupp.wood_spoon_eaters.databinding.FragmentTipBinding
+import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderRequest
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.CustomTipListener {
+class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.CustomTipListener, WSErrorDialog.WSErrorListener {
 
     val viewModel by sharedViewModel<CheckoutViewModel>()
     val mainViewModel by sharedViewModel<OrderCheckoutViewModel>()
@@ -91,6 +92,9 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
         viewModel.progressData.observe(viewLifecycleOwner, {
             handlePb(it ?: false)
         })
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+            handleWSError(it.getContentIfNotHandled())
+        })
     }
 
     private fun handlePb(shouldShow: Boolean) {
@@ -125,6 +129,12 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
         }
     }
 
+    private fun handleWSError(errorEvent: String?) {
+        errorEvent?.let {
+            WSErrorDialog(it, this).show(childFragmentManager, Constants.ERROR_DIALOG)
+        }
+    }
+
     private fun clearAll() {
         with(binding!!) {
             tipFrag12Percent.unselect()
@@ -138,7 +148,7 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
 
     private fun onTipSelected(tipSelection: Int?, tipAmount: Int? = null) {
         if (tipSelection == Constants.TIP_CUSTOM_SELECTED) {
-            viewModel.updateOrderParams(OrderRequest(tipPercentage = null, tip = tipAmount), Constants.EVENT_CLICK_TIP)
+            viewModel.updateOrderParams(OrderRequest(tipPercentage = -1f, tip = tipAmount), Constants.EVENT_CLICK_TIP)
         } else {
             if (tipSelection == Constants.TIP_NOT_SELECTED) {
                 viewModel.updateOrderParams(
@@ -159,6 +169,10 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
 
     override fun onCustomTipDone(tip: Double) {
         onCustomTipSelected(tip)
+    }
+
+    override fun onWSErrorDone() {
+        viewModel.refreshCheckoutPage()
     }
 
 }

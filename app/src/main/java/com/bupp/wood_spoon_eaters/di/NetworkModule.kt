@@ -16,7 +16,6 @@ import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_F
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
-import com.bupp.wood_spoon_eaters.network.ApiVersioningInterceptor
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.*
@@ -65,7 +64,6 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
     logging.level = HttpLoggingInterceptor.Level.BODY
 
     val authInterceptor = AuthInterceptor(apiSettings)
-    val versionInterceptor = ApiVersioningInterceptor()
 
     val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor(authInterceptor)
     return httpClient.build()
@@ -86,6 +84,7 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
                 .withSubtype(FeedRestaurantSection::class.java, Constants.FEED_SECTION_TYPE_RESTAURANT)
                 .withSubtype(FeedIsEmptySection::class.java, Constants.FEED_EMPTY_NO_CHEF)
                 .withSubtype(FeedSingleEmptySection::class.java, Constants.SECTION_EMPTY_NO_CHEF)
+                .withSubtype(FeedSearchEmptySection::class.java, Constants.SECTION_EMPTY_SEARCH)
 //                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
         )
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())

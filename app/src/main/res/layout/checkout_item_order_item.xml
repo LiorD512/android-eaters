@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="-0.01"
-            android:paddingStart="7dp"
+            android:layout_marginStart="7dp"
             app:layout_constraintBottom_toBottomOf="@+id/orderItemCounter"
             app:layout_constraintStart_toEndOf="@+id/orderItemCounter"
             app:layout_constraintTop_toTopOf="@+id/orderItemCounter"
@@ -42,11 +42,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="-0.01"
-            android:paddingStart="7dp"
             android:paddingTop="3dp"
-            android:paddingBottom="10dp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/orderItemName"
+            tools:visibility="visible"
+            android:layout_marginStart="7dp"
+            app:layout_constraintStart_toEndOf="@+id/orderItemCounter"
             app:layout_constraintTop_toBottomOf="@+id/orderItemName"
             tools:text="No olive oil • Pita on the side" />
 

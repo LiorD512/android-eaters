@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRepoStatus.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -24,12 +25,14 @@ class RestaurantPageViewModel(
     private val restaurantRepository: RestaurantRepository,
     private val cartManager: CartManager,
     private val feedDataManager: FeedDataManager,
-    private val eventsManager: EventsManager
+    private val eventsManager: EventsManager,
+    private val metaDataManager: MetaDataRepository,
 
 ) : ViewModel() {
     var currentRestaurantId: Long = -1
 
     var currentCookingSlot: CookingSlot? = null
+    var searchedCookingSlotId: Long? = null
 
     val initialParamData = MutableLiveData<RestaurantInitParams>()
     val restaurantFullData = MutableLiveData<Restaurant>()
@@ -56,33 +59,35 @@ class RestaurantPageViewModel(
         if (initialParamData.value == null) {
             currentRestaurantId = params.restaurantId ?: -1
             initialParamData.postValue(params)
-            initRestaurantFullData(params.restaurantId)
+            searchedCookingSlotId = params.cookingSlot?.id
+            initRestaurantFullData(params.restaurantId, query = params.query)
         }
     }
 
-    fun reloadPage(showSkeleton: Boolean = true){
+    fun reloadPage(showSkeleton: Boolean = true) {
         initRestaurantFullData(currentRestaurantId, showSkeleton)
     }
 
-    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true) {
+    private fun initRestaurantFullData(restaurantId: Long?, showSkeleton: Boolean = true, query: String? = null) {
         restaurantId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 Log.d(TAG, "initRestaurantFullData")
-                if(showSkeleton){
+                if (showSkeleton) {
                     dishListData = getDishSkeletonItems()
                     dishListLiveData.postValue(DishListData(dishListData))
                 }
-//                dishListLiveData.postRawValue(DishListData(getDishSkeletonItems()))
                 val lastFeedRequest = feedDataManager.getLastFeedRequest()
+                lastFeedRequest.q = query
                 val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
                 if (result.type == SUCCESS) {
                     result.restaurant?.let { restaurant ->
+                        restaurant.flagUrl = metaDataManager.getCountryFlagById(restaurant.countryId)
                         restaurantFullData.postValue(restaurant)
                         dishes = restaurant.dishes.associateBy({ it.id }, { it })
                         handleDeliveryTimingSection(restaurant)
                         chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
                     }
-                }else if(result.type == SERVER_ERROR){
+                }else if (result.type == SERVER_ERROR) {
                     dishListLiveData.postValue(DishListData(emptyList()))
                 }
             }
@@ -113,8 +118,15 @@ class RestaurantPageViewModel(
      */
     private fun chooseStartingCookingSlot(restaurant: Restaurant, sortedCookingSlots: List<SortedCookingSlots>) {
         Log.d(TAG, "chooseStartingCookingSlot")
-        if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
-            /**  case1 : has open cart - get the cooking slot of the current order **/
+        if (searchedCookingSlotId != null) {
+            /**  case1 : open restaurant from search page **/
+            val currentCookingSlot = getCookingSlotById(searchedCookingSlotId!!)
+            currentCookingSlot?.let {
+                onCookingSlotSelected(currentCookingSlot, true)
+            }
+        }
+        else if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
+            /**  case2 : has open cart - get the cooking slot of the current order **/
             val orderCookingSlot = cartManager.getCurrentCookingSlot()
             orderCookingSlot?.let {
                 val currentCookingSlot = getCookingSlotById(orderCookingSlot.id)
@@ -123,7 +135,7 @@ class RestaurantPageViewModel(
                 }
             }
         } else {
-            /**  case2 : no open cart, has chosen date from feed - search for cookingSlot that contains chosen date  **/
+            /**  case3 : no open cart, has chosen date from feed - search for cookingSlot that contains chosen date  **/
             feedDataManager.getFeedDeliveryParams()?.let { feedDate ->
                 sortedCookingSlots.forEach { date ->
                     var feedTimeCookingSlot: CookingSlot? = null
@@ -212,8 +224,8 @@ class RestaurantPageViewModel(
                         menuItem.availableLater = null
 
                         menuItem.sectionTitle = section.title
-                        menuItem.sectionOrder = sectionIndex +1
-                        menuItem.dishOrderInSection = restaurantIndex+1
+                        menuItem.sectionOrder = sectionIndex + 1
+                        menuItem.dishOrderInSection = restaurantIndex + 1
 
                         tempHash.remove(dish.id)
                     }
@@ -265,7 +277,7 @@ class RestaurantPageViewModel(
         val dishSectionsList = mutableListOf<DishSections>()
         cookingSlot.sections.forEach { section ->
             if (section.menuItems.isNotEmpty()) {
-                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: ""))
+                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: "", section.subtitle ?: ""))
                 section.menuItems.forEach { menuItem ->
                     dishSectionsList.add(DishSectionSingleDish(menuItem))
                 }
@@ -404,8 +416,8 @@ class RestaurantPageViewModel(
         }
     }
 
-    fun logEvent(eventName: String){
-        when(eventName){
+    fun logEvent(eventName: String) {
+        when (eventName) {
             Constants.EVENT_LIKE_RESTAURANT -> {
                 eventsManager.logEvent(eventName, getLikeRestaurantData())
             }
@@ -430,7 +442,7 @@ class RestaurantPageViewModel(
 
     private fun getCookingSlotChangeData(): Map<String, String> {
         val data = mutableMapOf<String, String>()
-        currentCookingSlot?.let{
+        currentCookingSlot?.let {
             data["selected_date"] = DateUtils.parseDateToUsDate(it.startsAt)
             data["day"] = DateUtils.parseDateToDayName(it.startsAt)
         }

@@ -5,7 +5,7 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.core.location.LocationManagerCompat
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
-import com.bupp.wood_spoon_eaters.common.AppSettings
+import com.bupp.wood_spoon_eaters.common.UserSettings
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.utils.LocationUtils
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager.AddressDataType
@@ -16,7 +16,7 @@ import java.util.*
 
 class FeedDataManager(
     private val context: Context,
-    private val eaterDataManager: EaterDataManager, private val appSettings: AppSettings
+    private val eaterDataManager: EaterDataManager, private val userSettings: UserSettings
 ) {
 
     private var isWaitingToLocationUpdate: Boolean = false
@@ -73,7 +73,7 @@ class FeedDataManager(
             val lastSelectedAddress = eaterDataManager.getFinalAddressLiveDataParam().value
             val knownAddresses = eaterDataManager.currentEater?.addresses
             val myLocation = getLocationLiveData().value
-            val hasGpsPermission = appSettings.hasGPSPermission
+            val hasGpsPermission = userSettings.hasGPSPermission
             val isGpsEnabled = isGpsEnabled()
             Log.d(
                 TAG,
@@ -198,6 +198,5 @@ class FeedDataManager(
 
     companion object {
         private const val TAG = "wowFeedDataManager"
-
     }
 }

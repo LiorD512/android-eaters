@@ -61,6 +61,11 @@
                         android:lineSpacingExtra="7.7sp"
                         android:text="Download the WoodSpoon Home Chefs app to add your dishes, set your schedule, and receive real-time order updates."/>
 
+                <View
+                        android:layout_weight="1"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"/>
+
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                         android:id="@+id/joinAsChefNext"
                         android:layout_width="match_parent"

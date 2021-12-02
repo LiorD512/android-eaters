@@ -39,7 +39,6 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             if(isAfterCancel!!){
                 viewModel.fetchData()
             }
-
         }
     }
 
@@ -64,13 +63,11 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOrdersHistoryBinding.bind(view)
-//        Analytics.with(requireContext()).screen("Order history")
 
         initUi()
         initObservers()
 
         viewModel.fetchData()
-        mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ORDERS)
     }
 
     private fun initObservers() {
@@ -120,6 +117,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 
     override fun onOrderClick(orderId: Long) {
         SingleOrderDetailsBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.SINGLE_ORDER_DETAILS_BOTTOM_SHEET)
+        viewModel.logEvent(Constants.EVENT_ORDERS_ORDER_HISTORY_CLICK)
     }
 
     override fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreview: String) {
@@ -139,6 +137,7 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
 //        activity?.window?.exitTransition = null
 //        startActivity(intent, transitionBundle.toBundle())
         trackOrderForResult.launch(intent, transitionBundle)
+        viewModel.logTrackOrderClick(order.id)
 //        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
     }
 

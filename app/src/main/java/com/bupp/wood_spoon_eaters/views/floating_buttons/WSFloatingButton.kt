@@ -64,6 +64,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     wsFloatingBtnTitle.text = "Place an order"
                     show()
                 }
+                Constants.CONTINUE -> {
+                    wsFloatingBtnSubTitle.visibility = View.GONE
+                    wsFloatingBtnIcon.visibility = View.INVISIBLE
+                    wsFloatingBtnTitle.text = "Continue"
+                    show()
+                }
                 else -> {
                 }
             }

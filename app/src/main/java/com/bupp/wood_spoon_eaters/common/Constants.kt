@@ -7,6 +7,7 @@ class Constants {
         const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
         const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
         const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
+        const val SECTION_EMPTY_SEARCH = "section_empty_no_matches"
         const val RESTAURANT_SECTION_TYPE_DISH = "dish"
         const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
 
@@ -99,6 +100,7 @@ class Constants {
         const val VIEW_CART = 0
         const val ADD_TO_CART = 1
         const val PLACE_ORDER = 2
+        const val CONTINUE = 3
 
 
         const val ARG_RESTAURANT = "args_restaurant"
@@ -221,6 +223,23 @@ class Constants {
         const val EVENT_CLEAR_CART = "clear_cart"
         const val EVENT_CLICK_PAYMENT = "click_payment"
         const val EVENT_CLICK_SIGN_OUT = "sign_out"
+
+        const val EVENT_SEARCH_TAG_CLICK = "clicked_on_popular_cuisine"
+        const val EVENT_SEARCH_QUERY_CLICK = "clicked_on_search_bar"
+        const val EVENT_SEARCH_QUERY = "searched_chefs"
+        const val EVENT_SEARCH_RESTAURANT_CLICK = "click_on_home_chef_from_search"
+
+        const val EVENT_ORDERS_TRACK_ORDER_CLICK = "click_track_your_order"
+        const val EVENT_TRACK_ORDER_HELP_CLICK = "click_help_in_track_order"
+        const val EVENT_ORDERS_CANCEL = "cancel_order"
+        const val EVENT_ORDERS_ORDER_HISTORY_CLICK = "click_on_past_order"
+        const val EVENT_ORDER_REPORT_ISSUE_CLICK = "click_report_issue"
+
+        const val EVENT_REVIEW_SUMMERY_CLICK = "click_on_rating"
+        const val EVENT_REVIEW_TRIGGERED = "rating_prompt"
+        const val EVENT_REVIEW_EXIT_1_PAGE = "diner_exit_rating_first_page"
+        const val EVENT_REVIEW_EXIT_2_PAGE = "diner_exit_rating_second_page"
+        const val EVENT_REVIEW_SUBMIT = "diner_submit_review"
 
         const val EVENT_ADD_ADDITIONAL_DISH = "add_upsale_dish_to_cart"
         const val EVENT_TRACK_ORDER_CLICK = "clicked_track_your_order"

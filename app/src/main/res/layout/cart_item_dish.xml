@@ -38,7 +38,6 @@
                 tools:text="GF Schnitzel" />
 
         <TextView
-                android:paddingBottom="10dp"
                 android:id="@+id/cartItemDescription"
                 style="@style/LatoReg11PurpleyGreyThree"
                 android:layout_width="0dp"

@@ -3,23 +3,24 @@ package com.bupp.wood_spoon_eaters.dialogs.web_docs
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 
-class WebDocsViewModel(private val metaDataManager: MetaDataRepository, private val flowEventsManager: FlowEventsManager) : ViewModel() {
+class WebDocsViewModel(private val appSettingsRepository: AppSettingsRepository, private val flowEventsManager: FlowEventsManager) : ViewModel() {
 
     fun getUrl(type: Int): String {
         when(type){
             Constants.WEB_DOCS_TERMS ->{
                 flowEventsManager.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY)
-                return metaDataManager.getTermsOfServiceUrl()
+                return appSettingsRepository.getTermsOfServiceUrl()
             }
             Constants.WEB_DOCS_PRIVACY ->{
                 flowEventsManager.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY)
-                return metaDataManager.getPrivacyPolicyUrl()
+                return appSettingsRepository.getPrivacyPolicyUrl()
             }
             Constants.WEB_DOCS_QA ->{
                 flowEventsManager.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_QA)
-                return metaDataManager.getQaUrl()
+                return appSettingsRepository.getQaUrl()
             }
             else -> return ""
         }

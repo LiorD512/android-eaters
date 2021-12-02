@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
@@ -98,20 +99,29 @@ class LoginActivity : BaseActivity() {
 
 
     private fun redirectToCreateAccountFromWelcome() {
-        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.welcomeFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+        }
     }
 
     private fun redirectToCreateAccountFromVerification() {
-        findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.codeFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_codeFragment_to_createAccountFragment)
+        }
     }
 
     private fun redirectToPhoneVerification() {
-        findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.welcomeFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+        }
     }
 
     private fun redirectToCodeVerification() {
-        hideKeyboard()
-        findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+        Log.d("wowo","destinatonL: ${findNavController(R.id.loginActContainer).currentDestination}")
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.phoneVerificationFragment){
+            hideKeyboard()
+            findNavController(R.id.loginActContainer).navigate(R.id.action_phoneVerificationFragment_to_codeFragment)
+        }
     }
 
     private fun handlePb(shouldShow: Boolean) {

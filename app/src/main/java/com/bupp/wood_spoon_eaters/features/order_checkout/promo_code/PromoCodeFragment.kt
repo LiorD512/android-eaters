@@ -6,23 +6,26 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.androidadvance.topsnackbar.TSnackbar
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.databinding.PromoCodeFragmentBinding
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
 class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
-    HeaderView.HeaderViewListener, WSEditText.WSEditTextListener {
+    HeaderView.HeaderViewListener, WSEditText.WSEditTextListener, CheckoutHeaderView.CheckoutHeaderListener {
 
     private lateinit var snackbar: TSnackbar
     val viewModel by viewModel<PromoCodeViewModel>()
@@ -39,7 +42,7 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
 
     private fun initUi() {
         with(binding!!) {
-            checkoutFragHeader.setOnIconClickListener { activity?.onBackPressed() }
+            checkoutFragHeader.setCheckoutHeaderListener(this@PromoCodeFragment)
             promoCodeFragCodeInput.setWSEditTextListener(this@PromoCodeFragment)
 
             openKeyboard(promoCodeFragCodeInput)
@@ -75,20 +78,21 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
     }
 
     private fun showWrongPromoCodeNotification(msg: String?) {
-        snackbar = TSnackbar.make(
-            binding!!.promoCodeFragmentLayout,
-            msg ?: "The promo code seems to be invalid. \nplease check again",
-            TSnackbar.LENGTH_LONG
-        ).apply {
-            view.elevation = 1000F
-        }
-        val snackBarView = snackbar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
-        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
-        textView.setTextAppearance(R.style.LatoBlack13Dark)
-        textView.gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
-        textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-        snackbar.show()
+        showErrorToast(msg!!, binding!!.root, Toast.LENGTH_LONG)
+//        snackbar = TSnackbar.make(
+//            binding!!.promoCodeFragmentLayout,
+//            msg ?: "The promo code seems to be invalid. \nplease check again",
+//            TSnackbar.LENGTH_LONG
+//        ).apply {
+//            view.elevation = 1000F
+//        }
+//        val snackBarView = snackbar.view
+//        snackBarView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.teal_blue))
+//        val textView = snackBarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text) as TextView
+//        textView.setTextAppearance(R.style.LatoBlack13Dark)
+//        textView.gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
+//        textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+//        snackbar.show()
     }
 
     private fun openKeyboard(view: View) {
@@ -118,6 +122,11 @@ class PromoCodeFragment : Fragment(R.layout.promo_code_fragment),
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    override fun onBackBtnClick() {
+        closeKeyboard()
+        activity?.onBackPressed()
     }
 
 }

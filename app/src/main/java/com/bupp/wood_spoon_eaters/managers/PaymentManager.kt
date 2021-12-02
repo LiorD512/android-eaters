@@ -6,6 +6,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.MTLogger
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.stripe.android.CustomerSession
 import com.stripe.android.PaymentConfiguration
@@ -14,7 +15,7 @@ import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PaymentManager(val metaDataRepository: MetaDataRepository, private val sharedPreferences: SharedPreferences) : EphemeralKeyProvider.EphemeralKeyProviderListener {
+class PaymentManager(val appSettingsRepository: AppSettingsRepository, private val sharedPreferences: SharedPreferences) : EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     var lastSelectedCardIdRes: String?
         get() = sharedPreferences.getString(LAST_SELECTED_CARD_ID, null)
@@ -35,18 +36,17 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
         //this method fetch metaData if needed and init stripe with LiveData listener.
         withContext(Dispatchers.IO){
             stripeInitializationEvent.postValue(StripeInitializationStatus.START)
-            val key = metaDataRepository.getStripePublishableKey()
+            val key = appSettingsRepository.getStripePublishableKey()
             if(key.isNullOrEmpty()){
-                val result = metaDataRepository.initMetaData()
+                val result = appSettingsRepository.initAppSettings()
                 when(result.status){
-                    MetaDataRepository.MetaDataRepoStatus.SUCCESS -> {
+                    AppSettingsRepository.AppSettingsRepoStatus.SUCCESS -> {
                         initStripe(context)
                         stripeInitializationEvent.postValue(StripeInitializationStatus.SUCCESS)
                     }
-                    MetaDataRepository.MetaDataRepoStatus.FAILED -> {
+                    AppSettingsRepository.AppSettingsRepoStatus.FAILED -> {
                         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
                     }
-
                 }
             }else{
                 initStripe(context)
@@ -60,7 +60,7 @@ class PaymentManager(val metaDataRepository: MetaDataRepository, private val sha
     }
 
     private fun initStripe(context: Context) {
-        val key = metaDataRepository.getStripePublishableKey()
+        val key = appSettingsRepository.getStripePublishableKey()
         MTLogger.c(TAG, "initStripe key: $key")
         key?.let {
             PaymentConfiguration.init(context, key)

@@ -81,6 +81,15 @@ object DateUtils {
         return ""
     }
 
+    fun parseDateToMonthTime(date: Date?): String {
+        //Aug 2, 10:40 pm
+        date?.let{
+            val sdf = SimpleDateFormat("MMM dd")
+            return "${sdf.format(date.time)}, ${parseDateToUsTime(it)}"
+        }
+        return ""
+    }
+
     fun parseDateToFullDayDate(date: Date): String {
         //Fri, Feb 12
         val sdf = SimpleDateFormat("EEEE, MMM dd")
@@ -189,7 +198,7 @@ object DateUtils {
         return false
     }
 
-    fun isNowInRange(startDate: Date, endDate: Date): Boolean {
+    fun isNowInRange(startDate: Date?, endDate: Date?): Boolean {
         return isDateInRange(Date(), startDate, endDate)
     }
 
@@ -225,6 +234,32 @@ object DateUtils {
             return from.time == from1.time
         }
         return false
+    }
+
+    fun isTomorrow(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = calendar.time
+
+        return isSameDay(date, tomorrow)
+    }
+
+    fun isAfterTomorrow(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 2)
+        val tomorrow = calendar.time
+
+        return isSameDay(date, tomorrow)
+    }
+
+    fun isSameWeek(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 2) //tomorrow
+        val tomorrow = calendar.time
+        calendar.add(Calendar.DAY_OF_YEAR, 4) //a week from now - add 4 more days to tomorrow
+        val inAWeek = calendar.time
+
+        return isDateInRange(date, tomorrow, inAWeek)
     }
 }
 

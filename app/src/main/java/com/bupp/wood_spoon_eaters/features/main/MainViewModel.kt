@@ -7,6 +7,7 @@ import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val metaDataRepository: MetaDataRepository, private val feedDataManager: FeedDataManager,
+    private val appSettingsRepository: AppSettingsRepository, private val feedDataManager: FeedDataManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
     private val userRepository: UserRepository, globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
     private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository,
@@ -120,11 +121,11 @@ class MainViewModel(
     }
 
     fun getContactUsPhoneNumber(): String {
-        return metaDataRepository.getContactUsPhoneNumber()
+        return appSettingsRepository.getContactUsPhoneNumber()
     }
 
     fun getContactUsTextNumber(): String {
-        return metaDataRepository.getContactUsTextNumber()
+        return appSettingsRepository.getContactUsTextNumber()
     }
 
 
@@ -185,20 +186,21 @@ class MainViewModel(
      * we start it from here, beacuse we need to update stuff when order is successfully done.
      */
     fun startRestaurantActivity(restaurantInitParams: RestaurantInitParams) {
-        eventsManager.logEvent(Constants.EVENT_CLICK_RESTAURANT, getRestaurantClicked(restaurantInitParams))
         startRestaurantActivity.postValue(restaurantInitParams)
     }
 
-    private fun getRestaurantClicked(restaurantInitParams: RestaurantInitParams): Map<String, String> {
+    fun logRestaurantClick(restaurantInitParams: RestaurantInitParams){
         val data = mutableMapOf<String, String>()
         data["home_chef_id"] = restaurantInitParams.restaurantId.toString()
+        data["kitchen_name"] = restaurantInitParams.restaurantName.toString()
+        data["home_chef_availability"] = restaurantInitParams.cookingSlot?.getAvailabilityString().toString()
         data["home_chef_name"] = restaurantInitParams.chefName.toString()
         data["home_chef_rating"] = restaurantInitParams.rating.toString()
         data["section_title"] = restaurantInitParams.sectionTitle.toString()
         data["section_index"] = restaurantInitParams.sectionOrder.toString()
         data["home_chef_index"] = restaurantInitParams.restaurantOrderInSection.toString()
         data["dish_tapped_index"] = restaurantInitParams.dishIndexInRestaurant.toString()
-        return data
+        eventsManager.logEvent(Constants.EVENT_CLICK_RESTAURANT, data)
     }
 
     fun forceFeedRefresh() {
@@ -215,6 +217,11 @@ class MainViewModel(
 
     fun logDeepLinkEvent(restaurantId: Long) {
         eventsManager.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
+    }
+
+    val refreshSearchData = MutableLiveData<Boolean>()
+    fun refreshSearchData() {
+        refreshSearchData.postValue(true)
     }
 
 }

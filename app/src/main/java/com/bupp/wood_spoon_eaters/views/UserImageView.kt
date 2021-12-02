@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.UserImageViewBinding
+import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
 
 class UserImageView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -36,6 +37,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setImage(imageUri: String?) {
         imageUri?.let{
             Glide.with(context).load(imageUri).transform(CircleCrop()).into(binding.userThumbnail)
+        }
+    }
+
+    fun setFlag(flagUrl: String?) {
+        flagUrl?.let {
+            Glide.with(context).load(it).circleCrop().into(binding.userFlag)
+//                    feedRestaurantItemChefFlag.text = CountryCodeUtils.countryCodeToEmojiFlag(it.uppercase(Locale.ROOT))
+
         }
     }
 

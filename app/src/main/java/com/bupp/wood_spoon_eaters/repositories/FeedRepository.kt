@@ -11,7 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FeedRepository(
-    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager) {
+    private val apiService: FeedRepositoryImpl, private val flavorConfigManager: FlavorConfigManager, private val cartManager: CartManager,
+    private val metaDataManager: MetaDataRepository
+) {
 
 
     private var lastFeedDataResult: FeedResult? = null
@@ -87,11 +89,16 @@ class FeedRepository(
     }
 
 
-    private fun processFeedData(feedResult: FeedResult?): List<FeedAdapterItem> {
+    private fun processFeedData(feedResult: FeedResult?, input: String? = null): List<FeedAdapterItem> {
         Log.d("wowProcessFeedData", "start ----")
         var localId: Long = -1
         val feedData = mutableListOf<FeedAdapterItem>()
         feedResult?.sections?.forEachIndexed { feedSectionIndex, feedSection ->
+            if(input != null && feedData.size == 0 && (feedResult.sections.isNotEmpty() && feedResult.sections[0].collections?.get(0) ?: null is FeedRestaurantSection)){
+                localId++
+                val searchTitle = "Results for “${input.capitalize()}”"
+                feedData.add(FeedAdapterSearchTitle(searchTitle, localId))
+            }
             feedSection.title?.let {
                 localId++
                 feedData.add(FeedAdapterTitle(it, localId))
@@ -117,8 +124,14 @@ class FeedRepository(
                         Log.d("wowProcessFeedData", "adding empty2 - $localId")
                         feedData.add(FeedAdapterEmptySection(feedSectionCollectionItem, localId))
                     }
+                    is FeedSearchEmptySection -> {
+                        Log.d("wowProcessFeedData", "adding search empty - $localId")
+                        feedData.add(FeedAdapterEmptySearch(feedSectionCollectionItem, localId))
+                    }
                     is FeedRestaurantSection -> {
                         Log.d("wowProcessFeedData", "adding rest  - $localId")
+                        feedSectionCollectionItem.flagUrl = metaDataManager.getCountryFlagById(feedSectionCollectionItem.countryId)
+                        feedSectionCollectionItem.countryIso = metaDataManager.getCountryIsoById(feedSectionCollectionItem.countryId)
                         if (isLargeItems) {
                             feedData.add(FeedAdapterLargeRestaurant(feedSectionCollectionItem, localId))
                         } else {
@@ -128,7 +141,8 @@ class FeedRepository(
                                     restaurantSection = feedSectionCollectionItem,
                                     sectionTitle = feedSection.title,
                                     sectionOrder = feedSectionIndex + 1,
-                                    restaurantOrderInSection = index + 1
+                                    restaurantOrderInSection = index + 1,
+
                                 )
                             )
                         }
@@ -166,6 +180,101 @@ class FeedRepository(
             tempFeedResult.add(section)
         }
         return processFeedData(FeedResult(tempFeedResult))
+    }
+
+    suspend fun getFeedBySearch(input: String, feedRequest: FeedRequest): FeedRepoResult {
+        val result = withContext(Dispatchers.IO) {
+            val lat = feedRequest.lat
+            val lng = feedRequest.lng
+            val addressId = feedRequest.addressId
+            val timestamp = feedRequest.timestamp
+            apiService.search(input, lat, lng, addressId, timestamp)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getFeedBySearch - NetworkError")
+                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getFeedBySearch - GenericError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getFeedBySearch - Success")
+                    val feedData = processFeedData(result.value.data, input)
+                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
+                }
+                else -> {
+                    Log.d(TAG, "getFeedBySearch - wsError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+    suspend fun getRecentOrders(feedRequest: FeedRequest): FeedRepoResult {
+        val result = withContext(Dispatchers.IO) {
+            val lat = feedRequest.lat
+            val lng = feedRequest.lng
+            val addressId = feedRequest.addressId
+            val timestamp = feedRequest.timestamp
+            apiService.getRecentOrders(lat, lng, addressId, timestamp)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getRecentOrders - NetworkError")
+                    FeedRepoResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getRecentOrders - GenericError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getRecentOrders - Success")
+                    val data = result.value.data
+                    val feedData = processFeedData(FeedResult(listOf(FeedSection(collections = data as MutableList<FeedSectionCollectionItem>))))
+                    FeedRepoResult(FeedRepoStatus.SUCCESS, feedData, isLargeItems)
+                }
+                else -> {
+                    Log.d(TAG, "getRecentOrders - wsError")
+                    FeedRepoResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
+    }
+
+    data class SearchTagsResult(val type: FeedRepoStatus, val tags: List<String>? = null)
+    suspend fun getSearchTags(feedRequest: FeedRequest): SearchTagsResult {
+        val result = withContext(Dispatchers.IO) {
+            val lat = feedRequest.lat
+            val lng = feedRequest.lng
+            val addressId = feedRequest.addressId
+//            val timestamp = feedRequest.timestamp
+            apiService.getSearchTags(lat, lng, addressId)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    Log.d(TAG, "getSearchTags - NetworkError")
+                    SearchTagsResult(FeedRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    Log.d(TAG, "getSearchTagss - GenericError")
+                    SearchTagsResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+                is ResultHandler.Success -> {
+                    Log.d(TAG, "getSearchTags - Success")
+                    val data = result.value.data
+                    SearchTagsResult(FeedRepoStatus.SUCCESS, data)
+                }
+                else -> {
+                    Log.d(TAG, "getSearchTags - wsError")
+                    SearchTagsResult(FeedRepoStatus.SOMETHING_WENT_WRONG)
+                }
+            }
+        }
     }
 
     companion object {

@@ -4,15 +4,17 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 
 /**
  * Created by MonkeyFather on 15/05/2018.
  */
 
-class LocationManager(val context: Context, private val metaDataRepository: MetaDataRepository) {
+class LocationManager(val context: Context, private val appSettingsRepository: AppSettingsRepository) {
 
     fun clearUserAddresses() {
+        Log.d(TAG, "clearUserAddresses")
         finalAddressLiveDataParam.postValue(FinalAddressParam(null))
         setDefaultAddress()
         lastChosenAddress = null
@@ -20,12 +22,12 @@ class LocationManager(val context: Context, private val metaDataRepository: Meta
     }
 
     fun setDefaultAddress() {
-        val lat = metaDataRepository.getDefaultLat()
-        val lng = metaDataRepository.getDefaultLng()
-        val name = metaDataRepository.getDefaultFeedLocationName()
+        Log.d(TAG, "setDefaultAddress")
+        val lat = appSettingsRepository.getDefaultLat()
+        val lng = appSettingsRepository.getDefaultLng()
+        val name = appSettingsRepository.getDefaultFeedLocationName()
         setSelectedAddressAndUpdateParams(Address(lat = lat, lng = lng, streetLine1 = name), AddressDataType.DEFAULT)
     }
-
 
     /////////////////////////////////////////
     /////////////    LOCATION    ////////////

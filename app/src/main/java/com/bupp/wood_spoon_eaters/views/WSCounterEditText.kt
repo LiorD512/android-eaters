@@ -6,6 +6,7 @@ import android.text.InputFilter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.bupp.wood_spoon_eaters.R
@@ -13,6 +14,8 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.WsCounterEditTextBinding
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.closeKeyboard
+import com.bupp.wood_spoon_eaters.utils.hideKeyboard
 
 class WSCounterEditText @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -104,7 +107,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         super.afterTextChanged(s)
                     }
                 })
-
             }
         }
     }

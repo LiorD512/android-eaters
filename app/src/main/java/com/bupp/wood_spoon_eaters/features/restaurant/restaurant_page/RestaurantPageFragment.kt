@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
-import android.animation.Animator
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -15,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartRestaurantBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.BottomSheetReviews
+import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
@@ -31,7 +30,6 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
@@ -199,6 +197,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderRestName.text = params.restaurantName
             restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
+//            params.chefFlag?.let { restHeaderChefThumbnail.setFlag(it) }
             rating.text = "${params.rating}"
 //            ratingLayout.isVisible = params.rating ?: 0f > 0
 
@@ -211,6 +210,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         with(binding!!) {
             //Cover photo + video
             Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
+            restaurant.flagUrl?.let { restHeaderChefThumbnail.setFlag(it) }
+
             restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
             restFragVideoBtn.setOnClickListener {
                 restaurant.video?.let { video ->
@@ -311,21 +312,21 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
         with(binding!!) {
             if (dishSections?.dishes.isNullOrEmpty()) {
-                if(!restaurantMainListLayout.restaurantNoNetwork.isVisible){
+                if (!restaurantMainListLayout.restaurantNoNetwork.isVisible) {
                     restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
                     restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
-                }else{
+                } else {
                     //Do nothing
                 }
-            }else {
-                    restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
-                    restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+            } else {
+                restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+                restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
 
-                    if (dishSections?.animateList == true)
-                        restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+                if (dishSections?.animateList == true)
+                    restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
 
-                    adapterDishes?.submitList(dishSections?.dishes)
-                }
+                adapterDishes?.submitList(dishSections?.dishes)
+            }
         }
     }
 
@@ -334,7 +335,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         val restaurant = viewModel.restaurantFullData.value
         restaurant?.let { restaurant ->
             val header = "${restaurant.getAvgRating()} (${restaurant?.reviewCount ?: ""} reviews)"
-            BottomSheetReviews.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            ReviewsBottomSheet.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 
