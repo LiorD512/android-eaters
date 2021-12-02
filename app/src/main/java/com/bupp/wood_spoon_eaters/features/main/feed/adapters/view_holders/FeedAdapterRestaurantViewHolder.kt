@@ -119,6 +119,8 @@ class FeedAdapterRestaurantViewHolder(
                 }else{
                     binding.feedRestaurantItemAvailability.visibility = View.INVISIBLE
                 }
+
+                binding.feedRestaurantItemUnavailable.isVisible = restaurant.cookingSlot?.canOrder == false
             }
         }
     }

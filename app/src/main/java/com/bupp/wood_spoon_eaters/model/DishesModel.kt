@@ -16,6 +16,7 @@ data class CookingSlot(
     @Json(name = "ends_at") val endsAt: Date,
     @Json(name = "starts_at") val startsAt: Date,
     @Json(name = "order_from") val orderFrom: Date,
+    @Json(name = "can_order") val canOrder: Boolean?,
     @Json(name = "last_call_at") val lastCallAt: Date?,
     @Json(name = "delivery_fee") val deliveryFee: Price?,
     @Json(name = "free_delivery") val freeDelivery: Boolean,
@@ -29,6 +30,7 @@ data class CookingSlot(
 data class FeedDishCookingSlot(
     @Json(name = "id") val id: Long,
     @Json(name = "starts_at") val startsAt: Date,
+    @Json(name = "can_order") val canOrder: Boolean?,
 ) : Parcelable {
     fun getAvailabilityString(): String {
         //this method is used for analytics
