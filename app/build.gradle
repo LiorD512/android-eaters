@@ -8,14 +8,14 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 
 android {
-//    signingConfigs {
-//        signing_config {
-//            storeFile file('D:\\Monkeytech\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
-//            storePassword 'kofkof12'
-//            keyPassword 'kofkof12'
-//            keyAlias = 'woodSpoonEaters'
-//        }
-//    }
+    signingConfigs {
+        signing_config {
+            storeFile file('D:\\Monkeytech\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
+            storePassword 'kofkof12'
+            keyPassword 'kofkof12'
+            keyAlias = 'woodSpoonEaters'
+        }
+    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -25,7 +25,7 @@ android {
         applicationId "com.bupp.wood_spoon_eaters"
         versionCode 98
         versionName "2.3.7"
-//        signingConfig signingConfigs.debug
+        signingConfig signingConfigs.debug
     }
 
 
@@ -40,9 +40,9 @@ android {
             applicationIdSuffix = ".staging"
         }
         getByName("release") {
-            debuggable false
-            shrinkResources true
-            minifyEnabled true
+            debuggable true
+//            shrinkResources true
+//            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders["isTestMode"] = "false"
 
@@ -127,7 +127,8 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.5.0'
 
     //utils
-    implementation 'com.stripe:stripe-android:16.1.1'
+//    implementation 'com.stripe:stripe-android:16.1.1'
+    implementation 'com.stripe:stripe-android:18.2.0'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation "in.co.ophio:secure-preferences:0.1.3"
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'

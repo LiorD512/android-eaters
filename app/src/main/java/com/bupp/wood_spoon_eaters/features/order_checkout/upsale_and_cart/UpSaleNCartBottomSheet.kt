@@ -152,7 +152,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun refreshButtonPosition() {
-        binding!!.floatingCartBtnLayout.waitForLayout {
+        binding?.floatingCartBtnLayout?.waitForLayout {
             val height = getScreenHeight()
             val yPos = height - (buttonHeight).toFloat() - currentSheetView!!.y
             binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
