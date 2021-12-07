@@ -39,13 +39,14 @@ class FeedAdapterRestaurantViewHolder(
     @SuppressLint("SetTextI18n")
     fun bindItems(restaurantSection: FeedAdapterRestaurant, listener: FeedAdapterRestaurantViewHolderListener, parentAdapterPosition: Int) {
         restaurantSection.restaurantSection.let { restaurant ->
-            Log.d("wowProcessFeedData", "bindItems - ${restaurantSection.restaurantSection.restaurantName} - pos ${restaurantSection.id}")
+            Log.d("wowProcessFeedData", "chef - ${restaurantSection.restaurantSection.restaurantName} - flag ${restaurant.flagUrl}")
             with(binding) {
                 Glide.with(context).load(restaurant.chefThumbnail?.url).circleCrop().into(feedRestaurantItemChefImage)
-                restaurant.flagUrl?.let {
-                    Glide.with(context).load(it).circleCrop().into(feedRestaurantItemChefFlag)
+                if(restaurant.flagUrl != null) {
+                    Glide.with(context).load(restaurant.flagUrl).circleCrop().into(feedRestaurantItemChefFlag)
 //                    feedRestaurantItemChefFlag.text = CountryCodeUtils.countryCodeToEmojiFlag(it.uppercase(Locale.ROOT))
-
+                }else{
+                    Glide.with(context).load("").circleCrop().into(feedRestaurantItemChefFlag)
                 }
                 feedRestaurantItemRestaurantName.text = restaurant.restaurantName
                 feedRestaurantItemChefName.text = "By ${restaurant.chefName}"

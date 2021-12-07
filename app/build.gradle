@@ -25,7 +25,7 @@ android {
         applicationId "com.bupp.wood_spoon_eaters"
         versionCode 98
         versionName "2.3.7"
-        signingConfig signingConfigs.debug
+//        signingConfig signingConfigs.debug
     }
 
 
@@ -34,15 +34,15 @@ android {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
 
-            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/v2/"'
+            buildConfigField "String", "BASE_URL", '"https://api.eatwoodspoon-staging.com/api/v2/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
 
             applicationIdSuffix = ".staging"
         }
         getByName("release") {
-            debuggable true
-//            shrinkResources true
-//            minifyEnabled true
+            debuggable false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders["isTestMode"] = "false"
 
@@ -125,6 +125,9 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.android.libraries.places:places:2.5.0'
+
+    //split
+    implementation 'io.split.client:android-client:2.8.1'
 
     //utils
 //    implementation 'com.stripe:stripe-android:16.1.1'
