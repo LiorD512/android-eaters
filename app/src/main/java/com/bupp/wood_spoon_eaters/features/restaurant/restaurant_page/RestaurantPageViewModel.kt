@@ -28,7 +28,7 @@ class RestaurantPageViewModel(
     private val eventsManager: EventsManager,
     private val metaDataManager: MetaDataRepository,
 
-) : ViewModel() {
+    ) : ViewModel() {
     var currentRestaurantId: Long = -1
 
     var currentCookingSlot: CookingSlot? = null
@@ -44,6 +44,7 @@ class RestaurantPageViewModel(
 
     var dishListData: List<DishSections> = emptyList()
     val dishListLiveData = MutableLiveData<DishListData>()
+    val dishSearchListLiveData = MutableLiveData<DishListData>()
 
     data class DishListData(val dishes: List<DishSections>, val animateList: Boolean = true)
 
@@ -87,7 +88,7 @@ class RestaurantPageViewModel(
                         handleDeliveryTimingSection(restaurant)
                         chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
                     }
-                }else if (result.type == SERVER_ERROR) {
+                } else if (result.type == SERVER_ERROR) {
                     dishListLiveData.postValue(DishListData(emptyList()))
                 }
             }
@@ -124,8 +125,7 @@ class RestaurantPageViewModel(
             currentCookingSlot?.let {
                 onCookingSlotSelected(currentCookingSlot, true)
             }
-        }
-        else if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
+        } else if (cartManager.hasOpenCartInRestaurant(restaurant.id)) {
             /**  case2 : has open cart - get the cooking slot of the current order **/
             val orderCookingSlot = cartManager.getCurrentCookingSlot()
             orderCookingSlot?.let {
@@ -454,6 +454,44 @@ class RestaurantPageViewModel(
             val result = restaurantRepository.unlikeCook(currentRestaurantId)
             favoriteEvent.postRawValue(result.type == SUCCESS)
         }
+    }
+
+    fun initDishSearch() {
+        dishSearchListLiveData.postValue(DishListData(listOf(DishSectionSearchEmpty())))
+    }
+
+    fun filterDishSearch(input: String) {
+        val currentDishes = dishListLiveData.value
+        val filteredList: MutableList<DishSections> = mutableListOf()
+        val availableArr: MutableList<DishSections> = mutableListOf()
+        val unAvailableArr: MutableList<DishSections> = mutableListOf()
+        var unavailableHeaderIndex = -1
+        currentDishes?.dishes?.forEachIndexed { index, dishSections ->
+            if(dishSections.viewType == DishSectionsViewType.AVAILABLE_HEADER){
+                filteredList.add(dishSections)
+            }
+            if(dishSections.viewType == DishSectionsViewType.UNAVAILABLE_HEADER){
+                unavailableHeaderIndex = index
+            }
+            if(dishSections.menuItem?.dish?.name?.lowercase()?.contains(input.lowercase()) == true){
+                if(unavailableHeaderIndex > -1 && index > unavailableHeaderIndex){
+                    unAvailableArr.add(dishSections)
+                }else{
+                    availableArr.add(dishSections)
+                }
+            }
+        }
+        if(availableArr.isEmpty()){
+            filteredList.clear()
+        }else{
+            filteredList.addAll(availableArr)
+        }
+        if(unAvailableArr.isNotEmpty()){
+            filteredList.add(DishSectionUnavailableHeader())
+            filteredList.addAll(unAvailableArr)
+        }
+        dishSearchListLiveData.postValue(DishListData(filteredList))
+
     }
 
     companion object {

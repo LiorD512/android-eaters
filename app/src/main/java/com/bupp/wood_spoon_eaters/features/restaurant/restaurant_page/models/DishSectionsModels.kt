@@ -50,9 +50,20 @@ class DishSectionSkeleton(
     }
 }
 
+class DishSectionSearchEmpty(
+    override val menuItem: MenuItem? = null,
+    override var cartQuantity: Int = 0,
+    override val isSwipeable: Boolean = false
+) : DishSections(viewType = EMPTY_SEARCH) {
+    companion object {
+        val viewType = EMPTY_SEARCH
+    }
+}
+
 enum class DishSectionsViewType {
     AVAILABLE_HEADER,
     UNAVAILABLE_HEADER,
     SINGLE_DISH,
-    SKELETON
+    SKELETON,
+    EMPTY_SEARCH
 }

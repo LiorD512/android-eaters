@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 import com.bupp.wood_spoon_eaters.databinding.*
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.*
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSingleDish
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderAvailableHeader
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderSkeleton
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders.DishViewHolderUnavailableHeader
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 
 class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
@@ -51,6 +48,10 @@ class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
             DishSectionSkeleton.viewType.ordinal ->{
                 val binding = ItemRestaurantDishSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return DishViewHolderSkeleton(binding)
+            }
+            DishSectionSearchEmpty.viewType.ordinal ->{
+                val binding = ItemRestaurantDishSearchEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return DishViewHolderSearchEmpty(binding)
             }
         }
        throw Exception("Specify a ViewHolder for given viewType : viewType = $viewType")

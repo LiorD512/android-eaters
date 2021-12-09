@@ -80,6 +80,7 @@ val appModule = module {
     single { PaymentManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { CampaignManager(get()) }
+    single { FeatureFlagManager() }
     single { MediaUploadManager(get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
     single { CartManager(get(), get(), get()) }
@@ -143,7 +144,7 @@ val appModule = module {
     viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
 
     //RestaurantPage
-    viewModel { RestaurantMainViewModel(get(), get(),get()) }
+    viewModel { RestaurantMainViewModel(get(), get(),get(), get()) }
     viewModel { RestaurantPageViewModel(get(), get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }

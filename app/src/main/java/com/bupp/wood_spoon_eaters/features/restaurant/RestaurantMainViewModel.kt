@@ -8,26 +8,31 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_search.DishSearchFragmentDirections
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 
 class RestaurantMainViewModel(
     private val flowEventsManager: FlowEventsManager,
     private val eventsManager: EventsManager,
-    cartManager: CartManager
+    cartManager: CartManager,
+    featureFlagManager: FeatureFlagManager
     ) : ViewModel() {
 
     private var shouldForceRefresh = false
     val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
+    val featureFlagEvent = featureFlagManager.getFeatureFlags()
 
     enum class NavigationType {
         OPEN_DISH_PAGE,
         START_ORDER_CHECKOUT_ACTIVITY,
         FINISH_RESTAURANT_ACTIVITY,
+        OPEN_DISH_SEARCH,
     }
 
     data class NavigationEvent(
@@ -46,6 +51,10 @@ class RestaurantMainViewModel(
             NavigationType.START_ORDER_CHECKOUT_ACTIVITY -> {
                 navigationEvent.postRawValue(NavigationEvent(navigationType, null))
             }
+            NavigationType.OPEN_DISH_SEARCH -> {
+                val direction = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishSearchFragment()
+                navigationEvent.postRawValue(NavigationEvent(navigationType, direction))
+            }
             else -> {}
         }
     }
@@ -54,7 +63,7 @@ class RestaurantMainViewModel(
         reOpenCartEvent.postValue(true)
     }
 
-    fun openDishPage(menuItem: MenuItem, curCookingSlot: CookingSlot?) {
+    fun openDishPage(menuItem: MenuItem, curCookingSlot: CookingSlot?, isFromSearch: Boolean = false) {
         val dishSectionTitle = menuItem.sectionTitle.toString()
         val dishOrderInSection = menuItem.dishOrderInSection
         val extras = DishInitParams(
@@ -64,8 +73,13 @@ class RestaurantMainViewModel(
             dishSectionTitle = dishSectionTitle,
             dishOrderInSection = dishOrderInSection
         )
-        val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
-        navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
+        if(isFromSearch){
+            val action = DishSearchFragmentDirections.actionDishSearchFragmentToDishPageFragment(extras)
+            navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
+        }else{
+            val action = RestaurantPageFragmentDirections.actionRestaurantPageFragmentToDishPageFragment(extras)
+            navigationEvent.postRawValue(NavigationEvent(NavigationType.OPEN_DISH_PAGE, action))
+        }
     }
 
     fun openDishPageWithOrderItem(customOrderItem: CustomOrderItem, finishToFeed: Boolean = false) {

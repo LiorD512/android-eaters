@@ -29,6 +29,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
@@ -51,13 +52,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private var binding: FragmentRestaurantPageBinding? = null
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
-    private val viewModel by viewModel<RestaurantPageViewModel>()
+    private val viewModel by sharedViewModel<RestaurantPageViewModel>()
 
     var adapterDishes: DishesMainAdapter? = null
 
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
 
-    var dishDividerDecoration: RecyclerView.ItemDecoration? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -102,7 +102,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             adapterDishes = DishesMainAdapter(getDishesAdapterListener())
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-            dishDividerDecoration = DividerItemDecoratorDish(divider)
+            val dishDividerDecoration = DividerItemDecoratorDish(divider)
             dishDividerDecoration?.let {
                 restaurantDishesList.addItemDecoration(it)
             }
@@ -113,7 +113,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantNoNetwork.visibility = View.INVISIBLE
                 viewModel.reloadPage(false)
             }
+            searchFragInput.setOnClickListener { openSearchDish() }
         }
+    }
+
+    private fun openSearchDish() {
+        mainViewModel.handleNavigation(RestaurantMainViewModel.NavigationType.OPEN_DISH_SEARCH)
     }
 
 
@@ -183,6 +188,19 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
             reOpenCart()
         })
+        mainViewModel.featureFlagEvent.observe(viewLifecycleOwner, {
+            handleFeatureFlagData(it)
+        })
+    }
+
+    private fun handleFeatureFlagData(event: List<FeatureFlagManager.FeatureFlag>?) {
+        event?.let{
+            it.forEach {
+                if(it.featureFlagType == FeatureFlagManager.FeatureFlagType.SEARCH_IN_RESTAURANT && it.isOn.not()){
+                    binding!!.restaurantMainListLayout.searchFragInput.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun reOpenCart() {
@@ -203,6 +221,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
+            restaurantMainListLayout.searchFragInput.hint = "Search ${params.restaurantName}"
         }
     }
 

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.view_holders
 
+import com.bupp.wood_spoon_eaters.databinding.ItemRestaurantDishSearchEmptyBinding
 import com.bupp.wood_spoon_eaters.databinding.RestaurantItemAvailableLaterBinding
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionUnavailableHeader
@@ -11,6 +12,15 @@ class DishViewHolderUnavailableHeader(val binding: RestaurantItemAvailableLaterB
 
     override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
         section as DishSectionUnavailableHeader
+    }
+
+}
+
+class DishViewHolderSearchEmpty(val binding: ItemRestaurantDishSearchEmptyBinding) : DishesMainAdapter.BaseItemViewHolder(binding.root) {
+    override val isSwipeable: Boolean = false
+
+    override fun bind(section: DishSections, listener: DishesMainAdapter.DishesMainAdapterListener) {
+        section as DishViewHolderSearchEmpty
     }
 
 }

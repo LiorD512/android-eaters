@@ -109,8 +109,10 @@ class RestaurantActivity : BaseActivity() {
                 RestaurantMainViewModel.NavigationType.START_ORDER_CHECKOUT_ACTIVITY -> {
                     startCheckoutForResult.launch(Intent(this, OrderCheckoutActivity::class.java))
                 }
-                RestaurantMainViewModel.NavigationType.FINISH_RESTAURANT_ACTIVITY -> {
-
+                RestaurantMainViewModel.NavigationType.OPEN_DISH_SEARCH -> {
+                    it.navDirections?.let { it1 ->
+                        findNavController(R.id.restaurantActContainer).navigate(it1)
+                    }
                 }
                 else -> {
                 }
