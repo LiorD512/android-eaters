@@ -44,13 +44,11 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         binding = ActivityLocationAndAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-//        Analytics.with(this).screen("Manage addresses")
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ADDRESSES)
-//        viewModel.checkIntentParam(intent)
 
         initUi()
         initObservers()
+
     }
 
     private fun initUi() {
