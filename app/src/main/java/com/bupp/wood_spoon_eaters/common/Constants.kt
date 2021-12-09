@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.common
 
+import com.squareup.moshi.Json
+
 class Constants {
     companion object {
 
@@ -246,7 +248,8 @@ class Constants {
         const val EVENT_PROCEED_TO_CHECKOUT = "proceed_checkout"
         const val EVENT_CLICK_TIP = "click_tip"
 
-
+        //feature flags
+        const val SEARCH_IN_RESTAURANT = "search_in_restaurant"
 
         const val MINIMUM_LOCATION_DISTANCE = 100
     }

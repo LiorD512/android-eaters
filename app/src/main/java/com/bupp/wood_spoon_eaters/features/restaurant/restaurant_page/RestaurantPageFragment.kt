@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
@@ -36,8 +35,8 @@ import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.bupp.wood_spoon_eaters.views.FavoriteBtn
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+import io.split.android.client.SplitClient
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
@@ -193,12 +192,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         })
     }
 
-    private fun handleFeatureFlagData(event: List<FeatureFlagManager.FeatureFlag>?) {
-        event?.let{
-            it.forEach {
-                if(it.featureFlagType == FeatureFlagManager.FeatureFlagType.SEARCH_IN_RESTAURANT && it.isOn.not()){
-                    binding!!.restaurantMainListLayout.searchFragInput.visibility = View.GONE
-                }
+    private fun handleFeatureFlagData(client: SplitClient?) {
+        client?.let{
+            val restaurantSearch = client.getTreatment(Constants.SEARCH_IN_RESTAURANT)
+            if(restaurantSearch == "off"){
+                binding!!.restaurantMainListLayout.searchFragInput.visibility = View.GONE
             }
         }
     }

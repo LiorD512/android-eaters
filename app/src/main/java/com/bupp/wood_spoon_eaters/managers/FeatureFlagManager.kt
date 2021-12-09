@@ -31,28 +31,27 @@ class FeatureFlagManager {
         fetchSplitData()
     }
 
-    enum class FeatureFlagType{
-        @Json(name = "search_in_restaurant") SEARCH_IN_RESTAURANT
-    }
 
 
-    data class FeatureFlag(val featureFlagType: FeatureFlagType, val isOn: Boolean)
-    val featureFlagData = MutableLiveData<List<FeatureFlag>>()
+
+//    data class FeatureFlag(val featureFlagType: FeatureFlagType, val isOn: Boolean)
+    val featureFlagData = MutableLiveData<SplitClient?>()
     fun getFeatureFlags() = featureFlagData
     private fun fetchSplitData(){
         client.on(SplitEvent.SDK_READY, object: SplitEventTask(){
             override fun onPostExecutionView(client: SplitClient?) {
-                handleSplitData(client)
+                featureFlagData.postValue(client)
+//                handleSplitData(client)
             }
         })
     }
 
-    private fun handleSplitData(client: SplitClient?) {
-        val featureFlags = mutableListOf<FeatureFlag>()
-        client?.let{
-            val restaurantSearch = client.getTreatment(FeatureFlagType.SEARCH_IN_RESTAURANT.name)
-            featureFlags.add(FeatureFlag(FeatureFlagType.SEARCH_IN_RESTAURANT, restaurantSearch == "on"))
-        }
-        featureFlagData.postValue(featureFlags)
-    }
+//    private fun handleSplitData(client: SplitClient?) {
+//        val featureFlags = mutableListOf<FeatureFlag>()
+//        client?.let{
+//            val restaurantSearch = client.getTreatment(FeatureFlagType.SEARCH_IN_RESTAURANT.name)
+//            featureFlags.add(FeatureFlag(FeatureFlagType.SEARCH_IN_RESTAURANT, restaurantSearch == "on"))
+//        }
+////        featureFlagData.postValue(featureFlags)
+//    }
 }
