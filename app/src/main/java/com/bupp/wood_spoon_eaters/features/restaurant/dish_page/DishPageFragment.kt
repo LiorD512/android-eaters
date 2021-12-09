@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDial
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DietariesAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
+import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishPhotosAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -37,6 +38,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     private var binding: FragmentDishPageBinding? = null
     private val viewModel by viewModel<DishPageViewModel>()
+    private var dishPhotosAdapter: DishPhotosAdapter? = null
 
     var availableTimesAdapter: DishAvailabilityAdapter? = null
 
@@ -68,6 +70,9 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
             availableTimesAdapter = DishAvailabilityAdapter()
             dishFragMainListLayout.dishFragDescription.initExpandableTextView(this@DishPageFragment)
+
+            dishPhotosAdapter = DishPhotosAdapter(requireContext())
+            dishFragPhotosPager.adapter = dishPhotosAdapter
         }
     }
 
@@ -269,6 +274,8 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             //Additional Details
             dishFragAdditionalDetailsLayout.isVisible = !dish.instruction.isNullOrEmpty()
             dishFragAdditionalDetails.text = dish.instruction
+
+//            dishPhotosAdapter?.setDishPhotos(dish.imageGallery)
         }
     }
 

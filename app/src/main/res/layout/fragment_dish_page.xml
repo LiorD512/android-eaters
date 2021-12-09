@@ -24,6 +24,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/dishFragPhotosPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <me.relex.circleindicator.CircleIndicator3
+                app:ci_height="10dp"
+                app:ci_width="10dp"
+                app:ci_animator="@anim/circle_indicator_anim"
+                app:ci_drawable="@drawable/vp_dark_indicator_selected"
+                app:ci_drawable_unselected="@drawable/vp_dark_indicator_unselected"
+                app:ci_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:layout_gravity="bottom"
+                android:id="@+id/dishFragPhotosIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"/>
+
         <ImageView
                 android:id="@+id/dishFragCoverPhoto"
                 android:layout_width="match_parent"

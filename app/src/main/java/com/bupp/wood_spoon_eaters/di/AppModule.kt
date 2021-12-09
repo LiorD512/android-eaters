@@ -101,7 +101,7 @@ val appModule = module {
 
 
     //location
-    viewModel { LocationAndAddressViewModel(get(), get(), get(), get()) }
+    viewModel { LocationAndAddressViewModel(get(), get(), get(), get(), get()) }
     viewModel { SelectAddressViewModel(get(), get(), get()) }
     viewModel { AddressMapVerificationViewModel(get(), get(), get()) }
 
