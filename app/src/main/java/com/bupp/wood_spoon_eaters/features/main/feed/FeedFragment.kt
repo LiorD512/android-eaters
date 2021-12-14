@@ -1,10 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
@@ -12,13 +11,12 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePick
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
-import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.features.reviews.review_activity.ReviewActivity
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.feed_header.FeedHeaderView
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
@@ -254,6 +252,12 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         viewModel.onPullToRefresh()
     }
 
+    override fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection) {
+        comingSoonData.successSubtitle?.let{
+            showErrorToast(it, binding!!.root, Toast.LENGTH_LONG)
+        }
+        //viewModel.onComingSoonBtnClick(zoneId)
+    }
 
 
     override fun onResume() {

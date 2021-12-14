@@ -10,6 +10,7 @@ class Constants {
         const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
         const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
         const val SECTION_EMPTY_SEARCH = "section_empty_no_matches"
+        const val SECTION_COMING_SOON = "coming_soon"
         const val RESTAURANT_SECTION_TYPE_DISH = "dish"
         const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
 
@@ -249,7 +250,7 @@ class Constants {
         const val EVENT_CLICK_TIP = "click_tip"
 
         //feature flags
-        const val SEARCH_IN_RESTAURANT = "search_in_restaurant"
+        const val SEARCH_IN_RESTAURANT = "android_show_search_in_restaurant"
 
         const val MINIMUM_LOCATION_DISTANCE = 100
     }

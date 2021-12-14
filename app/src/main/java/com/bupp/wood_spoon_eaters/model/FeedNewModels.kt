@@ -67,6 +67,18 @@ data class FeedSearchEmptySection(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+data class FeedComingSoonSection(
+    override val href: String? = null,
+    override val items: List<Campaign>? = null,
+    @Json(name = "title") val title: String?,
+    @Json(name = "subtitle") val subtitle: String?,
+    @Json(name = "success_subtitle") val successSubtitle: String?,
+    @Json(name = "city_photo") val cityPhoto: WSImage?,
+    @Json(name = "operational_zone_id") val operationalZoneId: Long?
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.COMING_SONG)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
 data class FeedSearchTagsEmptySection(
     val id: Long = -1
 ): Parcelable
@@ -182,6 +194,8 @@ enum class FeedModelsViewType {
     EMPTY_SECTION,
     @Json(name = "section_empty_no_matches")
     EMPTY_SEARCH,
+    @Json(name = "coming_soon")
+    COMING_SONG,
 }
 
 enum class FeedRestaurantSectionItemViewType{
@@ -209,6 +223,7 @@ enum class FeedAdapterViewType {
     NO_NETWORK_SECTION,
     SKELETON,
     SKELETON_SEARCH,
+    COMING_SOON,
     HREF
 }
 
@@ -262,6 +277,11 @@ data class FeedAdapterEmptyFeed(
 data class FeedAdapterEmptySection(
     val emptySection: FeedSingleEmptySection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.EMPTY_SECTION)
+
+@Parcelize
+data class FeedAdapterComingSoonSection(
+    val comingSoonSection: FeedComingSoonSection, override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.COMING_SOON)
 
 @Parcelize
 data class FeedAdapterNoNetworkSection(

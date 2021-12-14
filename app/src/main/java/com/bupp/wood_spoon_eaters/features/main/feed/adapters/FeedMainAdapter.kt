@@ -35,6 +35,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
         fun onChangeAddressClick()
         fun onDishSwiped()
         fun onRefreshFeedClick()
+        fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection)
 
         //Search
         fun onTagClick(tag: String){}
@@ -88,6 +89,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
             FeedAdapterViewType.EMPTY_SECTION.ordinal -> {
                 val binding = FeedAdapterEmptySectionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterEmptySectionViewHolder(binding)
+            }
+            FeedAdapterViewType.COMING_SOON.ordinal -> {
+                val binding = FeedAdapterComingSoonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterComingSoonViewHolder(binding, listener)
             }
             FeedAdapterViewType.EMPTY_SEARCH.ordinal -> {
                 val binding = SearchItemEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -146,6 +151,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
             }
             is FeedAdapterEmptySection -> {
                 holder as FeedAdapterEmptySectionViewHolder
+                holder.bindItems(section)
+            }
+            is FeedAdapterComingSoonSection -> {
+                holder as FeedAdapterComingSoonViewHolder
                 holder.bindItems(section)
             }
             is FeedAdapterNoNetworkSection -> {

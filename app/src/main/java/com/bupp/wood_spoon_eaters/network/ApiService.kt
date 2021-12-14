@@ -6,19 +6,18 @@ import com.bupp.wood_spoon_eaters.model.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
 
     //AppConfig
-    @V3
+    @VERSION("v3")
     @GET("eaters/utils/config")
     suspend fun getAppSettings(): ServerResponse<AppSettings>
 
     //MetaData
-    @V3
+    @VERSION("v3")
     @GET("eaters/utils/meta")
     suspend fun getMetaData(): ServerResponse<MetaDataModel>
 
@@ -32,7 +31,7 @@ interface ApiService {
     suspend fun validateCode(@Field("phone_number") phone: String, @Field("code") code: String): ServerResponse<Eater>
 
     //New Order
-    @V3
+    @VERSION("v3")
     @GET("cooks/{cook_id}/reviews")
     suspend fun getCookReview(@Path(value = "cook_id", encoded = true) cookId: Long): ServerResponse<Review>
 
@@ -47,13 +46,14 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
     ): ServerResponse<List<FeedRestaurantSection>>
 
-    @V3
+    @VERSION()
     @GET("eaters/me/search/tags")
     suspend fun getSearchTags(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null): ServerResponse<List<String>>
 
-    @V3
+//    @VERSION()
+    @VERSION("v4")
     @GET("eaters/me/search")
     suspend fun search(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
@@ -61,6 +61,7 @@ interface ApiService {
         @Query("q") q: String? = null
     ): ServerResponse<FeedResult>
 
+    @VERSION("v3")
     @GET("eaters/me/feed")
     suspend fun getFeed(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
@@ -192,7 +193,7 @@ interface ApiService {
     suspend fun postReport(@Path(value = "order_id", encoded = true) orderId: Long, @Body reports: Reports): ServerResponse<Any>
 
     //Post Review
-    @V3
+    @VERSION("v3")
     @POST("eaters/me/orders/{order_id}/reviews")
     suspend fun postReview(@Path(value = "order_id", encoded = true) orderId: Long, @Body reviewRequest: ReviewRequest): ServerResponse<Any>
 

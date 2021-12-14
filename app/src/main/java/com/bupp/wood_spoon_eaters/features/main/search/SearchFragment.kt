@@ -4,29 +4,23 @@ import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
-import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.InputTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Campaign
+import com.bupp.wood_spoon_eaters.model.FeedComingSoonSection
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
-import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
 import com.monkeytech.brenda.common.item_decorators.SpacesItemDecoration
-import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -161,6 +155,10 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
         }else{
             viewModel.searchInput(input)
         }
+    }
+
+    override fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection) {
+        //do nothing
     }
 
     override fun onResume() {

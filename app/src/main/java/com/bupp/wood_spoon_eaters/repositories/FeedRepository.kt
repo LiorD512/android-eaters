@@ -128,6 +128,10 @@ class FeedRepository(
                         Log.d("wowProcessFeedData", "adding search empty - $localId")
                         feedData.add(FeedAdapterEmptySearch(feedSectionCollectionItem, localId))
                     }
+                    is FeedComingSoonSection -> {
+                        Log.d("wowProcessFeedData", "adding coming soon section")
+                        feedData.add(FeedAdapterComingSoonSection(feedSectionCollectionItem, localId))
+                    }
                     is FeedRestaurantSection -> {
                         Log.d("wowProcessFeedData", "adding rest  - $localId")
                         feedSectionCollectionItem.flagUrl = metaDataManager.getCountryFlagById(feedSectionCollectionItem.countryId)

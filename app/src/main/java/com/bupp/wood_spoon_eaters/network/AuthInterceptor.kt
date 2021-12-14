@@ -66,14 +66,15 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     private fun buildVersionPath(request: Request): Request {
         Log.d(TAG, "buildVersionPath - VERSION_PLACE_HOLDER")
         val invocation = request.tag(Invocation::class.java)
-        val version = invocation?.method()?.getAnnotation(V3::class.java)
+        val version = invocation?.method()?.getAnnotation(VERSION::class.java)
+
 
         var url = request.url.toUrl().toString()
 
         if (version != null) {
             //Annotation is present
-            url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, "v3")
-            Log.d(TAG, "version: $version - v3 - $url")
+            url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, version.version)
+            Log.d(TAG, "version: ${version.version} - $url")
         } else {
             //No annotation
             Log.d(TAG, "version: $version - v2")

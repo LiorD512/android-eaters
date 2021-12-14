@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.facebook.FacebookSdk.getApplicationContext
 import com.squareup.moshi.Json
@@ -17,7 +18,7 @@ import io.split.android.client.events.SplitEventTask
 
 class FeatureFlagManager {
 
-    var apikey = "YOUR_API_KEY"
+    var apikey = "c4gj4v8i6uh178hpjjajq231nmvhucma6f2h"
 
     var config = SplitClientConfig.builder().build()
 
@@ -42,6 +43,11 @@ class FeatureFlagManager {
             override fun onPostExecutionView(client: SplitClient?) {
                 featureFlagData.postValue(client)
 //                handleSplitData(client)
+            }
+
+            override fun onPostExecution(client: SplitClient?) {
+                super.onPostExecution(client)
+                Log.d("wow","onPostExecution")
             }
         })
     }
