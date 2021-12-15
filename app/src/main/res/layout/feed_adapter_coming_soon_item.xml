@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/feedFragEmptyLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:visibility="visible"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
-    <ImageView
-            android:id="@+id/comingSoonImg"
-            android:layout_marginTop="15.4dp"
-            android:layout_marginHorizontal="15.4dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:src="@drawable/ic_cookie"
+    <ScrollView
+            android:fillViewport="true"
             android:layout_width="match_parent"
-            android:layout_height="359dp"/>
+            android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/comingSoonTitle"
-            android:layout_margin="15.4dp"
-            app:layout_constraintTop_toBottomOf="@+id/comingSoonImg"
-            style="@style/LatoBlack23Dark"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/feedFragEmptyLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:letterSpacing="-0.01"
-            android:lineSpacingExtra="7.7sp"
-            tools:text="Hello Atlanta, we’re\n
-coming to you in 1 day!"/>
+            android:background="@color/white"
+            tools:visibility="visible">
 
-    <TextView
-            android:layout_margin="15.4dp"
-            app:layout_constraintTop_toBottomOf="@+id/comingSoonTitle"
-            android:id="@+id/comingSoonSubtitle"
-            style="@style/LatoBold13DarkGrey"
-            android:layout_width="match_parent"
-            android:layout_height="40.32000000000005dp"
-            android:letterSpacing="-0.01"
-            android:lineSpacingExtra="6.7sp"
-            tools:text="Sign up to be notified and receive a free order
-When we launch on November 15."/>
+        <ImageView
+                android:id="@+id/comingSoonImg"
+                android:layout_width="match_parent"
+                android:layout_height="359dp"
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginTop="15.4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_cookie" />
 
-    <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-            android:id="@+id/comingSoonBtn"
-            android:layout_margin="15.4dp"
-            app:title="Notify me when you are here"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/comingSoonTitle"
+                style="@style/LatoBlack23Dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15.4dp"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="7.7sp"
+                app:layout_constraintTop_toBottomOf="@+id/comingSoonImg"
+                tools:text="Hello Atlanta, we’re\n
+coming to you in 1 day!" />
+
+        <TextView
+                android:id="@+id/comingSoonSubtitle"
+                style="@style/LatoBold13DarkGrey"
+                android:layout_width="match_parent"
+                android:layout_height="40.32000000000005dp"
+                android:layout_margin="15.4dp"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="6.7sp"
+                app:layout_constraintTop_toBottomOf="@+id/comingSoonTitle"
+                tools:text="Sign up to be notified and receive a free order
+When we launch on November 15." />
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                android:id="@+id/comingSoonBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15.4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:title="Notify me when you are here" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>
