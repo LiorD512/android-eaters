@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -27,8 +28,7 @@ class RestaurantPageViewModel(
     private val feedDataManager: FeedDataManager,
     private val eventsManager: EventsManager,
     private val metaDataManager: MetaDataRepository,
-
-    ) : ViewModel() {
+    private val featureFlagManager: FeatureFlagManager) : ViewModel() {
     var currentRestaurantId: Long = -1
 
     var currentCookingSlot: CookingSlot? = null
@@ -55,6 +55,10 @@ class RestaurantPageViewModel(
     val onCookingSlotForceChange = cartManager.getOnCookingSlotIdChange()
 
     val progressData = ProgressData()
+
+    init {
+        featureFlagManager.fetchSplitData()
+    }
 
     fun handleInitialParamData(params: RestaurantInitParams) {
         if (initialParamData.value == null) {

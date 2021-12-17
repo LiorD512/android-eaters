@@ -78,7 +78,7 @@ class AppSettingsRepository(private val apiService: AppSettingsRepositoryImpl) {
 
     fun getReportsEmailAddress(): String {
         for (settings in getSettings()){
-            if(settings.key == "reports_email")
+            if(settings.key == "client_support_email")
                 return settings.value!! as String
         }
         return ""
