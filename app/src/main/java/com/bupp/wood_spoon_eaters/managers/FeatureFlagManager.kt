@@ -1,7 +1,11 @@
 package com.bupp.wood_spoon_eaters.managers
 
+import android.content.Context
+import android.content.res.Resources
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.facebook.FacebookSdk.getApplicationContext
 import com.squareup.moshi.Json
@@ -17,16 +21,18 @@ import io.split.android.client.events.SplitEvent
 import io.split.android.client.events.SplitEventTask
 
 
-class FeatureFlagManager(userRepository: UserRepository) {
+class FeatureFlagManager(val context: Context, userRepository: UserRepository) {
 
-    var apikey = "ch7l69h7l4549d3kvm4dnaqtdvtbvsbo79rb"
+
+    val apiKey = context.getString(R.string.split_api_key)
+//    var apikey = "tnnt5987lhgpksrgfkm62563ar1smqb0492o"
 
     var config = SplitClientConfig.builder().build()
 
     var matchingKey = "Eater-${userRepository.getUser()?.id}"
     var k: Key = Key(matchingKey)
 
-    var splitFactory = SplitFactoryBuilder.build(apikey, k, config, getApplicationContext())
+    var splitFactory = SplitFactoryBuilder.build(apiKey, k, config, getApplicationContext())
     var client = splitFactory.client()
 
 
@@ -34,7 +40,7 @@ class FeatureFlagManager(userRepository: UserRepository) {
     val featureFlagData = MutableLiveData<SplitClient?>()
     fun getFeatureFlags() = featureFlagData
     fun fetchSplitData(){
-        val isReady = client.isReady
+//        val isReady = client.isReady
         client.on(SplitEvent.SDK_READY, object: SplitEventTask(){
             override fun onPostExecutionView(client: SplitClient?) {
                 featureFlagData.postValue(client)

@@ -195,9 +195,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun handleFeatureFlagData(client: SplitClient?) {
         client?.let{
             val restaurantSearch = client.getTreatment(Constants.SEARCH_IN_RESTAURANT)
-            if(restaurantSearch == "off"){
-                binding!!.restaurantMainListLayout.searchFragInput.visibility = View.GONE
-            }
+                binding!!.restaurantMainListLayout.restaurantSearchLayout.isVisible = restaurantSearch == "on"
         }
     }
 

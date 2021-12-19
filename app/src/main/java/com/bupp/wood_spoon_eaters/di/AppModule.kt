@@ -80,7 +80,7 @@ val appModule = module {
     single { PaymentManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { CampaignManager(get()) }
-    single { FeatureFlagManager(get()) }
+    single { FeatureFlagManager(get(), get()) }
     single { MediaUploadManager(get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
     single { CartManager(get(), get(), get()) }

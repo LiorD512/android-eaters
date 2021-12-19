@@ -207,7 +207,8 @@ class SearchViewModel(
                                 MTLogger.c(TAG, "handleHrefApiCalls - Success counter: $counter, hrefCounter: $hrefCount")
                                 if (counter == hrefCount) {
                                     searchResultData.postValue(SearchLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
-                                    logQueryResult(input, feedRepository.feed?.size ?: 0)
+                                    val restaurants = feedRepository.feed?.filter { it.type == FeedAdapterViewType.RESTAURANT }
+                                    logQueryResult(input, restaurants?.size ?: 0)
                                 }
                             }
                             else -> {
