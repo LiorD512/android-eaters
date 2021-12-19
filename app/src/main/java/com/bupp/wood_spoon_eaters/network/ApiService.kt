@@ -53,7 +53,7 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null): ServerResponse<List<String>>
 
 //    @VERSION()
-    @VERSION("v4")
+    @VERSION("v3")
     @GET("eaters/me/search")
     suspend fun search(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,

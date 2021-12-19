@@ -165,7 +165,8 @@ class SearchViewModel(
                         handleHrefApiCalls(result.feed, hrefCount, input)
                     } else {
                         searchResultData.postValue(SearchLiveData(result.feed, result.isLargeItems))
-                        logQueryResult(input, result.feed?.size ?: 0)
+                        val restaurants = result.feed?.filter { it.type == FeedAdapterViewType.RESTAURANT }
+                        logQueryResult(input, restaurants?.size ?: 0)
                     }
                 }
                 else -> {
