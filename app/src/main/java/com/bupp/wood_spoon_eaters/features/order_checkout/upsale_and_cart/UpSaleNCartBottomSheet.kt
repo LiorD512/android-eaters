@@ -154,8 +154,10 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
     private fun refreshButtonPosition() {
         binding?.floatingCartBtnLayout?.waitForLayout {
             val height = getScreenHeight()
-            val yPos = height - (buttonHeight).toFloat() - currentSheetView!!.y
-            binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+            currentSheetView?.let{
+                val yPos = height - (buttonHeight).toFloat() - currentSheetView!!.y
+                binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+            }
 //            Log.d(TAG, "initial height: $height")
 //            Log.d(TAG, "initial currentSheetView.y: ${currentSheetView?.y}")
 //            Log.d(TAG, "initial binding.floatingCartBtnLayout.measuredHeight: ${binding.floatingCartBtnLayout.measuredHeight}")
