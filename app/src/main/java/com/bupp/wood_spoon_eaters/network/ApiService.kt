@@ -144,6 +144,7 @@ interface ApiService {
     ): ServerResponse<Cook>
 
     //New Order calls
+    @Version
     @GET("menu_items/{menu_item_id}/dish")
     suspend fun getSingleDish(
         @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
