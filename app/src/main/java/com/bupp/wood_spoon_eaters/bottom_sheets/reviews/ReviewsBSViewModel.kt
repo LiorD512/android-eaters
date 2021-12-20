@@ -45,18 +45,18 @@ class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository,
                 val result = restaurantRepository.getCookReview(id)
                 when (result.type) {
                     RestaurantRepository.RestaurantRepoStatus.EMPTY -> {
-                        Log.e(RestaurantPageViewModel.TAG, "Empty")
+                        Log.e(TAG, "Empty")
                     }
                     RestaurantRepository.RestaurantRepoStatus.SUCCESS -> {
-                        Log.e(RestaurantPageViewModel.TAG, "Success")
+                        Log.e(TAG, "Success")
                         commentListData.postValue(result.review?.comments)
                     }
                     RestaurantRepository.RestaurantRepoStatus.SERVER_ERROR -> {
-                        Log.e(RestaurantPageViewModel.TAG, "Server Error")
+                        Log.e(TAG, "Server Error")
                         errorEvent.postRawValue(emptyList())
                     }
                     RestaurantRepository.RestaurantRepoStatus.SOMETHING_WENT_WRONG -> {
-                        Log.e(RestaurantPageViewModel.TAG, "Something went wrong")
+                        Log.e(TAG, "Something went wrong")
                         errorEvent.postRawValue(emptyList())
                     }
                 }
@@ -66,6 +66,10 @@ class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository,
 
     fun logOpenScreenEvent() {
         eventsManager.logEvent(Constants.EVENT_REVIEW_SUMMERY_CLICK)
+    }
+
+    companion object{
+        const val TAG = "wowReviewVM"
     }
 
 
