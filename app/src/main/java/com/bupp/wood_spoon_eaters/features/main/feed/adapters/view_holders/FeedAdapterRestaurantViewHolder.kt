@@ -54,7 +54,7 @@ class FeedAdapterRestaurantViewHolder(
                 feedRestaurantItemRating.isVisible = restaurant.avgRating ?: 0f > 0
 
 //                adapter.setParentItemPosition(restaurantSection.id)
-                adapter.setItemLocalId(restaurantSection.id)
+                adapter.setItemLocalId(restaurantSection.id, restaurant.cookingSlot?.canOrder)
 //                Log.d("feedPosition", "restaurant.chefName - ${restaurant.chefName}")
 //                Log.d("feedPosition", "parentAdapterPosition - $parentAdapterPosition")
 
@@ -120,6 +120,7 @@ class FeedAdapterRestaurantViewHolder(
                 }else{
                     binding.feedRestaurantItemAvailability.visibility = View.INVISIBLE
                 }
+
 
                 binding.feedRestaurantItemUnavailable.isVisible = restaurant.cookingSlot?.canOrder == false
             }

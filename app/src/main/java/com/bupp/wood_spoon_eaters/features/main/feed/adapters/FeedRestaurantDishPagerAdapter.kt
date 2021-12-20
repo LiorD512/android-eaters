@@ -2,15 +2,13 @@ package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,10 +22,6 @@ import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ResizableTagsView
 import jp.wasabeef.glide.transformations.BlurTransformation
-import android.widget.Toast
-
-
-
 
 
 class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapterListener) :
@@ -35,6 +29,7 @@ class FeedRestaurantDishPagerAdapter(val listener: FeedRestaurantDishPagerAdapte
 
 private var parentItemPosition: Int = -1
 private var parentItemId: Long? = null
+private var isAvailable: Boolean? = null
     interface FeedRestaurantDishPagerAdapterListener {
         fun onPageClick(itemLocalId: Long?, position: Int)
     }
@@ -45,9 +40,10 @@ private var parentItemId: Long? = null
         this.parentItemPosition = position
     }
 
-    fun setItemLocalId(id: Long?) {
+    fun setItemLocalId(id: Long?, isAvailable: Boolean? = true) {
         Log.d("wowProcessFeedData", "setItemLocalId: $id")
         this.parentItemId = id
+        this.isAvailable = isAvailable
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
@@ -70,7 +66,7 @@ private var parentItemId: Long? = null
         when (item.data) {
             is FeedRestaurantItemDish -> {
                 holder as FeedDishViewHolder
-                holder.bindItem(listener, holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemId, position)
+                holder.bindItem(holder.itemView.context, item.data as FeedRestaurantItemDish, parentItemId, isAvailable)
 
                 holder.layout.setOnClickListener{
                     Log.d("wowProcessFeedData", "parentItemPosition: $parentItemId")
@@ -99,7 +95,12 @@ private var parentItemId: Long? = null
         private val tagView: ResizableTagsView = binding.feedRestaurantItemTags
 
         @SuppressLint("ClickableViewAccessibility")
-        fun bindItem(listener: FeedRestaurantDishPagerAdapterListener, context: Context, dish: FeedRestaurantItemDish, parentItemId: Long?, position: Int) {
+        fun bindItem(
+            context: Context,
+            dish: FeedRestaurantItemDish,
+            parentItemId: Long?,
+            isAvailable: Boolean?
+        ) {
             Log.d("wowProcessFeedData", "dishItem - bindItem: $parentItemId")
 //            dish.thumbnailHash?.let{
 //                GlideApp.with(context).load(dish.thumbnail_url)
@@ -109,10 +110,15 @@ private var parentItemId: Long? = null
 //                    }
 //            }
             GlideApp.with(context).load(dish.thumbnail?.url).thumbnail(0.1f).placeholder(R.drawable.grey_white_cornered_rect).into(thumbnail)
-            name.text = dish.name
-            price.text = dish.formatted_price
+            if(isAvailable == true){
+                name.text = dish.name
+                price.text = dish.formatted_price
 
-            tagView.setTags(dish.tags)
+                tagView.setTags(dish.tags)
+            }
+            name.isVisible = isAvailable ?: true
+            price.isVisible = isAvailable ?: true
+            tagView.isVisible = isAvailable ?: true
 
 
 

@@ -39,7 +39,7 @@ interface ApiService {
     @DELETE("eaters/me/addresses/{address_id}")
     suspend fun deleteAddress(@Path(value = "address_id", encoded = true) addressId: Long): ServerResponse<Any>
 
-
+    @VERSION("v4")
     @GET("eaters/me/feed/order_again")
     suspend fun getRecentOrders(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
@@ -178,11 +178,11 @@ interface ApiService {
     @GET("eaters/me/orders/trackable")
     suspend fun getTraceableOrders(): ServerResponse<List<Order>>
 
-    @GET("eaters/me/favorites")
-    suspend fun getEaterFavorites(
-        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
-        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
-    ): ServerResponse<Search>
+//    @GET("eaters/me/favorites")
+//    suspend fun getEaterFavorites(
+//        @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
+//        @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null
+//    ): ServerResponse<Search>
 
     @GET("eaters/me/orders")
     suspend fun getOrders(): ServerResponse<List<Order>>
