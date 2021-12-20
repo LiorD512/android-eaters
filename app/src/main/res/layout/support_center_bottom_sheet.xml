@@ -21,17 +21,21 @@
             android:background="@color/light_periwinkle_50" />
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                 <ImageView
+                        android:id="@+id/top_icon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginTop="22dp"
                         android:layout_gravity="center"
                         android:src="@drawable/illus_message"
@@ -39,6 +43,9 @@
                         android:layout_height="wrap_content"/>
 
                 <TextView
+                        android:id="@+id/title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/top_icon"
                         style="@style/LatoBlack17Dark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -48,7 +55,8 @@
                         android:text="We’re here to help!" />
 
                 <FrameLayout
-
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title"
                         android:id="@+id/supportDialogQA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -73,6 +81,9 @@
                 </FrameLayout>
 
                 <View
+                        android:id="@+id/sep1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/supportDialogQA"
                         android:layout_marginBottom="22dp"
                         android:layout_marginHorizontal="15.4dp"
                         android:background="@color/grey_white"
@@ -80,6 +91,8 @@
                         android:layout_height="1dp"/>
 
                 <LinearLayout
+                        android:id="@+id/btn_layout"
+                        app:layout_constraintTop_toBottomOf="@+id/sep1"
                         android:paddingBottom="23dp"
                         android:layout_marginHorizontal="15.4dp"
                         android:orientation="horizontal"
@@ -105,11 +118,14 @@
                 </LinearLayout>
 
                 <View
+                        android:id="@+id/sep2"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_layout"
                         android:background="@color/grey_white"
                         android:layout_width="match_parent"
                         android:layout_height="7.7dp"/>
 
                 <com.bupp.wood_spoon_eaters.views.WSCounterEditText
+                        app:layout_constraintTop_toBottomOf="@+id/sep2"
                         android:id="@+id/supportDialogCommentInput"
                         android:layout_marginHorizontal="15.4dp"
                         app:maxLines="6"
@@ -118,12 +134,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                <View
-                        android:layout_weight="1"
-                        android:layout_width="1dp"
-                        android:layout_height="0dp"/>
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                        app:layout_constraintBottom_toBottomOf="parent"
                         android:id="@+id/supportDialogNext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -133,9 +146,9 @@
                         app:title="Send" />
 
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
 

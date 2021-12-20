@@ -46,14 +46,14 @@ interface ApiService {
         @Query("address_id") addressId: Long? = null, @Query("timestamp") timestamp: String? = null,
     ): ServerResponse<List<FeedRestaurantSection>>
 
-    @VERSION()
+    @VERSION("v3")
     @GET("eaters/me/search/tags")
     suspend fun getSearchTags(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null): ServerResponse<List<String>>
 
 //    @VERSION()
-    @VERSION("v3")
+    @VERSION("v4")
     @GET("eaters/me/search")
     suspend fun search(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,
@@ -61,7 +61,7 @@ interface ApiService {
         @Query("q") q: String? = null
     ): ServerResponse<FeedResult>
 
-    @VERSION("v3")
+    @VERSION("v4")
     @GET("eaters/me/feed")
     suspend fun getFeed(
         @Query("lat") lat: Double? = null, @Query("lng") lng: Double? = null,

@@ -84,9 +84,9 @@ class CheckoutViewModel(
                     deliveryDatesLiveData.postValue(it)
                     refreshDeliveryTime()
                 }
-            }
-            if (isPendingRequest) {
-                onTimeChangeClick()
+                if (isPendingRequest) {
+                    onTimeChangeClick()
+                }
             }
         }
     }

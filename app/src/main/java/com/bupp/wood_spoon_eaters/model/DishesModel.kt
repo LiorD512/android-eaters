@@ -115,7 +115,8 @@ data class FullDish(
     @Json(name = "ingredients") var ingredients: String? = null,
     @Json(name = "portion_size") var portionSize: String? = null,
     @Json(name = "dietary_accommodations") var accommodations: String? = null,
-    @Json(name = "image_gallery") val imageGallery: List<String>? = null,
+//    @Json(name = "image_gallery") val imageGallery: List<String>? = null,
+    @Json(name = "gallery") val imagesGallery: List<WSImage>?,
     @Json(name = "available_times") val availableTimes: List<AvailabilityDate>,
     //old model
     @Json(name = "avg_rating") val rating: Double?,

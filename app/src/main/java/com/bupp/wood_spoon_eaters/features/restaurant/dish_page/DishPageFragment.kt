@@ -73,6 +73,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
             dishPhotosAdapter = DishPhotosAdapter(requireContext())
             dishFragPhotosPager.adapter = dishPhotosAdapter
+            dishFragPhotosIndicator.setViewPager(dishFragPhotosPager)
         }
     }
 
@@ -275,7 +276,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragAdditionalDetailsLayout.isVisible = !dish.instruction.isNullOrEmpty()
             dishFragAdditionalDetails.text = dish.instruction
 
-//            dishPhotosAdapter?.setDishPhotos(dish.imageGallery)
+            dish.imagesGallery?.let { dishPhotosAdapter?.setDishPhotos(it) }
         }
     }
 
