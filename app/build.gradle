@@ -23,8 +23,8 @@ android {
         targetSdkVersion 30
 
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode 98
-        versionName "2.3.7"
+        versionCode 99
+        versionName "2.3.9"
 //        signingConfig signingConfigs.debug
     }
 
@@ -34,7 +34,7 @@ android {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
 
-            buildConfigField "String", "BASE_URL", '"https://woodspoon-staging.herokuapp.com/api/v2/"'
+            buildConfigField "String", "BASE_URL", '"https://api.eatwoodspoon-staging.com/api/v2/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
 
             applicationIdSuffix = ".staging"
@@ -126,8 +126,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.android.libraries.places:places:2.5.0'
 
+    //split
+    implementation 'io.split.client:android-client:2.8.1'
+
     //utils
-    implementation 'com.stripe:stripe-android:16.1.1'
+//    implementation 'com.stripe:stripe-android:16.1.1'
+    implementation 'com.stripe:stripe-android:18.2.0'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation "in.co.ophio:secure-preferences:0.1.3"
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'

@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityLocationAndAddressBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.google.android.libraries.places.api.Places
@@ -43,13 +44,11 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
         binding = ActivityLocationAndAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-//        Analytics.with(this).screen("Manage addresses")
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ADDRESSES)
-//        viewModel.checkIntentParam(intent)
 
         initUi()
         initObservers()
+
     }
 
     private fun initUi() {
@@ -130,6 +129,25 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                 else -> {}
             }
         })
+        viewModel.globalErrorLiveData.observe(this, {
+            handleError(it)
+        })
+    }
+
+    private fun handleError(errorData: GlobalErrorManager.GlobalError?) {
+        errorData?.let {
+            when (it.type) {
+                GlobalErrorManager.GlobalErrorType.NETWORK_ERROR -> {
+//                    Toast.makeText(this, "Network Error", Toast.LENGTH_SHORT).show()
+                }
+                GlobalErrorManager.GlobalErrorType.GENERIC_ERROR -> {
+//                    Toast.makeText(this, "Server Error", Toast.LENGTH_SHORT).show()
+                }
+                GlobalErrorManager.GlobalErrorType.WS_ERROR -> {
+                    WSErrorDialog(it.wsError?.msg, null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                }
+            }
+        }
     }
 
     private fun handleProgressBar(shouldShow: Boolean?) {

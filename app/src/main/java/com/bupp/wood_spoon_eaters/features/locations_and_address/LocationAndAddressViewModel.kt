@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
@@ -22,7 +23,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
-class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager, private val flowEventsManager: FlowEventsManager) : ViewModel() {
+class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager,
+                                  private val flowEventsManager: FlowEventsManager, private val globalErrorManager: GlobalErrorManager) : ViewModel() {
 
 
     val progressData = ProgressData()
@@ -41,7 +43,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     fun getLocationLiveData() = eaterDataManager.getLocationData()
-
+    val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
 
     fun onDoneClick(selectedAddress: Address?) {
         selectedAddress?.let{
@@ -181,7 +183,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
             viewModelScope.launch {
                 val userRepoResult = userRepository.addNewAddress(it)
                 progressData.endProgress()
-                when (userRepoResult.type) {
+                when (userRepoResult?.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
                         Log.d(TAG, "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
@@ -199,8 +201,8 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
                         mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
                     }
                     else -> {
-                        Log.d(TAG, "NetworkError")
-                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
+//                        Log.d(TAG, "NetworkError")
+//                        errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                 }
 

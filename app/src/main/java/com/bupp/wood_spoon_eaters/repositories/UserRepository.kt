@@ -182,7 +182,7 @@ class UserRepository(
 
 
     //Address
-    suspend fun addNewAddress(addressRequest: AddressRequest): UserRepoResult {
+    suspend fun addNewAddress(addressRequest: AddressRequest): UserRepoResult? {
         val result = withContext(Dispatchers.IO){
             apiService.postNewAddress(addressRequest)
         }
@@ -202,7 +202,14 @@ class UserRepository(
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
                 }
                 is ResultHandler.WSCustomError -> {
-                    UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
+                    result.errors?.let{
+                        if(it.isNotEmpty()){
+                            val error = it[0]
+                            globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, error)
+
+                        }
+                    }
+                    null
                 }
             }
         }
