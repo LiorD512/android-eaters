@@ -9,14 +9,6 @@
         app:layoutDescription="@xml/fragment_restaurant_page_scene">
 
     <Space
-            android:id="@+id/spaceTest"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <Space
             android:id="@+id/space"
             android:layout_width="match_parent"
             android:layout_height="1dp"

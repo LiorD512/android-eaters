@@ -48,6 +48,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
                     listener.onDateSelected(datesList?.getOrNull(tab.position))
+
                 }
             }
 
