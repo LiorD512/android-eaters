@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDial
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
+import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel.UnavailableUiType.*
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
@@ -102,10 +104,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             adapterDishes = DishesMainAdapter(getDishesAdapterListener())
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
             val dishDividerDecoration = DividerItemDecoratorDish(divider)
-            dishDividerDecoration?.let {
+            dishDividerDecoration.let {
                 restaurantDishesList.addItemDecoration(it)
             }
-            restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
+//            restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
 
             restaurantNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
                 detailsSkeleton.visibility = View.VISIBLE
@@ -184,12 +186,31 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.favoriteEvent.observe(viewLifecycleOwner, {
             handleFavoriteEvent(it)
         })
+        viewModel.unavailableEventData.observe(viewLifecycleOwner, {
+            handleUnAvailableEvent(it)
+        })
         mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
             reOpenCart()
         })
         mainViewModel.featureFlagEvent.observe(viewLifecycleOwner, {
             handleFeatureFlagData(it)
         })
+    }
+
+    private fun handleUnAvailableEvent(event: RestaurantPageViewModel.UnavailableUiData?) {
+        event?.let{
+            Log.d("wow","handleUnAvailableEvent")
+            if(event.type != AVAILABLE){
+                showErrorToast(event.text!!, binding!!.root, Toast.LENGTH_LONG)
+                with(binding!!){
+                    restFragUnavailableGradient.visibility = View.VISIBLE
+                    restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(adapterDishes!!, false)
+                    restaurantMainListLayout.restaurantCookingSlotLayout.visibility = View.GONE
+                }
+            }else{
+                binding!!.restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(adapterDishes!!, true)
+            }
+        }
     }
 
     private fun handleFeatureFlagData(client: SplitClient?) {

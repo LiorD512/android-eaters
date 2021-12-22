@@ -16,14 +16,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private val addTouchHelper = SwipeableAddDishItemTouchHelper()
     private val removeTouchHelper = SwipeableRemoveDishItemTouchHelper()
 
-    fun initSwipeableRecycler(adapter: SwipeableAdapter<*>) {
+    fun initSwipeableRecycler(adapter: SwipeableAdapter<*>, isSwipeable: Boolean = true) {
         this.adapter = adapter
 
-        ItemTouchHelper(addTouchHelper).attachToRecyclerView(this)
-        ItemTouchHelper(removeTouchHelper).attachToRecyclerView(this)
+        if(isSwipeable){
+            ItemTouchHelper(addTouchHelper).attachToRecyclerView(this)
+            ItemTouchHelper(removeTouchHelper).attachToRecyclerView(this)
 
-        addTouchHelper.adapter = adapter
-        removeTouchHelper.adapter = adapter
+            addTouchHelper.adapter = adapter
+            removeTouchHelper.adapter = adapter
+        }
 
         val removeShape: Drawable? = ContextCompat.getDrawable(context, R.drawable.swipeable_dish_remove_bkg)
         this.addItemDecoration(SwipeableRemoveDishItemDecorator(context, removeShape))
@@ -40,6 +42,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun disableSwipes(){
         ItemTouchHelper(addTouchHelper).attachToRecyclerView(null)
         ItemTouchHelper(removeTouchHelper).attachToRecyclerView(null)
+        addTouchHelper.adapter = null
+        removeTouchHelper.adapter = null
     }
 
 

@@ -4,16 +4,16 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:animateLayoutChanges="true"
+        android:background="@color/white"
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
     <LinearLayout
-            android:animateLayoutChanges="true"
             android:id="@+id/restaurantMainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
         <FrameLayout
@@ -67,106 +67,113 @@
                         android:paddingHorizontal="15.4dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="17.8dp"
-                        android:layout_marginTop="23dp"
-                        android:background="@color/grey_white" />
-
-
-                <TextView
-                        style="@style/LatoBold15DarkGrey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="23dp"
-                        android:paddingHorizontal="15.4dp"
-                        android:text="Delivery Day" />
-
-
-                <TextView
-                        style="@style/LatoReg13LightGrey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="11.5dp"
-                        android:layout_marginBottom="19dp"
-                        android:drawableStart="@drawable/ic_delivery_man"
-                        android:drawablePadding="5dp"
-                        android:paddingHorizontal="15.4dp"
-                        android:text="Choose an exact delivery time at checkout" />
-
-
-                <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
-                        android:id="@+id/restaurantDeliveryDates"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
                 <LinearLayout
-                        android:id="@+id/restaurantTimePickerViewLayout"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/restaurantCookingSlotLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15.4dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="23dp"
-                        android:animateLayoutChanges="true"
-                        android:background="@drawable/grey_white_cornered_rag15_rect"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="4dp">
+                        android:orientation="vertical">
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="17.8dp"
+                            android:layout_marginTop="23dp"
+                            android:background="@color/grey_white" />
+
 
                     <TextView
-                            android:id="@+id/restaurantTimePickerView"
                             style="@style/LatoBold15DarkGrey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawablePadding="3dp"
+                            android:layout_marginTop="23dp"
+                            android:paddingHorizontal="15.4dp"
+                            android:text="Delivery Day" />
+
+
+                    <TextView
+                            style="@style/LatoReg13LightGrey"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="11.5dp"
+                            android:layout_marginBottom="19dp"
+                            android:drawableStart="@drawable/ic_delivery_man"
+                            android:drawablePadding="5dp"
+                            android:paddingHorizontal="15.4dp"
+                            android:text="Choose an exact delivery time at checkout" />
+
+
+                    <com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
+                            android:id="@+id/restaurantDeliveryDates"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                            android:id="@+id/restaurantTimePickerViewLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15.4dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="23dp"
+                            android:animateLayoutChanges="true"
+                            android:background="@drawable/grey_white_cornered_rag15_rect"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp">
+
+                        <TextView
+                                android:id="@+id/restaurantTimePickerView"
+                                style="@style/LatoBold15DarkGrey"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="3dp"
+                                android:gravity="center"
+                                android:text="Now"
+                                app:drawableStartCompat="@drawable/ic_time_rest" />
+
+                        <ImageView
+                                android:id="@+id/restaurantTimePickerViewIcon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_arrow_down_2"
+                                android:visibility="gone"
+                                tools:visibility="visible" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/restaurantSearchLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_margin="15.4dp"
+                            android:background="@drawable/rect_bkg_grey"
                             android:gravity="center"
-                            android:text="Now"
-                            app:drawableStartCompat="@drawable/ic_time_rest" />
+                            android:orientation="horizontal">
 
-                    <ImageView
-                            android:layout_gravity="center"
-                            android:id="@+id/restaurantTimePickerViewIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_arrow_down_2"
-                            tools:visibility="visible"
-                            android:visibility="gone" />
+                        <EditText
+                                android:id="@+id/searchFragInput"
+                                style="@style/LatoBold13Black"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:focusable="false"
+                                android:hint="Search Israeli In The Big Apple"
+                                android:imeOptions="actionDone"
+                                android:inputType="textCapSentences"
+                                android:letterSpacing="-0.01"
+                                android:paddingStart="12.5dp"
+                                android:textColorHint="@color/very_light_grey" />
 
+                        <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="3.8dp"
+                                android:paddingVertical="3dp"
+                                android:src="@drawable/ic_search" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                        android:id="@+id/restaurantSearchLayout"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        android:layout_margin="15.4dp"
-                        android:background="@drawable/rect_bkg_grey"
-                        android:orientation="horizontal">
-
-                    <EditText
-                            android:focusable="false"
-                            android:paddingStart="12.5dp"
-                            android:background="@null"
-                            android:id="@+id/searchFragInput"
-                            style="@style/LatoBold13Black"
-                            android:textColorHint="@color/very_light_grey"
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:inputType="textCapSentences"
-                            android:imeOptions="actionDone"
-                            android:hint="Search Israeli In The Big Apple"
-                            android:letterSpacing="-0.01" />
-
-                    <ImageView
-                            android:paddingVertical="3dp"
-                            android:paddingHorizontal="3.8dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_search" />
-
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -191,14 +198,14 @@
     </LinearLayout>
 
     <FrameLayout
-            android:visibility="invisible"
             android:id="@+id/restaurantNoNetwork"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="invisible">
 
         <include
                 android:id="@+id/restaurantNoNetworkLayout"
-                layout="@layout/feed_adapter_no_network_item"/>
+                layout="@layout/feed_adapter_no_network_item" />
 
     </FrameLayout>
 

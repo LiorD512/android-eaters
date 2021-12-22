@@ -93,7 +93,7 @@
                 <LinearLayout
                         android:id="@+id/btn_layout"
                         app:layout_constraintTop_toBottomOf="@+id/sep1"
-                        android:paddingBottom="23dp"
+                        android:paddingVertical="23dp"
                         android:layout_marginHorizontal="15.4dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"

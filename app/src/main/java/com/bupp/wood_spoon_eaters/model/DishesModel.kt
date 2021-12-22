@@ -16,14 +16,23 @@ data class CookingSlot(
     @Json(name = "ends_at") val endsAt: Date,
     @Json(name = "starts_at") val startsAt: Date,
     @Json(name = "order_from") val orderFrom: Date,
-    @Json(name = "can_order") val canOrder: Boolean?,
+    @Json(name = "status") val status: CookingSlotStatus?,
     @Json(name = "last_call_at") val lastCallAt: Date?,
     @Json(name = "delivery_fee") val deliveryFee: Price?,
-    @Json(name = "free_delivery") val freeDelivery: Boolean,
     @Json(name = "nationwide_shipping") val isNationwide: Boolean?,
     @Json(name = "sections") val sections: List<CookingSlotSection> = listOf(),
     val unAvailableDishes: MutableList<MenuItem> = mutableListOf(),
-) : Parcelable
+) : Parcelable {
+    fun isDummy(): Boolean{
+        return status == CookingSlotStatus.DUMMEY
+    }
+}
+
+enum class CookingSlotStatus{
+    @Json(name = "upcoming") UPCOMING,
+    @Json(name = "dummy") DUMMEY,
+    @Json(name = "active") ACTIVE
+}
 
 @Parcelize
 @JsonClass(generateAdapter = true)

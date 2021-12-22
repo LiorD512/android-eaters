@@ -33,7 +33,9 @@ class SingleOrderDetailsViewModel(private val orderRepository: OrderRepository, 
                     errorEvent.postValue(listOf(WSError(code = null, msg = "Error loading order...")))
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    errorEvent.postValue(result.wsError)
+                    result.wsError?.let{
+                        errorEvent.postValue(it)
+                    }
                 }
                 else -> {
 

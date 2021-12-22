@@ -48,6 +48,13 @@
                 android:src="@drawable/ic_play_grey"
                 android:background="@drawable/transparent_to_black_60_gradient"/>
 
+        <View
+                android:id="@+id/restFragUnavailableGradient"
+                android:visibility="gone"
+                android:background="@drawable/transparent_to_black_60_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
     </FrameLayout>
 
 

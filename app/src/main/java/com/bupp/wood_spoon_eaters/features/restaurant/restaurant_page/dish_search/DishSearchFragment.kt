@@ -54,8 +54,7 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
             dishDividerDecoration.let {
                 dishSearchFragList.addItemDecoration(it)
             }
-            dishSearchFragList.initSwipeableRecycler(adapterDishes!!)
-            dishSearchFragList.disableSwipes()
+            dishSearchFragList.initSwipeableRecycler(adapterDishes!!, false)
 
             dishSearchFragInput.addTextChangedListener(object: SimpleTextWatcher(){
                 override fun afterTextChanged(s: Editable) {

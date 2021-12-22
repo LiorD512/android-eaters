@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.features.restaurant.dish_page
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -133,6 +134,26 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         viewModel.networkError.observe(viewLifecycleOwner, {
             showNoNetworkLayout()
         })
+        viewModel.unavailableUiEvent.observe(viewLifecycleOwner, {
+            handleUnavailableUiEvent(it)
+        })
+    }
+
+    private fun handleUnavailableUiEvent(isDummy: Boolean?) {
+        if(isDummy == true){
+            with(binding!!){
+                val unavailableDish = "Unfortunately, this dish is unavailable at the moment. Check back later!"
+                showErrorToast(unavailableDish, binding!!.root, Toast.LENGTH_LONG)
+                dishFragUnavailableGradient.visibility = View.VISIBLE
+                dishFragAddToCartBtn.visibility = View.GONE
+                dishFragMainListLayout.dishFragPlusMinus.visibility = View.GONE
+                dishFragMainListLayout.dishFragUnavailableLayout.visibility = View.GONE
+                dishFragMainListLayout.dishFragAvailabilityLayout.visibility = View.GONE
+                binding!!.dishFragAddToCartBtn.hide()
+            }
+        }else{
+            binding!!.dishFragAddToCartBtn.show()
+        }
     }
 
     private fun showNoNetworkLayout() {
@@ -247,7 +268,6 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     private fun handleDishFullData(dish: FullDish) {
         with(binding!!){
             dishFragMainListLayout.dishFragNoNetwork.visibility = View.GONE
-            dishFragAddToCartBtn.show()
 
             // video
             dishFragVideoBtn.isVisible = !dish.restaurant.video.isNullOrEmpty()

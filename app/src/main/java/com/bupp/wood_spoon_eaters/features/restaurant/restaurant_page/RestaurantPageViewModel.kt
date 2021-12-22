@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +29,8 @@ class RestaurantPageViewModel(
     private val feedDataManager: FeedDataManager,
     private val eventsManager: EventsManager,
     private val metaDataManager: MetaDataRepository,
-    private val featureFlagManager: FeatureFlagManager) : ViewModel() {
+    private val featureFlagManager: FeatureFlagManager
+) : ViewModel() {
     var currentRestaurantId: Long = -1
 
     var currentCookingSlot: CookingSlot? = null
@@ -89,13 +91,43 @@ class RestaurantPageViewModel(
                         restaurant.flagUrl = metaDataManager.getCountryFlagById(restaurant.countryId)
                         restaurantFullData.postValue(restaurant)
                         dishes = restaurant.dishes.associateBy({ it.id }, { it })
-                        handleDeliveryTimingSection(restaurant)
-                        chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
+                        if (checkIfUnavailableCookingSlot(restaurant).not()) {
+                            handleDeliveryTimingSection(restaurant)
+                            chooseStartingCookingSlot(restaurant, sortedCookingSlots!!)
+                        }
                     }
                 } else if (result.type == SERVER_ERROR) {
                     dishListLiveData.postValue(DishListData(emptyList()))
                 }
             }
+        }
+    }
+
+    private fun checkIfUnavailableCookingSlot(restaurant: Restaurant): Boolean {
+        val canDeliver = restaurant.canBeDelivered ?: false
+        if (restaurant.cookingSlots[0].isDummy()) {
+            if (canDeliver) {
+                unavailableEventData.postValue(
+                    UnavailableUiData(
+                        UnavailableUiType.NO_COOKING_SLOT,
+                        "Unfortunately, this Home kitchen is closed at the moment. Check back later!"
+                    )
+                )
+            } else {
+                unavailableEventData.postValue(
+                    UnavailableUiData(
+                        UnavailableUiType.UNAVAILABLE_IN_YOUR_LOCATION,
+                        "Unfortunately, this Home kitchen does not deliver to you location."
+                    )
+                )
+            }
+            onCookingSlotSelected(restaurant.cookingSlots[0], true)
+            return true
+        } else {
+            unavailableEventData.postValue(
+                UnavailableUiData(UnavailableUiType.AVAILABLE)
+            )
+            return false
         }
     }
 
@@ -175,6 +207,18 @@ class RestaurantPageViewModel(
         onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot), forceTabChnage))
     }
 
+    enum class UnavailableUiType {
+        AVAILABLE,
+        NO_COOKING_SLOT,
+        UNAVAILABLE_IN_YOUR_LOCATION
+    }
+
+    data class UnavailableUiData(
+        val type: UnavailableUiType,
+        val text: String? = null,
+    )
+
+    val unavailableEventData = MutableLiveData<UnavailableUiData>()
     fun onCookingSlotSelected(cookingSlot: CookingSlot, forceTabChange: Boolean) {
         Log.d(TAG, "onCookingSlotSelected: $cookingSlot")
         updateCookingSlotRelatedUi(cookingSlot, forceTabChange)
@@ -283,14 +327,14 @@ class RestaurantPageViewModel(
             if (section.menuItems.isNotEmpty()) {
                 dishSectionsList.add(DishSectionAvailableHeader(section.title ?: "", section.subtitle ?: ""))
                 section.menuItems.forEach { menuItem ->
-                    dishSectionsList.add(DishSectionSingleDish(menuItem))
+                    dishSectionsList.add(DishSectionSingleDish(menuItem, isDummy = cookingSlot.isDummy()))
                 }
             }
         }
         if (cookingSlot.unAvailableDishes.isNotEmpty()) {
             dishSectionsList.add(DishSectionUnavailableHeader())
             cookingSlot.unAvailableDishes.forEach { menuItem ->
-                dishSectionsList.add(DishSectionSingleDish(menuItem))
+                dishSectionsList.add(DishSectionSingleDish(menuItem, isDummy = cookingSlot.isDummy()))
             }
         }
         updateDishCountUi(dishSectionsList)
@@ -471,26 +515,27 @@ class RestaurantPageViewModel(
         val unAvailableArr: MutableList<DishSections> = mutableListOf()
         var unavailableHeaderIndex = -1
         currentDishes?.dishes?.forEachIndexed { index, dishSections ->
-            if(dishSections.viewType == DishSectionsViewType.AVAILABLE_HEADER){
+            if (dishSections.viewType == DishSectionsViewType.AVAILABLE_HEADER) {
+                (dishSections as DishSectionAvailableHeader).subtitle = ""
                 filteredList.add(dishSections)
             }
-            if(dishSections.viewType == DishSectionsViewType.UNAVAILABLE_HEADER){
+            if (dishSections.viewType == DishSectionsViewType.UNAVAILABLE_HEADER) {
                 unavailableHeaderIndex = index
             }
-            if(dishSections.menuItem?.dish?.name?.lowercase()?.contains(input.lowercase()) == true){
-                if(unavailableHeaderIndex > -1 && index > unavailableHeaderIndex){
+            if (dishSections.menuItem?.dish?.name?.lowercase()?.contains(input.lowercase()) == true) {
+                if (unavailableHeaderIndex > -1 && index > unavailableHeaderIndex) {
                     unAvailableArr.add(dishSections)
-                }else{
+                } else {
                     availableArr.add(dishSections)
                 }
             }
         }
-        if(availableArr.isEmpty()){
+        if (availableArr.isEmpty()) {
             filteredList.clear()
-        }else{
+        } else {
             filteredList.addAll(availableArr)
         }
-        if(unAvailableArr.isNotEmpty()){
+        if (unAvailableArr.isNotEmpty()) {
             filteredList.add(DishSectionUnavailableHeader())
             filteredList.addAll(unAvailableArr)
         }

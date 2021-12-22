@@ -35,7 +35,9 @@ class PromoCodeViewModel(private val cartManager: CartManager, private val event
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
                     eventsManager.logEvent(Constants.EVENT_SUBMIT_PROMO_CODE, mapOf(Pair("Success", false)))
-                    errorEvent.postValue(result.wsError)
+                    result.wsError?.let{
+                        errorEvent.postValue(it)
+                    }
                 }
             }
             progressData.endProgress()

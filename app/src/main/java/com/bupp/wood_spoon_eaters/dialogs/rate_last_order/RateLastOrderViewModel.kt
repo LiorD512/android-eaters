@@ -30,7 +30,9 @@ class RateLastOrderViewModel(private val orderRepository: OrderRepository) : Vie
                     errorEvent.postValue(listOf(WSError(code = null, msg = "Error loading order...")))
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    errorEvent.postValue(result.wsError)
+                    result.wsError?.let{
+                        errorEvent.postValue(it)
+                    }
                 }
                 else -> {
 
@@ -53,7 +55,9 @@ class RateLastOrderViewModel(private val orderRepository: OrderRepository) : Vie
                     errorEvent.postValue(listOf(WSError(code = null, msg = "Error loading order...")))
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    errorEvent.postValue(result.wsError)
+                    result.wsError?.let{
+                        errorEvent.postValue(it)
+                    }
                 }
                 else -> {
 

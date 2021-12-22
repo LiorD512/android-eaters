@@ -10,7 +10,7 @@ sealed class DishSections(
 
 data class DishSectionAvailableHeader(
     val header: String,
-    val subtitle: String,
+    var subtitle: String,
     override val menuItem: MenuItem? = null,
     override var cartQuantity: Int = 0,
     override val isSwipeable: Boolean = false
@@ -33,7 +33,8 @@ class DishSectionUnavailableHeader(
 data class DishSectionSingleDish(
     override val menuItem: MenuItem,
     override var cartQuantity: Int = 0,
-    override val isSwipeable: Boolean = true
+    override val isSwipeable: Boolean = true,
+    val isDummy: Boolean = false
 ) : DishSections(viewType = SINGLE_DISH) {
     companion object {
         val viewType = SINGLE_DISH

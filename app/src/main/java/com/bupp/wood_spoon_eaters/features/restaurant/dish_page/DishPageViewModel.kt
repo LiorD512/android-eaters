@@ -28,6 +28,7 @@ class DishPageViewModel(
 ) : ViewModel() {
 
     private var isEditMode = false
+    private var isDummy: Boolean? = false
     lateinit var extras: DishInitParams
     private var dishMatchCookingSlot: Boolean = true
     //this param indicates if the current menuItem is matching the selected cooking slot in parent
@@ -76,6 +77,7 @@ class DishPageViewModel(
     )
 
     val dishQuantityChange = MutableLiveData<DishQuantityData>()
+    val unavailableUiEvent = MutableLiveData<Boolean>()
 
     fun initData(extras: DishInitParams) {
         Log.d("orderFlow - dishPage","initData")
@@ -89,6 +91,10 @@ class DishPageViewModel(
                 Log.d(TAG, "this is a different Cooking slot")
                 dishMatchCookingSlot = false
             }
+            isDummy = extras.cookingSlot?.isDummy()
+            if(isDummy == true){
+                unavailableUiEvent.postValue(true)
+            }
             eventsManager.logEvent(Constants.EVENT_CLICK_ON_DISH, getDishClicked(extras))
 
         }else if(extras.orderItem != null){
@@ -97,6 +103,7 @@ class DishPageViewModel(
             handleOrderItemData(extras.orderItem)
             extras.orderItem.menuItem?.id?.let { getFullDish(it) }
             dishMatchCookingSlot = true
+            isDummy = false
         }
     }
 
@@ -172,7 +179,10 @@ class DishPageViewModel(
                 }
             }
         }
-        dishQuantityChange.postValue(DishQuantityData(quantity, overallPrice))
+
+        if(isDummy == false){
+            dishQuantityChange.postValue(DishQuantityData(quantity, overallPrice))
+        }
     }
 
     fun onPerformClearCart() {

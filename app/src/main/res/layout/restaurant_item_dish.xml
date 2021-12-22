@@ -22,12 +22,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-                <ImageView
-                        android:id="@+id/dishPhoto"
+                <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        tools:src="@drawable/welcome_bkg_image" />
+                        android:layout_height="match_parent">
+
+
+                        <ImageView
+                                android:id="@+id/dishPhoto"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                tools:src="@drawable/welcome_bkg_image" />
+
+                        <View
+                                android:id="@+id/dishUnavailable"
+                                android:visibility="invisible"
+                                android:background="@color/black_60"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+
+                </FrameLayout>
 
         </androidx.cardview.widget.CardView>
 

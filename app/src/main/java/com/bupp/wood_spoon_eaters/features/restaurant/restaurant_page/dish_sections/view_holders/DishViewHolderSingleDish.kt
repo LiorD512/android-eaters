@@ -51,6 +51,14 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                 root.setOnClickListener {
                     listener.onDishClick(section.menuItem)
                 }
+
+                dishUnavailable.isVisible = section.isDummy
+                dishTagsView.isVisible = section.isDummy.not()
+                if(section.isDummy){
+                    dishName.alpha = 0.4f
+                    dishPrice.alpha = 0.4f
+                    dishDescription.alpha = 0.4f
+                }
             }
         }
     }
